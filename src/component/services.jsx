@@ -128,19 +128,20 @@ const Services = () => {
         >
           {items.map((item, index) => (
             <div key={index} className="">
-              <div className="h-[66vh] w-[60vh] p-4 flex flex-col  justify-between border-white border-2 rounded-2xl">
+              <div className="h-[54vh] w-[60vh] p-4 flex flex-col  justify-between border-white border-2 rounded-2xl">
                 <div className="text-6xl sm:text-6xl md:text-5xl lg:text-6xl text-white">
                   {item.imgSrc}
                 </div>
-                <div className="my-2 min-h-[36vh]">
+                <div className="my-2 min-h-[6vw]">
                   <p className="text-wrap text-left text-white poppins-bold text-lg sm:text-xl md:text-2xl lg:text-4xl font-black whitespace-normal break-words">
                     {item.title}
                   </p>
-                  <p className=" mt-4 text-left text-wrap text-xs poppins-light sm:text-sm text-white">
+                </div>
+                <div className="min-h-[16vh]">
+                <p className=" text-left text-wrap poppins-light sm:text-sm text-white">
                     {item.description}
                   </p>
                 </div>
-
                 <div className=" min-h-4">
                   <div className="border-t border-white "></div>
                 </div>
