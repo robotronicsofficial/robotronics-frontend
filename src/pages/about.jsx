@@ -16,7 +16,8 @@ const About = () => {
       <AboutVision/>
       <AboutSquad/>
       {/* <Schoollgoso/> */}
-      <Marquees/>
+      <Marquees direction = "left"/>
+      <Marquees direction = "right"/>
       <Gotobtn/>
       <Footer/>
     </div>
