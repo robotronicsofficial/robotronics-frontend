@@ -9,13 +9,13 @@ function Marquee({ imagesurls, direction, images }) {
         initial={{ x: direction === "left" ? "0" : "-100%" }}
         animate={{ x: direction === "left" ? "-100%" : "0" }}
         transition={{ ease: "linear", duration: 30, repeat: Infinity }}
-        className="flex py-6 gap-10 whitespace-nowrap overflow-hidden flex-shrink-0"
+        className="flex py-6 gap-10 whitespace-nowrap overflow-hidden flex-shrink-0 bg-"
       >
         {imagesurls.map((url, index) => (
           <img
             key={index}
             src={url}
-            className=" select-none w-[7vw]"
+            className=" select-none w-[10vw] h-[10vw] rounded-3xl"
             alt={`Marquee image ${index + 1}`}
           />
         ))}
@@ -30,7 +30,7 @@ function Marquee({ imagesurls, direction, images }) {
           <img
             key={index}
             src={url}
-            className="select-none w-[7vw]"
+            className="select-none w-[10vw] h-[10vw]  rounded-3xl"
           />
         ))}
       </motion.div>
