@@ -14,7 +14,6 @@ import logo8 from "../assets/imagesContent/schoollogos/logo8.jpg";
 import logo9 from "../assets/imagesContent/schoollogos/logo9.jpg";
 import logo10 from "../assets/imagesContent/schoollogos/logo10.jpg";
 import logo11 from "../assets/imagesContent/schoollogos/logo11.png";
-import logo12 from "../assets/imagesContent/schoollogos/logo12.png";
 
 
 function Marquees({direction}) {
@@ -30,13 +29,12 @@ function Marquees({direction}) {
       logo8,
       logo9,
       logo10,
-      logo11,
-      logo12,
+      logo11
     ]
   ];
 
   return (
-    <div className=" w-full relative overflow-hidden">
+    <div className=" w-full relative overflow-hidden bg-[#e5ddd9]">
       {images.map((item, index) => (
         <Marquee
           key={index}

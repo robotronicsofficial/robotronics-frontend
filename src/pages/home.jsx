@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <div className="flex flex-col">
       <Intro />
-      <Marquees/>
+      <Marquees direction = "left"/>
       <Graph />
       <Services />
       <Offers />

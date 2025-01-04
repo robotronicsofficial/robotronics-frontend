@@ -14,7 +14,7 @@ const ServiceCard = ({ service }) => {
       <div className="bg-white p-5 rounded-xl">
         <img
           className="rounded-xl w-full object-cover object-center"
-          src={python}
+          src={service.image.url}
           alt={'image'}
         />
         <div className="flex flex-row justify-between">
