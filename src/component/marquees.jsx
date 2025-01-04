@@ -17,7 +17,7 @@ import logo11 from "../assets/imagesContent/schoollogos/logo11.png";
 import logo12 from "../assets/imagesContent/schoollogos/logo12.png";
 
 
-function Marquees() {
+function Marquees({direction}) {
   var images = [
     [
       logo1,
@@ -40,7 +40,7 @@ function Marquees() {
       {images.map((item, index) => (
         <Marquee
           key={index}
-          direction={index === 0 ? "left" : "right"}
+          direction={direction}
           imagesurls={item}
         />
       ))}
