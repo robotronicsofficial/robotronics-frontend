@@ -58,6 +58,7 @@ const Shopsearch = () => {
 
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
+
   return (
     <div className="flex flex-col bg-lightgray lg:px-20 px-2">
       {/* block 1 */}
@@ -148,12 +149,12 @@ const Shopsearch = () => {
           <Shopfilter />
           {/* shop items */}
           <div className="flex flex-wrap lg:px-10">
-            {currentProducts.map((product) => (
+            {products.map((product) => (
               <a href="/ProductDetailPage" key={product.id}>
                 <Shopproduct
-                  title={product.title}
+                  title={product.name}
                   description={product.description}
-                  image={product.image}
+                  image={product.image.url}
                   price={product.price}
                   category={product.category}
                 />
