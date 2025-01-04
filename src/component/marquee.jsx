@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-function Marquee({ imagesurls, direction }) {
+function Marquee({ imagesurls, direction, images }) {
   return (
     <div className="flex gap-6 w-full overflow-hidden ">
       <motion.div
@@ -15,7 +15,7 @@ function Marquee({ imagesurls, direction }) {
           <img
             key={index}
             src={url}
-            className="filter invert select-none w-[7vw]"
+            className=" select-none w-[7vw]"
             alt={`Marquee image ${index + 1}`}
           />
         ))}
@@ -30,7 +30,7 @@ function Marquee({ imagesurls, direction }) {
           <img
             key={index}
             src={url}
-            className="filter invert select-none w-[7vw]"
+            className="select-none w-[7vw]"
           />
         ))}
       </motion.div>
