@@ -5,12 +5,15 @@ const Shopproduct = ({title, price,image}) => {
         {/* img */}
             
             
-        <div className="transition duration-300 ease-in-out hover:opacity-70" >
+        <div className="transition duration-300 ease-in-out hover:opacity-70 relative  " >
               <img className="rounded-2xl w-[18vw]" src={image} alt="" />
-              <button className="bg-yellow p-2 lg:px-7 text-white poppins-medium rounded-lg" >ADD TO CARD</button>
 
         </div>
+          <div className="flex flex-col absolute  translate-x-[50%] mt-[20vh]">
+          <button className="bg-yellow p-2 lg:px-7 text-white poppins-medium rounded-lg mb-2">ADD TO CARD</button>
+          <button className="bg-yellow p-2 lg:px-7 text-white poppins-medium rounded-lg">ADD TO wishList </button>
             
+            </div>            
         {/* text */}  
         <div className="" >
             <p className="text-lightblack hover:text-black hover:border-black text-xl poppins-bold my-2" >{title}</p>
