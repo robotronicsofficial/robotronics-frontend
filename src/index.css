@@ -17,10 +17,10 @@
   /* height: 130vh !important; */
 }
 .abouthero {
-  background: url(./assets/images/aboutvideo.svg) top center no-repeat;
+  background: url(./assets/imagesContent/bannercode/b1.jpg) right center no-repeat;
   background-size: cover;
+  /* background-position: right; */
   background-repeat: no-repeat;
-  /* height: 100vh; */
 }
 
 .shophero {
@@ -112,7 +112,7 @@
   height: 80vh !important;
 }
 .internationalServices {
-  background: url(./assets/images/internationalServices.svg) top center
+  background: url(./assets/imagesContent/bannercode/b4.jpg) top center
     no-repeat;
   background-size: cover;
   background-repeat: no-repeat;
