@@ -148,9 +148,9 @@ const Shopsearch = () => {
         <div className="flex ">
           <Shopfilter />
           {/* shop items */}
-          <div className="flex flex-wrap lg:px-10">
+          <div className="flex flex-wrap items-center justify-between gap-x-20 gap-y-10 p-5  lg:px-10">
             {products.map((product) => (
-              <a href="/ProductDetailPage" key={product.id}>
+              <a className=" h-[25vw]" href="/ProductDetailPage" key={product.id}>
                 <Shopproduct
                   title={product.name}
                   description={product.description}
