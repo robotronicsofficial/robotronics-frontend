@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo/robotronicsCharacter.svg";
 import basket from "../assets/logo/basket.svg";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import Aos from "aos";
 import { useSelector } from "react-redux";
@@ -16,6 +17,7 @@ export default function Header() {
   // const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
+  const { loginWithRedirect,user, isAuthenticated ,logout } = useAuth0();
   const cartItems = useSelector((state) => state.cart.items) || 0;
   const totalItems = Object.values(cartItems).reduce(
     (acc, item) => acc + item.count,
@@ -196,7 +198,8 @@ export default function Header() {
         {/* User Actions */}
         <nav className="hidden md:flex md:items-center md:w-auto"data-aos="fade-left" data-aos-duration="2000">
           <div className="flex gap-x-2 items-center">
-            {token ? (
+            {/* {token ? ( */}
+            {isAuthenticated ? (
               <>
                 <span
                   className="text-black poppins-light capitalize cursor-pointer hover:font-medium"
@@ -204,10 +207,12 @@ export default function Header() {
                     navigate("/Dashboard/userInfo");
                   }}
                 >
-                  {username}
+                  {user.nickname}
+                  {console.log(user)}
                 </span>
                 <button
-                  onClick={handleLogout}
+                  // onClick={handleLogout}
+                  onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
                   className="py-1 px-2 rounded bg-signin text-white hover:bg-opacity-90 transition duration-300"
                 >
                   Logout
@@ -224,6 +229,7 @@ export default function Header() {
                 <NavLink
                   to="/Login"
                   className="py-1 px-2 rounded m-2 cursor-pointer shadow-4xl focus:outline-none transition duration-300 hover:bg-signin hover:text-white"
+                  onClick={() => loginWithRedirect()}
                 >
                   Login
                 </NavLink>
