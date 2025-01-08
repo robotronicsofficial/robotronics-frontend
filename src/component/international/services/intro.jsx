@@ -24,18 +24,16 @@ const Intro = () => {
             {/* Text */}
             <div className="space-y-2">
               <div className="flex flex-row space-x-2"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
-                <h1 className="lg:text-3xl poppins-extralight text-white">WELCOME TO THE </h1>
-                <h1 className="lg:text-3xl poppins-bold text-white font-bold">WORLD OF</h1>
+                <h1 className="lg:text-3xl poppins-extralight text-white">ROBOTRONICS</h1>
+                <h1 className="lg:text-3xl poppins-bold text-white font-bold">WELCOMES</h1>
               </div>
               <div className="flex"data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
-                <p className="lg:text-8xl text-4xl poppins-bold text-yellow">RO</p>
-                <p className="lg:text-8xl text-4xl poppins-bold text-white">BOTRONICS</p>
+                <p className="lg:text-8xl text-4xl poppins-bold text-yellow">INTERNATIONAL&nbsp;</p>
+                
+                <p className="lg:text-8xl text-4xl poppins-bold text-white">STUDENTS</p>
               </div>
               <p className="text-wrap text-sm poppins-extralight text-white"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Necessitatibus consequuntur aliquid fugit in recusandae velit
-                quas soluta libero, sint modi obcaecati ad minus quibusdam iusto
-                possimus molestiae pariatur amet officiis.
+              Robotronics has successfully taught 15,000+ International Student across the globe. International Students are invited to explore the future of Robotics, Coding and STEM Education. We offer hands-on learning experiences, empowering students of all ages to explore, create and innovate in the exciting world of Robotics & STEM.
               </p>
             </div>
             {/* button

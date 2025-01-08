@@ -14,9 +14,9 @@ const IHome = () => {
       <Intro />
       {/* <SchoolLogos /> */}
       <Marquees/>
-      <Upcoming />
+      {/* <Upcoming /> */}
       {/* <div className="hidden lg:block "> */}
-        <Events />
+        {/* <Events /> */}
       {/* </div> */}
       <Offers />
       <Shop />
