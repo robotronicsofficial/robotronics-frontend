@@ -1,15 +1,16 @@
-import icon from "../../assets/logo/searchicon.svg";
-import arow from "../../assets/logo/shopArowIcon.svg";
-// import ShopItems from "../shopItems";
+import { useEffect, useState, useMemo } from "react";
+import { IoHomeOutline } from "react-icons/io5";
+import { FaHeart, FaArrowRight } from "react-icons/fa";
+import { BsHandbag } from "react-icons/bs";
 import Shopfilter from "../shop/shopfilter";
 import Shopproduct from "../shop/shopproduct";
 import ShopPages from "../shop/shopPages";
-import { IoHomeOutline } from "react-icons/io5";
-import { FaHeart } from "react-icons/fa";
-import { BsHandbag } from "react-icons/bs";
-import { FaArrowRight } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import icon from "../../assets/logo/searchicon.svg";
+import arow from "../../assets/logo/shopArowIcon.svg";
+import robot from "../../assets/robo.jpg";
+// import ShopItems from "../shopItems";
 // import { a } from "framer-motion/client";
+
 
 const Shopsearch = () => {
   const [products, setProducts] = useState([]);
@@ -32,31 +33,36 @@ const Shopsearch = () => {
     fetchProducts();
   }, []); 
 
-  // Filtered products based on search query
-  const filteredProducts = products.filter((product) =>
-    product.title && typeof product.title === 'string' 
-      ? product.title.toLowerCase().includes(searchQuery.toLowerCase())
-      : false
+ // Memoized filtered products
+ const filteredProducts = useMemo(() => {
+  return products.filter((product) =>
+    product.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+}, [products, searchQuery]);
   
+
+   // Pagination calculations
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+
+  const currentProducts = useMemo(() => {
+    return filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  }, [filteredProducts, indexOfFirstProduct, indexOfLastProduct]);
+
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   const handleSearchClick = () => {
     console.log("Search button clicked");
   };
-  
+
   const handleArrowClick = () => {
     console.log("Arrow button clicked");
   };
 
-  // Pagination logic
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
 
   return (
@@ -105,6 +111,8 @@ const Shopsearch = () => {
             <div className="h-0 w-full border border-lin"></div>
           </div>
         </div>
+
+
         {/* search-bars */}
         <div className="lg:flex flex-row " data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000">
           <div className="flex lg:text-4xl text-xl text-bold poppins-regular lg:w-1/5 self-center">
@@ -148,22 +156,29 @@ const Shopsearch = () => {
         <div className="flex ">
           <Shopfilter />
           {/* shop items */}
-          <div className="flex flex-wrap items-center justify-between gap-x-20 gap-y-10 p-5  lg:px-10">
-            {products.map((product) => (
-              <a className=" h-[25vw]" href="/ProductDetailPage" key={product.id}>
+          <div className="flex flex-wrap items-center justify-between gap-x-20 gap-y-10 p-5 lg:px-10">
+            {currentProducts.map((product) => (
+              <a
+                className="h-[25vw]"
+                href="/ProductDetailPage"
+                key={product.id}
+              >
                 <Shopproduct
                   title={product.name}
                   description={product.description}
-                  image={product.image.url}
+                  image={robot}
                   price={product.price}
                   category={product.category}
                 />
               </a>
             ))}
+            {currentProducts.length === 0 && (
+              <p className="text-center w-full">No products found.</p>
+            )}
           </div>
         </div>
       </div>
-      {/* block 3 */}
+      {/* Pagination Section */}
       <div className="flex-1">
         <div className="">
           <ShopPages />
@@ -171,19 +186,24 @@ const Shopsearch = () => {
         <div className="lg:flex flex-row justify-between lg:p-5">
           {/* Pagination */}
           <div className="flex">
-            {Array.from({ length: totalPages }, (_, index) => (
+          {Array.from({ length: totalPages }, (_, index) => (
               <button
                 key={index}
-                className={`p-1 px-3 ${currentPage === index + 1 ? "bg-gold" : "bg-white"} lg:text-base text-sm hover:bg-gold`}
-                onClick={() => setCurrentPage(index + 1)}
+                className={`p-1 px-3 ${
+                  currentPage === index + 1 ? "bg-gold" : "bg-white"
+                } lg:text-base text-sm hover:bg-gold`}
+                onClick={() => handlePageChange(index + 1)}
+                aria-label={`Page ${index + 1}`}
               >
                 {index + 1}
               </button>
             ))}
           </div>
           <div className="flex" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
-            <p className="lg:text-base poppins-medium text-sm">
-              SHOWED {indexOfFirstProduct + 1} - {Math.min(indexOfLastProduct, filteredProducts.length)} OF {filteredProducts.length} PRODUCTS
+          <p className="lg:text-base text-sm poppins-medium">
+              SHOWED {indexOfFirstProduct + 1} -{" "}
+              {Math.min(indexOfLastProduct, filteredProducts.length)} OF{" "}
+              {filteredProducts.length} PRODUCTS
             </p>
           </div>
         </div>
