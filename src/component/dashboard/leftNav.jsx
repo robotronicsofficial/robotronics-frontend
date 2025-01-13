@@ -44,7 +44,7 @@ const LeftNav = () => {
   };
 
   return (
-    <div className="flex flex-col px-20">
+    <div className="flex flex-col pl-20">
       {/* User Information */}
       <div className="lg:mb-4 lg:py-5 py-2 space-y-5">
         <div className="flex flex-row space-x-2">

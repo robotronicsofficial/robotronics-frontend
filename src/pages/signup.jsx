@@ -15,7 +15,8 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State for visibility
+  const [showPassword, setShowPassword] = useState(false); // State for visibility// State for visibility
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
@@ -137,52 +138,66 @@ const Signup = () => {
               />
             </div>
             <div className="flex flex-col">
-              <div className="flex flex-row justify-between ">
-                <p className="text-sm poppins-light ">Password</p>
-                <div className="flex flex-row">
-                  <button className="">
-                    <img src={hide} />
-                  </button>
-                  <p className="text-sm poppins-light ">Hide</p>
-                </div>
+              <div className="flex flex-row justify-between items-center">
+                <p className="text-sm poppins-light">Password</p>
+                <button
+                  className="flex items-center justify-center space-x-2 w-20"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <>
+                      <img className="h-5 w-5" src={hide} alt="Hide password" />
+                      <p className="text-sm poppins-light">Hide</p>
+                    </>
+                  ) : (
+                    <p className="text-sm poppins-light">Show</p>
+                  )}
+                </button>
               </div>
               <input
                 className="border border-line rounded-xl p-2 bg-gray"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <p className="text-sm text-wrap poppins-light ">
+              <p className="text-sm text-wrap poppins-light mt-2">
                 Use 8 or more characters with a mix of letters, numbers &
                 symbols
               </p>
             </div>
-            <div className="flex items-center py-5">
-              <input
-                id="default-checkbox"
-                type="checkbox"
-                className="w-4 h-4 text-brown bg-gray-100 border-gray-300 rounded focus:bro dark:focus-brown dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                htmlFor="default-checkbox"
-                className="ms-2 text-sm text-wrap font-medium text-gray-900 dark:text-gray-300"
+
+            <div className="lg:space-y-3 space-y-1">
+              <div className="flex items-center py-5">
+                <input
+                  id="terms-checkbox"
+                  type="checkbox"
+                  className="w-4 h-4 text-brown bg-gray-100 border-gray-300 rounded focus:ring-2"
+                  onChange={(e) => setIsCheckboxChecked(e.target.checked)}
+                />
+                <label
+                  htmlFor="terms-checkbox"
+                  className="ms-2 text-sm font-medium text-gray-900"
+                >
+                  By creating an account, I agree to our{" "}
+                  <a href="#" className="underline underline-offset-4">
+                    Terms of use
+                  </a>{" "}
+                  and{" "}
+                  <a href="#" className="underline underline-offset-4">
+                    Privacy Policy
+                  </a>
+                </label>
+              </div>
+              <button
+                className={`bg-brown text-gold rounded-3xl px-5 py-2 ${
+                  !isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={handleSignUp}
+                disabled={!isCheckboxChecked}
               >
-                By creating an account, I agree to our{" "}
-                <a href="#" className="underline text-wrap underline-offset-4">
-                  Terms of use
-                </a>{" "}
-                and{" "}
-                <a href="" className="underline text-wrap underline-offset-4">
-                  Privacy Policy{" "}
-                </a>
-              </label>
+                Sign up
+              </button>
             </div>
-            <button
-              className="bg-brown text-gold rounded-3xl px-5 py-2"
-              onClick={handleSignUp}
-            >
-              Sign up
-            </button>
             <p className="text-sm">
               Already have an account?{" "}
               <a
