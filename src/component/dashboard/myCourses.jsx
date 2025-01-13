@@ -136,8 +136,12 @@
 import LeftNav from "./leftNav";
 import { FaStar } from "react-icons/fa";
 import JS from "../../assets/images/JS-MyCouses.svg";
+import { FaArrowDown } from "react-icons/fa";
+import { useState } from "react";
 
 const MyCourses = () => {
+  const [showAllCourses, setShowAllCourses] = useState(false); // Track toggle state
+
   const courses = [
     {
       id: 1,
@@ -207,64 +211,93 @@ const MyCourses = () => {
     },
   ];
 
+  // Toggle button handler
+  const toggleCourses = () => {
+    setShowAllCourses((prev) => !prev);
+  };
+
   return (
     <div className="bg-background lg:flex flex-row">
       {/* Left Navigation */}
-      <div className="lg:w-1/4 w-2/3"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
+      <div
+        className="lg:w-[30%] w-2/3"
+        data-aos="fade-right"
+        data-aos-duration="2000"
+        data-aos-delay="4000"
+      >
         <LeftNav />
       </div>
 
       {/* Course Listing */}
-      <div className="w-full text-center py-5"data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+      <div
+        className="w-full text-center py-5"
+        data-aos="fade-left"
+        data-aos-duration="2000"
+        data-aos-delay="4000"
+      >
         <h1 className="text-lightblack lg:text-2xl text-base poppins-bold">
-          My Courses
+          {showAllCourses ? "All Courses" : "Active Courses"}
         </h1>
+
+        {/* Toggle Switch */}
+        <div className="my-4 flex items-center justify-center">
+          <span className="mr-2 text-sm">Active</span>
+          <label className="relative inline-block w-12 h-6">
+            <input
+              type="checkbox"
+              onChange={toggleCourses}
+              className="opacity-0 w-0 h-0 peer"
+            />
+            <span className="absolute inset-0 bg-gray-300 rounded-full peer-checked:bg-yellow transition-all duration-300"></span>
+            <span className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-6"></span>
+          </label>
+          <span className="ml-2 text-sm">All</span>
+        </div>
 
         {/* Shop Items */}
         <div className="flex flex-wrap justify-between gap-y-6">
-          {courses.map((course) => (
-            <div
-              key={course.id}
-              className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-6"
-            >
-              <div className="rounded overflow-hidden shadow-lg bg-white h-full flex flex-col">
-                <img className="w-full" src={course.image} alt="Course" />
-                <div className="lg:px-6 py-4 flex-grow">
-
-                  <div className="lg:flex flex-row p-2 flex-wrap justify-between">
-                    <p className="text-gray-700 text-wrap poppins-bold rounded-lg px-1 bg-lin text-base">
-                      {course.category}
-                    </p>
-                    <div className="flex items-center">
-                      <FaStar className="text-yellow-500" />
-                      <p className="text-gray-700 poppins-light text-base ml-2">
-                        {course.rating} ({course.reviews} Reviews)
+          {courses
+            .filter((course) => (showAllCourses ? true : course.status === "Purchased"))
+            .map((course) => (
+              <div
+                key={course.id}
+                className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-[#fffff] p-6"
+              >
+                <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff]">
+                  <img className="w-full" src={course.image} alt="Course" />
+                  <div className="lg:px-6 py-4 flex-grow">
+                    <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
+                      <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base">
+                        {course.category}
                       </p>
+                      <div className="flex items-center">
+                        <FaStar className="text-yellow-500 text-yellow" />
+                        <p className="text-gray-700 poppins-light text-base ml-2">
+                          ({course.reviews} Reviews)
+                        </p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="font-bold text-xl p-2 poppins-bold text-left text-wrap mb-2">
-                    {course.title}
-                  </div>
+                    <div className="font-bold text-xl p-2 poppins-bold text-left text-wrap mb-2">
+                      {course.title}
+                    </div>
 
-                  <p className="text-gray-700 space-x-2 poppins-bold text-left text-base">
-                    <span className="text-line px-2">by</span>
-                    {course.author}
-                  </p>
-                </div>
-                <div className=" p-5 px-10 flex justify-between">
-                  <a href="/Dashboard/courseDetail">
-                  <button className="bg-yellow text-white  shadow-xl poppins-bold py-2 px-4 rounded-full">
-                    {course.buttonText}
-                  </button>
-                  </a>
-                  <span className="text-gray-700 text-base  text-center poppins-bold">
-                    {course.status}
-                  </span>
+                    <p className="text-gray-700 space-x-2 text-left text-base">
+                      <span className="text-line px-2">by</span>
+                      {course.author}
+                    </p>
+                  </div>
+                  <div className="p-4 px-8">
+                    <a href="/Dashboard/courseDetail">
+                      <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
+                        <span>{course.buttonText}</span>
+                        <FaArrowDown className="text-xs" />
+                      </button>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>
