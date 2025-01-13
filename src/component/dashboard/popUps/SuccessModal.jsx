@@ -6,11 +6,11 @@ const SuccessModal = ({ onClose }) => (
       <div className="flex justify-center mb-4">
         <svg className="w-12 h-12 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
       </div>
-      <h2 className="text-2xl font-bold mb-2">Successfully</h2>
-      <p className="mb-4">You passed the verification successfully.</p>
+      <h2 className="text-2xl font-bold mb-2">Successful</h2>
+      {/* <p className="mb-4">You passed the verification successfully.</p> */}
       <button
-        className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 transition"
-        onClick={onClose}
+        className="bg-yellow-500 mt-4 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 transition bg-green-700"
+        onClick={onClose} // This triggers the onClose function
       >
         CONTINUE
       </button>

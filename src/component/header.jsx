@@ -198,8 +198,8 @@ export default function Header() {
         {/* User Actions */}
         <nav className="hidden md:flex md:items-center md:w-auto"data-aos="fade-left" data-aos-duration="2000">
           <div className="flex gap-x-2 items-center">
-            {/* {token ? ( */}
-            {isAuthenticated ? (
+            {/* {isAuthenticated ? ( */}
+            {token ? (
               <>
                 <span
                   className="text-black poppins-light capitalize cursor-pointer hover:font-medium"
@@ -207,12 +207,12 @@ export default function Header() {
                     navigate("/Dashboard/userInfo");
                   }}
                 >
-                  {user.nickname}
+                  {username}
                   {console.log(user)}
                 </span>
                 <button
-                  // onClick={handleLogout}
-                  onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                  onClick={handleLogout}
+                  // onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
                   className="py-1 px-2 rounded bg-signin text-white hover:bg-opacity-90 transition duration-300"
                 >
                   Logout
@@ -229,7 +229,7 @@ export default function Header() {
                 <NavLink
                   to="/Login"
                   className="py-1 px-2 rounded m-2 cursor-pointer shadow-4xl focus:outline-none transition duration-300 hover:bg-signin hover:text-white"
-                  onClick={() => loginWithRedirect()}
+                  // onClick={() => loginWithRedirect()}
                 >
                   Login
                 </NavLink>
