@@ -2,166 +2,219 @@ import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import LeftNav from "./leftNav";
 import Intro from "../dashboard/intro";
-import ForgotPassword from "./popUps/ForgotPassword";
-import Verification from "./popUps/Verification ";
-import NewPassword from "./popUps/NewPassword ";
 import SuccessModal from "./popUps/SuccessModal";
+import { useNavigate } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
 
 const UserInfoIntro = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({});
+  const [editingField, setEditingField] = useState(null);
+  const [updatedData, setUpdatedData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+  const [cards, setCards] = useState([]);
+
   const userData = sessionStorage.getItem("id");
-  console.log("user", user);
+
+  const handleHomeClick = () => {
+    navigate("/"); // Navigate to the home page
+  };
 
   useEffect(() => {
-    // Fetch courses from the API
-    fetch(`http://localhost:8080/find/${userData}`)
+    if (userData) {
+      fetch(`http://localhost:8080/find/${userData}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setUser(data.data);
+          setUpdatedData({
+            name: data.data.username || "",
+            email: data.data.email || "",
+            phone: data.data.phone || "",
+          });
+        })
+        .catch((error) => console.error("Error fetching user:", error));
+    }
+  }, [userData]);
+
+  const handleFieldEdit = (field) => {
+    setEditingField(field);
+  };
+
+  const handleInputChange = (e) => {
+    setUpdatedData({ ...updatedData, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdateField = (field) => {
+    const fieldValue = updatedData[field];
+    // console.log(fieldValue);
+
+    fetch("http://localhost:8080/patchMe", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: userData,
+        [field]: fieldValue,
+      }),
+    })
       .then((response) => response.json())
-      .then((data) => setUser(data.data))
-      .catch((error) => console.error("Error fetching courses:", error));
-  }, []);
-
-  // const userInfo = [
-  //   {
-  //     id: "0203455667",
-  //     name: "John Doe",
-  //     email: "johndoe@example.com",
-  //     phone: "123-456-7890",
-  //     address: "123 Main St, Anytown, USA",
-  //     password: ". . . . . . . . ",
-  //   },
-  // ];
-
-  const cards = [
-    {
-      id: "0203455667",
-      name: "John Doe",
-      email: "johndoe@example.com",
-      phone: "123-456-7890",
-      address: "123 Main St, Anytown, USA",
-      password: ". . . . . . . . ",
-    },
-    {
-      id: "0203455668",
-      name: "Jane Doe",
-      email: "janedoe@example.com",
-      phone: "987-654-3210",
-      address: "456 Elm St, Anytown, USA",
-      password: ". . . . . . . . ",
-    },
-    {
-      id: "0203455669",
-      name: "Mike Doe",
-      email: "mikedoe@example.com",
-      phone: "321-654-9870",
-      address: "789 Oak St, Anytown, USA",
-      password: ". . . . . . . . ",
-    },
-    {
-      id: "0203455670",
-      name: "Sarah Doe",
-      email: "sara@example.com",
-      phone: "456-789-1230",
-      address: "987 Maple St, Anytown, USA",
-      password: ". . . . . . . . ",
-    },
-  ];
-
-  const closeModal = () => {
-    setStep(0);
-    setIsModalOpen(false);
-  };
-
-  const openSuccessModal = () => {
-    setIsSuccessModalOpen(true);
-  };
-
-  const closeSuccessModal = () => {
-    setIsSuccessModalOpen(false);
+      .then((data) => {
+        if (data.updatedUser) {
+          setUser(data.updatedUser);
+          setEditingField(null);
+          setIsSuccessModalOpen(true);
+        }
+      })
+      .catch((error) => console.error("Error updating user:", error));
   };
 
   return (
     <div className="bg-background">
-      {/* intro */}
+      {console.log(user)}
       <div>
         <Intro />
       </div>
-      {/* body */}
-      <div className="lg:flex flex-row"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000" >
+      <div
+        className="lg:flex flex-row"
+        data-aos="fade-right"
+        data-aos-duration="2000"
+        data-aos-delay="4000"
+      >
         <div className="lg:w-1/3 w-2/3">
           <LeftNav />
         </div>
-        {/* right */}
         <div className="w-full lg:p-10 p-6">
           <div>
-            <p className="text-2xl poppins-bold">My Info</p>
+            <p className="text-2xl poppins-bold mb-2">My Info</p>
             <p className="text-xl poppins-light">Contact Details</p>
           </div>
-          {/* form */}
           <form action="">
             {/* Name */}
             <div>
               <ol className="list-reset flex flex-col text-gray-600">
                 <div className="py-5 flex flex-col space-y-5">
-                  {/* name */}
-                  <div className="">
+                  <div>
                     <div className="space-y-5">
                       <p className="text-lightblack poppins-bold">Your Name</p>
-                      <p className="text-lightblack poppins-regular">
-                        {user.username}
-                      </p>
+                      <div className="flex flex-row poppins-light justify-between">
+                        {editingField !== "name" ? (
+                          <>
+                            <p className="text-lightblack poppins-regular">
+                              {user.username}
+                            </p>
+                            <a
+                              className="hover:text-yellow text-brown poppins-bold"
+                              href="#"
+                              onClick={() => handleFieldEdit("name")}
+                            >
+                              Edit
+                            </a>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type="text"
+                              name="name"
+                              value={updatedData.name}
+                              onChange={handleInputChange}
+                              className="text-lightblack poppins-regular"
+                            />
+                            <button
+                              type="button"
+                              className="px-4 py-2 bg-yellow-500 text-white rounded-md"
+                              onClick={() => handleUpdateField("name")}
+                            >
+                              Save
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </div>
                     <div className="w-full border text-sm border-lin"></div>
                   </div>
-                  {/* email */}
-                  <div className="">
+                  {/* Email */}
+                  <div>
                     <div className="space-y-5">
                       <p className="text-lightblack poppins-bold">Your Email</p>
-                      <p className="text-lightblack poppins-light ">
-                        {user.email}
-                      </p>
+                      <div className="flex flex-row poppins-light justify-between">
+                        {editingField !== "email" ? (
+                          <>
+                            <p className="text-lightblack poppins-light">
+                              {user.email}
+                            </p>
+                            <a
+                              className="hover:text-yellow text-brown font-bold"
+                              href="#"
+                              onClick={() => handleFieldEdit("email")}
+                            >
+                              Edit
+                            </a>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type="email"
+                              name="email"
+                              value={updatedData.email}
+                              onChange={handleInputChange}
+                              className="text-lightblack poppins-regular"
+                            />
+                            <button
+                              type="button"
+                              className="px-4 py-2 bg-yellow-500 text-white rounded-md"
+                              onClick={() => handleUpdateField("email")}
+                            >
+                              Save
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </div>
                     <div className="w-full border text-sm border-lin"></div>
                   </div>
-                  {/* phone */}
-                  <div className="">
+                  {/* Phone */}
+                  <div>
                     <div className="space-y-5">
                       <p className="text-lightblack poppins-bold">
                         Phone Number
                       </p>
                       <div className="flex flex-row poppins-light justify-between">
-                        <p className="text-lightblack">{user.phone}</p>
-                        <a
-                          className="hover:text-yellow text-brown poppins-bold"
-                          href="#"
-                        >
-                          change
-                        </a>
-                      </div>
-                    </div>
-                    <div className="w-full border text-sm border-lin"></div>
-                  </div>
-                  {/* password */}
-                  <div className="">
-                    <div className="space-y-5">
-                      <p className="text-lightblack poppins-bold">Password</p>
-                      <div className="flex flex-row justify-between">
-                        <p className="text-lightblack poppins-extrabold">
-                          {user.password}
-                        </p>
-                        <a
-                          className="hover:text-yellow text-brown font-bold"
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setIsModalOpen(true);
-                            setStep(1);
-                          }}
-                        >
-                          change
-                        </a>
+                        {editingField !== "phone" ? (
+                          <>
+                            <p className="text-lightblack">{user.phone}</p>
+                            <a
+                              className="hover:text-yellow text-brown font-bold"
+                              href="#"
+                              onClick={() => handleFieldEdit("phone")}
+                            >
+                              Change
+                            </a>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type="text"
+                              name="phone"
+                              value={updatedData.phone}
+                              onChange={handleInputChange}
+                              className="text-lightblack poppins-regular"
+                            />
+                            <button
+                              type="button"
+                              className="px-4 py-2 bg-yellow-500 text-white rounded-md"
+                              onClick={() => handleUpdateField("phone")}
+                            >
+                              Save
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="w-full border text-sm border-lin"></div>
@@ -170,78 +223,108 @@ const UserInfoIntro = () => {
               </ol>
             </div>
           </form>
-          {/* text */}
+
+          {/* Address Text */}
           <div className="flex flex-row justify-between">
             <p className="text-base poppins-bold lg:text-xl text-brown">
-              Address
+              Parent
             </p>
-            <a href="Dashboard/userInfoForm">
-              <p className="poppins-bold text-base lg:text-xl text-brown">
-                Add New
-              </p>
-            </a>
-
           </div>
-          {/* cards */}
+
+          {/* Cards Section */}
+          {/* Cards Section */}
           <div className="flex flex-wrap lg:p-5">
-            {cards.map((card, index) => (
-              <div key={index} className="w-full md:w-1/2 p-3">
-                <div className="flex flex-col space-y-5 bg-white rounded-xl p-5 shadow-lg">
-                  <div className="space-y-5">
-                    <p className="text-lightblack poppins-bold">{card.name}</p>
-                    <p className="text-lightblack poppins-bold">{card.id}</p>
-                    <p className="text-lightblack poppins-bold">
-                      {card.address}
-                    </p>
-                    <div className="flex flex-row space-x-5">
-                      <button className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2">
-                        Home
-                      </button>
-                      <button className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2">
-                        Default billing address
-                      </button>
-                    </div>
-                    <div className="flex flex-row space-x-5">
-                      <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
-                        Remove
-                      </a>
-                      <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
-                        Edit
-                      </a>
-                    </div>
+            <div key={user._id} className="w-full md:w-1/2 p-3">
+              <div className="flex flex-col space-y-5 bg-white rounded-xl p-5 shadow-lg">
+                <div className="space-y-5">
+                  {/* Display user data dynamically from the fetched 'user' object */}
+                  <p className="text-lightblack poppins-bold">
+                    {user.username}
+                  </p>
+                  <p className="text-lightblack poppins-bold">{user.email}</p>
+                  <p className="text-lightblack poppins-bold">{user.phone}</p>
+
+                  <div className="flex flex-row space-x-5">
+                    <button
+                      className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2"
+                      onClick={handleHomeClick}
+                    >
+                      Home
+                    </button>
+                    <button className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2">
+                      Default billing address
+                    </button>
+                  </div>
+
+                  <div className="flex flex-row space-x-5">
+                    <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
+                      Remove
+                    </a>
+                    <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
+                      Edit
+                    </a>
                   </div>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
+
+          <div className="flex flex-row justify-between">
+            <p className="text-base poppins-bold lg:text-xl text-brown">
+              Child Account
+            </p>
+            <a href="Dashboard/userInfoForm">
+              <p className="poppins-bold text-base lg:text-xl text-brown">
+                Add Another Child
+              </p>
+            </a>
+          </div>
+
+          <div className="flex flex-wrap lg:p-5">
+            <div key={user._id} className="w-full md:w-1/2 p-3">
+              <div className="flex flex-col space-y-5 bg-white rounded-xl p-5 shadow-lg">
+                <div className="space-y-5">
+                  {/* Display user data dynamically from the fetched 'user' object */}
+                  <div className="flex items-center gap-2">
+                  <FaUserCircle className="text-sm"/>
+                  <p className="text-lightblack poppins-bold">
+                    {user.username}
+                  </p>
+                  </div>
+                  <p className="text-lightblack poppins-bold">{user.email}</p>
+                  <p className="text-lightblack poppins-bold">{user.phone}</p>
+
+                  <div className="flex flex-row space-x-5">
+                    <button className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2 bg-yellow text-white">
+                      View My Courses
+                    </button>
+                  </div>
+
+                  <div className="flex flex-row space-x-5">
+                    <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
+                      Remove
+                    </a>
+                    <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
+                      Edit
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Success Modal */}
+          <Modal
+            isOpen={isSuccessModalOpen}
+            onRequestClose={() => setIsSuccessModalOpen(false)}
+            contentLabel="Success Modal"
+            className="bg-white rounded-lg p-8 max-w-lg mx-auto my-20 relative"
+            overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-50"
+          >
+            <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />
+          </Modal>
         </div>
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Change Password"
-        className="bg-white rounded-lg p-8 max-w-lg mx-auto my-20 relative"
-        overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
-      >
-        {step === 1 && <ForgotPassword onNext={() => setStep(2)} />}
-        {step === 2 && <Verification onNext={() => setStep(3)} />}
-        {step === 3 && <NewPassword onUpdate={openSuccessModal} />}
-        <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-          onClick={closeModal}
-        >
-          &times;
-        </button>
-      </Modal>
-      <Modal
-        isOpen={isSuccessModalOpen}
-        onRequestClose={closeSuccessModal}
-        contentLabel="Success Modal"
-        className="bg-white rounded-lg p-8 max-w-lg mx-auto my-20 relative"
-        overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
-      >
-        <SuccessModal onClose={closeSuccessModal} />
-      </Modal>
     </div>
   );
 };

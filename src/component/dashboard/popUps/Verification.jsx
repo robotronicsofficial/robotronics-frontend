@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 
 const Verification = ({ onNext }) => {
   const [code, setCode] = useState(['', '', '', '']);
@@ -13,7 +12,8 @@ const Verification = ({ onNext }) => {
 
       // Move focus to the next input if a digit is entered
       if (value && index < 3) {
-        document.getElementById(`digit-${index + 1}`).focus();
+        const nextInput = document.getElementById(`digit-${index + 1}`);
+        if (nextInput) nextInput.focus();
       }
     }
   };
@@ -22,7 +22,7 @@ const Verification = ({ onNext }) => {
     e.preventDefault();
     // Check if all digits are entered
     if (code.join('').length === 4) {
-      console.log(`Verifying code ${code.join('')}`);
+      console.log(`Verifying code: ${code.join('')}`);
       onNext();
     } else {
       alert('Please enter a 4-digit code.');
@@ -65,10 +65,6 @@ const Verification = ({ onNext }) => {
       </div>
     </div>
   );
-};
-
-Verification.propTypes = {
-  onNext: PropTypes.func.isRequired,
 };
 
 export default Verification;
