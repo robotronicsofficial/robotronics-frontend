@@ -1,13 +1,16 @@
 import { useEffect, useState, useMemo } from "react";
-import { IoHomeOutline } from "react-icons/io5";
-import { FaHeart, FaArrowRight } from "react-icons/fa";
-import { BsHandbag } from "react-icons/bs";
+import { FaArrowRight } from "react-icons/fa";
+import { BsHandbag} from "react-icons/bs";
 import Shopfilter from "../shop/shopfilter";
 import Shopproduct from "../shop/shopproduct";
 import ShopPages from "../shop/shopPages";
 import icon from "../../assets/logo/searchicon.svg";
 import arow from "../../assets/logo/shopArowIcon.svg";
 import robot from "../../assets/robo.jpg";
+import shopHome from "../../assets/shopHome.png";
+import { FaRegHeart } from "react-icons/fa";
+
+
 // import ShopItems from "../shopItems";
 // import { a } from "framer-motion/client";
 
@@ -69,57 +72,74 @@ const Shopsearch = () => {
     <div className="flex flex-col bg-lightgray lg:px-20 px-2">
       {/* block 1 */}
       <div className="flex-1 ">
-        <div>
+        <div className="justify-around">
           {/* line 1 */}
           <div className="lg:pt-16 pt-8" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
-            <div className="h-0 w-full border border-lin"></div>
+            <div className="h-0 w-full border border-[#838383]"></div>
           </div>
-          <div className="lg:flex md:flex lg:px-24 px-2 lg:pt-10 pt-5  justify-between items-center ">
-            <div className="flex justify-between  w-full">
+          <div className="lg:flex md:flex lg:px-2 lg:pt-5  justify-between items-center ">
+            <div className="flex justify-between">
               <div className="flex">
-                <IoHomeOutline className="h-5" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000" />
-                <p className="px-3 lg:text-base poppins-bold  text-sm " data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+                <img 
+                  src={shopHome} 
+                  alt="" 
+                  className="w-[18px] h-[18px]"
+                  data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000"
+                />
+
+                <p className="px-5 font-bold" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
                   Main Page
+                </p>
+                <p className="font-bold opacity-10">
+                  Catalog
                 </p>
               </div>
             </div>
 
-            <div className="w-2/3 flex justify-between space-x-5" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
-              <div className="flex justify-between  w-full">
-                <div className="flex">
-                  <FaHeart className="h-6" />
-                  <p className="px-3 lg:text-base  poppins-bold text-sm text-center ">
-                    Wish List (0)
-                  </p>
+            <div className="w-[50%] flex justify-between space-x-5 gap-10 pr-10" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+              <div className="flex justify-between  w-full items-center">
+                <div className="flex items-center">
+                  <div className="rounded-full bg-[#352E2C] px-2 py-2" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
+                    <FaRegHeart className="text-white"/>
+                  </div>
+                  <div>
+                    <p className="px-3 lg:text-base poppins-bold text-sm text-center ">
+                      Wish List (0)
+                    </p>
+                  </div>
                 </div>
-                <FaArrowRight className="text-lin" />
+                <FaArrowRight className="text-[#838383]" />
               </div>
 
-              <div className="flex justify-between  w-full">
-                <div className="flex ">
-                  <BsHandbag className="h-6" />
-                  <p className="px-3 lg:text-base text-sm  poppins-bold text-right ">
-                    2 Products - $1000
-                  </p>
+              <div className="flex  w-full items-center justify-between">
+                <div className="flex items-center ">
+                  <div className="rounded-full bg-[#352E2C] px-2 py-2">
+                    <BsHandbag className=" text-white" />  
+                  </div>
+                  <div>
+                    <p className="px-3 lg:text-base text-sm poppins-bold text-center">
+                      2 Products - $1000
+                    </p>
+                  </div>
                 </div>
-                <FaArrowRight className="text-lin" />
+                <FaArrowRight className="text-[#838383]" />
               </div>
             </div>
           </div>
           {/* line 2 */}
-          <div className=" lg:pt-10 pt-5" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
-            <div className="h-0 w-full border border-lin"></div>
+          <div className=" lg:pt-5 pt-5" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+            <div className="h-0 w-full border border-[#838383]"></div>
           </div>
         </div>
 
 
         {/* search-bars */}
         <div className="lg:flex flex-row " data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000">
-          <div className="flex lg:text-4xl text-xl text-bold poppins-regular lg:w-1/5 self-center">
-            Category
+          <div className=" lg:text-2xl poppins-regular lg:w-1/5 self-center">
+            CATEGORY
+            <div className="h-1.5 w-14 border bg-brown border-brown mt-4"></div>
           </div>
-          {/* <div className="h-1 w-56 border bg-brown border-brown mt-2"></div> */}
-          <div className=" lg:text-2xl text-xl poppins-semibold items-right lg:py-10 py-4 lg:w-4/5">
+          <div className=" lg:text-2xl text-xl poppins-regular items-right lg:py-10 py-4 lg:w-4/5">
             catalog
             <div className="flex lg:space-x-3">
               {/* search */}
@@ -154,7 +174,7 @@ const Shopsearch = () => {
       <div className="flex-1" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
         {/* parent */}
         <div className="flex ">
-          <Shopfilter />
+          <Shopfilter/>
           {/* shop items */}
           <div className="flex flex-wrap items-center justify-between gap-x-20 gap-y-10 p-5 lg:px-10">
             {currentProducts.map((product) => (
