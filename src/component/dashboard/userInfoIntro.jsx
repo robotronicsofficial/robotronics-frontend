@@ -5,12 +5,14 @@ import Intro from "../dashboard/intro";
 import SuccessModal from "./popUps/SuccessModal";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
+import PinModal from "./popUps/PinModal"
 
 const UserInfoIntro = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isPinModalOpen, setIsPinModalOpen] = useState(false); // State for PinModal
   const [user, setUser] = useState({});
   const [editingField, setEditingField] = useState(null);
   const [updatedData, setUpdatedData] = useState({
@@ -75,6 +77,12 @@ const UserInfoIntro = () => {
       .catch((error) => console.error("Error updating user:", error));
   };
 
+  const handlePinSubmit = (pin) => {
+    // Handle the PIN submission logic here
+    console.log("Submitted PIN:", pin);
+    setIsPinModalOpen(false); // Close the modal after submission
+  };
+
   return (
     <div className="bg-background">
       {console.log(user)}
@@ -128,7 +136,7 @@ const UserInfoIntro = () => {
                             />
                             <button
                               type="button"
-                              className="px-4 py-2 bg-yellow-500 text-white rounded-md"
+                              className="px-4 py-2 bg-yellow-500 text-yellow rounded-md"
                               onClick={() => handleUpdateField("name")}
                             >
                               Save
@@ -168,7 +176,7 @@ const UserInfoIntro = () => {
                             />
                             <button
                               type="button"
-                              className="px-4 py-2 bg-yellow-500 text-white rounded-md"
+                              className="px-4 py-2 bg-yellow-500 text-yellow rounded-md"
                               onClick={() => handleUpdateField("email")}
                             >
                               Save
@@ -208,8 +216,48 @@ const UserInfoIntro = () => {
                             />
                             <button
                               type="button"
-                              className="px-4 py-2 bg-yellow-500 text-white rounded-md"
+                              className="px-4 py-2 bg-yellow-500 text-yellow rounded-md"
                               onClick={() => handleUpdateField("phone")}
+                            >
+                              Save
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="w-full border text-sm border-lin"></div>
+                  </div>
+                  {/* password */}
+                  <div>
+                    <div className="space-y-5">
+                      <p className="text-lightblack poppins-bold">
+                        Password
+                      </p>
+                      <div className="flex flex-row poppins-light justify-between">
+                        {editingField !== "password" ? (
+                          <>
+                            <p className="text-lightblack">{user.password}</p>
+                            <a
+                              className="hover:text-yellow text-brown font-bold"
+                              href="#"
+                              onClick={() => handleFieldEdit("password")}
+                            >
+                              Change
+                            </a>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type="text"
+                              name="phone"
+                              value={updatedData.password}
+                              onChange={handleInputChange}
+                              className="text-lightblack poppins-regular"
+                            />
+                            <button
+                              type="button"
+                              className="px-4 py-2 bg-yellow-500 text-yellow rounded-md"
+                              onClick={() => handleUpdateField("password")}
                             >
                               Save
                             </button>
@@ -295,7 +343,7 @@ const UserInfoIntro = () => {
                   <p className="text-lightblack poppins-bold">{user.phone}</p>
 
                   <div className="flex flex-row space-x-5">
-                    <button className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2 bg-yellow text-white">
+                    <button onClick={() => setIsPinModalOpen(true)} className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2 bg-yellow text-white">
                       View My Courses
                     </button>
                   </div>
@@ -323,6 +371,13 @@ const UserInfoIntro = () => {
           >
             <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />
           </Modal>
+
+          {/* Pin Modal */}
+          <PinModal
+            isOpen={isPinModalOpen}
+            onClose={() => setIsPinModalOpen(false)}
+            onPinSubmit={handlePinSubmit}
+          />
         </div>
       </div>
     </div>
