@@ -23,8 +23,8 @@ const Shopsearch = () => {
       try {
         const response = await fetch("http://localhost:8080/getProducts");
         const data = await response.json();
-        console.log("Fetched products:", data);
-        setProducts(data);
+        console.log("Fetched products:", data.products);
+        setProducts(data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -166,7 +166,7 @@ const Shopsearch = () => {
                 <Shopproduct
                   title={product.name}
                   description={product.description}
-                  image={robot}
+                  image={`http://localhost:8080/${product.images[0]}`}
                   price={product.price}
                   category={product.category}
                 />
