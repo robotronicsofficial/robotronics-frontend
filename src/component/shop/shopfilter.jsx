@@ -106,19 +106,31 @@ const Shopfilter = () => {
             className="flex cursor-pointer hover:text-black poppins-light hover:border-black lg:text-base text-sm text-lightblack lg:pt-5 pt-2"
             href="#"
           >
-            Lego WeDo 2.0
+            Lego Robots
           </a>
           <a
             className="flex cursor-pointer hover:text-black poppins-light hover:border-black lg:text-base text-sm text-lightblack lg:pt-5 pt-2"
             href="#"
           >
-            Lego Mindstorms EV3
+            Curriculum Books
           </a>
           <a
             className="flex cursor-pointer hover:text-black poppins-light hover:border-black lg:text-base text-sm text-lightblack lg:pt-8 pt-4"
             href="#"
           >
-            Arduino based Robots
+            Arduino Robots
+          </a>
+          <a
+            className="flex cursor-pointer hover:text-black poppins-light hover:border-black lg:text-base text-sm text-lightblack lg:pt-8 pt-4"
+            href="#"
+          >
+            Educational Toys
+          </a>
+          <a
+            className="flex cursor-pointer hover:text-black poppins-light hover:border-black lg:text-base text-sm text-lightblack lg:pt-8 pt-4"
+            href="#"
+          >
+            Others
           </a>
         </div>
       )}

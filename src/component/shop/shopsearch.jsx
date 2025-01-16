@@ -6,7 +6,6 @@ import Shopproduct from "../shop/shopproduct";
 import ShopPages from "../shop/shopPages";
 import icon from "../../assets/logo/searchicon.svg";
 import arow from "../../assets/logo/shopArowIcon.svg";
-import robot from "../../assets/robo.jpg";
 import shopHome from "../../assets/shopHome.png";
 import { FaRegHeart } from "react-icons/fa";
 
@@ -19,6 +18,8 @@ const Shopsearch = () => {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [wishlistCount, setWishlistCount] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
   const productsPerPage = 9;
 
   useEffect(() => {
@@ -26,8 +27,8 @@ const Shopsearch = () => {
       try {
         const response = await fetch("http://localhost:8080/getProducts");
         const data = await response.json();
-        console.log("Fetched products:", data.products);
-        setProducts(data.products);
+        console.log("Fetched products:", data);
+        setProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -65,6 +66,20 @@ const Shopsearch = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  const handleAddToWishlist = () => {
+    setWishlistCount((prev) => prev + 1);
+  };
+
+  const handleAddToCart = (product) => {
+    setCartItems((prev) => [...prev, product]);
+  };
+
+  // Calculate the total price of the products in the cart
+  const totalCartPrice = useMemo(() => {
+    return cartItems.reduce((total, item) => total + item.price, 0);
+  }, [cartItems]);
+
 
 
 
@@ -104,7 +119,7 @@ const Shopsearch = () => {
                   </div>
                   <div>
                     <p className="px-3 lg:text-base poppins-bold text-sm text-center ">
-                      Wish List (0)
+                      Wish List ({wishlistCount})
                     </p>
                   </div>
                 </div>
@@ -118,7 +133,7 @@ const Shopsearch = () => {
                   </div>
                   <div>
                     <p className="px-3 lg:text-base text-sm poppins-bold text-center">
-                      2 Products - $1000
+                      {cartItems.length} Products - PKR {totalCartPrice}
                     </p>
                   </div>
                 </div>
@@ -178,19 +193,20 @@ const Shopsearch = () => {
           {/* shop items */}
           <div className="flex flex-wrap items-center justify-between gap-x-20 gap-y-10 p-5 lg:px-10">
             {currentProducts.map((product) => (
-              <a
-                className="h-[25vw]"
-                href="/ProductDetailPage"
-                key={product.id}
-              >
+              // <a
+              //   className="h-[25vw]"
+              //   href="/ProductDetailPage"
+              //   key={product.id}
+              // >
                 <Shopproduct
+                  key={product.id}
                   title={product.name}
-                  description={product.description}
-                  image={`http://localhost:8080/${product.images[0]}`}
                   price={product.price}
-                  category={product.category}
+                  image={`http://localhost:8080/${product.images[0]}`}
+                  onAddToWishlist={handleAddToWishlist}
+                  onAddToCart={() => handleAddToCart(product)}  // Pass the product when adding to cart
                 />
-              </a>
+              // </a>
             ))}
             {currentProducts.length === 0 && (
               <p className="text-center w-full">No products found.</p>
