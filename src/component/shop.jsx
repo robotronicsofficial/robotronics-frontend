@@ -13,8 +13,8 @@ const ServiceCard = ({ service }) => {
     <div className="p-5" data-aos="fade-up">
       <div className="bg-white p-5 rounded-xl">
         <img
-          // className="rounded-xl w-full object-cover object-center"
-          // src={service.image.url}
+          className="rounded-xl w-full object-cover object-center"
+          src={`http://localhost:8080/${service.thumbnail}`}
           alt={'image'}
         />
         <div className="flex flex-row justify-between">
@@ -68,12 +68,12 @@ const Shop = () => {
 
     const fetchServices = async () => {
       try {
-        const response = await fetch("http://localhost:8080/all/Courses");
+        const response = await fetch("http://localhost:8080/get-courses");
         if (!response.ok) {
           throw new Error("Failed to fetch services data");
         }
         const data = await response.json();
-        setServices(data || []);
+        setServices(data.courses || []);
         setLoading(false);
       } catch (err) {
         setError(err.message);
