@@ -121,11 +121,10 @@ export default function Header() {
 
             <NavLink
               className="cursor-pointer hover:text-black poppins-light hover:border-b hover:border-black text-black text-lg font-bold bg-yellow rounded-lg px-4"
-              to="/Dashboard/courseDetail"
+              to="/Robogeniushome"
             >
               <StarIcon />
               RoboGenius
-
             </NavLink>
 
            
