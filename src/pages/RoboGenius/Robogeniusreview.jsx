@@ -1,0 +1,84 @@
+import React from "react";
+// import ceo5 from './path/to/ceo5.jpg'; // Replace with the actual path to your image
+// import star from './path/to/star.png'; // Replace with the actual path to your star image
+
+import c5 from "../../assets/images/ceo5.svg";
+import { FaStar, FaArrowDown } from "react-icons/fa";
+import shopStar from "../../assets/images/shopStar.svg";
+
+const ReviewsComponent = () => {
+  const reviews = [
+    {
+      name: "Ahmed Saimoon",
+      role: "CEO, Avito",
+      review:
+        "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
+    },
+    {
+      name: "Ahmed Saimoon",
+      role: "CEO, Avito",
+      review:
+        "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
+    },
+    {
+      name: "Ahmed Saimoon",
+      role: "CEO, Avito",
+      review:
+        "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
+    },
+    {
+      name: "Ahmed Saimoon",
+      role: "CEO, Avito",
+      review:
+        "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
+    },
+    {
+      name: "Ahmed Saimoon",
+      role: "CEO, Avito",
+      review:
+        "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
+    },
+    {
+      name: "Ahmed Saimoon",
+      role: "CEO, Avito",
+      review:
+        "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
+    },
+  ];
+
+  return (
+    <>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+      {reviews.map((review, index) => (
+        <div key={index} className="lg:p-5 border border-gray-200 rounded-2xl">
+          <div className="flex">
+            <img className="lg:p-5" src={c5} alt="CEO" />
+            <div className="flex flex-col">
+              <p className="text-brown text-sm lg:text-base font-bold poppins-bold">
+                {review.name}
+              </p>
+              <p className="text-brown text-sm poppins-regular">
+                {review.role}
+              </p>
+              <img className="" src={shopStar} alt="" />
+            </div>
+          </div>
+          <div>
+            <p className="py-2 text-brown lg:text-base text-sm text-wrap poppins-regular">
+              {review.review}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div className=" flex justify-end items-center pr-4">
+    <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
+      <span>View More</span>
+      <FaArrowDown className="text-xs transform -rotate-90" />
+    </button>
+  </div>
+  </>
+  );
+};
+
+export default ReviewsComponent;

@@ -77,7 +77,7 @@ const Testimonial = () => {
               </div>
           </div>
           {/* div 3 */}
-          <div className="lg:p-5 border border-gray rounded-2xl">
+          <div className="lg:p-5 border border-gray rounded-2xl ">
             {/* img */}
             <div className="flex">
 

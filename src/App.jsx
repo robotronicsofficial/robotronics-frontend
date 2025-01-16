@@ -12,6 +12,7 @@ import ProductDetailPage from "./pages/shop/ProductDetailPage";
 import CoursesProductDetail from "./pages/courses/coursesProductDetail";
 import ShippingService from "./pages/shop/shippingService";
 import CareerJob from "./pages/career/careerJob";
+import Robogeniushome from "./pages/RoboGenius/Robogeniushome"
 
 import SendResumeForm from "./component/SendResumeForm";
 import CareerDetailPage from "./pages/career/careerDetailPage";
@@ -71,6 +72,7 @@ function App() {
           <Route path="/Dashboard/userInfoForm" element={<UserInfoForm />} />
           <Route path="/Dashboard/courseDetail" element={<CourseDetail />} />
           <Route path="/International/myRobot" element={<MyRobort />} />
+          <Route path="/Robogeniushome" element={<Robogeniushome />} />
           <Route
             path="/International/videoGallery"
             element={<VideoGallery />}
