@@ -1,4 +1,5 @@
 import { PiGraduationCapLight } from "react-icons/pi";
+// import Header from "../../header";
 import Header from "../../header";
 import bg from "../../../assets/images/courses_details.svg";
 import yt from "../../../assets/images/courseDetailsYoutube.svg";
@@ -13,10 +14,6 @@ const Intro = () => {
         <Header />
         <div className="pt-10 px-10"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000" >
           <a href="/Dashboard/MyCoursesPage">
-          <button className="hover:text-brown text-xl border border-xl border-brown hover:shadow-md p-1 rounded-xl" 
-         >
-            Back
-          </button>
           </a>
         </div>
       </div>
