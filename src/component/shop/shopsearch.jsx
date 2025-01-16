@@ -28,7 +28,7 @@ const Shopsearch = () => {
         const response = await fetch("http://localhost:8080/getProducts");
         const data = await response.json();
         console.log("Fetched products:", data);
-        setProducts(data);
+        setProducts(data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
