@@ -1,7 +1,7 @@
 import Footer from "../../component/footer"
 import CustomerInfoIntro from "../../component/shop/customerInfoIntro"
 import CustomerInfomation from "../../component/shop/CustomerInfomation"
-const customerInfo = () => {
+const CustomerInfo = () => {
   return (
     <div>
         <CustomerInfoIntro/>
@@ -11,4 +11,4 @@ const customerInfo = () => {
   )
 }
 
-export default customerInfo
+export default CustomerInfo

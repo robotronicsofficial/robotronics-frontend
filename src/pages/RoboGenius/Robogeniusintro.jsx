@@ -8,8 +8,17 @@ import { FaStar } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { MdCheckBox } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+
 
 const Robogeniusintro = () => {
+
+  const navigate = useNavigate(); // Initialize the navigate function
+
+  const handleRegisterClick = () => {
+    navigate("/Robogeniushome/Register"); // Navigate to the desired route
+  };
+
   return (
     <div className="bg-background">
       <div className="p-5">
@@ -59,7 +68,7 @@ const Robogeniusintro = () => {
 
                 {/* button */}
                 <div className="my-6">
-                  <button className=" text-brown py-2 px-10 rounded-md bg-gold shadow-lg hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                  <button onClick={handleRegisterClick} className=" text-brown py-2 px-10 rounded-md bg-gold shadow-lg hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                     Register Now
                   </button>
                 </div>
