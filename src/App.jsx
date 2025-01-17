@@ -6,13 +6,14 @@ import Shop from "./pages/shop";
 import Cart from "./pages/shop/cart";
 import Signup from "./pages/signup";
 import Login from "./pages/login";
-import CustomerInfo from "./pages/shop/customerInfo";
+import CustomerInfo from "./pages/shop/CustomerInfo";
 import Course from "./pages/courses";
 import ProductDetailPage from "./pages/shop/ProductDetailPage";
 import CoursesProductDetail from "./pages/courses/coursesProductDetail";
 import ShippingService from "./pages/shop/shippingService";
 import CareerJob from "./pages/career/careerJob";
 import Robogeniushome from "./pages/RoboGenius/Robogeniushome"
+import Robogeniusregister from "./pages/RoboGenius/RogoGeniusRegister/Robogeniusregister";
 
 import SendResumeForm from "./component/SendResumeForm";
 import CareerDetailPage from "./pages/career/careerDetailPage";
@@ -33,6 +34,7 @@ import Screen from "./pages/SplashScreen/screen";
 import Search from "./component/search";
 import MyRobort from './pages/Dashboard/myRobot'
 import JobApplicationForm from "./component/careers/CareerDetailPage/jobApplicationForm";
+
 
 function App() {
   return (
@@ -73,6 +75,7 @@ function App() {
           <Route path="/Dashboard/courseDetail" element={<CourseDetail />} />
           <Route path="/International/myRobot" element={<MyRobort />} />
           <Route path="/Robogeniushome" element={<Robogeniushome />} />
+          <Route path="/Robogeniushome/Register" element={<Robogeniusregister />} />
           <Route
             path="/International/videoGallery"
             element={<VideoGallery />}
