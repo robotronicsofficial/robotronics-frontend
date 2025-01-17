@@ -8,6 +8,7 @@ import icon from "../../assets/logo/searchicon.svg";
 import arow from "../../assets/logo/shopArowIcon.svg";
 import shopHome from "../../assets/shopHome.png";
 import { FaRegHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 
 // import ShopItems from "../shopItems";
@@ -192,22 +193,19 @@ const Shopsearch = () => {
           <Shopfilter/>
           {/* shop items */}
           <div className="flex flex-wrap items-center justify-between gap-x-20 gap-y-10 p-5 lg:px-10">
-            {currentProducts.map((product) => (
-              // <a
-              //   className="h-[25vw]"
-              //   href="/ProductDetailPage"
-              //   key={product.id}
-              // >
-                <Shopproduct
-                  key={product.id}
-                  title={product.name}
-                  price={product.price}
-                  image={`http://localhost:8080/${product.images[0]}`}
-                  onAddToWishlist={handleAddToWishlist}
-                  onAddToCart={() => handleAddToCart(product)}  // Pass the product when adding to cart
-                />
-              // </a>
-            ))}
+          {currentProducts.map((product) => (
+            <div key={product.id} className="relative">
+              {/* Pass the productId to the Shopproduct */}
+              <Shopproduct
+                title={product.name}
+                price={product.price}
+                image={`http://localhost:8080/${product.images[0]}`}
+                onAddToWishlist={handleAddToWishlist}
+                onAddToCart={() => handleAddToCart(product)}  // Pass the product when adding to cart
+                productId={product.id}  // Pass the product ID
+              />
+            </div>
+          ))}
             {currentProducts.length === 0 && (
               <p className="text-center w-full">No products found.</p>
             )}
