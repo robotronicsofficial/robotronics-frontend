@@ -6,7 +6,7 @@ import Shop from "./pages/shop";
 import Cart from "./pages/shop/cart";
 import Signup from "./pages/signup";
 import Login from "./pages/login";
-import CustomerInfo from "./pages/shop/CustomerInfo";
+import CustomerInfo from "./pages/shop/customerInfo";
 import Course from "./pages/courses";
 import ProductDetailPage from "./pages/shop/ProductDetailPage";
 import CoursesProductDetail from "./pages/courses/coursesProductDetail";

@@ -1,5 +1,5 @@
 import React from 'react'
-import CustomerInfo from '../../shop/CustomerInfo'
+import CustomerInfo from '../../shop/customerInfo'
 import Footer from '../../../component/footer'
 // import CustomerInfoIntro from '../../../component/shop/customerInfoIntro'
 import RobogeniusCustomerInfoIntro from './RobogeniusCustomerInfoIntro'
