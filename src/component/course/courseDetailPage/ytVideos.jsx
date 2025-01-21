@@ -1,7 +1,7 @@
 const YtVideos = () => {
   return (
     <div className="p-5 bg-gray">
-      <p className="lg:text-6xl text-4xl text-brown text-center font-bold">FQA</p>
+      {/* <p className="lg:text-6xl text-4xl text-brown text-center font-bold">FQA</p> */}
       <div className="lg:p-10 p-5 lg:flex flex-row lg:space-x-5 lg:space-y-0 space-y-8  justify-center">
         {/* video 1 */}
         <div className=" bg-white  ">
