@@ -23,7 +23,7 @@ export default function Header() {
     (acc, item) => acc + item.count,
     0
   );
-
+ 
   useEffect(() => {
     Aos.init(); // Initialize AOS librarya
     const storedToken = sessionStorage.getItem("token");

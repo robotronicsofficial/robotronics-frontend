@@ -34,6 +34,7 @@ import Screen from "./pages/SplashScreen/screen";
 import Search from "./component/search";
 import MyRobort from './pages/Dashboard/myRobot'
 import JobApplicationForm from "./component/careers/CareerDetailPage/jobApplicationForm";
+import Robogeniuspaymenthome from "./pages/RoboGenius/RoboGeniusPayment/Robogeniuspaymenthome";
 
 
 function App() {
@@ -76,6 +77,7 @@ function App() {
           <Route path="/International/myRobot" element={<MyRobort />} />
           <Route path="/Robogeniushome" element={<Robogeniushome />} />
           <Route path="/Robogeniushome/Register" element={<Robogeniusregister />} />
+          <Route path="/Robogeniushome/Payment" element={<Robogeniuspaymenthome />} />
           <Route
             path="/International/videoGallery"
             element={<VideoGallery />}
