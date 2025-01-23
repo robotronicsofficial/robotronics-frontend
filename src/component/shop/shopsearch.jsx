@@ -8,7 +8,6 @@ import icon from "../../assets/logo/searchicon.svg";
 import arow from "../../assets/logo/shopArowIcon.svg";
 import shopHome from "../../assets/shopHome.png";
 import { FaRegHeart } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
 
 // import ShopItems from "../shopItems";
@@ -104,10 +103,7 @@ const Shopsearch = () => {
                 />
 
                 <p className="px-5 font-bold" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
-                  Main Page
-                </p>
-                <p className="font-bold opacity-10">
-                  Catalog
+                  Shop Page
                 </p>
               </div>
             </div>
@@ -156,7 +152,7 @@ const Shopsearch = () => {
             <div className="h-1.5 w-14 border bg-brown border-brown mt-4"></div>
           </div>
           <div className=" lg:text-2xl text-xl poppins-regular items-right lg:py-10 py-4 lg:w-4/5">
-            catalog
+            Shop
             <div className="flex lg:space-x-3">
               {/* search */}
               <div className="flex flex-1">
