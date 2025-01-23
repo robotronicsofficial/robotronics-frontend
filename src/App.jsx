@@ -24,6 +24,7 @@ import UserInfo from "./pages/Dashboard/userInfo";
 import Order from "./pages/Dashboard/order";
 import MyCoursesPage from "./pages/Dashboard/myCoursesPage";
 import WishList from "./pages/Dashboard/wishList";
+import Payment from "./pages/Dashboard/Payment";
 import Error from "./pages/404/error";
 import UserInfoForm from "./pages/Dashboard/userInfoForm";
 import CourseDetail from "./pages/Dashboard/CourseDetail";
@@ -72,11 +73,13 @@ function App() {
           <Route path="/Dashboard/order" element={<Order />} />
           <Route path="/Dashboard/MyCoursesPage" element={<MyCoursesPage />} />
           <Route path="/Dashboard/WishList" element={<WishList />} />
+          <Route path="/Dashboard/PaymentHistory" element={<Payment />} />
           <Route path="/404" element={<Error />} />
           <Route path="/Dashboard/userInfoForm" element={<UserInfoForm />} />
           <Route path="/Dashboard/courseDetail" element={<CourseDetail />} />
           <Route path="/International/myRobot" element={<MyRobort />} />
           <Route path="/Robogeniushome" element={<Robogeniushome />} />
+          <Route path="/Robogeniushome/GiftCourse" element={<Robogeniushome />} />
           <Route path="/Robogeniushome/Register" element={<Robogeniusregister />} />
           <Route path="/Robogeniushome/Payment" element={<Robogeniuspaymenthome />} />
           <Route path="/Robogeniushome/Review" element={<Robogeniusrevieworderhome />} />
