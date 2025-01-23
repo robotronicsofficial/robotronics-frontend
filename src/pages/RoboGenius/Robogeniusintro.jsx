@@ -10,9 +10,7 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import { MdCheckBox } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
-
 const Robogeniusintro = () => {
-
   const navigate = useNavigate(); // Initialize the navigate function
 
   const handleRegisterClick = () => {
@@ -72,7 +70,10 @@ const Robogeniusintro = () => {
 
                 {/* button */}
                 <div className="my-6">
-                  <button onClick={handleRegisterClick} className=" text-brown py-2 px-10 rounded-md bg-gold shadow-lg hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                  <button
+                    onClick={handleRegisterClick}
+                    className=" text-brown py-2 px-10 rounded-md bg-gold shadow-lg hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                  >
                     Register Now
                   </button>
                 </div>
@@ -88,8 +89,9 @@ const Robogeniusintro = () => {
                   <div className="flex space-x-6">
                     <div className="inline-block ">
                       <button
-                      onClick={handleGiftProgramClick} 
-                      className="bg-yellow text-white py-3 px-4 rounded-full shadow-lg hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                        onClick={handleGiftProgramClick}
+                        className="bg-yellow text-white py-3 px-4 rounded-full shadow-lg hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                      >
                         Gift This Program
                       </button>
                     </div>
@@ -173,7 +175,9 @@ const Robogeniusintro = () => {
                   className="w-24 h-24 rounded-full"
                 />
                 <div className="h-24 justify-center">
-                  <h2 className="text-lg text-white font-bold mb-2">David Millar</h2>
+                  <h2 className="text-lg text-white font-bold mb-2">
+                    David Millar
+                  </h2>
                   <p className="text-sm text-wrap text-white">
                     Masters - Business Administration Mentor/Motivational
                     Speaker.
