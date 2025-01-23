@@ -19,6 +19,10 @@ const Robogeniusintro = () => {
     navigate("/Robogeniushome/Register"); // Navigate to the desired route
   };
 
+  const handleGiftProgramClick = () => {
+    navigate("/Robogeniushome/GiftCourse"); // Replace with your desired route
+  };
+
   return (
     <div className="bg-background">
       <div className="p-5">
@@ -83,7 +87,9 @@ const Robogeniusintro = () => {
                 <div className="">
                   <div className="flex space-x-6">
                     <div className="inline-block ">
-                      <button className="bg-yellow text-white py-3 px-4 rounded-full shadow-lg hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                      <button
+                      onClick={handleGiftProgramClick} 
+                      className="bg-yellow text-white py-3 px-4 rounded-full shadow-lg hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                         Gift This Program
                       </button>
                     </div>
