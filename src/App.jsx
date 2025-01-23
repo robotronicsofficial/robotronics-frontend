@@ -37,6 +37,7 @@ import MyRobort from './pages/Dashboard/myRobot'
 import JobApplicationForm from "./component/careers/CareerDetailPage/jobApplicationForm";
 import Robogeniuspaymenthome from "./pages/RoboGenius/RoboGeniusPayment/Robogeniuspaymenthome";
 import Robogeniusrevieworderhome from "./pages/RoboGenius/RoboGeniusReview/Robogeniusrevieworderhome";
+import GiftCourse from "./pages/RoboGenius/RobogeniusGift/GiftCourse";
 
 
 function App() {
@@ -79,7 +80,7 @@ function App() {
           <Route path="/Dashboard/courseDetail" element={<CourseDetail />} />
           <Route path="/International/myRobot" element={<MyRobort />} />
           <Route path="/Robogeniushome" element={<Robogeniushome />} />
-          <Route path="/Robogeniushome/GiftCourse" element={<Robogeniushome />} />
+          <Route path="/Robogeniushome/GiftCourse" element={<GiftCourse />} />
           <Route path="/Robogeniushome/Register" element={<Robogeniusregister />} />
           <Route path="/Robogeniushome/Payment" element={<Robogeniuspaymenthome />} />
           <Route path="/Robogeniushome/Review" element={<Robogeniusrevieworderhome />} />
