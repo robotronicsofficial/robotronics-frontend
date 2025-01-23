@@ -6,10 +6,12 @@ import {
   FaHeadphones,
   FaSignOutAlt,
 } from "react-icons/fa";
+import { MdOutlinePayment } from "react-icons/md";
+
 import { useState } from "react";
 
 const LeftNav = () => {
-  const user = { userName: "hammad" };
+  const user = { userName: "Arslan" };
 
   const data = [
     { name: "My info", href: "/Dashboard/userInfo", icon: <FaUser className="text-brown" /> },
@@ -18,6 +20,11 @@ const LeftNav = () => {
       name: "Wishlist",
       href: "/Dashboard/WishList",
       icon: <FaHeart className="text-brown" />,
+    },
+    {
+      name: "Payment History",
+      href: "/Dashboard/WishList",
+      icon: <MdOutlinePayment className="text-brown" />,
     },
     {
       name: "Support",
@@ -44,7 +51,7 @@ const LeftNav = () => {
   };
 
   return (
-    <div className="flex flex-col pl-20">
+    <div className="flex flex-col pl-20  w-[24vw]">
       {/* User Information */}
       <div className="lg:mb-4 lg:py-5 py-2 space-y-5">
         <div className="flex flex-row space-x-2">
@@ -56,9 +63,9 @@ const LeftNav = () => {
 
       {/* Navigation Links */}
       <nav>
-        <ul className="space-y-4 ">
+        <ul className="space-y-5">
           {data.map((item, index) => (
-            <li key={index} className="relative">
+            <li key={index} className="relative  items-center ">
               <div
                 className={` lg:px-14 px-5 flex items-center rounded-e-xl lg:space-x-5 text-brown hover:text-black hover:bg-gold hover:border-l-4 border-black ${activeIndex === index ? "bg-gold text-brown" : ""
                   }`}
