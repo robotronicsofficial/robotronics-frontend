@@ -23,7 +23,7 @@ const LeftNav = () => {
     },
     {
       name: "Payment History",
-      href: "/Dashboard/WishList",
+      href: "/Dashboard/PaymentHistory",
       icon: <MdOutlinePayment className="text-brown" />,
     },
     {
