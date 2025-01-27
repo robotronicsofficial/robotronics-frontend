@@ -185,10 +185,10 @@ const Shopsearch = () => {
       {/* block 2 */}
       <div className="flex-1" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
         {/* parent */}
-        <div className="flex ">
+        <div className="flex">
           <Shopfilter/>
           {/* shop items */}
-          <div className="flex flex-wrap items-center justify-between gap-x-20 gap-y-10 p-5 lg:px-10">
+          <div className="flex flex-wrap  justify-between gap-x-20 gap-y-4 px-5 lg:px-10 lg:py-10 min-h-[85vw]">
           {currentProducts.map((product) => (
             <div key={product.id} className="relative">
               {/* Pass the productId to the Shopproduct */}
@@ -210,7 +210,7 @@ const Shopsearch = () => {
       </div>
       {/* Pagination Section */}
       <div className="flex-1">
-        <div className="">
+        <div className="mt-10">
           <ShopPages />
         </div>
         <div className="lg:flex flex-row justify-between lg:p-5">
