@@ -201,7 +201,7 @@ export default function Header() {
             {token ? (
               <>
                 <span
-                  className="text-black poppins-light capitalize cursor-pointer hover:font-medium"
+                  className="text-black poppins-light capitalize cursor-pointer hover:font-medium w-[7vw]"
                   onClick={() => {
                     navigate("/Dashboard/userInfo");
                   }}

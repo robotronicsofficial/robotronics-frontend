@@ -48,36 +48,38 @@ const ReviewsComponent = () => {
 
   return (
     <>
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
-      {reviews.map((review, index) => (
-        <div key={index} className="lg:p-5 border border-gray-200 rounded-2xl">
-          <div className="flex">
-            <img className="lg:p-5" src={c5} alt="CEO" />
-            <div className="flex flex-col">
-              <p className="text-brown text-sm lg:text-base font-bold poppins-bold">
-                {review.name}
+      <div className="w-full px-6">
+        <div className="m-4 ">
+          <h1 className="text-5xl poppins-medium text-brown text-center w-full">Reviews</h1>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+        {reviews.map((review, index) => (
+          <div
+            key={index}
+            className="lg:p-5 border border-gray-200 rounded-2xl"
+          >
+            <div className="flex">
+              <img className="lg:p-5" src={c5} alt="CEO" />
+              <div className="flex flex-col">
+                <p className="text-brown text-sm lg:text-base font-bold poppins-bold">
+                  {review.name}
+                </p>
+                <p className="text-brown text-sm poppins-regular">
+                  {review.role}
+                </p>
+                <img className="" src={shopStar} alt="" />
+              </div>
+            </div>
+            <div>
+              <p className="py-2 text-brown lg:text-base text-sm text-wrap poppins-regular">
+                {review.review}
               </p>
-              <p className="text-brown text-sm poppins-regular">
-                {review.role}
-              </p>
-              <img className="" src={shopStar} alt="" />
             </div>
           </div>
-          <div>
-            <p className="py-2 text-brown lg:text-base text-sm text-wrap poppins-regular">
-              {review.review}
-            </p>
-          </div>
-        </div>
-      ))}
-    </div>
-    <div className=" flex justify-end items-center pr-4">
-    <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
-      <span>View More</span>
-      <FaArrowDown className="text-xs transform -rotate-90" />
-    </button>
-  </div>
-  </>
+        ))}
+      </div>
+    </>
   );
 };
 

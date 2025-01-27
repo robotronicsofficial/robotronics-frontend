@@ -8,6 +8,15 @@ import Robogeniusreview from "./Robogeniusreview";
 
 const Robogeniusdetail = () => {
   const [showAllCourses, setShowAllCourses] = useState(false); // Track toggle state
+  const [visibleCourses, setVisibleCourses] = useState(3); // State to track how many courses are visible
+
+  const handleViewMore = () => {
+    setVisibleCourses((prev) => prev + 3); // Show 3 more courses when button is clicked
+  };
+
+  const handleShowLess = () => {
+    setVisibleCourses(3); // Reset to showing only the default 3 courses
+  };
 
   const courses = [
     {
@@ -216,56 +225,62 @@ const Robogeniusdetail = () => {
 
         {/* Course Sections */}
         <div className="mt-10">
+          {/* Courses Grid */}
           <div className="flex flex-wrap justify-between gap-y-6">
-            {courses
-              .slice(0, 3) // Show only 3 courses
-              .map((course) => (
-                <div
-                  key={course.id}
-                  className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-2 bg-[#fffff] p-6"
-                >
-                  <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff]">
-                    <img className="w-full" src={course.image} alt="Course" />
-                    <div className="lg:px-6 py-4 flex-grow">
-                      <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                        <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base">
-                          {course.category}
-                        </p>
-                        <div className="flex items-center">
-                          <FaStar className="text-yellow-500 text-yellow" />
-                          <p className="text-gray-700 poppins-light text-base ml-2">
-                            ({course.reviews} Reviews)
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="font-bold text-xl p-2 poppins-bold text-left text-wrap mb-2">
-                        {course.title}
-                      </div>
-
-                      <p className="text-gray-700 space-x-2 text-left text-base">
-                        <span className="text-line px-2">by</span>
-                        {course.author}
+            {courses.slice(0, visibleCourses).map((course) => (
+              <div
+                key={course.id}
+                className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-2 bg-[#ffffff] p-6"
+              >
+                <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff]">
+                  <img className="w-full" src={course.image} alt="Course" />
+                  <div className="lg:px-6 py-4 flex-grow">
+                    <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
+                      <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base">
+                        {course.category}
                       </p>
+                      <div className="flex items-center">
+                        <FaStar className="text-yellow-500" />
+                        <p className="text-gray-700 poppins-light text-base ml-2">
+                          ({course.reviews} Reviews)
+                        </p>
+                      </div>
                     </div>
-                    <div className="p-4 px-8">
-                      <a href="/Dashboard/courseDetail">
-                        <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
-                          <span>{course.buttonText}</span>
-                          <FaArrowDown className="text-xs" />
-                        </button>
-                      </a>
+
+                    <div className="font-bold text-xl p-2 poppins-bold text-left text-wrap mb-2">
+                      {course.title}
                     </div>
+
+                    <p className="text-gray-700 space-x-2 text-left text-base">
+                      <span className="text-line px-2">by</span>
+                      {course.author}
+                    </p>
+                  </div>
+                  <div className="p-4 px-8">
+                    <a href="/Dashboard/courseDetail">
+                      <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
+                        <span>{course.buttonText}</span>
+                        <FaArrowDown className="text-xs -rotate-90" />
+                      </button>
+                    </a>
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
-          <div className="w-full flex justify-end pr-4">
-            <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
-              <span>View More</span>
-              <FaArrowDown className="text-xs transform -rotate-90" />
-            </button>
-          </div>
+
+          {/* View More Button */}
+          {visibleCourses < courses.length && ( // Show the button only if there are more courses to display
+            <div className="w-full flex justify-end pr-4">
+              <button
+                onClick={handleViewMore}
+                className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2"
+              >
+                <span>View More</span>
+                <FaArrowDown className="text-xs transform -rotate-120" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Reviews */}
