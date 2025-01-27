@@ -36,7 +36,7 @@ const Intro = () => {
     <>
       <div className="hero" id="hero">
         <div className="p-5">
-          <Header />
+          {/* <Header /> */}
         </div>
 
         <div className="space-y-5">

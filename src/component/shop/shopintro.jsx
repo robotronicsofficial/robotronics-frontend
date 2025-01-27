@@ -12,7 +12,7 @@ const Shopintro = () => {
     <>
       <div className="shophero relative w-full" id="shophero">
         <div className="p-8" >
-          <Header />
+          {/* <Header /> */}
         </div>
       </div>
     </>

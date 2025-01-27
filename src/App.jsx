@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./component/Layout";
 import Home from "./pages/home";
 import AboutUs from "./pages/about";
 import Shipping from "./pages/shop/shipping";
@@ -12,9 +13,8 @@ import ProductDetailPage from "./pages/shop/ProductDetailPage";
 import CoursesProductDetail from "./pages/courses/coursesProductDetail";
 import ShippingService from "./pages/shop/shippingService";
 import CareerJob from "./pages/career/careerJob";
-import Robogeniushome from "./pages/RoboGenius/Robogeniushome"
+import Robogeniushome from "./pages/RoboGenius/Robogeniushome";
 import Robogeniusregister from "./pages/RoboGenius/RogoGeniusRegister/Robogeniusregister";
-
 import SendResumeForm from "./component/SendResumeForm";
 import CareerDetailPage from "./pages/career/careerDetailPage";
 import Blog from "./pages/Blog/blog";
@@ -33,17 +33,16 @@ import IServices from "./pages/International/services";
 import IHome from "./pages/International/home";
 import Screen from "./pages/SplashScreen/screen";
 import Search from "./component/search";
-import MyRobort from './pages/Dashboard/myRobot'
+import MyRobort from './pages/Dashboard/myRobot';
 import JobApplicationForm from "./component/careers/CareerDetailPage/jobApplicationForm";
 import Robogeniuspaymenthome from "./pages/RoboGenius/RoboGeniusPayment/Robogeniuspaymenthome";
 import Robogeniusrevieworderhome from "./pages/RoboGenius/RoboGeniusReview/Robogeniusrevieworderhome";
 import GiftCourse from "./pages/RoboGenius/RobogeniusGift/GiftCourse";
 
-
 function App() {
   return (
-    <>
-      <Router>
+    <Router>
+      <Layout>
         <Routes>
           <Route path="/Search" element={<Search />} />
           <Route path="/Screen" element={<Screen />} />
@@ -58,12 +57,8 @@ function App() {
           <Route path="/CustomerInfo" element={<CustomerInfo />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Signup" element={<Signup />} />
-          <Route
-            path="/CoursesProduct/:id?"
-            element={<CoursesProductDetail />}
-          />
+          <Route path="/CoursesProduct/:id?" element={<CoursesProductDetail />} />
           <Route path="/CareerJob" element={<CareerJob />} />
-          {/* <Route path="/" element={<CareesFindRole />} /> */}
           <Route path="/send-resume" element={<SendResumeForm />} />
           <Route path="/CareerDetailPage" element={<CareerDetailPage />} />
           <Route path="/job-application" element={<JobApplicationForm />} />
@@ -84,15 +79,13 @@ function App() {
           <Route path="/Robogeniushome/Register" element={<Robogeniusregister />} />
           <Route path="/Robogeniushome/Payment" element={<Robogeniuspaymenthome />} />
           <Route path="/Robogeniushome/Review" element={<Robogeniusrevieworderhome />} />
-          <Route
-            path="/International/videoGallery"
-            element={<VideoGallery />}
-          />
+          <Route path="/International/videoGallery" element={<VideoGallery />} />
           <Route path="/International/Iservices" element={<IServices />} />
           <Route path="/International/home" element={<IHome />} />
         </Routes>
-      </Router>
-    </>
+      </Layout>
+    </Router>
   );
 }
+
 export default App;
