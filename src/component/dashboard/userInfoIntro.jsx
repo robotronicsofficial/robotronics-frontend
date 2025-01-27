@@ -292,7 +292,7 @@ const UserInfoIntro = () => {
                   <p className="text-lightblack poppins-bold">{user.email}</p>
                   <p className="text-lightblack poppins-bold">{user.phone}</p>
 
-                  <div className="flex flex-row space-x-5">
+                  {/* <div className="flex flex-row space-x-5">
                     <button
                       className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2"
                       onClick={handleHomeClick}
@@ -302,16 +302,16 @@ const UserInfoIntro = () => {
                     <button className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2">
                       Default billing address
                     </button>
-                  </div>
+                  </div> */}
 
-                  <div className="flex flex-row space-x-5">
+                  {/* <div className="flex flex-row space-x-5">
                     <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
                       Remove
                     </a>
                     <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
                       Edit
                     </a>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -348,14 +348,14 @@ const UserInfoIntro = () => {
                     </button>
                   </div>
 
-                  <div className="flex flex-row space-x-5">
+                  {/* <div className="flex flex-row space-x-5">
                     <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
                       Remove
                     </a>
                     <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
                       Edit
                     </a>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
