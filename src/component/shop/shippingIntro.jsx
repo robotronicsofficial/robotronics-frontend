@@ -1,11 +1,7 @@
-import Header from "../header"
 import ShippingStep from "../../component/shop/steps.jsx/reviewStep"
 const ShippingIntro = () =>  {
     return (
       <div className="shopCarthero" id="shopCarthero">
-          <div className="p-5">
-            <Header />
-          </div>
           {/* parent */}
           <div className="flex flex-col lg:py-20 py-10" >
           <div className=" items-center" >

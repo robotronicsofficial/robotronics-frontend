@@ -1,7 +1,6 @@
 import { useState } from "react";
 import robo from "../../../assets/images/shopRobot.svg";
 import star from "../../../assets/images/shopStar.svg";
-import Header from "../../header";
 import { FaRegHeart } from "react-icons/fa";
 
 const Intro = () => {
@@ -21,9 +20,6 @@ const Intro = () => {
 
   return (
     <div className="bg-lightgray">
-      <div className="P-5 ">
-        <Header />
-      </div>
       {/* parent */}
       <div className="lg:p-5 lg:px-14 flex flex-row">
         {/* left */}

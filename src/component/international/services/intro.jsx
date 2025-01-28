@@ -6,16 +6,11 @@ import {
   FaWhatsapp,
   FaYoutube,
 } from "react-icons/fa";
-import Header from "../../header";
-import { useState } from "react";
 
 const Intro = () => {
   
   return (
     <div className="internationalServices">
-      <div className="p-5 ">
-        <Header />
-      </div>
       <div className="space-y-5"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
           {/* As a School & Parent */}
         {/* intro */}

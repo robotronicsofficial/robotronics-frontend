@@ -3,7 +3,6 @@ import AboutRobotronics from "../component/about/aboutRobotronics";
 import AboutScience from "../component/about/aboutScience"
 import AboutVision from "../component/about/aboutVision"
 import AboutSquad from "../component/about/aboutSquad"
-import Schoollgoso from "../component/schoollogos"
 import Footer from "../component/footer"
 import Gotobtn from "../component/goToBtn"
 import Marquees from "../component/marquees";

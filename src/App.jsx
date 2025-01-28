@@ -15,11 +15,10 @@ import ShippingService from "./pages/shop/shippingService";
 import CareerJob from "./pages/career/careerJob";
 import Robogeniushome from "./pages/RoboGenius/Robogeniushome";
 import Robogeniusregister from "./pages/RoboGenius/RogoGeniusRegister/Robogeniusregister";
-import SendResumeForm from "./component/SendResumeForm";
 import CareerDetailPage from "./pages/career/careerDetailPage";
 import Blog from "./pages/Blog/blog";
 import BlogDetail from "./pages/Blog/blogDetail";
-import COntactUS from "./pages/contactUs/cOntactUS";
+import ContactUs from "./pages/contactUs/contactUs";
 import UserInfo from "./pages/Dashboard/userInfo";
 import Order from "./pages/Dashboard/order";
 import MyCoursesPage from "./pages/Dashboard/myCoursesPage";
@@ -59,12 +58,11 @@ function App() {
           <Route path="/Signup" element={<Signup />} />
           <Route path="/CoursesProduct/:id?" element={<CoursesProductDetail />} />
           <Route path="/CareerJob" element={<CareerJob />} />
-          <Route path="/send-resume" element={<SendResumeForm />} />
           <Route path="/CareerDetailPage" element={<CareerDetailPage />} />
-          <Route path="/job-application" element={<JobApplicationForm />} />
+          <Route path="/JobApplicationForm" element={<JobApplicationForm />} />
           <Route path="/Blog" element={<Blog />} />
           <Route path="/BlogDetail" element={<BlogDetail />} />
-          <Route path="/COntactUS" element={<COntactUS />} />
+          <Route path="/ContactUs" element={<ContactUs />} />
           <Route path="/Dashboard/userInfo" element={<UserInfo />} />
           <Route path="/Dashboard/order" element={<Order />} />
           <Route path="/Dashboard/MyCoursesPage" element={<MyCoursesPage />} />

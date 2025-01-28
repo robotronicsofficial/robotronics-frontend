@@ -17,7 +17,7 @@ const CareesFindRole = () => {
 
   const handleSendResume = () => {
     // Navigate to the job application form
-    navigate("/job-application"); // Use the path to your job application form
+    navigate("/JobApplicationForm"); // Use the path to your job application form
   };
 
   return (

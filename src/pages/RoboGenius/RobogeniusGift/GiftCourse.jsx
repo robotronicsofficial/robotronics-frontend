@@ -1,4 +1,3 @@
-import React from 'react'
 import GiftCourseHome from './GiftCourseHome'
 
 const GiftCourse = () => {

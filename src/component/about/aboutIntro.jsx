@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 // import { Link } from "react-scroll";
 import "aos/dist/aos.css"; // Import CSS for AOS
-import Header from "../../component/header";
 import Aos from "aos";
 import {
   FaFacebook,
@@ -20,9 +19,6 @@ const Iaboutntro = () => {
   return (
     <>
       <div className="abouthero relative w-full" id="abouthero">
-        <div className="m-5">
-          <Header />
-        </div>
         <div className="overflow-hidden" >
         <div className="flex justify-between w-full p-10">
             {/* text */}

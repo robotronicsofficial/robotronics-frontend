@@ -1,5 +1,4 @@
 import Intro from "../../component/international/services/intro"
-import SchoolLogos from "../../component/schoollogos"
 import Updates from "../../component/updates"
 import OurServices from "../../component/international/services/ourServices"
 import QuickContact from "../../component/international/services/quickContact"
@@ -10,7 +9,6 @@ const IServices = () => {
     <div>
       <Intro />
       <Marquees/>
-      {/* <SchoolLogos /> */}
       <OurServices />
       <Updates />
       <QuickContact />

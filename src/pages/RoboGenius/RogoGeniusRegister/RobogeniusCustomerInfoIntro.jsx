@@ -1,12 +1,7 @@
-import Header from "../../../component/header";
-// import CartsStep from "../../../component/shop/steps.jsx/cartsStep";
 import Robogeniuscustomercart from "./Robogeniuscustomercart";
 const RobogeniusCustomerInfoIntro = () => {
   return (
     <div className="shopCarthero" id="shopCarthero">
-      <div className="p-5">
-        <Header />
-      </div>
       {/* parent */}
       <div className="flex flex-col">
         <div className=" items-center"data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000">
