@@ -1,9 +1,6 @@
-import { PiGraduationCapLight } from "react-icons/pi";
-import Header from "../../component/header";
 import bg from "../../assets/images/courses_details.svg";
 import yt from "../../assets/images/courseDetailsYoutube.svg";
 import pic from "../../assets/images/courseDetailpic.svg";
-import { BsCalendar } from "react-icons/bs";
 import { FaStar } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoShareSocialOutline } from "react-icons/io5";
@@ -23,17 +20,7 @@ const Robogeniusintro = () => {
 
   return (
     <div className="bg-background">
-      <div className="p-5">
-        <Header />
-        <div
-          className="pt-10 px-10"
-          data-aos="fade-right"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
-        >
-          <a href="/Dashboard/MyCoursesPage"></a>
-        </div>
-      </div>
+     
       <div className="bg-gray-100 p-6">
         <div className="max-w-7xl mx-auto">
           <div className="lg:flex flex-wrap lg:flex-nowrap lg:space-x-6">

@@ -1,6 +1,5 @@
 
 import { FaChevronRight } from "react-icons/fa";
-import Header from "../header";
 
 const Intro = () => {
   const breadcrumbs = [
@@ -13,9 +12,6 @@ const Intro = () => {
     <div className="bg-background"  >
       {/* intro */}
       <div>
-        <div className="py-10 px-5">
-          <Header />
-        </div>
         {/* Dynamics-URLS */}
         <nav className="flex w-1/2 mx-auto bg-gray-100  rounded-lg">
           <ol className="list-reset flex text-gray-600">

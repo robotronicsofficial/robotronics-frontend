@@ -1,12 +1,8 @@
-import Header from "../header"
 // import ShopCartSteps from "../shop/ShopCartSteps"
 import CustomerStep from "../../component/shop/steps.jsx/customerStep"
 const CustomerInfoIntro = () => {
   return (
     <div className="shopCarthero" id="shopCarthero">
-        <div className="p-5">
-          <Header />
-        </div>
         {/* parent */}
         <div className="flex flex-col lg:py-20 py-10" >
         <div className=" items-center" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">

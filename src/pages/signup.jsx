@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Header from "../component/header";
 import hide from "../assets/images/hide.svg";
 import robot from "../assets/images/SignupRobot.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
@@ -51,9 +50,6 @@ const Signup = () => {
 
   return (
     <div className="signin" id="signin">
-      <div className="p-5">
-        <Header />
-      </div>
       <div className="lg:flex flex-row justify-between lg:p-14 p-5">
         <div className="hidden lg:block">
           <div className="items-center p-5 space-y-5 ">

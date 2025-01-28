@@ -3,7 +3,6 @@ import python from "../../../assets/images/python.svg";
 import star from "../../../assets/images/shopStar.svg";
 import { useDispatch } from "react-redux";
 
-import Header from "../../header";
 import { addToCart } from "../../../store/cart/cartSlice";
 const CourseIntro = ({ title, id, image, price }) => {
   const dispatch = useDispatch();
@@ -13,9 +12,6 @@ const CourseIntro = ({ title, id, image, price }) => {
   };
   return (
     <div className="bg-lightgray"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
-      <div className="p-5 ">
-        <Header />
-      </div>
       {/* parent */}
       <div className=" p-10 lg:flex flex-row ">
         {/* left */}

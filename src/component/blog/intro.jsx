@@ -1,10 +1,6 @@
-import Header from "../header";
 const Intro = () => {
   return (
     <div className="blog">
-      <div className="p-5">
-        <Header />
-      </div>
 
       <div className="lg:p-10 lg:pt-32 pt-24 lg:pl-28 pl-10 space-y-4  " >
       <p className="text-white lg:text-7xl text-4xl poppins-extrabold"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">Turning science </p>

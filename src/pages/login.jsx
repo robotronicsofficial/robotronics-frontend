@@ -5,7 +5,6 @@ import hide from "../assets/images/hide.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
 import apple from "../assets/images/Applelogo.svg";
-import Header from "../component/header";
 import Footer from "../component/footer";
 
 const saveLoginData = (loginData) => {
@@ -86,9 +85,6 @@ const Login = () => {
   if (forgotPasswordMode) {
     return (
       <div className="bg-gray" id="forgot-password">
-        <div className="p-5">
-          <Header />
-        </div>
         <div className="flex flex-col items-center justify-center py-20">
           <p className="text-4xl poppins-bold text-brown">Forgot Password</p>
           <form
@@ -128,9 +124,6 @@ const Login = () => {
 
   return (
     <div className="bg-gray" id="signin">
-      <div className="p-5">
-        <Header />
-      </div>
       <div>
         <div
           className="flex flex-col lg:space-y-4 space-y-1 items-center justify-center lg:py-20 py-10"
