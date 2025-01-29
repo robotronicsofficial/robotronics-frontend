@@ -1,13 +1,11 @@
 import { useEffect, useState, useMemo } from "react";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaRegHeart } from "react-icons/fa";
 import { BsHandbag } from "react-icons/bs";
 import Shopfilter from "../shop/shopfilter";
 import Shopproduct from "../shop/shopproduct";
 import ShopPages from "../shop/shopPages";
 import icon from "../../assets/logo/searchicon.svg";
-import arow from "../../assets/logo/shopArowIcon.svg";
 import shopHome from "../../assets/shopHome.png";
-import { FaRegHeart } from "react-icons/fa";
 
 const Shopsearch = () => {
   const [products, setProducts] = useState([]);
@@ -21,82 +19,42 @@ const Shopsearch = () => {
   const productsPerPage = 9;
 
   useEffect(() => {
+    let isMounted = true;
     const fetchProducts = async () => {
       try {
         const response = await fetch("http://localhost:8080/getProducts");
         const data = await response.json();
-        setProducts(data.products);
+        if (isMounted) setProducts(data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
-
     fetchProducts();
+    return () => (isMounted = false);
   }, []);
 
-  const handleSort = (products) => {
-    switch (sortOption) {
-      case "Price: Low to High":
-        return [...products].sort((a, b) => a.price - b.price);
-      case "Price: High to Low":
-        return [...products].sort((a, b) => b.price - a.price);
-      case "Popularity":
-        return [...products]; // Assuming default product order reflects popularity
-      default:
-        return products;
-    }
-  };
-
   const filteredProducts = useMemo(() => {
-    return handleSort(
-      products.filter(
-        (product) =>
-          product.name?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          product.price >= priceRange[0] &&
-          product.price <= priceRange[1] &&
-          product.shippingDays <= shippingDays // Filter by shipping days
+    return products
+      .filter(({ name, price, shippingDays: days }) =>
+        name?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        price >= priceRange[0] &&
+        price <= priceRange[1] &&
+        days <= shippingDays
       )
-    );
+      .sort((a, b) => {
+        if (sortOption === "Price: Low to High") return a.price - b.price;
+        if (sortOption === "Price: High to Low") return b.price - a.price;
+        return 0;
+      });
   }, [products, searchQuery, priceRange, shippingDays, sortOption]);
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-
   const currentProducts = useMemo(() => {
-    return filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-  }, [filteredProducts, indexOfFirstProduct, indexOfLastProduct]);
+    const start = (currentPage - 1) * productsPerPage;
+    return filteredProducts.slice(start, start + productsPerPage);
+  }, [filteredProducts, currentPage]);
 
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-  const handleSearchClick = () => {
-    console.log("Search button clicked");
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const handleAddToWishlist = () => {
-    setWishlistCount((prev) => prev + 1);
-  };
-
-  const handleAddToCart = (product) => {
-    setCartItems((prev) => [...prev, product]);
-  };
-
-  const handlePriceRangeChange = (range) => {
-    setPriceRange(range);
-    setCurrentPage(1);
-  };
-
-  const handleShippingChange = (days) => {
-    setShippingDays(days);
-    setCurrentPage(1);
-  };
-
-  const totalCartPrice = useMemo(() => {
-    return cartItems.reduce((total, item) => total + item.price, 0);
-  }, [cartItems]);
+  const totalCartPrice = useMemo(() => cartItems.reduce((total, { price }) => total + price, 0), [cartItems]);
 
   return (
     <div className="flex flex-col bg-lightgray lg:px-20 px-2">
@@ -111,7 +69,6 @@ const Shopsearch = () => {
             <div className="flex items-center">
               <img
                 src={shopHome}
-                alt=""
                 className="w-[18px] h-[18px]"
                 data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000"
               />
@@ -168,7 +125,7 @@ const Shopsearch = () => {
         <div className="lg:text-2xl text-xl poppins-regular lg:w-4/5">
           <div className="flex lg:space-x-3">
             <div className="flex flex-1">
-              <button className="border border-gray bg-white p-2" onClick={handleSearchClick}>
+              <button className="border border-gray bg-white p-2">
                 <img src={icon} alt="" />
               </button>
               <input
@@ -182,15 +139,15 @@ const Shopsearch = () => {
 
             {/* Sorting Dropdown */}
             <div className="relative">
-              <select
-                className="border border-gray lg:h-10 lg:w-64 bg-white"
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-              >
-                <option value="Popularity">Popularity</option>
-                <option value="Price: Low to High">Price: Low to High</option>
-                <option value="Price: High to Low">Price: High to Low</option>
-              </select>
+            <select
+              className="border bg-white h-10 w-64"
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="Popularity">Popularity</option>
+              <option value="Price: Low to High">Price: Low to High</option>
+              <option value="Price: High to Low">Price: High to Low</option>
+            </select>
             </div>
           </div>
         </div>
@@ -198,7 +155,7 @@ const Shopsearch = () => {
 
       {/* Product Display Section */}
       <div className="flex">
-        <Shopfilter onPriceRangeChange={handlePriceRangeChange} onShippingChange={handleShippingChange} />
+        <Shopfilter onPriceRangeChange={setPriceRange} onShippingChange={setShippingDays} />
         <div className="flex flex-wrap justify-between gap-x-20 gap-y-4 px-5 lg:px-10 lg:py-10 min-h-[85vw]">
           {currentProducts.map((product) => (
             <Shopproduct
@@ -206,8 +163,8 @@ const Shopsearch = () => {
               title={product.name}
               price={product.price}
               image={`http://localhost:8080/${product.images[0]}`}
-              onAddToWishlist={handleAddToWishlist}
-              onAddToCart={() => handleAddToCart(product)}
+              onAddToWishlist={() => setWishlistCount((prev) => prev + 1)}
+              onAddToCart={() => setCartItems((prev) => [...prev, product])}
               productId={product.id}
             />
           ))}
@@ -216,25 +173,21 @@ const Shopsearch = () => {
       </div>
 
 
-          <ShopPages/>
+      <ShopPages/>
       {/* Pagination Section */}
       <div className="lg:flex flex-row justify-between lg:p-5">
         <div className="flex">
-          {Array.from({ length: totalPages }, (_, index) => (
+          {Array.from({ length: totalPages }, (_, i) => (
             <button
-              key={index}
-              className={`p-1 px-3 ${currentPage === index + 1 ? "bg-gold" : "bg-white"} lg:text-base text-sm hover:bg-gold`}
-              onClick={() => handlePageChange(index + 1)}
-              aria-label={`Page ${index + 1}`}
-            >
-              {index + 1}
-            </button>
+            key={i}
+            className={`p-2 px-4 ${currentPage === i + 1 ? "bg-gold" : "bg-white"}`}
+            onClick={() => setCurrentPage(i + 1)}
+          >
+            {i + 1}
+          </button>
           ))}
         </div>
-        <p className="lg:text-base text-sm poppins-medium">
-          SHOWED {indexOfFirstProduct + 1} - {Math.min(indexOfLastProduct, filteredProducts.length)} OF{" "}
-          {filteredProducts.length} PRODUCTS
-        </p>
+        <p>SHOWING {Math.min(currentPage * productsPerPage, filteredProducts.length)} OF {filteredProducts.length} PRODUCTS</p>
       </div>
     </div>
   );
