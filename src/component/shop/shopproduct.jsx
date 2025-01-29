@@ -18,7 +18,7 @@ const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, product
        <div onClick={handleProductClick} className="cursor-pointer">
         <div className="w-[18vw] h-[17vw] rounded-2xl overflow-hidden">
           <img
-            className="h-full w-full object-cover group-hover:opacity-50"
+            className="h-full w-full object-fit group-hover:opacity-50"
             src={image}
             alt="Product"
           />
