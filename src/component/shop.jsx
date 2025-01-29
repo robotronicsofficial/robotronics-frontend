@@ -7,6 +7,8 @@ import download from "../assets/logo/download.svg";
 import sale from "../assets/logo/sales.svg";
 import leftArrow from "../assets/logo/arrow-up-left.svg";
 import rightArrow from "../assets/logo/arrow-up-right.svg";
+import { IoStarSharp } from "react-icons/io5";
+import { LuClock } from "react-icons/lu";
 
 const ServiceCard = ({ service }) => {
   return (
@@ -17,40 +19,40 @@ const ServiceCard = ({ service }) => {
           src={`http://localhost:8080/${service.thumbnail}`}
           alt={'image'}
         />
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between items-center">
           <h3 className="lg:text-lg text-sm font-bold poppins-extrabold py-5">
             {service.title || "Unnamed Service"}
           </h3>
-          <div className="flex flex-col space-y-3">
-            <img className="p-2" src={service.imgIcon} alt="Service Icon" />
-            <p className="text-yellow poppins-bold">{service.price || "Free"}</p>
+          <div className="flex text-yellow">
+            {/* <img className="p-2" src={service.imgIcon} alt="Service Icon" /> */}
+            <IoStarSharp/>
+            <IoStarSharp/>
+            <IoStarSharp/>
+            <IoStarSharp/>
+            <IoStarSharp/>
+            <IoStarSharp/>
           </div>
         </div>
         <div className="pb-4">
           <div className="w-full h-0.5 border border-dotted border-black"></div>
         </div>
-        <div className="flex justify-center lg:space-x-5 md:space-x-2 items-center">
-          <div className="flex poppins-medium">
-            <img className="p-1" src={time} alt="Duration Icon" />
-            {service.duration || "N/A"}
-          </div>
-          <div className="flex poppins-medium">
-            <img className="p-1" src={download} alt="Courses Icon" />
-            {service.courses || "N/A"}
-          </div>
-          <div className="flex poppins-medium">
-            <img className="p-1" src={sale} alt="Sales Icon" />
-            {service.sales || "N/A"}
+        <div className="flex flex-row justify-between items-center">
+          <LuClock />
+          <h3 className="lg:text-lg text-sm font-bold poppins-extrabold py-5">
+            {service.title || "Unnamed Service"}
+          </h3>
+          <div className="flex text-yellow">
+            {/* <img className="p-2" src={service.imgIcon} alt="Service Icon" /> */}
+            <IoStarSharp/>
+            <IoStarSharp/>
+            <IoStarSharp/>
+            <IoStarSharp/>
+            <IoStarSharp/>
+            <IoStarSharp/>
           </div>
         </div>
       </div>
-      <div className="p-5" data-aos="fade-up">
-        <div className="bg-yellow p-5 rounded flex justify-center items-center">
-          <button className="text-xl font-bold" data-aos="fade-up">
-            Join Course
-          </button>
-        </div>
-      </div>
+      
     </div>
   );
 };
@@ -154,6 +156,13 @@ const Shop = () => {
             ))}
           </div>
         </div>
+        <div className="px-3 py-4 flex items-center justify-center" data-aos="fade-up">
+        <div className="bg-yellow p-5 rounded flex justify-center items-center w-[20vw]">
+          <button className="text-xl font-bold" data-aos="fade-up">
+            Get Enrolled
+          </button>
+        </div>
+      </div>
       </div>
     </section>
   );
