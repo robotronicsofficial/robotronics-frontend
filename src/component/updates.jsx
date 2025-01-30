@@ -32,7 +32,7 @@ const Updates = () => {
             data-aos-duration="2000"
           >
             Latest Updates What&apos;s <br />
-            <span className="block text-gold text-2xl lg:text-5xl poppins-extrabold">
+            <span className="block text-[#f5ab34] text-2xl lg:text-5xl poppins-extrabold">
               Cooking
             </span>
           </p>
