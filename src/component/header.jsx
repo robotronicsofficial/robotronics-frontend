@@ -56,8 +56,10 @@ export default function Header() {
   };
 
   return (
-    <header className="text-gray-600 bg-white body-font rounded-md">
-      <div className="container mx-auto flex flex-wrap items-center justify-between p-5">
+    <header className="bg-transparent relative top-20 z-50">
+    
+      <div className="w-full h-full flex items-center justify-center absolute ">
+      <div className="bg-white flex flex-wrap items-center justify-between p-5 shadow w-[95vw] mt-6 mb-6 rounded-2xl ">
         {/* Logo */}
         <a href="/" className="flex items-center"data-aos="fade-right" data-aos-duration="2000">
           <img src={logo} alt="logo" className="w-20 h-20" />
@@ -385,6 +387,7 @@ export default function Header() {
             )}
           </div>
         </nav>
+      </div>
       </div>
     </header>
   );
