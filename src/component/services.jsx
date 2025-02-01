@@ -24,7 +24,7 @@ const Services = () => {
       description:
         "Region's Largest Robotics & Skill Development Online platform where Individuals and Schools can learn all the modern skills under one roof. ",
       imgSrc: <FaRobot />,
-      linkText: "Enroll Now",
+      linkText: "View Detail",
       linkUrl: "#",
     },
     {
@@ -32,7 +32,7 @@ const Services = () => {
       description:
         "We offer a wide range of Robotics & STEM based workshops catering all the different age groups (Age 4-16) considering their areas of interest and mental abilities.",
       imgSrc: <FaWrench />,
-      linkText: "Enroll Now",
+      linkText: "View Detail",
       linkUrl: "#",
     },
     {
@@ -40,7 +40,7 @@ const Services = () => {
       description:
         "We provide Training, Mentorship, Robots, Registrations, Judgement and Criteria Development Services to Students and Schools across Pakistan.",
       imgSrc: <FaTrophy />,
-      linkText: "Enroll Now",
+      linkText: "View Detail",
       linkUrl: "#",
     },
     {
@@ -48,7 +48,7 @@ const Services = () => {
       description:
         "We have Developed and Implemented our 'Robotronics' Curriculum with most of the renowned educational systems. We provide Curriculum, Trainers and Robotic Labs.",
       imgSrc: <FaTrophy />,
-      linkText: "Enroll Now",
+      linkText: "View Detail",
       linkUrl: "#",
     },
     {
@@ -56,7 +56,7 @@ const Services = () => {
       description:
         "Robotics and Skill Development Clubs/Camps are conducted in large number of schools throughout the year with zero investment from the school.",
       imgSrc: <FaTrophy />,
-      linkText: "Enroll Now",
+      linkText: "View Detail",
       linkUrl: "#",
     },
     {
@@ -64,7 +64,7 @@ const Services = () => {
       description:
         "We provide schools with Exhibition and Competition Consultation services where we assist them in Judging, Training and Criteria Development Services.",
       imgSrc: <FaTrophy />,
-      linkText: "Enroll Now",
+      linkText: "View Detail",
       linkUrl: "#",
     },
   ];
@@ -138,7 +138,7 @@ const Services = () => {
                   </p>
                 </div>
                 <div className="min-h-[16vh]">
-                <p className=" text-left text-wrap poppins-light sm:text-sm text-white">
+                  <p className=" text-left text-wrap poppins-light sm:text-sm text-white">
                     {item.description}
                   </p>
                 </div>
@@ -147,10 +147,10 @@ const Services = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                <div className=" text-white text-sm md:text-lg underline poppins-light rounded text-left bg-transparent  transition-colors duration-300 ease-in-out">
+                  <div className=" text-white text-sm md:text-lg underline poppins-light rounded text-left bg-transparent  transition-colors duration-300 ease-in-out">
                     {item.linkText}
                   </div>
-                  <MdArrowOutward  className="text-xl text-yellow"/>
+                  <MdArrowOutward className="text-xl text-yellow" />
                 </div>
               </div>
             </div>
@@ -168,10 +168,15 @@ const Services = () => {
         <img className="" src={img4} alt="image" />
         {/* Two circular buttons on the right */}
         <div className="flex self-center  px-10">
-          <button onClick={handleNavigate}  className="pb-1  text-center lg:w-32 lg:h-14  rounded-2xl border border-white  text-yellow text-2xl">
-            {/* <img className="lg:w-12 lg:h-12" src={img6} alt="image" /> */}
-            See more
-          </button>
+          <div className="bg-yellow p-4 rounded flex justify-center items-center w-[14vw]">
+            <button
+              onClick={handleNavigate}
+              className="text-xl font-bold text-white"
+              data-aos="fade-up"
+            >
+              View All Services
+            </button>
+          </div>
         </div>
       </div>
     </div>
