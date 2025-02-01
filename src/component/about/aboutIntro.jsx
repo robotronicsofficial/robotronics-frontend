@@ -22,7 +22,7 @@ const Iaboutntro = () => {
         <div className="overflow-hidden" >
         <div className="flex justify-between w-full p-10 h-[50vw]">
             {/* text */}
-            <div className="space-y-5 pt-32 lg:w-1/2 ">
+            <div className="space-y-5 pt-60 lg:w-1/2 ">
               {/* Text */}
               <div className="space-y-2"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
                 <div className="flex flex-row space-x-2">
