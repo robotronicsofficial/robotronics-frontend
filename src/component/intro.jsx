@@ -83,7 +83,7 @@ const Intro = () => {
             {/* text */}
             <div className="flex flex-col justify-between space-y-5 mt-32 lg:w-1/2" data-aos="fade-right" data-aos-duration="2000">
               {/* Text */}
-              <div className="space-y-2  flex flex-col gap-6" data-aos="fade-right" data-aos-duration="2000">
+              <div className="space-y-2  flex flex-col gap-6 mt-8" data-aos="fade-right" data-aos-duration="2000">
                 <div className="flex flex-row  space-x-2 ">
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-thin">
                     WELCOME TO THE{" "}
@@ -153,7 +153,7 @@ const Intro = () => {
 
             {/* Image */}
             <div className="hidden md:block" data-aos="fade-left" data-aos-duration="2000">
-              <img alt="card img" src={Robort} className="w-full" />
+              <img alt="card img" src={Robort} className="w-full mt-10" />
             </div>
           </div>
         </div>

@@ -41,7 +41,7 @@ const Header = () => (
     </div>
     <div className="mt-14" data-aos="fade-up">
       <p
-        className="md:text-5xl text-3xl text-wrap text-left poppins-bold text-brown "
+        className="md:text-5xl text-3xl text-wrap text-left poppins-bold text-brown px-8"
         style={{ lineHeight: "1.3" }}
       >
         Through{" "}
@@ -56,7 +56,7 @@ const Header = () => (
 );
 
 const InfoSection = () => (
-  <div className="w-2/3 md:mt-14 p-5 md:ml-20" data-aos="fade-up">
+  <div className="w-2/3 md:mt-8 p-5 md:ml-20" data-aos="fade-up">
     <div className="md:text-3xl text-xl text-wrap text-left poppins-regular text-brown">
       By 2024,
       <span className="md:text-5xl text-2xl text-wrap text-left poppins-semibold text-brown">

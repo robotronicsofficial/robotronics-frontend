@@ -9,6 +9,7 @@ import leftArrow from "../assets/logo/arrow-up-left.svg";
 import rightArrow from "../assets/logo/arrow-up-right.svg";
 import { IoStarSharp } from "react-icons/io5";
 import { LuClock } from "react-icons/lu";
+import { IoVideocamOutline } from "react-icons/io5";
 
 const ServiceCard = ({ service }) => {
   return (
@@ -17,7 +18,7 @@ const ServiceCard = ({ service }) => {
         <img
           className="rounded-xl w-full object-cover object-center"
           src={`http://localhost:8080/${service.thumbnail}`}
-          alt={'image'}
+          alt={"image"}
         />
         <div className="flex flex-row justify-between items-center">
           <h3 className="lg:text-lg text-sm font-bold poppins-extrabold py-5">
@@ -25,34 +26,32 @@ const ServiceCard = ({ service }) => {
           </h3>
           <div className="flex text-yellow">
             {/* <img className="p-2" src={service.imgIcon} alt="Service Icon" /> */}
-            <IoStarSharp/>
-            <IoStarSharp/>
-            <IoStarSharp/>
-            <IoStarSharp/>
-            <IoStarSharp/>
-            <IoStarSharp/>
+            <IoStarSharp />
+            <IoStarSharp />
+            <IoStarSharp />
+            <IoStarSharp />
+            <IoStarSharp />
+            <IoStarSharp />
           </div>
         </div>
-        <div className="pb-4">
-          <div className="w-full h-0.5 border border-dotted border-black"></div>
-        </div>
-        <div className="flex flex-row justify-between items-center">
-          <LuClock />
-          <h3 className="lg:text-lg text-sm font-bold poppins-extrabold py-5">
+        
+          <div className="w-full h-0.5 border border-dotted border-black my-2"></div>
+        
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <LuClock className="text-yellow text-xl" />
+          <h3 className="lg:text-sm text-sm font-bold poppins-extrabold py-4 flex items-center gap-2">
             {service.title || "Unnamed Service"}
           </h3>
-          <div className="flex text-yellow">
-            {/* <img className="p-2" src={service.imgIcon} alt="Service Icon" /> */}
-            <IoStarSharp/>
-            <IoStarSharp/>
-            <IoStarSharp/>
-            <IoStarSharp/>
-            <IoStarSharp/>
-            <IoStarSharp/>
+          </div>
+          <div className="flex items-center gap-2">
+            <IoVideocamOutline  className="text-yellow text-xl" />
+          <h3 className="lg:text-sm text-sm font-bold poppins-extrabold py-4 flex items-center gap-2">
+            {service.title || "Unnamed Service"}
+          </h3>
           </div>
         </div>
       </div>
-      
     </div>
   );
 };
@@ -77,6 +76,7 @@ const Shop = () => {
         const data = await response.json();
         setServices(data.courses || []);
         setLoading(false);
+        console.log(data.courses)
       } catch (err) {
         setError(err.message);
         setLoading(false);
@@ -106,7 +106,7 @@ const Shop = () => {
     currentIndex + servicesPerPage
   );
 
-  console.log(services)
+  console.log(services);
 
   return (
     <section className="bg-gray">
@@ -117,8 +117,8 @@ const Shop = () => {
               <img src={robo} alt="Robotics Course" />
               <div className="content-center text-wrap text-brown text-2xl md:text-4xl poppins-extrabold">
                 Upcoming
-                <span className="text-gold text-2xl md:text-5xl poppins-extrabold">
-                  Courses-
+                <span className="text-[#f5ab34] text-2xl md:text-5xl poppins-extrabold ml-2">
+                    Courses-
                 </span>
                 Gear up for some Fun
               </div>
@@ -156,13 +156,16 @@ const Shop = () => {
             ))}
           </div>
         </div>
-        <div className="px-3 py-4 flex items-center justify-center" data-aos="fade-up">
-        <div className="bg-yellow p-5 rounded flex justify-center items-center w-[20vw]">
-          <button className="text-xl font-bold" data-aos="fade-up">
-            Get Enrolled
-          </button>
+        <div
+          className="px-3 py-4 flex items-center justify-center"
+          data-aos="fade-up"
+        >
+          <div className="bg-yellow p-5 rounded flex justify-center items-center w-[20vw]">
+            <button className="text-2xl font-bold" data-aos="fade-up">
+              Get Enrolled
+            </button>
+          </div>
         </div>
-      </div>
       </div>
     </section>
   );
