@@ -14,8 +14,8 @@ const Intro = () => {
       <div className="space-y-5"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
           {/* As a School & Parent */}
         {/* intro */}
-        <div className="w-full pt-28">
-          <div className="space-y-5 lg:p-10 p-4 lg:px-24 lg:w-1/2 ">
+        <div className="w-full pt-60">
+          <div className="space-y-5 lg:p-10 p-4 lg:px-24 lg:w-1/2">
             {/* Text */}
             <div className="space-y-2">
               <div className="flex flex-row space-x-2"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
