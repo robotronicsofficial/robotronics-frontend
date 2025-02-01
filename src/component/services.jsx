@@ -94,7 +94,7 @@ const Services = () => {
               <p className="text-white lg:text-6xl font-bold poppins-black text-2xl ">
                 Our Top
               </p>
-              <p className="text-gold lg:text-6xl font-bold poppins-black text-2xl ">
+              <p className="text-[#f5ab34] lg:text-6xl font-bold poppins-black text-2xl ">
                 Services- <br />
               </p>
             </div>

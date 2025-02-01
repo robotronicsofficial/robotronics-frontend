@@ -20,7 +20,7 @@ const Iaboutntro = () => {
     <>
       <div className="abouthero relative w-full" id="abouthero">
         <div className="overflow-hidden" >
-        <div className="flex justify-between w-full p-10">
+        <div className="flex justify-between w-full p-10 h-[50vw]">
             {/* text */}
             <div className="space-y-5 pt-32 lg:w-1/2 ">
               {/* Text */}
