@@ -23,7 +23,7 @@ const Robogeniusintro = () => {
      
       <div className="bg-gray-100 p-6">
         <div className="max-w-7xl mx-auto">
-          <div className="lg:flex flex-wrap lg:flex-nowrap lg:space-x-6">
+          <div className="lg:flex flex-wrap lg:flex-nowrap lg:space-x-6 mt-20">
             {/* Left Side */}
             <div
               className="w-full lg:w-2/3 space-y-6"

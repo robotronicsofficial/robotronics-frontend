@@ -160,8 +160,8 @@ const Shop = () => {
           className="px-3 py-4 flex items-center justify-center"
           data-aos="fade-up"
         >
-          <div className="bg-yellow p-5 rounded flex justify-center items-center w-[20vw]">
-            <button className="text-2xl font-bold" data-aos="fade-up">
+          <div className="bg-yellow p-5 rounded flex justify-center items-center w-[14vw]">
+            <button className="text-xl font-bold" data-aos="fade-up">
               Get Enrolled
             </button>
           </div>

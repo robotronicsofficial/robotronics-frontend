@@ -21,7 +21,7 @@ const AboutSquad = () => {
         {founders.map((founder) => (
           <div key={founder.id} className="flex-1 p-14">
             <img className="shadow-2xl"data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000" src={founder.imgSrc} alt={founder.title} />
-            <div className="bg-black"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+            <div className="bg-black flex flex-col items-center justify-center py-4"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
               <p className="text-white poppins-regular lg:text-xl text-sm">{founder.name}</p>
               <p className="text-white poppins-regular text-sm">{founder.title}</p>
             </div>
@@ -31,7 +31,7 @@ const AboutSquad = () => {
       {/* block 3 */}
       <div className="lg:p-10 p-5">
         <div className="flex ">
-          <div className="flex-1 flex flex-row justify-between " >
+          <div className="flex-1 flex flex-row justify-between  items-center mb-6" >
             {/* line */}
             <div className="flex "data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000" >
               <div className="h-0 lg:w-16 w-8 border border-black" ></div>
@@ -41,8 +41,8 @@ const AboutSquad = () => {
             <p className="flex lg:text-xl text-sm text-wrap text-center poppins-regular "data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000" >Are you our next squad member?</p>
           </div>
         </div>
-        <div className="flex-1 w-2/3 poppins-bold" >
-          <p className="lg:text-6xl text-3xl font-bold lg:text-left text-wrap"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000" >From ambitious startups to Countrywide Schools, we partner  with Great <b className=" text-gold" >Educational industry leaders.</b> </p>
+        <div className="flex-1 w-[70vw] poppins-bold " >
+          <p className="lg:text-6xl text-3xl font-bold lg:text-left text-wrap"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000" >From ambitious startups to Countrywide Schools, we partner  with Great <b className=" text-[#f5ab34]" >Educational industry leaders.</b> </p>
         </div>
       </div>
     </div>
