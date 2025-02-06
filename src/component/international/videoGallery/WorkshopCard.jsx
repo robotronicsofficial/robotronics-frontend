@@ -1,6 +1,7 @@
-import { BiPlayCircle } from 'react-icons/bi'; 
-import img from '../../../assets/images/videoG.svg'
-import PropTypes from 'prop-types';
+import { BiPlayCircle } from "react-icons/bi";
+import img from "../../../assets/images/videoG.svg";
+import { RxClock } from "react-icons/rx";
+import PropTypes from "prop-types";
 
 const WorkshopCard = ({ workshop }) => (
   <div className="bg-white shadow-lg rounded-lg overflow-hidden  m-2">
@@ -14,20 +15,21 @@ const WorkshopCard = ({ workshop }) => (
         {workshop.time}
       </span>
     </div>
-    <div className="p-4 bg-brown rounded-xl">
-      <div className="flex items-center text-white space-x-2 mb-2">
-        <img
-          src={workshop.instructorpic} 
-          alt={workshop.instructor}
-          className="w-10 h-10 rounded-full"
-        />
-        <p className="text-gray-700 text-white poppins-medium">{workshop.instructor}</p>
+    <div className="p-3 bg-[#362d2c] relative">
+      <div className="flex gap-6 text-white ">
+        <p className="text-gray-700 text-white poppins-medium ">
+          {workshop.instructor}
+        </p>
+        <div className="w-20 h-20 rounded-full absolute right-2 -top-10 border-2 border-white"></div>
+
       </div>
-      <h3 className="text-lg text-white poppins-bold">{workshop.title}</h3>
-      <p className="text-gray-600 text-white text-wrap poppins-light md:text-xs">{workshop.description}</p>
-      <div className=" flex items-center text-white poppins-light space-x-2 text-gray-600">
-        <BiPlayCircle />
-        <p>{workshop.date}</p>
+      <h3 className="text-lg text-white poppins-bold ">{workshop.title}</h3>
+      <p className="text-gray-600 text-white text-wrap poppins-light md:text-xs my-1">
+        {workshop.description}
+      </p>
+      <div className=" flex items-center text-white poppins-light space-x-1 text-gray-600 mt-4">
+        <RxClock />
+        <p>9:00 am  To 11:00 am</p>
       </div>
     </div>
   </div>
