@@ -6,15 +6,15 @@ import { useState, useMemo } from "react";
 const workshopsData = [
   {
     id: 1,
-    instructor: "Bilal Ahmed",
+    instructor: "Activity Name",
     instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
+    title: "Album Name",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
     time: "7 min",
     date: "2023-01-20T09:00:00", // Use ISO format for dates
     image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
+    city: "Islamabad",
     popularity: 5,
   },
   {
@@ -214,7 +214,16 @@ const workshopsData = [
   },
 ];
 
-const Filters = ({ selectedDate, setSelectedDate, selectedSchool, setSelectedSchool, selectedCity, setSelectedCity, sortBy, setSortBy }) => (
+const Filters = ({
+  selectedDate,
+  setSelectedDate,
+  selectedSchool,
+  setSelectedSchool,
+  selectedCity,
+  setSelectedCity,
+  sortBy,
+  setSortBy,
+}) => (
   <div className="flex flex-wrap md:flex-nowrap space-y-4 md:space-y-0 md:space-x-6 mb-6">
     <div className="w-full md:w-1/4">
       <label className="block text-brown poppins-medium mb-2">Date</label>
@@ -226,7 +235,9 @@ const Filters = ({ selectedDate, setSelectedDate, selectedSchool, setSelectedSch
       />
     </div>
     <div className="w-full md:w-1/4">
-      <label className="block text-brown poppins-medium mb-2">School Name</label>
+      <label className="block text-brown poppins-medium mb-2">
+        School Name
+      </label>
       <input
         type="text"
         className="w-full p-2 border border-gray rounded"
@@ -235,7 +246,9 @@ const Filters = ({ selectedDate, setSelectedDate, selectedSchool, setSelectedSch
       />
     </div>
     <div className="w-full md:w-1/4">
-      <label className="block text-brown poppins-medium mb-2">Select City</label>
+      <label className="block text-brown poppins-medium mb-2">
+        Select City
+      </label>
       <select
         className="w-full p-2 border border-gray rounded"
         value={selectedCity}
@@ -270,6 +283,12 @@ const Intro = () => {
   const [selectedSchool, setSelectedSchool] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [sortBy, setSortBy] = useState("Videos");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+    console.log(`Selected category: ${category}`);
+  };
 
   const filteredWorkshops = useMemo(() => {
     return workshopsData
@@ -277,7 +296,9 @@ const Intro = () => {
         if (selectedDate && !workshop.date.includes(selectedDate)) return false;
         if (
           selectedSchool &&
-          !workshop.instructor.toLowerCase().includes(selectedSchool.toLowerCase())
+          !workshop.instructor
+            .toLowerCase()
+            .includes(selectedSchool.toLowerCase())
         )
           return false;
         if (selectedCity && workshop.city !== selectedCity) return false;
@@ -301,17 +322,16 @@ const Intro = () => {
 
   return (
     <div className="bg-gray p-14">
-      <div className="flex flex-wrap md:flex-nowrap md:space-x-6">
-        <aside className="p-5 md:w-1/6">
-           {/* Sidebar */}
-        <div className="p-5 md:w-1/6 mb-6 md:mb-0">
+      <div className="flex flex-wrap md:flex-nowrap gap-8  md:space-x-6">
+        <aside className="p-8 w-[22vw]  overflow-hidden ">
+          {/* Sidebar */}
           <h2
             className="font-bold text-3xl poppins-bold text-brown mb-4"
             data-aos="fade-right"
             data-aos-duration="2000"
             data-aos-delay="4000"
           >
-            Workshops
+            Activity Name
           </h2>
           <h2
             className="border border-brown w-1/3 h-2 rounded-md bg-brown mb-4"
@@ -320,58 +340,43 @@ const Intro = () => {
             data-aos-delay="4000"
           ></h2>
           <div>
-            <h3
-              className="poppins-medium text-brown text-lg mb-2"
-              data-aos="fade-right"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
-            >
-              Robotics Workshop
-            </h3>
-            <ul
-              className="space-y-1"
-              data-aos="fade-left"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
-            >
-              <li className="text-gray-600 poppins-light hover:text-brown text-lin cursor-pointer">
-                Batch 01
-              </li>
-              <li className="text-gray-600 poppins-light hover:text-brown text-lin cursor-pointer">
-                Batch 02
-              </li>
-              <li className="text-gray-600 poppins-light hover:text-brown text-lin cursor-pointer">
-                Batch 03
-              </li>
-            </ul>
-          </div>
-          <div className="mt-4">
-            <h3
-              className="poppins-medium text-brown text-lg mb-2"
-              data-aos="fade-right"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
-            >
-              EV3 Workshop
-            </h3>
-            <ul
-              className="space-y-1"
-              data-aos="fade-left"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
-            >
-              <li className="text-gray-600 poppins-light hover:text-brown text-lin cursor-pointer">
-                Batch 01
-              </li>
-              <li className="text-gray-600 poppins-light hover:text-brown text-lin cursor-pointer">
-                Batch 02
-              </li>
-              <li className="text-gray-600 poppins-light hover:text-brown text-lin cursor-pointer">
-                Batch 03
-              </li>
-            </ul>
-          </div>
-        </div>
+  <ul
+    className="space-y-2"
+    data-aos="fade-left"
+    data-aos-duration="2000"
+    data-aos-delay="4000"
+  >
+    {[
+      "RoboGenius Program",
+      "Robotics Workshops",
+      "Skill Development Workshops",
+      "IVY Club",
+      "Robotronics Subject Implementation",
+      "Curriculum Preparation",
+      "Providing Robotics & STEM Trainer",
+      "After-School Robotic Club",
+      "Robotic Labs",
+      "Summer/Winter Camps",
+      "Online Courses",
+      "Robotic Competitions",
+    ].map((category) => (
+      <a
+        key={category}
+        className={`flex cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 
+          ${
+            selectedCategory === category
+              ? "font-semibold text-[#e06f21]"
+              : "text-gray-600 hover:text-gray-400 hover:transition-all hover:duration-150 active:text-black"
+          }
+        `}
+        onClick={() => handleCategoryClick(category)}
+      >
+        {category}
+      </a>
+    ))}
+  </ul>
+</div>
+
         </aside>
         <main className="w-full md:w-3/4">
           <Filters
