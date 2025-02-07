@@ -1,218 +1,7 @@
 import { AiOutlineDown } from "react-icons/ai"; // Import the icon for dropdowns
 import WorkshopCard from "./WorkshopCard"; // Import the WorkshopCard component
 import Pagination from "../../blog/Pagination";
-import { useState, useMemo } from "react";
-
-const workshopsData = [
-  {
-    id: 1,
-    instructor: "Activity Name",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Album Name",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Islamabad",
-    popularity: 5,
-  },
-  {
-    id: 2,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 3,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 4,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 5,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 6,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 7,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 8,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 9,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 10,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 11,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 12,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 13,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 14,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Lahore",
-    popularity: 5,
-  },
-  {
-    id: 15,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Karachi",
-    popularity: 5,
-  },
-  {
-    id: 16,
-    instructor: "Bilal Ahmed",
-    instructorpic: "../../../assets/images/workshopCards.svg",
-    title: "Robotic Workshop",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
-    time: "7 min",
-    date: "2023-01-20T09:00:00", // Use ISO format for dates
-    image: "../../../assets/images/workshopCards.svg",
-    city: "Islamabad",
-    popularity: 5,
-  },
-];
+import { useState, useMemo, useEffect } from "react";
 
 const Filters = ({
   selectedDate,
@@ -283,7 +72,30 @@ const Intro = () => {
   const [selectedSchool, setSelectedSchool] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [sortBy, setSortBy] = useState("Videos");
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(""); // Added state for selectedCategory
+  const [workshopsData, setWorkshopsData] = useState([]); // For storing fetched workshop data
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/allVideoGallery");
+        if (!response.ok) {
+          throw new Error("Failed to fetch services data");
+        }
+        const data = await response.json();
+        setWorkshopsData(data.data || []); // Storing the fetched data
+        console.log(data.data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchGallery();
+  }, []);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -296,12 +108,11 @@ const Intro = () => {
         if (selectedDate && !workshop.date.includes(selectedDate)) return false;
         if (
           selectedSchool &&
-          !workshop.instructor
-            .toLowerCase()
-            .includes(selectedSchool.toLowerCase())
+          !workshop.schoolName.toLowerCase().includes(selectedSchool.toLowerCase())
         )
           return false;
         if (selectedCity && workshop.city !== selectedCity) return false;
+        if (selectedCategory && workshop.category !== selectedCategory) return false; // Filtering by category
         return true;
       })
       .sort((a, b) => {
@@ -312,7 +123,7 @@ const Intro = () => {
         }
         return 0;
       });
-  }, [selectedDate, selectedSchool, selectedCity, sortBy]);
+  }, [selectedDate, selectedSchool, selectedCity, sortBy, selectedCategory, workshopsData]);
 
   const indexOfLastWorkshop = currentPage * workshopsPerPage;
   const currentWorkshops = filteredWorkshops.slice(
@@ -320,63 +131,51 @@ const Intro = () => {
     indexOfLastWorkshop
   );
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div className="bg-gray p-14">
-      <div className="flex flex-wrap md:flex-nowrap gap-8  md:space-x-6">
-        <aside className="p-8 w-[22vw]  overflow-hidden ">
+      <div className="flex flex-wrap md:flex-nowrap gap-8 md:space-x-6">
+        <aside className="p-8 w-[22vw] overflow-hidden">
           {/* Sidebar */}
-          <h2
-            className="font-bold text-3xl poppins-bold text-brown mb-4"
-            data-aos="fade-right"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
-          >
-            Activity Name
-          </h2>
-          <h2
-            className="border border-brown w-1/3 h-2 rounded-md bg-brown mb-4"
-            data-aos="fade-left"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
-          ></h2>
+          <h2 className="font-bold text-3xl poppins-bold text-brown mb-4">Activity Name</h2>
+          <h2 className="border border-brown w-1/3 h-2 rounded-md bg-brown mb-4"></h2>
           <div>
-  <ul
-    className="space-y-2"
-    data-aos="fade-left"
-    data-aos-duration="2000"
-    data-aos-delay="4000"
-  >
-    {[
-      "RoboGenius Program",
-      "Robotics Workshops",
-      "Skill Development Workshops",
-      "IVY Club",
-      "Robotronics Subject Implementation",
-      "Curriculum Preparation",
-      "Providing Robotics & STEM Trainer",
-      "After-School Robotic Club",
-      "Robotic Labs",
-      "Summer/Winter Camps",
-      "Online Courses",
-      "Robotic Competitions",
-    ].map((category) => (
-      <a
-        key={category}
-        className={`flex cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 
-          ${
-            selectedCategory === category
-              ? "font-semibold text-[#e06f21]"
-              : "text-gray-600 hover:text-gray-400 hover:transition-all hover:duration-150 active:text-black"
-          }
-        `}
-        onClick={() => handleCategoryClick(category)}
-      >
-        {category}
-      </a>
-    ))}
-  </ul>
-</div>
-
+            <ul className="space-y-2">
+              {[
+                "RoboGenius Program",
+                "Robotics Workshops",
+                "Skill Development Workshops",
+                "IVY Club",
+                "Robotronics Subject Implementation",
+                "Curriculum Preparation",
+                "Providing Robotics & STEM Trainer",
+                "After-School Robotic Club",
+                "Robotic Labs",
+                "Summer/Winter Camps",
+                "Online Courses",
+                "Robotic Competitions",
+              ].map((category) => (
+                <a
+                  key={category}
+                  className={`flex cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
+                    selectedCategory === category
+                      ? "font-semibold text-[#e06f21]"
+                      : "text-gray-600 hover:text-gray-400 hover:transition-all hover:duration-150 active:text-black"
+                  }`}
+                  onClick={() => handleCategoryClick(category)}
+                >
+                  {category}
+                </a>
+              ))}
+            </ul>
+          </div>
         </aside>
         <main className="w-full md:w-3/4">
           <Filters
@@ -391,7 +190,7 @@ const Intro = () => {
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 py-5">
             {currentWorkshops.map((workshop) => (
-              <WorkshopCard key={workshop.id} workshop={workshop} />
+              <WorkshopCard key={workshop._id} workshop={workshop} />
             ))}
           </div>
           <Pagination
