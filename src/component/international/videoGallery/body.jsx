@@ -144,8 +144,22 @@ const Intro = () => {
       <div className="flex flex-wrap md:flex-nowrap gap-8 md:space-x-6">
         <aside className="p-8 w-[22vw] overflow-hidden">
           {/* Sidebar */}
-          <h2 className="font-bold text-3xl poppins-bold text-brown mb-4">Activity Name</h2>
-          <h2 className="border border-brown w-1/3 h-2 rounded-md bg-brown mb-4"></h2>
+
+          <h2
+            className="font-bold text-3xl poppins-bold text-brown mb-4"
+            data-aos="fade-right"
+            data-aos-duration="2000"
+            data-aos-delay="4000"
+          >
+            Activities
+          </h2>
+          <h2
+            className="border border-brown w-1/3 h-2 rounded-md bg-brown mb-4"
+            data-aos="fade-left"
+            data-aos-duration="2000"
+            data-aos-delay="4000"
+          ></h2>
+
           <div>
             <ul className="space-y-2">
               {[
