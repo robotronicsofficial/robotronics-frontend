@@ -140,7 +140,7 @@ const QuickContact = () => {
           {status && <p className="mt-4 text-red-500">{status}</p>}
         </div>
       </div>
-      <div className="p-5 py-10 bg-white"></div>
+      
     </div>
   );
 };
