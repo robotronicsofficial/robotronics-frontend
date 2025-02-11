@@ -105,7 +105,8 @@ const Intro = () => {
   const filteredWorkshops = useMemo(() => {
     return workshopsData
       .filter((workshop) => {
-        if (selectedDate && !workshop.date.includes(selectedDate)) return false;
+        if (selectedDate && new Date(workshop.date).toISOString().split("T")[0] !== selectedDate) return false;
+
         if (
           selectedSchool &&
           !workshop.schoolName.toLowerCase().includes(selectedSchool.toLowerCase())
@@ -202,7 +203,7 @@ const Intro = () => {
             sortBy={sortBy}
             setSortBy={setSortBy}
           />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 py-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 py-5">
             {currentWorkshops.map((workshop) => (
               <WorkshopCard key={workshop._id} workshop={workshop} />
             ))}
