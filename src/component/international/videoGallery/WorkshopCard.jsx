@@ -2,38 +2,48 @@ import { BiPlayCircle } from "react-icons/bi";
 import img from "../../../assets/images/videoG.svg";
 import { RxClock } from "react-icons/rx";
 import PropTypes from "prop-types";
+import { LuMapPin } from "react-icons/lu";
 
 const WorkshopCard = ({ workshop }) => (
-  <div className="bg-white shadow-lg rounded-lg overflow-hidden m-2">
-    <div className="relative">
+  <div className="bg-white shadow-lg rounded-lg overflow-hidden ">
+    <div className="relative h-[16vw]">
       <img
         src={workshop.thumbnail}
         alt={workshop.workshopName}
-        className="w-full lg:h-48 object-cover"
+        className="w-full h-full object-cover"
       />
-      <span className="absolute right-2 bg-black text-white text-sm rounded px-2">
-        {workshop.timeFrom} am To {workshop.timeTo} am
-      </span>
     </div>
-    <div className="p-3 bg-[#362d2c] relative">
-      <div className="flex gap-6 text-white ">
-        <p className="text-gray-700 text-white poppins-medium">{workshop.activity}</p>
-        <div className="w-20 h-20 rounded-full absolute right-2 -top-10 border-2 border-white overflow-hidden">
+    <div className="px-3 py-4 bg-[#362d2c] relative bg-red-600 h-[18vw] flex flex-col ">
+      <div className=" text-white bg-orange-600 h-[2vw] ">
+        <p className="text-gray-700 text-white poppins-medium">
+          {workshop.activity}
+        </p>
+        <div className="w-20 h-20 rounded-full absolute right-2 -top-10 border-2 border-white overflow-hidden bg-yellow">
           <img
             src={workshop.schoolLogo}
             alt={workshop.schoolName}
             className="w-full h-full object-cover"
           />
         </div>
-
       </div>
-      <h3 className="text-lg text-white poppins-bold">{workshop.workshopName}</h3>
-      <p className="text-gray-600 text-white text-wrap poppins-light md:text-xs my-1">
+     <div className="h-[20vw] mt-2 bg-green-700 flex flex-col ">
+     <h3 className="text-lg text-white poppins-bold">
+        {workshop.workshopName}
+      </h3>
+      <p className="text-gray-600 text-white text-wrap poppins-light md:text-xs">
         {workshop.description}
       </p>
-      <div className="flex items-center text-white poppins-light space-x-1 text-gray-600 mt-4">
+     </div>
+     <div className="flex items-center justify-between text-white poppins-light space-x-1 text-gray-600 mt-4 bg-pink-600 px-2">
+        <p className="flex items-center gap-2 text-sm">
         <RxClock />
-        <p>{workshop.timeFrom} am To {workshop.timeTo} am</p>
+
+          {workshop.timeFrom} To {workshop.timeTo}{" "}
+        </p>
+        <div className="flex items-center gap-2">
+        <LuMapPin />
+        {workshop.city}
+        </div>
       </div>
     </div>
   </div>
