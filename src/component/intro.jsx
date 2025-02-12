@@ -35,9 +35,7 @@ const Intro = () => {
   return (
     <>
       <div className="hero" id="hero">
-        <div className="p-5">
-          {/* <Header /> */}
-        </div>
+        
 
         <div className="space-y-5">
           {/* As a School & Parent */}
