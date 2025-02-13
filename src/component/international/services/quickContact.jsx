@@ -70,7 +70,7 @@ const QuickContact = () => {
         </div>
         <div
           className="lg:px-32 flex-1"
-          data-aos="fade-left"
+          data-aos=""
           data-aos-duration="2000"
           data-aos-delay="4000"
         >
