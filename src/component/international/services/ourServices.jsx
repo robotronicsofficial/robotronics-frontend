@@ -6,8 +6,18 @@ import scratch from "../../../assets/imagesContent/coursesimages/scratch.svg";
 import wordpress from "../../../assets/imagesContent/coursesimages/wordpress.svg";
 import video from "../../../assets/imagesContent/coursesimages/video.svg";
 import financialmanagement from "../../../assets/imagesContent/coursesimages/financialmanagement.svg";
+import { useNavigate } from "react-router-dom";
 
 const OurServices = () => {
+
+
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/serviceDetail")
+  }
+
+
   // Local JSON data for services
   const services = [
     {
@@ -47,7 +57,8 @@ const OurServices = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow-md overflow-hidden"
+              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+              onClick={handleNavigate}
             >
               <div className="flex justify-center relative">
                 <div className="absolute mt-10">

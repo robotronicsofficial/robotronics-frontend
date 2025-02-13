@@ -1,13 +1,18 @@
-import React from 'react'
-import Intro from '../../component/intro'
-import ServiceInto from './ServiceInto'
+import React from "react";
+import ServiceInto from "./ServiceInto";
+import ServiceBody from "./ServiceBody";
+import Footer from "../../component/footer";
+import QuickContact from "../../component/international/services/quickContact";
 
 const ServiceDetail = () => {
   return (
     <div>
-      <ServiceInto/>
+      <ServiceInto />
+      <ServiceBody />
+      <QuickContact/>
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default ServiceDetail
+export default ServiceDetail;

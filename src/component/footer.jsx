@@ -137,7 +137,7 @@ const Footer = () => {
             </div>
 
             {/* Search & App Buttons */}
-            <div className="flex flex-col justify-center w-full lg:w-1/2 px-4"data-aos="fade-left" data-aos-duration="2000">
+            <div className="flex flex-col justify-center w-full lg:w-1/2 px-4"data-aos="" data-aos-duration="2000">
               {/* Subscribe Section */}
               <div className="flex flex-col lg:flex-row items-center lg:items-start mb-4 space-y-4 lg:space-y-0 lg:space-x-4">
                 <div className="relative w-full">
