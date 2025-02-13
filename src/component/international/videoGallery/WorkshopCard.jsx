@@ -5,15 +5,16 @@ import PropTypes from "prop-types";
 import { LuMapPin } from "react-icons/lu";
 
 const WorkshopCard = ({ workshop }) => (
-  <div className="bg-white shadow-lg rounded-lg overflow-hidden ">
-    <div className="relative h-[16vw]">
+  <div className="bg-white shadow-lg rounded-lg overflow-hidden " onClick={() => window.open(workshop.url, "_blank")}>
+    <div className="relative h-[16vw] cursor-pointer"
+    >
       <img
         src={workshop.thumbnail}
         alt={workshop.workshopName}
-        className="w-full h-full object-contain"
+        className="w-full h-full object-fill"
       />
     </div>
-    <div className="px-3 py-4 bg-[#362d2c] relative h-[18vw] flex flex-col ">
+    <div className="px-3 py-4 bg-[#362d2c] relative h-[18vw] flex flex-col " onClick={() => window.open(workshop.url, "_blank")}>
       <div className=" text-white  h-[2vw] ">
         <p className="text-gray-700 text-white poppins-medium">
           {workshop.activity}
