@@ -10,11 +10,11 @@ const WorkshopCard = ({ workshop }) => (
       <img
         src={workshop.thumbnail}
         alt={workshop.workshopName}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-contain"
       />
     </div>
-    <div className="px-3 py-4 bg-[#362d2c] relative bg-red-600 h-[18vw] flex flex-col ">
-      <div className=" text-white bg-orange-600 h-[2vw] ">
+    <div className="px-3 py-4 bg-[#362d2c] relative h-[18vw] flex flex-col ">
+      <div className=" text-white  h-[2vw] ">
         <p className="text-gray-700 text-white poppins-medium">
           {workshop.activity}
         </p>
@@ -26,21 +26,21 @@ const WorkshopCard = ({ workshop }) => (
           />
         </div>
       </div>
-     <div className="h-[20vw] mt-2 bg-green-700 flex flex-col ">
-     <h3 className="text-lg text-white poppins-bold">
+     <div className="h-[20vw] mt-2  flex flex-col ">
+     <h3 className="text-lg text-white poppins-bold text-wrap leading-none mb-2">
         {workshop.workshopName}
       </h3>
       <p className="text-gray-600 text-white text-wrap poppins-light md:text-xs">
         {workshop.description}
       </p>
      </div>
-     <div className="flex items-center justify-between text-white poppins-light space-x-1 text-gray-600 mt-4 bg-pink-600 px-2">
+     <div className="flex items-center justify-between text-white poppins-light space-x-1 text-gray-600 mt-4 px-2">
         <p className="flex items-center gap-2 text-sm">
         <RxClock />
 
           {workshop.timeFrom} To {workshop.timeTo}{" "}
         </p>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
         <LuMapPin />
         {workshop.city}
         </div>

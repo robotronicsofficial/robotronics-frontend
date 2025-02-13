@@ -10,8 +10,12 @@ import rightArrow from "../assets/logo/arrow-up-right.svg";
 import { IoStarSharp } from "react-icons/io5";
 import { LuClock } from "react-icons/lu";
 import { IoVideocamOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const ServiceCard = ({ service }) => {
+  
+
+
   return (
     <div className="p-5" data-aos="fade-up">
       <div className="bg-white p-5 rounded-xl">
@@ -57,6 +61,11 @@ const ServiceCard = ({ service }) => {
 };
 
 const Shop = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/Robogeniushome");
+  };
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -161,7 +170,7 @@ const Shop = () => {
           data-aos="fade-up"
         >
           <div className="bg-yellow p-5 rounded flex justify-center items-center w-[14vw]">
-            <button className="text-xl font-bold" data-aos="fade-up">
+            <button onClick={handleNavigate} className="text-xl font-bold" data-aos="fade-up">
               Get Enrolled
             </button>
           </div>

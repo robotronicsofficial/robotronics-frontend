@@ -40,6 +40,9 @@ import GiftCourse from "./pages/RoboGenius/RobogeniusGift/GiftCourse";
 import ChildHome from "./pages/child protection/ChildHome";
 import TermsHome from "./pages/Terms of Use/TermsHome";
 import PrivacyHome from "./pages/Privacy Policy/PrivacyHome";
+import ServiceDetail from "./pages/service detail/ServiceDetail";
+
+
 
 function App() {
   return (
@@ -86,6 +89,8 @@ function App() {
           <Route path="/ChildProtection" element={<ChildHome />} />
           <Route path="/TermsConditions" element={<TermsHome />} />
           <Route path="/PrivacyPolicy" element={<PrivacyHome />} />
+          <Route path="/ServiceDetail" element={<ServiceDetail />} />
+ 
          
         </Routes>
       </Layout>

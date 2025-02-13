@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import Aos from "aos";
 
 const Services = () => {
+
   const navigate = useNavigate(); // Initialize the navigation function
 
   useEffect(() => {
@@ -72,6 +73,12 @@ const Services = () => {
   const handleNavigate = () => {
     navigate("/International/Iservices"); // Navigate to the desired route
   };
+
+  const handleserviceNavigate = () => {
+    navigate("/serviceDetail"); // Navigate to the desired route
+  };
+
+
 
   return (
     <div
@@ -146,8 +153,8 @@ const Services = () => {
                   <div className="border-t border-white "></div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <div className=" text-white text-sm md:text-lg underline poppins-light rounded text-left bg-transparent  transition-colors duration-300 ease-in-out">
+                <div className="flex items-center gap-2 cursor-pointer" onClick={handleserviceNavigate}>
+                  <div  className=" text-white text-sm md:text-lg underline poppins-light rounded text-left bg-transparent  transition-colors duration-300 ease-in-out">
                     {item.linkText}
                   </div>
                   <MdArrowOutward className="text-xl text-yellow" />

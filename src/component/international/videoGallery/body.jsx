@@ -2,6 +2,7 @@ import { AiOutlineDown } from "react-icons/ai"; // Import the icon for dropdowns
 import WorkshopCard from "./WorkshopCard"; // Import the WorkshopCard component
 import Pagination from "../../blog/Pagination";
 import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Filters = ({
   selectedDate,
@@ -65,6 +66,7 @@ const Filters = ({
 );
 
 const Intro = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const workshopsPerPage = 12;
 
@@ -105,15 +107,22 @@ const Intro = () => {
   const filteredWorkshops = useMemo(() => {
     return workshopsData
       .filter((workshop) => {
-        if (selectedDate && new Date(workshop.date).toISOString().split("T")[0] !== selectedDate) return false;
+        if (
+          selectedDate &&
+          new Date(workshop.date).toISOString().split("T")[0] !== selectedDate
+        )
+          return false;
 
         if (
           selectedSchool &&
-          !workshop.schoolName.toLowerCase().includes(selectedSchool.toLowerCase())
+          !workshop.schoolName
+            .toLowerCase()
+            .includes(selectedSchool.toLowerCase())
         )
           return false;
         if (selectedCity && workshop.city !== selectedCity) return false;
-        if (selectedCategory && workshop.category !== selectedCategory) return false; // Filtering by category
+        if (selectedCategory && workshop.category !== selectedCategory)
+          return false; // Filtering by category
         return true;
       })
       .sort((a, b) => {
@@ -124,7 +133,14 @@ const Intro = () => {
         }
         return 0;
       });
-  }, [selectedDate, selectedSchool, selectedCity, sortBy, selectedCategory, workshopsData]);
+  }, [
+    selectedDate,
+    selectedSchool,
+    selectedCity,
+    sortBy,
+    selectedCategory,
+    workshopsData,
+  ]);
 
   const indexOfLastWorkshop = currentPage * workshopsPerPage;
   const currentWorkshops = filteredWorkshops.slice(
@@ -147,10 +163,8 @@ const Intro = () => {
           {/* Sidebar */}
 
           <h2
-            className="font-bold text-3xl poppins-bold text-brown mb-4"
-            data-aos="fade-right"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
+            className="font-bold text-3xl poppins-bold text-brown mb-4 cursor-pointer"
+            onClick={() => navigate("/International/videoGallery")}
           >
             Activities
           </h2>
