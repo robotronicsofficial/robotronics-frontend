@@ -16,6 +16,7 @@ const categories = [
   "Summer/Winter Camps",
   "Online Courses",
   "Robotic Competitions",
+  
 ];
 
 const Filters = ({
