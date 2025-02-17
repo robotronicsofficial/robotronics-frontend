@@ -127,7 +127,7 @@ const Login = () => {
       <div>
         <div
           className="flex flex-col lg:space-y-4 space-y-1 items-center justify-center lg:py-20 py-10"
-          data-aos="fade-right"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >
@@ -149,7 +149,7 @@ const Login = () => {
         </div>
         <div
           className="flex flex-row justify-center items-center"
-          data-aos="fade-left"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >
@@ -160,7 +160,7 @@ const Login = () => {
         <form
           onSubmit={handleLogin}
           className="flex flex-col items-center space-y-3"
-          data-aos="fade-right"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >

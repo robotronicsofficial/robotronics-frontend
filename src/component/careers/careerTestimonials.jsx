@@ -59,7 +59,7 @@ const CareerTestimonials = () => {
         {/* text */}
         <div
           className="flex flex-row content-center"
-          data-aos="fade-left"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >
@@ -81,7 +81,7 @@ const CareerTestimonials = () => {
         {/* message */}
         <div
           className="w-full bg-white rounded-xl"
-          data-aos="fade-right"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >

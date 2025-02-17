@@ -24,7 +24,7 @@ const Iaboutntro = () => {
             {/* text */}
             <div className="space-y-5 pt-60 lg:w-1/2 ">
               {/* Text */}
-              <div className="space-y-2"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
+              <div className="space-y-2"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
                 <div className="flex flex-row space-x-2">
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-thin">WELCOME TO THE </h1>
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-extralight">WORLD OF</h1>
@@ -37,7 +37,7 @@ const Iaboutntro = () => {
                 </p>  
               </div>
               {/* button */}
-              {/* <div className="space-x-3"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
+              {/* <div className="space-x-3"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
                 <button
                   to="section2"
                   offset={-70}

@@ -91,7 +91,7 @@ const Robogeniusdetail = () => {
     <div className="bg-background lg:px-24 py-5">
       <div
         className="bg-white p-8 py-10 shadow-xl rounded-md"
-        data-aos="fade-right"
+        data-aos="fade-up"
         data-aos-duration="2000"
         data-aos-delay="4000"
       >

@@ -28,7 +28,7 @@ const Updates = () => {
         <div className="flex-1 text-white space-y-4">
           <p
             className="text-white px-4 lg:px-24 py-14 poppins-extrabold text-2xl lg:text-5xl "
-            data-aos="fade-right"
+            data-aos="fade-up"
             data-aos-duration="2000"
           >
             Latest Updates What&apos;s <br />
@@ -39,7 +39,7 @@ const Updates = () => {
 
           <h1
             className="text-white text-wrap px-4 poppins-regular lg:px-24 text-sm lg:text-lg"
-            data-aos="fade-right"
+            data-aos="fade-up"
             data-aos-duration="2000"
           >Be informed about the latest updates in the world of Robotics.	
 
@@ -67,7 +67,7 @@ const Updates = () => {
           {/* text */}
           <div
             className="space-y-2"
-            data-aos="fade-left"
+            data-aos="fade-up"
             data-aos-duration="2000"
           >
             <div className="text-wrap">

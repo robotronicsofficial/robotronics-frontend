@@ -69,7 +69,7 @@ const ContactMap = () => {
   return (
     <div
       className="flex bg-background"
-      data-aos="fade-right"
+      data-aos="fade-up"
       data-aos-duration="2000"
       data-aos-delay="400"
     >

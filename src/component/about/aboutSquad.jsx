@@ -11,8 +11,8 @@ const AboutSquad = () => {
     <div className="flex flex-col bg-gray">
       {/* block 1 */}
       <div className="lg:flex  lg:p-14 p-7">
-        <p className="flex-1 lg:text-6xl poppins-semibold text-3xl font-bold "data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">OUR SQUAD</p>
-        <p className="flex-1 text-wrap poppins-regular lg:text-4xl text-2xl"data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+        <p className="flex-1 lg:text-6xl poppins-semibold text-3xl font-bold "data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">OUR SQUAD</p>
+        <p className="flex-1 text-wrap poppins-regular lg:text-4xl text-2xl"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
         Our team is a tight-knit family of engineers, developers, educators and visionaries, all bound by the same innovative approach and creative enthusiasm.
         </p>
       </div>
@@ -33,16 +33,16 @@ const AboutSquad = () => {
         <div className="flex ">
           <div className="flex-1 flex flex-row justify-between  items-center mb-6" >
             {/* line */}
-            <div className="flex "data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000" >
+            <div className="flex "data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >
               <div className="h-0 lg:w-16 w-8 border border-black" ></div>
               <div className="h-0 lg:w-48 w-20 border border-line" ></div>
             </div>
             {/* text */}
-            <p className="flex lg:text-xl text-sm text-wrap text-center poppins-regular "data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000" >Are you our next squad member?</p>
+            <p className="flex lg:text-xl text-sm text-wrap text-center poppins-regular "data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >Are you our next squad member?</p>
           </div>
         </div>
         <div className="flex-1 w-[70vw] poppins-bold " >
-          <p className="lg:text-6xl text-3xl font-bold lg:text-left text-wrap"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000" >From ambitious startups to Countrywide Schools, we partner  with Great <b className=" text-[#f5ab34]" >Educational industry leaders.</b> </p>
+          <p className="lg:text-6xl text-3xl font-bold lg:text-left text-wrap"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >From ambitious startups to Countrywide Schools, we partner  with Great <b className=" text-[#f5ab34]" >Educational industry leaders.</b> </p>
         </div>
       </div>
     </div>
