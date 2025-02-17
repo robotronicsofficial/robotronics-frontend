@@ -62,7 +62,7 @@ const QuickContact = () => {
       <div className="flex p-10">
         <div
           className="flex-1 hidden md:block"
-          data-aos="fade-right"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >

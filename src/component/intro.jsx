@@ -79,9 +79,9 @@ const Intro = () => {
 
           <div className="flex justify-between w-full py-16 px-20">
             {/* text */}
-            <div className="flex flex-col justify-between space-y-5 mt-32 lg:w-1/2" data-aos="fade-right" data-aos-duration="2000">
+            <div className="flex flex-col justify-between space-y-5 mt-32 lg:w-1/2" data-aos="fade-up" data-aos-duration="2000">
               {/* Text */}
-              <div className="space-y-2  flex flex-col gap-6 mt-8" data-aos="fade-right" data-aos-duration="2000">
+              <div className="space-y-2  flex flex-col gap-6 mt-8" data-aos="fade-up" data-aos-duration="2000">
                 <div className="flex flex-row  space-x-2 ">
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-thin">
                     WELCOME TO THE{" "}
@@ -103,7 +103,7 @@ const Intro = () => {
                 Your gateway to the future of Robotics, Coding and STEM Education. We offer hands-on learning experiences, empowering students of all ages to explore, create and innovate in the exciting world of Robotics.
                 </p>
                 {/* Buttons */}
-              <div className="space-x-3 mt-10" data-aos="fade-right" data-aos-duration="2000">
+              <div className="space-x-3 mt-10" data-aos="fade-up" data-aos-duration="2000">
                 <button
                   to="section2"
                   offset={-70}

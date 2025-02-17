@@ -114,7 +114,7 @@ const Services = () => {
             <img
               src={robort}
               alt="image"
-              data-aos="fade-right"
+              data-aos="fade-up"
               data-aos-duration="2000"
             />
           </div>
@@ -123,7 +123,7 @@ const Services = () => {
       {/* Second layer: Shop items */}
       <div
         className="px-4 py-8"
-        data-aos="fade-right"
+        data-aos="fade-up"
         data-aos-duration="2000"
         data-aos-delay="4000"
       >

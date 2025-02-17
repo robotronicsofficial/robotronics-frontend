@@ -10,7 +10,7 @@ const PrivacyBody = () => {
             <div className="space-y-12">
               <h1
                 className="text-5xl poppins-bold text-brown"
-                data-aos="fade-left"
+                data-aos="fade-up"
                 data-aos-duration="2000"
                 data-aos-delay="4000"
               >
@@ -18,7 +18,7 @@ const PrivacyBody = () => {
               </h1>
               <ol
                 className="text-xl poppins-light space-y-2"
-                data-aos="fade-right"
+                data-aos="fade-up"
                 data-aos-duration="2000"
                 data-aos-delay="4000"
               >

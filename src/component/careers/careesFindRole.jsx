@@ -26,7 +26,7 @@ const CareesFindRole = () => {
       <div className="flex flex-col items-center lg:items-start text-center lg:text-left py-10">
         <p
           className="text-wrap font-light text-brown text-5xl lg:text-7xl mb-10"
-          data-aos="fade-right"
+          data-aos="fade-up"
           data-aos-duration="2000"
         >
           Can't find a role <br />
@@ -68,7 +68,7 @@ const CareesFindRole = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="p-3 border border-brown rounded-xl hover:bg-brown hover:text-white transition transform hover:scale-105"
-            data-aos="fade-left"
+            data-aos="fade-up"
             data-aos-duration="2000"
             data-aos-delay={`${index * 300}`}
           >

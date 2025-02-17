@@ -24,7 +24,7 @@ const Testimonial = () => {
       {/* layer 2 */}
       <div className="  flex w-full justify-between lg:gap-5 gap-2 p-2 lg:p-5">
         {/* block 1 */}
-        <div className="flex-1 lg:space-y-4 space-y-2 "data-aos="fade-right" data-aos-duration="2000"> 
+        <div className="flex-1 lg:space-y-4 space-y-2 "data-aos="fade-up" data-aos-duration="2000"> 
         {/* div 1 */}
         <div className="flex  flex-col justify-center border border-gray rounded-2xl content-center ">
          <img className="flex " src={ceo1}/>
@@ -95,7 +95,7 @@ const Testimonial = () => {
           </div>
         </div>
         {/* block 3 */}
-        <div className="flex-1 lg:space-y-4 " data-aos="fade-left" data-aos-duration="2000"> 
+        <div className="flex-1 lg:space-y-4 " data-aos="fade-up" data-aos-duration="2000"> 
         {/* div 1 */}
         <div className="flex p-5 border border-gray rounded-2xl">
           {/* image */}

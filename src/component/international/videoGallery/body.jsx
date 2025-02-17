@@ -170,7 +170,7 @@ const Intro = () => {
           </h2>
           <h2
             className="border border-brown w-1/3 h-2 rounded-md bg-brown mb-4"
-            data-aos="fade-left"
+            data-aos="fade-up"
             data-aos-duration="2000"
             data-aos-delay="4000"
           ></h2>
