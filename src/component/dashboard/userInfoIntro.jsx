@@ -91,7 +91,7 @@ const UserInfoIntro = () => {
       </div>
       <div
         className="lg:flex flex-row"
-        data-aos="fade-right"
+        data-aos="fade-up"
         data-aos-duration="2000"
         data-aos-delay="4000"
       >

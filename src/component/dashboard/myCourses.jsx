@@ -221,7 +221,7 @@ const MyCourses = () => {
       {/* Left Navigation */}
       <div
         className="lg:w-[30%] w-2/3"
-        data-aos="fade-right"
+        data-aos="fade-up"
         data-aos-duration="2000"
         data-aos-delay="4000"
       >
@@ -231,7 +231,7 @@ const MyCourses = () => {
       {/* Course Listing */}
       <div
         className="w-full text-center py-5"
-        data-aos="fade-left"
+        data-aos="fade-up"
         data-aos-duration="2000"
         data-aos-delay="4000"
       >

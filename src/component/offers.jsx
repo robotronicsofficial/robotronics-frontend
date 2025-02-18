@@ -16,7 +16,7 @@ const Offers = () => {
   }, []);
 
   return (
-    <div className="lg:flex justify-between space-y-5 lg:space-y-0 bg-yellow lg:p-10 p-5 "data-aos="fade-left" data-aos-duration="2000">
+    <div className="lg:flex justify-between space-y-5 lg:space-y-0 bg-yellow lg:p-10 p-5 "data-aos="fade-up" data-aos-duration="2000">
       {/* First image */}
       <div className="flex-1 text-wrap flex lg:space-x-3" data-aos="fade-up">
         <div className="p-5 flex items-center">

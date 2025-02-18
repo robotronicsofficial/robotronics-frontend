@@ -25,7 +25,7 @@ const Intro = () => {
         {/* left */}
         <div
           className="lg:flex flex-row justify-center hidden"
-          data-aos="fade-right"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >
@@ -65,7 +65,7 @@ const Intro = () => {
         {/* right */}
         <div
           className="p-5 lg:px-24 lg:space-y-14 space-y-8"
-          data-aos="fade-left"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >

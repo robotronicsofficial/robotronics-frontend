@@ -27,7 +27,7 @@ const Robogeniusintro = () => {
             {/* Left Side */}
             <div
               className="w-full lg:w-2/3 space-y-6"
-              data-aos="fade-right"
+              data-aos="fade-up"
               data-aos-duration="2000"
               data-aos-delay="4000"
             >
@@ -100,7 +100,7 @@ const Robogeniusintro = () => {
             {/* Right Side */}
             <div
               className="w-full lg:w-1/3 mt-6 lg:mt-0 space-y-4"
-              data-aos="fade-left"
+              data-aos="fade-up"
               data-aos-duration="2000"
               data-aos-delay="4000"
             >

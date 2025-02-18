@@ -81,7 +81,7 @@ const Shopsearch = () => {
         {/* Line 1 */}
         <div
           className="lg:pt-16 pt-8"
-          data-aos="fade-right"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >
@@ -93,13 +93,13 @@ const Shopsearch = () => {
               <img
                 src={shopHome}
                 className="w-[18px] h-[18px]"
-                data-aos="fade-right"
+                data-aos="fade-up"
                 data-aos-duration="2000"
                 data-aos-delay="4000"
               />
               <p
                 className="px-5 font-bold"
-                data-aos="fade-left"
+                data-aos="fade-up"
                 data-aos-duration="2000"
                 data-aos-delay="4000"
               >
@@ -110,7 +110,7 @@ const Shopsearch = () => {
 
           <div
             className="w-[50%] flex justify-between space-x-5 gap-10 pr-10"
-            data-aos="fade-left"
+            data-aos="fade-up"
             data-aos-duration="2000"
             data-aos-delay="4000"
           >
@@ -118,7 +118,7 @@ const Shopsearch = () => {
               <div className="flex items-center">
                 <div
                   className="rounded-full bg-[#352E2C] px-2 py-2"
-                  data-aos="fade-right"
+                  data-aos="fade-up"
                   data-aos-duration="2000"
                   data-aos-delay="4000"
                 >
@@ -151,7 +151,7 @@ const Shopsearch = () => {
         {/* Line 2 */}
         <div
           className="lg:pt-5 pt-5"
-          data-aos="fade-left"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >

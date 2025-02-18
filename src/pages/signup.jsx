@@ -55,7 +55,7 @@ const Signup = () => {
           <div className="items-center p-5 space-y-5 ">
             <p
               className="text-6xl text-white text-wrap poppins-bold"
-              data-aos="fade-right"
+              data-aos="fade-up"
               data-aos-duration="2000"
               data-aos-delay="4000"
             >
@@ -63,7 +63,7 @@ const Signup = () => {
             </p>
             <p
               className="text-2xl poppins-light text-white"
-              data-aos="fade-left"
+              data-aos="fade-up"
               data-aos-duration="2000"
               data-aos-delay="4000"
             >
@@ -89,7 +89,7 @@ const Signup = () => {
         </div>
         <div
           className="flex flex-col bg-gray rounded-lg lg:p-14 p-5"
-          data-aos="fade-left"
+          data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >

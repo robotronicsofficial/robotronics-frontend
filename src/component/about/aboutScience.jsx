@@ -18,7 +18,7 @@ const AboutScience = () => {
             Turning science <br /> Fiction into <br />{" "}
             <p
               className=" text-yellow poppins-bold pb-2"
-              data-aos="fade-left"
+              data-aos="fade-up"
               data-aos-duration="2000"
               data-aos-delay="4000"
             >
@@ -26,7 +26,7 @@ const AboutScience = () => {
             </p>
             <p
               className="flex border border-gold h-0 w-32 "
-              data-aos="fade-right"
+              data-aos="fade-up"
               data-aos-duration="2000"
               data-aos-delay="4000"
             ></p>
@@ -36,13 +36,13 @@ const AboutScience = () => {
         <div className="bg-black text-white p-6 relative max-w-md">
           <div
             className="bg-yellow w-32 h-32 rounded-full absolute top-0 left-0"
-            data-aos="fade-right"
+            data-aos="fade-up"
             data-aos-duration="2000"
             data-aos-delay="4000"
           ></div>
           <p
             className="relative z-10 text-sm text-wrap poppins-light leading-relaxed pt-4 pl-4"
-            data-aos="fade-left"
+            data-aos="fade-up"
             data-aos-duration="2000"
             data-aos-delay="4000"
           >
@@ -58,7 +58,7 @@ const AboutScience = () => {
           <div className="flex flex-row justify-between">
             <div
               className="border-t border-yellow pt-4"
-              data-aos="fade-right"
+              data-aos="fade-up"
               data-aos-duration="2000"
               data-aos-delay="4000"
             >
@@ -73,7 +73,7 @@ const AboutScience = () => {
               <div className="max-w-4xl mx-auto">
                 <div
                   className="border-t border-white pt-4"
-                  data-aos="fade-left"
+                  data-aos="fade-up"
                   data-aos-duration="2000"
                   data-aos-delay="4000"
                 >
