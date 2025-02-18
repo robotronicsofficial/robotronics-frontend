@@ -5,17 +5,18 @@ import PropTypes from "prop-types";
 import { LuMapPin } from "react-icons/lu";
 
 const WorkshopCard = ({ workshop }) => (
-  <div className="bg-white shadow-lg rounded-lg overflow-hidden ">
-    <div className="relative h-[16vw]">
+  <div className="bg-white shadow-lg rounded-lg overflow-hidden " onClick={() => window.open(workshop.url, "_blank")}>
+    <div className="relative h-[16vw] cursor-pointer"
+    >
       <img
         src={workshop.thumbnail}
         alt={workshop.workshopName}
-        className="w-full h-full object-contain"
+        className="w-full h-full object-fill"
       />
     </div>
-    <div className="px-3 py-4 bg-[#362d2c] relative h-[18vw] flex flex-col ">
+    <div className="px-3 py-4 bg-[#362d2c] relative h-[18vw] flex flex-col " onClick={() => window.open(workshop.url, "_blank")}>
       <div className=" text-white  h-[2vw] ">
-        <p className="text-gray-700 text-white poppins-medium">
+        <p className="text-gray-700 text-white poppins-medium z-50 my-3">
           {workshop.activity}
         </p>
         <div className="w-20 h-20 rounded-full absolute right-2 -top-10 border-2 border-white overflow-hidden bg-yellow">
@@ -27,7 +28,7 @@ const WorkshopCard = ({ workshop }) => (
         </div>
       </div>
      <div className="h-[20vw] mt-2  flex flex-col ">
-     <h3 className="text-lg text-white poppins-bold text-wrap leading-none mb-2">
+     <h3 className="text-lg text-white poppins-bold text-wrap leading-none my-4">
         {workshop.workshopName}
       </h3>
       <p className="text-gray-600 text-white text-wrap poppins-light md:text-xs">
