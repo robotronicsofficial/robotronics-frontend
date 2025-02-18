@@ -1,8 +1,24 @@
-import { AiOutlineDown } from "react-icons/ai"; // Import the icon for dropdowns
-import WorkshopCard from "./WorkshopCard"; // Import the WorkshopCard component
-import Pagination from "../../blog/Pagination";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import WorkshopCard from "./WorkshopCard";
+import Pagination from "../../blog/Pagination";
+
+const categories = [
+  "RoboGenius Program",
+  "Robotics Workshops",
+  "Skill Development Workshops",
+  "IVY Club",
+  "Robotronics Subject Implementation",
+  "Curriculum Preparation",
+  "Providing Robotics & STEM Trainer",
+  "After-School Robotic Club",
+  "Robotic Labs",
+  "Summer/Winter Camps",
+  "Online Courses",
+  "Robotic Competitions",
+  "asjdbajshbdkj"
+  
+];
 
 const Filters = ({
   selectedDate,
@@ -45,9 +61,29 @@ const Filters = ({
         onChange={(e) => setSelectedCity(e.target.value)}
       >
         <option value="">City</option>
-        <option value="Lahore">Lahore</option>
-        <option value="Karachi">Karachi</option>
-        <option value="Islamabad">Islamabad</option>
+        {[
+          "Lahore",
+          "Karachi",
+          "Islamabad",
+          "Faisalabad",
+          "Rawalpindi",
+          "Multan",
+          "Peshawar",
+          "Quetta",
+          "Sialkot",
+          "Gujranwala",
+          "Hyderabad",
+          "Sargodha",
+          "Bahawalpur",
+          "Sukkur",
+          "Larkana",
+          "Sheikhupura",
+          "Kahror Pakka",
+        ].map((city) => (
+          <option key={city} value={city}>
+            {city}
+          </option>
+        ))}
       </select>
     </div>
     <div className="w-full md:w-1/4">
@@ -57,9 +93,7 @@ const Filters = ({
         value={sortBy}
         onChange={(e) => setSortBy(e.target.value)}
       >
-        <option value="Videos">Videos</option>
         <option value="Date">Date</option>
-        <option value="Popularity">Popularity</option>
       </select>
     </div>
   </div>
@@ -74,8 +108,8 @@ const Intro = () => {
   const [selectedSchool, setSelectedSchool] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [sortBy, setSortBy] = useState("Videos");
-  const [selectedCategory, setSelectedCategory] = useState(""); // Added state for selectedCategory
-  const [workshopsData, setWorkshopsData] = useState([]); // For storing fetched workshop data
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [workshopsData, setWorkshopsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -87,9 +121,9 @@ const Intro = () => {
           throw new Error("Failed to fetch services data");
         }
         const data = await response.json();
-        setWorkshopsData(data.data || []); // Storing the fetched data
-        console.log(data.data);
+        setWorkshopsData(data.data || []);
         setLoading(false);
+        console.log(data.data);
       } catch (err) {
         setError(err.message);
         setLoading(false);
@@ -100,19 +134,24 @@ const Intro = () => {
   }, []);
 
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    console.log(`Selected category: ${category}`);
+    setSelectedCategory(category.trim().toLowerCase());
   };
 
   const filteredWorkshops = useMemo(() => {
     return workshopsData
       .filter((workshop) => {
+        const workshopActivity = workshop.activity
+          ? workshop.activity.trim().toLowerCase()
+          : "";
+        const selectedCategoryFormatted = selectedCategory
+          ? selectedCategory.trim().toLowerCase()
+          : "";
+
         if (
           selectedDate &&
           new Date(workshop.date).toISOString().split("T")[0] !== selectedDate
         )
           return false;
-
         if (
           selectedSchool &&
           !workshop.schoolName
@@ -121,8 +160,11 @@ const Intro = () => {
         )
           return false;
         if (selectedCity && workshop.city !== selectedCity) return false;
-        if (selectedCategory && workshop.category !== selectedCategory)
-          return false; // Filtering by category
+        if (
+          selectedCategoryFormatted &&
+          workshopActivity !== selectedCategoryFormatted
+        )
+          return false;
         return true;
       })
       .sort((a, b) => {
@@ -148,74 +190,55 @@ const Intro = () => {
     indexOfLastWorkshop
   );
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="bg-gray p-14">
       <div className="flex flex-wrap md:flex-nowrap gap-8 md:space-x-6">
         <aside className="p-8 w-[22vw] overflow-hidden">
-          {/* Sidebar */}
-
           <h2
             className="font-bold text-3xl poppins-bold text-brown mb-4 cursor-pointer"
-            onClick={() => navigate("/International/videoGallery")}
+            onClick={() => {
+              setSelectedCategory("");
+              setSelectedDate("");
+              setSelectedSchool("");
+              setSelectedCity("");
+              setSortBy(""); 
+              navigate("/International/videoGallery");
+            }}
           >
             Activities
           </h2>
-          <h2
-            className="border border-brown w-1/3 h-2 rounded-md bg-brown mb-4"
-            data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
-          ></h2>
-
-          <div>
-            <ul className="space-y-2">
-              {[
-                "RoboGenius Program",
-                "Robotics Workshops",
-                "Skill Development Workshops",
-                "IVY Club",
-                "Robotronics Subject Implementation",
-                "Curriculum Preparation",
-                "Providing Robotics & STEM Trainer",
-                "After-School Robotic Club",
-                "Robotic Labs",
-                "Summer/Winter Camps",
-                "Online Courses",
-                "Robotic Competitions",
-              ].map((category) => (
-                <a
-                  key={category}
-                  className={`flex cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
-                    selectedCategory === category
-                      ? "font-semibold text-[#e06f21]"
-                      : "text-gray-600 hover:text-gray-400 hover:transition-all hover:duration-150 active:text-black"
-                  }`}
-                  onClick={() => handleCategoryClick(category)}
-                >
-                  {category}
-                </a>
-              ))}
-            </ul>
-          </div>
+          <h2 className="border border-brown w-1/3 h-2 rounded-md bg-brown mb-4"></h2>
+          <ul className="space-y-2">
+            {categories.map((category) => (
+              <li
+                key={category}
+                className={`cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
+                  selectedCategory === category.trim().toLowerCase()
+                    ? "font-semibold text-[#e06f21]"
+                    : "text-gray-600 hover:text-gray-400"
+                }`}
+                onClick={() => handleCategoryClick(category)}
+              >
+                {category}
+              </li>
+            ))}
+          </ul>
         </aside>
         <main className="w-full md:w-3/4">
           <Filters
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            selectedSchool={selectedSchool}
-            setSelectedSchool={setSelectedSchool}
-            selectedCity={selectedCity}
-            setSelectedCity={setSelectedCity}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
+            {...{
+              selectedDate,
+              setSelectedDate,
+              selectedSchool,
+              setSelectedSchool,
+              selectedCity,
+              setSelectedCity,
+              sortBy,
+              setSortBy,
+            }}
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 py-5">
             {currentWorkshops.map((workshop) => (
