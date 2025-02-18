@@ -6,11 +6,11 @@ const MoreProduct = () => {
       {/* product */}
       <div className="space-y-8" >
         {/* title */}
-        <p className="lg:text-5xl text-2xl poppins-bold text-brown text-center"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
+        <p className="lg:text-5xl text-2xl poppins-bold text-brown text-center"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
           You May Also Like This
         </p>
         {/* dec */}
-        <p className="text-line text-wrap poppins-light text-center"data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+        <p className="text-line text-wrap poppins-light text-center"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod
         </p>

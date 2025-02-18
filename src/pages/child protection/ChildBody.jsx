@@ -10,13 +10,13 @@ const ChildBody = () => {
             <div className="space-y-12">
               <h1
                 className="text-5xl poppins-bold text-brown"
-                data-aos="fade-left"
+                data-aos="fade-up"
                 data-aos-duration="2000"
                 data-aos-delay="4000"
               >
                 Child Protection Policy
               </h1>
-              <ol className="text-xl poppins-light space-y-2" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
+              <ol className="text-xl poppins-light space-y-2" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
                 <li><strong>1. Commitment:</strong> We are committed to ensuring the safety and well-being of all children participating in our courses. Our policies are designed to protect children from harm and ensure their positive development.</li>
                 
                 <li><strong>2. Background Checks:</strong> All instructors undergo thorough background checks to ensure they are suitable to work with children. Periodic re-evaluations are conducted to maintain high standards of safety.</li>

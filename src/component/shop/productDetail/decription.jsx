@@ -15,7 +15,7 @@ const Decription = ({ description, category, duration }) => {
       {/* div 2 */}
       <div className="p-5 flex flex-row justify-between ">
         <div className=" p-2 w-1/2 space-y-2">
-          <p className="lg:text-2xl text-xl poppins-semibold text-brown"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
+          <p className="lg:text-2xl text-xl poppins-semibold text-brown"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
             DESCRIPTION
           </p>
           <p className="text-wrap text-xs poppins-medium text-line ">
@@ -23,7 +23,7 @@ const Decription = ({ description, category, duration }) => {
           </p>
         </div>
         <div className="p-2 w-1/2">
-          <div className="text-wrap text-line space-y-2 lg:px-20 px-4"data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+          <div className="text-wrap text-line space-y-2 lg:px-20 px-4"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
             <p className="lg:text-2xl text-xl  poppins-semibold text-brown">
               FITS AND FEATURES
             </p>

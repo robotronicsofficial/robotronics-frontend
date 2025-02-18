@@ -8,19 +8,19 @@ const AboutRobotronics = () => {
     <div className="flex p-5 flex-col w-full bg-gray">
       {/* block 1 */}
       <div className="lg:text-yellow poppins-light lg:pt-20 pt-10 lg:text-6xl text-3xl justify-between text-right lg:px-10 px-4 md:text-5xl text-yellow"
-      data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000"
+      data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"
       >
        
        ROBOTRONICS
       </div>
       {/* line */}
-      <div className="lg:mx-10"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
+      <div className="lg:mx-10"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
         <div className="h-0 w-full border border-brown"></div>
       </div>
       {/* block 2 */}
       <div className="lg:flex md:flex justify-between lg:p-5">
         {/* row */}
-        <div className="flex-1 lg:pt-18 md:pt-10"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
+        <div className="flex-1 lg:pt-18 md:pt-10"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
           {/* col */}
           <div className="flex flex-col">
             <span className=" flex lg:text-yellow poppins-bold lg:text-4xl text-2xl text-right md:text4xl text-yellow text-wrap">
@@ -45,7 +45,7 @@ const AboutRobotronics = () => {
           <img src={ceo} alt="ceo" className="rounded-full" />
         </div>
         {/* div 3 */}
-        <div className="flex-1 pt-5 lg:pt-14"data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+        <div className="flex-1 pt-5 lg:pt-14"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
           <div className="flex flex-col" >
             <img src={c2} alt="parents" className="hidden lg:block" />
             <span className="flex lg:text-black lg:pt-8 pt-4 poppins-light lg:text-2xl text-xl md:text-2xl text-black">
