@@ -16,8 +16,6 @@ const categories = [
   "Summer/Winter Camps",
   "Online Courses",
   "Robotic Competitions",
-  "asjdbajshbdkj"
-  
 ];
 
 const Filters = ({
@@ -204,14 +202,16 @@ const Intro = () => {
               setSelectedDate("");
               setSelectedSchool("");
               setSelectedCity("");
-              setSortBy(""); 
+              setSortBy("");
               navigate("/International/videoGallery");
             }}
           >
             Activities
           </h2>
           <h2 className="border border-brown w-1/3 h-2 rounded-md bg-brown mb-4"></h2>
-          <ul className="space-y-2">
+
+          {/* this will show all the activities filter */}
+          {/* <ul className="space-y-2">
             {categories.map((category) => (
               <li
                 key={category}
@@ -225,6 +225,32 @@ const Intro = () => {
                 {category}
               </li>
             ))}
+          </ul> */}
+
+          {/* this filter will only show those activity filters who are having data in them */}
+          <ul className="space-y-2">
+            {categories
+              .filter((category) =>
+                workshopsData.some(
+                  (workshop) =>
+                    workshop.activity &&
+                    workshop.activity.trim().toLowerCase() ===
+                      category.trim().toLowerCase()
+                )
+              )
+              .map((category) => (
+                <li
+                  key={category}
+                  className={`cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
+                    selectedCategory === category.trim().toLowerCase()
+                      ? "font-semibold text-[#e06f21]"
+                      : "text-gray-600 hover:text-gray-400"
+                  }`}
+                  onClick={() => handleCategoryClick(category)}
+                >
+                  {category}
+                </li>
+              ))}
           </ul>
         </aside>
         <main className="w-full md:w-3/4">
