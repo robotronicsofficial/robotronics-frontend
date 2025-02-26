@@ -1,79 +1,81 @@
-// import robot from "../../../assets/images/IServicesS4.svg"; // Import fallback image
-
-import python from "../../../assets/imagesContent/coursesimages/python.svg";
-import ai from "../../../assets/imagesContent/coursesimages/ai.svg";
-import scratch from "../../../assets/imagesContent/coursesimages/scratch.svg";
-import wordpress from "../../../assets/imagesContent/coursesimages/wordpress.svg";
-import video from "../../../assets/imagesContent/coursesimages/video.svg";
-import financialmanagement from "../../../assets/imagesContent/coursesimages/financialmanagement.svg";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import robot from "../../../assets/images/IServicesS4.svg"; // Fallback image
+
+const BASE_URL = "http://localhost:8080/";
 
 const OurServices = () => {
-
-
+  const [services, setServices] = useState([]);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleNavigate = () => {
-    navigate("/serviceDetail")
-  }
+  useEffect(() => {
+    fetch(`${BASE_URL}api/getAllService`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Services:", data);
+        setServices(data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching services:", error);
+        setError(error.message);
+      });
+  }, []);
 
-
-  // Local JSON data for services
-  const services = [
-    {
-      title: "Python",
-      imgSrc: python, // Update this path or use robot as fallback
-    },
-    {
-      title: "Scratch",
-      imgSrc: scratch, // Update this path or use robot as fallback
-    },
-    {
-      title: "Artifical Intellignce",
-      imgSrc: ai, // Update this path or use robot as fallback
-    },
-    {
-      title: "Wordpress Development",
-      imgSrc: wordpress, // Update this path or use robot as fallback
-    },
-    {
-      title: "Video Editing",
-      imgSrc: video, // Update this path or use robot as fallback
-    },
-    {
-      title: "Financial Management",
-      imgSrc: financialmanagement, // Update this path or use robot as fallback
-    },
-    // Add more services as needed
-  ];
+  // Pass the selected service data to the details page
+  const handleNavigate = (service) => {
+    navigate("/serviceDetail", { state: { service } });
+  };
 
   return (
     <div className="OurServices p-20">
       <div className="container mx-auto">
-        <h2 className="lg:text-6xl md:text-5xl text-4xl text-brown poppins-bold mb-8">
+        <h2 className="lg:text-6xl md:text-5xl text-4xl text-brown poppins-bold mb-16">
           Our Services
         </h2>
+        {error && <p className="text-red-500">Error: {error}</p>}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
-              onClick={handleNavigate}
-            >
-              <div className="flex justify-center relative">
-                <div className="absolute mt-10">
-                  <h3 className="text-3xl text-white poppins-regular mb-2">
-                    {service.title}
-                  </h3>
+          {services.length > 0 ? (
+            services.map((service) => {
+              const imageUrl = service.thumbnailImage
+                ? `${BASE_URL}${service.thumbnailImage.replace("\\", "/")}`
+                : robot;
+
+              return (
+                <div
+                  key={service._id}
+                  className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+                  onClick={() => handleNavigate(service)} // Pass service data
+                >
+                  <div className="flex justify-center relative">
+                    {/* Black overlay */}
+                    <div className="absolute inset-0 bg-black opacity-40"></div>
+
+                    {/* Text Content */}
+                    <div className="absolute mt-10 z-10">
+                      <h3 className="text-3xl text-white poppins-regular mb-2 text-wrap text-center">
+                        {service.name}
+                      </h3>
+                    </div>
+
+                    {/* Background Image */}
+                    <img
+                      className="w-full object-cover"
+                      src={imageUrl}
+                      alt={`Image representing ${service.name}`}
+                    />
+                  </div>
                 </div>
-                <img
-                  src={service.imgSrc || robot} // Fallback image in case imgSrc is missing
-                  alt={`Image representing ${service.title}`}
-                  className="w-full object-cover"
-                />
-              </div>
-            </div>
-          ))}
+              );
+            })
+          ) : (
+            <p className="text-center text-lg">Loading services...</p>
+          )}
         </div>
       </div>
     </div>

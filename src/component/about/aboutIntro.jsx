@@ -20,9 +20,9 @@ const Iaboutntro = () => {
     <>
       <div className="abouthero relative w-full" id="abouthero">
         <div className="overflow-hidden" >
-        <div className="flex justify-between w-full p-10 h-[50vw]">
+        <div className="flex justify-between w-full p-10 h-[50vw] bg-black bg-opacity-50">
             {/* text */}
-            <div className="space-y-5 pt-60 lg:w-1/2 ">
+            <div className="space-y-5 pt-48 lg:w-1/2 ">
               {/* Text */}
               <div className="space-y-2"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
                 <div className="flex flex-row space-x-2">
@@ -30,9 +30,9 @@ const Iaboutntro = () => {
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-extralight">WORLD OF</h1>
                 </div>
                 <div className="flex text-wrap">
-                  <p className="lg:text-8xl md:text-xl text-4xl font-bold text-white poppins-bold">About Us</p>
+                  <p className="lg:text-8xl md:text-xl text-4xl font-bold text-white poppins-bold my-4">About Us</p>
                 </div>
-                <p className="text-wrap text-sm poppins-light text-white">
+                <p className="text-wrap text-sm poppins-light text-white my-4">
                 Robotronics Pakistan (Pvt) Ltd is a pioneer educational institute dedicated to advancing robotics and STEM education across Pakistan since 2019. We are in collaboration with leading organizations and schools to empower youth with hands-on learning, fostering innovation, critical thinking and problem-solving skills.
                 </p>  
               </div>
@@ -54,7 +54,7 @@ const Iaboutntro = () => {
                 </button>
               </div> */}
               {/* socil icons */}
-              <div className="flex flex-row space-x-2  lg:space-x-5">
+              <div className="flex flex-row space-x-2  lg:space-x-5 mt-10">
                 <a
                   href="https://www.facebook.com/robotronicspakistan/"data-aos="fade-up" data-aos-duration="2000"
                   target="_blank"
