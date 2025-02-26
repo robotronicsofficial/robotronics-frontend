@@ -79,7 +79,7 @@ const Intro = () => {
 
           <div className="flex justify-between w-full py-16 px-20">
             {/* text */}
-            <div className="flex flex-col justify-between space-y-5 mt-32 lg:w-1/2" data-aos="fade-up" data-aos-duration="2000">
+            <div className="flex flex-col justify-center space-y-5 mt-32 lg:w-1/2" data-aos="fade-up" data-aos-duration="2000">
               {/* Text */}
               <div className="space-y-2  flex flex-col gap-6 mt-8" data-aos="fade-up" data-aos-duration="2000">
                 <div className="flex flex-row  space-x-2 ">

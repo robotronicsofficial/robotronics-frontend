@@ -4,7 +4,7 @@ const Intro = () => {
     <div className="contactUs bg-contactbg" >
         
         <div className="w-2/4 text-center lg:p-14 lg:py-14 py-5"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >
-            <p className="lg:text-6xl text-2xl poppins-extrabold text-gold" >CONTACT US</p>
+            <p className="lg:text-6xl text-2xl poppins-extrabold text-[#f5ab34] mt-40" >CONTACT US</p>
         </div> 
         <div className="px-44" >
             {/* image */}
