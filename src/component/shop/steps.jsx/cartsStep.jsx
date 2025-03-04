@@ -1,9 +1,9 @@
+
 import { useState } from "react";
 import { FaCreditCard, FaEye, FaShoppingBag, FaUser } from "react-icons/fa";
 import ShopCartproductList from "../shopCartproductList";
 import CustomerInfomation from "../CustomerInfomation";
 import ShopShipping from "../shopShipping";
-import { BiSkipPrevious, BiSolidSkipPreviousCircle } from "react-icons/bi";
 
 const Step = ({ icon, title, description, isActive }) => (
   <div className="flex flex-col items-center space-y-2">
@@ -16,6 +16,7 @@ const Step = ({ icon, title, description, isActive }) => (
     </p>
   </div>
 );
+
 const CartsStep = () => {
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -76,24 +77,9 @@ const CartsStep = () => {
         <h2 className="text-xl font-semibold mb-4">
           {steps[currentStep].title}
         </h2>
-        <p>{steps[currentStep].content}</p>
+        <p className="" >{steps[currentStep].content}</p>
       </div>
       <div className="flex justify-between">
-        {/* <button
-          className={`${
-            currentStep === 0 ? "bg-gray" : "bg-green-400 cursor-pointer"
-          } flex p-2 rounded`}
-          onClick={handlePrevious}
-          disabled={currentStep === 0}
-        > */}
-          {/* <BiSolidSkipPreviousCircle className="self-center mr-2" /> Previous */}
-        {/* </button> */}
-        {/* <button
-          onClick={handleNext}
-          disabled={currentStep === steps.length - 1}
-        >
-          Next
-        </button> */}
       </div>
     </div>
   );

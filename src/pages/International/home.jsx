@@ -2,9 +2,6 @@ import Intro from "../../component/international/services/intro";
 import Offers from "../../component/offers";
 import Updates from "../../component/updates";
 import QuickContact from "../../component/international/services/quickContact";
-import Footer from "../../component/footer";
-// import Upcoming from "../../component/international/internationalPage/upcoming";
-// import Events from "../../component/international/internationalPage/event";
 import Shop from "../../component/international/internationalPage/Shop";
 import Marquees from "../../component/marquees";
 const IHome = () => {
@@ -12,15 +9,10 @@ const IHome = () => {
     <div>
       <Intro />
       <Marquees/>
-      {/* <Upcoming /> */}
-      {/* <div className="hidden lg:block "> */}
-      {/* <Events /> */}
-      {/* </div> */}
       <Offers />
       <Shop />
       <Updates />
       <QuickContact />
-      <Footer />
     </div>
   );
 };

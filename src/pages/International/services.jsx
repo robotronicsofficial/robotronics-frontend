@@ -2,7 +2,6 @@ import Intro from "../../component/international/services/intro"
 import Updates from "../../component/updates"
 import OurServices from "../../component/international/services/ourServices"
 import QuickContact from "../../component/international/services/quickContact"
-import Footer from "../../component/footer"
 import Marquees from "../../component/marquees"
 const IServices = () => {
   return (
@@ -12,7 +11,6 @@ const IServices = () => {
       <OurServices />
       <Updates />
       <QuickContact />
-      <Footer />
     </div>
   )
 }

@@ -169,8 +169,8 @@ const Shop = () => {
           className="px-3 py-4 flex items-center justify-center"
           data-aos="fade-up"
         >
-          <div className="bg-yellow p-5 rounded flex justify-center items-center w-[14vw]">
-            <button onClick={handleNavigate} className="text-xl font-bold" data-aos="fade-up">
+          <div className="bg-yellow p-5 rounded flex justify-center items-center w-[14vw]" data-aos="fade-up" >
+            <button onClick={handleNavigate} className="text-xl font-bold" >
               Get Enrolled
             </button>
           </div>

@@ -1,6 +1,4 @@
-import React from 'react';
 import Intro from '../../component/contactUs/intro';
-import Footer from '../../component/footer';
 import ChildBody from './ChildBody';
 
 const ChildHome = () => {
@@ -8,7 +6,6 @@ const ChildHome = () => {
     <div>
       <Intro />
       <ChildBody/>
-      <Footer />
     </div>
   );
 };

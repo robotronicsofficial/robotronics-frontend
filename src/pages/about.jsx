@@ -3,7 +3,6 @@ import AboutRobotronics from "../component/about/aboutRobotronics";
 import AboutScience from "../component/about/aboutScience"
 import AboutVision from "../component/about/aboutVision"
 import AboutSquad from "../component/about/aboutSquad"
-import Footer from "../component/footer"
 import Gotobtn from "../component/goToBtn"
 import Marquees from "../component/marquees";
 const About = () => {
@@ -14,11 +13,9 @@ const About = () => {
       <AboutScience/>
       <AboutVision/>
       <AboutSquad/>
-      {/* <Schoollgoso/> */}
       <Marquees direction = "left"/>
       <Marquees direction = "right"/>
       <Gotobtn/>
-      <Footer/>
     </div>
   )
 }

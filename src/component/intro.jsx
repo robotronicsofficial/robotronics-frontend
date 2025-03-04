@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import {
   FaFacebook,
   FaInstagram,
@@ -8,75 +8,19 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 import "aos/dist/aos.css"; // Import CSS for AOS
-import Header from "../component/header";
 import Robort from "../assets/images/Robort.svg";
 import Aos from "aos";
-// import { FaChevronDown } from "react-icons/fa";
 
 const Intro = () => {
-  // const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     Aos.init(); // Initialize AOS library
   }, []);
 
-  // const toggleDropdown = () => {
-  //   setIsOpen(!isOpen);
-  // };
-
-  // const services = [
-  //   "Robotic Workshops",
-  //   "Robotic Kits",
-  //   "After-School Robotics Clubs",
-  //   "Grade 1-8 Robotronics Curriculum.",
-  //   "Robotic Competitions (Management, Preparation and Consultation)",
-  // ];
-
   return (
     <>
       <div className="hero" id="hero">
-        
-
         <div className="space-y-5">
-          {/* As a School & Parent */}
-          {/* <div className="w-full flex justify-center">
-            <div
-              className="relative inline-block text-left"
-              data-aos="fade-up"
-              data-aos-duration="2000"
-            >
-              <button
-                type="button"
-                className="inline-flex justify-between w-full rounded-md hover:bg-brown hover:border-brown border border-lin shadow-sm px-4 py-2 bg-dropbox poppins-regular text-gray hover:text-gold"
-                onMouseEnter={toggleDropdown} // Opens the dropdown on hover
-                aria-expanded={isOpen ? "true" : "false"}
-                aria-haspopup="true"
-              >
-                Our Services
-                <FaChevronDown className="ml-2" />
-              </button>
-
-              {isOpen && (
-                <div
-                  className="origin-top-right absolute border border-lin mt-2 w-72 rounded-md shadow-lg bg-dropbox ring-1 hover:text-brown ring-black ring-opacity-5" // Increased width to w-72
-                  onMouseLeave={toggleDropdown} // Closes the dropdown when hovering out
-                >
-                  <div className="py-1 max-h-56 overflow-y-auto">
-                    {services.map((service, index) => (
-                      <a
-                        key={index}
-                        href="#"
-                        className="block px-4 py-2 text-sm text-wrap text-gray hover:bg-yellow poppins-regular hover:text-brown"
-                      >
-                        {service}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div> */}
-
           <div className="flex justify-between w-full py-16 px-20">
             {/* text */}
             <div className="flex flex-col justify-center space-y-5 mt-32 lg:w-1/2" data-aos="fade-up" data-aos-duration="2000">
@@ -141,7 +85,7 @@ const Intro = () => {
                     data-aos="fade-up"
                     data-aos-duration="2000"
                     data-aos-delay={index * 300}
-                    className="lg:p-3 p-1 border border-brown bg-white rounded-xl hover:bg-white hover:text-brown"
+                    className="lg:p-3 p-1 border border-brown bg-white rounded-xl hover:bg-brown hover:text-white"
                   >
                     {icon}
                   </a>

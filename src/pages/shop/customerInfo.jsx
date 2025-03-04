@@ -1,4 +1,3 @@
-import Footer from "../../component/footer"
 import CustomerInfoIntro from "../../component/shop/customerInfoIntro"
 import CustomerInfomation from "../../component/shop/CustomerInfomation"
 const CustomerInfo = () => {
@@ -6,7 +5,6 @@ const CustomerInfo = () => {
     <div>
         <CustomerInfoIntro/>
         <CustomerInfomation/>
-        <Footer/>
     </div>
   )
 }
