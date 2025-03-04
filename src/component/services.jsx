@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Aos from "aos";
-import { FaRobot, FaWrench, FaTrophy } from "react-icons/fa";
+import { FaRobot} from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import robort from "../assets/images/right-face-robot.svg";
 
@@ -56,7 +55,7 @@ const Services = () => {
         {error && <p className="text-red-500">Error: {error}</p>} {/* Show error if any */}
         <div className="flex flex-wrap justify-center gap-6 lg:gap-12">
           {services.length > 0 ? (
-            services.map((service, index) => (
+            services.map((service) => (
               <div key={service._id} className="h-[54vh] w-[60vh] p-4 flex flex-col justify-between border-white border-2 rounded-2xl">
                 <div className="text-6xl sm:text-6xl md:text-5xl lg:text-6xl text-white">
                   <FaRobot />

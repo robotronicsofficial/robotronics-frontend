@@ -1,4 +1,3 @@
-import Footer from "../../component/footer";
 const Error = () => {
   return (
     <div className="bg-background">
@@ -19,7 +18,6 @@ const Error = () => {
           </p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

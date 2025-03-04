@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router'
 import Header from "../component/header";
+import Footer from './footer';
 
 const Layout = ({ children }) => {
   const hideNavbarPaths = ["/Search", "/screen", "/CareerDetailPage", "/JobApplicationForm"];
@@ -9,8 +10,10 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      {showNavbar && <Header />} {/* Global navigation bar */}
+      {showNavbar && <Header/>} {/* Global navigation bar */}
       <main>{children}</main>
+      {/* Footer */}
+      <Footer />
     </>
   );
 };

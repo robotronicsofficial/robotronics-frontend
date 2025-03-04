@@ -36,23 +36,11 @@ export default function Header() {
     setMenuOpen(!menuOpen);
   };
 
-  // const toggleDropdown = () => {
-  //   setDropdownOpen(!dropdownOpen);
-  // };
-
-  // const services = [
-  //   "Robotic Workshops",
-  //   "Robotic Kits",
-  //   "After-School Robotics Clubs",
-  //   "Grade 1-8 Robotronics Curriculum.",
-  //   "Robotic Competitions (Management, Preparation and Consultation)",
-  // ];
 
   const handleLogout = () => {
     sessionStorage.removeItem("token");
     setToken(null);
     setUsername("");
-    // Add any additional logout logic here
   };
 
   return (
@@ -72,19 +60,22 @@ export default function Header() {
 
         {/* Navigation */}
         <nav className="hidden md:flex md:items-center md:w-auto"data-aos="fade-down" data-aos-duration="2000">
-          <div className="flex space-x-6 flex-row">
+          <div className="md:flex lg:space-x-6 space-x-3 flex-row">
+
             <NavLink
               className="mr-2 cursor-pointer poppins-light hover:text-shadow-md hover:text-black hover:border-b hover:border-black text-black text-lg transition duration-300"
               to="/"
             >
               Home
             </NavLink>
+            
             <NavLink
               className="mr-2 cursor-pointer poppins-light hover:text-black hover:border-b hover:border-black text-black text-lg "
               to="/aboutUs"
             >
               Who We Are
             </NavLink>
+
             <NavLink
               className="mr-2 cursor-pointer poppins-light hover:text-black hover:border-b hover:border-black text-black text-lg"
               to="/International/Iservices"
@@ -120,7 +111,7 @@ export default function Header() {
             >
               Contact
             </NavLink>
-
+           
             <NavLink
               className="cursor-pointer hover:text-black poppins-light hover:border-b hover:border-black text-black text-lg font-bold bg-yellow rounded-lg px-4"
               to="/Robogeniushome"
@@ -129,70 +120,6 @@ export default function Header() {
               RoboGenius
             </NavLink>
 
-           
-            
-            {/* Dropdown for Services */}
-            {/* <div className="relative">
-              {/* <button
-                className="cursor-pointer hover:text-black poppins-light hover:border-b hover:border-black text-black text-lg"
-                onClick={toggleDropdown}
-              >
-                Services
-              </button> */}
-              {/* <NavLink
-                type="button"
-                className="flex cursor-pointer hover:text-black poppins-light hover:border-b hover:border-black text-black text-lg"
-                onMouseEnter={toggleDropdown} // Opens the dropdown on hover
-                aria-expanded={dropdownOpen ? "true" : "false"}
-                aria-haspopup="true"
-                to="/International/Iservices"
-              >
-                Our Services
-                {/* <FaChevronDown className="mt-[6px] ml-2" />y */}
-              {/* </NavLink> */}
-              {/* {dropdownOpen && (
-                <div
-                className="origin-top-right absolute border border-lin mt-2 w-72 rounded-md shadow-lg bg-dropbox ring-1 hover:text-brown ring-black ring-opacity-5" // Increased width to w-72
-                onMouseLeave={toggleDropdown} // Closes the dropdown when hovering out
-              >
-                <div className="py-1 max-h-56 overflow-y-auto">
-                  {services.map((service, index) => (
-                    <a
-                      key={index}
-                      href="#"
-                      className="block px-4 py-2 text-sm text-wrap text-gray hover:bg-yellow poppins-regular hover:text-brown"
-                    >
-                      {service}
-                    </a>
-                  ))}
-                </div>
-              </div>
-              )} */}
-            {/* </div>  */}
-            
-
-
-            {/* <NavLink
-              className="mr-2 cursor-pointer poppins-light hover:text-black hover:border-b hover:border-black text-black text-lg"
-              to="/Course"
-            >
-              Courses
-            </NavLink> */}
-           
-            
-            {/* <NavLink
-              className="mr-2 cursor-pointer poppins-light hover:text-black hover:border-b hover:border-black text-black text-lg"
-              to="/Blog"
-            >
-              Blog
-            </NavLink> */}
-           
-            {/* <NavLink
-              className="cursor-pointer hover:text-black poppins-light hover:border-b hover:border-black text-black text-lg"
-              to="/CareerJob"
-            >
-              Careers
-            </NavLink> */}
           </div>
         </nav>
 
