@@ -1,19 +1,27 @@
 import { useEffect, useState, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { FaArrowRight, FaRegHeart } from "react-icons/fa";
 import { BsHandbag } from "react-icons/bs";
+import { IoIosSearch } from "react-icons/io";
+import { fetchProducts, addToCart } from "../../store/cart/cartSlice";
 import Shopfilter from "../shop/shopfilter";
 import Shopproduct from "../shop/shopproduct";
 import ShopPages from "../shop/shopPages";
-import icon from "../../assets/logo/searchicon.svg";
 import shopHome from "../../assets/shopHome.png";
-import { IoIosSearch } from "react-icons/io";
 
 const Shopsearch = () => {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+
+  // Get products and cart data from Redux store
+  const products = useSelector((state) => state.cart.items);
+  const cart = useSelector((state) => state.cart.cart);
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  const totalPrice = useSelector((state) => state.cart.totalPrice);
+
+  // Local state for filters & sorting
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [wishlistCount, setWishlistCount] = useState(0);
-  const [cartItems, setCartItems] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 600000]);
   const [shippingDays, setShippingDays] = useState(15);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -22,46 +30,25 @@ const Shopsearch = () => {
   const productsPerPage = 9;
 
   useEffect(() => {
-    let isMounted = true;
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/getProducts");
-        const data = await response.json();
-        if (isMounted) setProducts(data.products);
-        console.log(data.products);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-    fetchProducts();
-    return () => (isMounted = false);
-  }, []);
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   const filteredProducts = useMemo(() => {
     return products
-      .filter(
-        ({ name, price, shippingDays: days, category }) =>
-          name?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          price >= priceRange[0] &&
-          price <= priceRange[1] &&
-          days <= shippingDays &&
-          (!selectedCategory || category === selectedCategory)
+      .filter(({ name, price, shippingDays: days, category }) =>
+        name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        price >= priceRange[0] &&
+        price <= priceRange[1] &&
+        days <= shippingDays &&
+        (!selectedCategory || category === selectedCategory)
       )
       .sort((a, b) => {
-        if (sortOption === "Popularity") return b.ratings - a.ratings; // Default sorting by rating
+        if (sortOption === "Popularity") return b.ratings - a.ratings;
         if (sortOption === "Price: Low to High") return a.price - b.price;
         if (sortOption === "Price: High to Low") return b.price - a.price;
-
         return 0;
       });
-  }, [
-    products,
-    searchQuery,
-    priceRange,
-    shippingDays,
-    sortOption,
-    selectedCategory,
-  ]);
+  }, [products, searchQuery, priceRange, shippingDays, sortOption, selectedCategory]);
 
   const currentProducts = useMemo(() => {
     const start = (currentPage - 1) * productsPerPage;
@@ -69,66 +56,31 @@ const Shopsearch = () => {
   }, [filteredProducts, currentPage]);
 
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-  const totalCartPrice = useMemo(
-    () => cartItems.reduce((total, { price }) => total + price, 0),
-    [cartItems]
-  );
 
   return (
     <div className="flex flex-col bg-lightgray lg:px-20 px-2">
       {/* Header Section */}
       <div className="justify-around mb-8">
-        {/* Line 1 */}
-        <div
-          className="lg:pt-16 pt-8"
-          data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
-        >
+        <div className="lg:pt-16 pt-8" data-aos="fade-up">
           <div className="h-0 w-full border border-[#838383]"></div>
         </div>
         <div className="lg:flex md:flex lg:px-2 lg:pt-5 justify-between items-center">
           <div className="flex justify-between">
             <div className="flex items-center">
-              <img
-                src={shopHome}
-                className="w-[18px] h-[18px]"
-                data-aos="fade-up"
-                data-aos-duration="2000"
-                data-aos-delay="4000"
-              />
-              <p
-                className="px-5 font-bold"
-                data-aos="fade-up"
-                data-aos-duration="2000"
-                data-aos-delay="4000"
-              >
-                Shop Page
-              </p>
+              <img src={shopHome} className="w-[18px] h-[18px]" data-aos="fade-up" />
+              <p className="px-5 font-bold" data-aos="fade-up">Shop Page</p>
             </div>
           </div>
 
-          <div
-            className="w-[50%] flex justify-between space-x-5 gap-10 pr-10"
-            data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
-          >
+          <div className="w-[50%] flex justify-between space-x-5 gap-10 pr-10" data-aos="fade-up">
             <div className="flex justify-between w-full items-center">
               <div className="flex items-center">
-                <div
-                  className="rounded-full bg-[#352E2C] px-2 py-2"
-                  data-aos="fade-up"
-                  data-aos-duration="2000"
-                  data-aos-delay="4000"
-                >
+                <div className="rounded-full bg-[#352E2C] px-2 py-2">
                   <FaRegHeart className="text-white" />
                 </div>
-                <div>
-                  <p className="px-3 lg:text-base poppins-bold text-sm text-center">
-                    Wish List ({wishlistCount})
-                  </p>
-                </div>
+                <p className="px-3 lg:text-base poppins-bold text-sm text-center">
+                  Wish List ({wishlistCount})
+                </p>
               </div>
               <FaArrowRight className="text-[#838383]" />
             </div>
@@ -138,23 +90,15 @@ const Shopsearch = () => {
                 <div className="rounded-full bg-[#352E2C] px-2 py-2">
                   <BsHandbag className="text-white" />
                 </div>
-                <div>
-                  <p className="px-3 lg:text-base text-sm poppins-bold text-center">
-                    {cartItems.length} Products - PKR {totalCartPrice}
-                  </p>
-                </div>
+                <p className="px-3 lg:text-base text-sm poppins-bold text-center">
+                  {totalQuantity} Products - PKR {totalPrice}
+                </p>
               </div>
               <FaArrowRight className="text-[#838383]" />
             </div>
           </div>
         </div>
-        {/* Line 2 */}
-        <div
-          className="lg:pt-5 pt-5"
-          data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
-        >
+        <div className="lg:pt-5 pt-5" data-aos="fade-up">
           <div className="h-0 w-full border border-[#838383]"></div>
         </div>
       </div>
@@ -207,37 +151,28 @@ const Shopsearch = () => {
               price={product.price}
               image={`http://localhost:8080/${product.images[0]}`}
               onAddToWishlist={() => setWishlistCount((prev) => prev + 1)}
-              onAddToCart={() => setCartItems((prev) => [...prev, product])}
+              onAddToCart={() => dispatch(addToCart(product))}
               productId={product.id}
             />
           ))}
-          {currentProducts.length === 0 && (
-            <p className="text-center w-full">No products found.</p>
-          )}
+          {currentProducts.length === 0 && <p className="text-center w-full">No products found.</p>}
         </div>
       </div>
 
       <ShopPages />
-      {/* Pagination Section */}
       <div className="lg:flex flex-row justify-between lg:p-5">
         <div className="flex">
           {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i}
-              className={`p-2 px-4 ${
-                currentPage === i + 1 ? "bg-gold" : "bg-white"
-              }`}
+              className={`p-2 px-4 ${currentPage === i + 1 ? "bg-gold" : "bg-white"}`}
               onClick={() => setCurrentPage(i + 1)}
             >
               {i + 1}
             </button>
           ))}
         </div>
-        <p>
-          SHOWING{" "}
-          {Math.min(currentPage * productsPerPage, filteredProducts.length)} OF{" "}
-          {filteredProducts.length} PRODUCTS
-        </p>
+        <p>SHOWING {Math.min(currentPage * productsPerPage, filteredProducts.length)} OF {filteredProducts.length} PRODUCTS</p>
       </div>
     </div>
   );
