@@ -1,41 +1,71 @@
-// src/features/cartSlice.js
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const loadCartFromLocalStorage = () => {
-  const savedCart = localStorage.getItem("cart");
-  return savedCart ? JSON.parse(savedCart) : {};
+// Async thunk for fetching products
+export const fetchProducts = createAsyncThunk(
+  "cart/fetchProducts",
+  async () => {
+    try {
+      const response = await fetch("http://localhost:8080/getProducts");
+      const data = await response.json();
+      return data.products;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      throw error;
+    }
+  }
+);
+
+const initialState = {
+  cart: [],
+  items: [], // Will be populated via fetchProducts
+  totalQuantity: 0,
+  totalPrice: 0,
 };
 
 const cartSlice = createSlice({
   name: "cart",
-  initialState: {
-    items: loadCartFromLocalStorage(),
-  },
+  initialState,
   reducers: {
     addToCart: (state, action) => {
-      const { id } = action.payload;
-      if (state.items[id]) {
-        state.items[id].count += 1; // Increment count if product already in cart
-      } else {
-        state.items[id] = { count: 1 }; // Add new product to cart
-      }
-      localStorage.setItem("cart", JSON.stringify(state.items)); // Save to localStorage
+      // const existingItem = state.cart.find((item) => item.id === action.payload.id);
+      // console.log(state.cart);
+      // console.log("++++++++++++++++")
+      // // contotalPricesole.log(existingItem)
+      
+      // if (existingItem) {
+      //   console.log("If")
+      //   state.cart[existingItem].quantity += 1;
+      // } else {
+      //   console.log("<Else")
+
+      //   state.cart.push({ ...action.payload, quantity: 1 });
+      // }
+
+      state.cart.push(action.payload );
+      console.log(state.cart)
+
+      state.totalQuantity += 1;
+      state.totalPrice += action.payload.price;
     },
+    
     removeFromCart: (state, action) => {
-      const { id } = action.payload;
-      if (state.items[id]) {
-        if (state.items[id].count > 1) {
-          state.items[id].count -= 1; // Decrement count if more than 1
-        } else {
-          delete state.items[id]; // Remove item if count is 1
-        }
-        localStorage.setItem("cart", JSON.stringify(state.items)); // Save to localStorage
+      const itemIndex = state.cart.findIndex((i) => i.id === action.payload.id);
+      if (itemIndex !== -1) {
+        state.totalQuantity -= state.cart[itemIndex].quantity;
+        state.totalPrice -= state.cart[itemIndex].price * state.cart[itemIndex].quantity;
+        state.cart.splice(itemIndex, 1);
       }
     },
     clearCart: (state) => {
-      state.items = {}; // Clear the entire cart
-      localStorage.removeItem("cart"); // Remove from localStorage
+      state.cart = [];
+      state.totalQuantity = 0;
+      state.totalPrice = 0;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchProducts.fulfilled, (state, action) => {
+      state.items = action.payload;
+    });
   },
 });
 

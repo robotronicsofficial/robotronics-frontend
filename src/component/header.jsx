@@ -6,11 +6,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import Aos from "aos";
 import { useSelector } from "react-redux";
-// import { FaChevronDown } from "react-icons/fa";
 import StarIcon from '@mui/icons-material/Star';
 
 
 export default function Header() {
+
+  const {totalQuantity} = useSelector((state) => state.cart);
+
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [token, setToken] = useState(null);
@@ -163,15 +165,14 @@ export default function Header() {
                 </NavLink>
               </div>
             )}
-            {/* <img className="flex" src={basket} alt="basket" /> */}
             <div
               className="relative cursor-pointer"
               onClick={() => {
                 navigate("/cart");
               }}
             >
-              {/* <span className="text-2xl">🛒</span> */}
               <img src={basket} alt="basket"></img>
+              <span>{totalQuantity}</span>
               {totalItems > 0 && (
                 <span className="absolute top-[-8px] right-[-10px] bg-red-600 text-white rounded-full text-xs font-bold px-2">
                   {totalItems}
