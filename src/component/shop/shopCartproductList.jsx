@@ -41,6 +41,7 @@ const ShopCartproductList = ({ onNext }) => {
               image={`http://localhost:8080/${product.images[0]}`}
               price={product.price}
               category={product.category}
+              quantity={product.quantity}
             />
           ))
         ) : (
