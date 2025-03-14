@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../../store/cart/cartSlice";
 
-export default function ShopCartItems({ title, price, image, count, id }) {
+export default function ShopCartItems({ title, price, image, count, id, quantity }) {
   const [type, setType] = useState("Robot");
 
   // Redux Hooks
@@ -63,24 +63,30 @@ export default function ShopCartItems({ title, price, image, count, id }) {
               </select>
             </div>
 
-            {/* Quantity Controls */}
-            <div className="w-1/2 flex items-center border border-gray-300 rounded-md">
-              <span className="px-3 text-gray-600">Qty:</span>
-              <span className="flex-1 text-center">{count}</span>
+            {/* Quantity selector */}
+            <div className="bg-white flex items-center justify-centle">
+              {/* Decrease button */}
               <button
-                className="px-3 py-2 border-l border-gray-300 hover:bg-red-500 hover:text-white transition"
-                onClick={handleRemoveFromCart}
-                disabled={count <= 1}
-              >
-                -
-              </button>
-              <button
-                className="px-3 py-2 border-l border-gray-300 hover:bg-green-500 hover:text-white transition"
-                onClick={handleAddToCart}
+                className="lg:px-3 px-1 lg:py-1 bg-gray-200 bg-red rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none"
               >
                 +
               </button>
+              {/* Quantity input */}
+              <input
+                type="number"
+                className="lg:w-24 w-10 lg:px-3 px-1 py-1 text-sm rounded-md focus:outline-none text-center"
+                value={quantity}
+                readOnly
+              />
+              {/* Increase button */}
+              <button
+                className="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none"
+              >
+                -
+              </button>
             </div>
+
+           
           </div>
 
           {/* Price */}

@@ -1,7 +1,6 @@
 
 import { useState } from "react";
 import { FaCreditCard, FaEye, FaShoppingBag, FaUser } from "react-icons/fa";
-import { BiSolidSkipPreviousCircle } from "react-icons/bi";
 import ShopCartproductList from "../shopCartproductList";
 import CustomerInfomation from "../CustomerInfomation";
 import ShopShipping from "../shopShipping";

@@ -1,5 +1,5 @@
 // import ShopCartSteps from "../shop/ShopCartSteps"
-import CustomerStep from "../../component/shop/steps.jsx/customerStep"
+import CustomerStep from "../../component/shop/steps/customerStep"
 const CustomerInfoIntro = () => {
   return (
     <div className="shopCarthero" id="shopCarthero">
