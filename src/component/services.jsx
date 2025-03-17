@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Aos from "aos";
-import { FaRobot, FaWrench, FaTrophy } from "react-icons/fa";
+import { FaRobot} from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import robort from "../assets/images/right-face-robot.svg";
 

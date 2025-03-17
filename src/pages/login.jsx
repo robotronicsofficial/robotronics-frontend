@@ -5,7 +5,6 @@ import hide from "../assets/images/hide.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
 import apple from "../assets/images/Applelogo.svg";
-import Footer from "../component/footer";
 
 const saveLoginData = (loginData) => {
   sessionStorage.setItem("token", loginData.token);
@@ -237,7 +236,6 @@ const Login = () => {
         </form>
       </div>
       <ToastContainer />
-      <Footer />
     </div>
   );
 };

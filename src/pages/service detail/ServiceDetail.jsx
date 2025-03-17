@@ -1,8 +1,6 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 import ServiceInto from "./ServiceInto";
 import ServiceBody from "./ServiceBody";
-import Footer from "../../component/footer";
 import QuickContact from "../../component/international/services/quickContact";
 
 const ServiceDetail = () => {
@@ -18,7 +16,6 @@ const ServiceDetail = () => {
       <ServiceInto service={service} />
       <ServiceBody service={service} />
       <QuickContact />
-      <Footer />
     </div>
   );
 };

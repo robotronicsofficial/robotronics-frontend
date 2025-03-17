@@ -28,7 +28,7 @@ const Offers = () => {
           <p className=" text-white poppins-bold text-wrap text-xl lg:text-2xl md:text-2xl">
           Innovations
           </p>
-          <p className=" text-white text-wrap poppins-medium text-lg mt-4  lg:text-l md:text-l">
+          <p className=" text-white text-wrap poppins-medium text-sm mt-4  lg:text-l md:text-l">
           Innovation in robotics refers to the ability to develop new ideas, techniques or technologies that improve or redefine robotic systems.
           </p>
         </div>
@@ -45,7 +45,7 @@ const Offers = () => {
           Critical Thinking
 
           </p>
-          <p className=" text-white text-wrap poppins-medium text-lg mt-4  lg:text-l md:text-l">
+          <p className=" text-white text-wrap poppins-medium text-sm mt-4  lg:text-l md:text-l">
           Critical thinking skills in robotics involve analyzing and evaluating problems logically to make informed decisions.
           </p>
         </div>
@@ -61,7 +61,7 @@ const Offers = () => {
           <p className=" text-white poppins-bold text-wrap text-xl lg:text-2xl md:text-2xl">
           Problem Solving 
           </p>
-          <p className=" text-white poppins-medium text-wrap text-lg mt-4 lg:text-l md:text-l ">
+          <p className=" text-white poppins-medium text-wrap text-sm mt-4 lg:text-l md:text-l ">
           Problem-solving ability in robotics focuses on identifying challenges and developing practical solutions through systematic approaches
           </p>
         </div>
