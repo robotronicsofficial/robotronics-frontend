@@ -16,6 +16,7 @@
   background: black;
   /* height: 130vh !important; */
 }
+
 .abouthero {
   background: url(./assets/imagesContent/bannercode/b1.jpg) right center no-repeat;
   background-size: cover;
@@ -117,7 +118,7 @@
     no-repeat;
   background-size: cover;
   background-repeat: no-repeat;
-  height: 100vh;
+  /* height: 100vh; */
 }
 .OurServices {
   background-color: white;

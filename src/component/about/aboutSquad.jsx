@@ -4,8 +4,8 @@ import founder3 from "../../assets/images/abourfounder3.svg";
 const AboutSquad = () => {
   const founders = [
     { id: 1, name: 'Darlene Robertson', title: 'founder1', imgSrc: founder1 },
-    { id: 2, name: 'Darlene Robertson', title: 'founder2', imgSrc: founder1 },
-    { id: 3, name: 'Darlene Robertson', title: 'founder3', imgSrc: founder1 },
+    { id: 2, name: 'Darlene Robertson', title: 'founder2', imgSrc: founder2 },
+    { id: 3, name: 'Darlene Robertson', title: 'founder3', imgSrc: founder3 },
   ];
   return (
     <div className="flex flex-col bg-gray">

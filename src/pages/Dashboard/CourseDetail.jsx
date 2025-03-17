@@ -1,5 +1,4 @@
 import Intro from "../../component/dashboard/CourseDetail/intro"
-import Footer from "../../component/footer"
 import CourseDescription from "../../component/dashboard/CourseDetail/courseDescription"
 
 const CourseDetail = () => {
@@ -7,7 +6,6 @@ const CourseDetail = () => {
     <div>
       <Intro />
       <CourseDescription />
-      <Footer />
     </div>
   )
 }

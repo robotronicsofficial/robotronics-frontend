@@ -1,4 +1,4 @@
-import ShippingStep from "../../component/shop/steps.jsx/reviewStep"
+import ShippingStep from "../../component/shop/steps/reviewStep"
 const ShippingIntro = () =>  {
     return (
       <div className="shopCarthero" id="shopCarthero">
