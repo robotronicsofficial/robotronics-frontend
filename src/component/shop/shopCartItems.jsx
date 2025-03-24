@@ -1,26 +1,23 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../../store/cart/cartSlice";
 
-export default function ShopCartItems({ title, price, image, count, id, quantity }) {
-  const [type, setType] = useState("Robot");
-
+export default function ShopCartItems({ title, price, image, count, id, quantity, category }) {
   // Redux Hooks
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cart);
 
-  // Memoized total item count
-  const totalItems = useMemo(
-    () => cartItems.reduce((acc, item) => acc + item.count, 0),
-    [cartItems]
-  );
+  // Local state for quantity
+  const [itemQuantity, setItemQuantity] = useState(quantity);
 
   // Callbacks for performance
   const handleAddToCart = useCallback(() => {
+    setItemQuantity((prev) => prev + 1);
     dispatch(addToCart({ id }));
   }, [dispatch, id]);
 
   const handleRemoveFromCart = useCallback(() => {
+    setItemQuantity((prev) => (prev > 1 ? prev - 1 : 1));
     dispatch(removeFromCart({ id }));
   }, [dispatch, id]);
 
@@ -49,25 +46,17 @@ export default function ShopCartItems({ title, price, image, count, id, quantity
             ))}
           </div>
 
-          {/* Select Type */}
           <div className="flex gap-4 mb-4">
-            <div className="w-1/2">
-              <select
-                className="w-full bg-white border border-gray-300 rounded-md p-2"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-              >
-                <option value="Robot">Robot</option>
-                <option value="Vehicle">Vehicle</option>
-                <option value="Building">Building</option>
-              </select>
+            <div className="lg:px-5 bg-white items-center text-center justify-center">
+              <p>Type: {category}</p>
             </div>
 
             {/* Quantity selector */}
-            <div className="bg-white flex items-center justify-centle">
-              {/* Decrease button */}
+            <div className="bg-white flex items-center justify-center">
+              {/* Increase button */}
               <button
-                className="lg:px-3 px-1 lg:py-1 bg-gray-200 bg-red rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none"
+                onClick={handleAddToCart}
+                className="lg:px-3 px-1 lg:py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none"
               >
                 +
               </button>
@@ -75,18 +64,17 @@ export default function ShopCartItems({ title, price, image, count, id, quantity
               <input
                 type="number"
                 className="lg:w-24 w-10 lg:px-3 px-1 py-1 text-sm rounded-md focus:outline-none text-center"
-                value={quantity}
+                value={itemQuantity}
                 readOnly
               />
-              {/* Increase button */}
+              {/* Decrease button */}
               <button
+                onClick={handleRemoveFromCart}
                 className="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none"
               >
                 -
               </button>
             </div>
-
-           
           </div>
 
           {/* Price */}

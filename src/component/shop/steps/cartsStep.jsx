@@ -9,7 +9,7 @@ const Step = ({ icon, title, description, isActive }) => (
   <div className="flex flex-col items-center space-y-2">
     <div
       className={`p-3 rounded-full transition-colors ${
-        isActive ? "bg-primary text-white" : "bg-muted text-gray-500"
+        isActive ? "bg-[rgb(249,159,14)] text-red-700" : "bg-muted text-gray-500"
       }`}
     >
       {icon}
