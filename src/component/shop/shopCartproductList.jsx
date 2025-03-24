@@ -3,15 +3,10 @@ import { useSelector } from "react-redux";
 import ShopCartItems from "../shop/shopCartItems";
 
 const ShopCartproductList = ({ onNext }) => {
-  const {cart, totalQuantity} = useSelector((state) => state.cart);
+  const {cart, totalPrice} = useSelector((state) => state.cart);
   //also destructure totalPrice from the slice
   const discountPercentage = 10;
 
-  // Memoized calculations
-  const totalPrice = useMemo(
-    () => cart.reduce((total, item) => total + item.count * item.price, 0),
-    [cart]
-  );
 
   const discountAmount = useMemo(
     () => (totalPrice * discountPercentage) / 100,
