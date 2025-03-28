@@ -42,14 +42,22 @@ const cartSlice = createSlice({
     },
 
     removeFromCart: (state, action) => {
-      const itemIndex = state.cart.findIndex((item) => item._id === action.payload._id);
-      if (itemIndex !== -1) {
-        const item = state.cart[itemIndex];
-        state.totalQuantity -= item.quantity;
-        state.totalPrice -= item.price * item.quantity;
-        state.cart.splice(itemIndex, 1);
+      const existingItem = state.cart.find((item) => item._id === action.payload._id);
+    
+      if (existingItem) {
+        if (existingItem.quantity > 1) {
+          existingItem.quantity -= 1;
+          state.totalQuantity -= 1;
+          state.totalPrice -= existingItem.price;
+        } else {
+          // If quantity is 1, remove the product from cart
+          state.cart = state.cart.filter((item) => item._id !== action.payload._id);
+          state.totalQuantity -= 1;
+          state.totalPrice -= existingItem.price;
+        }
       }
     },
+    
 
     clearCart: (state) => {
       state.cart = [];
