@@ -25,7 +25,8 @@ module.exports = {
         dropbox: "#b9bab8",
       },
       fontFamily: {
-        title: ["Poppins", "sans-serif"]
+        title: ["Poppins", "sans-serif"],
+        lato: ['Lato', 'sans-serif']
       },
       animation: {
         "loop-scroll": "loop-scroll 30s linear infinite",

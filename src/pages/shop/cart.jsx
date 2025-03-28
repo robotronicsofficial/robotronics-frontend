@@ -7,12 +7,14 @@ const Cart = () => {
       {/* parent */}
       <div className="flex flex-col">
         <div className=" items-center"data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000">
-          <p className="text-brown font-bold text-wrap lg:text-5xl text-3xl poppins-bold text-center self-center ">
-            SHOPING CART
-          </p>
-          <p className="text-brown text-sm text-wrap text-center poppins-semibold self-center mt-4 text-light opacity-85 ">
-            THIS IS YOUR CART BASED ON WHAT YOU WANTED
-          </p>
+        <p className="text-[#362D2C] font-poppins font-bold text-3xl lg:text-[32px] leading-[40px] tracking-normal text-center">
+          SHOPPING CART
+        </p>
+
+        <p className="text-[#7E7F7C] font-poppins font-normal text-base leading-5 tracking-normal text-center mt-7">
+          THIS IS YOUR CART BASED ON WHAT YOU WANTED TO BUY
+        </p>
+
         </div>
         <div className="self-center px-2"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
           <CartsStep />
