@@ -1,6 +1,17 @@
 import CustomerProduct from "../../component/shop/customerProduct";
+import { useState } from "react";
 
 const CustomerOrder = ({ onNext }) => {
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleOpenPopup = () => {
+    setShowPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+
   const products = [
     {
       id: 1,
@@ -34,7 +45,12 @@ const CustomerOrder = ({ onNext }) => {
     },
   ];
   return (
-    <div className="lg:px-14 px-5 lg:p-8 p-4 lg:space-y-20 space-y-8 "data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+    <div
+      className="lg:px-14 px-5 lg:p-8 p-4 lg:space-y-20 space-y-8 "
+      data-aos="fade-left"
+      data-aos-duration="2000"
+      data-aos-delay="4000"
+    >
       {/* text */}
       <div className="lg:space-y-8 space-y-4">
         <p className="lg:text-4xl text-2xl poppins-bold">YOUR ORDER</p>
@@ -47,7 +63,7 @@ const CustomerOrder = ({ onNext }) => {
       <div className="lg:space-y-5 space-y-2 poppins-extralight">
         {products.map((product) => {
           return (
-            <CustomerProduct
+            <CustomerProduct onNext={handleOpenPopup}
               key={product.id}
               title={product.title}
               description={product.description}
@@ -59,6 +75,49 @@ const CustomerOrder = ({ onNext }) => {
           );
         })}
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
+          <div className="bg-white p-6 rounded-lg shadow-lg transform transition-transform scale-95 animate-fadeIn relative w-[30vw] py-10">
+            {/* Close Button (X) */}
+            <button
+              className="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-xl"
+              onClick={handleClosePopup}
+            >
+              &times;
+            </button>
+
+            {/* Heart Icon */}
+            <div className="flex flex-col  items-center">
+              {/* <FaRegHeart className="text-yellow text-[4vw]" /> */}
+
+              {/* Message */}
+
+              <p className="text-4xl font-medium-center my-6 text-wrap text-center">Are you sure you want to delete this product?</p>
+
+              <p className="text-xl text-[#807D7E] mt-4 mb-6 text-wrap text-center">
+              This will delete product from the cart
+              </p>
+
+              {/* Home Button */}
+              <div className="flex gap-16">
+              <button
+                className="mt-4 px-4 py-2 text-red-600 rounded hover:bg-red-200 transition duration-200 w-24"
+                onClick={handleClosePopup}
+              >
+                YES
+              </button>
+              <button
+                className="mt-4 px-4 py-2 text-green-600 rounded hover:bg-green-200 transition duration-200 w-24"
+                onClick={handleClosePopup}
+              >
+                CANCEL
+              </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* line  */}
       <div className="flex flex-col lg:py-5 py-2 ">

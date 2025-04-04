@@ -74,8 +74,8 @@ const Robogeniuscustomercart = ({ onNext }) => {
           className={`${currentStep == 2 && "text-red-500"} w-6 h-6`}
         />
       ),
-      title: "Payment",
-      description: "Choose your payment method and complete the transaction.",
+      title: "Subscriptions Payment",
+      description: "Submit your Payment Information",
       content: <ShopShipping onNext={handleNext} />,
     },
     {
@@ -97,9 +97,9 @@ const Robogeniuscustomercart = ({ onNext }) => {
       </div>
     <div className="container mx-auto px-4 py-8 md:py-16">
       <div className="bg-muted p-6 rounded-lg mb-8">
-        <h2 className="text-xl font-semibold mb-4">
+        {/* <h2 className="text-xl font-semibold mb-4">
           {steps[currentStep].title}
-        </h2>
+        </h2> */}
         <p>{steps[currentStep].content}</p>
       </div>
     

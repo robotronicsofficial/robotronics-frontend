@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 // import CustomerOrder from "../../component/shop/customerOrder";
 import CustomerOrder from "../../../component/shop/customerOrder";
 import { useState } from "react";
@@ -36,7 +36,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
             {/* left */}
         <div className="w-full ">
           {/* form */}
-          <div className="space-y-5 px-6 py-8">
+          <div className="space-y-5 px-12 py-8">
             <h1 className="text-4xl poppins-bold text-brown">Parent Information</h1>
             {/* <h2 className="text-xl poppins-light text-brown">Add Address</h2> */}
           </div>
@@ -49,38 +49,38 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
               {/* First Name */}
               <div>
                 <label
-                  htmlFor="firstName"
+                  htmlFor="ParentFirstName"
                   className="block text-sm poppins-light text-gray-700"
                 >
-                  First Name
+                  Parent First Name
                 </label>
                 <input
                   type="text"
-                  name="firstName"
-                  id="firstName"
-                  value={form.firstName}
+                  name="ParentFirstName"
+                  id="ParentFirstName"
+                  value={form.ParentFirstName}
                   onChange={handleChange}
                   className=" p-3 px-5 mt-1 block w-full border-gray-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder="First Name"
+                  placeholder="Parent First Name"
                   required
                 />
               </div>
               {/* Last Name */}
               <div>
                 <label
-                  htmlFor="lastName"
+                  htmlFor="ParentLastName"
                   className="block text-sm poppins-light text-gray-700"
                 >
-                  Last Name
+                  Parent Last Name
                 </label>
                 <input
                   type="text"
-                  name="lastName"
-                  id="lastName"
-                  value={form.lastName}
+                  name="ParentLastName"
+                  id="ParentLastName"
+                  value={form.ParentLastName}
                   onChange={handleChange}
                   className=" p-3 px-5 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder="Last Name"
+                  placeholder="Parent Last Name"
                   required
                 />
               </div>
@@ -130,7 +130,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
                   htmlFor="streetAddress"
                   className="block text-sm poppins-light text-gray-700"
                 >
-                  Street Address
+                  Residential / School Address
                 </label>
                 <input
                   type="text"
@@ -141,23 +141,6 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
                   className=" p-3 px-5 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   placeholder="House number and street name"
                   required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="aptSuite"
-                  className="block text-sm poppins-light text-gray-700"
-                >
-                  Apt, suite, unit
-                </label>
-                <input
-                  type="text"
-                  name="aptSuite"
-                  id="aptSuite"
-                  value={form.aptSuite}
-                  onChange={handleChange}
-                  className=" p-3 px-5 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder="apartment, suite, unit, etc. (optional)"
                 />
               </div>
             </div>
@@ -252,22 +235,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
               </div>
             </div>
             {/* Delivery Instruction */}
-            <div>
-              <label
-                htmlFor="deliveryInstruction"
-                className=" block text-sm poppins-light text-gray-700"
-              >
-                Delivery Instruction
-              </label>
-              <textarea
-                name="deliveryInstruction"
-                id="deliveryInstruction"
-                value={form.deliveryInstruction}
-                onChange={handleChange}
-                className=" p-7 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                placeholder="Delivery Instruction"
-              ></textarea>
-            </div>
+            
             {/* submit */}
            
           </form>
@@ -275,7 +243,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
 
         <div className="w-full ">
           {/* form */}
-          <div className="space-y-5 px-6 py-8">
+          <div className="space-y-5 px-12 py-8">
             <h1 className="text-4xl poppins-bold text-brown">Child 1 Information</h1>
             {/* <h2 className="text-xl poppins-light text-brown">Add Address</h2> */}
           </div>
@@ -346,19 +314,19 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
               </div>
               <div>
                 <label
-                  htmlFor="companyName"
+                  htmlFor="SchoolName"
                   className="block text-sm poppins-light text-gray-700"
                 >
-                  Company Name
+                  School Name
                 </label>
                 <input
                   type="text"
-                  name="companyName"
-                  id="companyName"
-                  value={form.companyName}
+                  name="SchoolName"
+                  id="SchoolName"
+                  value={form.SchoolName}
                   onChange={handleChange}
                   className=" p-3 px-5 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder="Company (optional)"
+                  placeholder="School Name (optional)"
                 />
               </div>
             </div>
@@ -369,7 +337,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
                   htmlFor="streetAddress"
                   className="block text-sm poppins-light text-gray-700"
                 >
-                  Street Address
+                  House Address
                 </label>
                 <input
                   type="text"
@@ -378,27 +346,11 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
                   value={form.streetAddress}
                   onChange={handleChange}
                   className=" p-3 px-5 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder="House number and street name"
+                  placeholder="House Address"
                   required
                 />
               </div>
-              <div>
-                <label
-                  htmlFor="aptSuite"
-                  className="block text-sm poppins-light text-gray-700"
-                >
-                  Apt, suite, unit
-                </label>
-                <input
-                  type="text"
-                  name="aptSuite"
-                  id="aptSuite"
-                  value={form.aptSuite}
-                  onChange={handleChange}
-                  className=" p-3 px-5 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder="apartment, suite, unit, etc. (optional)"
-                />
-              </div>
+              
             </div>
             {/* City */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -422,39 +374,6 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
               </div>
               <div>
                 <label
-                  htmlFor="state"
-                  className="block text-sm poppins-light text-gray-700"
-                >
-                  State*
-                </label>
-                <select
-                  name="state"
-                  id="state"
-                  value={form.state}
-                  onChange={handleChange}
-                  className=" p-3 mt-1 block w-full border-gray-300 poppins-light rounded-md shadow-sm focus:border-yellow focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  required
-                >
-                  <option value="" className="poppins-light">
-                    Select state
-                  </option>
-                  <option value="CA" className="poppins-light">
-                    California
-                  </option>
-                  <option value="NY" className="poppins-light">
-                    New York
-                  </option>
-                  <option value="TX" className="poppins-light">
-                    Texas
-                  </option>
-                  {/* Add more options as needed */}
-                </select>
-              </div>
-            </div>
-            {/* Phone */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
                   htmlFor="phone"
                   className="block text-sm poppins-light text-gray-700"
                 >
@@ -471,6 +390,10 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
                   required
                 />
               </div>
+            </div>
+            {/* Phone */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
               <div>
                 <label
                   htmlFor="postalCode"
@@ -491,31 +414,13 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
               </div>
             </div>
             {/* Delivery Instruction */}
-            <div>
-              <label
-                htmlFor="deliveryInstruction"
-                className=" block text-sm poppins-light text-gray-700"
-              >
-                Delivery Instruction
-              </label>
-              <textarea
-                name="deliveryInstruction"
-                id="deliveryInstruction"
-                value={form.deliveryInstruction}
-                onChange={handleChange}
-                className=" p-7 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                placeholder="Delivery Instruction"
-              ></textarea>
-              <div className="mt-4">
-              <button
+            <button
             type="submit"
             className="text-center lg:text-xl text-sm poppins-bold text-gold bg-brown py-2 lg:px-20 px-5"
             onClick={onNext}
           >
             ADD ANOTHER CHILD
           </button>
-              </div>
-            </div>
             {/* submit */}
             <div className="mt-6 space-y-4">
               {/* Set as default shipping address */}
@@ -566,9 +471,12 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
                 </button>
               </div>
             </div>
+            
           </form>
         </div>
         </div>
+
+        
         
         {/* line */}
         <div
