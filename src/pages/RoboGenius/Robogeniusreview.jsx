@@ -1,9 +1,9 @@
-import React from "react";
+// import React from "react";
 // import ceo5 from './path/to/ceo5.jpg'; // Replace with the actual path to your image
 // import star from './path/to/star.png'; // Replace with the actual path to your star image
 
 import c5 from "../../assets/images/ceo5.svg";
-import { FaStar, FaArrowDown } from "react-icons/fa";
+
 import shopStar from "../../assets/images/shopStar.svg";
 
 const ReviewsComponent = () => {
@@ -32,28 +32,17 @@ const ReviewsComponent = () => {
       review:
         "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
     },
-    {
-      name: "Ahmed Saimoon",
-      role: "CEO, Avito",
-      review:
-        "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
-    },
-    {
-      name: "Ahmed Saimoon",
-      role: "CEO, Avito",
-      review:
-        "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
-    },
   ];
 
   return (
     <>
-      <div className="w-full px-6">
-        <div className="m-4 ">
-          <h1 className="text-5xl poppins-medium text-brown text-center w-full">Reviews</h1>
+      <div className="bg-[#ebe5e2]">
+      <div className="w-full px-24">
+        <div className="mx-4 ">
+          <h1 className="text-4xl poppins-medium text-brown text-center w-full  py-8">See what others are achieving through learning</h1>
         </div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 px-24 ">
         {reviews.map((review, index) => (
           <div
             key={index}
@@ -78,6 +67,7 @@ const ReviewsComponent = () => {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </>
   );
