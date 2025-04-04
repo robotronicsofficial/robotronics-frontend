@@ -91,7 +91,7 @@ const Shopsearch = () => {
                   <BsHandbag className="text-white" />
                 </div>
                 <p className="px-3 lg:text-base text-sm poppins-bold text-center">
-                  {totalQuantity} Products - PKR {totalPrice}
+                  {totalQuantity} Products - PKR {totalPrice.toLocaleString()}
                 </p>
               </div>
               <FaArrowRight className="text-[#838383]" />
