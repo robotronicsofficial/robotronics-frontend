@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 // import CustomerOrder from "../../component/shop/customerOrder";
 // import CustomerOrder from "../../../component/shop/customerOrder";
 import CustomerOrder from "../../../component/shop/customerOrder";
@@ -31,7 +31,7 @@ const Giftbody = ({ onNext }) => {
           <div className="w-full">
             {/* Header */}
             <div className="space-y-5 py-8">
-              <h1 className="lg:text-4xl text-2xl poppins-bold text-brown px-16">
+              <h1 className="lg:text-4xl text-2xl poppins-bold text-brown px-20">
                 Recipient’s Information
               </h1>
             </div>
@@ -76,25 +76,6 @@ const Giftbody = ({ onNext }) => {
                   onChange={handleChange}
                   className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   placeholder="Enter Email"
-                  required
-                />
-              </div>
-
-              {/* Send Date */}
-              <div>
-                <label
-                  htmlFor="sendDate"
-                  className="block text-xl poppins-regular  text-brown"
-                >
-                  When do you want to send this gift?
-                </label>
-                <input
-                  type="date"
-                  name="sendDate"
-                  id="sendDate"
-                  value={form.sendDate}
-                  onChange={handleChange}
-                  className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   required
                 />
               </div>

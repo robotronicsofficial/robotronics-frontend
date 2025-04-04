@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import LeftNav from "./leftNav";
 
 const PayHistory = () => {
@@ -31,8 +31,8 @@ const PayHistory = () => {
       {/* Invoice Section */}
       <div className="w-full md:w-3/4 p-4" >
 
-        <h1 className="text-3xl font-bold mb-4">My Payment History</h1>
-        <h3 className="text-xl mb-8">Payment Details </h3>
+        <h1 className="text-3xl font-bold mb-8">My Payment History</h1>
+        {/* <h3 className="text-xl mb-8">Payment Details </h3> */}
         {invoices.map((invoice, index) => (
           <div
             key={index}

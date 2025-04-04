@@ -1,4 +1,3 @@
-
 import { FaChevronRight } from "react-icons/fa";
 
 const Intro = () => {
@@ -9,7 +8,7 @@ const Intro = () => {
     { name: "Wishlist", href: "/Dashboard/WishList" },
   ];
   return (
-    <div className="bg-background"  >
+    <div className="bg-background pt-44"  >
       {/* intro */}
       <div>
         {/* Dynamics-URLS */}

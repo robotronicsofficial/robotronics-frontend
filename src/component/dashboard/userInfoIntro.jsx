@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
+
 import LeftNav from "./leftNav";
 import Intro from "../dashboard/intro";
-import SuccessModal from "./popUps/SuccessModal";
-import { useNavigate } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa";
-import PinModal from "./popUps/PinModal"
+
+// import { useNavigate } from "react-router-dom";
+// import { FaUserCircle } from "react-icons/fa";
+// import PinModal from "./popUps/PinModal"
 
 const UserInfoIntro = () => {
-  const navigate = useNavigate();
-  const [step, setStep] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [isPinModalOpen, setIsPinModalOpen] = useState(false); // State for PinModal
+  // const navigate = useNavigate();
+  // const [step, setStep] = useState(0);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [user, setUser] = useState({});
   const [editingField, setEditingField] = useState(null);
   const [updatedData, setUpdatedData] = useState({
@@ -20,13 +19,13 @@ const UserInfoIntro = () => {
     email: "",
     phone: "",
   });
-  const [cards, setCards] = useState([]);
+  // const [cards, setCards] = useState([]);
 
   const userData = sessionStorage.getItem("id");
 
-  const handleHomeClick = () => {
-    navigate("/"); // Navigate to the home page
-  };
+  // const handleHomeClick = () => {
+  //   navigate("/"); // Navigate to the home page
+  // };
 
   useEffect(() => {
     if (userData) {
@@ -71,20 +70,15 @@ const UserInfoIntro = () => {
         if (data.updatedUser) {
           setUser(data.updatedUser);
           setEditingField(null);
-          setIsSuccessModalOpen(true);
+          // setIsSuccessModalOpen(true);
         }
       })
       .catch((error) => console.error("Error updating user:", error));
   };
 
-  const handlePinSubmit = (pin) => {
-    // Handle the PIN submission logic here
-    console.log("Submitted PIN:", pin);
-    setIsPinModalOpen(false); // Close the modal after submission
-  };
 
   return (
-    <div className="bg-background">
+    <div className="bg-background ">
       {console.log(user)}
       <div>
         <Intro />
@@ -283,7 +277,7 @@ const UserInfoIntro = () => {
           {/* Cards Section */}
           <div className="flex flex-wrap lg:p-5">
             <div key={user._id} className="w-full md:w-1/2 p-3">
-              <div className="flex flex-col space-y-5 bg-white rounded-xl p-5 shadow-lg">
+              <div className="flex flex-col space-y-5 bg-white rounded-xl p-5 shadow-lg w-[25vw]">
                 <div className="space-y-5">
                   {/* Display user data dynamically from the fetched 'user' object */}
                   <p className="text-lightblack poppins-bold">
@@ -317,67 +311,7 @@ const UserInfoIntro = () => {
             </div>
           </div>
 
-          <div className="flex flex-row justify-between">
-            <p className="text-base poppins-bold lg:text-xl text-brown">
-              Child Account
-            </p>
-            <a href="Dashboard/userInfoForm">
-              <p className="poppins-bold text-base lg:text-xl text-brown">
-                Add Another Child
-              </p>
-            </a>
-          </div>
-
-          <div className="flex flex-wrap lg:p-5">
-            <div key={user._id} className="w-full md:w-1/2 p-3">
-              <div className="flex flex-col space-y-5 bg-white rounded-xl p-5 shadow-lg">
-                <div className="space-y-5">
-                  {/* Display user data dynamically from the fetched 'user' object */}
-                  <div className="flex items-center gap-2">
-                  <FaUserCircle className="text-sm"/>
-                  <p className="text-lightblack poppins-bold">
-                    {user.username}
-                  </p>
-                  </div>
-                  <p className="text-lightblack poppins-bold">{user.email}</p>
-                  <p className="text-lightblack poppins-bold">{user.phone}</p>
-
-                  <div className="flex flex-row space-x-5">
-                    <button onClick={() => setIsPinModalOpen(true)} className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2 bg-yellow text-white">
-                      View My Courses
-                    </button>
-                  </div>
-
-                  {/* <div className="flex flex-row space-x-5">
-                    <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
-                      Remove
-                    </a>
-                    <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
-                      Edit
-                    </a>
-                  </div> */}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Success Modal */}
-          <Modal
-            isOpen={isSuccessModalOpen}
-            onRequestClose={() => setIsSuccessModalOpen(false)}
-            contentLabel="Success Modal"
-            className="bg-white rounded-lg p-8 max-w-lg mx-auto my-20 relative"
-            overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-50"
-          >
-            <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />
-          </Modal>
-
-          {/* Pin Modal */}
-          <PinModal
-            isOpen={isPinModalOpen}
-            onClose={() => setIsPinModalOpen(false)}
-            onPinSubmit={handlePinSubmit}
-          />
+          
         </div>
       </div>
     </div>
