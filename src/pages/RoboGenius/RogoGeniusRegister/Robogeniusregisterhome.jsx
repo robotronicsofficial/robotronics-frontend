@@ -1,4 +1,4 @@
-import Footer from '../../../component/footer'
+// import Footer from '../../../component/footer'
 import RobogeniusCustomerInfoIntro from './RobogeniusCustomerInfoIntro'
 
 const Robogeniusregisterhome = () => {
@@ -6,7 +6,7 @@ const Robogeniusregisterhome = () => {
     <div>
       <div>
         <RobogeniusCustomerInfoIntro/>
-        <Footer/>
+        {/* <Footer/> */}
     </div>
     </div>
   )

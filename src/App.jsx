@@ -41,6 +41,10 @@ import ChildHome from "./pages/child protection/ChildHome";
 import TermsHome from "./pages/Terms of Use/TermsHome";
 import PrivacyHome from "./pages/Privacy Policy/PrivacyHome";
 import ServiceDetail from "./pages/service detail/ServiceDetail";
+import PaymentDetail from "./pages/Dashboard/paymentDetail";
+import ChildProfile from "./pages/Dashboard/ChildProfile";
+import ProgressCertificate from "./pages/Dashboard/ProgressCertificate";
+import RoboGeniusProgressPage from "./component/dashboard/RoboGeniusProgressPage";
 
 
 
@@ -74,9 +78,14 @@ function App() {
           <Route path="/Dashboard/MyCoursesPage" element={<MyCoursesPage />} />
           <Route path="/Dashboard/WishList" element={<WishList />} />
           <Route path="/Dashboard/PaymentHistory" element={<Payment />} />
+          <Route path="/Dashboard/PaymentDetails" element={<PaymentDetail />} />
+          <Route path="/Dashboard/ChildProfile" element={<ChildProfile />} />
           <Route path="/404" element={<Error />} />
           <Route path="/Dashboard/userInfoForm" element={<UserInfoForm />} />
           <Route path="/Dashboard/courseDetail" element={<CourseDetail />} />
+          <Route path="/Dashboard/ProgressCertificate" element={<ProgressCertificate />} />
+          <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<RoboGeniusProgressPage />} />
+
           <Route path="/International/myRobot" element={<MyRobort />} />
           <Route path="/Robogeniushome" element={<Robogeniushome />} />
           <Route path="/Robogeniushome/GiftCourse" element={<GiftCourse />} />

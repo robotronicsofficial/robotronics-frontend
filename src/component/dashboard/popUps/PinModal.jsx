@@ -49,10 +49,10 @@ const PinModal = ({ isOpen, onClose, onPinSubmit }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-        <h2 className="text-2xl font-bold text-center mb-4">Enter Your Pin</h2>
+      <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 h-[45vh] flex flex-col gap-4">
+        <h2 className="text-2xl font-bold text-center mb-4">Set Up a PIN</h2>
         <p className="text-gray-600 text-center mb-6">
-          Enter your 4 digits code that you received on your email.
+          Enter your 4 digits pin
         </p>
 
         {/* PIN Input Fields */}
@@ -72,31 +72,22 @@ const PinModal = ({ isOpen, onClose, onPinSubmit }) => {
           </div>
 
           {/* Timer and Resend Button */}
-          <div className="text-center">
+          {/* <div className="text-center">
             <p className="text-gray-600">
               Time remaining: 00:{counter < 10 ? `0${counter}` : counter}
             </p>
             
-          </div>
+          </div> */}
 
           {/* Verify Button */}
           <div className="flex flex-col">
-          <button
-            type="submit"
-            className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors bg-yellow"
-          >
-            VERIFY
-          </button>
-          <button
-              type="button"
-              // disabled={isResendDisabled}
-              className="mt-4"
-              // className={`text-sm mt-2 ${
-              //   isResendDisabled ? "text-gray-400" : "text-blue-500"
-              // }`}
+            <button
+              type="submit"
+              className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors bg-yellow"
             >
-              If you forgot the pin! <span onClick={handleResend} className="text-red-500">Resend</span>
+              CONFIRM PIN
             </button>
+            
           </div>
         </form>
 
