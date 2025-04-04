@@ -17,7 +17,6 @@ const ShopCartproductList = ({ onNext }) => {
     [totalPrice, discountAmount]
   );
 
-  // Store quantity as an object with product IDs as keys
   const [itemQuantity, setItemQuantity] = useState(
     cart.reduce((acc, product) => {
       acc[product._id] = product.quantity;
@@ -31,7 +30,7 @@ const ShopCartproductList = ({ onNext }) => {
         ...prev,
         [product._id]: (prev[product._id] || 0) + 1,
       }));
-      dispatch(addToCart(product)); //  Now passing the entire product object
+      dispatch(addToCart(product));
     },
     [dispatch]
   );
@@ -42,7 +41,7 @@ const ShopCartproductList = ({ onNext }) => {
         ...prev,
         [product._id]: prev[product._id] > 1 ? prev[product._id] - 1 : 1,
       }));
-      dispatch(removeFromCart(product)); // Now passing the entire product object
+      dispatch(removeFromCart(product));
     },
     [dispatch]
   );
@@ -56,10 +55,7 @@ const ShopCartproductList = ({ onNext }) => {
       <div className="lg:w-2/3 flex-col">
         {cart.length > 0 ? (
           cart.map((product) => (
-            <div
-              className="max-w-4xl mx-auto py-8"
-              key={product._id}
-            >
+            <div className="max-w-4xl mx-auto py-8" key={product._id}>
               <div className="flex flex-col sm:flex-row gap-6">
                 <div className="w-[15vw] h-[15vw] overflow-hidden">
                   <img
@@ -72,28 +68,25 @@ const ShopCartproductList = ({ onNext }) => {
                 </div>
 
                 <div className="w-full sm:w-2/3">
-                <h1 className="text-[20px] font-bold leading-[28px] tracking-normal font-Poppins mb-2 text-[#362D2C]">
-                  {product.name}
-                </h1>
+                  <h1 className="text-[20px] font-bold leading-[28px] tracking-normal font-Poppins mb-2 text-[#362D2C]">
+                    {product.name}
+                  </h1>
                   <div className="flex text-yellow-500 my-6 text-2xl">
                     {Array.from({ length: 5 }, (_, i) => (
                       <span key={i}>★</span>
                     ))}
                   </div>
-
                   <div className="flex gap-4 mb-4">
                     <div className="lg:px-5 bg-white items-center text-center justify-center">
                       <p>Type: {product.category}</p>
                     </div>
-
                     <div className="bg-white flex items-center justify-center">
-                    <button
+                      <button
                         onClick={() => handleRemoveFromCart(product)}
                         className="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 focus:outline-none"
                       >
                         -
                       </button>
-                      
                       <input
                         type="number"
                         className="lg:w-24 w-10 lg:px-3 px-1 py-1 text-sm rounded-md focus:outline-none text-center"
@@ -109,7 +102,7 @@ const ShopCartproductList = ({ onNext }) => {
                     </div>
                   </div>
                   <div className="text-2xl font-bold text-right text-[#362D2C] pt-10">
-                    PKR {product.price}
+                    PKR {product.price.toLocaleString()}
                   </div>
                 </div>
               </div>
@@ -119,33 +112,28 @@ const ShopCartproductList = ({ onNext }) => {
           <p className="p-5 text-center text-gray-500">Your cart is empty.</p>
         )}
       </div>
-
       <div className="flex flex-col p-2">
         <div className="h-full border border-gray-300"></div>
       </div>
-
       <div className="flex flex-col bg-gray lg:px-10 px-6 py-6 shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold mb-4">ORDER SUMMARY</h2>
         <p className="text-sm text-gray-500 mb-6">Apply your monthly voucher to get more discounts!</p>
         <div className="space-y-3">
           <div className="flex justify-between text-sm border-b pb-2">
             <span>Price</span>
-            <span className="font-bold">PKR {totalPrice.toFixed(2)}</span>
+            <span className="font-bold">PKR {totalPrice.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-sm border-b pb-2">
             <span>Discount ({discountPercentage}%)</span>
-            <span className="font-bold text-red-500">- PKR {discountAmount.toFixed(2)}</span>
+            <span className="font-bold text-red-500">- PKR {discountAmount.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-lg font-semibold">
             <span>Total Price</span>
-            <span className="text-green-600">PKR {discountedPrice.toFixed(2)}</span>
+            <span className="text-green-600">PKR {discountedPrice.toLocaleString()}</span>
           </div>
         </div>
-
         <div className="mt-6">
-          <label htmlFor="voucher" className="text-sm">
-            Your voucher code
-          </label><br></br>
+          <label htmlFor="voucher" className="text-sm">Your voucher code</label><br />
           <input
             id="voucher"
             type="text"
@@ -153,7 +141,6 @@ const ShopCartproductList = ({ onNext }) => {
             placeholder="Enter voucher code"
           />
         </div>
-
         <div className="flex justify-center mt-6">
           <button
             type="button"

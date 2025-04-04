@@ -27,7 +27,7 @@ const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, product
           <p className="text-[#362D2C] hover:text-black text-xl poppins-bold my-2">
             {title}
           </p>
-          <p className="text-[#C86400] poppins-bold text-xl">PKR {price}.00</p>
+          <p className="text-[#C86400] poppins-bold text-xl">PKR {price.toLocaleString()}</p>
         </div>
       </div>
 
