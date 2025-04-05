@@ -6,6 +6,7 @@ import mastercard from "../../../assets/images/mastercard.svg";
 import CustomerOrder from "../../../component/shop/customerOrder";
 import YtVideos from "../../../component/course/courseDetailPage/ytVideos";
 import { FaRegHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Step = ({ icon, title, description, isActive }) => (
   <div className="flex flex-col items-center space-y-2">
@@ -20,6 +21,7 @@ const Step = ({ icon, title, description, isActive }) => (
 );
 
 const Robogeniuspaymentcustomercart = () => {
+  const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
 
   const handleOpenPopup = () => {
@@ -329,7 +331,7 @@ const Robogeniuspaymentcustomercart = () => {
                 {/* Home Button */}
                 <button
                   className="mt-4 px-4 py-2 bg-[#FFA500] text-white rounded hover:bg-[#FF8C00] transition duration-200"
-                  onClick={handleClosePopup}
+                  onClick={() => navigate("/Dashboard/userInfo")}
                 >
                   HOME
                 </button>
