@@ -1,6 +1,5 @@
 import {
-  FaUser,
-  FaBox,
+  
   // FaHeart,
   FaHeadphones,
   FaSignOutAlt,
@@ -8,6 +7,9 @@ import {
 import { MdOutlinePayment } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { useState } from "react";
+import { RiRobot3Fill } from "react-icons/ri";
+import { FaUser } from "react-icons/fa";
+import { FaBox } from "react-icons/fa";
 
 const LeftNav = () => {
   const user = { userName: "Arslan" };
@@ -32,7 +34,7 @@ const LeftNav = () => {
     },
     {
       name: "RoboGenius",
-      icon: <FaUser className="text-brown" />,
+      icon: <RiRobot3Fill className="text-brown" />,
       dropdownIcon: <RiArrowDropDownLine className="text-3xl text-brown" />,
       subMenu: [
         { name: "\u2022 Child Profile", href: "/Dashboard/ChildProfile" },

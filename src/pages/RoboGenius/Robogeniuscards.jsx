@@ -1,9 +1,11 @@
-// import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Robogeniuscards = () => {
   const [isBasicYearly, setIsBasicYearly] = useState(false);
   const [isProYearly, setIsProYearly] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <div className="bg-[#ebe5e2] py-6 px-24">
       <div className="flex flex-col items-center justify-center">
@@ -43,7 +45,10 @@ const Robogeniuscards = () => {
             </p>
 
             {/* Register Button */}
-            <button className="bg-orange-400 text-white py-2 px-6 rounded-lg mb-6">
+            <button
+              className="bg-orange-400 text-white py-2 px-6 rounded-lg mb-6"
+              onClick={() => navigate("/Robogeniushome/Register")}
+            >
               Register Now
             </button>
 
@@ -59,7 +64,10 @@ const Robogeniuscards = () => {
             </ul>
 
             {/* Gift Program Button */}
-            <button className="bg-orange-400 text-white py-2 px-6 rounded-lg mt-6">
+            <button
+              className="bg-orange-400 text-white py-2 px-6 rounded-lg mt-6"
+              onClick={() => navigate("/Robogeniushome/GiftCourse")}
+            >
               Gift This Program
             </button>
           </div>
@@ -87,7 +95,10 @@ const Robogeniuscards = () => {
             </p>
 
             {/* Register Button */}
-            <button className="bg-orange-400 text-white py-2 px-6 rounded-lg mb-6">
+            <button
+              className="bg-orange-400 text-white py-2 px-6 rounded-lg mb-6"
+              onClick={() => navigate("/Robogeniushome/Register")}
+            >
               Register Now
             </button>
 
@@ -103,7 +114,10 @@ const Robogeniuscards = () => {
             </ul>
 
             {/* Gift Program Button */}
-            <button className="bg-orange-400 text-white py-2 px-6 rounded-lg mt-6">
+            <button
+              className="bg-orange-400 text-white py-2 px-6 rounded-lg mt-6"
+              onClick={() => navigate("/Robogeniushome/GiftCourse")}
+            >
               Gift This Program
             </button>
           </div>
