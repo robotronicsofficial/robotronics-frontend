@@ -2,9 +2,11 @@
 // import CustomerOrder from "../../component/shop/customerOrder";
 // import CustomerOrder from "../../../component/shop/customerOrder";
 import CustomerOrder from "../../../component/shop/customerOrder";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const Giftbody = ({ onNext }) => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     recipientName: "",
     email: "",
@@ -99,13 +101,13 @@ const Giftbody = ({ onNext }) => {
               </div>
 
               {/* Submit Button */}
-              <div className="text-center">
+              <div className="">
                 <button
                   type="submit"
-                  className="text-center lg:text-xl text-sm poppins-bold text-gold bg-brown py-2 lg:px-20 px-5"
-                //   onClick={onNext}
+                  className="text-center lg:text-xl text-sm poppins-bold text-[#807D7E] bg-white py-2 lg:px-12 px-5 rounded-lg"
+                  onClick={() => navigate("/Robogeniushome")}
                 >
-                  Submit
+                  Cancel
                 </button>
               </div>
             </form>
