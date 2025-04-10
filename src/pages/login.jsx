@@ -1,50 +1,82 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import hide from "../assets/images/hide.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
 import apple from "../assets/images/Applelogo.svg";
-
-const saveLoginData = (loginData) => {
-  sessionStorage.setItem("token", loginData.token);
-  sessionStorage.setItem("id", loginData.user._id);
-  sessionStorage.setItem("username", loginData.user.username);
-  sessionStorage.setItem("email", loginData.user.email);
-};
+import { useAuth } from "../contexts/AuthContext";
 
 const Login = () => {
+  const { currentUser, login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.emailVerified) {
+      toast.success('Your email has been verified! Please sign in to continue.', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      
+      // Clear the state
+      window.history.replaceState({}, document.title);
+    }
+
+    // Redirect if already logged in
+    if (currentUser) {
+      navigate("/");
+    }
+  }, [location.state, currentUser, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8080/login", {
+      const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
         throw new Error(
-          "Login failed. Please check your credentials and try again."
+          data.message || "Login failed. Please check your credentials and try again."
         );
       }
 
-      const data = await response.json();
-      console.log("Login successful:", data);
-      saveLoginData(data);
+      // Call the login function from AuthContext
+      // await login(data.user, data.token);
       toast.success("Login successful!");
-      window.location.href = "/";
+      const redirectPath = localStorage.getItem('redirectAfterLogin');
+      console.log(redirectPath);
+      if (redirectPath) {
+        localStorage.removeItem('redirectAfterLogin');
+        // navigate(redirectPath);
+        window.location.href = `http://localhost:5173${redirectPath}`;
+      } else {
+        window.location.href = "/";
+      }
+
+
     } catch (error) {
       console.error("Error during login:", error);
       setError(error.message);
@@ -54,37 +86,38 @@ const Login = () => {
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
-    setError(null);
-
+    setError('');
+  
     try {
-      const response = await fetch("http://localhost:8080/forgot-password", {
-        method: "POST",
+      const response = await fetch('http://localhost:8080/auth/forgot-password', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email: forgotEmail }),
       });
-
+  
+      const data = await response.json();
+  
       if (!response.ok) {
-        throw new Error(
-          "Failed to send password reset instructions. Please try again."
-        );
+        throw new Error(data.message || 'Something went wrong');
       }
-
-      toast.success("Password reset instructions sent to your email.");
-      setForgotPasswordMode(false);
-      setForgotEmail("");
-    } catch (error) {
-      console.error("Error during password reset:", error);
-      setError(error.message);
-      toast.error(error.message);
+  
+      toast.success('Password reset instructions sent to your email');
+    } catch (err) {
+      setError(err.message);
+      console.error('Forgot password error:', err);
     }
+  };
+
+  const handleSocialLogin = (provider) => {
+    window.location.href = `http://localhost:8080/auth/${provider}`;
   };
 
   if (forgotPasswordMode) {
     return (
       <div className="bg-gray" id="forgot-password">
-        <div className="flex flex-col items-center justify-center py-20">
+        <div className="flex flex-col items-center justify-center pt-44 pb-20">
           <p className="text-4xl poppins-bold text-brown">Forgot Password</p>
           <form
             onSubmit={handleForgotPassword}
@@ -125,7 +158,7 @@ const Login = () => {
     <div className="bg-gray" id="signin">
       <div>
         <div
-          className="flex flex-col lg:space-y-4 space-y-1 items-center justify-center lg:py-20 py-10"
+          className="flex flex-col lg:space-y-4 space-y-1 items-center justify-center lg:py-40 py-10"
           data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
@@ -133,15 +166,27 @@ const Login = () => {
           <p className="text-center text-wrap justify-center lg:py-10 py-5 text-4xl poppins-bold text-brown">
             Log in to your account
           </p>
-          <button className=" poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-28 px-12">
+          <button 
+            type="button"
+            className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-28 px-12"
+            onClick={() => handleSocialLogin('facebook')}
+          >
             <img className="h-6 w-8" src={facebook} alt="Facebook" />
             Continue with Facebook
           </button>
-          <button className=" poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14">
+          <button 
+            type="button"
+            className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14"
+            onClick={() => handleSocialLogin('google')}
+          >
             <img className="h-6 w-8" src={google} alt="Google" />
             Continue with Google
           </button>
-          <button className=" poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14">
+          <button 
+            type="button"
+            className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14"
+            onClick={() => handleSocialLogin('apple')}
+          >
             <img className="h-6 w-8" src={apple} alt="Apple" />
             Continue with Apple
           </button>
@@ -226,10 +271,14 @@ const Login = () => {
             <div className="h-0 lg:w-60 w-48 border border-line"></div>
           </div>
           <p className="text-center poppins-regular justify-center lg:py-10 py-5 lg:text-3xl text-xl text-brown">
-            Don’t have an account?
+            Don't have an account?
           </p>
           <div className="lg:pb-10 pb-4">
-            <button className="bg-gray border border-line text-brown poppins-regular rounded-3xl items-center justify-center py-3 lg:px-32 px-14">
+            <button 
+              type="button"
+              className="bg-gray border border-line text-brown poppins-regular rounded-3xl items-center justify-center py-3 lg:px-32 px-14"
+              onClick={() => navigate('/register')}
+            >
               Sign up
             </button>
           </div>
