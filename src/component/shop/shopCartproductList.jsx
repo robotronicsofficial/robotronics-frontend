@@ -1,12 +1,18 @@
 import { useMemo, useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "../../store/cart/cartSlice";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const ShopCartproductList = ({ onNext }) => {
   const { cart, totalPrice } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const discountPercentage = 10;
-
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
   const discountAmount = useMemo(
     () => (totalPrice * discountPercentage) / 100,
     [totalPrice, discountPercentage]
@@ -47,8 +53,29 @@ const ShopCartproductList = ({ onNext }) => {
   );
 
   const handleNext = useCallback(() => {
+    if (!currentUser) {
+      // Store the current path to redirect back after login
+      localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      
+      // Show toast message
+      toast.error("Please sign in to proceed to checkout", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      
+      // Redirect to login page
+      navigate("/login");
+      return;
+    }
+    
+    // If user is authenticated, proceed to next step
     if (onNext) onNext();
-  }, [onNext]);
+  }, [currentUser, onNext, navigate]);
+
 
   return (
     <div className="lg:flex flex-row">
