@@ -45,7 +45,7 @@ import ChildHome from "./pages/child protection/ChildHome";
 import TermsHome from "./pages/Terms of Use/TermsHome";
 import PrivacyHome from "./pages/Privacy Policy/PrivacyHome";
 import ServiceDetail from "./pages/service detail/ServiceDetail";
-import PaymentDetail from "./pages/Dashboard/paymentDetail";
+import PaymentDetail from "./pages/Dashboard/PaymentDetail";
 import ChildProfile from "./pages/Dashboard/ChildProfile";
 import ProgressCertificate from "./pages/Dashboard/ProgressCertificate";
 import RoboGeniusProgressPage from "./component/dashboard/RoboGeniusProgressPage";

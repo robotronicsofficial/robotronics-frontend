@@ -6,6 +6,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 const RobogeniusCustomerInformation = ({ onNext }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+
   const [parentForm, setParentForm] = useState({
     firstName: "",
     lastName: "",
@@ -71,8 +72,9 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
     ]);
   };
 
+  // Add this function to handle child form deletion
   const removeChildForm = (index) => {
-    if (childrenForms.length > 1) {
+    if (childrenForms.length > 1) { // Don't allow deleting the last child
       setChildrenForms(prevForms => prevForms.filter((_, i) => i !== index));
     }
   };
@@ -197,7 +199,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
               />
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor={`country-${index}`} className="block text-sm poppins-light text-gray-700">
