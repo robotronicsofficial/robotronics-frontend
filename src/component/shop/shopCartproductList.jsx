@@ -52,7 +52,7 @@ const ShopCartproductList = ({ onNext }) => {
 
   return (
     <div className="lg:flex flex-row">
-      <div className="lg:w-2/3 flex-col">
+      <div className="lg:w-2/3 flex-col pr-5">
         {cart.length > 0 ? (
           cart.map((product) => (
             <div className="max-w-4xl mx-auto py-8" key={product._id}>
@@ -76,10 +76,8 @@ const ShopCartproductList = ({ onNext }) => {
                       <span key={i}>★</span>
                     ))}
                   </div>
-                  <div className="flex gap-4 mb-4">
-                    <div className="lg:px-5 bg-white items-center text-center justify-center">
-                      <p>Type: {product.category}</p>
-                    </div>
+                  {/* Counter */}
+                  <div className="flex justify-end gap-4 mb-4">
                     <div className="bg-white flex items-center justify-center">
                       <button
                         onClick={() => handleRemoveFromCart(product)}
@@ -105,6 +103,7 @@ const ShopCartproductList = ({ onNext }) => {
                     PKR {product.price.toLocaleString()}
                   </div>
                 </div>
+
               </div>
             </div>
           ))
@@ -113,40 +112,73 @@ const ShopCartproductList = ({ onNext }) => {
         )}
       </div>
       <div className="flex flex-col p-2">
-        <div className="h-full border border-gray-300"></div>
+        <div className="h-full w-0 border border-[#D4D4D4]"></div>
       </div>
-      <div className="flex flex-col bg-gray lg:px-10 px-6 py-6 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">ORDER SUMMARY</h2>
-        <p className="text-sm text-gray-500 mb-6">Apply your monthly voucher to get more discounts!</p>
-        <div className="space-y-3">
-          <div className="flex justify-between text-sm border-b pb-2">
+      <div className="flex flex-col bg-gray lg:px-10 px-6 py-6 rounded-lg">
+      <h2 className="font-poppins font-semibold text-[32px] leading-[40px] tracking-[0] text-[#362D2C] mb-4">
+        ORDER SUMMARY
+      </h2>
+      <p className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] my-6">
+        Apply your monthly voucher to get more discount!
+      </p>
+        <div className="space-y-3 my-6">
+          <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Price</span>
-            <span className="font-bold">PKR {totalPrice.toLocaleString()}</span>
+            <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#362D2C] bg-transparent">
+              PKR {totalPrice.toLocaleString()}
+            </span>
           </div>
-          <div className="flex justify-between text-sm border-b pb-2">
+          <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Discount ({discountPercentage}%)</span>
-            <span className="font-bold text-red-500">- PKR {discountAmount.toLocaleString()}</span>
+            <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#362D2C] bg-transparent">
+              - PKR {discountAmount.toLocaleString()}
+            </span>
           </div>
-          <div className="flex justify-between text-lg font-semibold">
+          <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Total Price</span>
-            <span className="text-green-600">PKR {discountedPrice.toLocaleString()}</span>
+            <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#C86400] bg-transparent">
+              PKR {discountedPrice.toLocaleString()}
+            </span>
           </div>
         </div>
         <div className="mt-6">
-          <label htmlFor="voucher" className="text-sm">Your voucher code</label><br />
-          <input
-            id="voucher"
-            type="text"
-            className="w-full p-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter voucher code"
-          />
+        <input
+          id="voucher"
+          type="text"
+          className="w-full p-2 mt-2 bg-gray font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] border-b"
+          placeholder="Your voucher code"
+        />
+
         </div>
-        <div className="flex justify-center mt-6">
+
+        <div className="mt-20">
+          <span className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-[#362D2C]">
+            Write your special notes here...
+          </span>
+
+          <textarea
+            className="block mt-1 p-7 font-poppins font-light shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            style={{
+              width: '401px',
+              height: '139px',
+              background: '#EBE5E2',
+              border: '1px solid #BCBABA',
+            }}></textarea>
+        </div>
+
+        <div className="flex justify-center mt-20">
           <button
             type="button"
-            className="w-full lg:w-auto px-6 py-2 bg-blue-600 text-white text-lg font-semibold rounded-md hover:bg-blue-700 transition"
             onClick={handleNext}
             aria-label="Proceed to Checkout"
+            className="font-semibold transition text-white"
+            style={{
+              width: '408px',
+              height: '44px',
+              padding: '12px',
+              gap: '10px',
+              backgroundColor: '#362D2C',
+            }}
           >
             PROCEED TO CHECKOUT
           </button>
