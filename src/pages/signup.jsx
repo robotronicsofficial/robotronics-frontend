@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import hide from "../assets/images/hide.svg";
 import robot from "../assets/images/SignupRobot.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
@@ -8,48 +10,155 @@ import google from "../assets/images/Googlelogo.svg";
 import apple from "../assets/images/Applelogo.svg";
 
 const Signup = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State for visibility// State for visibility
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: ""
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  const [passwordErrors, setPasswordErrors] = useState({
+    length: false,
+    number: false,
+    symbol: false,
+    match: false
+  });
+  const phoneInputRef = useRef(null);
+  useEffect(() => {
+    // This effect will run after the component mounts
+    if (phoneInputRef.current) {
+      // Find the input element within the phone input component
+      const inputElement = phoneInputRef.current.querySelector('input');
+
+      if (inputElement) {
+        // Apply your custom classes
+        inputElement.classList.add(
+          'border', 'border-line', 'rounded-xl', 'p-2',
+          'bg-gray', 'w-full', 'focus:outline-none',
+          'focus:ring-0', 'focus:border-line'
+        );
+
+        // Remove any unwanted classes
+        inputElement.classList.remove('PhoneInputInput');
+      }
+    }
+  }, []);
+
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
-  const username = firstName + lastName;
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword((prev) => !prev);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    // Password validation
+    if (name === "password") {
+      setPasswordErrors({
+        length: value.length >= 8,
+        number: /\d/.test(value),
+        symbol: /[!@#$%^&*(),.?":{}|<>]/.test(value),
+        match: value === formData.confirmPassword && formData.confirmPassword !== ""
+      });
+    }
+
+    // Confirm password validation
+    if (name === "confirmPassword") {
+      setPasswordErrors(prev => ({
+        ...prev,
+        match: value === formData.password && formData.password !== ""
+      }));
+    }
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData(prev => ({
+      ...prev,
+      phoneNumber: value
+    }));
+  };
+
+  const validateForm = () => {
+    // Check all password requirements
+    const isPasswordValid = (
+      passwordErrors.length &&
+      passwordErrors.number &&
+      passwordErrors.symbol &&
+      passwordErrors.match
+    );
+
+    if (!isPasswordValid) {
+      toast.error("Please ensure your password meets all requirements");
+      return false;
+    }
+
+    if (!isCheckboxChecked) {
+      toast.error("Please agree to the Terms of Use and Privacy Policy");
+      return false;
+    }
+
+    return true;
+  };
 
   const handleSignUp = async () => {
+    if (!validateForm()) return;
+
+    setIsLoading(true); // Start loading
     try {
-      const response = await fetch("http://localhost:8080/register", {
-        method: "POST",
+      const response = await fetch('http://localhost:8080/auth/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: username,
-          email: email,
-          phone: phoneNumber,
-          password: password,
-          isAdmin: false,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phoneNumber,
+          password: formData.password
         }),
       });
-      console.log(response);
+
       if (!response.ok) {
         const errorData = await response.json();
         toast.error(`Error: ${errorData.msg || "Failed to create account"}`);
       } else {
-        toast.success("Account created successfully!");
+        toast.success("Email sent successfully! Please verify your email.");
       }
     } catch (error) {
       toast.error(`An error occurred: ${error.message}. Please try again.`);
+    } finally {
+      setIsLoading(false); // Stop loading regardless of success/error
     }
+
+  };
+
+  // Password requirement check icons
+  const RequirementCheck = ({ isValid, text }) => (
+    <div className="flex items-center">
+      <span className={`inline-block w-4 h-4 rounded-full mr-2 ${isValid ? 'bg-green-500' : 'bg-red-500'}`}></span>
+      <span className={`text-xs ${isValid ? 'text-green-500' : 'text-red-500'}`}>{text}</span>
+    </div>
+  );
+  const handleSocialLogin = (provider) => {
+    window.location.href = `http://localhost:8080/auth/${provider}`;
   };
 
   return (
     <div className="signin" id="signin">
-      <div className="lg:flex flex-row justify-between lg:p-14 p-5">
+      <div className="lg:flex flex-row justify-between lg:p-14 lg:py-40 p-5">
         <div className="hidden lg:block">
           <div className="items-center p-5 space-y-5 ">
             <p
@@ -101,16 +210,18 @@ const Signup = () => {
                 <p className="text-sm poppins-light ">First name</p>
                 <input
                   className="border border-line rounded-xl p-2 lg:px-8 bg-gray"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
                 />
               </div>
               <div className="flex flex-col">
                 <p className="text-sm poppins-light ">Last name</p>
                 <input
                   className="border border-line rounded-xl p-2 lg:px-8 bg-gray"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -119,25 +230,46 @@ const Signup = () => {
               <input
                 className="border border-line rounded-xl p-2 bg-gray"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
               />
             </div>
+
+
             <div className="flex flex-col">
-              <p className="text-sm poppins-light ">Phone number</p>
-              <input
-                className="border border-line rounded-xl p-2 bg-gray"
-                type="number"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
+              <p className="text-sm poppins-light">Phone number</p>
+              <div className="relative" ref={phoneInputRef}>
+                <PhoneInput
+                  international
+                  defaultCountry="PK"
+                  value={formData.phoneNumber}
+                  onChange={handlePhoneChange}
+                  inputProps={{
+                    className: "border border-line rounded-xl p-2 bg-gray w-full focus:outline-none focus:ring-0 focus:border-line",
+                    autoComplete: "tel",
+                    type: "tel"
+                  }}
+                  countrySelectProps={{
+                    className: "absolute left-0 top-0 h-full flex items-center pl-2"
+                  }}
+                  style={{
+                    '--PhoneInputCountryFlag-height': '1.5rem',
+                    '--PhoneInputCountryFlag-borderColor': 'transparent',
+                    '--PhoneInputCountrySelectArrow-color': '#your-text-color',
+                    '--PhoneInputCountrySelectArrow-opacity': '1',
+                  }}
+                />
+              </div>
             </div>
+
             <div className="flex flex-col">
               <div className="flex flex-row justify-between items-center">
                 <p className="text-sm poppins-light">Password</p>
                 <button
                   className="flex items-center justify-center space-x-2 w-20"
                   onClick={togglePasswordVisibility}
+                  type="button"
                 >
                   {showPassword ? (
                     <>
@@ -150,15 +282,66 @@ const Signup = () => {
                 </button>
               </div>
               <input
-                className="border border-line rounded-xl p-2 bg-gray"
+                className={`border rounded-xl p-2 bg-gray ${formData.password ?
+                  (passwordErrors.length && passwordErrors.number && passwordErrors.symbol) ?
+                    'border-green-500' : 'border-red-500'
+                  : 'border-line'
+                  }`}
                 type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
               />
-              <p className="text-sm text-wrap poppins-light mt-2">
-                Use 8 or more characters with a mix of letters, numbers &
-                symbols
-              </p>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                <RequirementCheck
+                  isValid={passwordErrors.length}
+                  text="8+ characters"
+                />
+                <RequirementCheck
+                  isValid={passwordErrors.number}
+                  text="Contain at least one Number"
+                />
+                <RequirementCheck
+                  isValid={passwordErrors.symbol}
+                  text="Contain at least one symbol"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col mt-4">
+              <div className="flex flex-row justify-between items-center">
+                <p className="text-sm poppins-light">Confirm Password</p>
+                <button
+                  className="flex items-center justify-center space-x-2 w-20"
+                  onClick={toggleConfirmPasswordVisibility}
+                  type="button"
+                >
+                  {showConfirmPassword ? (
+                    <>
+                      <img className="h-5 w-5" src={hide} alt="Hide password" />
+                      <p className="text-sm poppins-light">Hide</p>
+                    </>
+                  ) : (
+                    <p className="text-sm poppins-light">Show</p>
+                  )}
+                </button>
+              </div>
+              <input
+                className={`border rounded-xl p-2 bg-gray ${formData.confirmPassword ?
+                  passwordErrors.match ? 'border-green-500' : 'border-red-500'
+                  : 'border-line'
+                  }`}
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+              {formData.confirmPassword && (
+                <p className={`text-xs mt-1 ${passwordErrors.match ? 'text-green-500' : 'text-red-500'
+                  }`}>
+                  {passwordErrors.match ? 'Passwords match!' : 'Passwords do not match'}
+                </p>
+              )}
             </div>
 
             <div className="lg:space-y-3 space-y-1">
@@ -184,13 +367,21 @@ const Signup = () => {
                 </label>
               </div>
               <button
-                className={`bg-brown text-gold rounded-3xl px-5 py-2 ${
-                  !isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`bg-brown text-gold rounded-3xl px-5 py-2 w-full flex items-center justify-center ${!isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""}`}
                 onClick={handleSignUp}
-                disabled={!isCheckboxChecked}
+                disabled={!isCheckboxChecked || isLoading}
               >
-                Sign up
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                  </>
+                ) : (
+                  "Sign up"
+                )}
               </button>
             </div>
             <p className="text-sm">
@@ -210,17 +401,29 @@ const Signup = () => {
               <div className="h-0 w-52 border border-line"></div>
             </div>
             <div className="flex flex-col lg:space-y-4 space-y-2 items-center justify-center lg:py-20 py-10 ">
-              <button className=" poppins-semibold flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-28 px-14">
-                <img className="h-6 w-8 " src={facebook} />
-                SignUp with Facebook
+              <button
+                type="button"
+                className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-28 px-12"
+                onClick={() => handleSocialLogin('facebook')}
+              >
+                <img className="h-6 w-8" src={facebook} alt="Facebook" />
+                Continue with Facebook
               </button>
-              <button className="poppins-semibold flex flex-row bg-gray border border-line text-black font-bold rounded-3xl  py-3 lg:px-32 px-14 ">
-                <img className="h-6 w-8 " src={google} />
-                SignUp with Google{" "}
+              <button
+                type="button"
+                className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14"
+                onClick={() => handleSocialLogin('google')}
+              >
+                <img className="h-6 w-8" src={google} alt="Google" />
+                Continue with Google
               </button>
-              <button className="poppins-semibold flex flex-row bg-gray border border-line text-black font-bold rounded-3xl  py-3 lg:px-32 px-14">
-                <img className="h-6 w-8 " src={apple} />
-                SignUp with Apple{"  "}
+              <button
+                type="button"
+                className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14"
+                onClick={() => handleSocialLogin('apple')}
+              >
+                <img className="h-6 w-8" src={apple} alt="Apple" />
+                Continue with Apple
               </button>
             </div>
           </div>
