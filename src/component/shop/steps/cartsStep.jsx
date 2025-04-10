@@ -109,8 +109,8 @@ const CartsStep = () => {
         ))}
       </div>
 
-      <div className="bg-muted p-6 rounded-lg mb-8">
-        <h2 className="text-xl font-semibold mb-4">{steps[currentStep].title}</h2>
+      <div className="bg-muted rounded-lg">
+        <h1 className="text-4xl poppins-bold text-brown pt-20">{steps[currentStep].title}</h1>
         <p>{steps[currentStep].content}</p>
       </div>
     </div>
