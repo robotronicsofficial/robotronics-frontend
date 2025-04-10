@@ -1,7 +1,8 @@
 import CustomerOrder from "../../component/shop/customerOrder";
 import { useState } from "react";
-
+import { useAuth } from '../../contexts/AuthContext';
 const CustomerInfomation = ({ onNext }) => {
+  const { currentUser } = useAuth();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -21,11 +22,48 @@ const CustomerInfomation = ({ onNext }) => {
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
-    // Add form submission logic here
+    console.log(currentUser);
+    try {
+      if (!currentUser) {
+        throw new Error('You must be logged in to save an address');
+      }
+  
+      const API_URL = 'http://localhost:8080/api/addresses';
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...form,
+          userId: currentUser._id // Include user ID explicitly
+        })
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to save address');
+      }
+  
+      const data = await response.json();
+      console.log('Address saved:', data);
+      // Show success message
+    } catch (error) {
+      console.error('Error saving address:', error);
+      // Display error to user
+    }
   };
+
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
+  //   setForm(prevForm => ({
+  //     ...prevForm,
+  //     [name]: type === 'checkbox' ? checked : value
+  //   }));
+  // };
 
   return (
     <div className="lg:flex flex-row p-5 bg-gray">

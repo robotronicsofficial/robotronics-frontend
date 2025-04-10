@@ -7,6 +7,10 @@ import Shop from "./pages/shop";
 import Cart from "./pages/shop/cart";
 import Signup from "./pages/signup";
 import Login from "./pages/login";
+import VerifyEmail from "./pages/VerifyEmail";
+import ResetPassword from "./pages/ResetPassword";
+
+
 import CustomerInfo from "./pages/shop/customerInfo";
 import Course from "./pages/courses";
 import ProductDetailPage from "./pages/shop/ProductDetailPage";
@@ -45,7 +49,9 @@ import PaymentDetail from "./pages/Dashboard/paymentDetail";
 import ChildProfile from "./pages/Dashboard/ChildProfile";
 import ProgressCertificate from "./pages/Dashboard/ProgressCertificate";
 import RoboGeniusProgressPage from "./component/dashboard/RoboGeniusProgressPage";
-
+import ProtectedRoute from './component/ProtectedRoute';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -65,6 +71,10 @@ function App() {
           <Route path="/Course" element={<Course />} />
           <Route path="/CustomerInfo" element={<CustomerInfo />} />
           <Route path="/Login" element={<Login />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+
+
           <Route path="/Signup" element={<Signup />} />
           <Route path="/CoursesProduct/:id?" element={<CoursesProductDetail />} />
           <Route path="/CareerJob" element={<CareerJob />} />
@@ -73,18 +83,18 @@ function App() {
           <Route path="/Blog" element={<Blog />} />
           <Route path="/BlogDetail" element={<BlogDetail />} />
           <Route path="/ContactUs" element={<ContactUs />} />
-          <Route path="/Dashboard/userInfo" element={<UserInfo />} />
-          <Route path="/Dashboard/order" element={<Order />} />
-          <Route path="/Dashboard/MyCoursesPage" element={<MyCoursesPage />} />
-          <Route path="/Dashboard/WishList" element={<WishList />} />
-          <Route path="/Dashboard/PaymentHistory" element={<Payment />} />
-          <Route path="/Dashboard/PaymentDetails" element={<PaymentDetail />} />
-          <Route path="/Dashboard/ChildProfile" element={<ChildProfile />} />
+          <Route path="/Dashboard/userInfo" element={<ProtectedRoute><UserInfo /></ProtectedRoute>} />
+          <Route path="/Dashboard/order" element={<ProtectedRoute><Order /></ProtectedRoute>} />
+          <Route path="/Dashboard/MyCoursesPage" element={<ProtectedRoute><MyCoursesPage /></ProtectedRoute>} />
+          <Route path="/Dashboard/WishList" element={<ProtectedRoute><WishList /></ProtectedRoute>} />
+          <Route path="/Dashboard/PaymentHistory" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+          <Route path="/Dashboard/PaymentDetails" element={<ProtectedRoute><PaymentDetail /></ProtectedRoute>} />
+          <Route path="/Dashboard/ChildProfile" element={<ProtectedRoute><ChildProfile /></ProtectedRoute>} />
+          <Route path="/Dashboard/userInfoForm" element={<ProtectedRoute><UserInfoForm /></ProtectedRoute>} />
+          <Route path="/Dashboard/courseDetail" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
+          <Route path="/Dashboard/ProgressCertificate" element={<ProtectedRoute><ProgressCertificate /></ProtectedRoute>} />
+          <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<ProtectedRoute><RoboGeniusProgressPage /></ProtectedRoute>} />
           <Route path="/404" element={<Error />} />
-          <Route path="/Dashboard/userInfoForm" element={<UserInfoForm />} />
-          <Route path="/Dashboard/courseDetail" element={<CourseDetail />} />
-          <Route path="/Dashboard/ProgressCertificate" element={<ProgressCertificate />} />
-          <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<RoboGeniusProgressPage />} />
 
           <Route path="/International/myRobot" element={<MyRobort />} />
           <Route path="/Robogeniushome" element={<Robogeniushome />} />
@@ -99,9 +109,20 @@ function App() {
           <Route path="/TermsConditions" element={<TermsHome />} />
           <Route path="/PrivacyPolicy" element={<PrivacyHome />} />
           <Route path="/ServiceDetail" element={<ServiceDetail />} />
- 
-         
+
+
         </Routes>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </Layout>
     </Router>
   );
