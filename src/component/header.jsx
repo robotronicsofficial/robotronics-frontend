@@ -181,20 +181,12 @@ export default function Header() {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              {menuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
+
+              <img src={basket} alt="basket"></img>
+              {totalQuantity > 0 && (
+                <span className="absolute top-[-8px] right-[-10px] bg-signin text-white rounded-full text-xs font-bold px-2">
+                  {totalQuantity}
+                </span>
               )}
             </svg>
           </button>
