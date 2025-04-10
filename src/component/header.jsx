@@ -159,10 +159,9 @@ export default function Header() {
                 }}
               >
                 <img src={basket} alt="basket"></img>
-                <span>{totalQuantity}</span>
-                {totalItems > 0 && (
-                  <span className="absolute top-[-8px] right-[-10px] bg-red-600 text-white rounded-full text-xs font-bold px-2">
-                    {totalItems}
+                {totalQuantity > 0 && (
+                  <span className="absolute top-[-8px] right-[-10px] bg-signin text-white rounded-full text-xs font-bold px-2">
+                    {totalQuantity}
                   </span>
                 )}
               </div>
