@@ -100,7 +100,7 @@ const ShopCartproductList = ({ onNext }) => {
                   </h1>
                   <div className="flex text-yellow-500 my-6 text-2xl">
                     {Array.from({ length: 5 }, (_, i) => (
-                      <span key={i}>★</span>
+                      <span className="text-yellow" key={i}>★</span>
                     ))}
                   </div>
                   {/* Counter */}
@@ -163,7 +163,7 @@ const ShopCartproductList = ({ onNext }) => {
           </div>
           <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Total Price</span>
-            <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#C86400] bg-transparent">
+            <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-yellow bg-transparent">
               PKR {discountedPrice.toLocaleString()}
             </span>
           </div>
