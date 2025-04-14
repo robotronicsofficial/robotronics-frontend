@@ -6,7 +6,6 @@ import ShopShipping from "../shopShipping";
 import shopBag from "../../../assets/add shopping-bag.png";
 import userIcon from "../../../assets/user-circle.png";
 import cardIcon from "../../../assets/credit-card.png";
-import reviewIcon from "../../../assets/eye.png";
 import { useSelector } from "react-redux";
 
 // Styled Slider
@@ -80,15 +79,11 @@ const CartsStep = () => {
       description: "With many payment method, included yours.",
       content: <ShopShipping onNext={() => setCurrentStep(3)} />, 
     },
-    {
-      icon: reviewIcon,
-      title: "REVIEW",
-      description: "View all your information before the confirmation.",
-      content: <p>This is where you would show the order summary for review.</p>,
-    },
   ];
 
-  const progressValue = cart.length > 0 ? ((currentStep + 1) / steps.length) * 100 : 0;
+  const progressMap = [0, 50, 100 ];
+  const progressValue = progressMap[currentStep] || 0;
+
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-16">
@@ -96,7 +91,7 @@ const CartsStep = () => {
         <SuccessSlider value={progressValue} min={0} max={100} disabled />
       </div>
 
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {steps.map((step, index) => (
           <Step
             key={index}

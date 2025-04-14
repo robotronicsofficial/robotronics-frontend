@@ -8,7 +8,7 @@ const ProductDetailPage = () => {
   console.log("Product ID:", id);
 
   return (
-    <div>
+    <div className="pt-[9rem] bg-lightgray">
         <Intro/>
         <Decription/>
         <MoreProduct/>

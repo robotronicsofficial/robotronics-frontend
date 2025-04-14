@@ -14,7 +14,6 @@ const Shopsearch = () => {
 
   // Get products and cart data from Redux store
   const products = useSelector((state) => state.cart.items);
-  const cart = useSelector((state) => state.cart.cart);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
 
@@ -146,13 +145,13 @@ const Shopsearch = () => {
         <div className="flex flex-wrap justify-between gap-x-20 gap-y-4 px-5 lg:px-10 lg:py-10 min-h-[85vw]">
           {currentProducts.map((product) => (
             <Shopproduct
-              key={product.id}
+              key={product._id}
               title={product.name}
               price={product.price}
               image={`http://localhost:8080/${product.images[0]}`}
               onAddToWishlist={() => setWishlistCount((prev) => prev + 1)}
               onAddToCart={() => dispatch(addToCart(product))}
-              productId={product.id}
+              productId={product._id}
             />
           ))}
           {currentProducts.length === 0 && <p className="text-center w-full">No products found.</p>}
