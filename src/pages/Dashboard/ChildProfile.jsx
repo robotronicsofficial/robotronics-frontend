@@ -6,7 +6,10 @@ import RoboGeniusChildProfile from "../../component/dashboard/RoboGeniusChildPro
 const ChildProfile = () => {
   return (
     <div>
+      <div className="px-4 md:px-20 bg-[#ebe5e2]">
       <Intro/>
+
+      </div>
       <RoboGeniusChildProfile/>
     </div>
   )

@@ -217,7 +217,7 @@ const MyCourses = () => {
   };
 
   return (
-    <div className="bg-background lg:flex flex-row">
+    <div className="bg-background lg:flex flex-row px-4 md:px-20 pt-44 md:pt-2">
       {/* Left Navigation */}
       <div
         className="lg:w-[30%] w-2/3"
@@ -261,13 +261,13 @@ const MyCourses = () => {
             .map((course) => (
               <div
                 key={course.id}
-                className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-[#fffff] p-6"
+                className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-[#fffff] p-6 "
               >
-                <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff]">
+                <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff] gap-0">
                   <img className="w-full" src={course.image} alt="Course" />
-                  <div className="lg:px-6 py-4 flex-grow">
+                  <div className="px-6 md:px-2 py-2 flex-grow flex flex-col gap-2 ">
                     <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                      <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base">
+                      <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base mb-4 md:mb-0">
                         {course.category}
                       </p>
                       <div className="flex items-center">
@@ -282,12 +282,9 @@ const MyCourses = () => {
                       {course.title}
                     </div>
 
-                    <p className="text-gray-700 space-x-2 text-left text-base">
-                      <span className="text-line px-2">by</span>
-                      {course.author}
-                    </p>
+                   
                   </div>
-                  <div className="p-4 px-8">
+                  <div className="py-3 px-4">
                     <a href="/Dashboard/courseDetail">
                       <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
                         <span>{course.buttonText}</span>

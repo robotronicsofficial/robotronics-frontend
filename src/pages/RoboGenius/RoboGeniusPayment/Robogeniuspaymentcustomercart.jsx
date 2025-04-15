@@ -84,13 +84,13 @@ const Robogeniuspaymentcustomercart = () => {
 
   return (
     <div>
-      <div className="w-[100vw] flex lg:flex-row items-center justify-center gap-[10vw] mt-10 flex-col">
+      <div className=" flex lg:flex-row items-center justify-center gap-[10vw] mt-10 flex-col">
         {steps.map((step, index) => (
           <Step key={index} {...step} isActive={index <= currentStep} />
         ))}
       </div>
 
-      <div className="lg:flex flex-row p-5 bg-gray mt-10">
+      <div className="lg:flex flex-row p-5 bg-gray mt-10 bg-green-400">
         {/* left */}
         <div
           className="lg:w-2/3"

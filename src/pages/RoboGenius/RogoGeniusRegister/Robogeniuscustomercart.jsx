@@ -90,12 +90,12 @@ const Robogeniuscustomercart = ({ onNext }) => {
 
   return (
     <>
-    <div className="w-[100vw] flex lg:flex-row items-center justify-center gap-[10vw] mt-10 flex-col">
+    <div className=" flex lg:flex-row items-center justify-center gap-[10vw] mt-10 flex-col bg-yellow">
         {steps.map((step, index) => (
           <Step key={index} {...step} isActive={index <= currentStep} />
         ))}
       </div>
-    <div className="container mx-auto px-4 py-8 md:py-16">
+    <div className="container mx-auto px-4 py-8 md:py-16 bg-red-500">
       <div className="bg-muted p-6 rounded-lg mb-8">
         {/* <h2 className="text-xl font-semibold mb-4">
           {steps[currentStep].title}
