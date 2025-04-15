@@ -1,16 +1,12 @@
 import CustomerOrder from "../../../component/shop/customerOrder";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from '../../../contexts/AuthContext';
 
 const RobogeniusCustomerInformation = ({ onNext }) => {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
-
   const [parentForm, setParentForm] = useState({
     firstName: "",
     lastName: "",
-    email: "", 
     country: "",
     companyName: "",
     streetAddress: "",
@@ -26,13 +22,11 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
     {
       firstName: "",
       lastName: "",
-      email: "", 
-      dateOfBirth: "", 
       country: "",
       schoolName: "",
       streetAddress: "",
       city: "",
-      phone: "", 
+      phone: "",
       postalCode: "",
     }
   ]);
@@ -60,8 +54,6 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
       {
         firstName: "",
         lastName: "",
-        email: "",
-        dateOfBirth: "",
         country: "",
         schoolName: "",
         streetAddress: "",
@@ -88,45 +80,6 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
     // Add form submission logic here
   };
 
-  const handleSave = async () => {
-    try {
-      // Combine all data
-      const allData = {
-        parent: {
-          ...parentForm,
-          userId: currentUser.userId  // Add current user ID if available
-        },
-        children: childrenForms
-      };
-  
-      console.log("Saving data:", allData);
-  
-      const response = await fetch('http://localhost:8080/api/parents', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${await currentUser.getIdToken()}` // If using Firebase auth
-        },
-        body: JSON.stringify(allData)
-      });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to save information');
-      }
-  
-      console.log("Save successful:", data);
-      // alert('Information saved successfully!');
-      // Optionally navigate somewhere after save
-      // navigate('/success-page');
-  
-    } catch (error) {
-      console.error("Save error:", error);
-      alert(`Error saving information: ${error.message}`);
-    }
-  };
-
   const renderChildForm = (child, index) => {
     return (
       <div key={index} className="w-full">
@@ -136,7 +89,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
           </h1>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6 bg-background p-6 max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor={`firstName-${index}`} className="block text-sm poppins-light text-gray-700">
                 First Name
@@ -168,38 +121,6 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
               />
             </div>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor={`email-${index}`} className="block text-sm poppins-light text-gray-700">
-                Email (Optional)
-              </label>
-              <input
-                type="email"
-                name="email"
-                id={`email-${index}`}
-                value={child.email}
-                onChange={(e) => handleChildChange(index, e)}
-                className="p-3 px-5 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                placeholder="Child's Email"
-              />
-            </div>
-            <div>
-              <label htmlFor={`dateOfBirth-${index}`} className="block text-sm poppins-light text-gray-700">
-                Date of Birth
-              </label>
-              <input
-                type="date"
-                name="dateOfBirth"
-                id={`dateOfBirth-${index}`}
-                value={child.dateOfBirth}
-                onChange={(e) => handleChildChange(index, e)}
-                className="p-3 px-5 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                required
-              />
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor={`country-${index}`} className="block text-sm poppins-light text-gray-700">
@@ -266,7 +187,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
             </div>
             <div>
               <label htmlFor={`phone-${index}`} className="block text-sm poppins-light text-gray-700">
-                Phone (Optional)
+                Phone
               </label>
               <input
                 type="text"
@@ -276,6 +197,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
                 onChange={(e) => handleChildChange(index, e)}
                 className="p-3 px-5 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 placeholder="Phone"
+                required
               />
             </div>
           </div>
@@ -297,6 +219,8 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
             </div>
           </div>
 
+          
+          {/* Modified button section */}
           <div className="flex space-x-4">
             {index === childrenForms.length - 1 && (
               <button
@@ -319,22 +243,17 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
             )}
           </div>
 
+          {/* Cancel button on new line - only for last child */}
           {index === childrenForms.length - 1 && (
-            <div className="mt-4 flex space-x-4">
+            <div className="mt-4">
               <button
                 type="button"
                 onClick={() => navigate("/Robogeniushome")}
-                className="text-center lg:text-xl text-sm poppins-bold text-gray-700 bg-white py-2 lg:px-20 px-5 border border-gray-300 hover:bg-gray-50"
+                className="text-center lg:text-xl text-sm poppins-bold text-gray-700 bg-white py-2 lg:px-20 px-5 border border-gray-300 hover:bg-gray-50 w-full md:w-auto"
               >
                 CANCEL
               </button>
-              <button
-                type="button"
-                onClick={handleSave}
-                className="text-center lg:text-xl text-sm poppins-bold text-white bg-green-600 py-2 lg:px-20 px-5 hover:bg-green-700"
-              >
-                SAVE INFORMATION
-              </button>
+              
             </div>
           )}
         </form>
@@ -354,7 +273,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
               </h1>
             </div>
             <form onSubmit={handleSubmit} className="space-y-6 bg-background p-6 max-w-4xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="firstName" className="block text-sm poppins-light text-gray-700">
                     Parent First Name
@@ -386,26 +305,6 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
                   />
                 </div>
               </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="email" className="block text-sm poppins-light text-gray-700">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={parentForm.email}
-                    onChange={handleParentChange}
-                    className="p-3 px-5 mt-1 block w-full poppins-light border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    placeholder="Parent Email"
-                    required
-                  />
-                </div>
-              
-              </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="country" className="block text-sm poppins-light text-gray-700">

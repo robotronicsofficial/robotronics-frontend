@@ -1,31 +1,18 @@
 import { useEffect, useState } from "react";
-
 import LeftNav from "./leftNav";
 import Intro from "../dashboard/intro";
 
-// import { useNavigate } from "react-router-dom";
-// import { FaUserCircle } from "react-icons/fa";
-// import PinModal from "./popUps/PinModal"
-
 const UserInfoIntro = () => {
-  // const navigate = useNavigate();
-  // const [step, setStep] = useState(0);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [user, setUser] = useState({});
   const [editingField, setEditingField] = useState(null);
   const [updatedData, setUpdatedData] = useState({
     name: "",
     email: "",
     phone: "",
+    password: "",
   });
-  // const [cards, setCards] = useState([]);
 
   const userData = sessionStorage.getItem("id");
-
-  // const handleHomeClick = () => {
-  //   navigate("/"); // Navigate to the home page
-  // };
 
   useEffect(() => {
     if (userData) {
@@ -37,6 +24,7 @@ const UserInfoIntro = () => {
             name: data.data.username || "",
             email: data.data.email || "",
             phone: data.data.phone || "",
+            password: data.data.password || "",
           });
         })
         .catch((error) => console.error("Error fetching user:", error));
@@ -53,13 +41,9 @@ const UserInfoIntro = () => {
 
   const handleUpdateField = (field) => {
     const fieldValue = updatedData[field];
-    // console.log(fieldValue);
-
     fetch("http://localhost:8080/patchMe", {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         id: userData,
         [field]: fieldValue,
@@ -70,248 +54,82 @@ const UserInfoIntro = () => {
         if (data.updatedUser) {
           setUser(data.updatedUser);
           setEditingField(null);
-          // setIsSuccessModalOpen(true);
         }
       })
       .catch((error) => console.error("Error updating user:", error));
   };
 
-
   return (
-    <div className="bg-background ">
-      {console.log(user)}
-      <div>
-        <Intro />
-      </div>
-      <div
-        className="lg:flex flex-row"
-        data-aos="fade-up"
-        data-aos-duration="2000"
-        data-aos-delay="4000"
-      >
-        <div className="lg:w-1/3 w-2/3">
+    <div className="bg-background min-h-screen  px-4 md:px-20">
+      <Intro />
+      <div className="flex flex-col lg:flex-row pt-40 md:pt-4" data-aos="fade-up" data-aos-duration="2000">
+        <div className="w-full lg:w-1/3 ">
           <LeftNav />
         </div>
-        <div className="w-full lg:p-10 p-6">
+
+        <div className="w-full px-4 py-6 lg:px-10">
           <div>
-            <p className="text-2xl poppins-bold mb-2">My Info</p>
-            <p className="text-xl poppins-light">Contact Details</p>
+            <p className="text-xl lg:text-2xl poppins-bold mb-2">My Info</p>
+            <p className="text-base lg:text-xl poppins-light">Contact Details</p>
           </div>
-          <form action="">
-            {/* Name */}
-            <div>
-              <ol className="list-reset flex flex-col text-gray-600">
-                <div className="py-5 flex flex-col space-y-5">
-                  <div>
-                    <div className="space-y-5">
-                      <p className="text-lightblack poppins-bold">Your Name</p>
-                      <div className="flex flex-row poppins-light justify-between">
-                        {editingField !== "name" ? (
-                          <>
-                            <p className="text-lightblack poppins-regular">
-                              {user.username}
-                            </p>
-                            <a
-                              className="hover:text-yellow text-brown poppins-bold"
-                              href="#"
-                              onClick={() => handleFieldEdit("name")}
-                            >
-                              Edit
-                            </a>
-                          </>
-                        ) : (
-                          <>
-                            <input
-                              type="text"
-                              name="name"
-                              value={updatedData.name}
-                              onChange={handleInputChange}
-                              className="text-lightblack poppins-regular"
-                            />
-                            <button
-                              type="button"
-                              className="px-4 py-2 bg-yellow-500 text-yellow rounded-md"
-                              onClick={() => handleUpdateField("name")}
-                            >
-                              Save
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    <div className="w-full border text-sm border-lin"></div>
+
+          <form>
+            <ol className="flex flex-col space-y-6 mt-6 text-gray-600">
+              {["name", "email", "phone", "password"].map((field, idx) => (
+                <div key={idx}>
+                  <p className="text-lightblack poppins-bold capitalize">Your {field}</p>
+                  <div className="flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center">
+                    {editingField !== field ? (
+                      <>
+                        <p className="text-lightblack poppins-regular break-all">
+                          {user[field === "name" ? "username" : field]}
+                        </p>
+                        <button
+                          type="button"
+                          className="text-brown hover:text-yellow poppins-bold"
+                          onClick={() => handleFieldEdit(field)}
+                        >
+                          {field === "password" ? "Change" : "Edit"}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <input
+                          type={field === "email" ? "email" : "text"}
+                          name={field}
+                          value={updatedData[field]}
+                          onChange={handleInputChange}
+                          className="border border-gray-300 px-3 py-2 rounded w-full max-w-sm"
+                        />
+                        <button
+                          type="button"
+                          className="px-4 py-2 bg-yellow-500 text-white rounded"
+                          onClick={() => handleUpdateField(field)}
+                        >
+                          Save
+                        </button>
+                      </>
+                    )}
                   </div>
-                  {/* Email */}
-                  <div>
-                    <div className="space-y-5">
-                      <p className="text-lightblack poppins-bold">Your Email</p>
-                      <div className="flex flex-row poppins-light justify-between">
-                        {editingField !== "email" ? (
-                          <>
-                            <p className="text-lightblack poppins-light">
-                              {user.email}
-                            </p>
-                            <a
-                              className="hover:text-yellow text-brown font-bold"
-                              href="#"
-                              onClick={() => handleFieldEdit("email")}
-                            >
-                              Edit
-                            </a>
-                          </>
-                        ) : (
-                          <>
-                            <input
-                              type="email"
-                              name="email"
-                              value={updatedData.email}
-                              onChange={handleInputChange}
-                              className="text-lightblack poppins-regular"
-                            />
-                            <button
-                              type="button"
-                              className="px-4 py-2 bg-yellow-500 text-yellow rounded-md"
-                              onClick={() => handleUpdateField("email")}
-                            >
-                              Save
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    <div className="w-full border text-sm border-lin"></div>
-                  </div>
-                  {/* Phone */}
-                  <div>
-                    <div className="space-y-5">
-                      <p className="text-lightblack poppins-bold">
-                        Phone Number
-                      </p>
-                      <div className="flex flex-row poppins-light justify-between">
-                        {editingField !== "phone" ? (
-                          <>
-                            <p className="text-lightblack">{user.phone}</p>
-                            <a
-                              className="hover:text-yellow text-brown font-bold"
-                              href="#"
-                              onClick={() => handleFieldEdit("phone")}
-                            >
-                              Change
-                            </a>
-                          </>
-                        ) : (
-                          <>
-                            <input
-                              type="text"
-                              name="phone"
-                              value={updatedData.phone}
-                              onChange={handleInputChange}
-                              className="text-lightblack poppins-regular"
-                            />
-                            <button
-                              type="button"
-                              className="px-4 py-2 bg-yellow-500 text-yellow rounded-md"
-                              onClick={() => handleUpdateField("phone")}
-                            >
-                              Save
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    <div className="w-full border text-sm border-lin"></div>
-                  </div>
-                  {/* password */}
-                  <div>
-                    <div className="space-y-5">
-                      <p className="text-lightblack poppins-bold">
-                        Password
-                      </p>
-                      <div className="flex flex-row poppins-light justify-between">
-                        {editingField !== "password" ? (
-                          <>
-                            <p className="text-lightblack">{user.password}</p>
-                            <a
-                              className="hover:text-yellow text-brown font-bold"
-                              href="#"
-                              onClick={() => handleFieldEdit("password")}
-                            >
-                              Change
-                            </a>
-                          </>
-                        ) : (
-                          <>
-                            <input
-                              type="text"
-                              name="phone"
-                              value={updatedData.password}
-                              onChange={handleInputChange}
-                              className="text-lightblack poppins-regular"
-                            />
-                            <button
-                              type="button"
-                              className="px-4 py-2 bg-yellow-500 text-yellow rounded-md"
-                              onClick={() => handleUpdateField("password")}
-                            >
-                              Save
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    <div className="w-full border text-sm border-lin"></div>
-                  </div>
+                  <div className="w-full border border-lin mt-4"></div>
                 </div>
-              </ol>
-            </div>
+              ))}
+            </ol>
           </form>
 
-          {/* Address Text */}
-          <div className="flex flex-row justify-between">
-            <p className="text-base poppins-bold lg:text-xl text-brown">
-              Parent
-            </p>
+          <div className="flex justify-between items-center mt-8">
+            <p className="text-base lg:text-xl poppins-bold text-brown">Parent</p>
           </div>
 
-          {/* Cards Section */}
-          {/* Cards Section */}
-          <div className="flex flex-wrap lg:p-5">
+          <div className="flex flex-wrap p-2 lg:p-5">
             <div key={user._id} className="w-full md:w-1/2 p-3">
-              <div className="flex flex-col space-y-5 bg-white rounded-xl p-5 shadow-lg w-[25vw]">
-                <div className="space-y-5">
-                  {/* Display user data dynamically from the fetched 'user' object */}
-                  <p className="text-lightblack poppins-bold">
-                    {user.username}
-                  </p>
-                  <p className="text-lightblack poppins-bold">{user.email}</p>
-                  <p className="text-lightblack poppins-bold">{user.phone}</p>
-
-                  {/* <div className="flex flex-row space-x-5">
-                    <button
-                      className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2"
-                      onClick={handleHomeClick}
-                    >
-                      Home
-                    </button>
-                    <button className="text-sm lg:text-base poppins-light border border-lin rounded-lg px-3 py-2">
-                      Default billing address
-                    </button>
-                  </div> */}
-
-                  {/* <div className="flex flex-row space-x-5">
-                    <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
-                      Remove
-                    </a>
-                    <a className="text-sm lg:text-base px-3 py-2 poppins-bold cursor-pointer">
-                      Edit
-                    </a>
-                  </div> */}
-                </div>
+              <div className="flex flex-col space-y-4 bg-white rounded-xl p-5 shadow-lg w-full">
+                <p className="text-lightblack poppins-bold">{user.username}</p>
+                <p className="text-lightblack poppins-bold">{user.email}</p>
+                <p className="text-lightblack poppins-bold">{user.phone}</p>
               </div>
             </div>
           </div>
-
-          
         </div>
       </div>
     </div>

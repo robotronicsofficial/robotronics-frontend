@@ -53,7 +53,20 @@ const courses = [
 
 const Robogeniusmaincourses = () => {
   const [startIndex, setStartIndex] = useState(0);
-  const visibleCourses = 3; // Number of courses shown at a time
+  const [visibleCourses, setVisibleCourses] = useState(
+    window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3
+  );
+
+  // Handle window resize
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', () => {
+      const newVisibleCourses = window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+      if (newVisibleCourses !== visibleCourses) {
+        setVisibleCourses(newVisibleCourses);
+        setStartIndex(0); // Reset to first course when changing viewport
+      }
+    });
+  }
 
   const prevCourse = () => {
     setStartIndex((prevIndex) =>
@@ -68,55 +81,56 @@ const Robogeniusmaincourses = () => {
   };
 
   return (
-    <div className="relative bg-[#ebe5e2] py-4 px-40 ">
-      <div className="mx-4 ">
-        <h1 className="text-4xl poppins-medium text-brown text-center w-full  py-8">
+    <div className="relative bg-[#ebe5e2] py-4 px-4 md:px-20 lg:px-40">
+      <div className="mx-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl poppins-medium text-brown text-center w-full py-4 md:py-8">
           Courses Included in RoboGenius Program
         </h1>
       </div>
-      {/* Left Button */}
+      
+      {/* Left Button - Hidden on mobile */}
       <button
         onClick={prevCourse}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white text-black p-3 rounded-full shadow-md hover:bg-gray-300 transition mx-24"
+        className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 bg-white text-black p-3 rounded-full shadow-md hover:bg-gray-300 transition mx-4 md:mx-12 lg:mx-24"
       >
         <FaCircleArrowLeft />
       </button>
 
       {/* Courses Container */}
-      <div className="flex justify-center gap-6 overflow-hidden">
+      <div className="flex justify-center gap-4 md:gap-6 overflow-hidden">
         {courses
           .slice(startIndex, startIndex + visibleCourses)
           .map((course) => (
             <div
               key={course.id}
-              className="w-full  sm:w-1/2 lg:w-1/3 px-4 mb-2 p-6"
+              className="w-full max-w-xs sm:max-w-none sm:w-1/2 lg:w-1/3 px-2 sm:px-4 mb-2 p-2 sm:p-6"
             >
-              <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff] ">
+              <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff]">
                 <img className="w-full" src={course.image} alt="Course" />
-                <div className="lg:px-6 py-2 flex-grow">
-                  <div className="lg:flex flex-row mb-2 flex-wrap justify-between my-3">
-                    <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base">
+                <div className="px-4 lg:px-6 py-2 flex-grow">
+                  <div className="flex flex-row mb-2 flex-wrap justify-between my-3">
+                    <p className="text-gray-700 text-wrap text-center px-2 sm:px-4 py-1 rounded-full bg-[#efeff2] text-sm sm:text-base">
                       {course.category}
                     </p>
                     <div className="flex items-center">
                       <FaStar className="text-yellow" />
-                      <p className="text-gray-700 poppins-light text-base ml-2">
+                      <p className="text-gray-700 poppins-light text-sm sm:text-base ml-2">
                         ({course.reviews} Reviews)
                       </p>
                     </div>
                   </div>
 
-                  <div className="font-bold text-xl p-2 poppins-bold text-left text-wrap ">
+                  <div className="font-bold text-lg sm:text-xl p-2 poppins-bold text-left text-wrap">
                     {course.title}
                   </div>
                 </div>
-                <div className="px-8 mb-4 flex gap-2 py-4">
-                  <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
+                <div className="px-4 sm:px-8 mb-4 flex flex-col sm:flex-row gap-2 py-4">
+                  <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
                     <span>View Detail</span>
                     <FaArrowDown className="text-xs -rotate-90" />
                   </button>
 
-                  <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
+                  <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
                     <span>Activate Course</span>
                   </button>
                 </div>
@@ -125,13 +139,29 @@ const Robogeniusmaincourses = () => {
           ))}
       </div>
 
-      {/* Right Button */}
+      {/* Right Button - Hidden on mobile */}
       <button
         onClick={nextCourse}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white text-black p-3 rounded-full shadow-md hover:bg-gray-300 transition mr-24"
+        className="hidden sm:block absolute right-0 top-1/2 transform -translate-y-1/2 bg-white text-black p-3 rounded-full shadow-md hover:bg-gray-300 transition mx-4 md:mx-12 lg:mx-24"
       >
         <FaCircleArrowRight />
       </button>
+
+      {/* Mobile navigation buttons */}
+      <div className="sm:hidden flex justify-center gap-4 mt-4">
+        <button
+          onClick={prevCourse}
+          className="bg-white text-black p-2 rounded-full shadow-md hover:bg-gray-300 transition"
+        >
+          <FaCircleArrowLeft />
+        </button>
+        <button
+          onClick={nextCourse}
+          className="bg-white text-black p-2 rounded-full shadow-md hover:bg-gray-300 transition"
+        >
+          <FaCircleArrowRight />
+        </button>
+      </div>
     </div>
   );
 };
