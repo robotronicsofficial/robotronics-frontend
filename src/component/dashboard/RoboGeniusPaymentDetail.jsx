@@ -27,7 +27,7 @@ const RoboGeniusPaymentDetail = () => {
     // Add form submission logic here
   };
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col md:flex-row bg-[#ebe5e2]">
+    <div className="bg-gray-100 min-h-screen flex flex-col md:flex-row bg-[#ebe5e2]  pt-44 md:pt-2 px-2 md:px-20 ">
       {/* Sidebar */}
       <div className="w-full md:w-1/4">
         <LeftNav />
@@ -36,25 +36,22 @@ const RoboGeniusPaymentDetail = () => {
       {/* Invoice Section */}
       <div className="w-full md:w-3/4 p-4">
         <h1 className="text-3xl font-bold mb-12">Edit Payment Details</h1>
-        <div className="flex flex-col space-y-5 bg-white rounded-xl p-5 shadow-lg w-[25vw] mb-14">
-          <div className="space-y-8 px-6 py-4">
-            {/* Display user data dynamically from the fetched 'user' object */}
-            <div className="flex items-center gap-6">
-              {/* <FaUserCircle className="text-4xl" /> */}
-
-              <p className="text-xl font-medium tracking-widest">
-                **** **** **** 8976
-              </p>
-            </div>
-            <div className="flex gap-4 text-lg text-gray-600 mt-2">
-              <span>VALID THRU</span>
-              <span>01/29</span>
-              <span>CVV</span>
-              <span>**5</span>
-            </div>
-            <p className="font-semibold text-lg mt-4">Parent Name</p>
-          </div>
-        </div>
+        <div className="flex flex-col space-y-4 sm:space-y-5 bg-white rounded-xl p-4 sm:p-5 shadow-lg w-full sm:w-[70vw] md:w-[50vw] lg:w-[35vw] xl:w-[25vw] mb-8 sm:mb-10 md:mb-14">
+    <div className="space-y-6 px-4 sm:px-6 py-3 sm:py-4">
+      <div className="flex items-center gap-4 sm:gap-6">
+        <p className="text-lg sm:text-xl md:text-xl font-medium tracking-wider sm:tracking-widest">
+          **** **** **** 8976
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-3 sm:gap-4 text-base sm:text-lg text-gray-600">
+        <span>VALID THRU</span>
+        <span>01/29</span>
+        <span>CVV</span>
+        <span>**5</span>
+      </div>
+      <p className="font-semibold text-base sm:text-lg mt-3 sm:mt-4">Parent Name</p>
+    </div>
+  </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* First Name */}
           <div>

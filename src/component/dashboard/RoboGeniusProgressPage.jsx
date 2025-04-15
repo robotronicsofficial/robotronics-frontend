@@ -5,8 +5,10 @@ import RoboGeniusProgreeDetailPage from './RoboGeniusProgreeDetailPage'
 
 const RoboGeniusProgressPage = () => {
   return (
-    <div>
+    <div >
+      <div className='px-4 md:px-20'>
       <Intro/>
+      </div>
       <RoboGeniusProgreeDetailPage/>
     </div>
   )

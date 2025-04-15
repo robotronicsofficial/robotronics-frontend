@@ -5,7 +5,9 @@ import RoboGeniusPaymentDetail from "../../component/dashboard/RoboGeniusPayment
 const PaymentDetail = () => {
   return (
     <div>
+      <div className="px-4 md:px-20 bg-[#ebe5e2] ">
       <Intro />
+      </div>
       <RoboGeniusPaymentDetail />
     </div>
   );

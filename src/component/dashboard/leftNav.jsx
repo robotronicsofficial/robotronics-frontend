@@ -1,15 +1,7 @@
-import {
-  
-  // FaHeart,
-  FaHeadphones,
-  FaSignOutAlt,
-} from "react-icons/fa";
+import { FaHeadphones, FaSignOutAlt, FaUser, FaBox } from "react-icons/fa";
 import { MdOutlinePayment } from "react-icons/md";
-import { RiArrowDropDownLine } from "react-icons/ri";
+import { RiArrowDropDownLine, RiRobot3Fill } from "react-icons/ri";
 import { useState } from "react";
-import { RiRobot3Fill } from "react-icons/ri";
-import { FaUser } from "react-icons/fa";
-import { FaBox } from "react-icons/fa";
 
 const LeftNav = () => {
   const user = { userName: "Arslan" };
@@ -28,8 +20,8 @@ const LeftNav = () => {
       icon: <FaBox className="text-brown" />,
       dropdownIcon: <RiArrowDropDownLine className="text-3xl text-brown" />,
       subMenu: [
-        { name: "\u2022 My Products", href: "/International/myRobot" },
-        { name: "\u2022 My Courses", href: "/Dashboard/MyCoursesPage" },
+        { name: "• My Products", href: "/International/myRobot" },
+        { name: "• My Courses", href: "/Dashboard/MyCoursesPage" },
       ],
     },
     {
@@ -37,8 +29,8 @@ const LeftNav = () => {
       icon: <RiRobot3Fill className="text-brown" />,
       dropdownIcon: <RiArrowDropDownLine className="text-3xl text-brown" />,
       subMenu: [
-        { name: "\u2022 Child Profile", href: "/Dashboard/ChildProfile" },
-        { name: "\u2022 Progress & Certificate", href: "/Dashboard/ProgressCertificate" },
+        { name: "• Child Profile", href: "/Dashboard/ChildProfile" },
+        { name: "• Progress & Certificate", href: "/Dashboard/ProgressCertificate" },
       ],
     },
     {
@@ -46,8 +38,8 @@ const LeftNav = () => {
       icon: <MdOutlinePayment className="text-brown" />,
       dropdownIcon: <RiArrowDropDownLine className="text-3xl text-brown" />,
       subMenu: [
-        { name: "\u2022 Payment History", href: "/Dashboard/PaymentHistory" },
-        { name: "\u2022 Payment Details", href: "/Dashboard/PaymentDetails" },
+        { name: "• Payment History", href: "/Dashboard/PaymentHistory" },
+        { name: "• Payment Details", href: "/Dashboard/PaymentDetails" },
       ],
     },
     { name: "Support", href: "/404", icon: <FaHeadphones className="text-brown" /> },
@@ -55,33 +47,37 @@ const LeftNav = () => {
   ];
 
   return (
-    <div className="flex flex-col pl-20 w-[24vw]">
-      <div className="lg:mb-4 lg:py-5 py-2 space-y-5">
-        <div className="flex flex-row space-x-2">
-          <div className="border-l-4 border-gold rounded-2xl"></div>
-          <h1 className="lg:text-3xl text-xl poppins-bold">Hello {user.userName}</h1>
-        </div>
+    <div className="flex flex-col w-full lg:w-[24vw] px-6 py-4  md:mt-2">
+      <div className="mb-4 space-y-2">
+        <h1 className="text-xl lg:text-2xl poppins-bold">Hello {user.userName}</h1>
         <p className="text-lightblack poppins-light">Welcome to your Account</p>
       </div>
 
       <nav>
-        <ul className="space-y-5">
+        <ul className="space-y-4">
           {menuItems.map((item, index) => (
-            <li key={index} className="relative items-center">
+            <li key={index}>
               <div
-                className={`lg:px-14 px-5 flex items-center rounded-e-xl lg:space-x-5 text-brown hover:text-black hover:bg-gold hover:border-l-4 border-black ${activeIndex === index ? "bg-gold text-brown" : ""}`}
+                className={`flex items-center justify-between px-4 py-2 rounded-lg text-brown hover:bg-gold ${
+                  activeIndex === index ? "bg-gold" : ""
+                }`}
                 onClick={() => (item.subMenu ? toggleSubMenu(index) : setActiveIndex(index))}
               >
-                <div className="text-xl hover:text-black">{item.icon}</div>
-                <a href={item.href} className="lg:text-2xl text-xl font-medium text-lightblack">
-                  {item.name}
-                </a>
-                {item.subMenu && <span>{item.dropdownIcon}</span>}
+                <div className="flex items-center space-x-3">
+                  {item.icon}
+                  <a href={item.href} className="text-base lg:text-xl font-medium text-lightblack">
+                    {item.name}
+                  </a>
+                </div>
+                {item.subMenu && item.dropdownIcon}
               </div>
               {item.subMenu && showSubMenu[index] && (
-                <ul className="lg:pl-20 pt-2 space-y-2">
+                <ul className="pl-6 pt-2 space-y-1">
                   {item.subMenu.map((subItem, subIndex) => (
-                    <li key={subIndex} className="rounded-e-xl text-brown hover:text-black hover:bg-gold hover:border-l-4 border-black">
+                    <li
+                      key={subIndex}
+                      className="text-brown hover:text-black hover:bg-gold rounded-md px-2 py-1"
+                    >
                       <a href={subItem.href}>{subItem.name}</a>
                     </li>
                   ))}
