@@ -26,7 +26,7 @@ const Footer = () => {
   return (
     <div className="footer flex flex-col max-w-full ">
       {/* robotronics */}
-      <div className="flex lg:text-center p-10 ">
+      <div className="flex items-center lg:text-center p-10 ">
         {/* up button */}
         <div className="lg:w-1/4 md:w-1/3 w-1/2">
           <button

@@ -9,9 +9,9 @@ const RoboGeniusProgreeDetailPage = () => {
   ];
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col md:flex-row bg-[#ebe5e2]">
+    <div className="bg-gray-100 min-h-screen flex flex-col md:flex-row bg-[#ebe5e2] px-4 md:px-20 ">
       {/* Sidebar */}
-      <div className="w-full md:w-1/4">
+      <div className="w-full md:w-1/4 ">
         <LeftNav />
       </div>
 
@@ -20,32 +20,35 @@ const RoboGeniusProgreeDetailPage = () => {
         <h1 className="text-3xl font-bold mb-4">Child Name</h1>
 
         {/* Course Progress Table */}
-        <div className="bg-white p-4 rounded-lg shadow-md mt-14">
-          <h2 className="text-xl font-semibold mb-3">Course Progress</h2>
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="text-left text-gray-700 font-semibold ">
-                <th className="p-3">Course</th>
-                <th className="p-3">Class Completed</th>
-                <th className="p-3">Certificate</th>
-                <th className="p-3">Course Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {courses.map((course, index) => (
-                <tr key={index} className=" text-gray-900">
-                  <td className="p-3">{course.name}</td>
-                  <td className="p-3">{course.completed}</td>
-                  <td className="p-3 flex items-center gap-2">
-                    <button className="hover:text-yellow">download</button>
-                    <FaFilePdf  className="text-yellow"/>
-                  </td>
-                  <td className="p-3">{course.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <div className="bg-white p-4 rounded-lg shadow-md mt-14 overflow-x-auto">
+  <h2 className="text-xl font-semibold mb-3">Course Progress</h2>
+  <table className="w-full min-w-[600px] border-collapse">
+    <thead>
+      <tr className="text-left text-gray-700 font-semibold">
+        <th className="p-3">Course</th>
+        <th className="p-3">Class Completed</th>
+        <th className="p-3">Certificate</th>
+        <th className="p-3">Course Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {courses.map((course, index) => (
+        <tr key={index} className="text-gray-900 border-t">
+          <td className="p-3">{course.name}</td>
+          <td className="p-3">{course.completed}</td>
+          <td className="p-3">
+            <div className="flex items-center gap-2">
+              <button className="hover:text-yellow">download</button>
+              <FaFilePdf className="text-yellow" />
+            </div>
+          </td>
+          <td className="p-3">{course.status}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
       </div>
     </div>
   );

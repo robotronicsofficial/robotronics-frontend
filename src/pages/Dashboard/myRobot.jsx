@@ -35,11 +35,11 @@ const MyRobot = () => {
   return (
     <div className="bg-background min-h-screen"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >
       {/* intro */}
-      <div>
+      <div className="px-4 md:px-20">
         <Intro/>
       </div>
       {/* Product & NavBar */}
-      <div className="lg:flex flex-row">
+      <div className="lg:flex flex-row px-4 md:px-20 pt-40 md:pt-4">
         {/* NavBr */}
         <div className="lg:w-1/3 w-2/3 ">
           <LeftNav />

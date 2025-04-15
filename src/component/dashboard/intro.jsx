@@ -7,12 +7,13 @@ const Intro = () => {
     { name: "Product", href: "/International/myRobot" },
     { name: "Wishlist", href: "/Dashboard/WishList" },
   ];
+
   return (
-    <div className="bg-background pt-44"  >
+    <div className="bg-background pt-44 hidden md:block">
       {/* intro */}
       <div>
         {/* Dynamics-URLS */}
-        <nav className="flex w-1/2 mx-auto bg-gray-100  rounded-lg">
+        <nav className="flex w-1/2 bg-gray-100 rounded-lg px-7 ">
           <ol className="list-reset flex text-gray-600">
             {breadcrumbs.map((breadcrumb, index) => (
               <li key={index} className="flex items-center">
