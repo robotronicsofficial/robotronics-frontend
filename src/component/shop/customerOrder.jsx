@@ -47,13 +47,13 @@ const CustomerOrder = ({ onNext }) => {
   return (
     <div
       className="lg:px-14 px-5 lg:p-8 p-4 lg:space-y-20 space-y-8 "
-      data-aos="fade-left"
+      data-aos="fade-top"
       data-aos-duration="2000"
       data-aos-delay="4000"
     >
       {/* text */}
       <div className="lg:space-y-8 space-y-4">
-        <p className="lg:text-4xl text-2xl poppins-bold">YOUR ORDER</p>
+        <p className="md:text-4xl text-2xl poppins-bold">YOUR ORDER</p>
         <p className="text-sm text-line poppins-regular">
           Review all the products you want to buy
         </p>
@@ -78,44 +78,44 @@ const CustomerOrder = ({ onNext }) => {
 
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
-          <div className="bg-white p-6 rounded-lg shadow-lg transform transition-transform scale-95 animate-fadeIn relative w-[30vw] py-10">
-            {/* Close Button (X) */}
-            <button
-              className="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-xl"
-              onClick={handleClosePopup}
-            >
-              &times;
-            </button>
+         <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg transform transition-transform scale-95 animate-fadeIn relative w-[90vw] sm:w-[70vw] md:w-[50vw] lg:w-[30vw] py-10">
+  {/* Close Button (X) */}
+  <button
+    className="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-xl"
+    onClick={handleClosePopup}
+  >
+    &times;
+  </button>
 
-            {/* Heart Icon */}
-            <div className="flex flex-col  items-center">
-              {/* <FaRegHeart className="text-yellow text-[4vw]" /> */}
+  {/* Heart Icon & Content */}
+  <div className="flex flex-col items-center text-center px-2 sm:px-4">
+    {/* Message */}
+    <p className="text-xl sm:text-2xl lg:text-3xl font-semibold my-4 text-wrap">
+      Are you sure you want to delete this product?
+    </p>
 
-              {/* Message */}
+    <p className="text-sm sm:text-base text-[#807D7E] mt-2 mb-6">
+      This will delete product from the cart
+    </p>
 
-              <p className="text-4xl font-medium-center my-6 text-wrap text-center">Are you sure you want to delete this product?</p>
+    {/* Buttons */}
+    <div className="flex flex-col sm:flex-row gap-4 sm:gap-16">
+      <button
+        className="px-4 py-2 text-red-600 rounded hover:bg-red-200 transition duration-200 w-28"
+        onClick={handleClosePopup}
+      >
+        YES
+      </button>
+      <button
+        className="px-4 py-2 text-green-600 rounded hover:bg-green-200 transition duration-200 w-28"
+        onClick={handleClosePopup}
+      >
+        CANCEL
+      </button>
+    </div>
+  </div>
+</div>
 
-              <p className="text-xl text-[#807D7E] mt-4 mb-6 text-wrap text-center">
-              This will delete product from the cart
-              </p>
-
-              {/* Home Button */}
-              <div className="flex gap-16">
-              <button
-                className="mt-4 px-4 py-2 text-red-600 rounded hover:bg-red-200 transition duration-200 w-24"
-                onClick={handleClosePopup}
-              >
-                YES
-              </button>
-              <button
-                className="mt-4 px-4 py-2 text-green-600 rounded hover:bg-green-200 transition duration-200 w-24"
-                onClick={handleClosePopup}
-              >
-                CANCEL
-              </button>
-              </div>
-            </div>
-          </div>
         </div>
       )}
 
