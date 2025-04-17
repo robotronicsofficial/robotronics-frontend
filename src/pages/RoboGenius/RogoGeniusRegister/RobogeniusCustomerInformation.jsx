@@ -83,8 +83,8 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
   const renderChildForm = (child, index) => {
     return (
       <div key={index} className="w-full">
-        <div className="space-y-5 px-12 py-8">
-          <h1 className="text-4xl poppins-bold text-brown">
+        <div className="space-y-5 px-6 md:px-10 py-4 md:py-8 ">
+          <h1 className="text-2xl md:text-4xl poppins-bold text-brown text-wrap">
             Child {index + 1} Information
           </h1>
         </div>
@@ -267,8 +267,8 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
         <div className="flex flex-col lg:w-4/5">
           {/* Parent Form */}
           <div className="w-full">
-            <div className="space-y-5 px-12 py-8">
-              <h1 className="text-4xl poppins-bold text-brown">
+            <div className="space-y-5 px-6 md:px-10 py-4 md:py-8 ">
+              <h1 className="text-2xl md:text-4xl poppins-bold text-brown text-wrap">
                 Parent Information
               </h1>
             </div>

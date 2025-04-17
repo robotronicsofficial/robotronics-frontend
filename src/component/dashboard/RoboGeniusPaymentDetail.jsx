@@ -34,7 +34,7 @@ const RoboGeniusPaymentDetail = () => {
       </div>
 
       {/* Invoice Section */}
-      <div className="w-full md:w-3/4 p-4">
+      <div className="w-full md:w-3/4 px-6 py-5 md:px-10 ">
         <h1 className="text-3xl font-bold mb-12">Edit Payment Details</h1>
         <div className="flex flex-col space-y-4 sm:space-y-5 bg-white rounded-xl p-4 sm:p-5 shadow-lg w-full sm:w-[70vw] md:w-[50vw] lg:w-[35vw] xl:w-[25vw] mb-8 sm:mb-10 md:mb-14">
     <div className="space-y-6 px-4 sm:px-6 py-3 sm:py-4">
