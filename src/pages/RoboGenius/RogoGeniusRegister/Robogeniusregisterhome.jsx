@@ -3,13 +3,11 @@ import RobogeniusCustomerInfoIntro from './RobogeniusCustomerInfoIntro'
 
 const Robogeniusregisterhome = () => {
   return (
-    <div>
-      <div>
-        <RobogeniusCustomerInfoIntro/>
-        {/* <Footer/> */}
-    </div>
-    </div>
-  )
-}
+    <>
+      <RobogeniusCustomerInfoIntro />
+      {/* <Footer /> */}
+    </>
+  );
+};
 
-export default Robogeniusregisterhome
+export default Robogeniusregisterhome;

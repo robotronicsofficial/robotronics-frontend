@@ -15,7 +15,7 @@ const Robogeniuspaymentcart = () => {
             THIS IS YOUR CART BASED ON WHAT YOU WANTED
           </p>
         </div>
-        <div className="self-center"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <div className=""data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
           <Robogeniuspaymentcustomercart/>
         </div>
       </div>
