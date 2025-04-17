@@ -6,7 +6,6 @@ import ShopShipping from "../shopShipping";
 import shopBag from "../../../assets/add shopping-bag.png";
 import userIcon from "../../../assets/user-circle.png";
 import cardIcon from "../../../assets/credit-card.png";
-import { useSelector } from "react-redux";
 
 // Styled Slider
 const SuccessSlider = styled(Slider)(({ theme }) => ({
@@ -58,7 +57,6 @@ const Step = ({ icon, title, description, isActive, onClick }) => (
 
 const CartsStep = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const { cart } = useSelector((state) => state.cart);
 
   const steps = [
     {
