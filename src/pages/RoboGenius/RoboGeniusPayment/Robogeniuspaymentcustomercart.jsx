@@ -90,7 +90,7 @@ const Robogeniuspaymentcustomercart = () => {
         ))}
       </div>
 
-      <div className="lg:flex flex-row p-5 bg-gray mt-10 bg-green-400">
+      <div className="w-full lg:flex flex-row p-5 bg-gray mt-10 ">
         {/* left */}
         <div
           className="lg:w-2/3"
@@ -101,7 +101,7 @@ const Robogeniuspaymentcustomercart = () => {
           {/* shipping services */}
           <div className="lg:px-10 px-4 space-y-16 mt-8 ">
             <div className="space-y-8">
-              <p className="text-4xl text-brown poppins-bold font-bold">
+              <p className="text-2xl md:text-4xl  text-brown poppins-bold font-bold text-wrap">
                 SUBSCRIPTIONS PAYMENT
               </p>
               <p className="text-sm text-brown poppins-light font-bold">
@@ -115,7 +115,7 @@ const Robogeniuspaymentcustomercart = () => {
                   onChange={() => setIsChecked(!isChecked)}
                   className="mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm text-brown poppins-light pt-2">
+                <span className="text-sm text-brown poppins-light pt-2 text-wrap">
                   I agree that my provided payment method will be charged on a{" "}
                   <strong>monthly basis</strong>.
                 </span>
@@ -123,8 +123,8 @@ const Robogeniuspaymentcustomercart = () => {
             </div>
           </div>
           {/* Payment method */}
-          <div className="lg:p-10 p-4 space-y-5">
-            <p className="text-4xl text-brown font-bold">Payment method</p>
+          <div className="md:p-10 pt-10 px-4 space-y-5 ">
+            <p className="text-2xl md:text-4xl text-brown font-bold">Payment method</p>
             <p className="text-sm text-wrap poppins-light text-brown font-bold">
               You can use all Credit card services. We can accept Visa and
               MasterCard.
@@ -195,7 +195,7 @@ const Robogeniuspaymentcustomercart = () => {
               </div>
             </div>
           </div>
-          <div className="lg:px-10 px-4 space-y-4 lg:pt-20 pt-10 flex">
+          <div className="lg:px-10 px-4 space-y-4  pt-10 flex">
             <div className="lg:flex flex-row ">
               {/* left side */}
               <form className="lg:space-y-8 space-y-4 lg:mr-5">
@@ -306,37 +306,37 @@ const Robogeniuspaymentcustomercart = () => {
 
         <CustomerOrder onNext={handleOpenPopup} />
         {showPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
-            <div className="bg-white p-6 rounded-lg shadow-lg transform transition-transform scale-95 animate-fadeIn relative w-[30vw] py-10">
-              {/* Close Button (X) */}
-              <button
-                className="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-xl"
-                onClick={handleClosePopup}
-              >
-                &times;
-              </button>
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ">
+            <div className="bg-white p-6 rounded-lg shadow-lg transform transition-transform scale-95 animate-fadeIn relative w-[90vw] sm:w-[70vw] md:w-[50vw] lg:w-[30vw] py-10">
+  {/* Close Button (X) */}
+  <button
+    className="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-xl"
+    onClick={handleClosePopup}
+  >
+    &times;
+  </button>
 
-              {/* Heart Icon */}
-              <div className="flex flex-col  items-center">
-                <FaRegHeart className="text-yellow text-[4vw]" />
+  {/* Heart Icon */}
+  <div className="flex flex-col items-center">
+    <FaRegHeart className="text-yellow text-[10vw] sm:text-[6vw] md:text-[4vw]" />
 
-                {/* Message */}
+    {/* Message */}
+    <p className="text-4xl font-medium-center my-8">Thank You</p>
 
-                <p className="text-4xl font-medium-center my-8 ">Thank You</p>
+    <p className="text-xl text-[#807D7E] mt-4 mb-6 text-wrap text-center">
+      You will receive a confirmation email within 24 working hours.
+    </p>
 
-                <p className="text-xl text-[#807D7E] mt-4 mb-6 text-wrap text-center">
-                  You will receive a confirmation email within 24 working hours.
-                </p>
+    {/* Home Button */}
+    <button
+      className="mt-4 px-4 py-2 bg-[#FFA500] text-white rounded hover:bg-[#FF8C00] transition duration-200"
+      onClick={() => navigate("/Dashboard/userInfo")}
+    >
+      HOME
+    </button>
+  </div>
+</div>
 
-                {/* Home Button */}
-                <button
-                  className="mt-4 px-4 py-2 bg-[#FFA500] text-white rounded hover:bg-[#FF8C00] transition duration-200"
-                  onClick={() => navigate("/Dashboard/userInfo")}
-                >
-                  HOME
-                </button>
-              </div>
-            </div>
           </div>
         )}
       </div>

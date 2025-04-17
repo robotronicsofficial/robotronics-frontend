@@ -67,7 +67,7 @@ const UserInfoIntro = () => {
           <LeftNav />
         </div>
 
-        <div className="w-full px-4 py-6 lg:px-10">
+        <div className="w-full px-6 py-6 md:px-10">
           <div>
             <p className="text-xl lg:text-2xl poppins-bold mb-2">My Info</p>
             <p className="text-base lg:text-xl poppins-light">Contact Details</p>

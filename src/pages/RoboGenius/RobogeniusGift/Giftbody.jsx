@@ -27,13 +27,13 @@ const Giftbody = ({ onNext }) => {
 
   return (
     <div>
-      <div className="lg:flex flex-row bg-gray">
-        <div className="flex flex-col lg:w-4/5 ">
+      <div className="lg:flex flex-row bg-gray px-4 md:px-0">
+        <div className="flex flex-col md:w-4/5 ">
           {/* left */}
-          <div className="w-full">
+          <div className="w-full ">
             {/* Header */}
-            <div className="space-y-5 py-8">
-              <h1 className="lg:text-4xl text-2xl poppins-bold text-brown px-20">
+            <div className="space-y-5 py-8 ">
+              <h1 className="md:text-4xl text-2xl poppins-bold text-brown px-6 md:px-20">
                 Recipient’s Information
               </h1>
             </div>
