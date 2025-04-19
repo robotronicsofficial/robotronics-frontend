@@ -2,9 +2,12 @@ import { FaHeadphones, FaSignOutAlt, FaUser, FaBox } from "react-icons/fa";
 import { MdOutlinePayment } from "react-icons/md";
 import { RiArrowDropDownLine, RiRobot3Fill } from "react-icons/ri";
 import { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 const LeftNav = () => {
-  const user = { userName: "Arslan" };
+  const { currentUser} = useAuth();
+  // console.log("Current User:", currentUser);
+  // const user = { userName: "Arslan" };
   const [activeIndex, setActiveIndex] = useState(null);
   const [showSubMenu, setShowSubMenu] = useState({});
 
@@ -49,7 +52,7 @@ const LeftNav = () => {
   return (
     <div className="flex flex-col w-full lg:w-[24vw] px-6 py-4  md:mt-2">
       <div className="mb-4 space-y-2">
-        <h1 className="text-xl lg:text-2xl poppins-bold">Hello {user.userName}</h1>
+        <h1 className="text-xl lg:text-2xl poppins-bold">Hello {currentUser.firstName}</h1>
         <p className="text-lightblack poppins-light">Welcome to your Account</p>
       </div>
 

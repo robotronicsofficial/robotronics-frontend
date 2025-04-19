@@ -6,7 +6,7 @@ import RoboGeniusProgreeDetailPage from './RoboGeniusProgreeDetailPage'
 const RoboGeniusProgressPage = () => {
   return (
     <div >
-      <div className='px-4 md:px-20'>
+      <div className='px-4 md:px-20  bg-[#ebe5e2]'>
       <Intro/>
       </div>
       <RoboGeniusProgreeDetailPage/>
