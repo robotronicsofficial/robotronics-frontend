@@ -31,7 +31,7 @@ const QuickContact = () => {
 
     // Simulate form submission
     try {
-      const response = await fetch("http://localhost:8080/Contact", {
+      const response = await fetch("http://localhost:8080/api/quickContact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
