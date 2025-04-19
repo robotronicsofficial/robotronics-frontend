@@ -142,7 +142,7 @@ export default function Header() {
               {currentUser ? (
                 <>
                   <span
-                    className="text-black poppins-light capitalize cursor-pointer w-[10vw] hidden lg:block bg-yellow text-right"
+                    className="text-black poppins-light capitalize cursor-pointer w-[10vw] hidden lg:block text-right"
                     onClick={() => {
                       navigate("/Dashboard/userInfo");
                     }}

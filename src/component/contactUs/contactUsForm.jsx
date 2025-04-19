@@ -9,45 +9,73 @@ import {
 } from "react-icons/fa";
 import { TfiEmail } from "react-icons/tfi";
 import { FaLocationDot } from "react-icons/fa6";
-import { useState } from "react"; // import useState
+import { useState } from "react";
 
 const ContactUsForm = () => {
-  // State to store form data
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
+    userType: "", // 'school' or 'parent'
     schoolName: "",
     address: "",
     message: "",
+    selectedServices: [], // array to store selected services
   });
 
-  // State to store the status of form submission
   const [status, setStatus] = useState(null);
 
-  // Handle input field changes
+  // Define services for each user type
+  const services = {
+    school: [
+      "Robotics Curriculum Integration",
+      "Teacher Training Program",
+      "After-School Robotics Club",
+      "STEM Lab Setup Consultation",
+      "Competition Preparation",
+    ],
+    parent: [
+      "Weekend Robotics Classes",
+      "Holiday Robotics Camps",
+      "One-on-One Tutoring",
+      "Robotics Kit Purchase Guidance",
+      "Competition Registration Assistance",
+    ],
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
+      // Reset selected services when user type changes
+      ...(name === "userType" && { selectedServices: [] }),
     });
   };
 
-  // Handle form submission
+  const handleServiceToggle = (service) => {
+    setFormData((prevData) => {
+      const newSelectedServices = prevData.selectedServices.includes(service)
+        ? prevData.selectedServices.filter((s) => s !== service)
+        : [...prevData.selectedServices, service];
+      
+      return {
+        ...prevData,
+        selectedServices: newSelectedServices,
+      };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "http://localhost:8080/contact", // replace with your actual endpoint
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("http://localhost:8080/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       const result = await response.json();
 
@@ -57,9 +85,11 @@ const ContactUsForm = () => {
           name: "",
           phone: "",
           email: "",
+          userType: "",
           schoolName: "",
           address: "",
           message: "",
+          selectedServices: [],
         });
       } else {
         setStatus(`Error: ${result.message}`);
@@ -196,24 +226,49 @@ const ContactUsForm = () => {
               </label>
             </div>
 
-            {/* School Name */}
+            {/* User Type Dropdown */}
             <div className="relative z-0 w-full mb-5 group">
-              <input
-                type="text"
-                name="schoolName"
-                id="schoolName"
-                value={formData.schoolName}
+              <select
+                name="userType"
+                id="userType"
+                value={formData.userType}
                 onChange={handleChange}
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-              />
-              <label
-                htmlFor="schoolName"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                required
               >
-                School Name
+                <option value="">Select an option</option>
+                <option value="school">School</option>
+                <option value="parent">Parent</option>
+              </select>
+              <label
+                htmlFor="userType"
+                className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              >
+                I am a...
               </label>
             </div>
+
+            {/* School Name (only shown when userType is school) */}
+            {formData.userType === "school" && (
+              <div className="relative z-0 w-full mb-5 group">
+                <input
+                  type="text"
+                  name="schoolName"
+                  id="schoolName"
+                  value={formData.schoolName}
+                  onChange={handleChange}
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  htmlFor="schoolName"
+                  className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >
+                  School Name
+                </label>
+              </div>
+            )}
 
             {/* Address */}
             <div className="relative z-0 w-full mb-5 group">
@@ -225,14 +280,40 @@ const ContactUsForm = () => {
                 onChange={handleChange}
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
+                required
               />
               <label
                 htmlFor="address"
                 className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
-                Address
+                {formData.userType === "school" ? "School Address" : "Your Address"}
               </label>
             </div>
+
+            {/* Services Section (only shown when userType is selected) */}
+            {formData.userType && (
+              <div className="mb-5">
+                <label className="block text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  Services I'm interested in:
+                </label>
+                <div className="space-y-2">
+                  {services[formData.userType].map((service) => (
+                    <div key={service} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={`service-${service}`}
+                        checked={formData.selectedServices.includes(service)}
+                        onChange={() => handleServiceToggle(service)}
+                        className="mr-2"
+                      />
+                      <label htmlFor={`service-${service}`} className="text-sm">
+                        {service}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Message */}
             <div className="relative z-0 w-full mb-5 group">
@@ -252,6 +333,13 @@ const ContactUsForm = () => {
                 Message
               </label>
             </div>
+
+            {/* Status message */}
+            {status && (
+              <div className={`mb-5 p-3 rounded ${status.includes("Error") ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
+                {status}
+              </div>
+            )}
 
             {/* Submit button */}
             <div className="text-end p-5" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
