@@ -86,7 +86,7 @@ const ShopCartproductList = ({ onNext }) => {
               <div className="flex flex-col sm:flex-row gap-6">
                 <div className="w-[15vw] h-[15vw] overflow-hidden">
                   <img
-                    src={`http://localhost:8080/${product.images[0]}`}
+                    src={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`}
                     alt={product.name}
                     width={200}
                     height={200}
