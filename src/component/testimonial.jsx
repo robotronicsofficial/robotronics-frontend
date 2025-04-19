@@ -22,7 +22,7 @@ const Testimonial = () => {
         <p className="text-brown lg:text-6xl text-2xl poppins-semibold m-5 justify-center items-center "data-aos="fade-down" data-aos-duration="2000" >Are my clients happy?</p>
         </div>
       {/* layer 2 */}
-      <div className="  flex w-full justify-between lg:gap-5 gap-2 p-2 lg:p-5">
+      <div className="  flex w-full justify-between lg:gap-5 gap-2 p-2 lg:p-5 ">
         {/* block 1 */}
         <div className="flex-1 lg:space-y-4 space-y-2 "data-aos="fade-up" data-aos-duration="2000"> 
         {/* div 1 */}

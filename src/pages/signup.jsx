@@ -196,13 +196,13 @@ const Signup = () => {
           ></div>
         </div>
         <div
-          className="flex flex-col bg-gray rounded-lg lg:p-14 p-5"
+          className="flex flex-col bg-gray rounded-lg lg:p-14 p-5 mt-32 md:mt-0"
           data-aos="fade-up"
           data-aos-duration="2000"
           data-aos-delay="4000"
         >
           <div className="lg:space-y-3 space-y-1">
-            <p className="lg:text-3xl text-2xl font-bold lg:pb-5 pb-2 poppins-bold ">
+            <p className="md:text-3xl text-2xl font-bold lg:pb-5 pb-2 poppins-bold ">
               Sign Up Now
             </p>
             <div className="lg:flex flex-row lg:space-x-2 ">
@@ -240,27 +240,33 @@ const Signup = () => {
             <div className="flex flex-col">
               <p className="text-sm poppins-light">Phone number</p>
               <div className="relative" ref={phoneInputRef}>
-                <PhoneInput
-                  international
-                  defaultCountry="PK"
-                  value={formData.phoneNumber}
-                  onChange={handlePhoneChange}
-                  inputProps={{
-                    className: "border border-line rounded-xl p-2 bg-gray w-full focus:outline-none focus:ring-0 focus:border-line",
-                    autoComplete: "tel",
-                    type: "tel"
-                  }}
-                  countrySelectProps={{
-                    className: "absolute left-0 top-0 h-full flex items-center pl-2"
-                  }}
-                  style={{
-                    '--PhoneInputCountryFlag-height': '1.5rem',
-                    '--PhoneInputCountryFlag-borderColor': 'transparent',
-                    '--PhoneInputCountrySelectArrow-color': '#your-text-color',
-                    '--PhoneInputCountrySelectArrow-opacity': '1',
-                  }}
-                />
-              </div>
+  <PhoneInput
+    international
+    defaultCountry="PK"
+    value={formData.phoneNumber}
+    onChange={handlePhoneChange}
+    inputProps={{
+      className: "border border-line rounded-xl p-2 pl-14 bg-gray w-full focus:outline-none focus:ring-0 focus:border-line text-base",
+      autoComplete: "tel",
+      type: "tel"
+    }}
+    countrySelectProps={{
+      className: "absolute left-0 top-0 h-full flex items-center pl-2 touch-manipulation",
+      dropdownClass: "absolute z-50 max-h-60 overflow-y-auto bg-white shadow-lg border border-gray-200 rounded-md w-60 max-w-full mt-1",
+      buttonClass: "flex items-center justify-center h-full px-2 focus:outline-none"
+    }}
+    containerClass="relative w-full"
+    style={{
+      '--PhoneInputCountryFlag-height': '1.25rem',
+      '--PhoneInputCountryFlag-width': 'auto',
+      '--PhoneInputCountryFlag-borderColor': 'transparent',
+      '--PhoneInputCountrySelectArrow-color': '#555555',
+      '--PhoneInputCountrySelectArrow-opacity': '1',
+      '--PhoneInputCountrySelectArrow-width': '0.5em',
+      '--PhoneInputCountrySelectArrow-marginLeft': '0.5em',
+    }}
+  />
+</div>
             </div>
 
             <div className="flex flex-col">
@@ -354,7 +360,7 @@ const Signup = () => {
                 />
                 <label
                   htmlFor="terms-checkbox"
-                  className="ms-2 text-sm font-medium text-gray-900"
+                  className="ms-2 text-sm font-medium text-gray-900 text-wrap"
                 >
                   By creating an account, I agree to our{" "}
                   <a href="#" className="underline underline-offset-4">
