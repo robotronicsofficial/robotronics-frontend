@@ -20,12 +20,12 @@ const Iaboutntro = () => {
     <>
       <div className="abouthero relative w-full" id="abouthero">
         <div className="overflow-hidden" >
-        <div className="flex justify-between h-full w-full p-10  bg-black bg-opacity-50">
+        <div className="flex justify-between h-full w-full p-10   bg-black bg-opacity-70 md:bg-opacity-50">
             {/* text */}
-            <div className="space-y-5 pt-48 lg:w-1/2 ">
+            <div className="space-y-5 pt-40 md:pt-48 lg:w-1/2 md:ml-10">
               {/* Text */}
               <div className="space-y-2"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
-                <div className="flex flex-row space-x-2">
+                <div className="flex flex-row space-x-2 ">
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-thin">WELCOME TO THE </h1>
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-extralight">WORLD OF</h1>
                 </div>

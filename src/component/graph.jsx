@@ -30,8 +30,8 @@ ChartJS.register(
 
 // Subcomponents
 const Header = () => (
-  <div className="flex space-x-5 text-center bg-gray">
-    <div className="md:ml-20 p-5 hidden sm:block">
+  <div className="flex space-x-5 text-center bg-gray mt-8">
+    <div className="md:ml-20 p-5 hidden sm:block ">
       <img
         className="w-40 h-60"
         src={logo}
@@ -39,7 +39,7 @@ const Header = () => (
         aria-label="Company Logo"
       />
     </div>
-    <div className="mt-14" data-aos="fade-up">
+    <div className="" data-aos="fade-up">
       <p
         className="md:text-5xl text-xl text-wrap text-left poppins-bold text-brown px-8"
         style={{ lineHeight: "1.3" }}
@@ -48,15 +48,20 @@ const Header = () => (
         <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-yellow">
           Robotics & STEM,
         </span>
-        <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-brown" >we empower <br></br> young minds to think critically, solve problems,
-        and turn imagination into innovation.</span>
+        <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-brown">
+          we empower <br></br> young minds to think critically, solve problems,
+          and turn imagination into innovation.
+        </span>
       </p>
     </div>
   </div>
 );
 
 const InfoSection = () => (
-  <div className="w-2/3 md:mt-8 p-5 md:ml-20" data-aos="fade-up">
+  <div
+    className=" md:mt-8 p-5  px-14 md:px-10  md:ml-20 w-full"
+    data-aos="fade-up"
+  >
     <div className="md:text-3xl text-xl text-wrap text-left poppins-regular text-brown">
       By 2024,
       <span className="md:text-5xl text-2xl text-wrap text-left poppins-semibold text-brown">
@@ -70,26 +75,35 @@ const InfoSection = () => (
     </div>
 
     <div className="relative flex  w-full">
-        <div className="flex flex-col w-[14vw] h-[10vh] mt-36">
+      <div className="hidden md:flex flex-col w-[14vw] h-[10vh] mt-36">
         <div className="flex items-center">
-            <img src={circleg} alt="Progress" className="mr-2" aria-label="Progress Circle" />
-            <span>No. of Students</span>
-        </div>
-        <div className="flex items-center">
-            <img src={circleb} alt="Target" className="mr-2" aria-label="Target Circle" />
-            <span>No. of Schools</span>
-        </div>
-        </div>
-        <div className="w-[24vw] ">
-        <img
-            data-aos="fade-up"
-            src={robot}
-            alt="Robot illustration"
-            aria-label="Robot Illustration"
+          <img
+            src={circleg}
+            alt="Progress"
+            className="mr-2"
+            aria-label="Progress Circle"
           />
+          <span>No. of Students</span>
         </div>
+        <div className="flex items-center">
+          <img
+            src={circleb}
+            alt="Target"
+            className="mr-2"
+            aria-label="Target Circle"
+          />
+          <span>No. of Schools</span>
+        </div>
+      </div>
+      <div className="w-[24vw] ">
+        <img
+          data-aos="fade-up"
+          src={robot}
+          alt="Robot illustration"
+          aria-label="Robot Illustration"
+        />
+      </div>
     </div>
-
   </div>
 );
 
@@ -150,11 +164,11 @@ const Graph = () => {
   };
 
   return (
-    <div className="bg-gray" >
+    <div className="bg-gray">
       <Header />
       <div className="flex w-full justify-between bg-gray">
         <InfoSection />
-        <ChartSection data={data} options={options}  />
+        <ChartSection data={data} options={options} />
       </div>
     </div>
   );

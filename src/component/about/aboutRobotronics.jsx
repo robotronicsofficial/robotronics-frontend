@@ -7,7 +7,7 @@ const AboutRobotronics = () => {
   return (
     <div className="flex p-5 flex-col w-full bg-gray">
       {/* block 1 */}
-      <div className="lg:text-yellow poppins-light lg:pt-20 pt-10 lg:text-6xl text-3xl justify-between text-right lg:px-10 px-4 md:text-5xl text-yellow"
+      <div className="lg:text-yellow poppins-light lg:pt-10 pt-10 lg:text-6xl text-3xl justify-between text-right lg:px-10 px-4 md:text-5xl text-yellow"
       data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"
       >
        ROBOTRONICS
@@ -40,7 +40,7 @@ const AboutRobotronics = () => {
           </div>
         </div>
         {/* div 2 */}
-        <div className="flex-1 px-5 lg:pt-14"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <div className="flex-1 px-5 pt-8 lg:pt-14"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
           <img src={ceo} alt="ceo" className="rounded-full " />
         </div>
         {/* div 3 */}

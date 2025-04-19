@@ -12,7 +12,7 @@ const AboutSquad = () => {
       {/* block 1 */}
       <div className="lg:flex  lg:p-14 p-7">
         <p className="flex-1 lg:text-6xl poppins-semibold text-3xl font-bold "data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">OUR SQUAD</p>
-        <p className="flex-1 text-wrap poppins-regular lg:text-4xl text-2xl"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <p className="flex-1 text-wrap poppins-regular lg:text-4xl text-2xl pt-4 md:pt-0"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
         Our team is a tight-knit family of engineers, developers, educators and visionaries, all bound by the same innovative approach and creative enthusiasm.
         </p>
       </div>
@@ -42,7 +42,7 @@ const AboutSquad = () => {
           </div>
         </div>
         <div className="flex-1 w-[70vw] poppins-bold " >
-          <p className="lg:text-6xl text-3xl font-bold lg:text-left text-wrap"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >From ambitious startups to Countrywide Schools, we partner  with Great <b className=" text-[#f5ab34]" >Educational industry leaders.</b> </p>
+          <p className="md:text-6xl text-2xl font-bold md:text-left text-wrap"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >From ambitious startups to Countrywide Schools, we partner  with Great <b className=" text-[#f5ab34]" >Educational industry leaders.</b> </p>
         </div>
       </div>
     </div>
