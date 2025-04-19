@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useAuth } from '../../contexts/AuthContext';
+import { Notes } from "@mui/icons-material";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -56,7 +57,6 @@ const CustomerInfomation = ({ onNext }) => {
     phone: "", postalCode: "", deliveryInstruction: "",
   });
 
-  // --- Constants ---
   const SHIPPING_COST = 500;
   const DISCOUNT_PERCENTAGE = 0.10;
 
@@ -71,11 +71,17 @@ const CustomerInfomation = ({ onNext }) => {
     setLoading(true);
 
     try {
+      const noteFromCart = localStorage.getItem('checkoutNote') || '';
+
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/addresses`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, userId: currentUser._id }),
+        body: JSON.stringify({
+          ...form,
+          userId: currentUser._id,
+          notes: noteFromCart,
+        }),
       });
       
 
@@ -86,6 +92,9 @@ const CustomerInfomation = ({ onNext }) => {
 
       const data = await response.json();
       console.log('Address saved:', data);
+
+      localStorage.removeItem('checkoutNote');
+
       onNext?.();
     } catch (err) {
       alert(err.message);

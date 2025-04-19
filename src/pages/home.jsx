@@ -1,4 +1,3 @@
-import Footer from "../component/footer";
 import Graph from "../component/graph";
 import Intro from "../component/intro";
 import Offers from "../component/offers";
