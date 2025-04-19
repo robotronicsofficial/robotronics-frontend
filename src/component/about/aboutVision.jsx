@@ -32,12 +32,12 @@ const AboutVision = () => {
       <div className="lg:flex lg:p-16 p-8 flex-row justify-between items-center ">
         <div>
           <blockquote>
-            <p className="lg:text-2xl text-sm italic poppins-light text-wrap font-medium text-white dark:text-white"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+            <p className="lg:text-2xl text-sm md:px-6 italic poppins-light text-wrap font-medium text-white dark:text-white"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
             Robotics is not just about building machines; it's about creating opportunities to rethink how we solve problems, improve lives and explore new frontiers. It blends the ingenuity of human creativity with the precision of technology to shape a future where innovation knows no bounds. Robotics empowers us to transform imagination into reality, forming a formidable connection between what is and what could be, as we build a smarter, more sustainable world together.
             </p>
           </blockquote>
         </div>
-        <div className="p-2" >
+        <div className="p-2 pt-8 md:pt-2  flex flex-col   items-center" >
           <img className=""data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000" src={quote} />
           <p className="lg:text-2xl text-xl text-gold poppins-light"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >Peter Nammy</p>
           <p className="text-white  poppins-light"data-aos="fade-up" data-aos-duration="3000" data-aos-delay="6000" >Curriculum Head</p>

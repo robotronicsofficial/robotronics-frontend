@@ -158,12 +158,12 @@ const Login = () => {
     <div className="bg-gray" id="signin">
       <div>
         <div
-          className="flex flex-col lg:space-y-4 space-y-1 items-center justify-center lg:py-40 py-10"
+          className="flex flex-col lg:space-y-4 space-y-1 items-center justify-center md:pt-36 py-5 pt-32"
           data-aos="fade-up"
           data-aos-duration="2000"
-          data-aos-delay="4000"
+          data-aos-delay="500"
         >
-          <p className="text-center text-wrap justify-center lg:py-10 py-5 text-4xl poppins-bold text-brown">
+          <p className="text-center text-wrap justify-center lg:py-10 py-5 md:text-3xl text-2xl poppins-bold text-brown">
             Log in to your account
           </p>
           <button 
@@ -206,7 +206,7 @@ const Login = () => {
           className="flex flex-col items-center space-y-3"
           data-aos="fade-up"
           data-aos-duration="2000"
-          data-aos-delay="4000"
+          data-aos-delay="2000"
         >
           <div className="lg:py-8 py-4">
             <p className="text-sm poppins-regular ">Email address</p>
