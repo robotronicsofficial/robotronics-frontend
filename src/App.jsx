@@ -9,8 +9,6 @@ import Signup from "./pages/signup";
 import Login from "./pages/login";
 import VerifyEmail from "./pages/VerifyEmail";
 import ResetPassword from "./pages/ResetPassword";
-
-
 import CustomerInfo from "./pages/shop/customerInfo";
 import Course from "./pages/courses";
 import ProductDetailPage from "./pages/shop/ProductDetailPage";
@@ -52,7 +50,6 @@ import RoboGeniusProgressPage from "./component/dashboard/RoboGeniusProgressPage
 import ProtectedRoute from './component/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 
 function App() {
   return (
@@ -109,8 +106,6 @@ function App() {
           <Route path="/TermsConditions" element={<TermsHome />} />
           <Route path="/PrivacyPolicy" element={<PrivacyHome />} />
           <Route path="/ServiceDetail" element={<ServiceDetail />} />
-
-
         </Routes>
         <ToastContainer
           position="top-center"
