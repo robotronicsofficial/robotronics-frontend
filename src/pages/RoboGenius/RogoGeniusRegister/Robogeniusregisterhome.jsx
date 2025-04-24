@@ -5,7 +5,6 @@ const Robogeniusregisterhome = () => {
   return (
     <>
       <RobogeniusCustomerInfoIntro />
-      {/* <Footer /> */}
     </>
   );
 };

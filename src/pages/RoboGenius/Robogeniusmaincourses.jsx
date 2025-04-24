@@ -1,72 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaStar, FaArrowDown } from "react-icons/fa";
 import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
-import JS from "../../assets/images/JS-MyCouses.svg";
-
-const courses = [
-  {
-    id: 1,
-    category: "Development",
-    reviews: 4.8,
-    title: "Learning JavaScript With Imagination",
-    author: "John Doe",
-    buttonText: "Activate Course",
-    image: JS, // Replace with actual image path
-  },
-  {
-    id: 2,
-    category: "Design",
-    reviews: 4.5,
-    title: "The Complete Graphic Design for Beginners",
-    author: "Jane Smith",
-    buttonText: "Activate Course",
-    image: JS, // Replace with actual image path
-  },
-  {
-    id: 3,
-    category: "Marketing",
-    reviews: 4.3,
-    title: "Learning Digital Marketing on Facebook",
-    author: "Mike Johnson",
-    buttonText: "Activate Course",
-    image: JS, // Replace with actual image path
-  },
-  {
-    id: 4,
-    category: "Business",
-    reviews: 4.6,
-    title: "Mastering Business Strategies",
-    author: "Alice Brown",
-    buttonText: "Activate Course",
-    image: JS, // Replace with actual image path
-  },
-  {
-    id: 5,
-    category: "Technology",
-    reviews: 4.7,
-    title: "AI & Machine Learning Basics",
-    author: "Bob White",
-    buttonText: "Activate Course",
-    image: JS, // Replace with actual image path
-  },
-];
 
 const Robogeniusmaincourses = () => {
+  const [courses, setCourses] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
   const [visibleCourses, setVisibleCourses] = useState(
     window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3
   );
 
-  // Handle window resize
-  if (typeof window !== 'undefined') {
-    window.addEventListener('resize', () => {
-      const newVisibleCourses = window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
-      if (newVisibleCourses !== visibleCourses) {
-        setVisibleCourses(newVisibleCourses);
-        setStartIndex(0); // Reset to first course when changing viewport
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/get-courses");
+        const data = await response.json();
+        if (data?.courses) {
+          setCourses(data.courses);
+        }
+      } catch (error) {
+        console.error("Failed to fetch courses:", error);
       }
-    });
-  }
+    };
+
+    fetchCourses();
+  }, []);
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      const newVisibleCourses = window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+      setVisibleCourses(newVisibleCourses);
+      setStartIndex(0);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
 
   const prevCourse = () => {
     setStartIndex((prevIndex) =>
@@ -102,11 +72,15 @@ const Robogeniusmaincourses = () => {
           .slice(startIndex, startIndex + visibleCourses)
           .map((course) => (
             <div
-              key={course.id}
+              key={course._id}
               className="w-full max-w-xs sm:max-w-none sm:w-1/2 lg:w-1/3 px-2 sm:px-4 mb-2 p-2 sm:p-6"
             >
               <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff]">
-                <img className="w-full" src={course.image} alt="Course" />
+              <img
+                  className="w-full"
+                  src={`http://localhost:8080/${course.thumbnail.replace(/\\/g, "/")}`}
+                  alt={course.title}
+                />
                 <div className="px-4 lg:px-6 py-2 flex-grow">
                   <div className="flex flex-row mb-2 flex-wrap justify-between my-3">
                     <p className="text-gray-700 text-wrap text-center px-2 sm:px-4 py-1 rounded-full bg-[#efeff2] text-sm sm:text-base">

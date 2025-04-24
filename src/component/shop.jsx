@@ -15,7 +15,9 @@ const ServiceCard = ({ service }) => {
         {/* Image */}
         <img
           className="rounded-xl w-full h-48 sm:h-56 object-cover"
+
           src={`${import.meta.env.VITE_BACKEND_URL}/${service.thumbnail}`}
+
           alt={service.title || "Course image"}
         />
 
@@ -69,7 +71,9 @@ const Shop = () => {
     Aos.init({ duration: 1000 });
     const fetchServices = async () => {
       try {
+
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+
         if (!response.ok) throw new Error("Failed to fetch services");
         const data = await response.json();
         setServices(data.courses || []);
