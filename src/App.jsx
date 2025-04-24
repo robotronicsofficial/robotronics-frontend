@@ -71,7 +71,6 @@ function App() {
           <Route path="/verifyEmail" element={<VerifyEmail />} />
           <Route path="/reset-password" element={<ResetPassword />} />
 
-
           <Route path="/Signup" element={<Signup />} />
           <Route path="/CoursesProduct/:id?" element={<CoursesProductDetail />} />
           <Route path="/CareerJob" element={<CareerJob />} />
