@@ -2,7 +2,7 @@ import React from "react";
 
 const ServiceInto = ({ service }) => {
   // Ensure the image URL is correctly formatted
-  const imageUrl = `http://localhost:8080/${service.sideImage.replace(/\\/g, "/")}`;
+  const imageUrl = `${import.meta.env.VITE_BACKEND_URL}/${service.sideImage.replace(/\\/g, "/")}`;
 
   return (
     <div className="hero" id="hero">

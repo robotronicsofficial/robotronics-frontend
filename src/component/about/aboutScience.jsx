@@ -91,7 +91,7 @@ const AboutScience = () => {
           </div>
         </div>
       </div>
-      <div className="h-[80vh] w-100 px-10 overflow-hidden ">
+      <div className="h-[50vh] md:h-[80vh] w-100 px-10 overflow-hidden ">
         <img
           className="h-full w-full object-cover"
           data-aos="fade-up"

@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch('http://localhost:8080/auth/user', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/user`, {
         credentials: 'include'
       });
       
@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch('http://localhost:8080/auth/login', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ export function AuthProvider({ children }) {
 
   const register = async (firstName, lastName, email, phone, countryCode, password) => {
     try {
-      const response = await fetch('http://localhost:8080/auth/register', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      const response = await fetch('http://localhost:8080/auth/logout', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {
         credentials: 'include'
       });
       

@@ -13,7 +13,7 @@ const CoursesProductDetail = () => {
 
   useEffect(() => {
     // Fetch courses from the API
-    fetch(`http://localhost:8080/courses/${id}`)
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/courses/${id}`)
       .then((response) => response.json())
       .then((data) => setCourses(data.data))
       .catch((error) => console.error("Error fetching courses:", error));
