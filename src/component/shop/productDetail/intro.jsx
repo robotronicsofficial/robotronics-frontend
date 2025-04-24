@@ -19,12 +19,20 @@ const Intro = () => {
 
   // State for quantity and selected image
   const [quantity, setQuantity] = useState(1);
+<<<<<<< HEAD
   const [selectedImage, setSelectedImage] = useState(product?.images?.[0] ? `http://localhost:8080/${product.images[0]}` : robo);
+=======
+  const [selectedImage, setSelectedImage] = useState(product?.images?.[0] ? `${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}` : robo);
+>>>>>>> Naqeeb/main
 
   // Update selected image when product changes
   useEffect(() => {
     if (product?.images?.[0]) {
+<<<<<<< HEAD
       setSelectedImage(`http://localhost:8080/${product.images[0]}`);
+=======
+      setSelectedImage(`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`);
+>>>>>>> Naqeeb/main
     }
   }, [product]);
 
@@ -48,9 +56,15 @@ const Intro = () => {
               <div
                 key={idx}
                 className="h-10 w-10 bg-white shadow-lg cursor-pointer"
+<<<<<<< HEAD
                 onClick={() => setSelectedImage(`http://localhost:8080/${img}`)}
               >
                 <img src={`http://localhost:8080/${img}`} alt={`thumb-${idx}`} className="h-10 w-10" />
+=======
+                onClick={() => setSelectedImage(`${import.meta.env.VITE_BACKEND_URL}/${img}`)}
+              >
+                <img src={`${import.meta.env.VITE_BACKEND_URL}/${img}`} alt={`thumb-${idx}`} className="h-10 w-10" />
+>>>>>>> Naqeeb/main
               </div>
             ))}
           </div>

@@ -114,7 +114,7 @@ const Intro = () => {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const response = await fetch("http://localhost:8080/allVideoGallery");
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/allVideoGallery`);
         if (!response.ok) {
           throw new Error("Failed to fetch services data");
         }

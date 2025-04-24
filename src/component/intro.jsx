@@ -28,7 +28,7 @@ const Intro = () => {
               <div className="space-y-2  flex flex-col gap-6 mt-8  w-full" data-aos="fade-up" data-aos-duration="2000">
                 <div className="flex flex-row  space-x-2 ">
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-thin">
-                    WELCOME TO THE{" "}
+               sELCOME TO THE{" "}
                   </h1>
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-extralight">
                     WORLD OF

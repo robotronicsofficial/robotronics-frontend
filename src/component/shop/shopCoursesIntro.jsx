@@ -191,7 +191,11 @@ const ShopCoursesIntro = () => {
     const fetchCourses = async () => {
       try {
         // Fetch data from the backend
+<<<<<<< HEAD
         const response = await fetch("http://localhost:8080/all/courses");
+=======
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/all/courses`);
+>>>>>>> Naqeeb/main
         const data = await response.json();
 
         // Update state with the fetched data

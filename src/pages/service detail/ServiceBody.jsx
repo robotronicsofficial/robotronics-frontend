@@ -25,7 +25,7 @@ const ServiceBody = ({ service }) => {
         </div>
         <div className="h-[65vw] w-[46vw] bg-green-500 rounded-xl overflow-hidden">
           <img className="h-full w-full object-cover"
-            src={`http://localhost:8080/${service.sideImage.replace(
+            src={`${import.meta.env.VITE_BACKEND_URL}/${service.sideImage.replace(
               /\\/g,
               "/"
             )}`}

@@ -21,7 +21,7 @@ const CourseProduct = ({
     const newWishListValue = wishList === 0 ? 1 : 0;
 
     try {
-      const response = await fetch("http://localhost:8080/wishlist", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/wishlist`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

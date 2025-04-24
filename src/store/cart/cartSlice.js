@@ -5,7 +5,7 @@ export const fetchProducts = createAsyncThunk(
   "cart/fetchProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:8080/getProducts");
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getProducts`);
       if (!response.ok) throw new Error("Failed to fetch products");
       const data = await response.json();
       return data.products;
