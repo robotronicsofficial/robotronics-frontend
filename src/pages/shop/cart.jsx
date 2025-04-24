@@ -1,8 +1,6 @@
 import CartsStep from "../../component/shop/steps/cartsStep"
-
 const Cart = () => {
   return (
-    <div>
       <div className="shopCarthero pt-64" id="shopCarthero">
       {/* parent */}
       <div className="flex flex-col">
@@ -20,7 +18,6 @@ const Cart = () => {
           <CartsStep />
         </div>
       </div>
-    </div>
     </div>
   );
 };
