@@ -117,7 +117,7 @@ const Signup = () => {
 
     setIsLoading(true); // Start loading
     try {
-      const response = await fetch('http://localhost:8080/auth/register', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ const Signup = () => {
     </div>
   );
   const handleSocialLogin = (provider) => {
-    window.location.href = `http://localhost:8080/auth/${provider}`;
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`;
   };
 
   return (

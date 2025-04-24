@@ -43,7 +43,7 @@ const MoreProduct = () => {
               <img
                 src={
                   product?.images?.[0]
-                    ? `http://localhost:8080/${product.images[0]}`
+                    ? `${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`
                     : "https://via.placeholder.com/150"
                 }
                 alt={product.name}

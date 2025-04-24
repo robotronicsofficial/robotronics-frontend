@@ -46,7 +46,7 @@ const Login = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +89,7 @@ const Login = () => {
     setError('');
   
     try {
-      const response = await fetch('http://localhost:8080/auth/forgot-password', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ const Login = () => {
   };
 
   const handleSocialLogin = (provider) => {
-    window.location.href = `http://localhost:8080/auth/${provider}`;
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`;
   };
 
   if (forgotPasswordMode) {

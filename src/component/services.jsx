@@ -4,7 +4,7 @@ import { FaRobot} from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import robort from "../assets/images/right-face-robot.svg";
 
-const BASE_URL = "http://localhost:8080/";
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/`;
 
 const Services = () => {
   const [services, setServices] = useState([]);
