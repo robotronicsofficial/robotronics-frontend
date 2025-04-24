@@ -171,11 +171,7 @@ const CustomerInfomation = ({ onNext }) => {
           {cart.length > 0 ? (
             cart.map((product) => (
               <div className="flex flex-row space-x-3" key={product.id}>
-<<<<<<< HEAD
-                <img className="lg:h-32 lg:w-30" src={`http://localhost:8080/${product.images[0]}`} alt={product.name} />
-=======
                 <img className="lg:h-32 lg:w-30" src={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`} alt={product.name} />
->>>>>>> Naqeeb/main
                 <div className="flex flex-col gap-1 text-sm">
                   <p className="font-bold text-wrap">{product.name}</p>
                   <div className="flex gap-2"><span>Quantity:</span><p>{product.quantity}</p></div>
