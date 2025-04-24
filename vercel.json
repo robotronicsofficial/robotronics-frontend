@@ -5,10 +5,6 @@
         "src": "package.json",
         "use": "@vercel/static-build",
         "config": {
-<<<<<<< HEAD
-          "distDir": "dist"
-        }
-=======
           "distDir": "build"
         }
       },
@@ -21,7 +17,6 @@
       { 
         "source": "/(.*)", 
         "destination": "/index.html" 
->>>>>>> Naqeeb/main
       }
     ]
   }
