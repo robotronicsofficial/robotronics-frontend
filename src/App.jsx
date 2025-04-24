@@ -9,8 +9,6 @@ import Signup from "./pages/signup";
 import Login from "./pages/login";
 import VerifyEmail from "./pages/VerifyEmail";
 import ResetPassword from "./pages/ResetPassword";
-
-
 import CustomerInfo from "./pages/shop/customerInfo";
 import Course from "./pages/courses";
 import ProductDetailPage from "./pages/shop/ProductDetailPage";
@@ -53,7 +51,6 @@ import ProtectedRoute from './component/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 function App() {
   return (
     <Router>
@@ -71,9 +68,8 @@ function App() {
           <Route path="/Course" element={<Course />} />
           <Route path="/CustomerInfo" element={<CustomerInfo />} />
           <Route path="/Login" element={<Login />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/verifyEmail" element={<VerifyEmail />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-
 
           <Route path="/Signup" element={<Signup />} />
           <Route path="/CoursesProduct/:id?" element={<CoursesProductDetail />} />
@@ -109,8 +105,6 @@ function App() {
           <Route path="/TermsConditions" element={<TermsHome />} />
           <Route path="/PrivacyPolicy" element={<PrivacyHome />} />
           <Route path="/ServiceDetail" element={<ServiceDetail />} />
-
-
         </Routes>
         <ToastContainer
           position="top-center"

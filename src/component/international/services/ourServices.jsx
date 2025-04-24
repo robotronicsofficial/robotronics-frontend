@@ -88,7 +88,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import robot from "../../../assets/images/IServicesS4.svg"; // Fallback image
 
-const BASE_URL = "http://localhost:8080/";
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/`;
 
 const OurServices = () => {
   const [services, setServices] = useState([]);

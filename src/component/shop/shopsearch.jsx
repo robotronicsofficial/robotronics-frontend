@@ -148,7 +148,7 @@ const Shopsearch = () => {
               key={product._id}
               title={product.name}
               price={product.price}
-              image={`http://localhost:8080/${product.images[0]}`}
+              image={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`}
               onAddToWishlist={() => setWishlistCount((prev) => prev + 1)}
               onAddToCart={() => dispatch(addToCart(product))}
               productId={product._id}

@@ -17,7 +17,7 @@ const VerifyEmail = () => {
       
       const token = searchParams.get('token');
       try {
-        const response = await fetch(`http://localhost:8080/auth/verify-email?token=${token}`);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/verify-email?token=${token}`);
         const data = await response.json();
 
         if (response.ok) {
