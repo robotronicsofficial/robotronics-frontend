@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useAuth } from '../../contexts/AuthContext';
-import { Notes } from "@mui/icons-material";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -109,11 +108,9 @@ const CustomerInfomation = ({ onNext }) => {
   const finalTotalPrice = totalAfterDiscount + SHIPPING_COST;
 
   return (
-    <div className="lg:flex mt-20">
-      {/* Left - Form */}
-      <div className=" lg:w-4/5">
-        <form onSubmit={handleSubmit} className="space-y-6 bg-background max-w-4xl">
-          {/* Form Fields */}
+    <div className="lg:flex flex-row bg-gray">
+      <div className="flex flex-col lg:w-4/5">
+        <form onSubmit={handleSubmit} className="space-y-6 bg-background p-6 max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField label="First Name" name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name" required />
             <InputField label="Last Name" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name" required />
@@ -171,8 +168,8 @@ const CustomerInfomation = ({ onNext }) => {
           {cart.length > 0 ? (
             cart.map((product) => (
               <div className="flex flex-row space-x-3" key={product.id}>
-                <img className="lg:h-32 lg:w-30" src={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`} alt={product.name} />
-                <div className="flex flex-col gap-1 text-sm">
+                <img className="lg:h-20 lg:w-24" src={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`} alt={product.name} />
+                <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
                   <p className="font-bold text-wrap">{product.name}</p>
                   <div className="flex gap-2"><span>Quantity:</span><p>{product.quantity}</p></div>
                   <p className="font-bold">PKR {product.price.toLocaleString()}</p>

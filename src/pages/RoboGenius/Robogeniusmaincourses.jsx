@@ -75,11 +75,11 @@ const Robogeniusmaincourses = () => {
               key={course._id}
               className="w-full max-w-xs sm:max-w-none sm:w-1/2 lg:w-1/3 px-2 sm:px-4 mb-2 p-2 sm:p-6"
             >
-              <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff]">
-              <img
-                  className="w-full"
-                  src={`http://localhost:8080/${course.thumbnail.replace(/\\/g, "/")}`}
-                  alt={course.title}
+              <div className="bg-white p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
+                <img
+                    className="rounded-xl w-full h-48 sm:h-56 object-cover"
+                    src={`http://localhost:8080/${course.thumbnail.replace(/\\/g, "/")}`}
+                    alt={course.title}
                 />
                 <div className="px-4 lg:px-6 py-2 flex-grow">
                   <div className="flex flex-row mb-2 flex-wrap justify-between my-3">
