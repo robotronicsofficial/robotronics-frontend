@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 
-const PinModal = ({ isOpen, onClose, onPinSubmit }) => {
+const PinModal = ({ 
+  isOpen, 
+  onClose, 
+  onPinSubmit, 
+  mode = "create",
+  title = "Set Up a PIN",
+  description = "Enter your 4 digits pin"
+}) => {
   const [pin, setPin] = useState(["", "", "", ""]); // Array to store each digit of the PIN
   const [counter, setCounter] = useState(30); // 30-second timer
   const [isResendDisabled, setIsResendDisabled] = useState(true);
@@ -18,8 +25,18 @@ const PinModal = ({ isOpen, onClose, onPinSubmit }) => {
     return () => clearInterval(timer);
   }, [isOpen, counter]);
 
+  // Reset pin when modal opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      setPin(["", "", "", ""]);
+    }
+  }, [isOpen]);
+
   // Handle PIN input change
   const handlePinChange = (index, value) => {
+    // Only allow numbers
+    if (value && !/^[0-9]$/.test(value)) return;
+    
     const newPin = [...pin];
     newPin[index] = value;
     setPin(newPin);
@@ -42,14 +59,18 @@ const PinModal = ({ isOpen, onClose, onPinSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const fullPin = pin.join("");
-    onPinSubmit(fullPin);
+    if (fullPin.length === 4) {
+      onPinSubmit(fullPin);
+    } else {
+      onPinSubmit({ error: "Please enter a 4-digit PIN" });
+    }
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-auto h-auto max-h-[80vh] overflow-y-auto flex flex-col gap-4">
+      <div className="relative bg-white rounded-lg p-6 w-full max-w-md mx-auto h-auto max-h-[80vh] overflow-y-auto flex flex-col gap-4">
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-2xl"
@@ -57,9 +78,9 @@ const PinModal = ({ isOpen, onClose, onPinSubmit }) => {
           &times;
         </button>
 
-        <h2 className="text-xl sm:text-2xl font-bold text-center">Set Up a PIN</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-center">{title}</h2>
         <p className="text-gray-600 text-center text-sm sm:text-base">
-          Enter your 4 digits pin
+          {description}
         </p>
 
         {/* PIN Input Fields */}
@@ -86,21 +107,8 @@ const PinModal = ({ isOpen, onClose, onPinSubmit }) => {
               type="submit"
               className="w-full bg-yellow-500 bg-yellow text-white py-2 px-4 rounded-lg hover:bg-yellow-600 transition-colors text-sm sm:text-base"
             >
-              CONFIRM PIN
+              {mode === "verify" ? "VERIFY PIN" : "CONFIRM PIN"}
             </button>
-            
-            <div className="text-center text-gray-500 text-xs sm:text-sm">
-              {isResendDisabled ? (
-                `Resend in 00:${counter < 10 ? `0${counter}` : counter}`
-              ) : (
-                <button
-                  onClick={handleResend}
-                  className="w-full bg-yellow-500 bg-yellow text-white py-2 px-4 rounded-lg hover:bg-yellow-600 transition-colors text-sm sm:text-base"
-                >
-                  Resend PIN
-                </button>
-              )}
-            </div>
           </div>
         </form>
       </div>
@@ -108,4 +116,4 @@ const PinModal = ({ isOpen, onClose, onPinSubmit }) => {
   );
 };
 
-export default PinModal;
+export default PinModal; 

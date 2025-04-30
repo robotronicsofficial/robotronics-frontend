@@ -47,6 +47,9 @@ import PaymentDetail from "./pages/Dashboard/PaymentDetail";
 import ChildProfile from "./pages/Dashboard/ChildProfile";
 import ProgressCertificate from "./pages/Dashboard/ProgressCertificate";
 import RoboGeniusProgressPage from "./component/dashboard/RoboGeniusProgressPage";
+import MyAllCourses from "./component/dashboard/myAllCourses";
+
+
 import ProtectedRoute from './component/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -81,7 +84,11 @@ function App() {
           <Route path="/ContactUs" element={<ContactUs />} />
           <Route path="/Dashboard/userInfo" element={<ProtectedRoute><UserInfo /></ProtectedRoute>} />
           <Route path="/Dashboard/order" element={<ProtectedRoute><Order /></ProtectedRoute>} />
+          <Route path="/Dashboard/MyCoursesPage/:id" element={<ProtectedRoute><MyCoursesPage /></ProtectedRoute>} />
           <Route path="/Dashboard/MyCoursesPage" element={<ProtectedRoute><MyCoursesPage /></ProtectedRoute>} />
+          <Route path="/Dashboard/myAllCourses/:id" element={<ProtectedRoute><MyAllCourses /></ProtectedRoute>} />
+
+
           <Route path="/Dashboard/WishList" element={<ProtectedRoute><WishList /></ProtectedRoute>} />
           <Route path="/Dashboard/PaymentHistory" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
           <Route path="/Dashboard/PaymentDetails" element={<ProtectedRoute><PaymentDetail /></ProtectedRoute>} />
