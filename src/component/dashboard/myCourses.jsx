@@ -1,301 +1,318 @@
-// import LeftNav from "./leftNav";
-// import { FaStar } from "react-icons/fa";
-// import JS from "../../assets/images/JS-MyCouses.svg";
-// const MyCourses = () => {
-//   const courses = [
-//     {
-//       id: 1,
-//       title: "Learning JavaScript With Imagination",
-//       author: "David Millar",
-//       rating: 4.8,
-//       reviews: 4.8,
-//       category: "Development",
-//       image: JS, // Replace with your image path
-//       buttonText: "View Detail",
-//       status: "Purchased",
-//     },
-//     {
-//       id: 2,
-//       title: "The Complete Graphic Design for Beginners",
-//       author: "Jenny Wilson",
-//       rating: 4.5,
-//       reviews: 4.5,
-//       category: "Design",
-//       image: JS, // Replace with your image path
-//       buttonText: "View Detail",
-//       status: "Purchased",
-//     },
-//     {
-//       id: 3,
-//       title: "Learning Digital Marketing on Facebook",
-//       author: "Wade Warren",
-//       rating: 4.3,
-//       reviews: 4.3,
-//       category: "Marketing",
-//       image: JS, // Replace with your image path
-//       buttonText: "View Detail",
-//       status: "Purchased",
-//     },
-//     {
-//       id: 4,
-//       title: "Financial Analyst Training & Investing Course",
-//       author: "Robert Fox",
-//       rating: 4.8,
-//       reviews: 4.8,
-//       category: "Business",
-//       image: JS, // Replace with your image path
-//       buttonText: "View Detail",
-//       status: "Purchased",
-//     },
-//     {
-//       id: 5,
-//       title: "Data Analysis & Visualization Masterclass",
-//       author: "Guy Hawkins",
-//       rating: 4.5,
-//       reviews: 4.5,
-//       category: "Data Science",
-//       image: JS, // Replace with your image path
-//       buttonText: "View Detail",
-//       status: "Purchased",
-//     },
-//     {
-//       id: 6,
-//       title: "Master the Fundamentals of Math",
-//       author: "Sawpawlo Mark",
-//       rating: 4.7,
-//       reviews: 4.7,
-//       category: "Mathematics",
-//       image: JS, // Replace with your image path
-//       buttonText: "View Detail",
-//       status: "Purchased",
-//     },
-//   ];
-
-//   return (
-
-//     <div className="bg-background p-10 lg:flex flex-row">
-//       {/* NavBr */}
-//       <div className="lg:w-1/3  w-2/3">
-//         <LeftNav />
-//       </div>
-//       {/* products */}
-//       <div className="w-full text=center py-5 ">
-//         <h1 className="text-lightblack lg:text-2xl text-base font-bold  ">
-//           My Courses
-//         </h1>
-//         {/* Shop Items */}
-//         <div className="py-10 flex flex-wrap gap-6">
-//           {courses.map((course) => (
-//             <div
-//               key={course.id}
-//               className="w-full sm:w-1/2 lg:w-1/3 rounded overflow-hidden shadow-lg bg-white" // Remove padding
-//             >
-//               <img className="w-full" src={course.image} alt="Course" />
-//               <div className="lg:px-6 py-4">
-//                 <div className="lg:flex flex-row justify-between">
-//                   <p className="text-gray-700 rounded-lg px-1 bg-lin text-base">
-//                     {course.category}
-//                   </p>
-//                   {/* Stars */}
-//                   <div className="flex items-center">
-//                     <FaStar className="text-yellow-500" />
-//                     <p className="text-gray-700 text-base ml-2">
-//                       {course.rating} ({course.reviews} Reviews)
-//                     </p>
-//                   </div>
-//                 </div>
-//                 <div className="font-bold text-xl text-wrap mb-2">
-//                   {course.title}
-//                 </div>
-
-//                 <p className="flex flex-row text-gray-700 text-base">
-//                   <span className="text-line space-x-2">by</span>
-//                   {course.author}
-//                 </p>
-//               </div>
-//               <div className="px-6 pt-4 pb-2">
-//                 <button className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-full">
-//                   {course.buttonText}
-//                 </button>
-//                 <span className="text-gray-700 text-base ml-4 font-bold">
-//                   {course.status}
-//                 </span>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-
-//       </div>
-//     </div>
-
-//   );
-// };
-
-// export default MyCourses;
-
 import LeftNav from "./leftNav";
-import { FaStar } from "react-icons/fa";
-import JS from "../../assets/images/JS-MyCouses.svg";
-import { FaArrowDown } from "react-icons/fa";
-import { useState } from "react";
+import { FaStar, FaArrowDown } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const MyCourses = () => {
-  const [showAllCourses, setShowAllCourses] = useState(false); // Track toggle state
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const coursesPerPage = 9;
+  const navigate = useNavigate();
 
-  const courses = [
-    {
-      id: 1,
-      title: "Learning JavaScript With Imagination",
-      author: "David Millar",
-      rating: 4.8,
-      reviews: 4.8,
-      category: "Development",
-      image: JS,
-      buttonText: "View Detail",
-      status: "Purchased",
-    },
-    {
-      id: 2,
-      title: "The Complete Graphic Design for Beginners",
-      author: "Jenny Wilson",
-      rating: 4.5,
-      reviews: 4.5,
-      category: "Design",
-      image: JS,
-      buttonText: "View Detail",
-      status: "Purchased",
-    },
-    {
-      id: 3,
-      title: "Learning Digital Marketing on Facebook",
-      author: "Wade Warren",
-      rating: 4.3,
-      reviews: 4.3,
-      category: "Marketing",
-      image: JS,
-      buttonText: "View Detail",
-      status: "Purchased",
-    },
-    {
-      id: 4,
-      title: "Financial Analyst Training & Investing Course",
-      author: "Robert Fox",
-      rating: 4.8,
-      reviews: 4.8,
-      category: "Business",
-      image: JS,
-      buttonText: "View Detail",
-      status: "Purchased",
-    },
-    {
-      id: 5,
-      title: "Data Analysis & Visualization Masterclass",
-      author: "Guy Hawkins",
-      rating: 4.5,
-      reviews: 4.5,
-      category: "Data Science",
-      image: JS,
-      buttonText: "View Detail",
-      status: "Purchased",
-    },
-    {
-      id: 6,
-      title: "Master the Fundamentals of Math",
-      author: "Sawpawlo Mark",
-      rating: 4.7,
-      reviews: 4.7,
-      category: "Mathematics",
-      image: JS,
-      buttonText: "View Detail",
-      status: "Purchased",
-    },
-  ];
+  // Extract childId from the URL path (last segment)
+  const pathSegments = window.location.pathname.split('/');
+  const childId = pathSegments[pathSegments.length - 1];
 
-  // Toggle button handler
-  const toggleCourses = () => {
-    setShowAllCourses((prev) => !prev);
+  console.log("Extracted Child ID:", childId); // Debug log
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!childId || childId === "MyCoursesPage") {
+          throw new Error("Child ID not found in URL");
+        }
+
+        // Fetch courses
+        const response = await fetch("http://localhost:8080/get-courses");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setCourses(data.courses);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+  }, [childId]);
+
+
+  const toggleCourseSelection = (courseId) => {
+    if (selectedCourses.includes(courseId)) {
+      setSelectedCourses(selectedCourses.filter((id) => id !== courseId));
+    } else {
+      if (selectedCourses.length < 2) {
+        setSelectedCourses([...selectedCourses, courseId]);
+      } else {
+        setShowModal(true);
+      }
+    }
   };
 
+  const saveSelectedCourses = async () => {
+    try {
+      setSaveLoading(true);
+      setSaveSuccess(false);
+
+      if (!childId) {
+        throw new Error("Child ID not found");
+      }
+
+      const response = await fetch(`http://localhost:8080/api/${childId}/courses`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courses: selectedCourses.map((courseId, index) => ({
+            courseId,
+            status: index === 0 ? "active" : "pending"
+          }))
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to save courses");
+      }
+
+      setSaveSuccess(true);
+      setTimeout(() => {
+        navigate(`/dashboard/myAllCourses/${childId}`);
+      }, 1500);
+    } catch (err) {
+      console.error("Error saving courses:", err);
+      alert(`Error saving courses: ${err.message}`);
+    } finally {
+      setSaveLoading(false);
+    }
+  };
+
+  const totalPages = Math.ceil(courses.length / coursesPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const currentCourses = courses.slice(
+    (currentPage - 1) * coursesPerPage,
+    currentPage * coursesPerPage
+  );
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-red-500">Error: {error}</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-background lg:flex flex-row px-4 md:px-20 pt-44 md:pt-2">
+    <div className="bg-background lg:flex flex-row px-4 md:px-20 pt-44 md:pt-2 relative">
       {/* Left Navigation */}
-      <div
-        className="lg:w-[30%] w-2/3"
-        data-aos="fade-up"
-        data-aos-duration="2000"
-        data-aos-delay="4000"
-      >
+      <div className="lg:w-[30%] w-2/3" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
         <LeftNav />
       </div>
 
       {/* Course Listing */}
-      <div
-        className="w-full text-center py-5"
-        data-aos="fade-up"
-        data-aos-duration="2000"
-        data-aos-delay="4000"
-      >
-        <h1 className="text-lightblack lg:text-2xl text-base poppins-bold">
-          {showAllCourses ? "All Courses" : "Active Courses"}
+      <div className="w-full text-center py-5" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
+          Select any 2 Courses
         </h1>
 
-        {/* Toggle Switch */}
-        <div className="my-4 flex items-center justify-center">
-          <span className="mr-2 text-sm">Active</span>
-          <label className="relative inline-block w-12 h-6">
-            <input
-              type="checkbox"
-              onChange={toggleCourses}
-              className="opacity-0 w-0 h-0 peer"
-            />
-            <span className="absolute inset-0 bg-gray-300 rounded-full peer-checked:bg-yellow transition-all duration-300"></span>
-            <span className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-6"></span>
-          </label>
-          <span className="ml-2 text-sm">All</span>
+        {/* Save Button and Status */}
+        <div className="mb-6 flex flex-col items-center gap-2">
+          <button
+            onClick={saveSelectedCourses}
+            className={`py-2 px-6 rounded-full shadow-xl ${selectedCourses.length === 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#ffc224] hover:bg-[#ffb700]"
+              } transition-colors`}
+            disabled={selectedCourses.length === 0 || saveLoading}
+          >
+            {saveLoading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+              </span>
+            ) : (
+              "Save Courses"
+            )}
+          </button>
+
+          {saveSuccess && (
+            <div className="text-green-600 poppins-medium">
+              Courses saved successfully! Redirecting...
+            </div>
+          )}
+
+          {selectedCourses.length > 0 && (
+            <div className="text-gray-600 text-sm">
+              Selected {selectedCourses.length} of 2 courses
+            </div>
+          )}
         </div>
 
-        {/* Shop Items */}
+        {/* Courses */}
         <div className="flex flex-wrap justify-between gap-y-6">
-          {courses
-            .filter((course) => (showAllCourses ? true : course.status === "Purchased"))
-            .map((course) => (
-              <div
-                key={course.id}
-                className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-[#fffff] p-6 "
-              >
-                <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff] gap-0">
-                  <img className="w-full" src={course.image} alt="Course" />
-                  <div className="px-6 md:px-2 py-2 flex-grow flex flex-col gap-2 ">
-                    <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                      <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base mb-4 md:mb-0">
-                        {course.category}
+          {currentCourses.map((course) => (
+            <div
+              key={course._id}
+              className="relative w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-[#fffff] p-6"
+            >
+              <div className={`rounded-xl overflow-hidden shadow-lg h-full flex flex-col transition-all ${selectedCourses.includes(course._id)
+                  ? "border-4 border-yellow-400 transform scale-[1.02]"
+                  : "border hover:shadow-md"
+                }`}>
+                <img
+                  className="w-full h-48 object-cover"
+                  src={course.thumbnail ? `http://localhost:8080/${course.thumbnail.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x200"}
+                  alt={course.title}
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/300x200";
+                  }}
+                />
+                <div className="px-6 md:px-2 py-2 flex-grow flex flex-col gap-2">
+                  <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
+                    <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base mb-4 md:mb-0">
+                      {course.category}
+                    </p>
+                    <div className="flex items-center">
+                      <FaStar className="text-yellow-500" />
+                      <p className="text-gray-700 poppins-light text-base ml-2">
+                        ({course.reviews || 0} Rating)
                       </p>
-                      <div className="flex items-center">
-                        <FaStar className="text-yellow-500 text-yellow" />
-                        <p className="text-gray-700 poppins-light text-base ml-2">
-                          ({course.reviews} Reviews)
-                        </p>
-                      </div>
                     </div>
-
-                    <div className="font-bold text-xl p-2 poppins-bold text-left text-wrap mb-2">
-                      {course.title}
-                    </div>
-
-                   
                   </div>
-                  <div className="py-3 px-4">
-                    <a href="/Dashboard/courseDetail">
-                      <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
-                        <span>{course.buttonText}</span>
-                        <FaArrowDown className="text-xs" />
-                      </button>
-                    </a>
+
+                  <div className="font-bold text-xl p-2 poppins-bold text-left text-wrap mb-2">
+                    {course.title}
                   </div>
                 </div>
+
+                {/* Toggle Button */}
+                <div className="py-3 px-4 flex justify-center">
+                  <button
+                    onClick={() => toggleCourseSelection(course._id)}
+                    className={`py-2 px-6 rounded-full transition-colors ${selectedCourses.includes(course._id)
+                        ? "bg-red-500 hover:bg-red-600 text-white"
+                        : "bg-green-500 hover:bg-green-600 text-white"
+                      }`}
+                  >
+                    {selectedCourses.includes(course._id)
+                      ? "Deselect"
+                      : "Select"}
+                  </button>
+                </div>
+
+                <div className="pb-3 px-4">
+                  <button
+                    onClick={() => navigate(`/Dashboard/courseDetail/${course._id}`)}
+                    className="mt-2 bg-[#ffc224] w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-[#ffb700] transition-colors"
+                  >
+                    <span>View Detail</span>
+                    <FaArrowDown className="text-xs" />
+                  </button>
+                </div>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
+
+  
+        <div className="flex flex-col items-center justify-center mt-10 gap-4">
+
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 1}
+              className={`py-2 px-4 rounded-full ${currentPage === 1
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-300 hover:bg-gray-400 text-black"
+                }`}
+            >
+              Previous
+            </button>
+
+
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => (
+              <button
+                key={number}
+                onClick={() => paginate(number)}
+                className={`py-2 px-4 rounded-full ${currentPage === number
+                    ? "bg-[#ffc224] text-black font-bold"
+                    : "bg-gray-200 hover:bg-gray-300 text-black"
+                  }`}
+              >
+                {number}
+              </button>
+            ))}
+
+            <button
+              onClick={nextPage}
+              disabled={currentPage === totalPages}
+              className={`py-2 px-4 rounded-full ${currentPage === totalPages
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-300 hover:bg-gray-400 text-black"
+                }`}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+        <div className="mb-20">
+
+        </div>
+
+
+        {showModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg text-center w-96">
+              <h2 className="text-2xl font-bold mb-4 text-red-500">Limit Reached</h2>
+              <p className="text-gray-700 mb-6">You can select only 2 courses.</p>
+              <button
+                onClick={() => setShowModal(false)}
+                className="bg-[#ffc224] text-black py-2 px-6 rounded-full hover:bg-[#ffb700] transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
