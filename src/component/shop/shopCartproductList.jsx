@@ -96,7 +96,7 @@ const ShopCartproductList = ({ onNext }) => {
                 </div>
 
                 <div className="w-full sm:w-2/3">
-                  <h1 className="text-[20px] font-bold leading-[28px] tracking-normal font-Poppins mb-2 text-[#362D2C]">
+                  <h1 className="text-[20px] font-bold leading-[28px] tracking-normal font-Poppins mb-2 text-[#362D2C] text-wrap">
                     {product.name}
                   </h1>
                   <div className="flex text-yellow-500 my-6 text-2xl">

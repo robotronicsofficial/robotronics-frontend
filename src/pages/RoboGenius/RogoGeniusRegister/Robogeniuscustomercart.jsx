@@ -1,128 +1,105 @@
 import { useState } from "react";
-import { FaCreditCard, FaEye, FaShoppingBag, FaUser } from "react-icons/fa";
-// import ShopCartproductList from "../shopCartproductList";
-// import ShopCartproductList from "../../../component/shop/shopCartproductList";
-// import CustomerInfomation from "../CustomerInfomation";
-// import CustomerInfomation from "../../../component/shop/CustomerInfomation";
+import { Slider, alpha, styled } from "@mui/material";
 import RobogeniusCustomerInformation from "./RobogeniusCustomerInformation";
-// import ShopShipping from "../shopShipping";
 import ShopShipping from "../../../component/shop/shopShipping";
-import { BiSkipPrevious, BiSolidSkipPreviousCircle } from "react-icons/bi";
+import userIcon from "../../../assets/user-circle.png";
+import cardIcon from "../../../assets/credit-card.png";
 
-const Step = ({ icon, title, description, isActive }) => (
-  <div className="flex flex-col items-center space-y-2">
-    <div className={`p-3 rounded-full ${isActive ? "bg-primary" : "bg-muted"}`}>
-      {icon}
+// Styled Slider
+const SuccessSlider = styled(Slider)(() => ({
+  width: "100%",
+  maxWidth: "1043px",
+  height: "2px",
+  position: "relative",
+  color: "#362D2C",
+  '& .MuiSlider-track': {
+    backgroundColor: "#362D2C",
+  },
+  '& .MuiSlider-rail': {
+    backgroundColor: "#D4D4D4",
+  },
+  "& .MuiSlider-thumb": {
+    width: "8px",
+    height: "8px",
+    backgroundColor: "#362D2C",
+    "&:hover, &.Mui-focusVisible": {
+      boxShadow: `0px 0px 0px 8px ${alpha("#362D2C", 0.16)}`,
+    },
+    "&.Mui-active": {
+      boxShadow: `0px 0px 0px 14px ${alpha("#362D2C", 0.16)}`,
+    },
+  },
+}));
+
+const Step = ({ icon, title, description, isActive, onClick }) => (
+  <button
+    onClick={onClick}
+    disabled={!isActive}
+    className={`flex flex-col items-center space-y-2 cursor-pointer ${!isActive && "opacity-50 cursor-not-allowed"}`}
+  >
+    <div
+      className={`w-16 h-16 flex items-center justify-center rounded-full transition-colors shadow-md ${isActive ? "bg-[#362D2C]" : "bg-[#F6F6F6]"}`}
+    >
+      <img
+        src={icon}
+        className="w-7 h-7"
+        style={{ filter: isActive ? "invert(1)" : "none" }}
+      />
     </div>
-    <h3 className="text-sm font-medium text-center sm:text-base">{title}</h3>
-    <p className="text-xs text-center text-muted-foreground sm:text-sm">
+    <h3 className="font-bold text-[16px] text-[#362D2C] text-center sm:text-base">{title}</h3>
+    <p className="font-lato mt-4 font-medium text-[14px] leading-[20px] tracking-normal text-center text-[#7E7F7C] sm:text-sm">
       {description}
     </p>
-  </div>
+  </button>
 );
-const Robogeniuscustomercart = ({ onNext }) => {
 
 
-    const [form, setForm] = useState({
-      firstName: "",
-      lastName: "",
-      country: "",
-      companyName: "",
-      streetAddress: "",
-      aptSuite: "",
-      city: "",
-      state: "",
-      phone: "",
-      postalCode: "",
-      deliveryInstruction: "",
-    });
-  
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setForm((prevForm) => ({ ...prevForm, [name]: value }));
-    };
-  
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      console.log(form);
-      // Add form submission logic here
-    };
-
-
+const Robogeniuscustomercart = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
 
-  const handleNext = () => {
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
-  };
-
-  const handlePrevious = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
-  };
   const steps = [
     {
-      icon: (
-        <FaUser className={`${currentStep == 1 && "text-red-500"} w-6 h-6`} />
-      ),
-      title: "Parent and Child Information",
+      icon: userIcon,
+      title: "PARENT & CHILD INFORMATION",
       description: "Add your name, phone number and address.",
-      content: <RobogeniusCustomerInformation onNext={handleNext} />,
+      content: <RobogeniusCustomerInformation onNext={() => setCurrentStep(1)} />,
     },
     {
-      icon: (
-        <FaCreditCard
-          className={`${currentStep == 2 && "text-red-500"} w-6 h-6`}
-        />
-      ),
-      title: "Subscriptions Payment",
+      icon: cardIcon,
+      title: "SUBSCRIPTION PAYMENT",
       description: "Submit your Payment Information",
-      content: <ShopShipping onNext={handleNext} />,
-    },
-    {
-      icon: (
-        <FaEye className={`${currentStep == 3 && "text-red-500"} w-6 h-6`} />
-      ),
-      title: "Order Review",
-      description: "Review your order details before final confirmation.",
-      content: "This is where you would show the order summary for review.",
+      content: <ShopShipping onNext={() => setCurrentStep(2)}/>,
     },
   ];
 
+  const progressMap = [50, 100 ];
+  const progressValue = progressMap[currentStep] || 0;
+
   return (
     <>
-    <div className=" flex lg:flex-row items-center justify-center gap-[10vw] mt-10 flex-col ">
+      <div className="flex justify-center mt-10">
+        <SuccessSlider value={progressValue} min={0} max={100} disabled />
+      </div>
+
+
+      <div className="flex lg:flex-row items-center justify-evenly gap-[10vw] mt-10 flex-col">
         {steps.map((step, index) => (
-          <Step key={index} {...step} isActive={index <= currentStep} />
+          <Step
+            key={index}
+            icon={step.icon}
+            title={step.title}
+            description={step.description}
+            isActive={index <= currentStep}
+            onClick={() => setCurrentStep(index)}
+          />
         ))}
       </div>
-    <div className="container mx-auto px-4 py-8 md:py-16 ">
-      <div className="bg-muted py-6 px-2 md:px-6 rounded-lg mb-8">
-        {/* <h2 className="text-xl font-semibold mb-4">
-          {steps[currentStep].title}
-        </h2> */}
+      
+      <div className="container mx-auto px-4 py-8 md:py-16">
+        <h1 className="text-2xl md:text-4xl poppins-bold text-brown text-wrap">{steps[currentStep].title}</h1>
         <p>{steps[currentStep].content}</p>
       </div>
-    
-      <div className="flex justify-between">
-        {/* <button
-          className={`${
-            currentStep === 0 ? "bg-gray" : "bg-green-400 cursor-pointer"
-          } flex p-2 rounded`}
-          onClick={handlePrevious}
-          disabled={currentStep === 0}
-        > */}
-        {/* <BiSolidSkipPreviousCircle className="self-center mr-2" /> Previous */}
-        {/* </button> */}
-        {/* <button
-          onClick={handleNext}
-          disabled={currentStep === steps.length - 1}
-        >
-          Next
-        </button> */}
-      </div>
-    </div>
-    
-    
   </>
   );
 };
