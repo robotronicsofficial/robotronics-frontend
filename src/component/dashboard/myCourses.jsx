@@ -30,7 +30,7 @@ const MyCourses = () => {
         }
 
         // Fetch courses
-        const response = await fetch("http://localhost:8080/get-courses");
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -69,7 +69,7 @@ const MyCourses = () => {
         throw new Error("Child ID not found");
       }
 
-      const response = await fetch(`http://localhost:8080/api/${childId}/courses`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/courses`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -200,7 +200,7 @@ const MyCourses = () => {
                 }`}>
                 <img
                   className="w-full h-48 object-cover"
-                  src={course.thumbnail ? `http://localhost:8080/${course.thumbnail.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x200"}
+                  src={course.thumbnail ? `${import.meta.env.VITE_BACKEND_URL}/${course.thumbnail.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x200"}
                   alt={course.title}
                   onError={(e) => {
                     e.target.src = "https://via.placeholder.com/300x200";

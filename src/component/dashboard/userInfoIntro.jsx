@@ -90,7 +90,7 @@ const UserInfoIntro = () => {
           </div>
 
           <div className="flex flex-wrap p-2 lg:p-5">
-            <div className="w-full p-3">
+            <div className="w-full p-3 ">
               <div className="flex flex-col space-y-4 bg-white rounded-xl p-5 shadow-lg w-full">
                 <p className="text-lightblack poppins-bold">
                   <span className="font-semibold">Name:</span> {currentUser?.firstName || 'Not provided'} {currentUser?.lastName || ''}

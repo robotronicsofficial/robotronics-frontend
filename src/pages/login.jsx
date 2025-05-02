@@ -71,7 +71,7 @@ const Login = () => {
       if (redirectPath) {
         localStorage.removeItem('redirectAfterLogin');
         // navigate(redirectPath);
-        window.location.href = `http://localhost:5173${redirectPath}`;
+        window.location.href = `${import.meta.env.VITE_FRONTEND_URL}${redirectPath}`;
       } else {
         window.location.href = "/";
       }

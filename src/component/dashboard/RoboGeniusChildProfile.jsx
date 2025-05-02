@@ -279,7 +279,7 @@ const RoboGeniusChildProfile = () => {
 
       {/* Child Accounts Section */}
       <div className="w-full p-4 md:w-3/4 px-6">
-        <h1 className="text-2xl font-bold mb-4 md:text-3xl">Child Accounts</h1>
+        <h1 className="text-2xl font-bold mb-4 md:text-3xl pl-4">Child Accounts</h1>
 
         <div className="flex flex-wrap p-2 lg:p-5">
           {children.length > 0 ? (
@@ -310,7 +310,7 @@ const RoboGeniusChildProfile = () => {
                         <p className="text-lightblack poppins-bold text-sm md:text-base">
                           <span className="font-semibold">School:</span> {child.schoolName}
                         </p>
-                        <p className="text-lightblack poppins-bold text-sm md:text-base">
+                        <p className="text-lightblack poppins-bold text-sm md:text-base text-wrap">
                           <span className="font-semibold">Address:</span> {child.streetAddress}, {child.city}, {child.postalCode}
                         </p>
                       </div>
