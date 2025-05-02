@@ -7,6 +7,7 @@ import Testimonial from "../component/testimonial";
 import Updates from "../component/updates";
 import BoToBtn from "../component/goToBtn";
 import Marquees from "../component/marquees";
+import Robo from "../component/Robo"
 
 const Home = () => {
   return (
@@ -14,6 +15,7 @@ const Home = () => {
       <Intro />
       <Marquees direction = "left"/>
       <Graph />
+      <Robo/>
       <Services />
       <Offers />
       <Shop />
