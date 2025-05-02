@@ -1,25 +1,30 @@
+import { useState, useRef, useEffect } from "react";
 import bg from "../../assets/images/courses_details.svg";
 import yt from "../../assets/images/courseDetailsYoutube.svg";
-// import pic from "../../assets/images/courseDetailpic.svg";
-// import { FaRegHeart } from "react-icons/fa";
+import { IoMdShare } from "react-icons/io";
+import { FaFacebookF, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import { MdCheckBox } from "react-icons/md";
-// import { useNavigate } from "react-router-dom";
 
 const Robogeniusintro = () => {
-  // const navigate = useNavigate(); // Initialize the navigate function
+  const [showShare, setShowShare] = useState(false);
+  const shareRef = useRef(null);
+  const shareUrl = "http://localhost:5173/Robogeniushome"; // Replace with actual URL
 
-  // const handleRegisterClick = () => {
-  //   navigate("/Robogeniushome/Register"); // Navigate to the desired route
-  // };
-
-  // const handleGiftProgramClick = () => {
-  //   navigate("/Robogeniushome/GiftCourse"); // Replace with your desired route
-  // };
+  // Close share menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (shareRef.current && !shareRef.current.contains(event.target)) {
+        setShowShare(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="bg-background">
-      <div className="bg-gray-100 py-6 ">
-        <div className="w-full h-full px-4 py-12 sm:py-2  sm:px-8  md:px-12 lg:px-24 ">
+      <div className="bg-gray-100 py-6">
+        <div className="w-full h-full px-4 py-12 sm:py-2 sm:px-8 md:px-12 lg:px-24">
           <div className="flex flex-col lg:flex-row lg:space-x-6 mt-20 lg:mt-40">
             {/* Left Side */}
             <div
@@ -39,23 +44,63 @@ const Robogeniusintro = () => {
 
               {/* Heading + Button */}
               <div>
-                <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-start sm:items-center w-full ">
-                  <h1 className="text-2xl sm:text-3xl lg:text-5xl text-brown font-medium pt-6 lg:pt-0">
+                <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-start sm:items-center w-full">
+                  <h1 className="text-3xl sm:text-3xl lg:text-5xl text-brown font-medium pt-6 lg:pt-0 poppins-bold">
                     RoboGenius Program
                   </h1>
-                  <button className="border bg-red-600 text-white text-sm md:text-base lg:text-lg px-4 md:px-6 py-2 md:py-3 w-full sm:w-auto rounded-lg">
+                  <button className="border bg-red-600 text-white text-sm md:text-base lg:text-lg px-4 md:px-6 py-2 md:py-3 w-full sm:w-auto rounded-lg pointer-events-none">
                     ON SALE
                   </button>
                 </div>
 
                 {/* Info Bar */}
-                <div className="h-auto sm:h-[12vh] w-full bg-[#D9D9D9] flex flex-wrap sm:flex-nowrap items-center px-4 sm:px-8 justify-between mt-6 lg:mt-14 rounded-lg text-[#7D7D7D] text-sm sm:text-base gap-2 sm:gap-0 py-4 sm:py-0 ">
-                  <div className="whitespace-nowrap">06 Sections</div>
-                  <div className="whitespace-nowrap">08 Lessons</div>
+                <div className="h-auto sm:h-[12vh] w-full bg-[#D9D9D9] flex flex-wrap sm:flex-nowrap items-center px-4 sm:px-8 justify-between mt-6 lg:mt-14 rounded-lg text-[#7D7D7D] text-sm sm:text-base gap-2 sm:gap-0 py-4 sm:py-0 poppins-light ">
+                  <div className="whitespace-nowrap">30+ Courses</div>
+                  <div className="whitespace-nowrap">US-based Certificates</div>
                   <div className="whitespace-nowrap hidden sm:inline-block">
-                    Free Trial Available
+                    Self Paced Learning
                   </div>
-                  <div className="whitespace-nowrap">Share</div>
+
+                  {/* Share Button */}
+                  <div className="relative" ref={shareRef}>
+                    <button
+                      onClick={() => setShowShare((prev) => !prev)}
+                      className="flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <IoMdShare />
+                      <span>Share</span>
+                    </button>
+
+                    {/* Share Options */}
+                    {showShare && (
+                      <div className="absolute top-8 right-0 z-10 bg-white rounded shadow-md p-2 flex flex-col gap-2 min-w-[140px]">
+                        <a
+                          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 hover:text-blue-600"
+                        >
+                          <FaFacebookF /> Facebook
+                        </a>
+                        <a
+                          href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 hover:text-blue-400"
+                        >
+                          <FaTwitter /> Twitter
+                        </a>
+                        <a
+                          href={`https://wa.me/?text=${encodeURIComponent(shareUrl)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 hover:text-green-600"
+                        >
+                          <FaWhatsapp /> WhatsApp
+                        </a>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -78,26 +123,28 @@ const Robogeniusintro = () => {
 
               {/* Features */}
               <div className="bg-white px-4 sm:px-6 md:px-10 lg:px-8 py-6 sm:py-7 rounded-md shadow-md w-full">
-                <h3 className="text-lg sm:text-xl mb-4 font-semibold">
-                  Feature of this Program
+                <h3 className="text-lg sm:text-xl mb-4 font-semibold poppins-bold">
+                Features of RoboGenius Program:
                 </h3>
                 <ul className="list-none space-y-3 text-gray-700">
                   {[
-                    "Free Trial Available",
-                    "English",
-                    "Certificate Available",
-                    "3-4 hours worth of material",
-                    "Self paced",
-                    "Self paced",
+                    "30+ Courses in one Subscription",
+                    "Robotics, STEM, AI, Coding all included",
+                    "180+ hours of recorded Lectures",
+                    "Freelancing Skills including E-Commerce",
+                    "Easy to Understand Language",
+                    "24/7 LIVE Chat Support for Pro Users",
+                    "Multiple Child Accounts under one Parent",
+                    
                   ].map((item, index) => (
                     <li
                       key={index}
-                      className="flex items-center space-x-4 sm:space-x-6"
+                      className="flex items-center space-x-4 sm:space-x-6 "
                     >
                       <span className="text-yellow text-lg sm:text-xl">
                         <MdCheckBox />
                       </span>
-                      <span className="text-base sm:text-xl">{item}</span>
+                      <span className="text-base sm:text-xl md:text-base  poppins-light ">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -107,17 +154,23 @@ const Robogeniusintro = () => {
 
           {/* Bottom Description */}
           <div className="pt-14">
-            <h1 className="font-semibold text-2xl sm:text-3xl md:text-4xl mb-4">
-              Robogenius Short Description
+            <h1 className="font-semibold text-2xl sm:text-3xl md:text-4xl mb-4 poppins-bold">
+              What is Robogenius Program?
             </h1>
-            <p className="text-lightblack leading-relaxed text-base sm:text-lg">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              congue semper turpis, ac viverra velit tristique vitae. Sed vel
-              felis ac neque euismod rutrum. Donec vulputate, lectus at
-              tristique suscipit, ligula velit cursus purus, in condimentum
-              metus dolor in urna. Donec at turpis vel nunc aliquet iaculis. Sed
-              congue semper turpis, ac viverra velit tristique vitae. Sed vel
-              felis ac neque euismod rutrum.
+            <p className="text-lightblack leading-relaxed text-base sm:text-lg poppins-light">
+              Robogenius Program is world’s 1st subscription based platform
+              which has all the skills under one roof. It is a one-stop solution
+              for your Child to learn all the Modern Skills. From Robotics to AI
+              to Coding we have got you covered. Just like Netflix, Parents can
+              make multiple Child Accounts and engage their children in
+              productive work.
+              <br />
+              <br />
+              Activate 2 to 4 courses at a time and start your learning with
+              Robotronics. Submit Modular Assessments every month and receive a
+              US based STEMSOL.org verified Certificate. These skills will help
+              your child build their profile for IVY League University
+              Admissions as well.
             </p>
           </div>
         </div>

@@ -12,7 +12,7 @@ const Robogeniusmaincourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch("http://localhost:8080/get-courses");
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
         const data = await response.json();
         if (data?.courses) {
           setCourses(data.courses);
@@ -53,7 +53,7 @@ const Robogeniusmaincourses = () => {
   return (
     <div className="relative bg-[#ebe5e2] py-4 px-4 md:px-20 lg:px-40">
       <div className="mx-4">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl poppins-medium text-brown text-center w-full py-4 md:py-8">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl poppins-medium text-brown text-center w-full py-4 md:py-8 poppins-bold">
           Courses Included in RoboGenius Program
         </h1>
       </div>
@@ -78,7 +78,7 @@ const Robogeniusmaincourses = () => {
               <div className="bg-white p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
                 <img
                     className="rounded-xl w-full h-48 sm:h-56 object-cover"
-                    src={`http://localhost:8080/${course.thumbnail.replace(/\\/g, "/")}`}
+                    src={`${import.meta.env.VITE_BACKEND_URL}/${course.thumbnail.replace(/\\/g, "/")}`}
                     alt={course.title}
                 />
                 <div className="px-4 lg:px-6 py-2 flex-grow">

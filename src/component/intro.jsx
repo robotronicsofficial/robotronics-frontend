@@ -1,4 +1,6 @@
 import { useEffect} from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   FaFacebook,
   FaInstagram,
@@ -12,6 +14,8 @@ import Robort from "../assets/images/Robort.svg";
 import Aos from "aos";
 
 const Intro = () => {
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     Aos.init(); // Initialize AOS library
@@ -28,7 +32,7 @@ const Intro = () => {
               <div className="space-y-2  flex flex-col gap-6 mt-8  w-full" data-aos="fade-up" data-aos-duration="2000">
                 <div className="flex flex-row  space-x-2 ">
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-thin">
-               sELCOME TO THE{" "}
+               WELCOME TO THE{" "}
                   </h1>
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-extralight">
                     WORLD OF
@@ -50,18 +54,19 @@ const Intro = () => {
               <div className="space-x-3 mt-10" data-aos="fade-up" data-aos-duration="1500">
                 <button
                   to="section2"
+                  onClick={() => navigate("/Robogeniushome")}
                   offset={-70}
                   className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-black hover:text-white bg-gold poppins-bold hover:bg-lin shadow-xl rounded-md"
                 >
                   Get Enrolled
                 </button>
-                <button
+                {/* <button
                   to="section1"
                   offset={-70}
-                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-white hover:text-brown bg-lin poppins-bold hover:bg-gold shadow-xl rounded-md"
+                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-black hover:text-white bg-gold poppins-bold hover:bg-lin shadow-xl rounded-md"
                 >
                   Get Started
-                </button>
+                </button> */}
               </div>
               </div>
 
@@ -75,7 +80,7 @@ const Intro = () => {
                   { href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw", icon: <FaYoutube /> },
                   { href: "https://www.instagram.com/robotronicspk/?hl=en", icon: <FaInstagram /> },
                   { href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all", icon: <FaLinkedin /> },
-                  { href: "https://api.whatsapp.com/send?phone=1234567890", icon: <FaWhatsapp /> },
+                  { href: "https://wa.me/message/TKZZPIE2A34UM1", icon: <FaWhatsapp /> },
                 ].map(({ href, icon }, index) => (
                   <a
                     key={index}

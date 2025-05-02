@@ -130,7 +130,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
   return (
     <div className="lg:flex flex-row bg-gray">
       <div className="flex flex-col lg:w-3/5">
-        <form onSubmit={handleSubmit} className="space-y-6 bg-background p-6 max-w-4xl mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-6 bg-background p-6 max-w-4xl ">
           {/* Parent Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField label="Parent First Name" name="firstName" value={parentForm.firstName} onChange={handleParentChange} placeholder="Parent First Name" required />

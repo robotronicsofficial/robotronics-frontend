@@ -1,6 +1,8 @@
 import mission from "../../assets/images/aboutMission.svg";
 import vision from "../../assets/images/aboutVision.svg";
 import quote from "../../assets/images/aboutquote.svg"
+import founder2 from "../../assets/imagesContent/team/mfarhan.jpg";
+
 const AboutVision = () => {
   return (
     <div className="flex flex-col bg-black p-4 ">
@@ -42,8 +44,8 @@ const AboutVision = () => {
 
         <div className="p-2 pt-8 md:pt-2  flex flex-col   items-center" >
 
-          <img className=""data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000" src={quote} />
-          <p className="lg:text-2xl text-xl text-gold poppins-light"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >Peter Nammy</p>
+          <img className=""data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000" src={founder2} />
+          <p className="lg:text-2xl text-xl text-gold poppins-light"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >Engr Saba Farhan</p>
           <p className="text-white  poppins-light"data-aos="fade-up" data-aos-duration="3000" data-aos-delay="6000" >Curriculum Head</p>
         </div>
       </div>
