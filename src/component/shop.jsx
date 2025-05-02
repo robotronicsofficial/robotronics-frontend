@@ -14,7 +14,7 @@ const ServiceCard = ({ service }) => {
       <div className="bg-white p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
         {/* Image */}
         <img
-          className="rounded-xl w-full h-48 sm:h-56 object-cover"
+          className="rounded-xl w-full h-48 sm:h-56 object-fit"
 
           src={`${import.meta.env.VITE_BACKEND_URL}/${service.thumbnail}`}
 
@@ -43,13 +43,13 @@ const ServiceCard = ({ service }) => {
             <div className="flex items-center gap-2">
               <LuClock className="text-yellow text-lg sm:text-xl" />
               <span className="text-xs sm:text-sm font-bold poppins-extrabold text-wrap">
-                {service.title || "N/A"}
+                {service.month || "N/A"} Months
               </span>
             </div>
             <div className="flex items-center gap-2">
               <IoVideocamOutline className="text-yellow text-lg sm:text-xl" />
               <span className="text-xs sm:text-sm font-bold poppins-extrabold text-wrap">
-                {service.title || "N/A"} Lessons
+                {service.numLessons || "N/A"} Lectures
               </span>
             </div>
           </div>
@@ -124,10 +124,10 @@ const Shop = () => {
             {/* Text Content */}
             <div className="text-center md:text-left">
               <h2 className="text-brown text-2xl sm:text-3xl md:text-4xl lg:text-5xl poppins-extrabold leading-tight">
-                Upcoming <span className="text-[#f5ab34]">Courses-</span>
+                Courses in <span className="text-[#f5ab34]">RoboGenius Program</span>
               </h2>
               <p className="text-brown text-xl sm:text-2xl md:text-3xl poppins-extrabold mt-1 sm:mt-2">
-                Gear up for some Fun
+                Gear up for some Fun!
               </p>
             </div>
           </div>

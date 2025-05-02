@@ -216,7 +216,20 @@ const RoboGeniusChildProfile = () => {
       const isValid = await verifyPin(selectedChildId, pinData);
       if (isValid) {
         setIsVerifyPinModalOpen(false);
-        navigate(`/Dashboard/MyCoursesPage/${selectedChildId}`);
+        
+        // Fetch child's courses data
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getChild/${selectedChildId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch child courses');
+        }
+        const data = await response.json();
+        
+        // Navigate based on whether courses exist
+        if (data.courses && data.courses.length > 0) {
+          navigate(`/Dashboard/myAllCourses/${selectedChildId}`);
+        } else {
+          navigate(`/Dashboard/MyCoursesPage/${selectedChildId}`);
+        }
       } else {
         setPinError("Incorrect PIN. Please try again.");
         setIsErrorModalOpen(true);
@@ -228,13 +241,15 @@ const RoboGeniusChildProfile = () => {
     }
   };
 
-  const handleViewCourses = (childId) => {
+  const handleViewCourses = async (childId) => {
     setSelectedChildId(childId);
     const child = children.find(c => c._id === childId);
+    
     if (!child?.hasPin) return;
     
     setIsVerifyPinModalOpen(true);
   };
+
 
   const openPinModal = (childId, hasPin) => {
     setSelectedChildId(childId);
