@@ -30,7 +30,7 @@ const MyAllCourses = () => {
         setLoading(true);
         
         // Fetch all courses
-        const allCoursesResponse = await fetch("http://localhost:8080/get-courses");
+        const allCoursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
         if (!allCoursesResponse.ok) {
           throw new Error("Failed to fetch all courses");
         }
@@ -38,7 +38,7 @@ const MyAllCourses = () => {
         setAllCourses(allCoursesData.courses);
   
         // Fetch child's data
-        const childResponse = await fetch(`http://localhost:8080/api/child/${childId}/courses`);
+        const childResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/child/${childId}/courses`);
         if (!childResponse.ok) {
           throw new Error(`Failed to fetch child data. Status: ${childResponse.status}`);
         }
@@ -153,7 +153,7 @@ const MyAllCourses = () => {
                     className="w-full h-48 object-cover"
                     src={
                       course.thumbnail
-                        ? `http://localhost:8080/${course.thumbnail.replace(/\\/g, "/")}`
+                        ? `${import.meta.env.VITE_BACKEND_URL}/${course.thumbnail.replace(/\\/g, "/")}`
                         : "https://via.placeholder.com/300x200"
                     }
                     alt={course.title}
