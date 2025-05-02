@@ -182,11 +182,13 @@ const MyAllCourses = () => {
                   <div className="pb-3 px-4">
                     <button
                       onClick={() =>
-                        navigate(`/Dashboard/courseDetail/${course._id}`)
+                        // navigate(`/Dashboard/courseDetail/${course._id}`)
+                        navigate(`/Dashboard/courseDetail`)
+
                       }
                       className="mt-2 bg-[#ffc224] w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-[#ffb700] transition-colors"
                     >
-                      <span>View Details</span>
+                      <span>View Course</span>
                     </button>
                   </div>
                 </div>
