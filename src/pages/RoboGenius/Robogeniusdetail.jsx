@@ -90,21 +90,17 @@ const Robogeniusdetail = () => {
   return (
     <div className="bg-background lg:px-24 py-5">
       <div
-        className="bg-white p-8 py-10 rounded-xl"
+        className="bg-white p-8 py-6 rounded-xl"
         data-aos="fade-up"
         data-aos-duration="2000"
         data-aos-delay="4000"
       >
         <div className="py-5">
-          <h1 className="font-bold text-xl mb-4">Who this course is for?</h1>
-          <p className="text-wrap text-lightblack">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed congue
-            semper turpis, ac viverra velit tristique vitae. Sed vel felis ac
-            neque euismod rutrum. Donec vulputate, lectus at tristique suscipit,
-            ligula velit cursus purus, in condimentum metus dolor in urna. Donec
-            at turpis vel nunc aliquet iaculis. Sed congue semper turpis, ac
-            viverra velit tristique vitae. Sed vel felis ac neque euismod
-            rutrum.
+          <h1 className="font-bold text-xl mb-4 poppins-bold">Who this course is for?</h1>
+          <p className="text-wrap text-lightblack poppins-light">
+          RoboGenius program is basically for all those Parents who want to timely prepare their Kids for the future by exposing them to these Modern Era Skills.
+          <br />
+           This is for students of age 6 and onwards belonging to any socio-economic background can benefit from this program across the Globe. All the courses are recorded in simple English language with generally acceptable accent.
           </p>
         </div>
 
@@ -112,42 +108,48 @@ const Robogeniusdetail = () => {
           <ul className="space-y-4">
             <div className="mb-6">
               <li className="flex items-center space-x-6">
-                <span className="font-medium text-2xl">Requirments</span>
+                <span className="font-medium text-2xl poppins-bold">Requirements</span>
               </li>
             </div>
-            <p className="text-wrap text-lightblack">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed congue
-            semper turpis, ac viverra velit tristique vitae. Sed vel felis ac
-            neque euismod rutrum. Donec vulputate, lectus at tristique suscipit,
-            ligula velit cursus purus, in condimentum metus dolor in urna. Donec
-            at turpis vel nunc aliquet iaculis. Sed congue semper turpis, ac
-            viverra velit tristique vitae. Sed vel felis ac neque euismod
-            rutrum.
+            <p className="text-wrap text-lightblack poppins-light">
+            The students would require a normal speed Internet Connection. RoboGenius Platform is completely responsive for all screen types. Hence the courses can be taken on a Laptop/PC/Tablet/Ipad/Mobile etc. Systems with basic configuration can also be used.
           </p>
-            <div className="space-y-4">
-              <li className="flex items-center space-x-9">
+
+          <div>
+          <span className="font-medium text-2xl poppins-bold">Resources Provided by Robotronics</span>
+          </div>
+
+
+            <div className="space-y-3 poppins-light">
+              <li className="flex items-center space-x-9 ">
                 <span className="text-yellow">
                   <GoDotFill />
                 </span>
-                <span>Video Section</span>
+                <span>Recorded Video Lectures</span>
               </li>
               <li className="flex items-center space-x-9">
                 <span className="text-yellow">
                   <GoDotFill />
                 </span>
-                <span>Section Book</span>
+                <span>Code Files for each Lecture(Where ever applicable)</span>
               </li>
               <li className="flex items-center space-x-9">
                 <span className="text-yellow">
                   <GoDotFill />
                 </span>
-                <span>PDF</span>
+                <span>Practice Assignments</span>
               </li>
               <li className="flex items-center space-x-9">
                 <span className="text-yellow">
                   <GoDotFill />
                 </span>
-                <span>Audio</span>
+                <span>Module based Assessments</span>
+              </li>
+              <li className="flex items-center space-x-9">
+                <span className="text-yellow">
+                  <GoDotFill />
+                </span>
+                <span>E-Certificates for Pro Users</span>
               </li>
             </div>
           </ul>

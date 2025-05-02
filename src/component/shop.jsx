@@ -24,7 +24,7 @@ const ServiceCard = ({ service }) => {
         {/* Content */}
         <div className="flex-grow flex flex-col pt-4 sm:pt-5">
           {/* Title and Rating */}
-          <div className="flex justify-between items-start mb-3">
+          <div className="flex justify-between items-center mb-3">
             <h3 className="text-sm sm:text-base lg:text-lg font-bold poppins-extrabold pr-2 text-wrap">
               {service.title || "Unnamed Service"}
             </h3>

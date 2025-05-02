@@ -24,7 +24,7 @@ const LeftNav = () => {
       dropdownIcon: <RiArrowDropDownLine className="text-3xl text-brown" />,
       subMenu: [
         { name: "• My Products", href: "/International/myRobot" },
-        { name: "• My Courses", href: "/Dashboard/MyCoursesPage" },
+        // { name: "• My Courses", href: "/Dashboard/MyCoursesPage" },
       ],
     },
     {
@@ -52,7 +52,7 @@ const LeftNav = () => {
   return (
     <div className="flex flex-col w-full lg:w-[24vw] px-6 py-4  md:mt-2">
       <div className="mb-4 space-y-2">
-        <h1 className="text-xl lg:text-2xl poppins-bold">Hello {currentUser.firstName}</h1>
+        <h1 className="text-xl lg:text-xl poppins-bold">Hello {currentUser.firstName}</h1>
         <p className="text-lightblack poppins-light">Welcome to your Account</p>
       </div>
 

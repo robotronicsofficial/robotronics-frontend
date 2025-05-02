@@ -1,4 +1,3 @@
-
 import img from "../assets/logo/arrowN-E.svg";
 import robot from "../assets/images/bosten.svg";
 import circle from "../assets/logo/twocircle.svg";
@@ -8,6 +7,14 @@ import apple from "../assets/logo/apple.svg";
 import pstore from "../assets/logo/Playstor.svg";
 import Aos from "aos";
 import { useEffect } from "react";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaLinkedin,
+  // FaTwitter,
+  FaWhatsapp,
+  FaYoutube,
+} from "react-icons/fa";
 
 const Footer = () => {
   useEffect(() => {
@@ -31,7 +38,8 @@ const Footer = () => {
         <div className="lg:w-1/4 md:w-1/3 w-1/2">
           <button
             className="flex lg:w-12 lg:h-12 md:h-8 md:w-8 h-6 w-6 top-btn border border-white rounded-full"
-            data-aos="fade-up" data-aos-duration="2000"
+            data-aos="fade-up"
+            data-aos-duration="2000"
             onClick={goToTop}
           >
             <a>
@@ -46,7 +54,8 @@ const Footer = () => {
         <div className="text-left">
           <p
             className="text-black text-wrap font-black lg:text-8xl md:text-6xl text-4xl custom-outline"
-           data-aos="fade-down" data-aos-duration="2000"
+            data-aos="fade-down"
+            data-aos-duration="2000"
           >
             ROBOTRONICS
           </p>
@@ -56,7 +65,11 @@ const Footer = () => {
       <footer className="text-white body-font">
         <div className="container p-4 mx-auto">
           <div className="flex flex-wrap justify-between lg:text-center md:text-center text-left">
-            <div className="lg:w-1/2 flex p-10" data-aos="fade-up" data-aos-duration="2000">
+            <div
+              className="lg:w-1/2 flex p-10"
+              data-aos="fade-up"
+              data-aos-duration="2000"
+            >
               {/* Quick Links */}
               <div className="w-1/2 text-wrap text-left">
                 <h2 className="title-font font-medium poppins-semibold text-gold lg:text-xl tracking-widest">
@@ -64,44 +77,58 @@ const Footer = () => {
                 </h2>
                 <nav className="list-none space-y-2">
                   <li>
-                    <a className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                    href="/aboutUs">
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/aboutUs"
+                    >
                       About Us
                     </a>
                   </li>
                   <li>
-                    <a className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                    href="/CareerJob">
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/CareerJob"
+                    >
                       Careers
                     </a>
                   </li>
                   <li>
-                    <a className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                    href="/shop">
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/shop"
+                    >
                       Shop
                     </a>
                   </li>
                   <li>
-                    <a className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                    href="/Blog">
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/Blog"
+                    >
                       Blog
                     </a>
                   </li>
                   <li>
-                    <a className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                    href="/Course">
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/Course"
+                    >
                       Courses
                     </a>
                   </li>
                   <li>
-                    <a className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                    href="/International/videoGallery">
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/International/videoGallery"
+                    >
                       Gallery
                     </a>
                   </li>
                   <li>
-                    <a className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                    href="/International/home">
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/International/home"
+                    >
                       Robotronics International
                     </a>
                   </li>
@@ -116,28 +143,53 @@ const Footer = () => {
                 </h2>
                 <nav className="list-none space-y-4">
                   <li>
-                    <span className="text-white font-bold poppins-medium lg:text-xl">Email</span>
-                    <p className="text-white text-sm text-wrap poppins-regular font-thin">Robotronic@gmail.com</p>
+                    <span className="text-white font-bold poppins-medium lg:text-xl">
+                      Email
+                    </span>
+                    <p className="text-white text-sm text-wrap poppins-regular font-thin">
+                      support@robotronicsofficial.com
+                    </p>
                   </li>
                   <li>
-                    <span className="text-white font-bold poppins-medium lg:text-xl">Phone</span>
-                    <p className="text-white text-wrap poppins-regular font-thin">+92 333555-66-77</p>
+                    <span className="text-white font-bold poppins-medium lg:text-xl">
+                      Phone
+                    </span>
+                    <p className="text-white text-wrap poppins-regular font-thin">
+                      +92 320 7626 842
+                    </p>
                   </li>
                   <li>
-                    <span className="text-white font-bold poppins-medium lg:text-xl">Location</span>
-                    <p className="text-white text-wrap poppins-regular font-thin">2972 Westheimer Rd. Lahore, Pakistan</p>
+                    <span className="text-white font-bold poppins-medium lg:text-xl">
+                      Location
+                    </span>
+                    <p className="text-white text-wrap poppins-regular font-thin">
+                      Phase-4, DHA, Lahore, Pakistan
+                    </p>
                   </li>
                   <li>
-                    <span className="text-white font-bold poppins-medium lg:text-xl">Mo - Fr</span>
-                    <p className="text-white text-wrap poppins-regular font-thin">9am - 6pm</p>
+                    <span className="text-white font-bold poppins-medium lg:text-xl">
+                      Mo - Fr
+                    </span>
+                    <p className="text-white text-wrap poppins-regular font-thin">
+                      9am - 6pm
+                    </p>
                   </li>
                 </nav>
-                <img className="w-24 mt-4" data-aos="fade-up" src={robot} alt="robot" />
+                <img
+                  className="w-24 mt-4"
+                  data-aos="fade-up"
+                  src={robot}
+                  alt="robot"
+                />
               </div>
             </div>
 
             {/* Search & App Buttons */}
-            <div className="flex flex-col justify-center w-full lg:w-1/2 px-4"data-aos="" data-aos-duration="2000">
+            <div
+              className="flex flex-col justify-center w-full lg:w-1/2 px-4"
+              data-aos=""
+              data-aos-duration="2000"
+            >
               {/* Subscribe Section */}
               <div className="flex flex-col lg:flex-row items-center lg:items-start mb-4 space-y-4 lg:space-y-0 lg:space-x-4">
                 <div className="relative w-full">
@@ -154,85 +206,149 @@ const Footer = () => {
               </div>
 
               {/* Launch Countdown */}
-              <div className="flex my-4" >
+              <div className="flex my-4">
                 {/* img */}
-                <div className="md:w-1/2 flex " >
-                  <img src={mobile} className="h-64 hidden md:block" alt="" />
-                  <img src={mobile}  className="h-64 hidden md:block"alt="" />
-                </div>
+                <div className="relative w-full max-w-sm mx-auto h-72">
+  {/* Back phone */}
+  <img
+    src={mobile}
+    alt="Mobile 1"
+    className="absolute left-10 top-5 w-32 sm:w-36 md:w-40 z-0"
+  />
+
+  {/* Front phone */}
+  <img
+    src={mobile}
+    alt="Mobile 2"
+    className="absolute left-0 top-20 w-32 sm:w-36 md:w-40 z-10"
+  />
+</div>
+
+
                 <div className="lg:w-1/2 md:2/3 flex flex-col flex-wrap items-center text-wrap lg:items-start text-center lg:text-left">
-                  <p className="text-2xl text-white poppins-bold mb-8 ">READY TO LAUNCH IN...</p>
-                  <div className="flex  justify-center lg:justify-start space-x-4 text-white" data-aos="fade-up">
+                  <p className="text-2xl text-white poppins-bold mb-8 ">
+                    READY TO LAUNCH IN...
+                  </p>
+                  <div
+                    className="flex  justify-center lg:justify-start space-x-4 text-white"
+                    data-aos="fade-up"
+                  >
                     <div className="text-center">
                       <p className="text-gold poppins-regular text-sm">WEEKS</p>
-                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">22 :</p>
+                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
+                        22 :
+                      </p>
                     </div>
                     <div className="text-center">
                       <p className="text-gold text-sm poppins-regular ">DAYS</p>
-                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">12 :</p>
+                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
+                        12 :
+                      </p>
                     </div>
                     <div className="text-center">
-                      <p className="text-gold text-sm poppins-regular ">HOURS</p>
-                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">23 :</p>
+                      <p className="text-gold text-sm poppins-regular ">
+                        HOURS
+                      </p>
+                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
+                        23 :
+                      </p>
                     </div>
                     <div className="text-center">
-                      <p className="text-gold text-sm poppins-regular ">MINUTES</p>
-                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">45</p>
+                      <p className="text-gold text-sm poppins-regular ">
+                        MINUTES
+                      </p>
+                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
+                        45
+                      </p>
                     </div>
                   </div>
 
                   {/* App Store Buttons */}
                   <div className="flex flex-col gap-y-6 my-10">
-                    <button className="mb-4 border border-white p-4 rounded-xl flex items-center space-x-12 hover:bg-gray-800 transition-colors duration-200"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+                    <button
+                      className="mb-4 border border-white p-4 rounded-xl flex items-center space-x-12 hover:bg-gray-800 transition-colors duration-200"
+                      data-aos="fade-up"
+                      data-aos-duration="2000"
+                      data-aos-delay="4000"
+                    >
                       <img className="h-11 w-14" src={apple} alt="apple" />
                       <div className="text-white">
                         <p className="text-sm text-wrap">Download on the</p>
-                        <p className="text-2xl text-wrap font-bold">APP STORE</p>
+                        <p className="text-2xl text-wrap font-bold">
+                          APP STORE
+                        </p>
                       </div>
                     </button>
-                    <button className="border border-white p-4 rounded-xl flex items-center space-x-12 hover:bg-gray-800 transition-colors duration-200" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
-                      <img className="h-11 w-14" src={pstore} alt="play-store" />
+                    <button
+                      className="border border-white p-4 rounded-xl flex items-center space-x-12 hover:bg-gray-800 transition-colors duration-200"
+                      data-aos="fade-up"
+                      data-aos-duration="2000"
+                      data-aos-delay="4000"
+                    >
+                      <img
+                        className="h-11 w-14"
+                        src={pstore}
+                        alt="play-store"
+                      />
                       <div className="text-white">
                         <p className="text-sm text-wrap ">Download on the</p>
-                        <p className="text-2xl text-wrap font-bold">PLAY STORE</p>
+                        <p className="text-2xl text-wrap font-bold">
+                          PLAY STORE
+                        </p>
                       </div>
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
         {/* Footer Bottom */}
-        <div className="bg-black border-t px-10  border-white py-4">
+        <div className="bg-black border-t px-10   py-4">
           <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center text-center lg:text-left">
             <p className="text-sm poppins-medium text-wrap  text-white">
-              Copyright © 2024. All Rights Reserved. Powered by Robotronics
+              Copyright © 2025. All Rights Reserved. Powered by Robotronics.
             </p>
-            <div className="flex mt-4 lg:mt-0 space-x-3">
-              <a className="text-white">
-                <svg className="w-9 h-9 border border-white p-1 rounded-full" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
-                </svg>
-              </a>
-              <a className="text-white">
-                <svg className="w-9 h-9 border border-white p-2 rounded-full" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
-                </svg>
-              </a>
-              <a className="text-white">
-                <svg className="w-9 h-9 border border-white p-2 rounded-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
-                  <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
-                </svg>
-              </a>
-              <a className="text-white">
-                <svg className="w-9 h-9 border border-white p-2 rounded-full" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M16 8a6 6 0 00-11.92 1.6A5 5 0 006 14H0V2z"></path>
-                </svg>
-              </a>
+            <div className="flex flex-row space-x-2 lg:space-x-5">
+              {[
+                {
+                  href: "https://www.facebook.com/robotronicspakistan/",
+                  icon: <FaFacebook />,
+                },
+                // {
+                //   href: "https://twitter.com/robotronicspk",
+                //   icon: <FaTwitter />,
+                // },
+                {
+                  href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
+                  icon: <FaYoutube />,
+                },
+                {
+                  href: "https://www.instagram.com/robotronicspk/?hl=en",
+                  icon: <FaInstagram />,
+                },
+                {
+                  href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
+                  icon: <FaLinkedin />,
+                },
+                {
+                  href: "https://wa.me/message/TKZZPIE2A34UM1",
+                  icon: <FaWhatsapp />,
+                },
+              ].map(({ href, icon }, index) => (
+                <a
+                  key={index}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-aos-duration="1000"
+                  data-aos-delay={index * 200}
+                  className="lg:p-3 p-1 border border-brown bg-white rounded-xl hover:bg-brown hover:text-white text-black"
+                >
+                  {icon}
+                </a>
+              ))}
             </div>
           </div>
         </div>
@@ -242,4 +358,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
