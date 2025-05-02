@@ -7,7 +7,7 @@ export const fetchPlans = createAsyncThunk(
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getAllPlans`);
       if (!response.ok) throw new Error("Failed to fetch plans");
       const data = await response.json();
-      return data.plans || data;
+      return data.plans || data; // Handle both formats (data.plans or direct array)
     } catch (error) {
       console.error("Error fetching plans:", error);
       return rejectWithValue(error.message);

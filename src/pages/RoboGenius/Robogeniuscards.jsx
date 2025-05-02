@@ -134,7 +134,7 @@ const Robogeniuscards = () => {
                    {/* Register Button */}
                    <button
                     className="bg-orange-400 text-white py-2 px-6 rounded-lg mb-4 w-fit poppins-light"
-                    onClick={() => navigate("/Robogeniushome/Register")}
+                    onClick={() => handleRegisterClick(plan)}
                   >
                     Register Now
                   </button>
