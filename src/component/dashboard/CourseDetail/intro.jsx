@@ -1,10 +1,11 @@
 import { PiGraduationCapLight } from "react-icons/pi";
 // import Header from "../../header";
-import bg from "../../../assets/images/courses_details.svg";
-import yt from "../../../assets/images/courseDetailsYoutube.svg";
+import bg from "../../../assets/images/coures1.png";
 import pic from "../../../assets/images/courseDetailpic.svg";
 import { BsCalendar } from "react-icons/bs";
 import { FaStar } from "react-icons/fa";
+import ReactPlayer from "react-player";
+import video from "../../../assets/videos/video.mp4"; // ✅ Import your video
 
 const Intro = () => {
   return (
@@ -26,9 +27,9 @@ const Intro = () => {
                   className="w-full h-auto rounded-2xl shadow-md"
                 />
               </div>
-              <div className="flex items-center gap-8  pt-4">
-                <span className="bg-gray-200 text-gray-800 text-sm font-medium px-3 py-1  bg-white rounded-full ">
-                  Development
+              <div className="flex items-center gap-8 pt-4">
+                <span className="bg-gray-200 text-gray-800 text-sm font-medium px-3 py-1 bg-white rounded-full">
+                  Game Development
                 </span>
                 <div className="flex items-center justify-center gap-2">
                   <FaStar className="text-yellow" />
@@ -36,9 +37,9 @@ const Intro = () => {
                 </div>
               </div>
               <div>
-                <div className="flex items-center w-[40vw] ">
+                <div className="flex items-center w-[40vw]">
                   <h1 className="lg:text-5xl text-2xl text-wrap text-brown font-medium mb-4">
-                    Resolving Conflicts Between Designers And Engineers
+                    Animation And Game Development
                   </h1>
                 </div>
                 <div className="flex items-center space-x-2 text-[#7F7E97]">
@@ -47,21 +48,26 @@ const Intro = () => {
                 </div>
 
                 <div className="h-[12vh] w-[40vw] bg-[#D9D9D9] flex items-center px-8 justify-between mt-6 rounded-lg text-[#7D7D7D]">
-                  <div className="inline-block">Months </div>
-                  <div className="inline-block">Lectures</div>
-                  <div className="inline-block">Module</div>
-                  <div className="inline-block">Quizes</div>
+                  <div className="inline-block">3 Months </div>
+                  <div className="inline-block">24 Lectures</div>
+                  <div className="inline-block">6 Module</div>
+                  <div className="inline-block">6 Quizes</div>
                 </div>
               </div>
             </div>
 
-            {/* Right Side */}
-            <div className="w-full lg:w-1/3 mt-6 lg:mt-0 space-y-4 bg-pink-400 h-[25vw] rounded-2xl ">
+            {/* Right Side with Video */}
+            <div className="w-full lg:w-1/3 mt-6 lg:mt-0 space-y-4 bg-yellow h-[25vw] rounded-2xl">
               <div className="bg-gray-300 w-full h-full rounded-2xl overflow-hidden">
-                <img
-                  src={yt}
-                  alt="Course"
-                  className="h-full w-full object-cover overflow-hidden rounded-lg  shadow-md "
+                <ReactPlayer
+                  url={video}
+                  playing
+                  muted
+                  loop
+                  controls
+                  width="100%"
+                  height="100%"
+                  className="rounded-lg"
                 />
               </div>
             </div>

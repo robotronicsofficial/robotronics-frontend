@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { FaStar, FaArrowDown } from "react-icons/fa";
 import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
+import { useNavigate } from 'react-router-dom';
 
 const Robogeniusmaincourses = () => {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
   const [visibleCourses, setVisibleCourses] = useState(
@@ -50,6 +52,10 @@ const Robogeniusmaincourses = () => {
     );
   };
 
+  const handleViewDetails = () => {
+    navigate('/Robogeniushome/Register');
+  };
+  
   return (
     <div className="relative bg-[#ebe5e2] py-4 px-4 md:px-20 lg:px-40">
       <div className="mx-4">
@@ -57,7 +63,7 @@ const Robogeniusmaincourses = () => {
           Courses Included in RoboGenius Program
         </h1>
       </div>
-      
+
       {/* Left Button - Hidden on mobile */}
       <button
         onClick={prevCourse}
@@ -75,6 +81,7 @@ const Robogeniusmaincourses = () => {
               key={course._id}
               className="w-full max-w-xs sm:max-w-none sm:w-1/2 lg:w-1/3 px-2 sm:px-4 mb-2 p-2 sm:p-6"
             >
+
               <div className="bg-white p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
                 <img
                     className="rounded-xl w-full h-48 sm:h-56 object-cover"
@@ -99,14 +106,20 @@ const Robogeniusmaincourses = () => {
                   </div>
                 </div>
                 <div className="px-4 sm:px-8 mb-4 flex flex-col sm:flex-row gap-2 py-4">
-                  <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
-                    <span>View Detail</span>
-                    <FaArrowDown className="text-xs -rotate-90" />
-                  </button>
+                  <div className="w-full flex justify-center mb-4 py-4">
+                    <button onClick={handleViewDetails}
+                    className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
+                      <span>View Course</span>
+                      <FaArrowDown className="text-xs -rotate-90" />
+                    </button>
+                  </div>
 
+
+
+                  {/* 
                   <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
                     <span>Activate Course</span>
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
