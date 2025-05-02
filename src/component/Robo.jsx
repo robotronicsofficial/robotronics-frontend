@@ -17,9 +17,9 @@ const Robo = () => {
           to="section2"
           onClick={() => navigate("/Robogeniushome")}
           offset={-70}
-          className="absolute bottom-[10vh] left-[10vw] items-center justify-center p-5 px-8 md:text-xl text-sm text-yellow  bg-white poppins-bold  shadow-xl rounded-md border-black"
+          className="absolute bottom-[8vh] left-[14vw] items-center justify-center py-8 px-10 md:text-3xl text-sm text-yellow  bg-white poppins-bold  shadow-xl rounded-[6vw] border-black border-4"
         >
-          Get Enrolled
+          Subscribe Now
         </button>
     </div>
   );
