@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "./cart/cartSlice";
-import courseReducer from "./courses/courseSlice";
+import planReducer from "./plans/planSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Uses localStorage by default
 import { combineReducers } from "redux";
@@ -9,13 +9,13 @@ import { combineReducers } from "redux";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart", "courses"],
+  whitelist: ["cart", "plans"],
 };
 
 // Root reducer
 const rootReducer = combineReducers({
   cart: cartReducer,
-  courses: courseReducer,
+  plans: planReducer,
 });
 
 // Persisted reducer

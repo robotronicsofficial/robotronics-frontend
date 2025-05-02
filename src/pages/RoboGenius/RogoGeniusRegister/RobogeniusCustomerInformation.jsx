@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import robo from "../../../assets/child.png";
+import { FaTrash } from "react-icons/fa"; // Import delete icon
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -46,8 +49,9 @@ const SelectField = ({ label, name, value, onChange, options, required = false }
 );
 
 const RobogeniusCustomerInformation = ({ onNext }) => {
-  const { cart, totalPrice } = useSelector((state) => state.cart);
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const { plan, price, billingCycle } = useSelector((state) => state.plans);
 
   const [loading, setLoading] = useState(false);
   const [parentForm, setParentForm] = useState({
@@ -60,8 +64,11 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
     {
       firstName: "", lastName: "", email: "", dateOfBirth: "", country: "",
       schoolName: "", streetAddress: "", city: "", phone: "", postalCode: "",
+      saved: false
     }
   ]);
+
+  const [savedChildren, setSavedChildren] = useState([]);
 
   const handleParentChange = (e) => {
     const { name, value } = e.target;
@@ -83,21 +90,99 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
       {
         firstName: "", lastName: "", email: "", dateOfBirth: "", country: "",
         schoolName: "", streetAddress: "", city: "", phone: "", postalCode: "",
+        saved: false
       }
     ]);
   };
 
   const removeChildForm = (index) => {
     if (childrenForms.length > 1) {
-      setChildrenForms(prev => prev.filter((_, i) => i !== index));
+      const updatedChildren = [...childrenForms];
+      const removedChild = updatedChildren.splice(index, 1)[0];
+      
+      setChildrenForms(updatedChildren);
+      
+      // Remove from saved children if it was saved
+      if (removedChild.saved) {
+        setSavedChildren(prev => 
+          prev.filter(child => 
+            child.firstName !== removedChild.firstName || 
+            child.lastName !== removedChild.lastName
+          )
+        );
+      }
+    }
+  };
+
+  const saveChildForm = (index) => {
+    // Check if parent form is complete
+    const requiredParentFields = ['firstName', 'lastName', 'email', 'country', 
+                                'streetAddress', 'city', 'state', 'phone', 'postalCode'];
+    const isParentComplete = requiredParentFields.every(field => parentForm[field]);
+    
+    if (!isParentComplete) {
+      alert("Please complete all required parent information first");
+      return;
+    }
+
+    // Check if current child form is complete
+    const child = childrenForms[index];
+    const requiredChildFields = ['firstName', 'lastName', 'email', 'dateOfBirth', 
+                               'country', 'streetAddress', 'city', 'phone', 'postalCode'];
+    const isChildComplete = requiredChildFields.every(field => child[field]);
+    
+    if (!isChildComplete) {
+      alert("Please complete all required child information");
+      return;
+    }
+
+    // Mark as saved
+    const updatedChildrenForms = [...childrenForms];
+    updatedChildrenForms[index] = { ...updatedChildrenForms[index], saved: true };
+    setChildrenForms(updatedChildrenForms);
+
+    // Add to saved children if not already there
+    if (!savedChildren.some(c => 
+      c.firstName === child.firstName && 
+      c.lastName === child.lastName && 
+      c.email === child.email)) {
+      setSavedChildren(prev => [...prev, child]);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!currentUser) return alert("Please log in to continue.");
-
+    
+    // Validation checks
+    if (!currentUser) {
+      alert("Please log in to continue.");
+      return navigate("/login"); // Redirect to login
+    }
+    
+    if (!plan) {
+      alert("Please select a plan before continuing");
+      return navigate("/plans"); // Redirect to plans page
+    }
+  
+    // Check for unsaved children
+    const unsavedChildren = childrenForms.filter(child => !child.saved);
+    if (unsavedChildren.length > 0) {
+      alert(`Please save ${unsavedChildren.length} unsaved child form(s) before continuing`);
+      return;
+    }
+  
+    // Validate required parent fields
+    const requiredParentFields = ['firstName', 'lastName', 'email', 'country', 
+                                'streetAddress', 'city', 'state', 'phone', 'postalCode'];
+    const missingParentFields = requiredParentFields.filter(field => !parentForm[field]);
+    
+    if (missingParentFields.length > 0) {
+      alert(`Missing required parent fields: ${missingParentFields.join(', ')}`);
+      return;
+    }
+  
     setLoading(true);
+    
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/parents`, {
         method: 'POST',
@@ -108,24 +193,54 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
             ...parentForm,
             userId: currentUser._id,
           },
-          children: childrenForms,
+          children: childrenForms.map(child => ({
+            ...child,
+            // Ensure no saved flag is sent to backend
+            saved: undefined
+          })),
+          plan: {
+            name: plan,
+            price,
+            billingCycle
+          }
         }),
       });
-
-      if (!response.ok) {
-        const { message } = await response.json();
-        throw new Error(message || 'Failed to save parent form');
-      }
-
+  
       const data = await response.json();
-      console.log('Address saved:', data);
-      onNext?.();
-    } catch (err) {
-      alert(err.message);
+  
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+  
+      // Successful submission
+      console.log('Registration successful:', data);
+      
+      // Option 1: Call onNext if provided
+      if (onNext) {
+        onNext(data); // Pass response data to next step
+      }
+      // Option 2: Navigate to success page
+      // navigate("/registration-success");
+      
+    } catch (error) {
+      console.error('Registration error:', error);
+      
+      // More user-friendly error messages
+      let errorMessage = error.message;
+      if (error.message.includes("Network Error")) {
+        errorMessage = "Network error - please check your connection";
+      } else if (error.message.includes("404")) {
+        errorMessage = "Service unavailable - please try again later";
+      }
+      
+      alert(`Registration failed: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
   };
+
+  // Calculate total price
+  const totalPrice = savedChildren.length * price;
 
   return (
     <div className="lg:flex flex-row bg-gray">
@@ -161,7 +276,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
             <div key={index} className="w-full pt-6 space-y-6">
               <div className="space-y-5 px-6 md:px-10 py-4 md:py-8">
                 <h1 className="text-2xl md:text-4xl poppins-bold text-brown text-wrap">
-                  Child {index + 1} Information
+                  {savedChildren.length === 0 ? "REGISTER YOUR CHILD" : `Child ${index + 1} Information`}
                 </h1>
               </div>
 
@@ -192,21 +307,34 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
               </div>
 
               <div className="flex space-x-4 mt-4">
+                {!child.saved && (
+                  <button 
+                    type="button" 
+                    onClick={() => saveChildForm(index)} 
+                    className="text-center lg:text-xl text-sm poppins-bold text-white bg-green-600 py-2 lg:px-20 px-5 hover:bg-green-700"
+                  >
+                    SAVE CHILD
+                  </button>
+                )}
                 {index === childrenForms.length - 1 && (
                   <button type="button" onClick={addChildForm} className="text-center lg:text-xl text-sm poppins-bold text-gold bg-brown py-2 lg:px-20 px-5">
                     ADD ANOTHER CHILD
                   </button>
                 )}
                 {index > 0 && (
-                  <button type="button" onClick={() => removeChildForm(index)} className="text-center lg:text-xl text-sm poppins-bold text-white bg-red-500 py-2 lg:px-20 px-5 hover:bg-red-600">
-                    DELETE CHILD
+                  <button 
+                    type="button" 
+                    onClick={() => removeChildForm(index)} 
+                    className="text-center lg:text-xl text-sm poppins-bold text-red-600 bg-gray py-2 lg:px-5 px-3 hover:bg-red-300 flex items-center"
+                  >
+                    <FaTrash className="mr-2" />
                   </button>
                 )}
               </div>
             </div>
           ))}
 
-          {/* Submit / Cancel */}
+          {/* Cancel */}
           <div className="flex flex-col md:flex-row justify-between mt-6 space-y-4 md:space-y-0 md:space-x-4">
             <button type="button" onClick={() => navigate("/Robogeniushome")} className="poppins-bold text-gray-700 bg-white py-2 px-6 border border-gray-300 hover:bg-gray-50 w-full md:w-auto">
               CANCEL
@@ -220,41 +348,65 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
         <div className="h-full w-0 border border-[#D4D4D4] ml-8"></div>
       </div>
 
-      {/* Right Side */}
+      {/* Right Side - Order Summary */}
       <div className="lg:px-14 px-5 lg:p-8 p-4 lg:space-y-20 space-y-8">
         <div className="lg:space-y-8 space-y-4">
-          <p className="lg:text-4xl poppins-bold text-brown">YOUR ORDER</p>
-          <p className="font-lato font-medium text-base leading-5 text-[#7E7F7C]">
-            Review all the products you want to buy
-          </p>
-
+          <p className="lg:text-4xl poppins-bold text-brown">REVIEW YOUR REGISTRATION</p>
         </div>
 
-        <div className="lg:space-y-5 space-y-2 poppins-extralight">
-          {cart.length > 0 ? (
-            cart.map((product) => (
-              <div className="flex flex-row space-x-3" key={product.id}>
-                <img className="lg:h-20 lg:w-24" src={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`} alt={product.name} />
+        {/* Saved Children Cards */}
+        {savedChildren.length > 0 ? (
+          savedChildren.map((child, index) => (
+            <div key={index} className="lg:space-y-5 space-y-2 poppins-extralight">
+              <div className="flex flex-row space-x-3">
+                <img className="lg:h-24 lg:w-24" src={robo} alt="img" />
                 <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
-                  <p className="font-bold text-wrap">{product.name}</p>
-                  <div className="flex gap-2"><span>Quantity:</span><p>{product.quantity}</p></div>
-                  <p className="font-bold">PKR {product.price.toLocaleString()}</p>
+                <p className="text-wrap">
+                  <span className="font-bold">Plan:</span> <span className="font-normal">{plan}</span>
+                </p>
+                <p className="text-wrap">
+                  <span className="font-bold">Name:</span>{" "}
+                  <span className="font-normal">{child.firstName} {child.lastName}</span>
+                </p>
+                <p className="text-wrap">
+                  <span className="font-bold">Payment Plan:</span>{" "}
+                  <span className="font-normal">{billingCycle}</span>
+                </p>
                 </div>
+                <p className="text-wrap">
+                  <span className="font-bold">Price:</span>{" "}
+                  <span className="font-normal">{price?.toLocaleString()}</span>
+                </p>
               </div>
-            ))
-          ) : (
-            <p className="p-5 text-center text-gray-500">Your cart is empty.</p>
-          )}
-        </div>
+            </div>
+          ))
+        ) : (
+          <div className="lg:space-y-5 space-y-2 poppins-extralight">
+            <p className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C]">No children registered yet</p>
+          </div>
+        )}
 
         <div className="h-0 border border-[#D4D4D4]"></div>
 
         <div className="space-y-2">
-          {/* Summary Items */}
-          <SummaryItem label="Shipping" value={`PKR 500`} />
-          <SummaryItem label="Discount 10%" value={`- PKR 500`} />
-          <SummaryItem label="Price" value={`PKR 500`} />
-          <SummaryItem label="Total Price" value={`PKR 500`} highlight />
+          <div className="flex justify-between">
+            <p className="text-[#7E7F7C] font-lato text-base">Number of Children</p>
+            <p className="font-lato text-[20px]">
+              {savedChildren.length}
+            </p>
+          </div>
+          <div className="flex justify-between">
+            <p className="text-[#7E7F7C] font-lato text-base">Price per Child</p>
+            <p className="font-lato text-[20px]">
+              PKR {price?.toLocaleString() || '0'}
+            </p>
+          </div>
+          <div className="flex justify-between">
+            <p className="text-[#7E7F7C] font-lato text-base">Total Price</p>
+            <p className="font-lato text-[20px] font-extrabold">
+              PKR {totalPrice?.toLocaleString() || '0'}
+            </p>
+          </div>     
         </div>
 
         <div className="h-0 border border-[#D4D4D4]"></div>
@@ -266,22 +418,12 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
             onClick={handleSubmit}
             disabled={loading}
           >
-            {loading ? "Processing..." : "CONTINUE TO SHIPPING"}
+            {loading ? "Processing..." : "CONTINUE TO REGISTER"}
           </button>
         </div>
       </div>
     </div>
   );
 };
-
-// Summary display line
-const SummaryItem = ({ label, value, highlight = false }) => (
-  <div className="flex justify-between">
-    <p className="text-[#7E7F7C] font-lato text-base">{label}</p>
-    <p className={`font-lato text-[20px] font-extrabold ${highlight ? 'text-yellow' : 'text-[#362D2C]'}`}>
-      {value}
-    </p>
-  </div>
-);
 
 export default RobogeniusCustomerInformation;
