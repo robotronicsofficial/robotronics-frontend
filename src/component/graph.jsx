@@ -41,15 +41,15 @@ const Header = () => (
     </div>
     <div className="" data-aos="fade-up">
       <p
-        className="md:text-5xl text-xl text-wrap text-left poppins-bold text-brown px-8"
+        className="md:text-6xl text-xl text-wrap text-left poppins-bold text-brown px-8"
         style={{ lineHeight: "1.3" }}
       >
         Through{" "}
-        <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-yellow">
-          Robotics & STEM,
+        <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-yellow mr-2">
+          Robotics & STEM, 
         </span>
         <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-brown">
-          we empower <br></br> young minds to think critically, solve problems,
+            we empower <br></br> young minds to think critically, solve problems
           and turn imagination into innovation.
         </span>
       </p>
@@ -63,7 +63,7 @@ const InfoSection = () => (
     data-aos="fade-up"
   >
     <div className="md:text-3xl text-xl text-wrap text-left poppins-regular text-brown">
-      By 2024,
+      By 2025,
       <span className="md:text-5xl text-2xl text-wrap text-left poppins-semibold text-brown">
         {" "}
         ROBOTRONICS

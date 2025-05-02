@@ -25,12 +25,12 @@ const Intro = () => {
               data-aos-duration="2000"
               data-aos-delay="4000"
             >
-              <h1 className=" md:text-3xl text-xl poppins-extralight text-white">
+              {/* <h1 className=" md:text-3xl text-xl poppins-extralight text-white">
                 ROBOTRONICS
               </h1>
               <h1 className=" md:text-3xl tex-xl poppins-bold text-white font-bold">
                 WELCOMES
-              </h1>
+              </h1> */}
             </div>
             <div
               className="flex flex-wrap"
@@ -39,10 +39,10 @@ const Intro = () => {
               data-aos-delay="4000"
             >
               <p className="lg:text-8xl text-4xl poppins-bold text-yellow">
-                INTERNATIONAL&nbsp;
+                OUR&nbsp;
               </p>
               <p className="lg:text-8xl text-4xl poppins-bold text-white">
-                STUDENTS
+                SERVICES
               </p>
             </div>
             <p
