@@ -24,7 +24,7 @@ const ServiceCard = ({ service }) => {
         {/* Content */}
         <div className="flex-grow flex flex-col pt-4 sm:pt-5">
           {/* Title and Rating */}
-          <div className="flex justify-between items-start mb-3">
+          <div className="flex justify-between items-center mb-3">
             <h3 className="text-sm sm:text-base lg:text-lg font-bold poppins-extrabold pr-2 text-wrap">
               {service.title || "Unnamed Service"}
             </h3>
@@ -43,13 +43,13 @@ const ServiceCard = ({ service }) => {
             <div className="flex items-center gap-2">
               <LuClock className="text-yellow text-lg sm:text-xl" />
               <span className="text-xs sm:text-sm font-bold poppins-extrabold text-wrap">
-                {service.title || "N/A"}
+                {service.month || "N/A"} Months
               </span>
             </div>
             <div className="flex items-center gap-2">
               <IoVideocamOutline className="text-yellow text-lg sm:text-xl" />
               <span className="text-xs sm:text-sm font-bold poppins-extrabold text-wrap">
-                {service.title || "N/A"} Lessons
+                {service.numLessons || "N/A"} Lectures
               </span>
             </div>
           </div>
