@@ -1,37 +1,74 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+<<<<<<< Updated upstream
 import { FaClock } from "react-icons/fa"; // or any icon you'd like
+=======
+>>>>>>> Stashed changes
+import { fetchPlans, setSubscriptionPlan } from "../../store/plans/planSlice"; // Import the action
+import { useSelector, useDispatch } from "react-redux";
 
 const Robogeniuscards = () => {
-  const [plans, setPlans] = useState([]);
   const [isYearly, setIsYearly] = useState({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Get all plans and loading/error states from Redux
+  const { totalPlans, loading, error } = useSelector((state) => state.plans);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getAllPlans`)
-      .then((res) => res.json())
-      .then((data) => {
-        setPlans(data);
-        const toggles = {};
-        data.forEach((plan) => {
-          toggles[plan.planName] = false;
-        });
-        setIsYearly(toggles);
-      })
-      .catch((err) => console.error("Error fetching plans:", err));
-  }, []);
+    dispatch(fetchPlans());
+  }, [dispatch]);
+
+  // Initialize yearly toggle states when plans are loaded
+  useEffect(() => {
+    if (totalPlans.length > 0) {
+      const toggles = {};
+      totalPlans.forEach(plan => {
+        toggles[plan.planName] = false;
+      });
+      setIsYearly(toggles);
+    }
+  }, [totalPlans]);
+
+  const handleRegisterClick = (plan) => {
+    const isPlanYearly = isYearly[plan.planName] || false;
+    const price = isPlanYearly ? plan.yearlyPrice : plan.monthlyPrice;
+    const billingCycle = isPlanYearly ? 'annual' : 'monthly';
+    
+    // Dispatch the action with the plan details
+    dispatch(setSubscriptionPlan({
+      plan: plan.planName,
+      price,
+      billingCycle
+    }));
+    
+    // Navigate to the register page
+    navigate("/Robogeniushome/Register");
+  };
+  
+  if (loading) return <div>Loading plans...</div>;
+  if (error) return <div>Error loading plans: {error}</div>;
 
   return (
     <div className="bg-[#ebe5e2] py-8 px-4 sm:px-8 md:px-16 lg:px-24">
       <div className="flex flex-col items-center justify-center">
+<<<<<<< Updated upstream
         {/* Responsive Heading */}
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold mb-6 sm:mb-8 text-center poppins-bold">
           Select your Plan
+=======
+>>>>>>> Stashed changes
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold mb-6 sm:mb-8 text-center">
+          Plans for you or your organization
         </h2>
 
+<<<<<<< Updated upstream
         {/* Toggle Buttons Section (UNCHANGED) */}
 
         <div className="flex items-center bg-[#D9D9D9] p-3 rounded-full w-fit gap-6 poppins-light">
+=======
+>>>>>>> Stashed changes
+        <div className="flex items-center bg-[#D9D9D9] p-3 rounded-full w-fit gap-6">
           <button className="px-14 py-3 bg-orange-400 text-black rounded-full">
             Personal
           </button>
@@ -53,28 +90,16 @@ const Robogeniuscards = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row justify-center items-center gap-4 lg:gap-10 bg-gray-200 py-10 px-4 w-full mt-6">
-        {plans.map((plan) => {
-  const isPlanYearly = isYearly[plan.planName] || false;
-  const displayPrice = isPlanYearly ? plan.yearlyPrice : plan.monthlyPrice;
-
-  let discountMessage = "";
-  if (!isPlanYearly) {
-    // Set discount message based on the plan type
-    if (plan.planName === "Basic") {
-      discountMessage = "You can save PKR 14,400/- on Yearly Plan!";
-    } else if (plan.planName === "Pro") {
-      discountMessage = "You can save PKR 28,800/- on Yearly Plan!";
-    }
-  }
-
-  return (
-    <div
-      key={plan._id}
-      className="w-full lg:w-[26vw] max-w-md min-h-[700px] bg-[#D9D9D9] rounded-2xl p-6 flex flex-col shadow-lg mb-6 lg:mb-0 items-center"
-    >
-      <h2 className="text-2xl font-bold mb-4 capitalize text-center">
-        {plan.planName}
-      </h2>
+          {totalPlans.map((plan) => {
+            const isPlanYearly = isYearly[plan.planName] || false;
+            const displayPrice = isPlanYearly ? plan.yearlyPrice : plan.monthlyPrice;
+            
+            return (
+              <div
+                key={plan._id}
+                className="w-full lg:w-[26vw] max-w-md h-auto lg:h-[90vh] bg-[#D9D9D9] rounded-2xl p-6 flex flex-col items-center justify-between shadow-lg mb-6 lg:mb-0"
+              >
+                <h2 className="text-2xl font-bold mb-4 capitalize">{plan.planName}</h2>
 
       {/* Billing Toggle */}
       <div className="flex items-center justify-center gap-4 mb-4 poppins-light">
@@ -121,6 +146,15 @@ const Robogeniuscards = () => {
       >
         Register Now
       </button>
+                <h1 className="text-2xl font-bold mb-4">PKR {displayPrice.toLocaleString()}</h1>
+                <p className="text-center mb-4 text-wrap">{plan.description}</p>
+
+                <button
+                  className="bg-orange-400 text-white py-2 px-6 rounded-lg mb-6"
+                  onClick={() => handleRegisterClick(plan)}
+                >
+                  Register Now
+                </button>
 
       {/* Features */}
       <ul className="flex-1 space-y-2 text-sm mb-4">
@@ -131,19 +165,15 @@ const Robogeniuscards = () => {
         ))}
       </ul>
 
-      {/* Gift Button at Bottom */}
-      <button
-        className="bg-orange-400 text-white py-2 px-6 rounded-lg w-fit poppins-light"
-        onClick={() => navigate("/Robogeniushome/GiftCourse")}
-      >
-        Gift This Program
-      </button>
-    </div>
-  );
-})}
-
-
-
+                <button
+                  className="bg-orange-400 text-white py-2 px-6 rounded-lg mt-6"
+                  onClick={() => navigate("/Robogeniushome/GiftCourse")}
+                >
+                  Gift This Program
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
