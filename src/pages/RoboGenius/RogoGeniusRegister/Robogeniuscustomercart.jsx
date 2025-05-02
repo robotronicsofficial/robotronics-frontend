@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Slider, alpha, styled } from "@mui/material";
 import RobogeniusCustomerInformation from "./RobogeniusCustomerInformation";
-import ShopShipping from "../../../component/shop/shopShipping";
+import RobogeniusPayment from "./RobogeniusPayment"
 import userIcon from "../../../assets/user-circle.png";
 import cardIcon from "../../../assets/credit-card.png";
 
@@ -69,7 +69,7 @@ const Robogeniuscustomercart = () => {
       icon: cardIcon,
       title: "SUBSCRIPTION PAYMENT",
       description: "Submit your Payment Information",
-      content: <ShopShipping onNext={() => setCurrentStep(2)}/>,
+      content: <RobogeniusPayment onNext={() => setCurrentStep(2)}/>,
     },
   ];
 
