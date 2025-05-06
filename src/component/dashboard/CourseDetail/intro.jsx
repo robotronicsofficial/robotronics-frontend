@@ -57,7 +57,7 @@ const Intro = () => {
             </div>
 
             {/* Right Side with Video */}
-            <div className="w-full lg:w-1/3 mt-6 lg:mt-0 space-y-4 bg-yellow h-[25vw] rounded-2xl">
+            <div className="w-full lg:w-1/3 mt-6 lg:mt-0 space-y-4 bg-[#0f1586] h-[25vw] rounded-2xl">
               <div className="bg-gray-300 w-full h-full rounded-2xl overflow-hidden">
                 <ReactPlayer
                   url={video}
