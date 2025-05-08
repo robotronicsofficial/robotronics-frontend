@@ -54,7 +54,7 @@ const SelectField = ({ label, name, value, onChange, options, required = false }
   </div>
 );
 
-const RobogeniusCustomerInformation = ({ onNext }) => {
+const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { plan, price, billingCycle } = useSelector((state) => state.plans);
@@ -96,7 +96,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
       ...prev,
       {
         firstName: "", lastName: "", email: "", dateOfBirth: "", country: "",
-        schoolName: "", streetAddress: "", city: "", phone: "", postalCode: "",
+        schoolName: "", streetAddress: "", city: "", phone: "", postalCode: "", gender: "",
         saved: false
       }
     ]);
@@ -215,6 +215,9 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
 
       const data = await response.json();
 
+      onSaveChildren(childrenForms.filter(child => child.saved));
+
+
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
       }
@@ -293,11 +296,6 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InputField label="Child Email" name="email" type="email" value={child.email} onChange={(e) => handleChildChange(index, e)} placeholder="Email" required />
-                <InputField label="Date of Birth" name="dateOfBirth" type="date" value={child.dateOfBirth} onChange={(e) => handleChildChange(index, e)} placeholder="Date of Birth" required />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <SelectField
                   label="Gender"
                   name="gender"
@@ -306,7 +304,10 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
                   options={GENDER_OPTIONS}
                   required
                 />
+                <InputField label="Date of Birth" name="dateOfBirth" type="date" value={child.dateOfBirth} onChange={(e) => handleChildChange(index, e)} placeholder="Date of Birth" required />
               </div>
+
+              <InputField label="Child Email" name="email" type="email" value={child.email} onChange={(e) => handleChildChange(index, e)} placeholder="Email" required />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputField label="Country / Region" name="country" value={child.country} onChange={(e) => handleChildChange(index, e)} placeholder="Country" required />

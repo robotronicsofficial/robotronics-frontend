@@ -57,19 +57,31 @@ const Step = ({ icon, title, description, isActive, onClick }) => (
 const Robogeniuscustomercart = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
+  const [savedChildren, setSavedChildren] = useState([]);
+
 
   const steps = [
     {
       icon: userIcon,
       title: "PARENT & CHILD INFORMATION",
       description: "Add your name, phone number and address.",
-      content: <RobogeniusCustomerInformation onNext={() => setCurrentStep(1)} />,
+      content: (
+        <RobogeniusCustomerInformation 
+          onNext={() => setCurrentStep(1)} 
+          onSaveChildren={setSavedChildren}
+        />
+      ),
     },
     {
       icon: cardIcon,
       title: "SUBSCRIPTION PAYMENT",
       description: "Submit your Payment Information",
-      content: <RobogeniusPayment onNext={() => setCurrentStep(2)}/>,
+      content: (
+        <RobogeniusPayment 
+          onNext={() => setCurrentStep(2)} 
+          savedChildren={savedChildren}
+        />
+      ),
     },
   ];
 

@@ -1,15 +1,21 @@
+import { useNavigate } from "react-router-dom";
 import Shippingpencilalt from "../../../assets/images/Shippingpencilalt.svg";
 import pencilaltBlack from "../../../assets/images/pencilaltBlack.svg";
 import mastercard from "../../../assets/images/mastercard.svg";
-import robo from "../../../assets/robo.jpg";
+import robo from "../../../assets/child.png";
 import { useSelector } from "react-redux";
 
-const RobogeniusPayment = ({ onNext }) => {
-  const { plan, price, billingCycle } = useSelector((state) => state.plans);
-  const { savedChildren } = useSelector((state) => state.customerInfo) || { savedChildren: [] };
+const RobogeniusPayment = ({ onNext, savedChildren = [] }) => {
+  const navigate = useNavigate();
 
-  // Calculate total price
+  const { plan, price, billingCycle } = useSelector((state) => state.plans);
+
   const totalPrice = savedChildren.length * price;
+
+  const handleCompletePayment = () => {
+    navigate("/Dashboard/ChildProfile");
+  };
+
 
   return (
     <div className="lg:flex flex-row bg-gray">
@@ -30,11 +36,22 @@ const RobogeniusPayment = ({ onNext }) => {
                 <div className="flex flex-row space-x-3">
                   <img className="lg:h-24 lg:w-24" src={robo} alt="img" />
                   <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
-                    <p className="font-bold text-wrap">Plan: {plan}</p>
-                    <p className="font-bold text-wrap">Name: {child.firstName} {child.lastName}</p>
-                    <p className="font-bold text-wrap">Payment Plan: {billingCycle}</p>
-                    <p className="font-bold">PKR {price?.toLocaleString()}</p>
+                    <p className="text-wrap">
+                      <span className="font-bold">Plan:</span> <span className="font-normal">{plan}</span>
+                    </p>
+                    <p className="text-wrap">
+                      <span className="font-bold">Name:</span>{" "}
+                      <span className="font-normal">{child.firstName} {child.lastName}</span>
+                    </p>
+                    <p className="text-wrap">
+                      <span className="font-bold">Payment Plan:</span>{" "}
+                      <span className="font-normal">{billingCycle}</span>
+                    </p>
                   </div>
+                  <p className="text-wrap">
+                    <span className="font-bold">Price:</span>{" "}
+                    <span className="font-normal">{price?.toLocaleString()}</span>
+                  </p>
                 </div>
               </div>
             ))
@@ -151,8 +168,8 @@ const RobogeniusPayment = ({ onNext }) => {
             <button
               type="button"
               className="text-center lg:text-xl text-sm poppins-bold text-[#F5AB34] bg-[#362D2C] py-2 lg:px-20 px-5"
-              onClick={onNext}
-            >
+              onClick={handleCompletePayment}
+              >
               COMPLETE PAYMENT
             </button>
           </div>

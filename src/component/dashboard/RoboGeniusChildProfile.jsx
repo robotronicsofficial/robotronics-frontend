@@ -188,6 +188,7 @@ const RoboGeniusChildProfile = () => {
           ...childData,
           pin: pinData,
           userId: currentUser._id
+
         }),
       });
 
