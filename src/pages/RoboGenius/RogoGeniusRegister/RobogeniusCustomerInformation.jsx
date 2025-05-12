@@ -189,6 +189,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
     }
 
     setLoading(true);
+    console.log(plan);
 
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/parents`, {
@@ -202,7 +203,7 @@ const RobogeniusCustomerInformation = ({ onNext }) => {
           },
           children: childrenForms.map(child => ({
             ...child,
-            // Ensure no saved flag is sent to backend
+         
             saved: undefined
           })),
           plan: {

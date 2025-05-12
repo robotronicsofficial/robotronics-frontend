@@ -58,6 +58,7 @@ const RoboGeniusChildProfile = () => {
           });
           
           setChildren(mergedChildren);
+          console.log("childs ", children, mergedChildren);
         } catch (err) {
           setError(err.message);
         } finally {
@@ -116,7 +117,6 @@ const RoboGeniusChildProfile = () => {
       if (!response.ok) {
         throw new Error("Failed to verify PIN");
       }
-
       const data = await response.json();
       return data.isValid;
     } catch (err) {
@@ -178,7 +178,7 @@ const RoboGeniusChildProfile = () => {
       }
 
       const childData = children.find(child => child._id === selectedChildId) || {};
-      
+      console.log("Child Dtaa",childData)
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/AddChildData`, {
         method: 'POST',
         headers: {
