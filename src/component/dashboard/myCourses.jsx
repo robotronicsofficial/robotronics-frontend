@@ -13,6 +13,7 @@ const MyCourses = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [maxCourses, setMaxCourses] = useState(2); // Default to Basic plan limit
   const coursesPerPage = 9;
   const navigate = useNavigate();
 
@@ -29,13 +30,26 @@ const MyCourses = () => {
           throw new Error("Child ID not found in URL");
         }
 
-        // Fetch courses
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        // First fetch child data to get the plan
+        const childResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getChildPlan/${childId}`);
+        if (!childResponse.ok) {
+          throw new Error(`HTTP error! status: ${childResponse.status}`);
         }
-        const data = await response.json();
-        setCourses(data.courses);
+        const childData = await childResponse.json();
+        console.log("Child Data", childData);
+
+        // Set max courses based on plan
+        const planName = childData.courses.plan?.name || 'Basic';
+        const courseLimit = planName === 'Pro' ? 4 : 2;
+        setMaxCourses(courseLimit);
+
+        // Then fetch courses
+        const coursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+        if (!coursesResponse.ok) {
+          throw new Error(`HTTP error! status: ${coursesResponse.status}`);
+        }
+        const coursesData = await coursesResponse.json();
+        setCourses(coursesData.courses);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -47,12 +61,11 @@ const MyCourses = () => {
     fetchData();
   }, [childId]);
 
-
   const toggleCourseSelection = (courseId) => {
     if (selectedCourses.includes(courseId)) {
       setSelectedCourses(selectedCourses.filter((id) => id !== courseId));
     } else {
-      if (selectedCourses.length < 2) {
+      if (selectedCourses.length < maxCourses) {
         setSelectedCourses([...selectedCourses, courseId]);
       } else {
         setShowModal(true);
@@ -148,18 +161,27 @@ const MyCourses = () => {
       {/* Course Listing */}
       <div className="w-full text-center py-5" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
         <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
-          Select any 2 Courses
+          Select any {maxCourses} Courses
         </h1>
 
         {/* Save Button and Status */}
+        {/* Save Button and Status */}
         <div className="mb-6 flex flex-col items-center gap-2">
+          <div className="text-lg font-semibold mb-2">
+            {maxCourses === 4 ? (
+              <span className="text-green-600">You have a Pro plan (can select up to 4 courses)</span>
+            ) : (
+              <span className="text-blue-600">You have a Basic plan (must select exactly 2 courses)</span>
+            )}
+          </div>
+
           <button
             onClick={saveSelectedCourses}
-            className={`py-2 px-6 rounded-full shadow-xl ${selectedCourses.length === 0
+            className={`py-2 px-6 rounded-full shadow-xl ${selectedCourses.length !== maxCourses
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-[#ffc224] hover:bg-[#ffb700]"
               } transition-colors`}
-            disabled={selectedCourses.length === 0 || saveLoading}
+            disabled={selectedCourses.length !== maxCourses || saveLoading}
           >
             {saveLoading ? (
               <span className="flex items-center justify-center">
@@ -170,21 +192,11 @@ const MyCourses = () => {
                 Saving...
               </span>
             ) : (
-              "Save Courses"
+              `Save ${maxCourses} Courses`
             )}
           </button>
 
-          {saveSuccess && (
-            <div className="text-green-600 poppins-medium">
-              Courses saved successfully! Redirecting...
-            </div>
-          )}
-
-          {selectedCourses.length > 0 && (
-            <div className="text-gray-600 text-sm">
-              Selected {selectedCourses.length} of 2 courses
-            </div>
-          )}
+          {/* ... rest of the button section ... */}
         </div>
 
         {/* Courses */}
@@ -195,8 +207,8 @@ const MyCourses = () => {
               className="relative w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-[#fffff] p-6"
             >
               <div className={`rounded-xl overflow-hidden shadow-lg h-full flex flex-col transition-all ${selectedCourses.includes(course._id)
-                  ? "border-4 border-yellow-400 transform scale-[1.02]"
-                  : "border hover:shadow-md"
+                ? "border-4 border-yellow-400 transform scale-[1.02]"
+                : "border hover:shadow-md"
                 }`}>
                 <img
                   className="w-full h-48 object-cover"
@@ -229,8 +241,8 @@ const MyCourses = () => {
                   <button
                     onClick={() => toggleCourseSelection(course._id)}
                     className={`py-2 px-6 rounded-full transition-colors ${selectedCourses.includes(course._id)
-                        ? "bg-red-500 hover:bg-red-600 text-white"
-                        : "bg-green-500 hover:bg-green-600 text-white"
+                      ? "bg-red-500 hover:bg-red-600 text-white"
+                      : "bg-green-500 hover:bg-green-600 text-white"
                       }`}
                   >
                     {selectedCourses.includes(course._id)
@@ -253,29 +265,26 @@ const MyCourses = () => {
           ))}
         </div>
 
-  
         <div className="flex flex-col items-center justify-center mt-10 gap-4">
-
           <div className="flex items-center space-x-4">
             <button
               onClick={prevPage}
               disabled={currentPage === 1}
               className={`py-2 px-4 rounded-full ${currentPage === 1
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-gray-300 hover:bg-gray-400 text-black"
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-gray-300 hover:bg-gray-400 text-black"
                 }`}
             >
               Previous
             </button>
-
 
             {Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => (
               <button
                 key={number}
                 onClick={() => paginate(number)}
                 className={`py-2 px-4 rounded-full ${currentPage === number
-                    ? "bg-[#ffc224] text-black font-bold"
-                    : "bg-gray-200 hover:bg-gray-300 text-black"
+                  ? "bg-[#ffc224] text-black font-bold"
+                  : "bg-gray-200 hover:bg-gray-300 text-black"
                   }`}
               >
                 {number}
@@ -286,24 +295,28 @@ const MyCourses = () => {
               onClick={nextPage}
               disabled={currentPage === totalPages}
               className={`py-2 px-4 rounded-full ${currentPage === totalPages
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-gray-300 hover:bg-gray-400 text-black"
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-gray-300 hover:bg-gray-400 text-black"
                 }`}
             >
               Next
             </button>
           </div>
         </div>
-        <div className="mb-20">
-
-        </div>
-
+        <div className="mb-20"></div>
 
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-8 rounded-lg shadow-lg text-center w-96">
-              <h2 className="text-2xl font-bold mb-4 text-red-500">Limit Reached</h2>
-              <p className="text-gray-700 mb-6">You can select only 2 courses.</p>
+              <h2 className="text-2xl font-bold mb-4 text-red-500">Plan Limit</h2>
+              <p className="text-gray-700 mb-4">
+                {maxCourses === 4
+                  ? "You must select exactly 4 courses with your Pro plan."
+                  : "You must select exactly 2 courses with your Basic plan."}
+              </p>
+              <p className="text-gray-600 mb-6">
+                Currently selected: {selectedCourses.length} courses
+              </p>
               <button
                 onClick={() => setShowModal(false)}
                 className="bg-[#ffc224] text-black py-2 px-6 rounded-full hover:bg-[#ffb700] transition-colors"
