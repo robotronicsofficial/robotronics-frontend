@@ -26,7 +26,7 @@ const RoboGeniusProgreeDetailPage = () => {
     <thead>
       <tr className="text-left text-gray-700 font-semibold">
         <th className="p-3">Course</th>
-        <th className="p-3">Class Completed</th>
+        <th className="p-3">Lecture Completed</th>
         <th className="p-3">Certificate</th>
         <th className="p-3">Course Status</th>
       </tr>
