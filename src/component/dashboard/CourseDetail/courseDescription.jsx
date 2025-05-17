@@ -53,6 +53,11 @@ const CourseDescription = () => {
           {
             id: "5fe135a5-eb5d-44d0-af49-4784efeaedbc",
             name: "What is Scratch?",
+              learningObjectives: [
+              "Select and modify DOM elements",
+              "Handle browser events",
+              "Create dynamic web content",
+            ],
             contents: [
               {
                 id: "fc51ced4-5b85-4cf2-9b60-673f52e9f198",
@@ -60,6 +65,7 @@ const CourseDescription = () => {
                 name: "Lecture No 1",
                 file: "https://youtu.be/xLdXMzlDonI",
               },
+              
               {
                 id: "fc51ced4-5b85-4cf2-9b60-673f52e9f199",
                 type: "pdf",
@@ -97,7 +103,11 @@ const CourseDescription = () => {
                 file: "http://localhost:8080/uploads/Courses/1.pdf",
               },
             ],
-         
+              learningObjectives: [
+              "Select and modify DOM elements",
+              "Handle browser events",
+              "Create dynamic web content",
+            ],
           },
           {
             id: "5fe135a5-eb5d-44d0-af49-4784efeaedbe",
@@ -122,7 +132,11 @@ const CourseDescription = () => {
                 file: "http://localhost:8080/uploads/Courses/1.pdf",
               },
             ],
-          
+               learningObjectives: [
+              "Select and modify DOM elements",
+              "Handle browser events",
+              "Create dynamic web content",
+            ],
           },
           {
             id: "5fe135a5-eb5d-44d0-af49-4784efeaedbf",
@@ -147,7 +161,11 @@ const CourseDescription = () => {
                 file: "http://localhost:8080/uploads/Courses/1.pdf",
               },
             ],
-          
+               learningObjectives: [
+              "Select and modify DOM elements",
+              "Handle browser events",
+              "Create dynamic web content",
+            ],
           },
         ],
         quiz: {
