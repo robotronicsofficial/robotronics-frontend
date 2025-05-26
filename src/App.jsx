@@ -94,7 +94,7 @@ function App() {
           <Route path="/Dashboard/PaymentDetails" element={<ProtectedRoute><PaymentDetail /></ProtectedRoute>} />
           <Route path="/Dashboard/ChildProfile" element={<ProtectedRoute><ChildProfile /></ProtectedRoute>} />
           <Route path="/Dashboard/userInfoForm" element={<ProtectedRoute><UserInfoForm /></ProtectedRoute>} />
-          <Route path="/Dashboard/courseDetail" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
+          <Route path="/Dashboard/courseDetail/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
           <Route path="/Dashboard/ProgressCertificate" element={<ProtectedRoute><ProgressCertificate /></ProtectedRoute>} />
           <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<ProtectedRoute><RoboGeniusProgressPage /></ProtectedRoute>} />
           <Route path="/404" element={<Error />} />
