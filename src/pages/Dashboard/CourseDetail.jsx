@@ -1,5 +1,4 @@
 import { PiGraduationCapLight } from "react-icons/pi";
-import bg from "../../assets/images/coures1.png";
 import ReactPlayer from "react-player";
 import video from "../../assets/videos/video.mp4"; 
 import { useState, useEffect } from "react";
@@ -107,12 +106,14 @@ const CourseDetail = () => {
 
   // Check if module is unlocked (only first module is unlocked)
   const isModuleUnlocked = (moduleIndex) => {
-    return moduleIndex === 0; // Only first module is unlocked
+    // return moduleIndex === 0; // Only first module is unlocked
+    return true;
   };
 
   // Check if content is unlocked (only first module's content is unlocked)
   const isContentUnlocked = (moduleIndex, contentIndex) => {
-    return moduleIndex === 0; // Only first module's content is unlocked
+    // return moduleIndex === 0; // Only first module's content is unlocked
+    return true;
   };
 
   if (loading) {
@@ -138,7 +139,10 @@ const CourseDetail = () => {
       </div>
     );
   }
-  
+  console.log("___________________________________________________")
+  console.log(courseData)
+  console.log("___________________________________________________")
+
   return (
     <div>             
       <div className="bg-background pt-44">
@@ -152,11 +156,11 @@ const CourseDetail = () => {
                 data-aos-duration="2000"
                 data-aos-delay="4000"
               >
-                <div>
+                <div className="">
                   <img
-                    src={bg}
+                    src={`${import.meta.env.VITE_BACKEND_URL}/${courseData.banner}`}
                     alt="Course"
-                    className="w-full h-auto rounded-2xl shadow-md"
+                    className="w-full h-[50vw] sm:h-[40vw] md:h-[30vw] lg:h-[23.8vw] object-center rounded-2xl shadow-md"
                   />
                 </div>
                 <div className="flex items-center gap-8 pt-4">
@@ -268,8 +272,8 @@ const CourseDetail = () => {
                           {!isModuleUnlocked(sectionIndex) && " (Locked)"}
                         </h2>
                         <div className="poppins-bold  text-l text-yellow ml-4 flex gap-4">
-                          <span>5 Lectures </span> -
-                          <span>44 min </span>
+                          <span>{section.modules.length || 0} Lectures </span> -
+                          <span>{section.timeDuration} mins </span>
                         </div>
                       </div>
                     </div>
@@ -321,7 +325,7 @@ const CourseDetail = () => {
                               <ul className="space-y-2">
                                 {module.learningObjectives.map((obj, idx) => (
                                   <li key={idx} className="flex items-start">
-                                    <span className="poppins-light text-gray-700">{obj}</span>
+                                    <span className="poppins-light text-gray-700">• {obj}</span>
                                   </li>
                                 ))}
                               </ul>
@@ -330,43 +334,71 @@ const CourseDetail = () => {
   
                           {/* Content Items */}
                           <div className="space-y-3">
-                            {module.contents.map((content, contentIndex) => (
-                              <div
-                                key={content.id}
-                                className="flex justify-between items-center p-3 hover:bg-gray rounded-lg transition-colors duration-200"
-                              >
-                                <div className="flex items-center">
-                                  <span className="poppins-bold text-yellow-500 mr-3">
-                                    {content.type === "video" && <FaCirclePlay className="text-yellow" />}
-                                    {content.type === "pdf" && <FaLaptopCode className="text-yellow" />}
-                                    {/* {content.type === "pdf" && <MdAssignment className="text-yellow" />}  //will active later on */}
-                                    {content.type === "quiz" && "📝"}
-                                  </span>
-                                  <span className="poppins-light text-gray-800">
-                                    {content.name}
-                                  </span>
+                            {module.contents.map((content) => {
+                              const fileUrl = `${import.meta.env.VITE_BACKEND_URL}${content.file}`;
+
+                              return (
+                                <div
+                                  key={content.id}
+                                  className="flex justify-between items-center p-3 hover:bg-gray rounded-lg transition-colors duration-200"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    {content.type === "video" && (
+                                      <>
+                                        <FaCirclePlay className="text-yellow text-lg" />
+                                        <button
+                                          onClick={() => handlePlayVideo(fileUrl)}
+                                          className="poppins-light"
+                                        >
+                                          {content.name}
+                                        </button>
+                                      </>
+                                    )}
+                                    {content.type === "assignment" && (
+                                      <>
+                                        <MdAssignment className="text-yellow text-lg" />
+                                        <button
+                                          onClick={() => handleViewPdf(fileUrl)}
+                                          className="poppins-light"
+                                        >
+                                          {content.name}
+                                        </button>
+                                      </>
+                                    )}
+                                    {content.type === "book" && (
+                                      <>
+                                        <FaLaptopCode className="text-yellow text-lg" />
+                                        <button
+                                          onClick={() => handleViewPdf(fileUrl)}
+                                          className="poppins-light"
+                                        >
+                                          {content.name}
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center space-x-4">
+                                    {content.type === "video" && (
+                                      <span className="poppins-medium text-yellow text-sm hover:text-yellow-600">
+                                        10 min
+                                      </span>
+                                    )}
+                                    {(content.type === "assignment" || content.type === "book") && (
+                                      <button
+                                        onClick={() => handleViewPdf(fileUrl)}
+                                        className="flex items-center poppins-medium text-yellow text-sm hover:text-yellow-600"
+                                      >
+                                        Download
+                                      </button>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="flex items-center space-x-4">
-                                  {content.type === "video" && (
-                                    <button
-                                      onClick={() => handlePlayVideo(content.file)}
-                                      className="poppins-medium text-yellow text-sm hover:text-yellow-600"
-                                    >
-                                      10 min
-                                    </button>
-                                  )}
-                                  {content.type === "pdf" && (
-                                    <button
-                                      onClick={() => handleViewPdf(content.file)}
-                                      className="poppins-medium text-yellow text-sm hover:text-yellow-600"
-                                    >
-                                      Download
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
+
+
+
                         </div>
                       )}
                     </div>
@@ -531,71 +563,85 @@ const CourseDetail = () => {
               </div>
             )}
       
-            {showPdfModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-                <div className="bg-white rounded-lg w-full max-w-5xl h-[90vh] flex flex-col">
-                  <div className="p-4 border-b flex justify-between items-center">
-                    <h3 className="poppins-bold text-lg">PDF Viewer</h3>
-                    <button
-                      onClick={() => setShowPdfModal(false)}
-                      className="poppins-bold text-gray-700 hover:text-gray-900 text-2xl"
-                    >
-                      &times;
-                    </button>
-                  </div>
-                  <div className="p-2 bg-gray-100">
-                    <p className="poppins-light text-sm text-gray-600 break-all">
-                      Current PDF URL: {currentPdf}
-                    </p>
-                  </div>
-                  <div className="flex-1 overflow-auto">
-                    {/* PDF Viewer with multiple fallback options */}
-                    <div className="h-full flex flex-col items-center justify-center">
-                      {/* Attempt 1: Direct embed */}
-                      <iframe
-                        src={currentPdf}
-                        className="w-full h-full min-h-[50vh]"
-                        frameBorder="0"
-                        title="PDF Viewer"
-                        onError={() => console.error("Failed to load PDF in iframe")}
-                      />
-      
-                      {/* Fallback options */}
-                      <div className="p-4 text-center">
-                        <p className="poppins-light mb-4 text-gray-600">If the PDF doesn't load above:</p>
-                        <div className="flex flex-wrap justify-center gap-4">
-                          <a
-                            href={`https://docs.google.com/viewer?url=${encodeURIComponent(currentPdf)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="poppins-medium inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm"
-                            onClick={() => console.log("Trying Google Docs viewer with URL:", currentPdf)}
-                          >
-                            Try Google Docs Viewer
-                          </a>
-                          <a
-                            href={currentPdf}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="poppins-medium inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm"
-                          >
-                            Open in New Tab
-                          </a>
-                          <a
-                            href={currentPdf}
-                            download
-                            className="poppins-medium inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm"
-                          >
-                            <FiDownload className="mr-2" size={16} />
-                            Download PDF
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {showPdfModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-lg w-full max-w-5xl h-[90vh] flex flex-col">
+      <div className="p-4 border-b flex justify-between items-center">
+        <h3 className="poppins-bold text-lg">
+          {currentPdf.endsWith('.pdf') ? 'PDF Viewer' : 'Document Viewer'}
+        </h3>
+        <button
+          onClick={() => setShowPdfModal(false)}
+          className="poppins-bold text-gray-700 hover:text-gray-900 text-2xl"
+        >
+          &times;
+        </button>
+      </div>
+      <div className="p-2 bg-gray-100">
+        <p className="poppins-light text-sm text-gray-600 break-all">
+          Current file: {currentPdf}
+        </p>
+      </div>
+      <div className="flex-1 overflow-auto">
+        {currentPdf.endsWith('.pdf') ? (
+          // PDF Viewer
+          <div className="h-full flex flex-col items-center justify-center">
+            <iframe
+              src={currentPdf}
+              className="w-full h-full min-h-[50vh]"
+              frameBorder="0"
+              title="PDF Viewer"
+            />
+          </div>
+        ) : (
+          // Non-PDF document viewer fallback
+          <div className="h-full flex flex-col items-center justify-center p-4">
+            <div className="text-center mb-4">
+              <p className="poppins-medium text-lg mb-2">
+                This document format cannot be displayed in the browser
+              </p>
+              <p className="poppins-light text-gray-600">
+                Please download the file to view it
+              </p>
+            </div>
+          </div>
+        )}
+        
+        {/* Download options */}
+        <div className="p-4 text-center border-t">
+          <div className="flex flex-wrap justify-center gap-4">
+            {currentPdf.endsWith('.pdf') && (
+              <a
+                href={`https://docs.google.com/viewer?url=${encodeURIComponent(currentPdf)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="poppins-medium inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm"
+              >
+                Try Google Docs Viewer
+              </a>
             )}
+            <a
+              href={currentPdf}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="poppins-medium inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm"
+            >
+              Open in New Tab
+            </a>
+            <a
+              href={currentPdf}
+              download
+              className="poppins-medium inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm"
+            >
+              <FiDownload className="mr-2" size={16} />
+              Download File
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
       
             <ReviewsComponent />
       </>
