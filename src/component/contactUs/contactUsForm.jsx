@@ -19,6 +19,7 @@ const ContactUsForm = () => {
     userType: "", // 'school' or 'parent'
     schoolName: "",
     address: "",
+    city: "",
     message: "",
     selectedServices: [], // array to store selected services
   });
@@ -28,6 +29,7 @@ const ContactUsForm = () => {
   // Define services for each user type
   const services = {
     school: [
+      "Robogenious Plan",
       "Robotics Curriculum Integration",
       "Teacher Training Program",
       "After-School Robotics Club",
@@ -35,6 +37,7 @@ const ContactUsForm = () => {
       "Competition Preparation",
     ],
     parent: [
+      "Robogenious Plan",
       "Weekend Robotics Classes",
       "Holiday Robotics Camps",
       "One-on-One Tutoring",
@@ -88,6 +91,7 @@ const ContactUsForm = () => {
           userType: "",
           schoolName: "",
           address: "",
+          city: "",
           message: "",
           selectedServices: [],
         });
@@ -149,11 +153,22 @@ const ContactUsForm = () => {
             </div>
           </div>
           {/* Social icons */}
-          <div className="flex flex-row lg:py-20 py-8 p-5 space-x-2 ">
-            <a href="https://www.facebook.com" data-aos="fade-up" data-aos-duration="2000" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-blue-800 shadow-md hover:shadow-lg">
+          <div className="flex flex-row lg:py-20 py-8 p-5 space-x-2 lg:space-x-5">
+            <a href="https://www.facebook.com/robotronicspakistan/" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-blue-800 shadow-md hover:shadow-lg">
               <FaFacebook className="text-white" />
             </a>
-            {/* Other social icons... */}
+            <a href="https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-red-600 shadow-md hover:shadow-lg">
+              <FaYoutube className="text-white" />
+            </a>
+            <a href="https://www.instagram.com/robotronicspk/?hl=en" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-pink-600 shadow-md hover:shadow-lg">
+              <FaInstagram className="text-white" />
+            </a>
+            <a href="https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-blue-600 shadow-md hover:shadow-lg">
+              <FaLinkedin className="text-white" />
+            </a>
+            <a href="https://wa.me/message/TKZZPIE2A34UM1" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-green-500 shadow-md hover:shadow-lg">
+              <FaWhatsapp className="text-white" />
+            </a>
           </div>
         </div>
 
@@ -226,6 +241,27 @@ const ContactUsForm = () => {
               </label>
             </div>
 
+             {/* City */}
+            <div className="relative z-0 w-full mb-5 group">
+              <input
+                type="text"
+                name="city"
+                id="city"
+                value={formData.city}
+                onChange={handleChange}
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+                required
+              />
+              <label
+                htmlFor="city"
+                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              >
+                City
+              </label>
+            </div>
+
+
             {/* User Type Dropdown */}
             <div className="relative z-0 w-full mb-5 group">
               <select
@@ -270,6 +306,7 @@ const ContactUsForm = () => {
               </div>
             )}
 
+           
             {/* Address */}
             <div className="relative z-0 w-full mb-5 group">
               <input
