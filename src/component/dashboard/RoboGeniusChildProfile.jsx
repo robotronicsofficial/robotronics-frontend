@@ -252,10 +252,12 @@ const handleVerifyPinSubmit = async (pinData) => {
     if (!coursesResponse.ok) {
       throw new Error('Failed to fetch child courses');
     }
+    localStorage.setItem('selectedChildId', selectedChildId);
     const coursesData = await coursesResponse.json();
     
     // Navigate based on whether courses exist
     if (coursesData.courses && coursesData.courses.length > 0) {
+
       navigate(`/Dashboard/myAllCourses/${selectedChildId}`);
     } else {
       navigate(`/Dashboard/MyCoursesPage/${selectedChildId}`);

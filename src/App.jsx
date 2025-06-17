@@ -49,7 +49,7 @@ import ProgressCertificate from "./pages/Dashboard/ProgressCertificate";
 import RoboGeniusProgressPage from "./component/dashboard/RoboGeniusProgressPage";
 import MyAllCourses from "./component/dashboard/myAllCourses";
 
-
+import ProtectedChild from "./component/protectedChild";
 import ProtectedRoute from './component/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -84,9 +84,11 @@ function App() {
           <Route path="/ContactUs" element={<ContactUs />} />
           <Route path="/Dashboard/userInfo" element={<ProtectedRoute><UserInfo /></ProtectedRoute>} />
           <Route path="/Dashboard/order" element={<ProtectedRoute><Order /></ProtectedRoute>} />
-          <Route path="/Dashboard/MyCoursesPage/:id" element={<ProtectedRoute><MyCoursesPage /></ProtectedRoute>} />
-          <Route path="/Dashboard/MyCoursesPage" element={<ProtectedRoute><MyCoursesPage /></ProtectedRoute>} />
-          <Route path="/Dashboard/myAllCourses/:id" element={<ProtectedRoute><MyAllCourses /></ProtectedRoute>} />
+
+
+          <Route path="/Dashboard/MyCoursesPage/:id" element={<ProtectedChild><MyCoursesPage /></ProtectedChild>} />
+          <Route path="/Dashboard/MyCoursesPage" element={<ProtectedChild><MyCoursesPage /></ProtectedChild>} />
+          <Route path="/Dashboard/myAllCourses/:id" element={<ProtectedChild><MyAllCourses /></ProtectedChild>} />
 
 
           <Route path="/Dashboard/WishList" element={<ProtectedRoute><WishList /></ProtectedRoute>} />
@@ -94,7 +96,7 @@ function App() {
           <Route path="/Dashboard/PaymentDetails" element={<ProtectedRoute><PaymentDetail /></ProtectedRoute>} />
           <Route path="/Dashboard/ChildProfile" element={<ProtectedRoute><ChildProfile /></ProtectedRoute>} />
           <Route path="/Dashboard/userInfoForm" element={<ProtectedRoute><UserInfoForm /></ProtectedRoute>} />
-          <Route path="/Dashboard/courseDetail/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
+          <Route path="/Dashboard/courseDetail/:id" element={<ProtectedChild><CourseDetail /></ProtectedChild>} />
           <Route path="/Dashboard/ProgressCertificate" element={<ProtectedRoute><ProgressCertificate /></ProtectedRoute>} />
           <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<ProtectedRoute><RoboGeniusProgressPage /></ProtectedRoute>} />
           <Route path="/404" element={<Error />} />
