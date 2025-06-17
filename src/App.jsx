@@ -49,7 +49,7 @@ import ProgressCertificate from "./pages/Dashboard/ProgressCertificate";
 import RoboGeniusProgressPage from "./component/dashboard/RoboGeniusProgressPage";
 import MyAllCourses from "./component/dashboard/myAllCourses";
 
-import ProtectedChild from "./component/protectedChild";
+import ProtectedChild from "./component/ProtectedChild";
 import ProtectedRoute from './component/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
