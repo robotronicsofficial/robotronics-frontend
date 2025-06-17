@@ -210,37 +210,62 @@ const RoboGeniusChildProfile = () => {
     }
   };
 
-  const handleVerifyPinSubmit = async (pinData) => {
-    try {
-      setPinError(null);
-      
-      const isValid = await verifyPin(selectedChildId, pinData);
-      if (isValid) {
-        setIsVerifyPinModalOpen(false);
-        
-        // Fetch child's courses data
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getChild/${selectedChildId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch child courses');
-        }
-        const data = await response.json();
-        
-        // Navigate based on whether courses exist
-        if (data.courses && data.courses.length > 0) {
-          navigate(`/Dashboard/myAllCourses/${selectedChildId}`);
-        } else {
-          navigate(`/Dashboard/MyCoursesPage/${selectedChildId}`);
-        }
-      } else {
-        setPinError("Incorrect PIN. Please try again.");
-        setIsErrorModalOpen(true);
-      }
-    } catch (err) {
-      console.error('Error verifying PIN:', err);
-      setPinError(err.message);
-      setIsErrorModalOpen(true);
+const handleVerifyPinSubmit = async (pinData) => {
+  try {
+    setPinError(null);
+    
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/verifyChildPin`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        childId: selectedChildId,
+        pin: pinData
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to verify PIN');
     }
-  };
+    console.log(data)
+ 
+
+    if (data.message === 'Another session is active. Please try again later.') {
+      setPinError("Another child is currently using this account. Please try again later.");
+      setIsErrorModalOpen(true);
+      return;
+    }
+
+    setIsVerifyPinModalOpen(false);
+    
+    // Store session ID in local storage or context
+    if (data.sessionId) {
+      localStorage.setItem('childSession', data.sessionId);
+      localStorage.setItem('childSessionExpires', Date.now() + 3 * 60 * 1000);
+    }
+
+    // Fetch child's courses data
+    const coursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getChild/${selectedChildId}`);
+    if (!coursesResponse.ok) {
+      throw new Error('Failed to fetch child courses');
+    }
+    const coursesData = await coursesResponse.json();
+    
+    // Navigate based on whether courses exist
+    if (coursesData.courses && coursesData.courses.length > 0) {
+      navigate(`/Dashboard/myAllCourses/${selectedChildId}`);
+    } else {
+      navigate(`/Dashboard/MyCoursesPage/${selectedChildId}`);
+    }
+  } catch (err) {
+    console.error('Error verifying PIN:', err);
+    setPinError(err.message);
+    setIsErrorModalOpen(true);
+  }
+};
 
   const handleViewCourses = async (childId) => {
     setSelectedChildId(childId);

@@ -2,7 +2,8 @@ import React from "react";
 
 const ServiceInto = ({ service }) => {
   // Ensure the image URL is correctly formatted
-  const imageUrl = `${import.meta.env.VITE_BACKEND_URL}/${service.sideImage.replace(/\\/g, "/")}`;
+  const imageUrl = `${import.meta.env.VITE_BACKEND_URL}/${service.bannerImage.replace(/\\/g, "/")}`;
+  console.log("Image ",imageUrl);
 
   return (
     <div className="hero" id="hero">

@@ -2,7 +2,7 @@ import LeftNav from "./leftNav";
 import { FaStar, FaArrowDown } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);

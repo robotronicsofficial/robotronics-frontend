@@ -13,7 +13,7 @@ const Intro = () => {
       {/* intro */}
       <div>
         {/* Dynamics-URLS */}
-        <nav className="flex w-1/2 bg-gray-100 rounded-lg px-7 ">
+        {/* <nav className="flex w-1/2 bg-gray-100 rounded-lg px-7 ">
           <ol className="list-reset flex text-gray-600">
             {breadcrumbs.map((breadcrumb, index) => (
               <li key={index} className="flex items-center">
@@ -31,9 +31,10 @@ const Intro = () => {
               </li>
             ))}
           </ol>
-        </nav>
+        </nav> */}
       </div>
     </div>
+    // <></>
   );
 };
 
