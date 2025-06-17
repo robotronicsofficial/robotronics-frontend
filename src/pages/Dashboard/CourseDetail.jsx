@@ -10,24 +10,18 @@ import { FaLaptopCode } from "react-icons/fa";
 import { MdAssignment } from "react-icons/md";
 import { AiOutlineRight } from "react-icons/ai";
 
-
 const CourseDetail = () => {
-
   const { id } = useParams();
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-   // State for managing UI
+  // State for managing UI
   const [expandedModules, setExpandedModules] = useState({});
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [currentVideo, setCurrentVideo] = useState("");
-  const [showPdfModal, setShowPdfModal] = useState(false);
-  const [currentPdf, setCurrentPdf] = useState("");
-  const [numPages, setNumPages] = useState(null);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizResults, setQuizResults] = useState({});
-
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -62,17 +56,6 @@ const CourseDetail = () => {
     setShowVideoModal(true);
   };
 
-  // PDF load success handler
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
-  };
-
-  const handleViewPdf = (url) => {
-    console.log("Attempting to load PDF from URL:", url);
-    setCurrentPdf(url);
-    setShowPdfModal(true);
-  };
-
   // Handle quiz answer selection
   const handleQuizAnswer = (sectionIndex, questionId, answer) => {
     setQuizAnswers(prev => ({
@@ -104,15 +87,8 @@ const CourseDetail = () => {
     }));
   };
 
-  // Check if module is unlocked (only first module is unlocked)
+  // Check if module is unlocked
   const isModuleUnlocked = (moduleIndex) => {
-    // return moduleIndex === 0; // Only first module is unlocked
-    return true;
-  };
-
-  // Check if content is unlocked (only first module's content is unlocked)
-  const isContentUnlocked = (moduleIndex, contentIndex) => {
-    // return moduleIndex === 0; // Only first module's content is unlocked
     return true;
   };
 
@@ -139,9 +115,6 @@ const CourseDetail = () => {
       </div>
     );
   }
-  console.log("___________________________________________________")
-  console.log(courseData)
-  console.log("___________________________________________________")
 
   return (
     <div>             
@@ -354,26 +327,16 @@ const CourseDetail = () => {
                                         </button>
                                       </>
                                     )}
-                                    {content.type === "assignment" && (
+                                    {(content.type === "assignment" || content.type === "book") && (
                                       <>
-                                        <MdAssignment className="text-yellow text-lg" />
-                                        <button
-                                          onClick={() => handleViewPdf(fileUrl)}
-                                          className="poppins-light"
-                                        >
+                                        {content.type === "assignment" ? (
+                                          <MdAssignment className="text-yellow text-lg" />
+                                        ) : (
+                                          <FaLaptopCode className="text-yellow text-lg" />
+                                        )}
+                                        <span className="poppins-light">
                                           {content.name}
-                                        </button>
-                                      </>
-                                    )}
-                                    {content.type === "book" && (
-                                      <>
-                                        <FaLaptopCode className="text-yellow text-lg" />
-                                        <button
-                                          onClick={() => handleViewPdf(fileUrl)}
-                                          className="poppins-light"
-                                        >
-                                          {content.name}
-                                        </button>
+                                        </span>
                                       </>
                                     )}
                                   </div>
@@ -384,21 +347,20 @@ const CourseDetail = () => {
                                       </span>
                                     )}
                                     {(content.type === "assignment" || content.type === "book") && (
-                                      <button
-                                        onClick={() => handleViewPdf(fileUrl)}
+                                      <a
+                                        href={fileUrl}
+                                        download
                                         className="flex items-center poppins-medium text-yellow text-sm hover:text-yellow-600"
                                       >
+                                        <FiDownload className="mr-1" />
                                         Download
-                                      </button>
+                                      </a>
                                     )}
                                   </div>
                                 </div>
                               );
                             })}
                           </div>
-
-
-
                         </div>
                       )}
                     </div>
@@ -529,121 +491,41 @@ const CourseDetail = () => {
           </div>
         </div>
       
-            {/* Video Modal */}
-            {showVideoModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-                <div className="bg-white rounded-lg w-full max-w-5xl h-[90vh] relative flex flex-col">
-                  <button
-                    onClick={() => setShowVideoModal(false)}
-                    className="poppins-bold absolute -top-10 right-0 text-white text-2xl hover:text-gray-300"
-                  >
-                    &times;
-                  </button>
-                  <div className="p-4 flex-1 flex items-center justify-center">
-                    <div className="w-full h-full">
-                      <ReactPlayer
-                        url={currentVideo}
-                        width="100%"
-                        height="100%"
-                        controls={true}
-                        style={{ minHeight: '70vh' }}
-                        config={{
-                          youtube: {
-                            playerVars: {
-                              modestbranding: 1,
-                              rel: 0,
-                              showinfo: 0
-                            }
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
+        {/* Video Modal */}
+        {showVideoModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg w-full max-w-5xl h-[90vh] relative flex flex-col">
+              <button
+                onClick={() => setShowVideoModal(false)}
+                className="poppins-bold absolute -top-10 right-0 text-white text-2xl hover:text-gray-300"
+              >
+                &times;
+              </button>
+              <div className="p-4 flex-1 flex items-center justify-center">
+                <div className="w-full h-full">
+                  <ReactPlayer
+                    url={currentVideo}
+                    width="100%"
+                    height="100%"
+                    controls={true}
+                    style={{ minHeight: '70vh' }}
+                    config={{
+                      youtube: {
+                        playerVars: {
+                          modestbranding: 1,
+                          rel: 0,
+                          showinfo: 0
+                        }
+                      }
+                    }}
+                  />
                 </div>
               </div>
-            )}
-      
-          {showPdfModal && (
-  <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-    <div className="bg-white rounded-lg w-full max-w-5xl h-[90vh] flex flex-col">
-      <div className="p-4 border-b flex justify-between items-center">
-        <h3 className="poppins-bold text-lg">
-          {currentPdf.endsWith('.pdf') ? 'PDF Viewer' : 'Document Viewer'}
-        </h3>
-        <button
-          onClick={() => setShowPdfModal(false)}
-          className="poppins-bold text-gray-700 hover:text-gray-900 text-2xl"
-        >
-          &times;
-        </button>
-      </div>
-      <div className="p-2 bg-gray-100">
-        <p className="poppins-light text-sm text-gray-600 break-all">
-          Current file: {currentPdf}
-        </p>
-      </div>
-      <div className="flex-1 overflow-auto">
-        {currentPdf.endsWith('.pdf') ? (
-          // PDF Viewer
-          <div className="h-full flex flex-col items-center justify-center">
-            <iframe
-              src={currentPdf}
-              className="w-full h-full min-h-[50vh]"
-              frameBorder="0"
-              title="PDF Viewer"
-            />
-          </div>
-        ) : (
-          // Non-PDF document viewer fallback
-          <div className="h-full flex flex-col items-center justify-center p-4">
-            <div className="text-center mb-4">
-              <p className="poppins-medium text-lg mb-2">
-                This document format cannot be displayed in the browser
-              </p>
-              <p className="poppins-light text-gray-600">
-                Please download the file to view it
-              </p>
             </div>
           </div>
         )}
-        
-        {/* Download options */}
-        <div className="p-4 text-center border-t">
-          <div className="flex flex-wrap justify-center gap-4">
-            {currentPdf.endsWith('.pdf') && (
-              <a
-                href={`https://docs.google.com/viewer?url=${encodeURIComponent(currentPdf)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="poppins-medium inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm"
-              >
-                Try Google Docs Viewer
-              </a>
-            )}
-            <a
-              href={currentPdf}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="poppins-medium inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm"
-            >
-              Open in New Tab
-            </a>
-            <a
-              href={currentPdf}
-              download
-              className="poppins-medium inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm"
-            >
-              <FiDownload className="mr-2" size={16} />
-              Download File
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
       
-            <ReviewsComponent />
+        <ReviewsComponent />
       </>
     </div>
   )
