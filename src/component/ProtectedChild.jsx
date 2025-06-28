@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 
 const ProtectedChild = ({ children }) => {
   const [isValidSession, setIsValidSession] = useState(true);
+  const [showSessionPopup, setShowSessionPopup] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkSession = async () => {
-        console.log("Enter ")
+      console.log("Enter");
       const selectedChildId = localStorage.getItem('selectedChildId');
       
       if (!selectedChildId) {
         setIsValidSession(false);
-        navigate('/login');
+        setShowSessionPopup(true);
         return;
       }
 
@@ -31,24 +33,50 @@ const ProtectedChild = ({ children }) => {
         if (!data.isValid) {
           setIsValidSession(false);
           localStorage.removeItem('selectedChildId');
-          navigate('/login'); 
+          setShowSessionPopup(true);
         }
       } catch (error) {
         console.error('Session check failed:', error);
         setIsValidSession(false);
-        navigate('/login');
+        setShowSessionPopup(true);
       }
     };
 
     checkSession();
 
     const interval = setInterval(checkSession, 3000);
-
     return () => clearInterval(interval);
   }, [navigate]);
 
+  const handlePopupClose = () => {
+    setShowSessionPopup(false);
+    navigate('/Dashboard/userInfo');
+  };
+
   if (!isValidSession) {
-    return <div>Session expired. Redirecting to login...</div>;
+    return (
+      <>
+        <Dialog
+          open={showSessionPopup}
+          onClose={handlePopupClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Session Alert</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              You are logged in to another PC. Please log in again to continue.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handlePopupClose} color="primary" autoFocus>
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <div>Session expired. Redirecting to login...</div>
+      </>
+    );
   }
 
   return <ProtectedRoute>{children}</ProtectedRoute>;
