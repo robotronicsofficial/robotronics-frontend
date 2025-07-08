@@ -1,6 +1,6 @@
 import { PiGraduationCapLight } from "react-icons/pi";
 import ReactPlayer from "react-player";
-import video from "../../assets/videos/video.mp4"; 
+import video from "../../assets/videos/video.mp4";
 import { useState, useEffect } from "react";
 import { FiDownload } from "react-icons/fi";
 import ReviewsComponent from "../../pages/RoboGenius/Robogeniusreview";
@@ -13,6 +13,7 @@ import { AiOutlineRight } from "react-icons/ai";
 const CourseDetail = () => {
   const { id } = useParams();
   const [courseData, setCourseData] = useState(null);
+  const [childCourseData, setChildCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,25 +25,90 @@ const CourseDetail = () => {
   const [quizResults, setQuizResults] = useState({});
 
   useEffect(() => {
-    const fetchCourseData = async () => {
+    const fetchData = async () => {
+      const childId = localStorage.getItem('selectedChildId');
+
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/coursesById/${id}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch course data');
+        const [courseRes, childCourseRes] = await Promise.all([
+          fetch(`${import.meta.env.VITE_BACKEND_URL}/coursesById/${id}`),
+          fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getChildById/${childId}/ByCourseId/${id}`)
+        ]);
+
+        if (!courseRes.ok || !childCourseRes.ok) {
+          throw new Error('One or both requests failed');
         }
-        const data = await response.json();
-        setCourseData(data);
+
+        const [courseData, childCourseData] = await Promise.all([
+          courseRes.json(),
+          childCourseRes.json()
+        ]);
+
+        setCourseData(courseData);
+        setChildCourseData(childCourseData);
       } catch (err) {
+        console.error(err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCourseData();
+    fetchData();
   }, [id]);
 
-  // Toggle module expansion
+
+  const isSectionUnlocked = (section, sectionIndex) => {
+    if (!section?.startDate || !section?.endDate) return true;
+
+    const now = new Date();
+    const startDate = new Date(section.startDate);
+    // const endDate = new Date(section.endDate);
+
+    const isDateValid = now >= startDate;
+
+    if (sectionIndex > 0) {
+      const prevSection = childCourseData?.Sections?.[sectionIndex - 1];
+      const prevQuizPassed = prevSection?.quiz?.result === "pass";
+      return isDateValid && prevQuizPassed;
+    }
+
+    return isDateValid;
+  };
+
+
+  const isModuleUnlocked = (sectionIndex) => {
+    if (childCourseData?.Sections?.[sectionIndex]) {
+      return isSectionUnlocked(childCourseData.Sections[sectionIndex], sectionIndex);
+    }
+    return true;
+  };
+
+
+  const updateChildCourseProgress = async (updatedData) => {
+    const childId = localStorage.getItem('selectedChildId');
+    console.log("Updated Data ",updatedData)
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/updateChildCourse/${childId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update child course progress');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error updating child course:', error);
+      throw error;
+    }
+  };
+
+
   const toggleModule = (moduleId) => {
     setExpandedModules((prev) => ({
       ...prev,
@@ -50,13 +116,12 @@ const CourseDetail = () => {
     }));
   };
 
-  // Handle video play
   const handlePlayVideo = (url) => {
     setCurrentVideo(url);
     setShowVideoModal(true);
   };
 
-  // Handle quiz answer selection
+
   const handleQuizAnswer = (sectionIndex, questionId, answer) => {
     setQuizAnswers(prev => ({
       ...prev,
@@ -64,32 +129,77 @@ const CourseDetail = () => {
     }));
   };
 
-  // Submit quiz
-  const submitQuiz = (sectionIndex) => {
-    const section = courseData.sections[sectionIndex];
+  const submitQuiz = async (sectionIndex) => {
+    const section = childCourseData.Sections[sectionIndex];
     const results = {};
     let score = 0;
 
     section.quiz.questions.forEach(question => {
-      const userAnswer = quizAnswers[`${sectionIndex}-${question.id}`];
+      const userAnswer = quizAnswers[`${sectionIndex}-${question._id}`];
       const isCorrect = userAnswer === question.correctAnswer;
-      results[question.id] = isCorrect;
+      results[question._id] = isCorrect;
       if (isCorrect) score++;
     });
 
-    setQuizResults(prev => ({
-      ...prev,
-      [sectionIndex]: {
-        score,
-        total: section.quiz.questions.length,
-        details: results
-      }
-    }));
-  };
 
-  // Check if module is unlocked
-  const isModuleUnlocked = (moduleIndex) => {
-    return true;
+    const percentage = (score / section.quiz.questions.length) * 100;
+    const passed = percentage >= 60;
+
+    const updatedChildCourseData = { ...childCourseData };
+    updatedChildCourseData.Sections[sectionIndex].quiz.obtainedScore = score;
+    updatedChildCourseData.Sections[sectionIndex].quiz.result = passed ? "pass" : "fail";
+    updatedChildCourseData.Sections[sectionIndex].quiz.attempts += 1;
+    updatedChildCourseData.Sections[sectionIndex].quiz.lastAttemptDate = new Date().toISOString();
+    
+    updatedChildCourseData.Sections[sectionIndex].quiz.questions = 
+      updatedChildCourseData.Sections[sectionIndex].quiz.questions.map(question => ({
+        ...question,
+        childAnswer: quizAnswers[`${sectionIndex}-${question._id}`] || "",
+        isCorrect: quizAnswers[`${sectionIndex}-${question._id}`] === question.correctAnswer
+      }));
+
+    if (passed && sectionIndex < updatedChildCourseData.Sections.length - 1) {
+      const nextSectionIndex = sectionIndex + 1;
+      const now = new Date();
+      const nextDay = new Date(now.setDate(now.getDate() + 1)); 
+      
+      if (!updatedChildCourseData.Sections[nextSectionIndex].startDate) {
+        updatedChildCourseData.Sections[nextSectionIndex].startDate = nextDay.toISOString();
+        updatedChildCourseData.Sections[nextSectionIndex].endDate = new Date(
+          nextDay.setDate(nextDay.getDate() + 14) 
+        ).toISOString();
+        updatedChildCourseData.Sections[nextSectionIndex].status = "unlock";
+      }
+    }
+
+    const totalSections = updatedChildCourseData.Sections.length;
+    const completedSections = updatedChildCourseData.Sections.filter(
+      s => s.quiz?.result === "pass"
+    ).length;
+    updatedChildCourseData.progress = Math.round((completedSections / totalSections) * 100);
+
+    if (completedSections === totalSections) {
+      updatedChildCourseData.isCompleted = true;
+      updatedChildCourseData.status = "completed";
+    }
+
+    try {
+      await updateChildCourseProgress(updatedChildCourseData);
+      
+      setChildCourseData(updatedChildCourseData);
+      setQuizResults(prev => ({
+        ...prev,
+        [sectionIndex]: {
+          score,
+          total: section.quiz.questions.length,
+          details: results,
+          passed
+        }
+      }));
+
+    } catch (error) {
+      console.error("Failed to update quiz results:", error);
+    }
   };
 
   if (loading) {
@@ -108,16 +218,16 @@ const CourseDetail = () => {
     );
   }
 
-  if (!courseData) {
+  if (!courseData || !childCourseData) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="text-gray-500 poppins-medium">Course not found</div>
+        <div className="text-gray-500 poppins-medium">Course data not found</div>
       </div>
     );
   }
 
   return (
-    <div>             
+    <div>
       <div className="bg-background pt-44">
         <div className="bg-gray-100 p-6">
           <div className="max-w-7xl mx-auto">
@@ -145,13 +255,13 @@ const CourseDetail = () => {
                       {Array.from({ length: 5 }, (_, i) => {
                         const fullStars = Math.floor(courseData.reviews);
                         const hasHalfStar = courseData.reviews % 1 >= 0.5;
-                        
+
                         if (i < fullStars) {
-                          return <span key={i} className="text-yellow text-2xl">★</span>; // full star
+                          return <span key={i} className="text-yellow text-2xl">★</span>;
                         } else if (i === fullStars && hasHalfStar) {
-                          return <span key={i} className="text-yellow text-2xl">☆</span>; // half star
+                          return <span key={i} className="text-yellow text-2xl">☆</span>;
                         } else {
-                          return <span key={i} className="text-white text-2xl">★</span>; // empty star
+                          return <span key={i} className="text-white text-2xl">★</span>;
                         }
                       })}
                     </div>
@@ -212,7 +322,7 @@ const CourseDetail = () => {
               <h1 className="poppins-bold text-2xl mb-4">Course Description</h1>
               <p className="poppins-light text-wrap text-lightblack">{courseData.description}</p>
             </div>
-                      
+
             {/* What You'll Learn */}
             <div className="lg:flex flex-row flex-wrap justify-between gap-8">
               {/* left */}
@@ -232,265 +342,297 @@ const CourseDetail = () => {
                 </ul>
               </div>
             </div>
-                  
+
             {/* Course Curriculum */}
             <div className="mt-12">
-              {courseData.sections.map((section, sectionIndex) => (
-                <div key={sectionIndex} className="mb-10">
-                  <div className="flex items-center mb-6">
-                    <div className="w-3 h-8 bg-yellow rounded mr-3"></div>
+              {courseData.sections.map((section, sectionIndex) => {
+                const childSection = childCourseData.Sections[sectionIndex];
+                const sectionUnlocked = isModuleUnlocked(sectionIndex);
+                const sectionDates = childCourseData?.Sections?.[sectionIndex];
+                const quizCompleted = childSection?.quiz?.result === "pass";
+                const quizAttempted = childSection?.quiz?.attempts > 0;
+
+                return (
+                  <div key={sectionIndex} className="mb-10">
+                    <div className="flex items-center mb-6">
+                      <div className="w-3 h-8 bg-yellow rounded mr-3"></div>
                       <div className="flex justify-between items-center w-full">
                         <h2 className="poppins-bold text-xl text-gray-800">
                           Module {sectionIndex + 1}: {section.name}
-                          {!isModuleUnlocked(sectionIndex) && " (Locked)"}
+                          {!sectionUnlocked && (
+                            <span className="text-red-500 ml-2 text-sm">
+                              {sectionIndex > 0 && childCourseData.Sections[sectionIndex - 1]?.quiz?.result !== "pass" ? 
+                                "(Locked - Complete previous module quiz to unlock)" :
+                                `(Locked - Available from ${sectionDates?.startDate ?
+                                  new Date(sectionDates.startDate).toLocaleDateString() : 'a future date'})`}
+                            </span>
+                          )}
                         </h2>
-                        <div className="poppins-bold  text-l text-yellow ml-4 flex gap-4">
+                        <div className="poppins-bold text-l text-yellow ml-4 flex gap-4">
                           <span>{section.modules.length || 0} Lectures </span> -
                           <span>{section.timeDuration} mins </span>
                         </div>
                       </div>
                     </div>
-              
-                  {/* Always show all modules but mark locked ones */}
-                  {section.modules.map((module, moduleIndex) => (
-                    <div
-                      key={module.id}
-                      className={`mb-6 rounded-lg bg-[#F0F0F0] ${
-                        isModuleUnlocked(sectionIndex) ? "bg-white" : "bg-gray-100 opacity-80"
-                      }`}
-                    >
-                      {/* Module Header */}
-                      <div
-                        className="p-5 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
-                        onClick={() => isModuleUnlocked(sectionIndex) && toggleModule(module.id)}
-                      >
-                        <div className="flex items-center">
-                          {!isModuleUnlocked(sectionIndex) && (
-                            <span className="poppins-bold text-yellow-500 mr-3">🔒</span>
-                          )}
-                          <span className="poppins-bold mr-3 text-yellow">
-                            <FaCirclePlay className="text-2xl" />
-                            {expandedModules[module.id]}
-                          </span>
-                          <h3 className="poppins-bold text-gray-800">
-                            <span className="text-yellow-500">Lecture {moduleIndex + 1}:</span> {module.name}
-                            {!isModuleUnlocked(sectionIndex) && " (Locked)"}
-                          </h3>
-                        </div>
-                        <div className="flex items-center space-x-6">
-                          <span className="poppins-bold text-yellow text-sm bg-gray-100 px-3 py-1 rounded-full">
-                            Preview
-                          </span>
-                        </div>
-                      </div>
-                          
-                      {/* Module Content (collapsible) */}
-                      {expandedModules[module.id] && isModuleUnlocked(sectionIndex) && (
-                        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                          {/* Learning Objectives */}
-                          {module.learningObjectives && module.learningObjectives.length > 0 && (
-                            <div className="mb-6 p-4 bg-gray rounded-lg border border-gray">
-                              <div className="flex items-center mb-3">
-                                <h4 className="poppins-semibold text-black">
-                                  What You'll Learn in this lecture
-                                </h4>
-                              </div>
-                              <ul className="space-y-2">
-                                {module.learningObjectives.map((obj, idx) => (
-                                  <li key={idx} className="flex items-start">
-                                    <span className="poppins-light text-gray-700">• {obj}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-  
-                          {/* Content Items */}
-                          <div className="space-y-3">
-                            {module.contents.map((content) => {
-                              const fileUrl = `${import.meta.env.VITE_BACKEND_URL}${content.file}`;
 
-                              return (
-                                <div
-                                  key={content.id}
-                                  className="flex justify-between items-center p-3 hover:bg-gray rounded-lg transition-colors duration-200"
-                                >
-                                  <div className="flex items-center gap-2">
-                                    {content.type === "video" && (
-                                      <>
-                                        <FaCirclePlay className="text-yellow text-lg" />
-                                        <button
-                                          onClick={() => handlePlayVideo(fileUrl)}
-                                          className="poppins-light"
-                                        >
-                                          {content.name}
-                                        </button>
-                                      </>
-                                    )}
-                                    {(content.type === "assignment" || content.type === "book") && (
-                                      <>
-                                        {content.type === "assignment" ? (
-                                          <MdAssignment className="text-yellow text-lg" />
-                                        ) : (
-                                          <FaLaptopCode className="text-yellow text-lg" />
-                                        )}
-                                        <span className="poppins-light">
-                                          {content.name}
-                                        </span>
-                                      </>
-                                    )}
-                                  </div>
-                                  <div className="flex items-center space-x-4">
-                                    {content.type === "video" && (
-                                      <span className="poppins-medium text-yellow text-sm hover:text-yellow-600">
-                                        10 min
-                                      </span>
-                                    )}
-                                    {(content.type === "assignment" || content.type === "book") && (
-                                      <a
-                                        href={fileUrl}
-                                        download
-                                        className="flex items-center poppins-medium text-yellow text-sm hover:text-yellow-600"
-                                      >
-                                        <FiDownload className="mr-1" />
-                                        Download
-                                      </a>
-                                    )}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-  
-                  {/* Quiz Section for the Module */}
-                  {section.quizEnabled && section.quiz.questions.length > 0 && (
-                    <div className="mt-8 bg-gray rounded-lg p-6 border border-blue-200">
-                      <div className="flex items-center mb-4">
-                        <div className="w-3 h-8 bg-yellow rounded mr-3"></div>
-                        <h3 className="poppins-bold text-xl text-black">
-                          Module {sectionIndex + 1} Quiz
-                          {!isModuleUnlocked(sectionIndex) && " (Locked)"}
-                        </h3>
-                      </div>
-                  
-                      {/* Collapse Card for Quiz */}
-                      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-                        {/* Quiz Header */}
-                        <div 
-                          className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
-                          onClick={() => isModuleUnlocked(sectionIndex) && toggleModule(`quiz-${sectionIndex}`)}
+                    {/* Always show all modules but mark locked ones */}
+                    {section.modules.map((module, moduleIndex) => (
+                      <div
+                        key={module.id}
+                        className={`mb-6 rounded-lg ${sectionUnlocked ? "bg-white" : "bg-gray-100 opacity-80"
+                          }`}
+                      >
+                        {/* Module Header */}
+                        <div
+                          className={`p-5 flex justify-between items-center ${sectionUnlocked ? 'cursor-pointer hover:bg-gray-50' : 'cursor-not-allowed'
+                            } transition-colors duration-200`}
+                          onClick={() => sectionUnlocked && toggleModule(module.id)}
                         >
                           <div className="flex items-center">
-                            {!isModuleUnlocked(sectionIndex) ? (
+                            {!sectionUnlocked && (
                               <span className="poppins-bold text-yellow-500 mr-3">🔒</span>
-                            ) : quizResults[sectionIndex] ? (
-                              <span className="poppins-bold text-green-500 mr-3">✓</span>
-                            ) : (
-                              <span className="poppins-bold text-yellow-500 mr-3">📝</span>
                             )}
-                            <h4 className="poppins-medium text-gray-800">
-                              Test your knowledge from this module
-                              {quizResults[sectionIndex] && " (Completed)"}
-                              {!isModuleUnlocked(sectionIndex) && " (Complete previous modules to unlock)"}
-                            </h4>
-                          </div>
-                          <div className="flex items-center space-x-4">
-                            <span className="poppins-light text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                              {section.quiz.questions.length} questions
+                            <span className="poppins-bold mr-3 text-yellow">
+                              <FaCirclePlay className="text-2xl" />
                             </span>
-                            {isModuleUnlocked(sectionIndex) && (
-                              <span className="poppins-bold text-yellow">
-                                {expandedModules[`quiz-${sectionIndex}`] ? "⮟" : "➤"}
+                            <h3 className="poppins-bold text-gray-800">
+                              <span className="text-yellow-500">Lecture {moduleIndex + 1}:</span> {module.name}
+                            </h3>
+                          </div>
+                          <div className="flex items-center space-x-6">
+                            {sectionUnlocked && (
+                              <span className="poppins-bold text-yellow text-sm bg-gray-100 px-3 py-1 rounded-full">
+                                Preview
                               </span>
                             )}
                           </div>
                         </div>
-                          
-                        {/* Quiz Content */}
-                        {expandedModules[`quiz-${sectionIndex}`] && isModuleUnlocked(sectionIndex) && (
+
+                        {/* Module Content (collapsible) */}
+                        {expandedModules[module.id] && sectionUnlocked && (
                           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                            {quizResults[sectionIndex] ? (
-                              <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
-                                <div className="poppins-bold text-lg mb-2">
-                                  Quiz Results: {quizResults[sectionIndex].score}/{quizResults[sectionIndex].total}
+                            {/* Learning Objectives */}
+                            {module.learningObjectives && module.learningObjectives.length > 0 && (
+                              <div className="mb-6 p-4 bg-gray rounded-lg border border-gray">
+                                <div className="flex items-center mb-3">
+                                  <h4 className="poppins-semibold text-black">
+                                    What You'll Learn in this lecture
+                                  </h4>
                                 </div>
-                                <div className="space-y-3">
-                                  {section.quiz.questions.map((question, qIndex) => (
-                                    <div key={question.id} className="border-b pb-3">
-                                      <div className="poppins-medium mb-1">
-                                        {qIndex + 1}. {question.question}
-                                      </div>
-                                      <div className="poppins-light text-sm text-gray-600 mb-1">
-                                        Your answer: {quizAnswers[`${sectionIndex}-${question.id}`]}
-                                      </div>
-                                      <div className={`poppins-medium text-sm ${quizResults[sectionIndex].details[question.id]
-                                          ? 'text-green-600'
-                                          : 'text-red-600'
-                                        }`}>
-                                        {quizResults[sectionIndex].details[question.id]
-                                          ? '✓ Correct'
-                                          : `✗ Incorrect (Correct answer: ${question.correctAnswer})`}
-                                      </div>
-                                    </div>
+                                <ul className="space-y-2">
+                                  {module.learningObjectives.map((obj, idx) => (
+                                    <li key={idx} className="flex items-start">
+                                      <span className="poppins-light text-gray-700">• {obj}</span>
+                                    </li>
                                   ))}
-                                </div>
-                                <button
-                                  onClick={() => setQuizResults(prev => {
-                                    const newResults = { ...prev };
-                                    delete newResults[sectionIndex];
-                                    return newResults;
-                                  })}
-                                  className="mt-4 poppins-medium text-blue-600 hover:text-blue-800"
-                                >
-                                  Retake Quiz
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="space-y-4">
-                                {section.quiz.questions.map((question, qIndex) => (
-                                  <div key={question.id} className="bg-white p-4 rounded-lg shadow-sm">
-                                    <div className="poppins-medium mb-2">
-                                      {qIndex + 1}. {question.question}
-                                    </div>
-                                    <div className="space-y-2">
-                                      {question.options.map((option, oIndex) => (
-                                        <label key={oIndex} className="flex items-center space-x-2 poppins-light">
-                                          <input
-                                            type="radio"
-                                            name={`quiz-${sectionIndex}-${question.id}`}
-                                            value={option}
-                                            onChange={() => handleQuizAnswer(sectionIndex, question.id, option)}
-                                            className="text-blue-600 focus:ring-blue-500"
-                                          />
-                                          <span>{option}</span>
-                                        </label>
-                                      ))}
-                                    </div>
-                                  </div>
-                                ))}
-                                <button
-                                  onClick={() => submitQuiz(sectionIndex)}
-                                  className="poppins-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-                                >
-                                  Submit Quiz
-                                </button>
+                                </ul>
                               </div>
                             )}
+
+                            {/* Content Items */}
+                            <div className="space-y-3">
+                              {module.contents.map((content) => {
+                                const fileUrl = content.type === "video"
+                                  ? content.file
+                                  : `${import.meta.env.VITE_BACKEND_URL}${content.file}`;
+
+                                return (
+                                  <div
+                                    key={content.id}
+                                    className="flex justify-between items-center p-3 hover:bg-gray rounded-lg transition-colors duration-200"
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      {content.type === "video" && (
+                                        <>
+                                          <FaCirclePlay className="text-yellow text-lg" />
+                                          <button
+                                            onClick={() => handlePlayVideo(fileUrl)}
+                                            className="poppins-light"
+                                          >
+                                            {content.name}
+                                          </button>
+                                        </>
+                                      )}
+                                      {(content.type === "assignment" || content.type === "book") && (
+                                        <>
+                                          {content.type === "assignment" ? (
+                                            <MdAssignment className="text-yellow text-lg" />
+                                          ) : (
+                                            <FaLaptopCode className="text-yellow text-lg" />
+                                          )}
+                                          <span className="poppins-light">
+                                            {content.name}
+                                          </span>
+                                        </>
+                                      )}
+                                    </div>
+                                    <div className="flex items-center space-x-4">
+                                      {content.type === "video" && (
+                                        <span className="poppins-medium text-yellow text-sm hover:text-yellow-600">
+                                          10 min
+                                        </span>
+                                      )}
+                                      {(content.type === "assignment" || content.type === "book") && (
+                                        <a
+                                          href={fileUrl}
+                                          download
+                                          className="flex items-center poppins-medium text-yellow text-sm hover:text-yellow-600"
+                                        >
+                                          <FiDownload className="mr-1" />
+                                          Download
+                                        </a>
+                                      )}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
                         )}
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    ))}
+
+                    {/* Quiz Section for the Module */}
+                    {childSection?.quiz?.questions?.length > 0 && (
+                      <div className={`mt-8 bg-gray rounded-lg p-6 border ${quizCompleted ? 'border-green-200' : 'border-blue-200'} ${!sectionUnlocked ? 'opacity-60' : ''}`}>
+                        <div className="flex items-center mb-4">
+                          <div className="w-3 h-8 bg-yellow rounded mr-3"></div>
+                          <h3 className="poppins-bold text-xl text-black">
+                            Module {sectionIndex + 1} Quiz
+                            {!sectionUnlocked && " (Locked)"}
+                            {quizCompleted && " (Completed)"}
+                          </h3>
+                        </div>
+
+                        {/* Collapse Card for Quiz */}
+                        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                          {/* Quiz Header */}
+                          <div
+                            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+                            onClick={() => sectionUnlocked && toggleModule(`quiz-${sectionIndex}`)}
+                          >
+                            <div className="flex items-center">
+                              {!sectionUnlocked ? (
+                                <span className="poppins-bold text-yellow-500 mr-3">🔒</span>
+                              ) : quizCompleted ? (
+                                <span className="poppins-bold text-green-500 mr-3">✓</span>
+                              ) : quizAttempted ? (
+                                <span className="poppins-bold text-orange-500 mr-3">↻</span>
+                              ) : (
+                                <span className="poppins-bold text-yellow-500 mr-3">📝</span>
+                              )}
+                              <h4 className="poppins-medium text-gray-800">
+                                Test your knowledge from this module
+                                {quizCompleted && " (Completed)"}
+                                {quizAttempted && !quizCompleted && " (Attempted - Try Again)"}
+                                {!sectionUnlocked && (sectionIndex > 0 ? 
+                                  " (Complete previous module quiz to unlock)" : 
+                                  " (Complete previous modules to unlock)")}
+                              </h4>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <span className="poppins-light text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                                {childSection.quiz.questions.length} questions
+                              </span>
+                              {sectionUnlocked && (
+                                <span className="poppins-bold text-yellow">
+                                  {expandedModules[`quiz-${sectionIndex}`] ? "⮟" : "➤"}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Quiz Content */}
+                          {expandedModules[`quiz-${sectionIndex}`] && sectionUnlocked && (
+                            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                              {quizResults[sectionIndex] || quizCompleted ? (
+                                <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
+                                  <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-green-600' : 'text-red-600'}`}>
+                                    Quiz Results: {quizResults[sectionIndex]?.score || childSection.quiz.obtainedScore}/{childSection.quiz.totalScore}
+                                    {quizCompleted ? " (Passed)" : " (Failed - Score at least 60% to unlock next module)"}
+                                  </div>
+                                  <div className="space-y-3">
+                                    {childSection.quiz.questions.map((question, qIndex) => {
+                                      const userAnswer = quizAnswers[`${sectionIndex}-${question._id}`] || question.childAnswer;
+                                      const isCorrect = userAnswer === question.correctAnswer;
+                                      
+                                      return (
+                                        <div key={question._id} className="border-b pb-3">
+                                          <div className="poppins-medium mb-1">
+                                            {qIndex + 1}. {question.questionText}
+                                          </div>
+                                          <div className="poppins-light text-sm text-gray-600 mb-1">
+                                            Your answer: {userAnswer}
+                                          </div>
+                                          <div className={`poppins-medium text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                                            {isCorrect ? '✓ Correct' : `✗ Incorrect (Correct answer: ${question.correctAnswer})`}
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                  {!quizCompleted && (
+                                    <button
+                                      onClick={() => {
+                                        setQuizResults(prev => {
+                                          const newResults = { ...prev };
+                                          delete newResults[sectionIndex];
+                                          return newResults;
+                                        });
+                                      }}
+                                      className="mt-4 poppins-medium text-blue-600 hover:text-blue-800"
+                                    >
+                                      Retake Quiz
+                                    </button>
+                                  )}
+                                </div>
+                              ) : (
+                                <div className="space-y-4">
+                                  {childSection.quiz.questions.map((question, qIndex) => (
+                                    <div key={question._id} className="bg-white p-4 rounded-lg shadow-sm">
+                                      <div className="poppins-medium mb-2">
+                                        {qIndex + 1}. {question.questionText}
+                                      </div>
+                                      <div className="space-y-2">
+                                        {question.options.map((option, oIndex) => (
+                                          <label key={oIndex} className="flex items-center space-x-2 poppins-light">
+                                            <input
+                                              type="radio"
+                                              name={`quiz-${sectionIndex}-${question._id}`}
+                                              value={option}
+                                              checked={quizAnswers[`${sectionIndex}-${question._id}`] === option}
+                                              onChange={() => handleQuizAnswer(sectionIndex, question._id, option)}
+                                              className="text-blue-600 focus:ring-blue-500"
+                                            />
+                                            <span>{option}</span>
+                                          </label>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ))}
+                                  <button
+                                    onClick={() => submitQuiz(sectionIndex)}
+                                    className="poppins-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                                  >
+                                    Submit Quiz
+                                  </button>
+                                  <div className="poppins-light text-sm text-gray-600 mt-2">
+                                    Note: You need to score at least 60% to unlock the next module.
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
-      
+
         {/* Video Modal */}
         {showVideoModal && (
           <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
@@ -524,11 +666,11 @@ const CourseDetail = () => {
             </div>
           </div>
         )}
-      
+
         <ReviewsComponent />
       </>
     </div>
-  )
+  );
 }
 
-export default CourseDetail
+export default CourseDetail;

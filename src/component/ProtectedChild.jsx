@@ -44,7 +44,7 @@ const ProtectedChild = ({ children }) => {
 
     checkSession();
 
-    const interval = setInterval(checkSession, 3000);
+    const interval = setInterval(checkSession, 30000);
     return () => clearInterval(interval);
   }, [navigate]);
 

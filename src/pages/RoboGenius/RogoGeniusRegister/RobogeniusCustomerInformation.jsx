@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -57,6 +57,7 @@ const SelectField = ({ label, name, value, onChange, options, required = false }
 const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  console.log(currentUser);
   const { plan, price, billingCycle } = useSelector((state) => state.plans);
 
   const [loading, setLoading] = useState(false);
@@ -74,6 +75,50 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
       saved: false
     }
   ]);
+
+  useEffect(() => {
+  const fetchParentData = async () => {
+    if (!currentUser?._id) return;
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/parents/${currentUser._id}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log(res);
+
+      if (!res.ok) {
+        if (res.status !== 404) {
+          throw new Error("Failed to fetch parent data");
+        }
+        return; 
+      }
+
+      const parentData = await res.json();
+      setParentForm({
+        firstName: parentData.firstName || "",
+        lastName: parentData.lastName || "",
+        email: parentData.email || "",
+        country: parentData.country || "",
+        companyName: parentData.companyName || "",
+        streetAddress: parentData.streetAddress || "",
+        aptSuite: parentData.aptSuite || "",
+        city: parentData.city || "",
+        state: parentData.state || "",
+        phone: parentData.phone || "",
+        postalCode: parentData.postalCode || "",
+        deliveryInstruction: parentData.deliveryInstruction || ""
+      });
+    } catch (error) {
+      console.error("Error fetching parent info:", error);
+    }
+  };
+
+  fetchParentData();
+}, [currentUser]);
 
   const [savedChildren, setSavedChildren] = useState([]);
 
