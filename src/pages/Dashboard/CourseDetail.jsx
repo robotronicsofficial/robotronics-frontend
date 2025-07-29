@@ -11,10 +11,17 @@ import { MdAssignment } from "react-icons/md";
 import { AiOutlineRight } from "react-icons/ai";
 import ChatSupport from "../../component/ChatSupport"
 
+const MAX_ATTEMPTS = {
+  BASIC: 2,
+  PRO: Infinity
+};
+
 const CourseDetail = () => {
   const { id } = useParams();
   const [courseData, setCourseData] = useState(null);
   const [childCourseData, setChildCourseData] = useState(null);
+  const [plan, setPlan] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -45,7 +52,10 @@ const CourseDetail = () => {
         ]);
 
         setCourseData(courseData);
-        setChildCourseData(childCourseData);
+
+        setChildCourseData(childCourseData.course);
+        setPlan(childCourseData.plan)
+
         console.log(childCourseData)
       } catch (err) {
         console.error(err);
@@ -57,9 +67,6 @@ const CourseDetail = () => {
 
     fetchData();
   }, [id]);
-
-
-
 
   const isSectionUnlocked = (section, sectionIndex) => {
     if (!section?.startDate || !section?.endDate) return true;
@@ -79,7 +86,6 @@ const CourseDetail = () => {
     return isDateValid;
   };
 
-
   const isModuleUnlocked = (sectionIndex) => {
     if (childCourseData?.Sections?.[sectionIndex]) {
       return isSectionUnlocked(childCourseData.Sections[sectionIndex], sectionIndex);
@@ -87,31 +93,32 @@ const CourseDetail = () => {
     return true;
   };
 
+const updateChildCourseProgress = async (updatedData, sectionIndex) => {
+  const childId = localStorage.getItem('selectedChildId');
+  console.log("Update section index:", sectionIndex); // Log the section index
+  try {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/updateChildCourse/${childId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...updatedData,
+        sectionIndex: sectionIndex // Include section index in the payload
+      }),
+    });
 
-  const updateChildCourseProgress = async (updatedData) => {
-    const childId = localStorage.getItem('selectedChildId');
-    console.log("Updated Data ",updatedData)
-    try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/updateChildCourse/${childId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update child course progress');
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error updating child course:', error);
-      throw error;
+    if (!response.ok) {
+      throw new Error('Failed to update child course progress');
     }
-  };
 
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error updating child course:', error);
+    throw error;
+  }
+};
 
   const toggleModule = (moduleId) => {
     setExpandedModules((prev) => ({
@@ -125,7 +132,6 @@ const CourseDetail = () => {
     setShowVideoModal(true);
   };
 
-
   const handleQuizAnswer = (sectionIndex, questionId, answer) => {
     setQuizAnswers(prev => ({
       ...prev,
@@ -133,8 +139,43 @@ const CourseDetail = () => {
     }));
   };
 
+  const isSameDay = (date1, date2) => {
+    console.log(date1,date2);
+    if (!date1 || !date2) return false;
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return (
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate()
+    );
+  };
+
   const submitQuiz = async (sectionIndex) => {
+    // const childPlan = childCourseData.plan?.name?.toLowerCase(); // 'basic' or 'pro'
+
+    // const childPlan = 'basic';
+    const childPlan = plan.name.toLowerCase();
+
+
+    console.log("CHild Plan", childPlan, childCourseData);
+    const maxAttempts = childPlan === 'pro' ? MAX_ATTEMPTS.PRO : MAX_ATTEMPTS.BASIC;
     const section = childCourseData.Sections[sectionIndex];
+    const today = new Date().toISOString();
+
+    let attemptsToAdd = 1;
+    if (childPlan === 'basic' && section.quiz.lastAttemptDate && isSameDay(section.quiz.lastAttemptDate, today)) {
+      if (section.quiz.attempts >= maxAttempts) {
+        alert(`You've reached the maximum number of attempts (${maxAttempts}) for today. Try again tomorrow.`);
+        return;
+      }
+      attemptsToAdd = 1; 
+    } else if (childPlan === 'basic') {
+      attemptsToAdd = 0;
+    } else {
+      attemptsToAdd = 1;
+    }
+
     const results = {};
     let score = 0;
 
@@ -145,17 +186,20 @@ const CourseDetail = () => {
       if (isCorrect) score++;
     });
 
-
     const percentage = (score / section.quiz.questions.length) * 100;
     const passed = percentage >= 60;
 
     const updatedChildCourseData = { ...childCourseData };
     updatedChildCourseData.Sections[sectionIndex].quiz.obtainedScore = score;
     updatedChildCourseData.Sections[sectionIndex].quiz.result = passed ? "pass" : "fail";
-    updatedChildCourseData.Sections[sectionIndex].quiz.attempts += 1;
-    updatedChildCourseData.Sections[sectionIndex].quiz.lastAttemptDate = new Date().toISOString();
-    
-    updatedChildCourseData.Sections[sectionIndex].quiz.questions = 
+    if (attemptsToAdd === 0)
+      updatedChildCourseData.Sections[sectionIndex].quiz.attempts = 1;
+    else
+      updatedChildCourseData.Sections[sectionIndex].quiz.attempts += attemptsToAdd;
+
+    updatedChildCourseData.Sections[sectionIndex].quiz.lastAttemptDate = today;
+
+    updatedChildCourseData.Sections[sectionIndex].quiz.questions =
       updatedChildCourseData.Sections[sectionIndex].quiz.questions.map(question => ({
         ...question,
         childAnswer: quizAnswers[`${sectionIndex}-${question._id}`] || "",
@@ -165,12 +209,12 @@ const CourseDetail = () => {
     if (passed && sectionIndex < updatedChildCourseData.Sections.length - 1) {
       const nextSectionIndex = sectionIndex + 1;
       const now = new Date();
-      const nextDay = new Date(now.setDate(now.getDate() + 1)); 
-      
+      const nextDay = new Date(now.setDate(now.getDate() + 1));
+
       if (!updatedChildCourseData.Sections[nextSectionIndex].startDate) {
         updatedChildCourseData.Sections[nextSectionIndex].startDate = nextDay.toISOString();
         updatedChildCourseData.Sections[nextSectionIndex].endDate = new Date(
-          nextDay.setDate(nextDay.getDate() + 14) 
+          nextDay.setDate(nextDay.getDate() + 14)
         ).toISOString();
         updatedChildCourseData.Sections[nextSectionIndex].status = "unlock";
       }
@@ -186,10 +230,11 @@ const CourseDetail = () => {
       updatedChildCourseData.isCompleted = true;
       updatedChildCourseData.status = "completed";
     }
+    console.log(updatedChildCourseData);
 
     try {
-      await updateChildCourseProgress(updatedChildCourseData);
-      
+          await updateChildCourseProgress(updatedChildCourseData, sectionIndex);
+
       setChildCourseData(updatedChildCourseData);
       setQuizResults(prev => ({
         ...prev,
@@ -357,6 +402,12 @@ const CourseDetail = () => {
                 const sectionDates = childCourseData?.Sections?.[sectionIndex];
                 const quizCompleted = childSection?.quiz?.result === "pass";
                 const quizAttempted = childSection?.quiz?.attempts > 0;
+                const childPlan = childCourseData.plan?.name?.toLowerCase();
+                const maxAttempts = childPlan === 'pro' ? MAX_ATTEMPTS.PRO : MAX_ATTEMPTS.BASIC;
+                const attemptsExhausted = childPlan === 'basic' &&
+                  childSection?.quiz?.lastAttemptDate &&
+                  isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) &&
+                  childSection?.quiz?.attempts >= maxAttempts;
 
                 return (
                   <div key={sectionIndex} className="mb-10">
@@ -367,7 +418,7 @@ const CourseDetail = () => {
                           Module {sectionIndex + 1}: {section.name}
                           {!sectionUnlocked && (
                             <span className="text-red-500 ml-2 text-sm">
-                              {sectionIndex > 0 && childCourseData.Sections[sectionIndex - 1]?.quiz?.result !== "pass" ? 
+                              {sectionIndex > 0 && childCourseData.Sections[sectionIndex - 1]?.quiz?.result !== "pass" ?
                                 "(Locked - Complete previous module quiz to unlock)" :
                                 `(Locked - Available from ${sectionDates?.startDate ?
                                   new Date(sectionDates.startDate).toLocaleDateString() : 'a future date'})`}
@@ -500,136 +551,178 @@ const CourseDetail = () => {
 
                     {/* Quiz Section for the Module */}
                     {childSection?.quiz?.questions?.length > 0 && (
-                      <div className={`mt-8 bg-gray rounded-lg p-6 border ${quizCompleted ? 'border-green-200' : 'border-blue-200'} ${!sectionUnlocked ? 'opacity-60' : ''}`}>
+                      <div className={`mt-8 rounded-lg p-6 border ${quizCompleted ? 'border-green-200 bg-green-50' :
+                        attemptsExhausted ? 'border-red-200 bg-red-50' :
+                          'border-blue-200 bg-gray-50'
+                        } ${!sectionUnlocked ? 'opacity-60' : ''}`}>
                         <div className="flex items-center mb-4">
                           <div className="w-3 h-8 bg-yellow rounded mr-3"></div>
                           <h3 className="poppins-bold text-xl text-black">
                             Module {sectionIndex + 1} Quiz
                             {!sectionUnlocked && " (Locked)"}
                             {quizCompleted && " (Completed)"}
+                            {attemptsExhausted && " (Attempts Exhausted for Today)"}
                           </h3>
                         </div>
 
-                        {/* Collapse Card for Quiz */}
-                        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-                          {/* Quiz Header */}
-                          <div
-                            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
-                            onClick={() => sectionUnlocked && toggleModule(`quiz-${sectionIndex}`)}
-                          >
-                            <div className="flex items-center">
-                              {!sectionUnlocked ? (
-                                <span className="poppins-bold text-yellow-500 mr-3">🔒</span>
-                              ) : quizCompleted ? (
-                                <span className="poppins-bold text-green-500 mr-3">✓</span>
-                              ) : quizAttempted ? (
-                                <span className="poppins-bold text-orange-500 mr-3">↻</span>
-                              ) : (
-                                <span className="poppins-bold text-yellow-500 mr-3">📝</span>
-                              )}
-                              <h4 className="poppins-medium text-gray-800">
-                                Test your knowledge from this module
-                                {quizCompleted && " (Completed)"}
-                                {quizAttempted && !quizCompleted && " (Attempted - Try Again)"}
-                                {!sectionUnlocked && (sectionIndex > 0 ? 
-                                  " (Complete previous module quiz to unlock)" : 
-                                  " (Complete previous modules to unlock)")}
-                              </h4>
+                        {attemptsExhausted ? (
+                          <div className="p-4 bg-white rounded-lg shadow-sm">
+                            <div className="poppins-bold text-red-600 text-lg mb-2">
+                              You've used all {maxAttempts} attempts for today.
                             </div>
-                            <div className="flex items-center space-x-4">
-                              <span className="poppins-light text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                                {childSection.quiz.questions.length} questions
-                              </span>
-                              {sectionUnlocked && (
-                                <span className="poppins-bold text-yellow">
-                                  {expandedModules[`quiz-${sectionIndex}`] ? "⮟" : "➤"}
-                                </span>
-                              )}
+                            <div className="poppins-light text-gray-700">
+                              {childPlan === 'basic' ?
+                                "You can try again tomorrow with fresh attempts." :
+                                "You can continue attempting this quiz as you have unlimited attempts."}
                             </div>
                           </div>
-
-                          {/* Quiz Content */}
-                          {expandedModules[`quiz-${sectionIndex}`] && sectionUnlocked && (
-                            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                              {quizResults[sectionIndex] || quizCompleted ? (
-                                <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
-                                  <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-green-600' : 'text-red-600'}`}>
-                                    Quiz Results: {quizResults[sectionIndex]?.score || childSection.quiz.obtainedScore}/{childSection.quiz.totalScore/10}
-                                    {quizCompleted ? " (Passed)" : " (Failed - Score at least 60% to unlock next module)"}
-                                  </div>
-                                  <div className="space-y-3">
-                                    {childSection.quiz.questions.map((question, qIndex) => {
-                                      const userAnswer = quizAnswers[`${sectionIndex}-${question._id}`] || question.childAnswer;
-                                      const isCorrect = userAnswer === question.correctAnswer;
-                                      
-                                      return (
-                                        <div key={question._id} className="border-b pb-3">
-                                          <div className="poppins-medium mb-1">
-                                            {qIndex + 1}. {question.questionText}
-                                          </div>
-                                          <div className="poppins-light text-sm text-gray-600 mb-1">
-                                            Your answer: {userAnswer}
-                                          </div>
-                                          <div className={`poppins-medium text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                                            {isCorrect ? '✓ Correct' : `✗ Incorrect (Correct answer: ${question.correctAnswer})`}
-                                          </div>
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                  {!quizCompleted && (
-                                    <button
-                                      onClick={() => {
-                                        setQuizResults(prev => {
-                                          const newResults = { ...prev };
-                                          delete newResults[sectionIndex];
-                                          return newResults;
-                                        });
-                                      }}
-                                      className="mt-4 poppins-medium text-blue-600 hover:text-blue-800"
-                                    >
-                                      Retake Quiz
-                                    </button>
+                        ) : (
+                          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                            {/* Quiz Header */}
+                            <div
+                              className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+                              onClick={() => sectionUnlocked && toggleModule(`quiz-${sectionIndex}`)}
+                            >
+                              <div className="flex items-center">
+                                {!sectionUnlocked ? (
+                                  <span className="poppins-bold text-yellow-500 mr-3">🔒</span>
+                                ) : quizCompleted ? (
+                                  <span className="poppins-bold text-green-500 mr-3">✓</span>
+                                ) : quizAttempted ? (
+                                  <span className="poppins-bold text-orange-500 mr-3">↻</span>
+                                ) : (
+                                  <span className="poppins-bold text-yellow-500 mr-3">📝</span>
+                                )}
+                                <h4 className="poppins-medium text-gray-800">
+                                  Test your knowledge from this module
+                                  {quizCompleted && " (Completed)"}
+                                  {quizAttempted && !quizCompleted && (
+                                    childPlan === 'basic' ? (
+                                      isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) ?
+                                        ` (Attempt ${childSection.quiz.attempts} of ${maxAttempts} today)` :
+                                        ` (${maxAttempts} fresh attempts available today)`
+                                    ) : ` (Attempt ${childSection.quiz.attempts})`
                                   )}
-                                </div>
-                              ) : (
-                                <div className="space-y-4">
-                                  {childSection.quiz.questions.map((question, qIndex) => (
-                                    <div key={question._id} className="bg-white p-4 rounded-lg shadow-sm">
-                                      <div className="poppins-medium mb-2">
-                                        {qIndex + 1}. {question.questionText}
-                                      </div>
-                                      <div className="space-y-2">
-                                        {question.options.map((option, oIndex) => (
-                                          <label key={oIndex} className="flex items-center space-x-2 poppins-light">
-                                            <input
-                                              type="radio"
-                                              name={`quiz-${sectionIndex}-${question._id}`}
-                                              value={option}
-                                              checked={quizAnswers[`${sectionIndex}-${question._id}`] === option}
-                                              onChange={() => handleQuizAnswer(sectionIndex, question._id, option)}
-                                              className="text-blue-600 focus:ring-blue-500"
-                                            />
-                                            <span>{option}</span>
-                                          </label>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  ))}
-                                  <button
-                                    onClick={() => submitQuiz(sectionIndex)}
-                                    className="poppins-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-                                  >
-                                    Submit Quiz
-                                  </button>
-                                  <div className="poppins-light text-sm text-gray-600 mt-2">
-                                    Note: You need to score at least 60% to unlock the next module.
-                                  </div>
-                                </div>
-                              )}
+                                  {!sectionUnlocked && (sectionIndex > 0 ?
+                                    " (Complete previous module quiz to unlock)" :
+                                    " (Complete previous modules to unlock)")}
+                                </h4>
+                              </div>
+                              <div className="flex items-center space-x-4">
+                                <span className="poppins-light text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                                  {childSection.quiz.questions.length} questions
+                                </span>
+                                {sectionUnlocked && (
+                                  <span className="poppins-bold text-yellow">
+                                    {expandedModules[`quiz-${sectionIndex}`] ? "⮟" : "➤"}
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                          )}
-                        </div>
+
+                            {/* Quiz Content */}
+                            {expandedModules[`quiz-${sectionIndex}`] && sectionUnlocked && (
+                              <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                                {quizResults[sectionIndex] || quizCompleted ? (
+                                  <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
+                                    <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-green-600' : 'text-red-600'}`}>
+                                      Quiz Results: {childSection.quiz.obtainedScore}/{childSection.quiz.totalScore / 10}
+                                      {quizCompleted ? " (Passed)" : " (Failed - Score at least 60% to unlock next module)"}
+                                    </div>
+                                    <div className="space-y-3">
+                                      {childSection.quiz.questions.map((question, qIndex) => {
+                                        const userAnswer = quizAnswers[`${sectionIndex}-${question._id}`] || question.childAnswer;
+                                        const isCorrect = userAnswer === question.correctAnswer;
+
+                                        return (
+                                          <div key={question._id} className="border-b pb-3">
+                                            <div className="poppins-medium mb-1">
+                                              {qIndex + 1}. {question.questionText}
+                                            </div>
+                                            <div className="poppins-light text-sm text-gray-600 mb-1">
+                                              Your answer: {userAnswer}
+                                            </div>
+                                            <div className={`poppins-medium text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                                              {isCorrect ? '✓ Correct' : `✗ Incorrect (Correct answer: ${question.correctAnswer})`}
+                                            </div>
+
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                    {!quizCompleted && (
+                                      childPlan === 'basic' &&
+                                        childSection.quiz.lastAttemptDate &&
+                                        isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) &&
+                                        childSection.quiz.attempts >= maxAttempts ? (
+                                        <div className="mt-4 poppins-medium text-gray-600">
+                                          You've used all {maxAttempts} attempts for today. Try again tomorrow.
+                                        </div>
+                                      ) : (
+                                        <button
+                                          onClick={() => {
+                                            setQuizResults(prev => {
+                                              const newResults = { ...prev };
+                                              delete newResults[sectionIndex];
+                                              return newResults;
+                                            });
+                                                window.location.reload();
+                                          }}
+                                          className="mt-4 poppins-medium text-blue-600 hover:text-blue-800"
+                                        >
+                                          {childPlan === 'basic' ?
+                                            (isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) ?
+                                              `Retake Quiz (Attempt ${childSection.quiz.attempts + 1} of ${maxAttempts} today)` :
+                                              `Retake Quiz (${maxAttempts} fresh attempts available)`) :
+                                            'Retake Quiz'}
+                                        </button>
+                                      )
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="space-y-4">
+                                    {childPlan === 'basic' && (
+                                      <div className="poppins-medium text-sm text-gray-600 mb-2">
+                                        Attempt {childSection.quiz.attempts + 1} of {maxAttempts} today
+                                      </div>
+                                    )}
+                                    {childSection.quiz.questions.map((question, qIndex) => (
+                                      <div key={question._id} className="bg-white p-4 rounded-lg shadow-sm">
+                                        <div className="poppins-medium mb-2">
+                                          {qIndex + 1}. {question.questionText}
+                                        </div>
+                                        <div className="space-y-2">
+                                          {question.options.map((option, oIndex) => (
+                                            <label key={oIndex} className="flex items-center space-x-2 poppins-light">
+                                              <input
+                                                type="radio"
+                                                name={`quiz-${sectionIndex}-${question._id}`}
+                                                value={option}
+                                                checked={quizAnswers[`${sectionIndex}-${question._id}`] === option}
+                                                onChange={() => handleQuizAnswer(sectionIndex, question._id, option)}
+                                                className="text-blue-600 focus:ring-blue-500"
+                                              />
+                                              <span>{option}</span>
+                                            </label>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    ))}
+                                    <button
+                                      onClick={() => submitQuiz(sectionIndex)}
+                                      className="poppins-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                                    >
+                                      Submit Quiz
+                                    </button>
+                                    <div className="poppins-light text-sm text-gray-600 mt-2">
+                                      Note: You need to score at least 60% to unlock the next module.
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
