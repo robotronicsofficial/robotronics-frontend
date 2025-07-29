@@ -9,6 +9,7 @@ import { FaCirclePlay } from "react-icons/fa6";
 import { FaLaptopCode } from "react-icons/fa";
 import { MdAssignment } from "react-icons/md";
 import { AiOutlineRight } from "react-icons/ai";
+import ChatSupport from "../../component/ChatSupport"
 
 const CourseDetail = () => {
   const { id } = useParams();
@@ -45,6 +46,7 @@ const CourseDetail = () => {
 
         setCourseData(courseData);
         setChildCourseData(childCourseData);
+        console.log(childCourseData)
       } catch (err) {
         console.error(err);
         setError(err.message);
@@ -55,6 +57,8 @@ const CourseDetail = () => {
 
     fetchData();
   }, [id]);
+
+
 
 
   const isSectionUnlocked = (section, sectionIndex) => {
@@ -225,6 +229,8 @@ const CourseDetail = () => {
       </div>
     );
   }
+
+  console.log(courseData)
 
   return (
     <div>
@@ -548,7 +554,7 @@ const CourseDetail = () => {
                               {quizResults[sectionIndex] || quizCompleted ? (
                                 <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
                                   <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-green-600' : 'text-red-600'}`}>
-                                    Quiz Results: {quizResults[sectionIndex]?.score || childSection.quiz.obtainedScore}/{childSection.quiz.totalScore}
+                                    Quiz Results: {quizResults[sectionIndex]?.score || childSection.quiz.obtainedScore}/{childSection.quiz.totalScore/10}
                                     {quizCompleted ? " (Passed)" : " (Failed - Score at least 60% to unlock next module)"}
                                   </div>
                                   <div className="space-y-3">
@@ -669,6 +675,7 @@ const CourseDetail = () => {
 
         <ReviewsComponent />
       </>
+      <ChatSupport />
     </div>
   );
 }
