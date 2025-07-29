@@ -9,6 +9,7 @@ import { FaCirclePlay } from "react-icons/fa6";
 import { FaLaptopCode } from "react-icons/fa";
 import { MdAssignment } from "react-icons/md";
 import { AiOutlineRight } from "react-icons/ai";
+import ChatSupport from "../../component/ChatSupport"
 
 const MAX_ATTEMPTS = {
   BASIC: 2,
@@ -51,8 +52,10 @@ const CourseDetail = () => {
         ]);
 
         setCourseData(courseData);
+
         setChildCourseData(childCourseData.course);
         setPlan(childCourseData.plan)
+
         console.log(childCourseData)
       } catch (err) {
         console.error(err);
@@ -271,6 +274,8 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
       </div>
     );
   }
+
+  console.log(courseData)
 
   return (
     <div>
@@ -640,6 +645,7 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
                                             <div className={`poppins-medium text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
                                               {isCorrect ? '✓ Correct' : `✗ Incorrect (Correct answer: ${question.correctAnswer})`}
                                             </div>
+
                                           </div>
                                         );
                                       })}
@@ -762,6 +768,7 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
 
         <ReviewsComponent />
       </>
+      <ChatSupport />
     </div>
   );
 }
