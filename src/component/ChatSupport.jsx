@@ -24,7 +24,7 @@ const ChatHeader = memo(({ isMaximized, toggleMaximize, toggleChat }) => (
   <div className="bg-white text-black p-4 flex justify-between items-center border-b border-gray">
     <h2 className="text-xl font-bold">Robotronics AI</h2>
     <div className="flex items-center space-x-2">
-      <button 
+      <button
         onClick={toggleMaximize}
         className="text-gray-600 hover:text-gray-800 text-xl p-1"
         aria-label={isMaximized ? "Minimize" : "Maximize"}
@@ -32,7 +32,7 @@ const ChatHeader = memo(({ isMaximized, toggleMaximize, toggleChat }) => (
       >
         {isMaximized ? <TbWindowMinimize size={20} /> : <TbWindowMaximize size={20} />}
       </button>
-      <button 
+      <button
         onClick={toggleChat}
         className="text-gray-600 hover:text-gray-800 text-xl p-1"
         aria-label="Close chat"
@@ -44,9 +44,9 @@ const ChatHeader = memo(({ isMaximized, toggleMaximize, toggleChat }) => (
 ));
 
 const Message = memo(({ message }) => (
-  <div 
-    className={`max-w-[80%] p-4 rounded-lg ${message.sender === 'user' 
-      ? 'bg-[#FFAC1F] text-white rounded-br-none' 
+  <div
+    className={`max-w-[80%] p-4 rounded-lg ${message.sender === 'user'
+      ? 'bg-[#FFAC1F] text-white rounded-br-none'
       : 'bg-white text-gray-800 rounded-bl-none border border-gray'}`}
     role={message.sender === 'user' ? 'status' : 'article'}
     aria-live={message.sender === 'bot' ? 'polite' : 'off'}
@@ -76,7 +76,7 @@ const ChatSupport = () => {
   const [isSpeechSupported, setIsSpeechSupported] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isBotTyping, setIsBotTyping] = useState(false);
-  
+
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
@@ -99,7 +99,7 @@ const ChatSupport = () => {
   // Check for speech recognition support
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
+
     if (SpeechRecognition) {
       setIsSpeechSupported(true);
       const recognition = new SpeechRecognition();
@@ -203,7 +203,7 @@ const ChatSupport = () => {
     if ((inputMessage.trim() === "" && !selectedFile) || isSending) return;
 
     setIsSending(true);
-    
+
     const newMessage = {
       text: inputMessage,
       sender: "user",
@@ -245,22 +245,22 @@ const ChatSupport = () => {
   return (
     <div className="fixed bottom-8 right-8 z-50" ref={chatContainerRef}>
       {!isOpen ? (
-        <button 
-          onClick={toggleChat} 
+        <button
+          onClick={toggleChat}
           className="focus:outline-none focus:ring-2 focus:ring-[#FFAC1F] rounded-2xl"
           aria-label="Open chat support"
         >
-          <img 
-            src={chatLogo} 
-            alt="Chat Support" 
+          <img
+            src={chatLogo}
+            alt="Chat Support"
             className="w-[186px] h-[70px] cursor-pointer hover:opacity-90 transition-opacity rounded-2xl"
           />
         </button>
       ) : (
-        <div 
+        <div
           className={`
-            fixed ${isMaximized ? 
-              'inset-0 m-auto w-[95vw] h-[95vh] rounded-3xl flex' : 
+            fixed ${isMaximized ?
+              'inset-0 m-auto w-[95vw] h-[95vh] rounded-3xl flex' :
               'bottom-0 right-0 w-[450px] h-[600px] rounded-3xl'
             } bg-white shadow-xl overflow-hidden border border-yellow transition-all duration-300 relative
           `}
@@ -268,12 +268,19 @@ const ChatSupport = () => {
           aria-modal="true"
           aria-labelledby="chat-header"
         >
-          {/* <div className={`
-            absolute ${isMaximized ? 
-              '-bottom-40 -right-40 w-[50vw] h-[50vw]' : 
-              '-bottom-20 -right-20 w-96 h-96'
-            } rounded-full bg-gradient-to-br from-[#FFAC1F] to-[#FF8C00] opacity-20 blur-xl z-0
-          `}></div> */}
+          <div
+  className={`
+    absolute bottom-0 left-1/2 transform -translate-x-1/2
+    ${isMaximized ? 'w-[900px] h-[400px] left-[calc(50%+130px)]' : 'w-[600px] h-[300px]'}
+    bg-gradient-to-br from-[#FFAC1F] to-[#FF8C00]
+    opacity-35 blur-xl z-0
+    rounded-t-full
+    pointer-events-none
+  `}
+/>
+
+
+
 
           {isMaximized && (
             <div className="w-64 bg-blue-50 border-r border-gray flex flex-col">
@@ -282,8 +289,8 @@ const ChatSupport = () => {
               </div>
               <div className="flex-1 overflow-y-auto p-2">
                 {[1, 2, 3].map((item) => (
-                  <div 
-                    key={item} 
+                  <div
+                    key={item}
                     className="p-3 hover:bg-gray rounded-lg cursor-pointer border-t border-gray first:border-t-0"
                   >
                     <p className="text-sm font-medium truncate">Sample conversation {item}</p>
@@ -292,7 +299,7 @@ const ChatSupport = () => {
                 ))}
               </div>
               <div className="p-4 border-t border-gray">
-                <button 
+                <button
                   className="w-full py-2 bg-[#FFAC1F] text-white rounded-lg hover:bg-[#e69a1a] transition-colors"
                   onClick={initializeChat}
                   aria-label="Start new chat"
@@ -304,20 +311,20 @@ const ChatSupport = () => {
           )}
 
           <div className="flex-1 flex flex-col h-full">
-            <ChatHeader 
-              isMaximized={isMaximized} 
-              toggleMaximize={toggleMaximize} 
-              toggleChat={toggleChat} 
+            <ChatHeader
+              isMaximized={isMaximized}
+              toggleMaximize={toggleMaximize}
+              toggleChat={toggleChat}
             />
 
-            <div 
+            <div
               className="flex-1 p-4 overflow-y-auto overflow-x-hidden bg-white"
               aria-live="polite"
               aria-atomic="true"
             >
               {messages.map((message, index) => (
-                <div 
-                  key={`${index}-${message.time}`} 
+                <div
+                  key={`${index}-${message.time}`}
                   className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <Message message={message} />
@@ -337,15 +344,15 @@ const ChatSupport = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            <form onSubmit={handleSendMessage} className="p-4 bg-white relative">
+            <form onSubmit={handleSendMessage} className="p-4  relative">
               {selectedFile && (
                 <div className="flex items-center justify-between mb-2 px-3 py-2 bg-gray-100 rounded-lg">
                   <div className="flex items-center">
                     <ImAttachment className="mr-2 text-gray-600" />
                     <span className="text-sm truncate max-w-xs">{selectedFile.name}</span>
                   </div>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => setSelectedFile(null)}
                     className="text-gray-500 hover:text-gray-700 ml-2"
                     aria-label="Remove file"
@@ -361,10 +368,11 @@ const ChatSupport = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type your message..."
-                  className="w-full border border-gray rounded-3xl px-14 py-3 focus:outline-none focus:ring-2 focus:ring-[#FFAC1F] text-base"
+                  className="w-full border border-black rounded-3xl px-14 py-3 bg-transparent shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFAC1F] text-base"
                   aria-label="Type your message"
                   disabled={isSending}
                 />
+
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex space-x-2">
                   <button
                     type="button"
@@ -384,7 +392,7 @@ const ChatSupport = () => {
                     disabled={isSending}
                   />
                 </div>
-                
+
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex space-x-2">
                   {isSpeechSupported && (
                     <button
@@ -408,8 +416,8 @@ const ChatSupport = () => {
                 </div>
               </div>
               <p className="text-xs text-gray-500 mt-2 text-center">
-                  Robotronics AI can make mistakes. Check our 
-                  <a href="/terms" className="text-[#FFAC1F] hover:underline ml-1">Terms & Conditions</a>.
+                Robotronics AI can make mistakes. Check our
+                <a href="/terms" className="text-[#FFAC1F] hover:underline ml-1">Terms & Conditions</a>.
               </p>
             </form>
           </div>
