@@ -11,6 +11,7 @@ const RoboGeniusProgreeDetailPage = () => {
   const [searchParams] = useSearchParams();
   const childId = searchParams.get('childId');
   const [downloading, setDownloading] = useState(false);
+  const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
 
   useEffect(() => {
     const fetchProgressData = async () => {
@@ -30,7 +31,7 @@ const RoboGeniusProgreeDetailPage = () => {
         const data = await response.json();
         setProgressData(data);
       } catch (err) {
-        setError(err.message);
+        setError('Failed to load progress data. Please check your connection and try again.');
       } finally {
         setLoading(false);
       }
@@ -39,66 +40,110 @@ const RoboGeniusProgreeDetailPage = () => {
     fetchProgressData();
   }, [childId]);
 
-const handleDownloadCertificate = async (courseId, courseName) => {
-  console.log(childId, courseId);
-  if (!childId || !courseId || downloading) return;
+  const handleDownloadCertificate = async (courseId, courseName) => {
+    if (!childId || !courseId || downloading) return;
 
-  setDownloading(true);
-  try {
-    // Single API call to generate and get download URL
-    const response = await fetch(`http://localhost:8080/api/generate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        childId,
-        courseId,
-        childName: progressData.childName,
-        courseName
-      })
-    });
+    setDownloading(true);
+    // Clear any previous error for this course
+    setDownloadErrors(prev => ({ ...prev, [courseId]: null }));
+    
+    try {
+      // Single API call to generate and get download URL
+      const response = await fetch(`http://localhost:8080/api/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          childId,
+          courseId,
+          childName: progressData.childName,
+          courseName
+        })
+      });
 
-    const result = await response.json();
+      // Check if the response is OK (status 200-299)
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
+      }
 
-    if (!response.ok) {
-      throw new Error(result.error || 'Failed to generate certificate');
+      const result = await response.json();
+
+      // Download the generated certificate
+      const downloadResponse = await fetch(
+        `http://localhost:8080/api/download/${result.certificateId}`
+      );
+
+      if (!downloadResponse.ok) {
+        throw new Error('Failed to download certificate file');
+      }
+
+      const blob = await downloadResponse.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${progressData.childName}_${courseName}_Certificate.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      // Refresh progress data
+      try {
+        const updatedProgress = await fetch(`http://localhost:8080/api/${childId}/progress`);
+        if (updatedProgress.ok) {
+          const updatedData = await updatedProgress.json();
+          setProgressData(updatedData);
+        }
+      } catch (refreshError) {
+        console.error("Failed to refresh progress data:", refreshError);
+        // We don't throw this error as the download was successful
+      }
+
+    } catch (err) {
+      console.error("Download error:", err);
+      // Set error specific to this course without affecting the whole page
+      setDownloadErrors(prev => ({ 
+        ...prev, 
+        [courseId]: err.message || 'Failed to download certificate. Please try again.' 
+      }));
+    } finally {
+      setDownloading(false);
     }
+  };
 
-    // Download the generated certificate
-    const downloadResponse = await fetch(
-      `http://localhost:8080/api/download/${result.certificateId}`
-    );
-
-    if (!downloadResponse.ok) {
-      throw new Error('Failed to download certificate');
-    }
-
-    const blob = await downloadResponse.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${progressData.childName}_${courseName}_Certificate.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-
-    // Refresh progress data
-    const updatedProgress = await fetch(`http://localhost:8080/api/${childId}/progress`);
-    const updatedData = await updatedProgress.json();
-    setProgressData(updatedData);
-
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setDownloading(false);
-  }
-};
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!progressData) return <div>No data found</div>;
+  if (loading) return (
+    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto"></div>
+        <p className="mt-4 text-gray-700">Loading progress data...</p>
+      </div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+      <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
+        <h2 className="text-xl font-bold text-red-600 mb-4">Error</h2>
+        <p className="text-gray-700 mb-4">{error}</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded"
+        >
+          Try Again
+        </button>
+      </div>
+    </div>
+  );
+  
+  if (!progressData) return (
+    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <p className="text-gray-700">No progress data found for this student.</p>
+      </div>
+    </div>
+  );
 
   const filteredCourses = progressData.courses.filter(course => {
     if (filter === 'all') return true;
@@ -152,40 +197,62 @@ const handleDownloadCertificate = async (courseId, courseName) => {
             </thead>
             <tbody>
               {filteredCourses.map((course, index) => {
-                // const isCompleted = course.status.toLowerCase() === 'completed';
-                // console.log("ISSSSSS ",course);
+                const isDownloading = downloading === course.id;
+                const courseError = downloadErrors[course.id];
+                
                 return (
                   <tr key={index} className="text-gray-900 border-t">
                     <td className="p-3">{course.name}</td>
                     <td className="p-3">{course.completed}</td>
                     <td className="p-3">
-                      <div className="flex items-center gap-2">
-                        {course.certificateAvailable ? (
-                          <>
-                            <button 
-                              className={`hover:text-yellow ${downloading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
-                              onClick={() => !downloading && handleDownloadCertificate(course.id, course.name)}
-                              disabled={downloading}
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          {course.certificateAvailable ? (
+                            <>
+                              <button 
+                                className={`hover:text-yellow-600 ${isDownloading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer text-blue-600'}`}
+                                onClick={() => !isDownloading && handleDownloadCertificate(course.id, course.name)}
+                                disabled={isDownloading}
+                              >
+                                {isDownloading ? 'Generating...' : 'Download'}
+                              </button>
+                              <FaFilePdf className="text-red-600" />
+                            </>
+                          ) : (
+                            <div 
+                              className="group relative cursor-not-allowed"
+                              title="Complete the course to download certificate"
                             >
-                              {downloading ? 'Generating...' : 'Download'}
+                              <span className="text-gray-400">Download</span>
+                              <FaFilePdf className="text-gray-400 inline ml-2" />
+                              <span className="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-2 whitespace-nowrap left-1/2 transform -translate-x-1/2">
+                                Complete the course to download
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        {/* {courseError && (
+                          <div className="text-red-500 text-xs mt-1 max-w-xs">
+                            {courseError}
+                            <button 
+                              onClick={() => setDownloadErrors(prev => ({ ...prev, [course.id]: null }))}
+                              className="ml-2 text-gray-500 hover:text-gray-700"
+                            >
+                              Dismiss
                             </button>
-                            <FaFilePdf className="text-yellow" />
-                          </>
-                        ) : (
-                          <div 
-                            className="group relative cursor-not-allowed"
-                            title="Complete the course to download certificate"
-                          >
-                            <span className="text-gray-400">download</span>
-                            <FaFilePdf className="text-gray-400 inline ml-2" />
-                            <span className="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-2 whitespace-nowrap">
-                              Complete the course to download
-                            </span>
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </td>
-                    <td className="p-3">{course.status}</td>
+                    <td className="p-3">
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        course.status.toLowerCase() === 'completed' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {course.status}
+                      </span>
+                    </td>
                   </tr>
                 );
               })}
