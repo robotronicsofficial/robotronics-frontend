@@ -40,8 +40,15 @@ import Robogeniuspaymenthome from "./pages/RoboGenius/RoboGeniusPayment/Robogeni
 import Robogeniusrevieworderhome from "./pages/RoboGenius/RoboGeniusReview/Robogeniusrevieworderhome";
 import GiftCourse from "./pages/RoboGenius/RobogeniusGift/GiftCourse";
 import ChildHome from "./pages/child protection/ChildHome";
-import TermsHome from "./pages/Terms of Use/TermsHome";
+import TermsHome from "./pages/policies/TermsHome";
 import PrivacyHome from "./pages/Privacy Policy/PrivacyHome";
+import FAQs from "./pages/policies/FAQs";
+import RefundPolicy from "./pages/policies/RefundPolicy";
+
+
+
+
+
 import ServiceDetail from "./pages/service detail/ServiceDetail";
 import PaymentDetail from "./pages/Dashboard/PaymentDetail";
 import ChildProfile from "./pages/Dashboard/ChildProfile";
@@ -111,8 +118,11 @@ function App() {
           <Route path="/International/Iservices" element={<IServices />} />
           <Route path="/International/home" element={<IHome />} />
           <Route path="/ChildProtection" element={<ChildHome />} />
+          
           <Route path="/TermsConditions" element={<TermsHome />} />
           <Route path="/PrivacyPolicy" element={<PrivacyHome />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/RefundPolicy" element={<RefundPolicy />} />
           <Route path="/ServiceDetail" element={<ServiceDetail />} />
         </Routes>
         <ToastContainer

@@ -132,6 +132,44 @@ const Footer = () => {
                       Robotronics International
                     </a>
                   </li>
+
+                  <li>
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/TermsConditions"
+                    >
+                      Terms & Conditions
+                    </a>
+                  </li>
+
+                  <li>
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/PrivacyPolicy"
+                    >
+                      Privacy Policy
+                    </a>
+                  </li>
+
+                  <li>
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/RefundPolicy"
+                    >
+                      Refund Policy
+                    </a>
+                  </li>
+
+                   <li>
+                    <a
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      href="/faqs"
+                    >
+                      FAQs
+                    </a>
+                  </li>
+
+
                 </nav>
                 <img className="h-7 w-7 mt-4" data-aos="fade-up" src={circle} />
               </div>

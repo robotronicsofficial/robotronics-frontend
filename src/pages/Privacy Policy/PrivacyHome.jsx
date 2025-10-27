@@ -1,11 +1,11 @@
 import Intro from '../../component/contactUs/intro'
-import PrivacyBody from './PrivacyBody'
+import PrivacyPolicy from './PrivacyPolicy'
 
 const PrivacyHome = () => {
   return (
     <div>
       <Intro/>
-      <PrivacyBody/>
+      <PrivacyPolicy/>
     </div>
   )
 }
