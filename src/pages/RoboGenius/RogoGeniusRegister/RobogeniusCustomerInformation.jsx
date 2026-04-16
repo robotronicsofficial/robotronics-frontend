@@ -6,6 +6,7 @@ import robo from "../../../assets/child.png";
 import { FaTrash } from "react-icons/fa"; // Import delete icon
 import { fetchSessionJson, sendSessionJson } from "../../../lib/api";
 import { normalizeParentRecord } from "../../../lib/robogenius";
+import { buildRobogeniusCheckout, saveRobogeniusCheckout } from "../../../lib/robogeniusCheckout";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -59,7 +60,6 @@ const SelectField = ({ label, name, value, onChange, options, required = false }
 const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  console.log(currentUser);
   const { plan, price, billingCycle } = useSelector((state) => state.plans);
 
   const [loading, setLoading] = useState(false);
@@ -225,7 +225,6 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
     }
 
     setLoading(true);
-    console.log(plan);
 
     try {
       const data = await sendSessionJson("/api/parents", {
@@ -248,17 +247,29 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
         },
       });
 
-      onSaveChildren?.(childrenForms.filter(child => child.saved));
+      const persistedParent = normalizeParentRecord(
+        data?.parent || {
+          ...parentForm,
+          children: childrenForms.map(({ saved, ...child }) => child),
+        }
+      );
+      const persistedChildren = persistedParent.children;
+      const checkout = buildRobogeniusCheckout({
+        parent: persistedParent,
+        children: persistedChildren,
+        plan: {
+          name: plan,
+          price,
+          billingCycle,
+        },
+      });
 
-      // Successful submission
-      console.log('Registration successful:', data);
+      saveRobogeniusCheckout(checkout);
+      onSaveChildren?.(persistedChildren);
 
-      // Option 1: Call onNext if provided
       if (onNext) {
-        onNext(data); // Pass response data to next step
+        onNext(checkout);
       }
-      // Option 2: Navigate to success page
-      // navigate("/registration-success");
 
     } catch (error) {
       console.error('Registration error:', error);
