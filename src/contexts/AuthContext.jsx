@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { clearActiveChildSession } from '../utils/childSessionRequest';
 
 const AuthContext = createContext();
 
@@ -98,6 +99,7 @@ export function AuthProvider({ children }) {
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
+      clearActiveChildSession();
       setCurrentUser(null);
       navigate('/', { replace: true });
     }

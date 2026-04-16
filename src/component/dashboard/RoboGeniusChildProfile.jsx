@@ -10,6 +10,10 @@ import ErrorModal from "./popUps/ErrorModal";
 import { useAuth } from "../../contexts/AuthContext";
 import { fetchBackendJson, fetchSessionJson, sendJson } from "../../lib/api";
 import {
+  CHILD_SESSION_TTL_MS,
+  clearActiveChildSession,
+} from "../../utils/childSessionRequest";
+import {
   ensureArray,
   formatDisplayDate,
   normalizeChildCourseRecord,
@@ -22,8 +26,7 @@ const mergeChildrenWithCourses = (parentChildren, childCourseList) =>
 
     return {
       ...child,
-      pin: childCourse?.pin || null,
-      hasPin: Boolean(childCourse?.pin),
+      hasPin: Boolean(childCourse?.hasPin),
       courses: Array.isArray(childCourse?.courses) ? childCourse.courses : [],
     };
   });
@@ -31,7 +34,7 @@ const mergeChildrenWithCourses = (parentChildren, childCourseList) =>
 const loadChildDashboardData = async (userId) => {
   const [parentData, childCoursesData] = await Promise.all([
     fetchSessionJson(`/api/parents/${userId}`),
-    fetchBackendJson("/api/getAllChild"),
+    fetchSessionJson("/api/getAllChild"),
   ]);
 
   return {
@@ -150,7 +153,6 @@ const RoboGeniusChildProfile = () => {
       }
 
       const childData = children.find(child => child._id === selectedChildId) || {};
-      console.log("Child Dtaa",childData)
       await sendJson("/api/AddChildData", {
         method: 'POST',
         body: {
@@ -198,12 +200,13 @@ const handleVerifyPinSubmit = async (pinData) => {
     
     // Store session ID locally so ProtectedChild can validate the same child session.
     if (data.sessionId) {
+      clearActiveChildSession();
+      localStorage.setItem('selectedChildId', selectedChildId);
       localStorage.setItem('childSession', data.sessionId);
-      localStorage.setItem('childSessionExpires', String(Date.now() + 3 * 60 * 1000));
+      localStorage.setItem('childSessionExpires', String(Date.now() + CHILD_SESSION_TTL_MS));
     }
 
     // Fetch child's courses data
-    localStorage.setItem('selectedChildId', selectedChildId);
     const coursesData = await fetchBackendJson(`/api/getChild/${selectedChildId}`);
     const selectedCourses = ensureArray(coursesData?.courses);
     

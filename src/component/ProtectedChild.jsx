@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
-
-const clearChildSession = () => {
-  localStorage.removeItem('selectedChildId');
-  localStorage.removeItem('childSession');
-  localStorage.removeItem('childSessionExpires');
-};
+import { clearActiveChildSession } from '../utils/childSessionRequest';
 
 const ProtectedChild = ({ children }) => {
   const [isValidSession, setIsValidSession] = useState(true);
@@ -21,14 +16,14 @@ const ProtectedChild = ({ children }) => {
       const childSessionExpires = Number(localStorage.getItem('childSessionExpires') || 0);
       
       if (!selectedChildId) {
-        clearChildSession();
+        clearActiveChildSession();
         setIsValidSession(false);
         setShowSessionPopup(true);
         return;
       }
 
       if (!childSession || !childSessionExpires || childSessionExpires <= Date.now()) {
-        clearChildSession();
+        clearActiveChildSession();
         setIsValidSession(false);
         setShowSessionPopup(true);
         return;
@@ -46,13 +41,13 @@ const ProtectedChild = ({ children }) => {
         const data = await response.json();
         
         if (!response.ok || !data.isValid) {
-          clearChildSession();
+          clearActiveChildSession();
           setIsValidSession(false);
           setShowSessionPopup(true);
         }
       } catch (error) {
         console.error('Session check failed:', error);
-        clearChildSession();
+        clearActiveChildSession();
         setIsValidSession(false);
         setShowSessionPopup(true);
       }

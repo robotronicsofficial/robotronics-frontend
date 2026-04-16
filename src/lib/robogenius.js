@@ -34,6 +34,7 @@ export const normalizeParentRecord = (parent = {}) => ({
 export const normalizeChildCourseRecord = (childCourse = {}) => ({
   ...childCourse,
   childId: childCourse.childId || "",
+  hasPin: Boolean(childCourse.hasPin || childCourse.pin),
   pin: typeof childCourse.pin === "string" ? childCourse.pin : null,
   courses: ensureArray(childCourse.courses),
 });

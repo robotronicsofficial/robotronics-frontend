@@ -7,7 +7,6 @@ import { buildChildSessionRequest } from "../../utils/childSessionRequest";
 const extractActiveCourses = (payload) => {
   if (Array.isArray(payload?.data?.activeCourses)) return payload.data.activeCourses;
   if (Array.isArray(payload?.activeCourses)) return payload.activeCourses;
-  if (Array.isArray(payload?.debug?.fetchedCourses)) return payload.debug.fetchedCourses;
   if (Array.isArray(payload?.courses)) return payload.courses;
   return [];
 };

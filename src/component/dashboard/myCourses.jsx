@@ -46,7 +46,7 @@ const MyCourses = () => {
         const childData = await childResponse.json();
 
         // Set max courses based on plan
-        const planName = childData?.courses?.plan?.name || "Basic";
+        const planName = childData?.plan?.name || "Basic";
         const courseLimit = planName.toLowerCase() === "pro" ? 4 : 2;
         setMaxCourses(courseLimit);
 
