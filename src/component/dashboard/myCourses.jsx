@@ -2,6 +2,7 @@ import LeftNav from "./leftNav";
 import { FaStar, FaArrowDown } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { buildChildSessionRequest } from "../../utils/childSessionRequest";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -25,8 +26,19 @@ const MyCourses = () => {
           throw new Error("Child ID not found in URL");
         }
 
+        const childSessionRequest = buildChildSessionRequest({
+          method: "GET",
+        });
+
+        if (!childSessionRequest) {
+          throw new Error("Child session not found. Please re-enter the PIN.");
+        }
+
         // First fetch child data to get the plan
-        const childResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getChildPlan/${childId}`);
+        const childResponse = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/getChildPlan/${childId}`,
+          childSessionRequest
+        );
         if (!childResponse.ok) {
           throw new Error(`HTTP error! status: ${childResponse.status}`);
         }
@@ -76,18 +88,27 @@ const MyCourses = () => {
         throw new Error("Child ID not found");
       }
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/courses`, {
+      const childSessionRequest = buildChildSessionRequest({
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: {
           courses: selectedCourses.map((courseId, index) => ({
             courseId,
             status: index === 0 ? "active" : "pending"
           }))
-        }),
+        },
       });
+
+      if (!childSessionRequest) {
+        throw new Error("Child session not found. Please re-enter the PIN.");
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/${childId}/courses`,
+        childSessionRequest
+      );
 
       if (!response.ok) {
         const errorData = await response.json();

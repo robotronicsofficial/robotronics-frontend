@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import LeftNav from "./leftNav";
 import { FaStar } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
+import { buildChildSessionRequest } from "../../utils/childSessionRequest";
 
 const extractActiveCourses = (payload) => {
   if (Array.isArray(payload?.data?.activeCourses)) return payload.data.activeCourses;
@@ -32,6 +33,14 @@ const MyAllCourses = () => {
   
         setLoading(true);
 
+        const childSessionRequest = buildChildSessionRequest({
+          method: "GET",
+        });
+
+        if (!childSessionRequest) {
+          throw new Error("Child session not found. Please re-enter the PIN.");
+        }
+
         // Fetch all courses
         const allCoursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
         if (!allCoursesResponse.ok) {
@@ -41,7 +50,10 @@ const MyAllCourses = () => {
         setAllCourses(Array.isArray(allCoursesData.courses) ? allCoursesData.courses : []);
   
         // Fetch child's data
-        const childResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/child/${childId}/courses`);
+        const childResponse = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/child/${childId}/courses`,
+          childSessionRequest
+        );
         if (!childResponse.ok) {
           throw new Error(`Failed to fetch child data. Status: ${childResponse.status}`);
         }

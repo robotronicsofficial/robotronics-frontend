@@ -10,6 +10,7 @@ import { FaLaptopCode } from "react-icons/fa";
 import { MdAssignment } from "react-icons/md";
 import { AiOutlineRight } from "react-icons/ai";
 import ChatSupport from "../../component/ChatSupport"
+import { buildChildSessionRequest } from "../../utils/childSessionRequest";
 
 const MAX_ATTEMPTS = {
   BASIC: 2,
@@ -51,9 +52,20 @@ const CourseDetail = () => {
           throw new Error("Child session not found. Select a child again.");
         }
 
+        const childCourseRequest = buildChildSessionRequest({
+          method: "GET",
+        });
+
+        if (!childCourseRequest) {
+          throw new Error("Child session not found. Please re-enter the PIN.");
+        }
+
         const [courseRes, childCourseRes] = await Promise.all([
           fetch(`${import.meta.env.VITE_BACKEND_URL}/coursesById/${id}`),
-          fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getChildById/${childId}/ByCourseId/${id}`)
+          fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/getChildById/${childId}/ByCourseId/${id}`,
+            childCourseRequest
+          )
         ]);
 
         if (!courseRes.ok || !childCourseRes.ok) {
@@ -107,17 +119,26 @@ const CourseDetail = () => {
 const updateChildCourseProgress = async (updatedData, sectionIndex) => {
   const childId = localStorage.getItem('selectedChildId');
   try {
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/updateChildCourse/${childId}`, {
+    const childSessionRequest = buildChildSessionRequest({
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      body: {
         courseId: id,
         ...updatedData,
         sectionIndex
-      }),
+      },
     });
+
+    if (!childSessionRequest) {
+      throw new Error("Child session not found. Please re-enter the PIN.");
+    }
+
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/updateChildCourse/${childId}`,
+      childSessionRequest
+    );
 
     if (!response.ok) {
       throw new Error('Failed to update child course progress');
