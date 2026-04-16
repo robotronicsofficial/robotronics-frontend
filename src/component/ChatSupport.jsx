@@ -1,5 +1,6 @@
 // components/ChatSupport.jsx
 import { useState, useEffect, useRef, useCallback, memo } from "react";
+import { Link } from "react-router-dom";
 import chatLogo from "../assets/chatLogo.png";
 import { RxCrossCircled } from "react-icons/rx";
 import { TbWindowMaximize, TbWindowMinimize } from "react-icons/tb";
@@ -417,7 +418,7 @@ const ChatSupport = () => {
               </div>
               <p className="text-xs text-gray-500 mt-2 text-center">
                 Robotronics AI can make mistakes. Check our
-                <a href="/terms" className="text-[#FFAC1F] hover:underline ml-1">Terms & Conditions</a>.
+                <Link to="/TermsConditions" className="ml-1 text-[#FFAC1F] hover:underline">Terms & Conditions</Link>.
               </p>
             </form>
           </div>
