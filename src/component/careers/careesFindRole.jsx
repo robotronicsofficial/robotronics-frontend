@@ -1,7 +1,5 @@
 import { FiArrowUpRight } from "react-icons/fi";
 // import { useNavigate } from "react-router-dom";
-import JobApplicationForm from "./CareerDetailPage/jobApplicationForm";
-
 import {
   FaFacebook,
   FaTwitter,
