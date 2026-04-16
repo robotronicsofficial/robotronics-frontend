@@ -3,6 +3,7 @@ import { FaFilePdf } from "react-icons/fa6";
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { normalizeProgressPayload } from "../../lib/robogenius";
+import { buildOptionalChildSessionRequest } from "../../utils/childSessionRequest";
 
 const RoboGeniusProgreeDetailPage = () => {
   const [progressData, setProgressData] = useState(null);
@@ -13,7 +14,24 @@ const RoboGeniusProgreeDetailPage = () => {
   const childId = searchParams.get('childId');
   const [downloadingCourseId, setDownloadingCourseId] = useState(null);
   const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
-  const selectedChildId = localStorage.getItem('selectedChildId') || childId;
+  const selectedChildId = childId || localStorage.getItem('selectedChildId');
+
+  const fetchProgressPayload = async (nextChildId) => {
+    const progressRequest = buildOptionalChildSessionRequest({
+      method: "GET",
+    }) || { method: "GET" };
+
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/${nextChildId}/progress`,
+      progressRequest
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return normalizeProgressPayload(await response.json());
+  };
 
   const fetchProgressData = async () => {
     if (!selectedChildId) {
@@ -23,25 +41,9 @@ const RoboGeniusProgreeDetailPage = () => {
     }
 
     try {
-      const childSession = localStorage.getItem('childSession');
-      if (!childSession) {
-        throw new Error('Child session is required to load progress.');
-      }
-
       setError(null);
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${selectedChildId}/progress`, {
-        headers: {
-          'X-Child-Session': childSession,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setProgressData(normalizeProgressPayload(data));
-    } catch (err) {
+      setProgressData(await fetchProgressPayload(selectedChildId));
+    } catch {
       setError('Failed to load progress data. Please check your connection and try again.');
     } finally {
       setLoading(false);
@@ -60,24 +62,21 @@ const RoboGeniusProgreeDetailPage = () => {
     setDownloadErrors(prev => ({ ...prev, [courseId]: null }));
     
     try {
-      const childSession = localStorage.getItem("childSession");
-
-      if (!childSession) {
-        throw new Error("Child session is required to generate certificates.");
-      }
-
-      // Single API call to generate and get download URL
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/generate`, {
+      const generateRequest = buildOptionalChildSessionRequest({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
+        body: {
           childId: selectedChildId,
           courseId,
-          sessionId: childSession,
-        })
+        },
       });
+
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/generate`,
+        generateRequest
+      );
 
       // Check if the response is OK (status 200-299)
       if (!response.ok) {
@@ -93,11 +92,9 @@ const RoboGeniusProgreeDetailPage = () => {
           result.downloadUrl || `/api/certificates/download/${result.certificateId}`,
           import.meta.env.VITE_BACKEND_URL
         ).toString(),
-        {
-          headers: {
-            'X-Child-Session': childSession,
-          },
-        }
+        buildOptionalChildSessionRequest({
+          method: "GET",
+        }) || { method: "GET" }
       );
 
       if (!downloadResponse.ok) {
@@ -116,15 +113,7 @@ const RoboGeniusProgreeDetailPage = () => {
 
       // Refresh progress data
       try {
-        const updatedProgress = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${selectedChildId}/progress`, {
-          headers: {
-            'X-Child-Session': childSession,
-          },
-        });
-        if (updatedProgress.ok) {
-          const updatedData = await updatedProgress.json();
-          setProgressData(normalizeProgressPayload(updatedData));
-        }
+        setProgressData(await fetchProgressPayload(selectedChildId));
       } catch (refreshError) {
         console.error("Failed to refresh progress data:", refreshError);
         // We don't throw this error as the download was successful
