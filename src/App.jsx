@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "./component/Layout";
 import Home from "./pages/home";
 import AboutUs from "./pages/about";
@@ -63,81 +63,77 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/Search" element={<Search />} />
-          <Route path="/Screen" element={<Screen />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/aboutUs" element={<AboutUs />} />
-          <Route path="/Cart" element={<Cart />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/ProductDetailPage/:id" element={<ProductDetailPage />} />
-          <Route path="/Shipping" element={<Shipping />} />
-          <Route path="/ShippingService" element={<ShippingService />} />
-          <Route path="/Course" element={<Course />} />
-          <Route path="/CustomerInfo" element={<CustomerInfo />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/verifyEmail" element={<VerifyEmail />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+    <Layout>
+      <Routes>
+        <Route path="/Search" element={<Search />} />
+        <Route path="/Screen" element={<Screen />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/aboutUs" element={<AboutUs />} />
+        <Route path="/Cart" element={<Cart />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/ProductDetailPage/:id" element={<ProductDetailPage />} />
+        <Route path="/Shipping" element={<Shipping />} />
+        <Route path="/ShippingService" element={<ShippingService />} />
+        <Route path="/Course" element={<Course />} />
+        <Route path="/CustomerInfo" element={<CustomerInfo />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/verifyEmail" element={<VerifyEmail />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
-          <Route path="/Signup" element={<Signup />} />
-          <Route path="/CoursesProduct/:id?" element={<CoursesProductDetail />} />
-          <Route path="/CareerJob" element={<CareerJob />} />
-          <Route path="/CareerDetailPage/:id?" element={<CareerDetailPage />} />
-          <Route path="/JobApplicationForm" element={<JobApplicationForm />} />
-          <Route path="/Blog" element={<Blog />} />
-          <Route path="/BlogDetail/:id?" element={<BlogDetail />} />
-          <Route path="/ContactUs" element={<ContactUs />} />
-          <Route path="/Dashboard/userInfo" element={<ProtectedRoute><UserInfo /></ProtectedRoute>} />
-          <Route path="/Dashboard/order" element={<ProtectedRoute><Order /></ProtectedRoute>} />
+        <Route path="/Signup" element={<Signup />} />
+        <Route path="/CoursesProduct/:id?" element={<CoursesProductDetail />} />
+        <Route path="/CareerJob" element={<CareerJob />} />
+        <Route path="/CareerDetailPage/:id?" element={<CareerDetailPage />} />
+        <Route path="/JobApplicationForm" element={<JobApplicationForm />} />
+        <Route path="/Blog" element={<Blog />} />
+        <Route path="/BlogDetail/:id?" element={<BlogDetail />} />
+        <Route path="/ContactUs" element={<ContactUs />} />
+        <Route path="/Dashboard/userInfo" element={<ProtectedRoute><UserInfo /></ProtectedRoute>} />
+        <Route path="/Dashboard/order" element={<ProtectedRoute><Order /></ProtectedRoute>} />
 
+        <Route path="/Dashboard/MyCoursesPage/:id" element={<ProtectedChild><MyCoursesPage /></ProtectedChild>} />
+        <Route path="/Dashboard/MyCoursesPage" element={<ProtectedChild><MyCoursesPage /></ProtectedChild>} />
+        <Route path="/Dashboard/myAllCourses/:id" element={<ProtectedChild><MyAllCourses /></ProtectedChild>} />
 
-          <Route path="/Dashboard/MyCoursesPage/:id" element={<ProtectedChild><MyCoursesPage /></ProtectedChild>} />
-          <Route path="/Dashboard/MyCoursesPage" element={<ProtectedChild><MyCoursesPage /></ProtectedChild>} />
-          <Route path="/Dashboard/myAllCourses/:id" element={<ProtectedChild><MyAllCourses /></ProtectedChild>} />
+        <Route path="/Dashboard/WishList" element={<ProtectedRoute><WishList /></ProtectedRoute>} />
+        <Route path="/Dashboard/PaymentHistory" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+        <Route path="/Dashboard/PaymentDetails" element={<ProtectedRoute><PaymentDetail /></ProtectedRoute>} />
+        <Route path="/Dashboard/ChildProfile" element={<ProtectedRoute><ChildProfile /></ProtectedRoute>} />
+        <Route path="/Dashboard/userInfoForm" element={<ProtectedRoute><UserInfoForm /></ProtectedRoute>} />
+        <Route path="/Dashboard/courseDetail/:id" element={<ProtectedChild><CourseDetail /></ProtectedChild>} />
+        <Route path="/Dashboard/ProgressCertificate" element={<ProtectedRoute><ProgressCertificate /></ProtectedRoute>} />
+        <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<ProtectedRoute><RoboGeniusProgressPage /></ProtectedRoute>} />
+        <Route path="/404" element={<Error />} />
 
-
-          <Route path="/Dashboard/WishList" element={<ProtectedRoute><WishList /></ProtectedRoute>} />
-          <Route path="/Dashboard/PaymentHistory" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
-          <Route path="/Dashboard/PaymentDetails" element={<ProtectedRoute><PaymentDetail /></ProtectedRoute>} />
-          <Route path="/Dashboard/ChildProfile" element={<ProtectedRoute><ChildProfile /></ProtectedRoute>} />
-          <Route path="/Dashboard/userInfoForm" element={<ProtectedRoute><UserInfoForm /></ProtectedRoute>} />
-          <Route path="/Dashboard/courseDetail/:id" element={<ProtectedChild><CourseDetail /></ProtectedChild>} />
-          <Route path="/Dashboard/ProgressCertificate" element={<ProtectedRoute><ProgressCertificate /></ProtectedRoute>} />
-          <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<ProtectedRoute><RoboGeniusProgressPage /></ProtectedRoute>} />
-          <Route path="/404" element={<Error />} />
-
-          <Route path="/International/myRobot" element={<MyRobort />} />
-          <Route path="/Robogeniushome" element={<Robogeniushome />} />
-          <Route path="/Robogeniushome/GiftCourse" element={<GiftCourse />} />
-          <Route path="/Robogeniushome/Register" element={<Robogeniusregister />} />
-          <Route path="/Robogeniushome/Payment" element={<Robogeniuspaymenthome />} />
-          <Route path="/Robogeniushome/Review" element={<Robogeniusrevieworderhome />} />
-          <Route path="/International/videoGallery" element={<VideoGallery />} />
-          <Route path="/International/Iservices" element={<IServices />} />
-          <Route path="/International/home" element={<IHome />} />
-          <Route path="/ChildProtection" element={<ChildHome />} />
-          
-          <Route path="/TermsConditions" element={<TermsHome />} />
-          <Route path="/PrivacyPolicy" element={<PrivacyHome />} />
-          <Route path="/faqs" element={<FAQs />} />
-          <Route path="/RefundPolicy" element={<RefundPolicy />} />
-          <Route path="/ServiceDetail/:id?" element={<ServiceDetail />} />
-        </Routes>
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </Layout>
-    </Router>
+        <Route path="/International/myRobot" element={<MyRobort />} />
+        <Route path="/Robogeniushome" element={<Robogeniushome />} />
+        <Route path="/Robogeniushome/GiftCourse" element={<GiftCourse />} />
+        <Route path="/Robogeniushome/Register" element={<Robogeniusregister />} />
+        <Route path="/Robogeniushome/Payment" element={<Robogeniuspaymenthome />} />
+        <Route path="/Robogeniushome/Review" element={<Robogeniusrevieworderhome />} />
+        <Route path="/International/videoGallery" element={<VideoGallery />} />
+        <Route path="/International/Iservices" element={<IServices />} />
+        <Route path="/International/home" element={<IHome />} />
+        <Route path="/ChildProtection" element={<ChildHome />} />
+        
+        <Route path="/TermsConditions" element={<TermsHome />} />
+        <Route path="/PrivacyPolicy" element={<PrivacyHome />} />
+        <Route path="/faqs" element={<FAQs />} />
+        <Route path="/RefundPolicy" element={<RefundPolicy />} />
+        <Route path="/ServiceDetail/:id?" element={<ServiceDetail />} />
+      </Routes>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </Layout>
   );
 }
 
