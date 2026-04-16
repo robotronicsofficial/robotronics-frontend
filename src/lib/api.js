@@ -26,7 +26,10 @@ export const fetchBackendJson = async (path, options = {}) => {
   const payload = await parseResponseBody(response);
 
   if (!response.ok) {
-    throw new Error(getApiErrorMessage(response, payload));
+    const error = new Error(getApiErrorMessage(response, payload));
+    error.status = response.status;
+    error.payload = payload;
+    throw error;
   }
 
   return payload;
