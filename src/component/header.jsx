@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo/robotronicsCharacter.svg";
 import basket from "../assets/logo/basket.svg";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -28,7 +28,6 @@ export default function Header() {
 
   useEffect(() => {
     Aos.init(); // Initialize AOS library
-    console.log("Current User:", currentUser);
   }, []);
 
   const toggleMenu = () => {
@@ -53,8 +52,8 @@ export default function Header() {
       <div className="w-full h-full flex items-center justify-center absolute">
         <div className="bg-white flex flex-wrap items-center justify-between p-3 sm:p-5 shadow w-[95vw] mt-6 mb-6 rounded-2xl">
           {/* Logo */}
-          <a
-            href="/"
+          <Link
+            to="/"
             className="flex items-center"
             data-aos="fade-right"
             data-aos-duration="2000"
@@ -65,7 +64,7 @@ export default function Header() {
               <br />
               <p className="poppins-bold text-gold">P A K I S T A N</p>
             </h1>
-          </a>
+          </Link>
 
           {/* Navigation - Desktop */}
           <nav
