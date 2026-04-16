@@ -27,6 +27,10 @@ const toAssetUrl = (path) => {
   return `${import.meta.env.VITE_BACKEND_URL}/${path.replace(/\\/g, "/")}`;
 };
 
+const isExternalUrl = (value) => /^https?:\/\//i.test(String(value || ""));
+const isProtectedCourseDownload = (value) =>
+  String(value || "").replace(/\\/g, "/").startsWith("uploads/Courses/");
+
 const CourseDetail = () => {
   const { id } = useParams();
   const [courseData, setCourseData] = useState(null);
@@ -64,24 +68,18 @@ const CourseDetail = () => {
           throw new Error("Child session not found. Please re-enter the PIN.");
         }
 
-        const [courseRes, childCourseRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_BACKEND_URL}/coursesById/${id}`),
-          fetch(
-            `${import.meta.env.VITE_BACKEND_URL}/api/getChildById/${childId}/ByCourseId/${id}`,
-            childCourseRequest
-          )
-        ]);
+        const childCourseRes = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/getChildById/${childId}/ByCourseId/${id}`,
+          childCourseRequest
+        );
 
-        if (!courseRes.ok || !childCourseRes.ok) {
-          throw new Error('One or both requests failed');
+        if (!childCourseRes.ok) {
+          throw new Error('Failed to load course details');
         }
 
-        const [coursePayload, childCoursePayload] = await Promise.all([
-          courseRes.json(),
-          childCourseRes.json()
-        ]);
+        const childCoursePayload = await childCourseRes.json();
 
-        setCourseData(normalizeCourseDetail(coursePayload));
+        setCourseData(normalizeCourseDetail(childCoursePayload?.courseDetails));
         setChildCourseData(normalizeChildCourse(childCoursePayload?.course));
         setPlan(childCoursePayload?.plan || null);
       } catch (err) {
@@ -169,6 +167,53 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
     setShowVideoModal(true);
   };
 
+  const handleDownloadContent = async (content) => {
+    const childId = localStorage.getItem("selectedChildId");
+    const contentId = content?.id || content?._id;
+
+    if (!childId || !contentId) {
+      return;
+    }
+
+    if (isExternalUrl(content.file) && !isProtectedCourseDownload(content.file)) {
+      window.open(content.file, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    const childSessionRequest = buildChildSessionRequest({
+      method: "GET",
+    });
+
+    if (!childSessionRequest) {
+      setError("Child session not found. Please re-enter the PIN.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/child/${childId}/courses/${id}/content/${contentId}/download`,
+        childSessionRequest
+      );
+
+      if (!response.ok) {
+        const errorPayload = await response.json().catch(() => null);
+        throw new Error(errorPayload?.message || "Failed to download course content");
+      }
+
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = content.name || "course-content";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(objectUrl);
+    } catch (downloadError) {
+      setError(downloadError.message || "Failed to download course content");
+    }
+  };
+
   const handleQuizAnswer = (sectionIndex, questionId, answer) => {
     setQuizAnswers(prev => ({
       ...prev,
@@ -208,19 +253,6 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
       }
     }
 
-    const results = {};
-    let score = 0;
-
-    questions.forEach(question => {
-      const userAnswer = quizAnswers[`${sectionIndex}-${question._id}`];
-      const isCorrect = userAnswer === question.correctAnswer;
-      results[question._id] = isCorrect;
-      if (isCorrect) score++;
-    });
-
-    const percentage = (score / questions.length) * 100;
-    const passed = percentage >= 60;
-
     if (!section?.quiz?.questions?.length) {
       return;
     }
@@ -241,10 +273,10 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
       setQuizResults(prev => ({
         ...prev,
         [sectionIndex]: {
-          score: responsePayload?.quiz?.score ?? score,
+          score: responsePayload?.quiz?.score ?? 0,
           total: responsePayload?.quiz?.total ?? questions.length,
-          details: responsePayload?.quiz?.details || results,
-          passed: responsePayload?.quiz?.passed ?? passed
+          details: responsePayload?.quiz?.details || {},
+          passed: Boolean(responsePayload?.quiz?.passed)
         }
       }));
       setQuizRetakes(prev => ({
@@ -535,14 +567,14 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                                         </span>
                                       )}
                                       {(content.type === "assignment" || content.type === "book") && (
-                                        <a
-                                          href={fileUrl}
-                                          download
+                                        <button
+                                          type="button"
+                                          onClick={() => handleDownloadContent(content)}
                                           className="flex items-center poppins-medium text-yellow text-sm hover:text-yellow-600"
                                         >
                                           <FiDownload className="mr-1" />
                                           Download
-                                        </a>
+                                        </button>
                                       )}
                                     </div>
                                   </div>
@@ -637,7 +669,9 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                                     <div className="space-y-3">
                                       {quizQuestions.map((question, qIndex) => {
                                         const userAnswer = quizAnswers[`${sectionIndex}-${question._id}`] || question.childAnswer;
-                                        const isCorrect = userAnswer === question.correctAnswer;
+                                        const isCorrect = Boolean(
+                                          quizResults[sectionIndex]?.details?.[question._id] ?? question.isCorrect
+                                        );
 
                                         return (
                                           <div key={question._id} className="border-b pb-3">
@@ -648,7 +682,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                                               Your answer: {userAnswer}
                                             </div>
                                             <div className={`poppins-medium text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                                              {isCorrect ? '✓ Correct' : `✗ Incorrect (Correct answer: ${question.correctAnswer})`}
+                                              {isCorrect ? '✓ Correct' : '✗ Incorrect'}
                                             </div>
 
                                           </div>
