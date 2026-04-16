@@ -37,6 +37,7 @@ const CourseDetail = () => {
   const [currentVideo, setCurrentVideo] = useState("");
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizResults, setQuizResults] = useState({});
+  const [quizRetakes, setQuizRetakes] = useState({});
   const courseSections = Array.isArray(courseData?.sections) ? courseData.sections : [];
   const childSections = Array.isArray(childCourseData?.Sections) ? childCourseData.Sections : [];
   const courseReviews = Number(courseData?.reviews) || 0;
@@ -273,6 +274,10 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
           passed
         }
       }));
+      setQuizRetakes(prev => ({
+        ...prev,
+        [sectionIndex]: false
+      }));
 
     } catch (error) {
       console.error("Failed to update quiz results:", error);
@@ -428,6 +433,8 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
                 const sectionDates = childSections[sectionIndex];
                 const quizCompleted = childSection?.quiz?.result === "pass";
                 const quizAttempted = childSection?.quiz?.attempts > 0;
+                const isRetakingQuiz = quizRetakes[sectionIndex];
+                const showQuizResults = !isRetakingQuiz && (quizResults[sectionIndex] || quizCompleted);
                 const childPlan = plan?.name?.toLowerCase() || 'basic';
                 const maxAttempts = childPlan === 'pro' ? MAX_ATTEMPTS.PRO : MAX_ATTEMPTS.BASIC;
                 const attemptsExhausted = childPlan === 'basic' &&
@@ -647,7 +654,7 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
                             {/* Quiz Content */}
                             {expandedModules[`quiz-${sectionIndex}`] && sectionUnlocked && (
                               <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                                {quizResults[sectionIndex] || quizCompleted ? (
+                                {showQuizResults ? (
                                   <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
                                     <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-green-600' : 'text-red-600'}`}>
                                       Quiz Results: {childSection.quiz.obtainedScore}/{childSection.quiz.questions.length}
@@ -690,7 +697,19 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
                                               delete newResults[sectionIndex];
                                               return newResults;
                                             });
-                                                window.location.reload();
+                                            setQuizAnswers(prev => {
+                                              const nextAnswers = { ...prev };
+                                              Object.keys(nextAnswers).forEach((key) => {
+                                                if (key.startsWith(`${sectionIndex}-`)) {
+                                                  delete nextAnswers[key];
+                                                }
+                                              });
+                                              return nextAnswers;
+                                            });
+                                            setQuizRetakes(prev => ({
+                                              ...prev,
+                                              [sectionIndex]: true
+                                            }));
                                           }}
                                           className="mt-4 poppins-medium text-blue-600 hover:text-blue-800"
                                         >
