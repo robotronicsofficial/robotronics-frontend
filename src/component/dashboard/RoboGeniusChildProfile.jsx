@@ -8,6 +8,12 @@ import PinModal from "./popUps/PinModal";
 import ChangePinModal from "./popUps/ChangePinModal";
 import ErrorModal from "./popUps/ErrorModal";
 import { useAuth } from "../../contexts/AuthContext";
+import { fetchBackendJson, fetchSessionJson, sendJson } from "../../lib/api";
+import {
+  ensureArray,
+  normalizeChildCourseRecord,
+  normalizeParentRecord,
+} from "../../lib/robogenius";
 
 const mergeChildrenWithCourses = (parentChildren, childCourseList) =>
   parentChildren.map((child) => {
@@ -21,11 +27,20 @@ const mergeChildrenWithCourses = (parentChildren, childCourseList) =>
     };
   });
 
+const loadChildDashboardData = async (userId) => {
+  const [parentData, childCoursesData] = await Promise.all([
+    fetchSessionJson(`/api/parents/${userId}`),
+    fetchBackendJson("/api/getAllChild"),
+  ]);
+
+  return {
+    parentChildren: normalizeParentRecord(parentData).children,
+    childCourseList: ensureArray(childCoursesData?.childCourse).map(normalizeChildCourseRecord),
+  };
+};
+
 const RoboGeniusChildProfile = () => {
   const navigate = useNavigate();
-  const sharedRequestOptions = {
-    credentials: "include",
-  };
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
   const [isVerifyPinModalOpen, setIsVerifyPinModalOpen] = useState(false);
@@ -45,28 +60,8 @@ const RoboGeniusChildProfile = () => {
       const fetchData = async () => {
         try {
           setLoading(true);
-          
-          const parentResponse = await fetch(
-            `${import.meta.env.VITE_BACKEND_URL}/api/parents/${currentUser._id}`,
-            sharedRequestOptions
-          );
-          if (!parentResponse.ok) {
-            throw new Error("Failed to fetch parent data");
-          }
-          const parentData = await parentResponse.json();
-          const parentChildren = Array.isArray(parentData?.children) ? parentData.children : [];
-
-          const childCoursesResponse = await fetch(
-            `${import.meta.env.VITE_BACKEND_URL}/api/getAllChild`,
-            sharedRequestOptions
-          );
-          if (!childCoursesResponse.ok) {
-            throw new Error("Failed to fetch child courses");
-          }
-          const childCoursesData = await childCoursesResponse.json();
-          const childCourseList = Array.isArray(childCoursesData?.childCourse) ? childCoursesData.childCourse : [];
+          const { parentChildren, childCourseList } = await loadChildDashboardData(currentUser._id);
           setChildCourses(childCourseList);
-     
           setChildren(mergeChildrenWithCourses(parentChildren, childCourseList));
         } catch (err) {
           setError(err.message);
@@ -87,27 +82,8 @@ const RoboGeniusChildProfile = () => {
         throw new Error("Parent account not found");
       }
 
-      const parentResponse = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/parents/${currentUser._id}`,
-        sharedRequestOptions
-      );
-      if (!parentResponse.ok) {
-        throw new Error("Failed to fetch parent data");
-      }
-      const parentData = await parentResponse.json();
-      const parentChildren = Array.isArray(parentData?.children) ? parentData.children : [];
-      
-      const childCoursesResponse = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/getAllChild`,
-        sharedRequestOptions
-      );
-      if (!childCoursesResponse.ok) {
-        throw new Error("Failed to fetch child courses");
-      }
-      const childCoursesData = await childCoursesResponse.json();
-      const childCourseList = Array.isArray(childCoursesData?.childCourse) ? childCoursesData.childCourse : [];
+      const { parentChildren, childCourseList } = await loadChildDashboardData(currentUser._id);
       setChildCourses(childCourseList);
-
       setChildren(mergeChildrenWithCourses(parentChildren, childCourseList));
     } catch (err) {
       console.error('Error refreshing child data:', err);
@@ -117,22 +93,13 @@ const RoboGeniusChildProfile = () => {
 
   const verifyPin = async (childId, pin) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/verifyChildPin`, {
+      const data = await sendJson("/api/verifyChildPin", {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        ...sharedRequestOptions,
-        body: JSON.stringify({
+        body: {
           childId,
-          pin
-        }),
+          pin,
+        },
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to verify PIN");
-      }
-      const data = await response.json();
       return data.isValid;
     } catch (err) {
       console.error('Error verifying PIN:', err);
@@ -152,25 +119,13 @@ const RoboGeniusChildProfile = () => {
       }
 
       // For changing PIN
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/children/${selectedChildId}/pin`, {
+      await sendJson(`/api/children/${selectedChildId}/pin`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        ...sharedRequestOptions,
-        body: JSON.stringify({
+        body: {
           oldPin: pinData.oldPin,
-          newPin: pinData.newPin
-        }),
+          newPin: pinData.newPin,
+        },
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to change PIN');
-      }
-
-      const data = await response.json();
-      console.log('PIN changed successfully:', data);
       
       await refreshChildData();
       
@@ -195,26 +150,14 @@ const RoboGeniusChildProfile = () => {
 
       const childData = children.find(child => child._id === selectedChildId) || {};
       console.log("Child Dtaa",childData)
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/AddChildData`, {
+      await sendJson("/api/AddChildData", {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        ...sharedRequestOptions,
-        body: JSON.stringify({
+        body: {
           ...childData,
           pin: pinData,
           userId: currentUser._id
-
-        }),
+        },
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to create PIN');
-      }
-
-      const data = await response.json();
-      console.log('PIN created successfully:', data);
       
       await refreshChildData();
       
@@ -231,23 +174,13 @@ const handleVerifyPinSubmit = async (pinData) => {
   try {
     setPinError(null);
     
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/verifyChildPin`, {
+    const data = await sendJson("/api/verifyChildPin", {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      ...sharedRequestOptions,
-      body: JSON.stringify({
+      body: {
         childId: selectedChildId,
-        pin: pinData
-      }),
+        pin: pinData,
+      },
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to verify PIN');
-    }
     console.log(data)
  
 
@@ -269,16 +202,9 @@ const handleVerifyPinSubmit = async (pinData) => {
     }
 
     // Fetch child's courses data
-    const coursesResponse = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/api/getChild/${selectedChildId}`,
-      sharedRequestOptions
-    );
-    if (!coursesResponse.ok) {
-      throw new Error('Failed to fetch child courses');
-    }
     localStorage.setItem('selectedChildId', selectedChildId);
-    const coursesData = await coursesResponse.json();
-    const selectedCourses = Array.isArray(coursesData?.courses) ? coursesData.courses : [];
+    const coursesData = await fetchBackendJson(`/api/getChild/${selectedChildId}`);
+    const selectedCourses = ensureArray(coursesData?.courses);
     
     // Navigate based on whether courses exist
     if (selectedCourses.length > 0) {

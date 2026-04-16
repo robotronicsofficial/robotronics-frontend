@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import LeftNav from "./leftNav";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
+import { fetchSessionJson } from "../../lib/api";
+import { normalizeParentRecord } from "../../lib/robogenius";
 const RoboGeniusProgressCertificate = () => {
   const navigate = useNavigate();
   const [children, setChildren] = useState([]);
@@ -17,20 +19,14 @@ const RoboGeniusProgressCertificate = () => {
       }
 
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/parents/${userId}`,
-          {
-            credentials: "include",
-          }
+        const data = normalizeParentRecord(
+          await fetchSessionJson(`/api/parents/${userId}`)
         );
-        const data = await response.json();
         console.log("Fetched Parent Data:", data);
-
-        if (data.children) {
-          setChildren(data.children);
-        }
+        setChildren(data.children);
       } catch (error) {
         console.error("Error fetching parent data:", error);
+        setChildren([]);
       }
     };
 

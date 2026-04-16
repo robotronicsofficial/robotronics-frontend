@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import robo from "../../../assets/child.png";
 import { FaTrash } from "react-icons/fa"; // Import delete icon
+import { fetchSessionJson, sendSessionJson } from "../../../lib/api";
+import { normalizeParentRecord } from "../../../lib/robogenius";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -81,23 +83,9 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
     if (!currentUser?._id) return;
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/parents/${currentUser._id}`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      console.log(res);
-
-      if (!res.ok) {
-        if (res.status !== 404) {
-          throw new Error("Failed to fetch parent data");
-        }
-        return; 
-      }
-
-      const parentData = await res.json();
+      const parentData = normalizeParentRecord(
+        await fetchSessionJson(`/api/parents/${currentUser._id}`)
+      );
       setParentForm({
         firstName: parentData.firstName || "",
         lastName: parentData.lastName || "",
@@ -113,6 +101,9 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
         deliveryInstruction: parentData.deliveryInstruction || ""
       });
     } catch (error) {
+      if (error.status === 404) {
+        return;
+      }
       console.error("Error fetching parent info:", error);
     }
   };
@@ -237,11 +228,9 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
     console.log(plan);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/parents`, {
+      const data = await sendSessionJson("/api/parents", {
         method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           parent: {
             ...parentForm,
             userId: currentUser._id,
@@ -256,14 +245,8 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
             price,
             billingCycle
           }
-        }),
+        },
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
 
       onSaveChildren?.(childrenForms.filter(child => child.saved));
 
