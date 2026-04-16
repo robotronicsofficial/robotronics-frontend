@@ -18,6 +18,9 @@ const Login = () => {
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const redirectFromState = location.state?.from
+    ? `${location.state.from.pathname || ""}${location.state.from.search || ""}${location.state.from.hash || ""}`
+    : null;
 
   useEffect(() => {
     if (location.state?.emailVerified) {
@@ -35,48 +38,25 @@ const Login = () => {
       window.history.replaceState({}, document.title);
     }
 
-    // Redirect if already logged in
     if (currentUser) {
-      navigate("/");
+      const redirectPath = localStorage.getItem("redirectAfterLogin");
+      if (redirectPath) {
+        localStorage.removeItem("redirectAfterLogin");
+        navigate(redirectPath, { replace: true });
+        return;
+      }
+
+      navigate(redirectFromState || "/", { replace: true });
     }
-  }, [location.state, currentUser, navigate]);
+  }, [location.state, currentUser, navigate, redirectFromState]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || "Login failed. Please check your credentials and try again."
-        );
-      }
-
-      // Call the login function from AuthContext
-      // await login(data.user, data.token);
+      await login(email, password);
       toast.success("Login successful!");
-      const redirectPath = localStorage.getItem('redirectAfterLogin');
-      console.log(redirectPath);
-      if (redirectPath) {
-        localStorage.removeItem('redirectAfterLogin');
-        // navigate(redirectPath);
-        window.location.href = `${import.meta.env.VITE_FRONTEND_URL}${redirectPath}`;
-      } else {
-        window.location.href = "/";
-      }
-
-
     } catch (error) {
       console.error("Error during login:", error);
       setError(error.message);
