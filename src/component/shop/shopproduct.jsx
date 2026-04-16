@@ -1,5 +1,6 @@
 import { FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 
 const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, productId }) => {
@@ -19,7 +20,7 @@ const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, product
         <div className="w-[18vw] h-[17vw] rounded-2xl overflow-hidden">
           <img
             className="h-full w-full object-fit group-hover:opacity-50"
-            src={image}
+            src={resolveBackendAssetUrl(image, "https://via.placeholder.com/300x200")}
             alt="Product"
           />
         </div>
@@ -27,7 +28,7 @@ const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, product
           <p className="text-[#362D2C] hover:text-black text-xl poppins-bold my-2">
             {title}
           </p>
-          <p className="text-[#C86400] poppins-bold text-xl">PKR {price.toLocaleString()}</p>
+          <p className="text-[#C86400] poppins-bold text-xl">PKR {Number(price || 0).toLocaleString()}</p>
         </div>
       </div>
 

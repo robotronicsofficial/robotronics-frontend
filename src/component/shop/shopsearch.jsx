@@ -8,6 +8,7 @@ import Shopfilter from "../shop/shopfilter";
 import Shopproduct from "../shop/shopproduct";
 import ShopPages from "../shop/shopPages";
 import shopHome from "../../assets/shopHome.png";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const Shopsearch = () => {
   const dispatch = useDispatch();
@@ -35,16 +36,16 @@ const Shopsearch = () => {
   const filteredProducts = useMemo(() => {
     return products
       .filter(({ name, price, shippingDays: days, category }) =>
-        name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        price >= priceRange[0] &&
-        price <= priceRange[1] &&
-        days <= shippingDays &&
+        String(name || "").toLowerCase().includes(searchQuery.toLowerCase()) &&
+        Number(price || 0) >= priceRange[0] &&
+        Number(price || 0) <= priceRange[1] &&
+        Number(days || 0) <= shippingDays &&
         (!selectedCategory || category === selectedCategory)
       )
       .sort((a, b) => {
-        if (sortOption === "Popularity") return b.ratings - a.ratings;
-        if (sortOption === "Price: Low to High") return a.price - b.price;
-        if (sortOption === "Price: High to Low") return b.price - a.price;
+        if (sortOption === "Popularity") return Number(b.ratings || 0) - Number(a.ratings || 0);
+        if (sortOption === "Price: Low to High") return Number(a.price || 0) - Number(b.price || 0);
+        if (sortOption === "Price: High to Low") return Number(b.price || 0) - Number(a.price || 0);
         return 0;
       });
   }, [products, searchQuery, priceRange, shippingDays, sortOption, selectedCategory]);
@@ -90,7 +91,7 @@ const Shopsearch = () => {
                   <BsHandbag className="text-white" />
                 </div>
                 <p className="px-3 lg:text-base text-sm poppins-bold text-center">
-                  {totalQuantity} Products - PKR {totalPrice.toLocaleString()}
+                  {totalQuantity} Products - PKR {Number(totalPrice || 0).toLocaleString()}
                 </p>
               </div>
               <FaArrowRight className="text-[#838383]" />
@@ -148,7 +149,7 @@ const Shopsearch = () => {
               key={product._id}
               title={product.name}
               price={product.price}
-              image={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`}
+              image={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
               onAddToWishlist={() => setWishlistCount((prev) => prev + 1)}
               onAddToCart={() => dispatch(addToCart(product))}
               productId={product._id}
