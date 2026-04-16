@@ -87,6 +87,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import robot from "../../../assets/images/IServicesS4.svg"; // Fallback image
+import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/`;
 
@@ -115,7 +116,7 @@ const OurServices = () => {
   }, []);
 
   const handleNavigate = (service) => {
-    navigate("/serviceDetail", { state: { service } });
+    navigate(`/ServiceDetail/${service._id}`);
   };
 
   return (
@@ -128,9 +129,7 @@ const OurServices = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.length > 0 ? (
             (showAll ? services : services.slice(0, 6)).map((service) => {
-              const imageUrl = service.thumbnailImage
-                ? `${BASE_URL}${service.thumbnailImage.replace("\\", "/")}`
-                : robot;
+              const imageUrl = resolveBackendAssetUrl(service.thumbnailImage, robot);
 
               return (
                 <div

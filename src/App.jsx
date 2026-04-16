@@ -123,7 +123,7 @@ function App() {
           <Route path="/PrivacyPolicy" element={<PrivacyHome />} />
           <Route path="/faqs" element={<FAQs />} />
           <Route path="/RefundPolicy" element={<RefundPolicy />} />
-          <Route path="/ServiceDetail" element={<ServiceDetail />} />
+          <Route path="/ServiceDetail/:id?" element={<ServiceDetail />} />
         </Routes>
         <ToastContainer
           position="top-center"

@@ -1,13 +1,10 @@
 import React from "react";
 import robo from "../../assets/imagesContent/servicedetailbanner/robo.png";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const ServiceBody = ({ service }) => {
   const goodAtItems = Array.isArray(service?.whatWeAreGoodAt) ? service.whatWeAreGoodAt : [];
-  const sideImage = service?.sideImage
-    ? service.sideImage.startsWith("http")
-      ? service.sideImage
-      : `${import.meta.env.VITE_BACKEND_URL}/${service.sideImage.replace(/\\/g, "/")}`
-    : robo;
+  const sideImage = resolveBackendAssetUrl(service?.sideImage, robo);
 
   return (
     <>

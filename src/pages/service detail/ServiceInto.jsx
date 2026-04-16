@@ -1,11 +1,8 @@
 import React from "react";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const ServiceInto = ({ service }) => {
-  const bannerImage = service?.bannerImage
-    ? service.bannerImage.startsWith("http")
-      ? service.bannerImage
-      : `${import.meta.env.VITE_BACKEND_URL}/${service.bannerImage.replace(/\\/g, "/")}`
-    : "";
+  const bannerImage = resolveBackendAssetUrl(service?.bannerImage);
 
   return (
     <div className="hero" id="hero">
