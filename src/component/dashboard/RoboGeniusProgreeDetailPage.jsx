@@ -12,9 +12,10 @@ const RoboGeniusProgreeDetailPage = () => {
   const childId = searchParams.get('childId');
   const [downloadingCourseId, setDownloadingCourseId] = useState(null);
   const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
+  const selectedChildId = localStorage.getItem('selectedChildId') || childId;
 
   const fetchProgressData = async () => {
-    if (!childId) {
+    if (!selectedChildId) {
       setError('Child ID not found in URL');
       setLoading(false);
       return;
@@ -27,7 +28,7 @@ const RoboGeniusProgreeDetailPage = () => {
       }
 
       setError(null);
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/progress`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${selectedChildId}/progress`, {
         headers: {
           'X-Child-Session': childSession,
         },
@@ -48,10 +49,10 @@ const RoboGeniusProgreeDetailPage = () => {
 
   useEffect(() => {
     fetchProgressData();
-  }, [childId]);
+  }, [selectedChildId]);
 
   const handleDownloadCertificate = async (courseId, courseName) => {
-    if (!childId || !courseId || downloadingCourseId) return;
+    if (!selectedChildId || !courseId || downloadingCourseId) return;
 
     setDownloadingCourseId(courseId);
     // Clear any previous error for this course
@@ -71,7 +72,7 @@ const RoboGeniusProgreeDetailPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          childId,
+          childId: selectedChildId,
           courseId,
           sessionId: childSession,
         })
@@ -114,7 +115,7 @@ const RoboGeniusProgreeDetailPage = () => {
 
       // Refresh progress data
       try {
-        const updatedProgress = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/progress`, {
+        const updatedProgress = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${selectedChildId}/progress`, {
           headers: {
             'X-Child-Session': childSession,
           },

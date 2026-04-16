@@ -74,11 +74,12 @@ const RoboGeniusProgressCertificate = () => {
 
                   <button
                     className="mt-3 w-full text-sm poppins-light border border-lin rounded-lg px-3 py-2 bg-yellow text-white hover:bg-yellow-600 transition-colors"
-                    onClick={() =>
+                    onClick={() => {
+                      localStorage.setItem('selectedChildId', child._id);
                       navigate(
                         `/Dashboard/ProgressCertificate/ProgressPage?childId=${child._id}`
-                      )
-                    }
+                      );
+                    }}
                   >
                     View Progress
                   </button>
