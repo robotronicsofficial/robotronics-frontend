@@ -1,189 +1,119 @@
-import { useState } from 'react';
-import Modal from 'react-modal';
-import { useNavigate } from 'react-router-dom';
-import mask from "../../assets/images/shopMask.svg"
+import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import {
+  calculateCartSummary,
+  formatShopCurrency,
+  hasCheckoutAddress,
+  hasCheckoutPayment,
+  loadShopCheckout,
+} from "../../lib/shopCheckout";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
-const ShopConfirmOrder = () => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [thankYouModalIsOpen, setThankYouModalIsOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+const ShopConfirmOrder = ({ onNext, buttonLabel = "CONTINUE TO SHIPPING" }) => {
   const navigate = useNavigate();
+  const { cart } = useSelector((state) => state.cart);
+  const checkout = useMemo(() => loadShopCheckout(), []);
+  const summary = calculateCartSummary(cart);
+  const hasAddress = hasCheckoutAddress(checkout.address);
+  const hasPayment = hasCheckoutPayment(checkout.payment);
 
-  const products = [
-    {
-      id: 1,
-      title: "MODERN BLACK STANDING LEGO",
-      description: "High-quality wireless headphones with noise-cancelling technology.",
-      image: { mask },
-      price: 79.99,
-      item: 2,
-      category: "Electronics",
-    },
-    {
-      id: 2,
-      title: "MODERN BLACK STANDING LEGO",
-      description: "Lightweight running shoes designed for maximum comfort and performance.",
-      image: { mask },
-      price: 59.99,
-      item: 1,
-      category: "Footwear",
-    },
-    {
-      id: 3,
-      title: "MODERN BLACK STANDING LEGO",
-      description: "High-quality wireless headphones with noise-cancelling technology.",
-      image: { mask },
-      price: 79.99,
-      item: 1,
-      category: "Electronics",
-    },
-  ];
+  const handleContinue = () => {
+    if (onNext) {
+      onNext();
+      return;
+    }
 
-  const openModal = () => {
-    setModalIsOpen(true);
+    navigate("/Shipping");
   };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-  const handleFileUpload = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
-
-  const handleConfirmOrder = () => {
-    console.log("Order confirmed with file:", selectedFile);
-    setModalIsOpen(false);
-    setThankYouModalIsOpen(true);
-  };
-
-  const goToHomePage = () => {
-    setThankYouModalIsOpen(false);
-    navigate('/');
-  };
-
-  const triggerFileInput = () => {
-    document.getElementById('fileInput').click();
-  };
-
-  const calculateTotal = () => {
-    const subtotal = products.reduce((total, product) => total + product.price * product.item, 0);
-    const shipping = 1125.0;
-    const discount = subtotal * 0.1;
-    const total = subtotal + shipping - discount;
-    return { subtotal, shipping, discount, total };
-  };
-
-  const { subtotal, shipping, discount, total } = calculateTotal();
 
   return (
     <div className="lg:px-14 px-5 lg:py-8 py-4 lg:w-1/3 space-y-8 w-full">
-      {/* Header */}
       <div className="space-y-4 text-center lg:text-left">
-        <p className="lg:text-4xl text-2xl font-bold">YOUR ORDER</p>
-        <p className="text-sm text-gray-600">Review all the products you want to buy</p>
+        <p className="lg:text-4xl text-2xl font-bold">ORDER REVIEW</p>
+        <p className="text-sm text-gray-600">
+          Review the live cart, address, and payment details before continuing.
+        </p>
       </div>
 
-      {/* Product List */}
       <div className="space-y-6">
-        {products.map((product) => (
-          <div key={product.id} className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <img src={product.image} alt={product.title} className="w-16 h-16 sm:w-20 sm:h-20 rounded" />
-            <div className="text-center sm:text-left">
-              <p className="font-bold">{product.title}</p>
-              <p className="text-sm">Quantity: {product.item}</p>
-              <p className="text-sm">Price: Pkr {product.price}</p>
+        {cart.length > 0 ? (
+          cart.map((product) => (
+            <div key={product._id || product.id} className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-4 sm:space-y-0">
+              <img
+                src={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
+                alt={product?.name || "Product"}
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded object-cover"
+              />
+              <div className="text-center sm:text-left">
+                <p className="font-bold">{product?.name || "Product"}</p>
+                <p className="text-sm">Quantity: {product?.quantity || 1}</p>
+                <p className="text-sm">Price: {formatShopCurrency(product?.price)}</p>
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="rounded-lg border border-dashed border-gray-300 p-4 text-sm text-gray-600">
+            Your cart is empty.
           </div>
-        ))}
+        )}
       </div>
 
-      {/* Divider */}
-      <div className="border-t border-gray-300 py-2"></div>
+      <div className="border-t border-gray-300 py-2" />
 
-      {/* Total Bill Details */}
       <div className="space-y-4">
-        <div className="flex justify-between">
-          <p className="text-sm">Shipping</p>
-          <p className="font-bold">Pkr {shipping.toFixed(2)}</p>
-        </div>
-        <div className="flex justify-between">
-          <p className="text-sm">Discount 10%</p>
-          <p className="font-bold">Pkr {discount.toFixed(2)}</p>
-        </div>
-        <div className="flex justify-between">
-          <p className="text-sm">Price</p>
-          <p className="font-bold">Pkr {subtotal.toFixed(2)}</p>
-        </div>
-        <div className="flex justify-between">
-          <p className="text-sm">Total Price</p>
-          <p className="text-yellow-600 font-bold">Pkr {total.toFixed(2)}</p>
-        </div>
+        <SummaryLine label="Shipping" value={formatShopCurrency(summary.shipping)} />
+        <SummaryLine label="Discount 10%" value={`- ${formatShopCurrency(summary.discount)}`} />
+        <SummaryLine label="Price" value={formatShopCurrency(summary.subtotal)} />
+        <SummaryLine label="Total Price" value={formatShopCurrency(summary.total)} highlight />
       </div>
 
-      {/* Confirm Button */}
+      <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4">
+        <p className="text-sm font-bold text-brown">Saved checkout details</p>
+        {hasAddress ? (
+          <div className="text-sm text-gray-700">
+            <p className="font-semibold">
+              {checkout.address.firstName} {checkout.address.lastName}
+            </p>
+            <p>{checkout.address.phone}</p>
+            <p>{checkout.address.streetAddress}</p>
+            <p>
+              {checkout.address.city}, {checkout.address.state}, {checkout.address.country}
+            </p>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-600">No shipping address is saved yet.</p>
+        )}
+        {hasPayment ? (
+          <div className="text-sm text-gray-700">
+            <p>{checkout.payment.shippingService}</p>
+            <p>{checkout.payment.paymentMethod}</p>
+            <p>{checkout.payment.billingEmail}</p>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-600">No payment method is saved yet.</p>
+        )}
+      </div>
+
       <div className="flex justify-center">
-        <button onClick={openModal} className="bg-brown text-white px-6 py-2 text-sm lg:text-lg rounded-lg">
-          Confirm Order
+        <button
+          type="button"
+          onClick={handleContinue}
+          className="bg-brown text-white px-6 py-2 text-sm lg:text-lg rounded-lg"
+          disabled={!cart.length}
+        >
+          {buttonLabel}
         </button>
       </div>
-
-      {/* File Upload Modal */}
-      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="fixed inset-0 flex items-center justify-center z-50" overlayClassName="fixed inset-0 bg-black bg-opacity-50">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full relative">
-          <button onClick={closeModal} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
-          <h2 className="text-xl font-bold mb-4">Upload your file here</h2>
-          <div className="flex items-center mb-4">
-            <input type="text" placeholder="No file chosen" className="bg-white border p-2 w-full" readOnly value={selectedFile ? selectedFile.name : ''} />
-            <button onClick={triggerFileInput} className="bg-blue-500 text-white px-4 py-2 rounded ml-2">Browse</button>
-            <input type="file" id="fileInput" onChange={handleFileUpload} className="hidden" />
-          </div>
-          <div className="flex justify-end space-x-4">
-            <button onClick={handleConfirmOrder} className="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
-            <button onClick={closeModal} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Thank You Modal */}
-      <Modal isOpen={thankYouModalIsOpen} onRequestClose={() => setThankYouModalIsOpen(false)} className="fixed inset-0 flex items-center justify-center z-50" overlayClassName="fixed inset-0 bg-black bg-opacity-50">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full relative">
-          <button onClick={() => setThankYouModalIsOpen(false)} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
-          <h2 className="text-xl font-bold mb-4">Thank You!</h2>
-          <p>Your order has been confirmed. Here are the items you ordered:</p>
-          <ul className="my-4 space-y-2">
-            {products.map((product) => (
-              <li key={product.id} className="flex space-x-4">
-                <img src={product.image} alt={product.title} className="w-12 h-12 rounded" />
-                <div>
-                  <p className="font-bold">{product.title}</p>
-                  <p className="text-sm">Quantity: {product.item}</p>
-                  <p className="text-sm">Price: Pkr {product.price}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <div className="border-t border-gray-200 pt-4">
-            <div className="flex justify-between">
-              <p className="text-sm">Shipping</p>
-              <p className="text-sm font-bold">Pkr {shipping.toFixed(2)}</p>
-            </div>
-            <div className="flex justify-between">
-              <p className="text-sm">Discount 10%</p>
-              <p className="text-sm font-bold">Pkr {discount.toFixed(2)}</p>
-            </div>
-            <div className="flex justify-between">
-              <p className="text-sm">Total Price</p>
-              <p className="text-yellow-600 font-bold">Pkr {total.toFixed(2)}</p>
-            </div>
-          </div>
-          <div className="mt-4 text-center">
-            <button onClick={goToHomePage} className="bg-blue-500 text-white px-6 py-2 rounded">Go to Home</button>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };
+
+const SummaryLine = ({ label, value, highlight = false }) => (
+  <div className="flex justify-between">
+    <p className="text-sm">{label}</p>
+    <p className={`font-bold ${highlight ? "text-yellow-600" : ""}`}>{value}</p>
+  </div>
+);
 
 export default ShopConfirmOrder;
