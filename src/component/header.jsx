@@ -8,6 +8,7 @@ import Aos from "aos";
 import { useSelector } from "react-redux";
 import StarIcon from "@mui/icons-material/Star";
 import MenuIcon from "@mui/icons-material/Menu"; // Import a proper menu icon
+import { CART_PATH, CONTACT_PATH } from "../router/paths";
 
 export default function Header() {
   const { totalQuantity } = useSelector((state) => state.cart);
@@ -117,7 +118,7 @@ export default function Header() {
 
               <NavLink
                 className="mr-1 sm:mr-2 cursor-pointer hover:text-black poppins-light hover:border-b hover:border-black text-black text-sm lg:text-lg"
-                to="/COntactUS"
+                to={CONTACT_PATH}
               >
                 Contact
               </NavLink>
@@ -178,7 +179,7 @@ export default function Header() {
               <div
                 className="relative cursor-pointer"
                 onClick={() => {
-                  navigate("/cart");
+                  navigate(CART_PATH);
                 }}
               >
                 <img
@@ -201,7 +202,7 @@ export default function Header() {
             <div
               className="relative cursor-pointer mr-2"
               onClick={() => {
-                navigate("/cart");
+                navigate(CART_PATH);
               }}
             >
               <img src={basket} alt="basket" className="w-6 h-6" />
@@ -315,7 +316,7 @@ export default function Header() {
               </NavLink>
               <NavLink
                 className="py-3 border-b cursor-pointer hover:bg-gray-100 px-2"
-                to="/COntactUS"
+                to={CONTACT_PATH}
                 onClick={() => setMenuOpen(false)}
               >
                 Contact

@@ -60,6 +60,7 @@ import ProtectedChild from "./component/ProtectedChild";
 import ProtectedRoute from './component/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CART_PATH, CONTACT_PATH } from "./router/paths";
 
 function App() {
   return (
@@ -69,7 +70,7 @@ function App() {
         <Route path="/Screen" element={<Screen />} />
         <Route path="/" element={<Home />} />
         <Route path="/aboutUs" element={<AboutUs />} />
-        <Route path="/Cart" element={<Cart />} />
+        <Route path={CART_PATH} element={<Cart />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/ProductDetailPage/:id" element={<ProductDetailPage />} />
         <Route path="/Shipping" element={<Shipping />} />
@@ -87,7 +88,7 @@ function App() {
         <Route path="/JobApplicationForm" element={<JobApplicationForm />} />
         <Route path="/Blog" element={<Blog />} />
         <Route path="/BlogDetail/:id?" element={<BlogDetail />} />
-        <Route path="/ContactUs" element={<ContactUs />} />
+        <Route path={CONTACT_PATH} element={<ContactUs />} />
         <Route path="/Dashboard/userInfo" element={<ProtectedRoute><UserInfo /></ProtectedRoute>} />
         <Route path="/Dashboard/order" element={<ProtectedRoute><Order /></ProtectedRoute>} />
 

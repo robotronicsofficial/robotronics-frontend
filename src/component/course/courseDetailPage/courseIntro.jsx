@@ -4,6 +4,7 @@ import star from "../../../assets/images/shopStar.svg";
 import { useDispatch } from "react-redux";
 
 import { addToCart } from "../../../store/cart/cartSlice";
+import { CART_PATH } from "../../../router/paths";
 const CourseIntro = ({ title, id, image, price }) => {
   const dispatch = useDispatch();
   const resolvedImage = image
@@ -178,7 +179,7 @@ const CourseIntro = ({ title, id, image, price }) => {
             <div className="flex flex-row space-x-5">
               {/* buy now button */}
               <div>
-                <a href="/cart">
+                <a href={CART_PATH}>
                   <button className="bg-brown p-2 poppins-medium  lg:px-6 text-white rounded-lg">
                     BUY NOW
                   </button>
