@@ -23,6 +23,9 @@ const mergeChildrenWithCourses = (parentChildren, childCourseList) =>
 
 const RoboGeniusChildProfile = () => {
   const navigate = useNavigate();
+  const sharedRequestOptions = {
+    credentials: "include",
+  };
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
   const [isVerifyPinModalOpen, setIsVerifyPinModalOpen] = useState(false);
@@ -43,14 +46,20 @@ const RoboGeniusChildProfile = () => {
         try {
           setLoading(true);
           
-          const parentResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/parents/${currentUser._id}`);
+          const parentResponse = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/parents/${currentUser._id}`,
+            sharedRequestOptions
+          );
           if (!parentResponse.ok) {
             throw new Error("Failed to fetch parent data");
           }
           const parentData = await parentResponse.json();
           const parentChildren = Array.isArray(parentData?.children) ? parentData.children : [];
 
-          const childCoursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getAllChild`);
+          const childCoursesResponse = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/getAllChild`,
+            sharedRequestOptions
+          );
           if (!childCoursesResponse.ok) {
             throw new Error("Failed to fetch child courses");
           }
@@ -78,14 +87,20 @@ const RoboGeniusChildProfile = () => {
         throw new Error("Parent account not found");
       }
 
-      const parentResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/parents/${currentUser._id}`);
+      const parentResponse = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/parents/${currentUser._id}`,
+        sharedRequestOptions
+      );
       if (!parentResponse.ok) {
         throw new Error("Failed to fetch parent data");
       }
       const parentData = await parentResponse.json();
       const parentChildren = Array.isArray(parentData?.children) ? parentData.children : [];
       
-      const childCoursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getAllChild`);
+      const childCoursesResponse = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/getAllChild`,
+        sharedRequestOptions
+      );
       if (!childCoursesResponse.ok) {
         throw new Error("Failed to fetch child courses");
       }
@@ -107,6 +122,7 @@ const RoboGeniusChildProfile = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        ...sharedRequestOptions,
         body: JSON.stringify({
           childId,
           pin
@@ -141,6 +157,7 @@ const RoboGeniusChildProfile = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        ...sharedRequestOptions,
         body: JSON.stringify({
           oldPin: pinData.oldPin,
           newPin: pinData.newPin
@@ -183,6 +200,7 @@ const RoboGeniusChildProfile = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        ...sharedRequestOptions,
         body: JSON.stringify({
           ...childData,
           pin: pinData,
@@ -218,6 +236,7 @@ const handleVerifyPinSubmit = async (pinData) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      ...sharedRequestOptions,
       body: JSON.stringify({
         childId: selectedChildId,
         pin: pinData
@@ -250,7 +269,10 @@ const handleVerifyPinSubmit = async (pinData) => {
     }
 
     // Fetch child's courses data
-    const coursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getChild/${selectedChildId}`);
+    const coursesResponse = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/getChild/${selectedChildId}`,
+      sharedRequestOptions
+    );
     if (!coursesResponse.ok) {
       throw new Error('Failed to fetch child courses');
     }
