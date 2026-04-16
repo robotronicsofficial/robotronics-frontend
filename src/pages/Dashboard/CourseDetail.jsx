@@ -120,7 +120,7 @@ const CourseDetail = () => {
     return true;
   };
 
-const updateChildCourseProgress = async (updatedData, sectionIndex) => {
+const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) => {
   const childId = localStorage.getItem('selectedChildId');
   try {
     const childSessionRequest = buildChildSessionRequest({
@@ -129,9 +129,9 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
         'Content-Type': 'application/json',
       },
       body: {
-        courseId: id,
-        ...updatedData,
-        sectionIndex
+        courseId,
+        sectionIndex,
+        answers,
       },
     });
 
@@ -145,7 +145,8 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
     );
 
     if (!response.ok) {
-      throw new Error('Failed to update child course progress');
+      const errorPayload = await response.json().catch(() => null);
+      throw new Error(errorPayload?.message || 'Failed to update child course progress');
     }
 
     const data = await response.json();
@@ -200,19 +201,11 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
     }
 
     const maxAttempts = childPlan === 'pro' ? MAX_ATTEMPTS.PRO : MAX_ATTEMPTS.BASIC;
-    const today = new Date().toISOString();
-
-    let attemptsToAdd = 1;
-    if (childPlan === 'basic' && section.quiz.lastAttemptDate && isSameDay(section.quiz.lastAttemptDate, today)) {
+    if (childPlan === 'basic' && section.quiz.lastAttemptDate && isSameDay(section.quiz.lastAttemptDate, new Date())) {
       if (section.quiz.attempts >= maxAttempts) {
         alert(`You've reached the maximum number of attempts (${maxAttempts}) for today. Try again tomorrow.`);
         return;
       }
-      attemptsToAdd = 1; 
-    } else if (childPlan === 'basic') {
-      attemptsToAdd = 0;
-    } else {
-      attemptsToAdd = 1;
     }
 
     const results = {};
@@ -228,75 +221,30 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
     const percentage = (score / questions.length) * 100;
     const passed = percentage >= 60;
 
-    const updatedSections = childSections.map((childSection) => ({
-      ...childSection,
-      quiz: childSection?.quiz
-        ? {
-            ...childSection.quiz,
-            questions: Array.isArray(childSection.quiz.questions)
-              ? [...childSection.quiz.questions]
-              : [],
-          }
-        : childSection?.quiz,
-    }));
-
-    if (!updatedSections[sectionIndex]?.quiz) {
+    if (!section?.quiz?.questions?.length) {
       return;
     }
 
-    const updatedChildCourseData = { ...childCourseData, Sections: updatedSections };
-    updatedChildCourseData.Sections[sectionIndex].quiz.obtainedScore = score;
-    updatedChildCourseData.Sections[sectionIndex].quiz.result = passed ? "pass" : "fail";
-    if (attemptsToAdd === 0)
-      updatedChildCourseData.Sections[sectionIndex].quiz.attempts = 1;
-    else
-      updatedChildCourseData.Sections[sectionIndex].quiz.attempts += attemptsToAdd;
-
-    updatedChildCourseData.Sections[sectionIndex].quiz.lastAttemptDate = today;
-
-    updatedChildCourseData.Sections[sectionIndex].quiz.questions =
-      updatedChildCourseData.Sections[sectionIndex].quiz.questions.map(question => ({
-        ...question,
-        childAnswer: quizAnswers[`${sectionIndex}-${question._id}`] || "",
-        isCorrect: quizAnswers[`${sectionIndex}-${question._id}`] === question.correctAnswer
-      }));
-
-    if (passed && sectionIndex < updatedChildCourseData.Sections.length - 1) {
-      const nextSectionIndex = sectionIndex + 1;
-      const now = new Date();
-      const nextDay = new Date(now.setDate(now.getDate() + 1));
-
-      if (!updatedChildCourseData.Sections[nextSectionIndex].startDate) {
-        updatedChildCourseData.Sections[nextSectionIndex].startDate = nextDay.toISOString();
-        updatedChildCourseData.Sections[nextSectionIndex].endDate = new Date(
-          nextDay.setDate(nextDay.getDate() + 14)
-        ).toISOString();
-        updatedChildCourseData.Sections[nextSectionIndex].status = "unlock";
-      }
-    }
-
-    const totalSections = updatedChildCourseData.Sections.length;
-    const completedSections = updatedChildCourseData.Sections.filter(
-      s => s.quiz?.result === "pass"
-    ).length;
-    updatedChildCourseData.progress = Math.round((completedSections / totalSections) * 100);
-
-    if (completedSections === totalSections) {
-      updatedChildCourseData.isCompleted = true;
-      updatedChildCourseData.status = "completed";
-    }
+    const answers = questions.map((question) => ({
+      questionId: question._id,
+      answer: quizAnswers[`${sectionIndex}-${question._id}`] || "",
+    }));
 
     try {
-          await updateChildCourseProgress(updatedChildCourseData, sectionIndex);
+      const responsePayload = await updateChildCourseProgress({
+        courseId: id,
+        sectionIndex,
+        answers,
+      });
 
-      setChildCourseData(updatedChildCourseData);
+      setChildCourseData(normalizeChildCourse(responsePayload?.data));
       setQuizResults(prev => ({
         ...prev,
         [sectionIndex]: {
-          score,
-          total: questions.length,
-          details: results,
-          passed
+          score: responsePayload?.quiz?.score ?? score,
+          total: responsePayload?.quiz?.total ?? questions.length,
+          details: responsePayload?.quiz?.details || results,
+          passed: responsePayload?.quiz?.passed ?? passed
         }
       }));
       setQuizRetakes(prev => ({
