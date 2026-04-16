@@ -20,8 +20,12 @@ const Services = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("Fetched Services:", data);
-        setServices(data.data);
+        const serviceList = Array.isArray(data?.data)
+          ? data.data
+          : Array.isArray(data)
+            ? data
+            : [];
+        setServices(serviceList);
       })
       .catch((error) => {
         console.error("Error fetching services:", error);
