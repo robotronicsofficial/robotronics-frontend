@@ -42,7 +42,6 @@ const LeftNav = () => {
       dropdownIcon: <RiArrowDropDownLine className="text-3xl text-brown" />,
       subMenu: [
         { name: "• Payment History", href: "/Dashboard/PaymentHistory" },
-        { name: "• Payment Details", href: "/Dashboard/PaymentDetails" },
       ],
     },
     { name: "Support", href: "/404", icon: <FaHeadphones className="text-brown" /> },

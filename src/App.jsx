@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Navigate, Routes, Route } from "react-router-dom";
 import Layout from "./component/Layout";
 import Home from "./pages/home";
 import AboutUs from "./pages/about";
@@ -27,7 +27,6 @@ import MyCoursesPage from "./pages/Dashboard/myCoursesPage";
 import WishList from "./pages/Dashboard/wishList";
 import Payment from "./pages/Dashboard/Payment";
 import Error from "./pages/404/error";
-import UserInfoForm from "./pages/Dashboard/userInfoForm";
 import CourseDetail from "./pages/Dashboard/CourseDetail";
 import VideoGallery from "./pages/International/videoGallery";
 import IServices from "./pages/International/services";
@@ -50,7 +49,6 @@ import RefundPolicy from "./pages/policies/RefundPolicy";
 
 
 import ServiceDetail from "./pages/service detail/ServiceDetail";
-import PaymentDetail from "./pages/Dashboard/PaymentDetail";
 import ChildProfile from "./pages/Dashboard/ChildProfile";
 import ProgressCertificate from "./pages/Dashboard/ProgressCertificate";
 import RoboGeniusProgressPage from "./component/dashboard/RoboGeniusProgressPage";
@@ -98,9 +96,9 @@ function App() {
 
         <Route path="/Dashboard/WishList" element={<ProtectedRoute><WishList /></ProtectedRoute>} />
         <Route path="/Dashboard/PaymentHistory" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
-        <Route path="/Dashboard/PaymentDetails" element={<ProtectedRoute><PaymentDetail /></ProtectedRoute>} />
+        <Route path="/Dashboard/PaymentDetails" element={<Navigate to="/Dashboard/PaymentHistory" replace />} />
         <Route path="/Dashboard/ChildProfile" element={<ProtectedRoute><ChildProfile /></ProtectedRoute>} />
-        <Route path="/Dashboard/userInfoForm" element={<ProtectedRoute><UserInfoForm /></ProtectedRoute>} />
+        <Route path="/Dashboard/userInfoForm" element={<Navigate to="/Dashboard/userInfo" replace />} />
         <Route path="/Dashboard/courseDetail/:id" element={<ProtectedChild><CourseDetail /></ProtectedChild>} />
         <Route path="/Dashboard/ProgressCertificate" element={<ProtectedRoute><ProgressCertificate /></ProtectedRoute>} />
         <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<ProtectedRoute><RoboGeniusProgressPage /></ProtectedRoute>} />
