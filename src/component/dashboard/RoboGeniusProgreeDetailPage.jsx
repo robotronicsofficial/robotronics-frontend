@@ -114,7 +114,11 @@ const RoboGeniusProgreeDetailPage = () => {
 
       // Refresh progress data
       try {
-        const updatedProgress = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/progress`);
+        const updatedProgress = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/progress`, {
+          headers: {
+            'X-Child-Session': childSession,
+          },
+        });
         if (updatedProgress.ok) {
           const updatedData = await updatedProgress.json();
           setProgressData(updatedData);
