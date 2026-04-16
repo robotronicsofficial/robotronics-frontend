@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
-import { clearActiveChildSession } from '../utils/childSessionRequest';
+import { DASHBOARD_CHILD_PROFILE_PATH } from '../router/paths';
+import { clearActiveChildSession, getActiveChildSession } from '../utils/childSessionRequest';
 
 const ProtectedChild = ({ children }) => {
   const [isValidSession, setIsValidSession] = useState(true);
@@ -11,23 +12,16 @@ const ProtectedChild = ({ children }) => {
 
   useEffect(() => {
     const checkSession = async () => {
-      const selectedChildId = localStorage.getItem('selectedChildId');
-      const childSession = localStorage.getItem('childSession');
-      const childSessionExpires = Number(localStorage.getItem('childSessionExpires') || 0);
-      
-      if (!selectedChildId) {
+      const activeChildSession = getActiveChildSession();
+
+      if (!activeChildSession) {
         clearActiveChildSession();
         setIsValidSession(false);
         setShowSessionPopup(true);
         return;
       }
 
-      if (!childSession || !childSessionExpires || childSessionExpires <= Date.now()) {
-        clearActiveChildSession();
-        setIsValidSession(false);
-        setShowSessionPopup(true);
-        return;
-      }
+      const { childId: selectedChildId, sessionId: childSession } = activeChildSession;
 
       try {
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/verifyChildSession`, {
@@ -61,7 +55,7 @@ const ProtectedChild = ({ children }) => {
 
   const handlePopupClose = () => {
     setShowSessionPopup(false);
-    navigate('/Dashboard/userInfo');
+    navigate(DASHBOARD_CHILD_PROFILE_PATH);
   };
 
   if (!isValidSession) {
