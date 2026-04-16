@@ -2,6 +2,13 @@ import React from "react";
 import robo from "../../assets/imagesContent/servicedetailbanner/robo.png";
 
 const ServiceBody = ({ service }) => {
+  const goodAtItems = Array.isArray(service?.whatWeAreGoodAt) ? service.whatWeAreGoodAt : [];
+  const sideImage = service?.sideImage
+    ? service.sideImage.startsWith("http")
+      ? service.sideImage
+      : `${import.meta.env.VITE_BACKEND_URL}/${service.sideImage.replace(/\\/g, "/")}`
+    : robo;
+
   return (
     <>
       <div className=" min-h-[65vw] flex gap-5 p-20">
@@ -11,24 +18,21 @@ const ServiceBody = ({ service }) => {
               OverView
             </h2>
             <p className="text-wrap text-[1.5vw] leading-8 mb-8 pr-6">
-              {service.overview}
+              {service?.overview || "Overview coming soon."}
             </p>
             <h2 className="text-[#E26400] mb-3 capatalize font-bold text-[1.5vw] ">
               What we are good at:
             </h2>
             <ul className="list-disc pl-5 space-y-3 text-gray-800 text-[1.2vw] text-wrap pr-6">
-              {service.whatWeAreGoodAt.map((item, idx) => (
+              {goodAtItems.length > 0 ? goodAtItems.map((item, idx) => (
                 <li key={idx}>{item}</li>
-              ))}
+              )) : <li>No details available yet.</li>}
             </ul>
           </div>
         </div>
         <div className="h-[65vw] w-[46vw] bg-green-500 rounded-xl overflow-hidden">
           <img className="h-full w-full object-cover"
-            src={`${import.meta.env.VITE_BACKEND_URL}/${service.sideImage.replace(
-              /\\/g,
-              "/"
-            )}`}
+            src={sideImage}
             alt="Service Image"
           />
         </div>

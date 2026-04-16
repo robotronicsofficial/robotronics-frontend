@@ -144,17 +144,16 @@ const Intro = () => {
         const selectedCategoryFormatted = selectedCategory
           ? selectedCategory.trim().toLowerCase()
           : "";
+        const workshopDate = workshop.date ? new Date(workshop.date) : null;
 
         if (
           selectedDate &&
-          new Date(workshop.date).toISOString().split("T")[0] !== selectedDate
+          (!workshopDate || Number.isNaN(workshopDate.getTime()) || workshopDate.toISOString().split("T")[0] !== selectedDate)
         )
           return false;
         if (
           selectedSchool &&
-          !workshop.schoolName
-            .toLowerCase()
-            .includes(selectedSchool.toLowerCase())
+          !workshop.schoolName?.toLowerCase().includes(selectedSchool.toLowerCase())
         )
           return false;
         if (selectedCity && workshop.city !== selectedCity) return false;
