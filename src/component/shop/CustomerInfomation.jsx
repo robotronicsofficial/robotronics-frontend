@@ -1,6 +1,9 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContext';
+import { calculateCartSummary, formatShopCurrency, loadShopCheckout, saveShopCheckout } from "../../lib/shopCheckout";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -46,24 +49,25 @@ const SelectField = ({ label, name, value, onChange, options, required = false }
 );
 
 const CustomerInfomation = ({ onNext }) => {
-  const { cart, totalPrice } = useSelector((state) => state.cart);
+  const { cart } = useSelector((state) => state.cart);
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const storedCheckout = loadShopCheckout();
 
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    firstName: "", lastName: "", country: "", companyName: "",
-    streetAddress: "", aptSuite: "", city: "", state: "",
-    phone: "", postalCode: "", deliveryInstruction: "",
+    firstName: storedCheckout.address?.firstName || "",
+    lastName: storedCheckout.address?.lastName || "",
+    country: storedCheckout.address?.country || "",
+    companyName: storedCheckout.address?.companyName || "",
+    streetAddress: storedCheckout.address?.streetAddress || "",
+    aptSuite: storedCheckout.address?.aptSuite || "",
+    city: storedCheckout.address?.city || "",
+    state: storedCheckout.address?.state || "",
+    phone: storedCheckout.address?.phone || "",
+    postalCode: storedCheckout.address?.postalCode || "",
+    deliveryInstruction: storedCheckout.address?.deliveryInstruction || "",
   });
-
-  const SHIPPING_COST = 500;
-  const DISCOUNT_PERCENTAGE = 0.10;
-
-  const resolveImageUrl = (image) => {
-    if (!image) return "https://via.placeholder.com/300x200";
-    if (image.startsWith("http")) return image;
-    return `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`;
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -96,11 +100,18 @@ const CustomerInfomation = ({ onNext }) => {
       }
 
       const data = await response.json();
-      console.log('Address saved:', data);
+      saveShopCheckout({
+        address: data?.address || form,
+      });
 
       localStorage.removeItem('checkoutNote');
 
-      onNext?.();
+      if (onNext) {
+        onNext();
+        return;
+      }
+
+      navigate("/ShippingService");
     } catch (err) {
       alert(err.message);
     } finally {
@@ -109,9 +120,7 @@ const CustomerInfomation = ({ onNext }) => {
   };
 
   // --- Discount Calculation ---
-  const discountAmount = totalPrice * DISCOUNT_PERCENTAGE;
-  const totalAfterDiscount = totalPrice - discountAmount;
-  const finalTotalPrice = totalAfterDiscount + SHIPPING_COST;
+  const summary = calculateCartSummary(cart);
 
   return (
     <div className="lg:flex flex-row bg-gray">
@@ -174,7 +183,11 @@ const CustomerInfomation = ({ onNext }) => {
           {cart.length > 0 ? (
             cart.map((product) => (
               <div className="flex flex-row space-x-3" key={product._id || product.id}>
-                <img className="lg:h-20 lg:w-24" src={resolveImageUrl(product.images?.[0])} alt={product.name} />
+                <img
+                  className="lg:h-20 lg:w-24 object-cover"
+                  src={resolveBackendAssetUrl(product.images?.[0], "https://via.placeholder.com/300x200")}
+                  alt={product.name}
+                />
                 <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
                   <p className="font-bold text-wrap">{product.name}</p>
                   <div className="flex gap-2"><span>Quantity:</span><p>{product.quantity}</p></div>
@@ -191,10 +204,10 @@ const CustomerInfomation = ({ onNext }) => {
 
         <div className="space-y-2">
           {/* Summary Items */}
-          <SummaryItem label="Shipping" value={`PKR ${SHIPPING_COST}`} />
-          <SummaryItem label="Discount 10%" value={`- PKR ${Number(discountAmount || 0).toLocaleString()}`} />
-          <SummaryItem label="Price" value={`PKR ${Number(totalPrice || 0).toLocaleString()}`} />
-          <SummaryItem label="Total Price" value={`PKR ${Number(finalTotalPrice || 0).toLocaleString()}`} highlight />
+          <SummaryItem label="Shipping" value={formatShopCurrency(summary.shipping)} />
+          <SummaryItem label="Discount 10%" value={`- ${formatShopCurrency(summary.discount)}`} />
+          <SummaryItem label="Price" value={formatShopCurrency(summary.subtotal)} />
+          <SummaryItem label="Total Price" value={formatShopCurrency(summary.total)} highlight />
         </div>
 
         <div className="h-0 border border-[#D4D4D4]"></div>

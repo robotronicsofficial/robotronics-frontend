@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Slider, alpha, styled } from "@mui/material";
 import ShopCartproductList from "../shopCartproductList";
 import CustomerInfomation from "../CustomerInfomation";
+import ShopPaymentMethod from "../shopPaymentMethod";
 import ShopShipping from "../shopShipping";
 import shopBag from "../../../assets/add shopping-bag.png";
 import userIcon from "../../../assets/user-circle.png";
 import cardIcon from "../../../assets/credit-card.png";
+import eyeIcon from "../../../assets/eye.png";
 
 // Styled Slider
 const SuccessSlider = styled(Slider)(() => ({
@@ -74,12 +76,23 @@ const CartsStep = () => {
     {
       icon: cardIcon,
       title: "SHIPPING & PAYMENT",
-      description: "With many payment method, included yours.",
-      content: <ShopShipping onNext={() => setCurrentStep(3)} />, 
+      description: "Choose your courier and billing method.",
+      content: <ShopPaymentMethod onNext={() => setCurrentStep(3)} />,
+    },
+    {
+      icon: eyeIcon,
+      title: "REVIEW ORDER",
+      description: "Confirm the saved checkout details and cart items.",
+      content: (
+        <ShopShipping
+          onEditCustomer={() => setCurrentStep(1)}
+          onEditPayment={() => setCurrentStep(2)}
+        />
+      ),
     },
   ];
 
-  const progressMap = [0, 50, 100 ];
+  const progressMap = [0, 33, 67, 100];
   const progressValue = progressMap[currentStep] || 0;
 
 
@@ -104,7 +117,7 @@ const CartsStep = () => {
 
       <div className="container mx-auto px-4 py-8 md:py-16">
         <h1 className="text-4xl poppins-bold text-brown text-wrap">{steps[currentStep].title}</h1>
-        <p>{steps[currentStep].content}</p>
+        <div>{steps[currentStep].content}</div>
       </div>
     </>
   );
