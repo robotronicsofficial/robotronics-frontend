@@ -25,17 +25,20 @@ export const buildChildSessionRequest = ({
   method = "GET",
   headers = {},
   body,
+  required = true,
 } = {}) => {
   const session = getActiveChildSession();
 
-  if (!session) {
+  if (!session && required) {
     return null;
   }
 
-  const nextHeaders = {
-    ...headers,
-    "X-Child-Session": session.sessionId,
-  };
+  const nextHeaders = session
+    ? {
+        ...headers,
+        "X-Child-Session": session.sessionId,
+      }
+    : { ...headers };
 
   if (body === undefined) {
     return {
@@ -47,9 +50,19 @@ export const buildChildSessionRequest = ({
   return {
     method,
     headers: nextHeaders,
-    body: JSON.stringify({
-      ...body,
-      sessionId: session.sessionId,
-    }),
+    body: JSON.stringify(
+      session
+        ? {
+            ...body,
+            sessionId: session.sessionId,
+          }
+        : body
+    ),
   };
 };
+
+export const buildOptionalChildSessionRequest = (options = {}) =>
+  buildChildSessionRequest({
+    ...options,
+    required: false,
+  });
