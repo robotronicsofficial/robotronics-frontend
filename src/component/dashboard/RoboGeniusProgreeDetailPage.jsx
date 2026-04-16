@@ -13,30 +13,31 @@ const RoboGeniusProgreeDetailPage = () => {
   const [downloadingCourseId, setDownloadingCourseId] = useState(null);
   const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
 
+  const fetchProgressData = async () => {
+    if (!childId) {
+      setError('Child ID not found in URL');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setError(null);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/progress`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setProgressData(data);
+    } catch (err) {
+      setError('Failed to load progress data. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProgressData = async () => {
-      if (!childId) {
-        setError('Child ID not found in URL');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/progress`);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        setProgressData(data);
-      } catch (err) {
-        setError('Failed to load progress data. Please check your connection and try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProgressData();
   }, [childId]);
 
@@ -48,12 +49,20 @@ const RoboGeniusProgreeDetailPage = () => {
     setDownloadErrors(prev => ({ ...prev, [courseId]: null }));
     
     try {
+      const adminToken = localStorage.getItem("token");
+
+      if (!adminToken) {
+        throw new Error("Admin sign-in is required to generate certificates.");
+      }
+
       // Single API call to generate and get download URL
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${adminToken}`,
         },
+        credentials: 'include',
         body: JSON.stringify({
           childId,
           courseId,
@@ -72,7 +81,16 @@ const RoboGeniusProgreeDetailPage = () => {
 
       // Download the generated certificate
       const downloadResponse = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/download/${result.certificateId}`
+        new URL(
+          result.downloadUrl || `/api/certificates/download/${result.certificateId}`,
+          import.meta.env.VITE_BACKEND_URL
+        ).toString(),
+        {
+          credentials: 'include',
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+          },
+        }
       );
 
       if (!downloadResponse.ok) {
@@ -128,7 +146,7 @@ const RoboGeniusProgreeDetailPage = () => {
         <h2 className="text-xl font-bold text-red-600 mb-4">Error</h2>
         <p className="text-gray-700 mb-4">{error}</p>
         <button 
-          onClick={() => window.location.reload()} 
+          onClick={fetchProgressData}
           className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded"
         >
           Try Again
@@ -232,17 +250,17 @@ const RoboGeniusProgreeDetailPage = () => {
                             </div>
                           )}
                         </div>
-                        {/* {courseError && (
+                        {courseError && (
                           <div className="text-red-500 text-xs mt-1 max-w-xs">
                             {courseError}
                             <button 
-                              onClick={() => setDownloadErrors(prev => ({ ...prev, [course.id]: null }))}
+                              onClick={() => setDownloadErrors(prev => ({ ...prev, [courseId]: null }))}
                               className="ml-2 text-gray-500 hover:text-gray-700"
                             >
                               Dismiss
                             </button>
                           </div>
-                        )} */}
+                        )}
                       </div>
                     </td>
                     <td className="p-3">

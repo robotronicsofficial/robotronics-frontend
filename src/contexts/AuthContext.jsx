@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -13,6 +14,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchUser = async () => {
     try {
@@ -97,7 +99,7 @@ export function AuthProvider({ children }) {
       console.error('Logout error:', err);
     } finally {
       setCurrentUser(null);
-      window.location.href = '/';
+      navigate('/', { replace: true });
     }
   };
 

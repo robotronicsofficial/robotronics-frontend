@@ -8,13 +8,20 @@ const RoboGeniusProgressCertificate = () => {
   const [children, setChildren] = useState([]);
 
   const { currentUser } = useAuth();
-  const userId = currentUser._id;
+  const userId = currentUser?._id;
 
   useEffect(() => {
     const fetchParentData = async () => {
+      if (!userId) {
+        return;
+      }
+
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/parents/${userId}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/parents/${userId}`,
+          {
+            credentials: "include",
+          }
         );
         const data = await response.json();
         console.log("Fetched Parent Data:", data);
