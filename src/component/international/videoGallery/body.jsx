@@ -121,7 +121,6 @@ const Intro = () => {
         const data = await response.json();
         setWorkshopsData(data.data || []);
         setLoading(false);
-        console.log(data.data);
       } catch (err) {
         setError(err.message);
         setLoading(false);

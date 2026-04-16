@@ -6,8 +6,6 @@ const ForgotPassword = ({ onNext }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate sending email
-    console.log(`Sending email to ${email}`);
     onNext();
   };
   ForgotPassword.propTypes = {

@@ -22,7 +22,6 @@ const Verification = ({ onNext }) => {
     e.preventDefault();
     // Check if all digits are entered
     if (code.join('').length === 4) {
-      console.log(`Verifying code: ${code.join('')}`);
       onNext();
     } else {
       alert('Please enter a 4-digit code.');

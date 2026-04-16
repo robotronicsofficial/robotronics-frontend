@@ -8,8 +8,6 @@ const NewPassword = ({ onUpdate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
-      // Simulate password update
-      console.log(`Updating password to ${password}`);
       onUpdate(); // Call the onUpdate function passed as a prop
     } else {
       alert('Passwords do not match');

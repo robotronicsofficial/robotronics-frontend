@@ -206,7 +206,6 @@ const ShopCoursesIntro = () => {
 
     fetchCourses();
   }, []); 
-  console.log("Here Course ",courses);
   // Filter courses based on selected filter
   const filteredCourses =
     selectedFilter === ""

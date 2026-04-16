@@ -184,7 +184,6 @@ const handleVerifyPinSubmit = async (pinData) => {
         pin: pinData,
       },
     });
-    console.log(data)
  
 
     if (

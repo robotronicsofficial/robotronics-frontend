@@ -22,7 +22,6 @@ const RoboGeniusProgressCertificate = () => {
         const data = normalizeParentRecord(
           await fetchSessionJson(`/api/parents/${userId}`)
         );
-        console.log("Fetched Parent Data:", data);
         setChildren(data.children);
       } catch (error) {
         console.error("Error fetching parent data:", error);
