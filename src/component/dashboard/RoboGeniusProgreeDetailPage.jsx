@@ -21,8 +21,17 @@ const RoboGeniusProgreeDetailPage = () => {
     }
 
     try {
+      const childSession = localStorage.getItem('childSession');
+      if (!childSession) {
+        throw new Error('Child session is required to load progress.');
+      }
+
       setError(null);
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/progress`);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/progress`, {
+        headers: {
+          'X-Child-Session': childSession,
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -49,10 +58,10 @@ const RoboGeniusProgreeDetailPage = () => {
     setDownloadErrors(prev => ({ ...prev, [courseId]: null }));
     
     try {
-      const adminToken = localStorage.getItem("token");
+      const childSession = localStorage.getItem("childSession");
 
-      if (!adminToken) {
-        throw new Error("Admin sign-in is required to generate certificates.");
+      if (!childSession) {
+        throw new Error("Child session is required to generate certificates.");
       }
 
       // Single API call to generate and get download URL
@@ -60,14 +69,11 @@ const RoboGeniusProgreeDetailPage = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${adminToken}`,
         },
-        credentials: 'include',
         body: JSON.stringify({
           childId,
           courseId,
-          childName: progressData?.childName,
-          courseName
+          sessionId: childSession,
         })
       });
 
@@ -86,9 +92,8 @@ const RoboGeniusProgreeDetailPage = () => {
           import.meta.env.VITE_BACKEND_URL
         ).toString(),
         {
-          credentials: 'include',
           headers: {
-            Authorization: `Bearer ${adminToken}`,
+            'X-Child-Session': childSession,
           },
         }
       );
