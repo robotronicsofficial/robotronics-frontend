@@ -3,6 +3,7 @@ import { FaStar, FaArrowDown } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { buildChildSessionRequest } from "../../utils/childSessionRequest";
+import { ensureArray } from "../../lib/robogenius";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -55,7 +56,7 @@ const MyCourses = () => {
           throw new Error(`HTTP error! status: ${coursesResponse.status}`);
         }
         const coursesData = await coursesResponse.json();
-        setCourses(coursesData.courses);
+        setCourses(ensureArray(coursesData?.courses));
         setLoading(false);
       } catch (err) {
         setError(err.message);

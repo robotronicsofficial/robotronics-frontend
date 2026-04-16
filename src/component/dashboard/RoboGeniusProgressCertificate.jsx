@@ -4,7 +4,7 @@ import LeftNav from "./leftNav";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
 import { fetchSessionJson } from "../../lib/api";
-import { normalizeParentRecord } from "../../lib/robogenius";
+import { formatDisplayDate, normalizeParentRecord } from "../../lib/robogenius";
 const RoboGeniusProgressCertificate = () => {
   const navigate = useNavigate();
   const [children, setChildren] = useState([]);
@@ -60,7 +60,7 @@ const RoboGeniusProgressCertificate = () => {
                   <div className="text-sm text-gray-700 space-y-1">
                     <p><strong>Email:</strong> {child.email}</p>
                     <p><strong>Phone:</strong> {child.phone}</p>
-                    <p><strong>DOB:</strong> {new Date(child.dateOfBirth).toLocaleDateString()}</p>
+                    <p><strong>DOB:</strong> {formatDisplayDate(child.dateOfBirth)}</p>
                     <p><strong>Country:</strong> {child.country}</p>
                     <p><strong>School:</strong> {child.schoolName}</p>
                     <p><strong>Street Address:</strong> {child.streetAddress}</p>

@@ -11,6 +11,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { fetchBackendJson, fetchSessionJson, sendJson } from "../../lib/api";
 import {
   ensureArray,
+  formatDisplayDate,
   normalizeChildCourseRecord,
   normalizeParentRecord,
 } from "../../lib/robogenius";
@@ -279,7 +280,7 @@ const handleVerifyPinSubmit = async (pinData) => {
                         </p>
                         {child.dateOfBirth && (
                           <p className="text-lightblack poppins-bold text-sm md:text-base">
-                            <span className="font-semibold">Date of Birth:</span> {new Date(child.dateOfBirth).toLocaleDateString()}
+                            <span className="font-semibold">Date of Birth:</span> {formatDisplayDate(child.dateOfBirth)}
                           </p>
                         )}
                         <p className="text-lightblack poppins-bold text-sm md:text-base">

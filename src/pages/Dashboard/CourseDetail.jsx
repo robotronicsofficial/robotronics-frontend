@@ -11,6 +11,10 @@ import { MdAssignment } from "react-icons/md";
 import { AiOutlineRight } from "react-icons/ai";
 import ChatSupport from "../../component/ChatSupport"
 import { buildChildSessionRequest } from "../../utils/childSessionRequest";
+import {
+  normalizeChildCourse,
+  normalizeCourseDetail,
+} from "../../lib/robogenius";
 
 const MAX_ATTEMPTS = {
   BASIC: 2,
@@ -77,8 +81,8 @@ const CourseDetail = () => {
           childCourseRes.json()
         ]);
 
-        setCourseData(coursePayload || null);
-        setChildCourseData(childCoursePayload?.course || null);
+        setCourseData(normalizeCourseDetail(coursePayload));
+        setChildCourseData(normalizeChildCourse(childCoursePayload?.course));
         setPlan(childCoursePayload?.plan || null);
       } catch (err) {
         console.error(err);
@@ -450,6 +454,7 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
             <div className="mt-12">
               {courseSections.map((section, sectionIndex) => {
                 const childSection = childSections[sectionIndex];
+                const quizQuestions = childSection?.quiz?.questions || [];
                 const sectionUnlocked = isModuleUnlocked(sectionIndex);
                 const sectionDates = childSections[sectionIndex];
                 const quizCompleted = childSection?.quiz?.result === "pass";
@@ -602,7 +607,7 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
                     ))}
 
                     {/* Quiz Section for the Module */}
-                    {childSection?.quiz?.questions?.length > 0 && (
+                    {quizQuestions.length > 0 && (
                       <div className={`mt-8 rounded-lg p-6 border ${quizCompleted ? 'border-green-200 bg-green-50' :
                         attemptsExhausted ? 'border-red-200 bg-red-50' :
                           'border-blue-200 bg-gray-50'
@@ -662,7 +667,7 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
                               </div>
                               <div className="flex items-center space-x-4">
                                 <span className="poppins-light text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                                  {childSection.quiz.questions.length} questions
+                                  {quizQuestions.length} questions
                                 </span>
                                 {sectionUnlocked && (
                                   <span className="poppins-bold text-yellow">
@@ -678,11 +683,11 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
                                 {showQuizResults ? (
                                   <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
                                     <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-green-600' : 'text-red-600'}`}>
-                                      Quiz Results: {childSection.quiz.obtainedScore}/{childSection.quiz.questions.length}
+                                      Quiz Results: {childSection.quiz.obtainedScore}/{quizQuestions.length}
                                       {quizCompleted ? " (Passed)" : " (Failed - Score at least 60% to unlock next module)"}
                                     </div>
                                     <div className="space-y-3">
-                                      {childSection.quiz.questions.map((question, qIndex) => {
+                                      {quizQuestions.map((question, qIndex) => {
                                         const userAnswer = quizAnswers[`${sectionIndex}-${question._id}`] || question.childAnswer;
                                         const isCorrect = userAnswer === question.correctAnswer;
 
@@ -750,7 +755,7 @@ const updateChildCourseProgress = async (updatedData, sectionIndex) => {
                                         Attempt {childSection.quiz.attempts + 1} of {maxAttempts} today
                                       </div>
                                     )}
-                                    {childSection.quiz.questions.map((question, qIndex) => (
+                                    {quizQuestions.map((question, qIndex) => (
                                       <div key={question._id} className="bg-white p-4 rounded-lg shadow-sm">
                                         <div className="poppins-medium mb-2">
                                           {qIndex + 1}. {question.questionText}

@@ -2,6 +2,7 @@ import LeftNav from "./leftNav";
 import { FaFilePdf } from "react-icons/fa6";
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { normalizeProgressPayload } from "../../lib/robogenius";
 
 const RoboGeniusProgreeDetailPage = () => {
   const [progressData, setProgressData] = useState(null);
@@ -39,7 +40,7 @@ const RoboGeniusProgreeDetailPage = () => {
       }
 
       const data = await response.json();
-      setProgressData(data);
+      setProgressData(normalizeProgressPayload(data));
     } catch (err) {
       setError('Failed to load progress data. Please check your connection and try again.');
     } finally {
@@ -122,7 +123,7 @@ const RoboGeniusProgreeDetailPage = () => {
         });
         if (updatedProgress.ok) {
           const updatedData = await updatedProgress.json();
-          setProgressData(updatedData);
+          setProgressData(normalizeProgressPayload(updatedData));
         }
       } catch (refreshError) {
         console.error("Failed to refresh progress data:", refreshError);
@@ -173,7 +174,7 @@ const RoboGeniusProgreeDetailPage = () => {
     </div>
   );
 
-  const filteredCourses = (progressData?.courses || []).filter(course => {
+  const filteredCourses = progressData.courses.filter(course => {
     if (filter === 'all') return true;
     return (course.status || 'active').toLowerCase() === filter;
   });
