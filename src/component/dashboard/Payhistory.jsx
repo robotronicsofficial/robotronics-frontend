@@ -1,29 +1,33 @@
 import React, { useEffect, useState } from "react";
 import LeftNav from "./leftNav";
 import { useAuth } from "../../contexts/AuthContext";
+import { fetchSessionJson } from "../../lib/api";
 
 const PayHistory = () => {
   const { currentUser } = useAuth();
   const [invoices, setInvoices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchPayHistory = async () => {
       try {
-        if (!currentUser?._id) return; // safeguard
-
-        // const { currentUser } = useAuth();
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getPayments?userId=${currentUser._id}`);
-
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch payments");
+        if (!currentUser?._id) {
+          setInvoices([]);
+          setLoading(false);
+          return;
         }
 
-        const result = await response.json();
-        console.log("Fetched payments:", result);
-        setInvoices(result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+        setLoading(true);
+        setError("");
+        const result = await fetchSessionJson("/api/getPayments");
+        setInvoices(Array.isArray(result) ? result : []);
+      } catch (requestError) {
+        console.error("Error fetching payments:", requestError);
+        setInvoices([]);
+        setError(requestError.message || "Failed to fetch payment history");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -41,7 +45,11 @@ const PayHistory = () => {
       <div className="w-full md:w-3/4 p-4">
         <h1 className="text-3xl font-bold mb-8">My Payment History</h1>
 
-        {invoices.length === 0 ? (
+        {loading ? (
+          <p className="text-gray-600">Loading payment history...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : invoices.length === 0 ? (
           <p className="text-gray-600">No payment history found.</p>
         ) : (
           invoices.map((invoice, index) => (
