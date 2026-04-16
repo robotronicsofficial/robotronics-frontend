@@ -1,55 +1,91 @@
-import { useState } from 'react'; // Add useState import
-import img from '../assets/images/search.svg';
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { resolveBackendAssetUrl } from "../utils/mediaUrl";
 
 const Search = () => {
-  // Initial state with one tag
-  const [tags, setTags] = useState(['arduino robots']);
-  //to make the form controlled
-  const [searchTerm, setSearchTerm] = useState('');
-  const [category, setCategory] = useState('');
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [category, setCategory] = useState("");
 
-  const categories = ['Volvo', 'Saab', 'Mercedes', 'Audi'];
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getProducts`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch products: ${response.status}`);
+        }
 
-  const searchResults = [
-    { id: 1, title: 'LORIUM IPSUM', imgUrl: img },
-    { id: 2, title: 'Lorium Ipsum', imgUrl: img },
-    { id: 3, title: 'Lorium Ipsum', imgUrl: img },
-    { id: 4, title: 'Lorium Ipsum', imgUrl: img },
-    { id: 5, title: 'Lorium Ipsum', imgUrl: img },
-    { id: 6, title: 'Lorium Ipsum', imgUrl: img },
+        const payload = await response.json();
+        setProducts(Array.isArray(payload?.products) ? payload.products : []);
+        setError("");
+      } catch (fetchError) {
+        setError(fetchError.message || "Failed to load products");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  ];
+    loadProducts();
+  }, []);
 
-  // Function to remove tag when 'x' is clicked
-  const removeTag = (indexToRemove) => {
-    setTags(tags.filter((_, index) => index !== indexToRemove));
-  };
+  const categories = useMemo(() => {
+    const values = products
+      .map((product) => product?.category)
+      .filter(Boolean);
+
+    return ["All categories", ...new Set(values)];
+  }, [products]);
+
+  const filteredProducts = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
+
+    return products.filter((product) => {
+      const name = String(product?.name || "").toLowerCase();
+      const description = String(product?.description || "").toLowerCase();
+      const productCategory = String(product?.category || "").toLowerCase();
+      const matchesQuery =
+        !query || name.includes(query) || description.includes(query) || productCategory.includes(query);
+      const matchesCategory = !category || category === "all categories" || productCategory === category.toLowerCase();
+
+      return matchesQuery && matchesCategory;
+    });
+  }, [products, searchTerm, category]);
 
   return (
-    <div className="min-h-screen bg-gray text-white p-4">
+    <div className="min-h-screen bg-gray-50 text-white p-4">
       {/* Search Bar and Filters */}
-      <div className="bg-gray-100 text-brown p-6 rounded-md flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-        <div className="flex space-x-4 w-full md:w-1/2">
-        <input
+      <div className="rounded-2xl bg-white p-6 text-brown shadow-sm">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm uppercase tracking-[0.2em] text-[#9E7A3A]">Live catalog</p>
+            <h1 className="text-3xl font-bold">Search products</h1>
+          </div>
+          <p className="text-sm text-[#7E7F7C]">
+            Search the live store inventory by name, description, or category.
+          </p>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-[1fr_240px]">
+          <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search..."
-            className="w-full p-2 rounded-md border border-gray-300"
-            aria-label="Search"
+            placeholder="Search products..."
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 text-brown outline-none focus:border-[#362D2C]"
+            aria-label="Search products"
           />
-          <button className=" text-white bg-brown px-4 py-2 rounded-md">
-            Search
-          </button>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="poppins-regular shadow-2xl rounded px-4 bg-gray text-brown"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 text-brown outline-none focus:border-[#362D2C]"
             aria-label="Select a category"
           >
-            <option value="">Select 1 Category</option>
             {categories.map((cat) => (
-              <option key={cat} value={cat.toLowerCase()}>
+              <option key={cat} value={cat === "All categories" ? "" : cat}>
                 {cat}
               </option>
             ))}
@@ -57,51 +93,63 @@ const Search = () => {
         </div>
       </div>
 
-      {/* Selected Tags */}
-      <div className="flex space-x-2 my-4">
-        {tags.map((tag, index) => (
-          <div
-            key={tag}
-            className="bg-gray-200 text-gray-800 inline-flex items-center px-4 py-2 rounded-full"
-          >
-            <span>{tag}</span>
-            <button
-              className="ml-2 text-gray-600"
-              onClick={() => removeTag(index)}
-              aria-label={`Remove tag ${tag}`}
-            >
-              &times;
-            </button>
-          </div>
-        ))}
-      </div>
-
       {/* Results Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 my-6">
-        {searchResults.map((result) => (
-          <div
-            key={result.id}
-            className="bg-gray-800 rounded-md overflow-hidden"
-          >
-            <img
-              src={result.imgUrl}
-              alt={result.title}
-              className="w-full h-40 object-cover"
-            />
-            <div className="p-4">
-              <h3 className="font-bold text-brown">{result.title}</h3>
-            </div>
+      <div className="my-6">
+        {loading ? (
+          <div className="rounded-2xl bg-white p-10 text-center text-brown shadow-sm">
+            Loading live products...
           </div>
-        ))}
+        ) : error ? (
+          <div className="rounded-2xl bg-white p-10 text-center text-red-600 shadow-sm">
+            {error}
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="rounded-2xl bg-white p-10 text-center text-brown shadow-sm">
+            No products matched your search.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredProducts.map((product) => (
+              <button
+                key={product._id}
+                type="button"
+                onClick={() => navigate(`/ProductDetailPage/${product._id}`)}
+                className="overflow-hidden rounded-2xl bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+              >
+                <img
+                  src={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
+                  alt={product?.name || "Product"}
+                  className="h-48 w-full object-cover"
+                />
+                <div className="space-y-3 p-5 text-brown">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="rounded-full bg-[#F3F0EA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#9E7A3A]">
+                      {product?.category || "General"}
+                    </p>
+                    <p className="text-sm font-semibold">PKR {Number(product?.price || 0).toLocaleString()}</p>
+                  </div>
+                  <h3 className="text-lg font-bold leading-snug">{product?.name || "Product"}</h3>
+                  <p className="line-clamp-2 text-sm text-[#7E7F7C]">
+                    {product?.description || "Live product listing from the store catalog."}
+                  </p>
+                  <p className="text-sm text-[#7E7F7C]">
+                    Stock: {product?.stock ?? "N/A"}
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-
-      {/* Results Count and Show More */}
-      <div className="h-0 w-full border border-lin"></div>
-      <div className="flex justify-between text-brown items-center p-5 px-10">
-        <p>{searchResults.length} results</p>
-        <button className="text-brown hover:underline">
-          Show me more results &rarr;
+      <div className="flex items-center justify-between px-2 pb-4 text-brown">
+        <p>{filteredProducts.length} results</p>
+        <button
+          type="button"
+          className="text-brown hover:underline"
+          onClick={() => navigate("/shop")}
+        >
+          Browse all products &rarr;
         </button>
       </div>
     </div>
