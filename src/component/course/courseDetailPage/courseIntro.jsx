@@ -6,9 +6,22 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../../store/cart/cartSlice";
 const CourseIntro = ({ title, id, image, price }) => {
   const dispatch = useDispatch();
+  const resolvedImage = image
+    ? image.startsWith("http")
+      ? image
+      : `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`
+    : python;
 
   const handleAddToCart = () => {
-    dispatch(addToCart({ id: id }));
+    dispatch(
+      addToCart({
+        _id: id,
+        name: title || "Course",
+        price: Number(price) || 0,
+        images: image ? [image] : [],
+        category: "Course",
+      })
+    );
   };
   return (
     <div className="bg-lightgray"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
@@ -19,9 +32,9 @@ const CourseIntro = ({ title, id, image, price }) => {
           {/* img */}
           <div className="rounded-full bg-gray max-w-full max-h-full flex items-center justify-center">
             <img
-              src={python}
+              src={resolvedImage}
               className="rounded-full object-cover md:w-full md:h-full"
-              alt="Python"
+              alt={title || "Course"}
             />
           </div>
 
@@ -120,7 +133,9 @@ const CourseIntro = ({ title, id, image, price }) => {
               </button>
             </div>
           </div>
-          <div className="text-yellow text-2xl poppins-bold">Pkr {price}</div>
+          <div className="text-yellow text-2xl poppins-bold">
+            {price != null ? `Pkr ${price}` : "Included"}
+          </div>
           {/* select */}
           <div className="flex flex-row lg:space-x-36 space-x-20 ">
             {/* select course */}

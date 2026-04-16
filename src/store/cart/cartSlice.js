@@ -23,35 +23,62 @@ const initialState = {
   totalPrice: 0,
 };
 
+const normalizeCartItem = (payload = {}) => {
+  const _id = payload._id ?? payload.id;
+  const price = Number(payload.price) || 0;
+  const images = Array.isArray(payload.images)
+    ? payload.images.filter(Boolean)
+    : payload.thumbnail
+      ? [payload.thumbnail]
+      : payload.image
+        ? [payload.image]
+        : [];
+
+  return {
+    ...payload,
+    _id,
+    name: payload.name ?? payload.title ?? "Item",
+    price,
+    images,
+  };
+};
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const existingItem = state.cart.find((item) => item._id === action.payload._id);
+      const normalizedItem = normalizeCartItem(action.payload);
+      if (!normalizedItem._id) {
+        return;
+      }
+
+      const existingItem = state.cart.find((item) => item._id === normalizedItem._id);
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
-        state.cart.push({ ...action.payload, quantity: 1 });
+        state.cart.push({ ...normalizedItem, quantity: 1 });
       }
 
       state.totalQuantity += 1;
-      state.totalPrice += action.payload.price;
+      state.totalPrice += normalizedItem.price;
     },
 
     removeFromCart: (state, action) => {
-      const existingItem = state.cart.find((item) => item._id === action.payload._id);
+      const normalizedItem = normalizeCartItem(action.payload);
+      const existingItem = state.cart.find((item) => item._id === normalizedItem._id);
     
       if (existingItem) {
+        const itemPrice = Number(existingItem.price ?? normalizedItem.price) || 0;
         if (existingItem.quantity > 1) {
           existingItem.quantity -= 1;
           state.totalQuantity -= 1;
-          state.totalPrice -= existingItem.price;
+          state.totalPrice -= itemPrice;
         } else {
           // If quantity is 1, remove the product from cart
-          state.cart = state.cart.filter((item) => item._id !== action.payload._id);
+          state.cart = state.cart.filter((item) => item._id !== normalizedItem._id);
           state.totalQuantity -= 1;
-          state.totalPrice -= existingItem.price;
+          state.totalPrice -= itemPrice;
         }
       }
     },

@@ -17,17 +17,29 @@ const CourseProduct = ({
   category,
 }) => {
   const [wishList, setWishList] = useState(0);
+  const resolvedImage = image
+    ? image.startsWith("http")
+      ? image
+      : `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`
+    : python;
   const toggleWishList = async () => {
     const newWishListValue = wishList === 0 ? 1 : 0;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/wishlist`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ _id: id }),
-      });
+      const isAdding = newWishListValue === 1;
+      const response = await fetch(
+        isAdding
+          ? `${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist`
+          : `${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist/${id}`,
+        {
+          method: isAdding ? "POST" : "DELETE",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: isAdding ? JSON.stringify({ productId: id }) : undefined,
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -44,7 +56,7 @@ const CourseProduct = ({
       <div className="rounded-2xl p-2 bg-white">
         {/* img */}
         <div className=""data-aos="fade-right">
-          <img src={python} alt="" />
+          <img src={resolvedImage} alt={title || "Course"} />
         </div>
         {/* title */}
         <div>
@@ -58,12 +70,16 @@ const CourseProduct = ({
             {wishList === 0 ? (
               <div className="flex justify-between">
                 <CiStar className="w-6 h-6 self-center" />
-                <p className="lg:text-xl text-gold font-bold">PKR {price}</p>
+                <p className="lg:text-xl text-gold font-bold">
+                  {price != null ? `PKR ${price}` : "Included"}
+                </p>
               </div>
             ) : (
               <div className="flex justify-between">
                 <FaStar className="w-6 h-6 self-center" />
-                <p className="lg:text-xl text-gold font-bold">PKR {price}</p>
+                <p className="lg:text-xl text-gold font-bold">
+                  {price != null ? `PKR ${price}` : "Included"}
+                </p>
               </div>
             )}
           </div>

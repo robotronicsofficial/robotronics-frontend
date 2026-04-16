@@ -10,21 +10,72 @@ import { FaRegHeart } from "react-icons/fa";
 const Intro = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-
-  // All products from Redux store
   const products = useSelector((state) => state.cart.items);
-  
-  // Get the product by ID
-  const product = products.find((item) => item._id === id);
 
-  // State for quantity and selected image
+  const [product, setProduct] = useState(() => products.find((item) => item._id === id) || null);
+  const [loading, setLoading] = useState(!product);
+  const [error, setError] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(product?.images?.[0] ? `${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}` : robo);
+  const [selectedImage, setSelectedImage] = useState(robo);
 
-  // Update selected image when product changes
+  const resolveImageUrl = (image) => {
+    if (!image) return robo;
+    if (image.startsWith("http")) return image;
+    return `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`;
+  };
+
+  useEffect(() => {
+    const cachedProduct = products.find((item) => item._id === id);
+    if (cachedProduct) {
+      setProduct(cachedProduct);
+      setError("");
+      setLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    const fetchProduct = async () => {
+      if (!id) {
+        setError("Product ID not found");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getProductById/${id}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch product: ${response.status}`);
+        }
+        const data = await response.json();
+        if (!cancelled) {
+          setProduct(data);
+          setError("");
+        }
+      } catch (fetchError) {
+        if (!cancelled) {
+          setError(fetchError.message);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchProduct();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [products, id]);
+
   useEffect(() => {
     if (product?.images?.[0]) {
-      setSelectedImage(`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`);
+      setSelectedImage(resolveImageUrl(product.images[0]));
+    } else {
+      setSelectedImage(robo);
     }
   }, [product]);
 
@@ -33,7 +84,9 @@ const Intro = () => {
     if (quantity > 1) setQuantity((prev) => prev - 1);
   };
 
-  if (!product) return <p className="p-10 text-center text-lg">Loading product...</p>;
+  if (loading) return <p className="p-10 text-center text-lg">Loading product...</p>;
+  if (error) return <p className="p-10 text-center text-lg text-red-500">{error}</p>;
+  if (!product) return <p className="p-10 text-center text-lg">Product not found.</p>;
 
   return (
     <div className="bg-lightgray">
@@ -44,13 +97,13 @@ const Intro = () => {
             <img src={selectedImage} alt="Selected" />
           </div>
           <div className="flex flex-row space-x-3 py-10">
-            {product.images.map((img, idx) => (
+            {(product.images || []).map((img, idx) => (
               <div
                 key={idx}
                 className="h-10 w-10 bg-white shadow-lg cursor-pointer"
-                onClick={() => setSelectedImage(`${import.meta.env.VITE_BACKEND_URL}/${img}`)}
+                onClick={() => setSelectedImage(resolveImageUrl(img))}
               >
-                <img src={`${import.meta.env.VITE_BACKEND_URL}/${img}`} alt={`thumb-${idx}`} className="h-10 w-10" />
+                <img src={resolveImageUrl(img)} alt={`thumb-${idx}`} className="h-10 w-10" />
               </div>
             ))}
           </div>
@@ -62,21 +115,21 @@ const Intro = () => {
 
           <div className="space-y-6">
             <div className="flex flex-row items-center lg:space-x-14 space-x-8">
+              <div className="flex my-6 text-2xl">
+                {Array.from({ length: 5 }, (_, i) => {
+                  const ratings = Number(product.ratings || 0);
+                  const fullStars = Math.floor(ratings);
+                  const hasHalfStar = ratings % 1 >= 0.5;
 
-            <div className="flex my-6 text-2xl">
-              {Array.from({ length: 5 }, (_, i) => {
-                const fullStars = Math.floor(product.ratings);
-                const hasHalfStar = product.ratings % 1 >= 0.5;
-                
-                if (i < fullStars) {
-                  return <span key={i} className="text-yellow">★</span>; // full star
-                } else if (i === fullStars && hasHalfStar) {
-                  return <span key={i} className="text-yellow">☆</span>; // half star (replace with half-icon if you have one)
-                } else {
-                  return <span key={i} className="text-white">★</span>; // empty star
-                }
-              })}
-            </div>
+                  if (i < fullStars) {
+                    return <span key={i} className="text-yellow">★</span>;
+                  } else if (i === fullStars && hasHalfStar) {
+                    return <span key={i} className="text-yellow">☆</span>;
+                  } else {
+                    return <span key={i} className="text-white">★</span>;
+                  }
+                })}
+              </div>
               {product.onSale && (
                 <div className="bg-red-600 p-1 px-2">
                   <span className="text-white">ON SALE</span>
@@ -85,10 +138,10 @@ const Intro = () => {
             </div>
             <div className="flex flex-row space-x-2">
               <p className="text-sm poppins-medium text-line">
-                {product.productSold} products sold,
+                {product.productSold ?? 0} products sold,
               </p>
               <p className="text-sm poppins-medium text-line">
-                {product.productWatched} products watched
+                {product.productWatched ?? 0} products watched
               </p>
             </div>
           </div>
@@ -106,7 +159,7 @@ const Intro = () => {
 
           <div className="lg:flex flex-row items-center justify-between lg:space-x-10">
             <div className="text-yellow text-2xl poppins-medium">
-              PKR {product.price.toLocaleString()}
+              PKR {Number(product.price || 0).toLocaleString()}
             </div>
             <div className="flex flex-row space-x-5">
               <button
@@ -127,11 +180,8 @@ const Intro = () => {
         </div>
       </div>
 
-
       <div className="lg:p-14 p-2 bg-gray">
-
-        {/* div 1 */}
-        <div className="px-2 flex flex-row lg:justify-center lg:space-x-10 space-x-4 "data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000">
+        <div className="px-2 flex flex-row lg:justify-center lg:space-x-10 space-x-4 " data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000">
           <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-brown">
             PRODUCT DETAIL
           </p>
@@ -142,7 +192,6 @@ const Intro = () => {
         </div>
 
         <div className="p-5 flex flex-row justify-between">
-          {/* DESCRIPTION */}
           <div className="p-2 w-1/2 space-y-2">
             <p
               className="lg:text-2xl text-xl poppins-semibold text-brown"
@@ -150,14 +199,11 @@ const Intro = () => {
             >
               DESCRIPTION
             </p>
-            <p className="text-wrap text-xs poppins-medium text-line"
-              data-aos="fade-up"
-            >
+            <p className="text-wrap text-xs poppins-medium text-line" data-aos="fade-up">
               {product?.description || "No description available."}
             </p>
           </div>
 
-          {/* FEATURES */}
           <div className="p-2 w-1/2">
             <div
               className="text-wrap text-line space-y-2 lg:px-20 px-4"
@@ -179,23 +225,20 @@ const Intro = () => {
           </div>
         </div>
 
-        <a className=" hover:curser-pointer transition duration-300 ease-in-out hover:opacity-70" >
-          <div className="shopPages flex flex-row lg:px-14 px-5 " id="shopPages">
-            {/* text */}
-            <div className="flex-1 lg:py-20 py-8 ">
-              <div className="flex flex-col justify-content ">
-                <p className="flex text-gold lg:text-4xl text-2xl font-bold"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">MORDERN</p>
-                <p className="flex text-white lg:text-4xl text-2xl font-bold"data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">LEGO ROBOT</p>
-                <p className="flex text-white line-through lg:text-xl text-sm lg:pt-8 pt-4 "data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000" >PKR 3252.41</p>
-                <p className="flex text-white lg:text-4xl text-2xl font-bold"data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000" >PKR 2352.41</p>
-      
+        <a className="hover:curser-pointer transition duration-300 ease-in-out hover:opacity-70">
+          <div className="shopPages flex flex-row lg:px-14 px-5" id="shopPages">
+            <div className="flex-1 lg:py-20 py-8">
+              <div className="flex flex-col justify-content">
+                <p className="flex text-gold lg:text-4xl text-2xl font-bold" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">MORDERN</p>
+                <p className="flex text-white lg:text-4xl text-2xl font-bold" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">LEGO ROBOT</p>
+                <p className="flex text-white line-through lg:text-xl text-sm lg:pt-8 pt-4" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">PKR 3252.41</p>
+                <p className="flex text-white lg:text-4xl text-2xl font-bold" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">PKR 2352.41</p>
               </div>
-              <img src={star} data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"/>
+              <img src={star} data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" alt="" />
             </div>
-            {/* img */}
-            <div className="flex-1"data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
-              <div className="flex justify-content w-full " >
-              <img src={robo} alt="LEGO ROBOT"/>
+            <div className="flex-1" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+              <div className="flex justify-content w-full">
+                <img src={robo} alt="LEGO ROBOT" />
               </div>
             </div>
           </div>

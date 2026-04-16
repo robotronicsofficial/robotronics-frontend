@@ -59,6 +59,12 @@ const CustomerInfomation = ({ onNext }) => {
   const SHIPPING_COST = 500;
   const DISCOUNT_PERCENTAGE = 0.10;
 
+  const resolveImageUrl = (image) => {
+    if (!image) return "https://via.placeholder.com/300x200";
+    if (image.startsWith("http")) return image;
+    return `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -167,12 +173,12 @@ const CustomerInfomation = ({ onNext }) => {
         <div className="lg:space-y-5 space-y-2 poppins-extralight">
           {cart.length > 0 ? (
             cart.map((product) => (
-              <div className="flex flex-row space-x-3" key={product.id}>
-                <img className="lg:h-20 lg:w-24" src={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`} alt={product.name} />
+              <div className="flex flex-row space-x-3" key={product._id || product.id}>
+                <img className="lg:h-20 lg:w-24" src={resolveImageUrl(product.images?.[0])} alt={product.name} />
                 <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
                   <p className="font-bold text-wrap">{product.name}</p>
                   <div className="flex gap-2"><span>Quantity:</span><p>{product.quantity}</p></div>
-                  <p className="font-bold">PKR {product.price.toLocaleString()}</p>
+                  <p className="font-bold">PKR {Number(product.price || 0).toLocaleString()}</p>
                 </div>
               </div>
             ))
@@ -186,9 +192,9 @@ const CustomerInfomation = ({ onNext }) => {
         <div className="space-y-2">
           {/* Summary Items */}
           <SummaryItem label="Shipping" value={`PKR ${SHIPPING_COST}`} />
-          <SummaryItem label="Discount 10%" value={`- PKR ${discountAmount.toLocaleString()}`} />
-          <SummaryItem label="Price" value={`PKR ${totalPrice.toLocaleString()}`} />
-          <SummaryItem label="Total Price" value={`PKR ${finalTotalPrice.toLocaleString()}`} highlight />
+          <SummaryItem label="Discount 10%" value={`- PKR ${Number(discountAmount || 0).toLocaleString()}`} />
+          <SummaryItem label="Price" value={`PKR ${Number(totalPrice || 0).toLocaleString()}`} />
+          <SummaryItem label="Total Price" value={`PKR ${Number(finalTotalPrice || 0).toLocaleString()}`} highlight />
         </div>
 
         <div className="h-0 border border-[#D4D4D4]"></div>

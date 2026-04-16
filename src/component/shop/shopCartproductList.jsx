@@ -24,18 +24,25 @@ const ShopCartproductList = ({ onNext }) => {
     [totalPrice, discountAmount]
   );
 
+  const resolveImageUrl = (image) => {
+    if (!image) return "https://via.placeholder.com/300x200";
+    if (image.startsWith("http")) return image;
+    return `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`;
+  };
+
   const [itemQuantity, setItemQuantity] = useState(
     cart.reduce((acc, product) => {
-      acc[product._id] = product.quantity;
+      acc[product._id || product.id] = product.quantity;
       return acc;
     }, {})
   );
 
   const handleAddToCart = useCallback(
     (product) => {
+      const productId = product._id || product.id;
       setItemQuantity((prev) => ({
         ...prev,
-        [product._id]: (prev[product._id] || 0) + 1,
+        [productId]: (prev[productId] || 0) + 1,
       }));
       dispatch(addToCart(product));
     },
@@ -44,9 +51,10 @@ const ShopCartproductList = ({ onNext }) => {
 
   const handleRemoveFromCart = useCallback(
     (product) => {
+      const productId = product._id || product.id;
       setItemQuantity((prev) => ({
         ...prev,
-        [product._id]: prev[product._id] > 1 ? prev[product._id] - 1 : 1,
+        [productId]: prev[productId] > 1 ? prev[productId] - 1 : 1,
       }));
       dispatch(removeFromCart(product));
     },
@@ -69,7 +77,7 @@ const ShopCartproductList = ({ onNext }) => {
       });
       
       // Redirect to login page
-      navigate("/login");
+      navigate("/Login");
       return;
     }
     
@@ -83,11 +91,11 @@ const ShopCartproductList = ({ onNext }) => {
       <div className="lg:w-2/3 flex-col pr-5">
         {cart.length > 0 ? (
           cart.map((product) => (
-            <div className="max-w-4xl mx-auto py-8" key={product._id}>
+            <div className="max-w-4xl mx-auto py-8" key={product._id || product.id}>
               <div className="flex flex-col sm:flex-row gap-6">
                 <div className="w-[15vw] h-[15vw] overflow-hidden">
                   <img
-                    src={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`}
+                    src={resolveImageUrl(product.images?.[0])}
                     alt={product.name}
                     width={200}
                     height={200}
@@ -116,7 +124,7 @@ const ShopCartproductList = ({ onNext }) => {
                       <input
                         type="number"
                         className="lg:w-24 w-10 lg:px-3 px-1 py-1 text-sm rounded-md focus:outline-none text-center"
-                        value={itemQuantity[product._id] || 1}
+                        value={itemQuantity[product._id || product.id] || 1}
                         readOnly
                       />
                       <button
@@ -128,7 +136,7 @@ const ShopCartproductList = ({ onNext }) => {
                     </div>
                   </div>
                   <div className="text-2xl font-bold text-right text-[#362D2C] pt-10">
-                    PKR {product.price.toLocaleString()}
+                    PKR {Number(product.price || 0).toLocaleString()}
                   </div>
                 </div>
 
@@ -153,19 +161,19 @@ const ShopCartproductList = ({ onNext }) => {
           <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Price</span>
             <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#362D2C] bg-transparent">
-              PKR {totalPrice.toLocaleString()}
+              PKR {Number(totalPrice || 0).toLocaleString()}
             </span>
           </div>
           <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Discount ({discountPercentage}%)</span>
             <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#362D2C] bg-transparent">
-              - PKR {discountAmount.toLocaleString()}
+              - PKR {Number(discountAmount || 0).toLocaleString()}
             </span>
           </div>
           <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Total Price</span>
             <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-yellow bg-transparent">
-              PKR {discountedPrice.toLocaleString()}
+              PKR {Number(discountedPrice || 0).toLocaleString()}
             </span>
           </div>
         </div>
