@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { FaShareAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 
 const BlogCard = ({ cardData }) => {
@@ -14,16 +15,16 @@ const BlogCard = ({ cardData }) => {
       avatar: cardData.authorImage || "https://via.placeholder.com/150",
       name: cardData.authorName || "Unknown author"
     },
-    date: new Date(cardData.date).toLocaleDateString() || "Unknown date",
+    date: cardData.date ? new Date(cardData.date).toLocaleDateString() : "Unknown date",
     shares: cardData.shares || 0
   };
 
   return (
     <div className="lg:max-w-[25vw] max-w-sm rounded overflow-hidden shadow-lg bg-white">
       <div className="relative">
-        <a href={`/BlogDetail/${cardData._id}`}>
+        <Link to={`/BlogDetail/${cardData._id}`}>
           <img className="w-full h-48 object-cover" src={mappedData.image} alt={mappedData.title} />
-        </a>
+        </Link>
         <div className="absolute top-0 left-0 mt-4 ml-4 space-x-2">
           {mappedData.tags.map((tag, index) => (
             <span
@@ -61,7 +62,7 @@ const BlogCard = ({ cardData }) => {
             </p>
           </div>
           <div className="text-sm flex flex-row">
-            <a href={`/BlogDetail/${cardData._id}`} className="text-xl poppins-light">VIEW POST</a>
+            <Link to={`/BlogDetail/${cardData._id}`} className="text-xl poppins-light">VIEW POST</Link>
           </div>
         </div>
         <div className="flex flex-wrap items-center justify-between">
@@ -109,13 +110,14 @@ const BlogPost = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:8080/getAllBlogs');
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getAllBlogs`);
         if (!response.ok) {
           throw new Error('Failed to fetch blogs');
         }
         const result = await response.json();
-        setData(result);
-        setTotalPages(Math.ceil(result.length / itemsPerPage));
+        const blogs = Array.isArray(result) ? result : [];
+        setData(blogs);
+        setTotalPages(Math.ceil(blogs.length / itemsPerPage));
       } catch (err) {
         setError(err.message);
       } finally {

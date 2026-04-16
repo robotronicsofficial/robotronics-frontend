@@ -56,7 +56,7 @@ const ResetPassword = () => {
       }
 
       toast.success("Password reset successfully!");
-      setTimeout(() => navigate("/login"), 2000);
+      setTimeout(() => navigate("/Login"), 2000);
     } catch (err) {
       setError(err.message);
       console.error("Reset password error:", err);
@@ -173,7 +173,7 @@ const ResetPassword = () => {
 
           <button
             type="button"
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/Login')}
             className="text-brown underline mt-2 poppins-regular"
           >
             Back to Login

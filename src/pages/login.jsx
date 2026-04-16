@@ -277,7 +277,7 @@ const Login = () => {
             <button 
               type="button"
               className="bg-gray border border-line text-brown poppins-regular rounded-3xl items-center justify-center py-3 lg:px-32 px-14"
-              onClick={() => navigate('/register')}
+              onClick={() => navigate('/Signup')}
             >
               Sign up
             </button>

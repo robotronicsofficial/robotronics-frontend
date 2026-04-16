@@ -87,7 +87,7 @@ function App() {
           <Route path="/CareerDetailPage" element={<CareerDetailPage />} />
           <Route path="/JobApplicationForm" element={<JobApplicationForm />} />
           <Route path="/Blog" element={<Blog />} />
-          <Route path="/BlogDetail" element={<BlogDetail />} />
+          <Route path="/BlogDetail/:id?" element={<BlogDetail />} />
           <Route path="/ContactUs" element={<ContactUs />} />
           <Route path="/Dashboard/userInfo" element={<ProtectedRoute><UserInfo /></ProtectedRoute>} />
           <Route path="/Dashboard/order" element={<ProtectedRoute><Order /></ProtectedRoute>} />

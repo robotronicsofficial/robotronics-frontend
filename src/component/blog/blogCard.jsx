@@ -1,16 +1,18 @@
-import PropTypes from "prop-types";
 import { FaShareAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const BlogCard = ({ cardData }) => {
+  const imageUrl = cardData?.image || cardData?.thumbnailImage || cardData?.bannerImage || "https://via.placeholder.com/300";
+  const formattedDate = cardData?.date ? new Date(cardData.date).toLocaleDateString() : "Unknown date";
+
   return (
     <div className="lg:max-w-[25vw] max-w-sm rounded overflow-hidden shadow-lg bg-white">
       <div className="relative">
-        <a href="/BlogDetail">
-          <img className="w-full" src={cardData?.image} alt="Robot" />
-        </a>
+        <Link to={`/BlogDetail/${cardData?._id || ""}`}>
+          <img className="w-full" src={imageUrl} alt="Robot" />
+        </Link>
         <div className="absolute top-0 left-0 mt-4 ml-4 space-x-2">
-          {cardData &&
-            cardData.tags.map((tag, index) => (
+          {cardData?.tags?.map((tag, index) => (
               <span
                 key={index}
                 className="bg-gray-800 text-white text-sm poppins-light px-2 py-1 rounded"
@@ -33,26 +35,28 @@ const BlogCard = ({ cardData }) => {
           {cardData?.description}
         </p>
       </div>
-      <div className="px-6 pt-4 pb-2 flex flex-col justify-between">
-        <div className="flex flex-wrap items-center justify-between">
-          <div className="flex flex-row items-center ">
-            <img
-              className="w-10 h-10 rounded-full mr-4"
-              src={cardData?.author.avatar}
-              alt="Author"
-            />
+        <div className="px-6 pt-4 pb-2 flex flex-col justify-between">
+          <div className="flex flex-wrap items-center justify-between">
+            <div className="flex flex-row items-center ">
+              <img
+                className="w-10 h-10 rounded-full mr-4"
+              src={cardData?.author?.avatar || "https://via.placeholder.com/150"}
+                alt="Author"
+              />
             <p className="text-gray-900 leading-none poppins-light ">
-              {cardData?.author.name}
+              {cardData?.author?.name || "Unknown author"}
             </p>
           </div>
           <div className="text-sm flex flex-row">
-            <button className="text-xlpoppins-light ">VIEW POST</button>
+            <Link to={`/BlogDetail/${cardData?._id || ""}`} className="text-xl poppins-light ">
+              VIEW POST
+            </Link>
           </div>
         </div>
         <div className="flex flex-wrap items-center  justify-between">
           <div className="flex flex-row space-x-3 ">
             <p className="text-gray-600 hidden lg:block sm:block">-----</p>
-            <p className="text-gray-600 poppins-light ">{cardData?.date}</p>
+            <p className="text-gray-600 poppins-light ">{formattedDate}</p>
             <span className="text-gray-600">•</span>
           </div>
 
