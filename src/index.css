@@ -34,11 +34,6 @@
 .signin {
   background-color: black !important;
 }
-.login {
-  background: url(./assets/images/signupimg.svg) top center no-repeat;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
 .image {
   background: url(./assets/images/updates.svg) top center no-repeat;
   background-size: cover;
