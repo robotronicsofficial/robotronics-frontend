@@ -216,6 +216,36 @@ const JobApplicationForm = () => {
             required
           />
         </div>
+        <div>
+          <label htmlFor="state" className="block text-sm text-gray-700">
+            State
+          </label>
+          <input
+            type="text"
+            name="state"
+            id="state"
+            value={form.state}
+            onChange={handleChange}
+            className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            placeholder="State"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="postalCode" className="block text-sm text-gray-700">
+            Postal Code
+          </label>
+          <input
+            type="text"
+            name="postalCode"
+            id="postalCode"
+            value={form.postalCode}
+            onChange={handleChange}
+            className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            placeholder="Postal Code"
+            required
+          />
+        </div>
       </div>
 
       {/* Experience */}
