@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
 import LeftNav from "./leftNav";
 import { FaStar } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
+
+const extractActiveCourses = (payload) => {
+  if (Array.isArray(payload?.data?.activeCourses)) return payload.data.activeCourses;
+  if (Array.isArray(payload?.activeCourses)) return payload.activeCourses;
+  if (Array.isArray(payload?.debug?.fetchedCourses)) return payload.debug.fetchedCourses;
+  if (Array.isArray(payload?.courses)) return payload.courses;
+  return [];
+};
+
 const MyAllCourses = () => {
   const [allCourses, setAllCourses] = useState([]);
   const [activeCourses, setActiveCourses] = useState([]);
@@ -12,13 +20,8 @@ const MyAllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 9;
   const navigate = useNavigate();
-  // let params = useParams();
-  // console.log("Parems ",params.id);
-  // Extract childId from URL path
-  const pathSegments = window.location.pathname.split('/');
-  const childId = pathSegments[pathSegments.length - 1];
-
-  console.log("Extracted Child ID:", childId); // Debug log
+  const { id: routeChildId } = useParams();
+  const childId = routeChildId || localStorage.getItem("selectedChildId");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,26 +31,24 @@ const MyAllCourses = () => {
         }
   
         setLoading(true);
-        
+
         // Fetch all courses
         const allCoursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
         if (!allCoursesResponse.ok) {
           throw new Error("Failed to fetch all courses");
         }
         const allCoursesData = await allCoursesResponse.json();
-        setAllCourses(allCoursesData.courses);
+        setAllCourses(Array.isArray(allCoursesData.courses) ? allCoursesData.courses : []);
   
         // Fetch child's data
         const childResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/child/${childId}/courses`);
         if (!childResponse.ok) {
           throw new Error(`Failed to fetch child data. Status: ${childResponse.status}`);
         }
-        let childData = await childResponse.json();
-        childData = childData.debug.fetchedCourses;
+        const childData = await childResponse.json();
+        const childCourses = extractActiveCourses(childData);
         
-        console.log("Child data response:", childData);
-        
-        setActiveCourses(childData);
+        setActiveCourses(childCourses);
         setLoading(false);
       } catch (err) {
         console.error("Error in fetchData:", err);

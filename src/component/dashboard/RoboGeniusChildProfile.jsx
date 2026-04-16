@@ -9,6 +9,18 @@ import ChangePinModal from "./popUps/ChangePinModal";
 import ErrorModal from "./popUps/ErrorModal";
 import { useAuth } from "../../contexts/AuthContext";
 
+const mergeChildrenWithCourses = (parentChildren, childCourseList) =>
+  parentChildren.map((child) => {
+    const childCourse = childCourseList.find((course) => course.childId === child._id);
+
+    return {
+      ...child,
+      pin: childCourse?.pin || null,
+      hasPin: Boolean(childCourse?.pin),
+      courses: Array.isArray(childCourse?.courses) ? childCourse.courses : [],
+    };
+  });
+
 const RoboGeniusChildProfile = () => {
   const navigate = useNavigate();
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -36,29 +48,17 @@ const RoboGeniusChildProfile = () => {
             throw new Error("Failed to fetch parent data");
           }
           const parentData = await parentResponse.json();
+          const parentChildren = Array.isArray(parentData?.children) ? parentData.children : [];
 
           const childCoursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getAllChild`);
           if (!childCoursesResponse.ok) {
             throw new Error("Failed to fetch child courses");
           }
           const childCoursesData = await childCoursesResponse.json();
-          setChildCourses(childCoursesData.childCourse || []);
+          const childCourseList = Array.isArray(childCoursesData?.childCourse) ? childCoursesData.childCourse : [];
+          setChildCourses(childCourseList);
      
-          const mergedChildren = parentData.children.map(child => {
-            const childCourse = childCoursesData.childCourse.find(
-              cc => cc.childId === child._id
-            );
-            
-            return {
-              ...child,
-              pin: childCourse?.pin || null,
-              hasPin: !!childCourse?.pin,
-              courses: childCourse?.courses || []
-            };
-          });
-          
-          setChildren(mergedChildren);
-          console.log("childs ", children, mergedChildren);
+          setChildren(mergeChildrenWithCourses(parentChildren, childCourseList));
         } catch (err) {
           setError(err.message);
         } finally {
@@ -74,27 +74,26 @@ const RoboGeniusChildProfile = () => {
 
   const refreshChildData = async () => {
     try {
+      if (!currentUser?._id) {
+        throw new Error("Parent account not found");
+      }
+
       const parentResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/parents/${currentUser._id}`);
+      if (!parentResponse.ok) {
+        throw new Error("Failed to fetch parent data");
+      }
       const parentData = await parentResponse.json();
+      const parentChildren = Array.isArray(parentData?.children) ? parentData.children : [];
       
       const childCoursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getAllChild`);
+      if (!childCoursesResponse.ok) {
+        throw new Error("Failed to fetch child courses");
+      }
       const childCoursesData = await childCoursesResponse.json();
-      setChildCourses(childCoursesData.childCourse || []);
-      
-      const mergedChildren = parentData.children.map(child => {
-        const childCourse = childCoursesData.childCourse.find(
-          cc => cc.childId === child._id
-        );
-        
-        return {
-          ...child,
-          pin: childCourse?.pin || null,
-          hasPin: !!childCourse?.pin,
-          courses: childCourse?.courses || []
-        };
-      });
-      
-      setChildren(mergedChildren);
+      const childCourseList = Array.isArray(childCoursesData?.childCourse) ? childCoursesData.childCourse : [];
+      setChildCourses(childCourseList);
+
+      setChildren(mergeChildrenWithCourses(parentChildren, childCourseList));
     } catch (err) {
       console.error('Error refreshing child data:', err);
       setError(err.message);
@@ -233,7 +232,10 @@ const handleVerifyPinSubmit = async (pinData) => {
     console.log(data)
  
 
-    if (data.message === 'Another session is active. Please try again later.') {
+    if (
+      data.message === 'Another session is active. Please try again later.' ||
+      data.message === 'Account is already active on another device'
+    ) {
       setPinError("Another child is currently using this account. Please try again later.");
       setIsErrorModalOpen(true);
       return;
@@ -241,10 +243,10 @@ const handleVerifyPinSubmit = async (pinData) => {
 
     setIsVerifyPinModalOpen(false);
     
-    // Store session ID in local storage or context
+    // Store session ID locally so ProtectedChild can validate the same child session.
     if (data.sessionId) {
       localStorage.setItem('childSession', data.sessionId);
-      localStorage.setItem('childSessionExpires', Date.now() + 3 * 60 * 1000);
+      localStorage.setItem('childSessionExpires', String(Date.now() + 3 * 60 * 1000));
     }
 
     // Fetch child's courses data
@@ -254,10 +256,10 @@ const handleVerifyPinSubmit = async (pinData) => {
     }
     localStorage.setItem('selectedChildId', selectedChildId);
     const coursesData = await coursesResponse.json();
+    const selectedCourses = Array.isArray(coursesData?.courses) ? coursesData.courses : [];
     
     // Navigate based on whether courses exist
-    if (coursesData.courses && coursesData.courses.length > 0) {
-
+    if (selectedCourses.length > 0) {
       navigate(`/Dashboard/myAllCourses/${selectedChildId}`);
     } else {
       navigate(`/Dashboard/MyCoursesPage/${selectedChildId}`);

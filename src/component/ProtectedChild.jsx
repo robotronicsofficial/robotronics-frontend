@@ -3,6 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 
+const clearChildSession = () => {
+  localStorage.removeItem('selectedChildId');
+  localStorage.removeItem('childSession');
+  localStorage.removeItem('childSessionExpires');
+};
+
 const ProtectedChild = ({ children }) => {
   const [isValidSession, setIsValidSession] = useState(true);
   const [showSessionPopup, setShowSessionPopup] = useState(false);
@@ -10,10 +16,19 @@ const ProtectedChild = ({ children }) => {
 
   useEffect(() => {
     const checkSession = async () => {
-      console.log("Enter");
       const selectedChildId = localStorage.getItem('selectedChildId');
+      const childSession = localStorage.getItem('childSession');
+      const childSessionExpires = Number(localStorage.getItem('childSessionExpires') || 0);
       
       if (!selectedChildId) {
+        clearChildSession();
+        setIsValidSession(false);
+        setShowSessionPopup(true);
+        return;
+      }
+
+      if (!childSession || !childSessionExpires || childSessionExpires <= Date.now()) {
+        clearChildSession();
         setIsValidSession(false);
         setShowSessionPopup(true);
         return;
@@ -25,18 +40,19 @@ const ProtectedChild = ({ children }) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ childId: selectedChildId }),
+          body: JSON.stringify({ childId: selectedChildId, sessionId: childSession }),
         });
 
         const data = await response.json();
         
-        if (!data.isValid) {
+        if (!response.ok || !data.isValid) {
+          clearChildSession();
           setIsValidSession(false);
-          localStorage.removeItem('selectedChildId');
           setShowSessionPopup(true);
         }
       } catch (error) {
         console.error('Session check failed:', error);
+        clearChildSession();
         setIsValidSession(false);
         setShowSessionPopup(true);
       }
@@ -65,7 +81,7 @@ const ProtectedChild = ({ children }) => {
           <DialogTitle id="alert-dialog-title">Session Alert</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              You are logged in to another PC. Please log in again to continue.
+              This child session is no longer valid. Re-enter the PIN to continue.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -74,7 +90,7 @@ const ProtectedChild = ({ children }) => {
             </Button>
           </DialogActions>
         </Dialog>
-        <div>Session expired. Redirecting to login...</div>
+        <div>Session expired. Redirecting to the child account page...</div>
       </>
     );
   }
