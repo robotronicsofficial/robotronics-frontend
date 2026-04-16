@@ -8,6 +8,7 @@ import robot from "../assets/images/SignupRobot.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
 import apple from "../assets/images/Applelogo.svg";
+import { getApiErrorMessage } from "../lib/api";
 
 const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -133,7 +134,7 @@ const Signup = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        toast.error(`Error: ${errorData.msg || "Failed to create account"}`);
+        toast.error(`Error: ${getApiErrorMessage(response, errorData)}`);
       } else {
         toast.success("Email sent successfully! Please verify your email.");
       }
