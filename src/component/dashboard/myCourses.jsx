@@ -1,8 +1,7 @@
 import LeftNav from "./leftNav";
 import { FaStar, FaArrowDown } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-// import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -16,17 +15,13 @@ const MyCourses = () => {
   const [maxCourses, setMaxCourses] = useState(2); // Default to Basic plan limit
   const coursesPerPage = 9;
   const navigate = useNavigate();
-
-  // Extract childId from the URL path (last segment)
-  const pathSegments = window.location.pathname.split('/');
-  const childId = pathSegments[pathSegments.length - 1];
-
-  console.log("Extracted Child ID:", childId); // Debug log
+  const { id: routeChildId } = useParams();
+  const childId = routeChildId || localStorage.getItem("selectedChildId");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!childId || childId === "MyCoursesPage") {
+        if (!childId) {
           throw new Error("Child ID not found in URL");
         }
 
@@ -36,11 +31,10 @@ const MyCourses = () => {
           throw new Error(`HTTP error! status: ${childResponse.status}`);
         }
         const childData = await childResponse.json();
-        console.log("Child Data", childData);
 
         // Set max courses based on plan
-        const planName = childData.courses.plan?.name || 'Basic';
-        const courseLimit = planName === 'Pro' ? 4 : 2;
+        const planName = childData?.courses?.plan?.name || "Basic";
+        const courseLimit = planName.toLowerCase() === "pro" ? 4 : 2;
         setMaxCourses(courseLimit);
 
         // Then fetch courses
@@ -102,7 +96,7 @@ const MyCourses = () => {
 
       setSaveSuccess(true);
       setTimeout(() => {
-        navigate(`/dashboard/myAllCourses/${childId}`);
+        navigate(`/Dashboard/myAllCourses/${childId}`);
       }, 1500);
     } catch (err) {
       console.error("Error saving courses:", err);

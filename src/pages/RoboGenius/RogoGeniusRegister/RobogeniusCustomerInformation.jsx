@@ -208,12 +208,12 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
     // Validation checks
     if (!currentUser) {
       alert("Please log in to continue.");
-      return navigate("/login"); // Redirect to login
+      return navigate("/Login"); // Redirect to login
     }
 
     if (!plan) {
       alert("Please select a plan before continuing");
-      return navigate("/plans"); // Redirect to plans page
+      return navigate("/Robogeniushome"); // Redirect to plans page
     }
 
     // Check for unsaved children
@@ -261,12 +261,11 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
 
       const data = await response.json();
 
-      onSaveChildren(childrenForms.filter(child => child.saved));
-
-
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
       }
+
+      onSaveChildren?.(childrenForms.filter(child => child.saved));
 
       // Successful submission
       console.log('Registration successful:', data);

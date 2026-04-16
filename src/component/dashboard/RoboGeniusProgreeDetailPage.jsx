@@ -10,7 +10,7 @@ const RoboGeniusProgreeDetailPage = () => {
   const [filter, setFilter] = useState('all');
   const [searchParams] = useSearchParams();
   const childId = searchParams.get('childId');
-  const [downloading, setDownloading] = useState(false);
+  const [downloadingCourseId, setDownloadingCourseId] = useState(null);
   const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const RoboGeniusProgreeDetailPage = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:8080/api/${childId}/progress`);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/progress`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -41,15 +41,15 @@ const RoboGeniusProgreeDetailPage = () => {
   }, [childId]);
 
   const handleDownloadCertificate = async (courseId, courseName) => {
-    if (!childId || !courseId || downloading) return;
+    if (!childId || !courseId || downloadingCourseId) return;
 
-    setDownloading(true);
+    setDownloadingCourseId(courseId);
     // Clear any previous error for this course
     setDownloadErrors(prev => ({ ...prev, [courseId]: null }));
     
     try {
       // Single API call to generate and get download URL
-      const response = await fetch(`http://localhost:8080/api/generate`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const RoboGeniusProgreeDetailPage = () => {
         body: JSON.stringify({
           childId,
           courseId,
-          childName: progressData.childName,
+          childName: progressData?.childName,
           courseName
         })
       });
@@ -72,7 +72,7 @@ const RoboGeniusProgreeDetailPage = () => {
 
       // Download the generated certificate
       const downloadResponse = await fetch(
-        `http://localhost:8080/api/download/${result.certificateId}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/download/${result.certificateId}`
       );
 
       if (!downloadResponse.ok) {
@@ -91,7 +91,7 @@ const RoboGeniusProgreeDetailPage = () => {
 
       // Refresh progress data
       try {
-        const updatedProgress = await fetch(`http://localhost:8080/api/${childId}/progress`);
+        const updatedProgress = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/progress`);
         if (updatedProgress.ok) {
           const updatedData = await updatedProgress.json();
           setProgressData(updatedData);
@@ -109,7 +109,7 @@ const RoboGeniusProgreeDetailPage = () => {
         [courseId]: err.message || 'Failed to download certificate. Please try again.' 
       }));
     } finally {
-      setDownloading(false);
+      setDownloadingCourseId(null);
     }
   };
 
@@ -145,9 +145,9 @@ const RoboGeniusProgreeDetailPage = () => {
     </div>
   );
 
-  const filteredCourses = progressData.courses.filter(course => {
+  const filteredCourses = (progressData?.courses || []).filter(course => {
     if (filter === 'all') return true;
-    return course.status.toLowerCase() === filter;
+    return (course.status || 'active').toLowerCase() === filter;
   });
 
   return (
@@ -197,12 +197,13 @@ const RoboGeniusProgreeDetailPage = () => {
             </thead>
             <tbody>
               {filteredCourses.map((course, index) => {
-                const isDownloading = downloading === course.id;
-                const courseError = downloadErrors[course.id];
+                const courseId = course.courseId || course.id || course._id;
+                const isDownloading = downloadingCourseId === courseId;
+                const courseError = downloadErrors[courseId];
                 
                 return (
                   <tr key={index} className="text-gray-900 border-t">
-                    <td className="p-3">{course.name}</td>
+                    <td className="p-3">{course.name || course.courseName || "Course"}</td>
                     <td className="p-3">{course.completed}</td>
                     <td className="p-3">
                       <div className="flex flex-col">
@@ -211,7 +212,7 @@ const RoboGeniusProgreeDetailPage = () => {
                             <>
                               <button 
                                 className={`hover:text-yellow-600 ${isDownloading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer text-blue-600'}`}
-                                onClick={() => !isDownloading && handleDownloadCertificate(course.id, course.name)}
+                                onClick={() => !isDownloading && handleDownloadCertificate(courseId, course.name || course.courseName || "Course")}
                                 disabled={isDownloading}
                               >
                                 {isDownloading ? 'Generating...' : 'Download'}
@@ -246,7 +247,7 @@ const RoboGeniusProgreeDetailPage = () => {
                     </td>
                     <td className="p-3">
                       <span className={`px-2 py-1 rounded-full text-xs ${
-                        course.status.toLowerCase() === 'completed' 
+                        (course.status || 'active').toLowerCase() === 'completed' 
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-yellow-100 text-yellow-800'
                       }`}>
