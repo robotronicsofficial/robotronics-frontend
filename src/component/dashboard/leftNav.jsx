@@ -2,10 +2,11 @@ import { FaHeadphones, FaSignOutAlt, FaUser, FaBox } from "react-icons/fa";
 import { MdOutlinePayment } from "react-icons/md";
 import { RiArrowDropDownLine, RiRobot3Fill } from "react-icons/ri";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 
 const LeftNav = () => {
-  const { currentUser} = useAuth();
+  const { currentUser, logout } = useAuth();
   // console.log("Current User:", currentUser);
   // const user = { userName: "Arslan" };
   const [activeIndex, setActiveIndex] = useState(null);
@@ -45,7 +46,6 @@ const LeftNav = () => {
       ],
     },
     { name: "Support", href: "/404", icon: <FaHeadphones className="text-brown" /> },
-    { name: "Sign out", href: "", icon: <FaSignOutAlt className="text-brown" /> },
   ];
 
   return (
@@ -67,9 +67,9 @@ const LeftNav = () => {
               >
                 <div className="flex items-center space-x-3">
                   {item.icon}
-                  <a href={item.href} className="text-base lg:text-xl font-medium text-lightblack">
+                  <Link to={item.href} className="text-base lg:text-xl font-medium text-lightblack">
                     {item.name}
-                  </a>
+                  </Link>
                 </div>
                 {item.subMenu && item.dropdownIcon}
               </div>
@@ -80,13 +80,23 @@ const LeftNav = () => {
                       key={subIndex}
                       className="text-brown hover:text-black hover:bg-gold rounded-md px-2 py-1"
                     >
-                      <a href={subItem.href}>{subItem.name}</a>
+                      <Link to={subItem.href}>{subItem.name}</Link>
                     </li>
                   ))}
                 </ul>
               )}
             </li>
           ))}
+          <li>
+            <button
+              type="button"
+              className="flex w-full items-center space-x-3 rounded-lg px-4 py-2 text-left text-brown hover:bg-gold"
+              onClick={logout}
+            >
+              <FaSignOutAlt className="text-brown" />
+              <span className="text-base font-medium text-lightblack lg:text-xl">Sign out</span>
+            </button>
+          </li>
         </ul>
       </nav>
     </div>
