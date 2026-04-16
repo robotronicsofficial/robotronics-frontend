@@ -60,14 +60,14 @@ import ProtectedChild from "./component/ProtectedChild";
 import ProtectedRoute from './component/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { CART_PATH, CONTACT_PATH } from "./router/paths";
+import { CART_PATH, CONTACT_PATH, SCREEN_PATH } from "./router/paths";
 
 function App() {
   return (
     <Layout>
       <Routes>
         <Route path="/Search" element={<Search />} />
-        <Route path="/Screen" element={<Screen />} />
+        <Route path={SCREEN_PATH} element={<Screen />} />
         <Route path="/" element={<Home />} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path={CART_PATH} element={<Cart />} />

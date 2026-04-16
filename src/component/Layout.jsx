@@ -1,9 +1,10 @@
 import { useLocation } from 'react-router'
 import Header from "../component/header";
 import Footer from './footer';
+import { SCREEN_PATH } from "../router/paths";
 
 const Layout = ({ children }) => {
-  const hideNavbarPaths = ["/Search", "/screen", "/JobApplicationForm"];
+  const hideNavbarPaths = ["/Search", SCREEN_PATH, "/JobApplicationForm"];
   const location = useLocation(); // from react-router-dom
 
   const showNavbar =
