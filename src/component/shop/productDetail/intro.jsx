@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../../store/cart/cartSlice";
 
@@ -9,6 +10,7 @@ import { FaRegHeart } from "react-icons/fa";
 
 const Intro = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const products = useSelector((state) => state.cart.items);
 
@@ -225,24 +227,51 @@ const Intro = () => {
           </div>
         </div>
 
-        <a className="hover:curser-pointer transition duration-300 ease-in-out hover:opacity-70">
-          <div className="shopPages flex flex-row lg:px-14 px-5" id="shopPages">
-            <div className="flex-1 lg:py-20 py-8">
-              <div className="flex flex-col justify-content">
-                <p className="flex text-gold lg:text-4xl text-2xl font-bold" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">MORDERN</p>
-                <p className="flex text-white lg:text-4xl text-2xl font-bold" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">LEGO ROBOT</p>
-                <p className="flex text-white line-through lg:text-xl text-sm lg:pt-8 pt-4" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">PKR 3252.41</p>
-                <p className="flex text-white lg:text-4xl text-2xl font-bold" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">PKR 2352.41</p>
-              </div>
-              <img src={star} data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" alt="" />
+        <section className="shopPages flex flex-row items-center gap-8 px-5 lg:px-14" id="shopPages">
+          <div className="flex-1 py-8 lg:py-20">
+            <div className="flex flex-col justify-content">
+              <p
+                className="flex text-gold lg:text-4xl text-2xl font-bold"
+                data-aos="fade-right"
+                data-aos-duration="2000"
+                data-aos-delay="4000"
+              >
+                Keep exploring
+              </p>
+              <p
+                className="flex text-white lg:text-4xl text-2xl font-bold"
+                data-aos="fade-left"
+                data-aos-duration="2000"
+                data-aos-delay="4000"
+              >
+                Live catalog
+              </p>
+              <p
+                className="mt-4 max-w-xl text-white/80 lg:text-lg text-sm"
+                data-aos="fade-up"
+                data-aos-duration="2000"
+                data-aos-delay="4000"
+              >
+                Browse the live store inventory instead of a filler promo block.
+              </p>
             </div>
-            <div className="flex-1" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
-              <div className="flex justify-content w-full">
-                <img src={robo} alt="LEGO ROBOT" />
-              </div>
+            <div className="mt-6 flex flex-wrap items-center gap-4">
+              <button
+                type="button"
+                onClick={() => navigate("/shop")}
+                className="rounded-lg bg-gold px-5 py-3 font-semibold text-brown transition hover:opacity-90"
+              >
+                Browse all products
+              </button>
+            </div>
+            <img src={star} className="mt-6" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" alt="" />
+          </div>
+          <div className="flex-1" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+            <div className="flex justify-content w-full">
+              <img src={robo} alt="Product spotlight illustration" />
             </div>
           </div>
-        </a>
+        </section>
       </div>
     </div>
   );
