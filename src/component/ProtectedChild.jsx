@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -85,6 +86,10 @@ const ProtectedChild = ({ children }) => {
   }
 
   return <ProtectedRoute>{children}</ProtectedRoute>;
+};
+
+ProtectedChild.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default ProtectedChild;

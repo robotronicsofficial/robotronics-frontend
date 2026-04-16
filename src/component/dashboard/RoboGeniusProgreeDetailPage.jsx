@@ -1,6 +1,6 @@
 import LeftNav from "./leftNav";
 import { FaFilePdf } from "react-icons/fa6";
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { normalizeProgressPayload } from "../../lib/robogenius";
 import { buildOptionalChildSessionRequest } from "../../utils/childSessionRequest";
@@ -16,7 +16,7 @@ const RoboGeniusProgreeDetailPage = () => {
   const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
   const selectedChildId = childId || localStorage.getItem('selectedChildId');
 
-  const fetchProgressPayload = async (nextChildId) => {
+  const fetchProgressPayload = useCallback(async (nextChildId) => {
     const progressRequest = buildOptionalChildSessionRequest({
       method: "GET",
     }) || { method: "GET" };
@@ -31,9 +31,9 @@ const RoboGeniusProgreeDetailPage = () => {
     }
 
     return normalizeProgressPayload(await response.json());
-  };
+  }, []);
 
-  const fetchProgressData = async () => {
+  const fetchProgressData = useCallback(async () => {
     if (!selectedChildId) {
       setError('Child ID not found in URL');
       setLoading(false);
@@ -48,11 +48,11 @@ const RoboGeniusProgreeDetailPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchProgressPayload, selectedChildId]);
 
   useEffect(() => {
     fetchProgressData();
-  }, [selectedChildId]);
+  }, [fetchProgressData]);
 
   const handleDownloadCertificate = async (courseId, courseName) => {
     if (!selectedChildId || !courseId || downloadingCourseId) return;
