@@ -23,16 +23,15 @@ const ServiceDetail = () => {
 
       try {
         setLoading(true);
-        const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/getServiceById/${id}`
-        );
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getAllService`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch service details");
         }
 
         const payload = await response.json();
-        setService(payload?.data || null);
+        const services = Array.isArray(payload?.data) ? payload.data : [];
+        setService(services.find((entry) => entry._id === id) || null);
         setError("");
       } catch (fetchError) {
         setError(fetchError.message || "Failed to load service details");
