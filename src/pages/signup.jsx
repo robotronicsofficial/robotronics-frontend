@@ -387,12 +387,12 @@ const Signup = () => {
             </div>
             <p className="text-sm">
               Already have an account?{" "}
-              <a
-                href="/Login"
+              <Link
+                to="/Login"
                 className="cursor-pointer underline underline-offset-4"
               >
                 Log in
-              </a>
+              </Link>
             </p>
           </div>
           <div className="flex flex-col lg:py-10 py-5">

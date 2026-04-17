@@ -14,6 +14,7 @@ import {
   buildChildSessionRequest,
   getActiveChildSession,
 } from "../../utils/childSessionRequest";
+import { openExternalUrl } from "../../utils/openExternalUrl";
 import {
   normalizeChildCourse,
   normalizeCourseDetail,
@@ -187,7 +188,9 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
     }
 
     if (isExternalUrl(content.file) && !isProtectedCourseDownload(content.file)) {
-      window.open(content.file, "_blank", "noopener,noreferrer");
+      if (!openExternalUrl(content.file)) {
+        setError("Unable to open this download link.");
+      }
       return;
     }
 

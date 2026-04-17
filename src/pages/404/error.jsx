@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Error = () => {
   return (
     <div className="bg-background">
@@ -11,10 +13,9 @@ const Error = () => {
             Your visited page was not found. you may go home page.
             <br />
             <br />
-            {/* Please go back to our <a href="/">homepage</a>. */}
-            <button className="bg-yellow poppins-light rounded-md p-2" >
-              <a href="/" className="text-brown poppins-light px-10 py-2 " >Back to Home page</a>{" "}
-            </button>
+            <Link to="/" className="inline-flex bg-yellow poppins-light rounded-md p-2 text-brown px-10 py-2">
+              Back to Home page
+            </Link>{" "}
           </p>
         </div>
       </div>
