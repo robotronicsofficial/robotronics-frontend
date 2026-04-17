@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PhoneInput from 'react-phone-number-input';
@@ -364,13 +365,13 @@ const Signup = () => {
                   className="ms-2 text-sm font-medium text-gray-900 text-wrap"
                 >
                   By creating an account, I agree to our{" "}
-                  <a href="#" className="underline underline-offset-4">
+                  <Link to="/TermsConditions" className="underline underline-offset-4">
                     Terms of use
-                  </a>{" "}
+                  </Link>{" "}
                   and{" "}
-                  <a href="#" className="underline underline-offset-4">
+                  <Link to="/PrivacyPolicy" className="underline underline-offset-4">
                     Privacy Policy
-                  </a>
+                  </Link>
                 </label>
               </div>
               <button
