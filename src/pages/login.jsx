@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import hide from "../assets/images/hide.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
@@ -128,7 +128,6 @@ const Login = () => {
           </form>
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>
-        <ToastContainer />
       </div>
     );
   }
@@ -255,7 +254,6 @@ const Login = () => {
           </div>
         </form>
       </div>
-      <ToastContainer />
     </div>
   );
 };
