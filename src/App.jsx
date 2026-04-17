@@ -80,12 +80,15 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="/Signup" element={<Signup />} />
-        <Route path="/CoursesProduct/:id?" element={<CoursesProductDetail />} />
+        <Route path="/CoursesProduct" element={<Navigate to="/Course" replace />} />
+        <Route path="/CoursesProduct/:id" element={<CoursesProductDetail />} />
         <Route path="/CareerJob" element={<CareerJob />} />
-        <Route path="/CareerDetailPage/:id?" element={<CareerDetailPage />} />
+        <Route path="/CareerDetailPage" element={<Navigate to="/CareerJob" replace />} />
+        <Route path="/CareerDetailPage/:id" element={<CareerDetailPage />} />
         <Route path="/JobApplicationForm" element={<JobApplicationForm />} />
         <Route path="/Blog" element={<Blog />} />
-        <Route path="/BlogDetail/:id?" element={<BlogDetail />} />
+        <Route path="/BlogDetail" element={<Navigate to="/Blog" replace />} />
+        <Route path="/BlogDetail/:id" element={<BlogDetail />} />
         <Route path={CONTACT_PATH} element={<ContactUs />} />
         <Route path="/Dashboard/userInfo" element={<ProtectedRoute><UserInfo /></ProtectedRoute>} />
         <Route path="/Dashboard/order" element={<ProtectedRoute><Order /></ProtectedRoute>} />
@@ -119,7 +122,8 @@ function App() {
         <Route path="/PrivacyPolicy" element={<PrivacyHome />} />
         <Route path="/faqs" element={<FAQs />} />
         <Route path="/RefundPolicy" element={<RefundPolicy />} />
-        <Route path="/ServiceDetail/:id?" element={<ServiceDetail />} />
+        <Route path="/ServiceDetail" element={<Navigate to="/International/Iservices" replace />} />
+        <Route path="/ServiceDetail/:id" element={<ServiceDetail />} />
         <Route path="*" element={<Error />} />
       </Routes>
       <ToastContainer
