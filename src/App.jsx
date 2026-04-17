@@ -120,7 +120,7 @@ function App() {
         <Route path="/faqs" element={<FAQs />} />
         <Route path="/RefundPolicy" element={<RefundPolicy />} />
         <Route path="/ServiceDetail/:id?" element={<ServiceDetail />} />
-        <Route path="*" element={<Navigate to="/404" replace />} />
+        <Route path="*" element={<Error />} />
       </Routes>
       <ToastContainer
         position="top-center"
