@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo/robotronicsCharacter.svg";
 import basket from "../assets/logo/basket.svg";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useAuth } from "../contexts/AuthContext";
 import Aos from "aos";
 import { useSelector } from "react-redux";
@@ -14,17 +13,7 @@ export default function Header() {
   const { totalQuantity } = useSelector((state) => state.cart);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const {
-    loginWithRedirect,
-    isAuthenticated: isAuth0Authenticated,
-    logout: auth0Logout,
-  } = useAuth0();
   const { currentUser, logout } = useAuth();
-  const cartItems = useSelector((state) => state.cart.items) || 0;
-  const totalItems = Object.values(cartItems).reduce(
-    (acc, item) => acc + item.count,
-    0
-  );
 
   useEffect(() => {
     Aos.init(); // Initialize AOS library
@@ -36,15 +25,6 @@ export default function Header() {
 
   const handleLogout = () => {
     logout();
-    if (isAuth0Authenticated) {
-      auth0Logout({ logoutParams: { returnTo: window.location.origin } });
-    }
-  };
-
-  // Close mobile menu when navigating
-  const handleNavigation = (path) => {
-    setMenuOpen(false);
-    navigate(path);
   };
 
   return (
