@@ -88,39 +88,46 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import robot from "../../../assets/images/IServicesS4.svg"; // Fallback image
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
-
-const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/`;
+import { fetchServices } from "../../../lib/services";
 
 const OurServices = () => {
   const [services, setServices] = useState([]);
   const [error, setError] = useState(null);
-  const [showAll, setShowAll] = useState(false); // State to toggle visibility
+  const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${BASE_URL}api/getAllService`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+    let active = true;
+
+    const loadServices = async () => {
+      try {
+        const nextServices = await fetchServices();
+
+        if (!active) {
+          return;
         }
-        return response.json();
-      })
-      .then((data) => {
-        const serviceList = Array.isArray(data?.data)
-          ? data.data
-          : Array.isArray(data)
-            ? data
-            : [];
-        setServices(serviceList);
-      })
-      .catch((error) => {
-        console.error("Error fetching services:", error);
-        setError(error.message);
-      });
+
+        setServices(nextServices);
+        setError(null);
+      } catch (nextError) {
+        if (!active) {
+          return;
+        }
+
+        console.error("Error fetching services:", nextError);
+        setError(nextError.message || "Failed to load services");
+      }
+    };
+
+    loadServices();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const handleNavigate = (service) => {
-    navigate(`/ServiceDetail/${service._id}`);
+    navigate(`/ServiceDetail/${service._id}`, { state: { service } });
   };
 
   return (
@@ -162,7 +169,6 @@ const OurServices = () => {
           )}
         </div>
 
-        {/* Show More / Show Less Button */}
         {services.length > 6 && (
           <div className="text-center mt-8">
             <button

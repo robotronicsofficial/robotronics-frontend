@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Careerintro from "../../component/careers/CareerDetailPage/Careerintro";
 import CareerJobDetail from "../../component/careers/CareerDetailPage/careerJobDetail";
+import { fetchJobById, getJobsErrorMessage } from "../../lib/jobs";
 
 const CareerDetailPage = () => {
   const { id } = useParams();
@@ -18,38 +19,17 @@ const CareerDetailPage = () => {
         setError("");
 
         if (id) {
-          const response = await fetch(
-            `${import.meta.env.VITE_BACKEND_URL}/api/jobs/${id}`
-          );
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(data.message || "Failed to load job details");
-          }
+          const data = await fetchJobById(id);
 
           if (active) {
             setJob(data);
           }
           return;
         }
-
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/jobs`);
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to load jobs");
-        }
-
-        if (active) {
-          setJob(Array.isArray(data) && data.length > 0 ? data[0] : null);
-          if (!Array.isArray(data) || data.length === 0) {
-            setError("No open roles are available right now.");
-          }
-        }
       } catch (fetchError) {
         if (active) {
           setJob(null);
-          setError(fetchError.message || "Failed to load job details");
+          setError(getJobsErrorMessage(fetchError, { detail: true }));
         }
       } finally {
         if (active) {
@@ -70,7 +50,17 @@ const CareerDetailPage = () => {
   }
 
   if (error && !job) {
-    return <div className="bg-background pt-44 pb-20 text-center text-red-500">{error}</div>;
+    return (
+      <div className="bg-background pt-44 pb-20 text-center">
+        <p className="text-red-500">{error}</p>
+        <Link
+          to="/CareerJob"
+          className="mt-6 inline-flex rounded-full bg-brown px-5 py-3 text-white transition hover:opacity-90"
+        >
+          Back to careers
+        </Link>
+      </div>
+    );
   }
 
   if (!job) {

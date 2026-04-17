@@ -3,38 +3,45 @@ import { useNavigate } from "react-router-dom";
 import { FaRobot} from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import robort from "../assets/images/right-face-robot.svg";
-
-const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/`;
+import { fetchServices } from "../lib/services";
 
 const Services = () => {
   const [services, setServices] = useState([]);
-  const [error, setError] = useState(null); // Added missing state for error
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${BASE_URL}api/getAllService`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+    let active = true;
+
+    const loadServices = async () => {
+      try {
+        const nextServices = await fetchServices();
+
+        if (!active) {
+          return;
         }
-        return response.json();
-      })
-      .then((data) => {
-        const serviceList = Array.isArray(data?.data)
-          ? data.data
-          : Array.isArray(data)
-            ? data
-            : [];
-        setServices(serviceList);
-      })
-      .catch((error) => {
-        console.error("Error fetching services:", error);
-        setError(error.message);
-      });
+
+        setServices(nextServices);
+        setError(null);
+      } catch (nextError) {
+        if (!active) {
+          return;
+        }
+
+        console.error("Error fetching services:", nextError);
+        setError(nextError.message || "Failed to load services");
+      }
+    };
+
+    loadServices();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const handleServiceNavigate = (service) => {
-    navigate(`/ServiceDetail/${service._id}`);
+    navigate(`/ServiceDetail/${service._id}`, { state: { service } });
   };
 
   return (

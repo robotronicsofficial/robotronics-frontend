@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import img3 from "../../assets/images/5.svg";
 import { FiArrowUpRight } from 'react-icons/fi';
 import { useNavigate } from "react-router-dom";
+import { fetchJobs, getJobsErrorMessage } from "../../lib/jobs";
 
 const CareerJoinTeam = () => {
   const navigate = useNavigate();
@@ -16,12 +17,7 @@ const CareerJoinTeam = () => {
     const loadJobs = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/jobs`);
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to load open roles");
-        }
+        const data = await fetchJobs();
 
         if (active) {
           setJobs(Array.isArray(data) ? data : []);
@@ -30,7 +26,7 @@ const CareerJoinTeam = () => {
       } catch (fetchError) {
         if (active) {
           setJobs([]);
-          setError(fetchError.message || "Failed to load open roles");
+          setError(getJobsErrorMessage(fetchError));
         }
       } finally {
         if (active) {
