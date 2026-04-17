@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CHECKOUT_NOTE_STORAGE_KEY = "checkoutNote";
+const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
+
 const getStoredCheckoutNote = () => (
   typeof window === "undefined" ? "" : window.sessionStorage.getItem(CHECKOUT_NOTE_STORAGE_KEY) || ""
 );
@@ -72,8 +74,10 @@ const ShopCartproductList = ({ onNext }) => {
 
   const handleNext = useCallback(() => {
     if (!currentUser) {
-      // Store the current path to redirect back after login
-      localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      window.sessionStorage.setItem(
+        REDIRECT_AFTER_LOGIN_STORAGE_KEY,
+        `${window.location.pathname}${window.location.search}${window.location.hash}`
+      );
       
       // Show toast message
       toast.error("Please sign in to proceed to checkout", {

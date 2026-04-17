@@ -7,6 +7,8 @@ import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
 import { useAuth } from "../contexts/AuthContext";
 
+const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
+
 const Login = () => {
   const { currentUser, login } = useAuth();
   const [email, setEmail] = useState("");
@@ -38,9 +40,9 @@ const Login = () => {
     }
 
     if (currentUser) {
-      const redirectPath = localStorage.getItem("redirectAfterLogin");
+      const redirectPath = window.sessionStorage.getItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
       if (redirectPath) {
-        localStorage.removeItem("redirectAfterLogin");
+        window.sessionStorage.removeItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
         navigate(redirectPath, { replace: true });
         return;
       }
