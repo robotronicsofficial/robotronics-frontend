@@ -107,6 +107,30 @@ const MyAllCourses = () => {
     setCurrentPage(1);
   }, [viewMode]);
 
+  const activeCourseIds = new Set(
+    activeCourses
+      .map((course) => String(course?.courseId || course?._id || ""))
+      .filter(Boolean)
+  );
+
+  const resolveCourseId = (course) => String(course?.courseId || course?._id || "");
+  const isActiveCourse = (course) => activeCourseIds.has(resolveCourseId(course));
+
+  const handleCourseClick = (course) => {
+    const courseId = resolveCourseId(course);
+
+    if (!courseId) {
+      return;
+    }
+
+    if (isActiveCourse(course)) {
+      navigate(`/Dashboard/courseDetail/${courseId}`);
+      return;
+    }
+
+    navigate(`/CoursesProduct/${courseId}`);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -198,14 +222,10 @@ const MyAllCourses = () => {
 
                   <div className="pb-3 px-4">
                     <button
-                      onClick={() =>
-                        navigate(`/Dashboard/courseDetail/${course._id}`)
-                        // navigate(`/Dashboard/courseDetail`)
-
-                      }
+                      onClick={() => handleCourseClick(course)}
                       className="mt-2 bg-[#ffc224] w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-[#ffb700] transition-colors"
                     >
-                      <span>View Course</span>
+                      <span>{isActiveCourse(course) ? "View Course" : "View Details"}</span>
                     </button>
                   </div>
                 </div>
