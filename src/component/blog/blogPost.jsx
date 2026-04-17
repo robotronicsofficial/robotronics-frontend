@@ -23,7 +23,13 @@ const BlogCard = ({ cardData }) => {
     <div className="lg:max-w-[25vw] max-w-sm rounded overflow-hidden shadow-lg bg-white">
       <div className="relative">
         <Link to={`/BlogDetail/${cardData._id}`}>
-          <img className="w-full h-48 object-cover" src={mappedData.image} alt={mappedData.title} />
+          <img
+            className="w-full h-48 object-cover"
+            src={mappedData.image}
+            alt={mappedData.title}
+            loading="lazy"
+            decoding="async"
+          />
         </Link>
         <div className="absolute top-0 left-0 mt-4 ml-4 space-x-2">
           {mappedData.tags.map((tag, index) => (

@@ -82,6 +82,8 @@ const Shop = () => {
                   className="h-56 w-full object-cover"
                   src={resolveBackendAssetUrl(course?.thumbnail, "https://via.placeholder.com/300x200")}
                   alt={course?.title || "Course"}
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="px-4 py-4">
                   <div className="flex items-start justify-between gap-3">

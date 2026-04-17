@@ -22,6 +22,8 @@ const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, product
             className="h-full w-full object-fit group-hover:opacity-50"
             src={resolveBackendAssetUrl(image, "https://via.placeholder.com/300x200")}
             alt="Product"
+            loading="lazy"
+            decoding="async"
           />
         </div>
         <div className="text-wrap w-full">

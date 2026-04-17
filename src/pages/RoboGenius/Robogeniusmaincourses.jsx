@@ -89,6 +89,8 @@ const Robogeniusmaincourses = () => {
                     className="rounded-xl w-full h-48 sm:h-56 object-cover"
                     src={course.thumbnail ? `${import.meta.env.VITE_BACKEND_URL}/${course.thumbnail.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x200"}
                     alt={course.title || "Course"}
+                    loading="lazy"
+                    decoding="async"
                 />
                 <div className="px-4 lg:px-6 py-2 flex-grow">
                   <div className="flex flex-row mb-2 flex-wrap justify-between my-3">

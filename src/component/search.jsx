@@ -120,6 +120,8 @@ const Search = () => {
                   src={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
                   alt={product?.name || "Product"}
                   className="h-48 w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="space-y-3 p-5 text-brown">
                   <div className="flex items-start justify-between gap-3">
