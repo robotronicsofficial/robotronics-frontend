@@ -18,6 +18,18 @@ const normalizeServicesPayload = (payload) => {
   return Array.isArray(payload) ? payload : [];
 };
 
+const normalizeSingleServicePayload = (payload) => {
+  if (payload?.data && typeof payload.data === "object" && !Array.isArray(payload.data)) {
+    return payload.data;
+  }
+
+  if (payload && typeof payload === "object" && !Array.isArray(payload)) {
+    return payload;
+  }
+
+  return null;
+};
+
 const writeServicesCache = (services) => {
   const storage = getServicesStorage();
   if (!storage) {
@@ -59,4 +71,26 @@ export const findCachedService = (serviceId) =>
 export const fetchServices = async () => {
   const payload = await fetchBackendJson("/api/getAllService");
   return writeServicesCache(normalizeServicesPayload(payload));
+};
+
+export const fetchServiceById = async (serviceId) => {
+  const payload = await fetchBackendJson(`/api/services/${serviceId}`);
+  const service = normalizeSingleServicePayload(payload);
+
+  if (!service) {
+    throw new Error("Service not found");
+  }
+
+  const cachedServices = readCachedServices();
+  const nextServices = cachedServices.some(
+    (entry) => String(entry?._id) === String(service._id),
+  )
+    ? cachedServices.map((entry) =>
+        String(entry?._id) === String(service._id) ? service : entry,
+      )
+    : [...cachedServices, service];
+
+  writeServicesCache(nextServices);
+
+  return service;
 };

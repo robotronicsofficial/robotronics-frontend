@@ -3,7 +3,7 @@ import { useLocation, useParams } from "react-router-dom";
 import ServiceInto from "./ServiceInto";
 import ServiceBody from "./ServiceBody";
 import QuickContact from "../../component/international/services/quickContact";
-import { fetchServices, findCachedService } from "../../lib/services";
+import { fetchServiceById, findCachedService } from "../../lib/services";
 
 const ServiceDetail = () => {
   const { id } = useParams();
@@ -51,9 +51,7 @@ const ServiceDetail = () => {
 
       try {
         setLoading(true);
-        const services = await fetchServices();
-        const matchedService =
-          services.find((entry) => String(entry?._id) === String(id)) || null;
+        const matchedService = await fetchServiceById(id);
 
         if (!active) {
           return;
