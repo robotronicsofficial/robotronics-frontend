@@ -2,23 +2,30 @@ export const CHILD_SESSION_TTL_MS = Number(
   import.meta.env.VITE_CHILD_SESSION_TTL_MS || 60 * 60 * 1000
 );
 
+let activeChildSession = null;
+
+export const setActiveChildSession = ({ childId, sessionId }) => {
+  activeChildSession = {
+    childId,
+    sessionId,
+    expiresAt: Date.now() + CHILD_SESSION_TTL_MS,
+  };
+};
+
 export const clearActiveChildSession = () => {
-  localStorage.removeItem("selectedChildId");
-  localStorage.removeItem("childSession");
-  localStorage.removeItem("childSessionExpires");
+  activeChildSession = null;
 };
 
 export const getActiveChildSession = () => {
-  const childId = localStorage.getItem("selectedChildId");
-  const sessionId = localStorage.getItem("childSession");
-  const sessionExpires = Number(localStorage.getItem("childSessionExpires") || 0);
-
-  if (!childId || !sessionId || !sessionExpires || sessionExpires <= Date.now()) {
+  if (!activeChildSession || activeChildSession.expiresAt <= Date.now()) {
     clearActiveChildSession();
     return null;
   }
 
-  return { childId, sessionId };
+  return {
+    childId: activeChildSession.childId,
+    sessionId: activeChildSession.sessionId,
+  };
 };
 
 export const buildChildSessionRequest = ({
@@ -50,14 +57,7 @@ export const buildChildSessionRequest = ({
   return {
     method,
     headers: nextHeaders,
-    body: JSON.stringify(
-      session
-        ? {
-            ...body,
-            sessionId: session.sessionId,
-          }
-        : body
-    ),
+    body: JSON.stringify(body),
   };
 };
 

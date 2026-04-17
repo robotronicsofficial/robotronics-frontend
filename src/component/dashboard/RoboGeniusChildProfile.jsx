@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LeftNav from "./leftNav";
 import { FaUserCircle } from "react-icons/fa";
@@ -9,10 +9,7 @@ import ChangePinModal from "./popUps/ChangePinModal";
 import ErrorModal from "./popUps/ErrorModal";
 import { useAuth } from "../../contexts/AuthContext";
 import { fetchBackendJson, fetchSessionJson, sendJson } from "../../lib/api";
-import {
-  CHILD_SESSION_TTL_MS,
-  clearActiveChildSession,
-} from "../../utils/childSessionRequest";
+import { clearActiveChildSession, setActiveChildSession } from "../../utils/childSessionRequest";
 import {
   ensureArray,
   formatDisplayDate,
@@ -51,12 +48,10 @@ const RoboGeniusChildProfile = () => {
   const [isChangePinModalOpen, setIsChangePinModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [children, setChildren] = useState([]);
-  const [childCourses, setChildCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [pinError, setPinError] = useState(null);
   const [selectedChildId, setSelectedChildId] = useState(null);
-  const [selectedChildHasPin, setSelectedChildHasPin] = useState(false);
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -65,7 +60,6 @@ const RoboGeniusChildProfile = () => {
         try {
           setLoading(true);
           const { parentChildren, childCourseList } = await loadChildDashboardData(currentUser._id);
-          setChildCourses(childCourseList);
           setChildren(mergeChildrenWithCourses(parentChildren, childCourseList));
         } catch (err) {
           setError(err.message);
@@ -87,28 +81,10 @@ const RoboGeniusChildProfile = () => {
       }
 
       const { parentChildren, childCourseList } = await loadChildDashboardData(currentUser._id);
-      setChildCourses(childCourseList);
       setChildren(mergeChildrenWithCourses(parentChildren, childCourseList));
     } catch (err) {
       console.error('Error refreshing child data:', err);
       setError(err.message);
-    }
-  };
-
-  const verifyPin = async (childId, pin) => {
-    try {
-      const data = await sendJson("/api/verifyChildPin", {
-        method: 'POST',
-        body: {
-          childId,
-          pin,
-        },
-      });
-      return data.isValid;
-    } catch (err) {
-      console.error('Error verifying PIN:', err);
-      setError(err.message);
-      return false;
     }
   };
 
@@ -200,9 +176,11 @@ const handleVerifyPinSubmit = async (pinData) => {
     // Store session ID locally so ProtectedChild can validate the same child session.
     if (data.sessionId) {
       clearActiveChildSession();
+      setActiveChildSession({
+        childId: selectedChildId,
+        sessionId: data.sessionId,
+      });
       localStorage.setItem('selectedChildId', selectedChildId);
-      localStorage.setItem('childSession', data.sessionId);
-      localStorage.setItem('childSessionExpires', String(Date.now() + CHILD_SESSION_TTL_MS));
     }
 
     // Fetch child's courses data
@@ -234,7 +212,6 @@ const handleVerifyPinSubmit = async (pinData) => {
 
   const openPinModal = (childId, hasPin) => {
     setSelectedChildId(childId);
-    setSelectedChildHasPin(hasPin);
     
     if (hasPin) {
       setIsChangePinModalOpen(true);
