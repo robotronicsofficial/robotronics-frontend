@@ -3,7 +3,11 @@ import { ensureArray, normalizeChildProfile, normalizeParentRecord } from "./rob
 const STORAGE_KEY = "robogenius_checkout";
 const DEFAULT_PAYMENT_METHOD = "credit-card";
 
-const isBrowser = () => typeof window !== "undefined" && Boolean(window.localStorage);
+const getStorage = () => (
+  typeof window === "undefined" ? null : window.sessionStorage
+);
+
+const isBrowser = () => Boolean(getStorage());
 
 const buildRandomSegment = () => {
   if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
@@ -86,7 +90,7 @@ export const loadRobogeniusCheckout = () => {
   }
 
   try {
-    const rawValue = window.localStorage.getItem(STORAGE_KEY);
+    const rawValue = getStorage()?.getItem(STORAGE_KEY);
     if (!rawValue) {
       return null;
     }
@@ -103,7 +107,7 @@ export const saveRobogeniusCheckout = (checkout) => {
   }
 
   const normalizedCheckout = buildRobogeniusCheckout(checkout);
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedCheckout));
+  getStorage()?.setItem(STORAGE_KEY, JSON.stringify(normalizedCheckout));
   return normalizedCheckout;
 };
 
@@ -130,7 +134,7 @@ export const updateRobogeniusCheckout = (partialCheckout = {}) => {
 
 export const clearRobogeniusCheckout = () => {
   if (isBrowser()) {
-    window.localStorage.removeItem(STORAGE_KEY);
+    getStorage()?.removeItem(STORAGE_KEY);
   }
 };
 
