@@ -241,7 +241,7 @@ const Login = () => {
             <div className="h-0 lg:w-60 w-48 border border-line"></div>
           </div>
           <p className="text-center poppins-regular justify-center lg:py-10 py-5 lg:text-3xl text-xl text-brown">
-            Don't have an account?
+            Don&apos;t have an account?
           </p>
           <div className="lg:pb-10 pb-4">
             <button 
