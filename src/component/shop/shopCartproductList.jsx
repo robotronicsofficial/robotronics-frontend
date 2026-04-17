@@ -6,12 +6,21 @@ import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const CHECKOUT_NOTE_STORAGE_KEY = "checkoutNote";
+const getStoredCheckoutNote = () => (
+  typeof window === "undefined" ? "" : window.sessionStorage.getItem(CHECKOUT_NOTE_STORAGE_KEY) || ""
+);
+const setStoredCheckoutNote = (value) => {
+  if (typeof window !== "undefined") {
+    window.sessionStorage.setItem(CHECKOUT_NOTE_STORAGE_KEY, value);
+  }
+};
 
 const ShopCartproductList = ({ onNext }) => {
   const { cart, totalPrice } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const discountPercentage = 10;
-  const [notes, setNotes] = useState(() => localStorage.getItem('checkoutNote') || '');
+  const [notes, setNotes] = useState(() => getStoredCheckoutNote());
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const discountAmount = useMemo(
@@ -194,11 +203,11 @@ const ShopCartproductList = ({ onNext }) => {
 
           <textarea
             className="block mt-1 p-7 font-poppins font-light shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            value={notes}
-            onChange={(e) => {
-              setNotes(e.target.value);
-              localStorage.setItem('checkoutNote', e.target.value);
-            }}
+              value={notes}
+              onChange={(e) => {
+                setNotes(e.target.value);
+                setStoredCheckoutNote(e.target.value);
+              }}
             style={{
               width: '401px',
               height: '139px',

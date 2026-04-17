@@ -2,7 +2,11 @@ const STORAGE_KEY = "shop_checkout";
 export const SHIPPING_COST = 500;
 export const DISCOUNT_RATE = 0.1;
 
-const isBrowser = () => typeof window !== "undefined" && Boolean(window.localStorage);
+const getStorage = () => (
+  typeof window === "undefined" ? null : window.sessionStorage
+);
+
+const isBrowser = () => Boolean(getStorage());
 
 export const normalizeCheckoutAddress = (address = {}) => ({
   firstName: address?.firstName || "",
@@ -55,7 +59,7 @@ export const loadShopCheckout = () => {
   }
 
   try {
-    const rawValue = window.localStorage.getItem(STORAGE_KEY);
+    const rawValue = getStorage()?.getItem(STORAGE_KEY);
     if (!rawValue) {
       return { address: null, payment: null };
     }
@@ -85,7 +89,7 @@ export const saveShopCheckout = (partialState = {}) => {
       : currentState.payment,
   };
 
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+  getStorage()?.setItem(STORAGE_KEY, JSON.stringify(nextState));
   return nextState;
 };
 
@@ -94,7 +98,7 @@ export const clearShopCheckout = () => {
     return;
   }
 
-  window.localStorage.removeItem(STORAGE_KEY);
+  getStorage()?.removeItem(STORAGE_KEY);
 };
 
 export const formatShopCurrency = (amount) =>

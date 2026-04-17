@@ -13,6 +13,16 @@ const STATES = [
   { value: "SIN", label: "Sindh" },
 ];
 
+const CHECKOUT_NOTE_STORAGE_KEY = "checkoutNote";
+const getCheckoutNote = () => (
+  typeof window === "undefined" ? "" : window.sessionStorage.getItem(CHECKOUT_NOTE_STORAGE_KEY) || ""
+);
+const clearCheckoutNote = () => {
+  if (typeof window !== "undefined") {
+    window.sessionStorage.removeItem(CHECKOUT_NOTE_STORAGE_KEY);
+  }
+};
+
 const InputField = ({ label, name, value, onChange, placeholder, required = false, type = "text" }) => (
   <div>
     <label htmlFor={name} className="block text-sm poppins-light text-gray-700">{label}</label>
@@ -80,7 +90,7 @@ const CustomerInfomation = ({ onNext }) => {
     setLoading(true);
 
     try {
-      const noteFromCart = localStorage.getItem('checkoutNote') || '';
+      const noteFromCart = getCheckoutNote();
 
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/addresses`, {
         method: 'POST',
@@ -104,7 +114,7 @@ const CustomerInfomation = ({ onNext }) => {
         address: data?.address || form,
       });
 
-      localStorage.removeItem('checkoutNote');
+      clearCheckoutNote();
 
       if (onNext) {
         onNext();
