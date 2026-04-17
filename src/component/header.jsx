@@ -23,10 +23,6 @@ export default function Header() {
     setMenuOpen(!menuOpen);
   };
 
-  const handleLogout = () => {
-    logout();
-  };
-
   return (
     <header className="bg-transparent relative top-20 sm:top-20 z-50 w-full">
       <div className="w-full h-full flex items-center justify-center absolute">
@@ -133,7 +129,7 @@ export default function Header() {
                   </span>
 
                   <button
-                    onClick={handleLogout}
+                    onClick={logout}
                     className="py-1 px-2 rounded bg-signin text-white hover:bg-opacity-90 transition duration-300"
                   >
                     Logout
@@ -326,7 +322,7 @@ export default function Header() {
                   </span>
                   <button
                     onClick={() => {
-                      handleLogout();
+                      logout();
                       setMenuOpen(false);
                     }}
                     className="mt-4 py-2 px-4 rounded bg-signin text-white hover:bg-opacity-90 transition duration-300 w-full"
