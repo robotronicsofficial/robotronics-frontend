@@ -34,6 +34,9 @@ const isExternalUrl = (value) => /^https?:\/\//i.test(String(value || ""));
 const isProtectedCourseDownload = (value) =>
   String(value || "").replace(/\\/g, "/").startsWith("uploads/Courses/");
 
+const getModuleKey = (module, sectionIndex, moduleIndex) =>
+  module?.id || module?._id || `${sectionIndex}-${moduleIndex}`;
+
 const CourseDetail = () => {
   const { id } = useParams();
   const activeChildSession = getActiveChildSession();
@@ -481,119 +484,123 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                     </div>
 
                     {/* Always show all modules but mark locked ones */}
-                    {(section.modules || []).map((module, moduleIndex) => (
-                      <div
-                        key={module.id || module._id || `${sectionIndex}-${moduleIndex}`}
-                        className={`mb-6 rounded-lg ${sectionUnlocked ? "bg-white" : "bg-gray-100 opacity-80"
-                          }`}
-                      >
-                        {/* Module Header */}
+                    {(section.modules || []).map((module, moduleIndex) => {
+                      const moduleKey = getModuleKey(module, sectionIndex, moduleIndex);
+
+                      return (
                         <div
-                          className={`p-5 flex justify-between items-center ${sectionUnlocked ? 'cursor-pointer hover:bg-gray-50' : 'cursor-not-allowed'
+                          key={moduleKey}
+                          className={`mb-6 rounded-lg ${sectionUnlocked ? "bg-white" : "bg-gray-100 opacity-80"
                             } transition-colors duration-200`}
-                          onClick={() => sectionUnlocked && toggleModule(module.id)}
                         >
-                          <div className="flex items-center">
-                            {!sectionUnlocked && (
-                              <span className="poppins-bold text-yellow-500 mr-3">🔒</span>
-                            )}
-                            <span className="poppins-bold mr-3 text-yellow">
-                              <FaCirclePlay className="text-2xl" />
-                            </span>
-                            <h3 className="poppins-bold text-gray-800">
-                              <span className="text-yellow-500">Lecture {moduleIndex + 1}:</span> {module.name}
-                            </h3>
-                          </div>
-                          <div className="flex items-center space-x-6">
-                            {sectionUnlocked && (
-                              <span className="poppins-bold text-yellow text-sm bg-gray-100 px-3 py-1 rounded-full">
-                                Preview
+                          {/* Module Header */}
+                          <div
+                            className={`p-5 flex justify-between items-center ${sectionUnlocked ? 'cursor-pointer hover:bg-gray-50' : 'cursor-not-allowed'
+                              } transition-colors duration-200`}
+                            onClick={() => sectionUnlocked && toggleModule(moduleKey)}
+                          >
+                            <div className="flex items-center">
+                              {!sectionUnlocked && (
+                                <span className="poppins-bold text-yellow-500 mr-3">🔒</span>
+                              )}
+                              <span className="poppins-bold mr-3 text-yellow">
+                                <FaCirclePlay className="text-2xl" />
                               </span>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Module Content (collapsible) */}
-                        {expandedModules[module.id] && sectionUnlocked && (
-                          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                            {/* Learning Objectives */}
-                            {module.learningObjectives && module.learningObjectives.length > 0 && (
-                              <div className="mb-6 p-4 bg-gray rounded-lg border border-gray">
-                                <div className="flex items-center mb-3">
-                                  <h4 className="poppins-semibold text-black">
-                                    What You&apos;ll Learn in this lecture
-                                  </h4>
-                                </div>
-                                <ul className="space-y-2">
-                                  {module.learningObjectives.map((obj, idx) => (
-                                    <li key={idx} className="flex items-start">
-                                      <span className="poppins-light text-gray-700">• {obj}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {/* Content Items */}
-                            <div className="space-y-3">
-                              {(module.contents || []).map((content) => {
-                                const fileUrl = toAssetUrl(content.file);
-
-                                return (
-                                  <div
-                                    key={content.id}
-                                    className="flex justify-between items-center p-3 hover:bg-gray rounded-lg transition-colors duration-200"
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      {content.type === "video" && (
-                                        <>
-                                          <FaCirclePlay className="text-yellow text-lg" />
-                                          <button
-                                            onClick={() => handlePlayVideo(fileUrl)}
-                                            className="poppins-light"
-                                          >
-                                            {content.name}
-                                          </button>
-                                        </>
-                                      )}
-                                      {(content.type === "assignment" || content.type === "book") && (
-                                        <>
-                                          {content.type === "assignment" ? (
-                                            <MdAssignment className="text-yellow text-lg" />
-                                          ) : (
-                                            <FaLaptopCode className="text-yellow text-lg" />
-                                          )}
-                                          <span className="poppins-light">
-                                            {content.name}
-                                          </span>
-                                        </>
-                                      )}
-                                    </div>
-                                    <div className="flex items-center space-x-4">
-                                      {content.type === "video" && (
-                                        <span className="poppins-medium text-yellow text-sm hover:text-yellow-600">
-                                          10 min
-                                        </span>
-                                      )}
-                                      {(content.type === "assignment" || content.type === "book") && (
-                                        <button
-                                          type="button"
-                                          onClick={() => handleDownloadContent(content)}
-                                          className="flex items-center poppins-medium text-yellow text-sm hover:text-yellow-600"
-                                        >
-                                          <FiDownload className="mr-1" />
-                                          Download
-                                        </button>
-                                      )}
-                                    </div>
-                                  </div>
-                                );
-                              })}
+                              <h3 className="poppins-bold text-gray-800">
+                                <span className="text-yellow-500">Lecture {moduleIndex + 1}:</span> {module.name}
+                              </h3>
+                            </div>
+                            <div className="flex items-center space-x-6">
+                              {sectionUnlocked && (
+                                <span className="poppins-bold text-yellow text-sm bg-gray-100 px-3 py-1 rounded-full">
+                                  Preview
+                                </span>
+                              )}
                             </div>
                           </div>
-                        )}
-                      </div>
-                    ))}
+
+                          {/* Module Content (collapsible) */}
+                          {expandedModules[moduleKey] && sectionUnlocked && (
+                            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                              {/* Learning Objectives */}
+                              {module.learningObjectives && module.learningObjectives.length > 0 && (
+                                <div className="mb-6 p-4 bg-gray rounded-lg border border-gray">
+                                  <div className="flex items-center mb-3">
+                                    <h4 className="poppins-semibold text-black">
+                                      What You&apos;ll Learn in this lecture
+                                    </h4>
+                                  </div>
+                                  <ul className="space-y-2">
+                                    {module.learningObjectives.map((obj, idx) => (
+                                      <li key={idx} className="flex items-start">
+                                        <span className="poppins-light text-gray-700">• {obj}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+
+                              {/* Content Items */}
+                              <div className="space-y-3">
+                                {(module.contents || []).map((content) => {
+                                  const fileUrl = toAssetUrl(content.file);
+
+                                  return (
+                                    <div
+                                      key={content.id || content._id || `${moduleKey}-${content.type}-${content.name}`}
+                                      className="flex justify-between items-center p-3 hover:bg-gray rounded-lg transition-colors duration-200"
+                                    >
+                                      <div className="flex items-center gap-2">
+                                        {content.type === "video" && (
+                                          <>
+                                            <FaCirclePlay className="text-yellow text-lg" />
+                                            <button
+                                              onClick={() => handlePlayVideo(fileUrl)}
+                                              className="poppins-light"
+                                            >
+                                              {content.name}
+                                            </button>
+                                          </>
+                                        )}
+                                        {(content.type === "assignment" || content.type === "book") && (
+                                          <>
+                                            {content.type === "assignment" ? (
+                                              <MdAssignment className="text-yellow text-lg" />
+                                            ) : (
+                                              <FaLaptopCode className="text-yellow text-lg" />
+                                            )}
+                                            <span className="poppins-light">
+                                              {content.name}
+                                            </span>
+                                          </>
+                                        )}
+                                      </div>
+                                      <div className="flex items-center space-x-4">
+                                        {content.type === "video" && (
+                                          <span className="poppins-medium text-yellow text-sm hover:text-yellow-600">
+                                            10 min
+                                          </span>
+                                        )}
+                                        {(content.type === "assignment" || content.type === "book") && (
+                                          <button
+                                            type="button"
+                                            onClick={() => handleDownloadContent(content)}
+                                            className="flex items-center poppins-medium text-yellow text-sm hover:text-yellow-600"
+                                          >
+                                            <FiDownload className="mr-1" />
+                                            Download
+                                          </button>
+                                        )}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
 
                     {/* Quiz Section for the Module */}
                     {quizQuestions.length > 0 && (
