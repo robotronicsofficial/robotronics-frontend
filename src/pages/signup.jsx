@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import PropTypes from "prop-types";
 import hide from "../assets/images/hide.svg";
 import robot from "../assets/images/SignupRobot.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
@@ -146,13 +147,6 @@ const Signup = () => {
 
   };
 
-  // Password requirement check icons
-  const RequirementCheck = ({ isValid, text }) => (
-    <div className="flex items-center">
-      <span className={`inline-block w-4 h-4 rounded-full mr-2 ${isValid ? 'bg-green-500' : 'bg-red-500'}`}></span>
-      <span className={`text-xs ${isValid ? 'text-green-500' : 'text-red-500'}`}>{text}</span>
-    </div>
-  );
   const handleSocialLogin = (provider) => {
     window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`;
   };
@@ -430,6 +424,24 @@ const Signup = () => {
       </div>
     </div>
   );
+};
+
+const RequirementCheck = ({ isValid, text }) => (
+  <div className="flex items-center">
+    <span
+      className={`inline-block w-4 h-4 rounded-full mr-2 ${
+        isValid ? "bg-green-500" : "bg-red-500"
+      }`}
+    ></span>
+    <span className={`text-xs ${isValid ? "text-green-500" : "text-red-500"}`}>
+      {text}
+    </span>
+  </div>
+);
+
+RequirementCheck.propTypes = {
+  isValid: PropTypes.bool.isRequired,
+  text: PropTypes.string.isRequired,
 };
 
 export default Signup;
