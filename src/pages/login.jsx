@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import hide from "../assets/images/hide.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
-import apple from "../assets/images/Applelogo.svg";
 import { useAuth } from "../contexts/AuthContext";
 
 const Login = () => {
@@ -161,14 +160,6 @@ const Login = () => {
           >
             <img className="h-6 w-8" src={google} alt="Google" />
             Continue with Google
-          </button>
-          <button 
-            type="button"
-            className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14"
-            onClick={() => handleSocialLogin('apple')}
-          >
-            <img className="h-6 w-8" src={apple} alt="Apple" />
-            Continue with Apple
           </button>
         </div>
         <div
