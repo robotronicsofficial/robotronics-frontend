@@ -2,7 +2,10 @@ import LeftNav from "./leftNav";
 import { FaStar, FaArrowDown } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { buildChildSessionRequest } from "../../utils/childSessionRequest";
+import {
+  buildChildSessionRequest,
+  getActiveChildSession,
+} from "../../utils/childSessionRequest";
 import { ensureArray } from "../../lib/robogenius";
 
 const MyCourses = () => {
@@ -12,13 +15,13 @@ const MyCourses = () => {
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
-  const [saveSuccess, setSaveSuccess] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxCourses, setMaxCourses] = useState(2); // Default to Basic plan limit
   const coursesPerPage = 9;
   const navigate = useNavigate();
   const { id: routeChildId } = useParams();
-  const childId = routeChildId || localStorage.getItem("selectedChildId");
+  const activeChildSession = getActiveChildSession(routeChildId);
+  const childId = activeChildSession?.childId || null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +32,7 @@ const MyCourses = () => {
 
         const childSessionRequest = buildChildSessionRequest({
           method: "GET",
+          childId,
         });
 
         if (!childSessionRequest) {
@@ -83,7 +87,6 @@ const MyCourses = () => {
   const saveSelectedCourses = async () => {
     try {
       setSaveLoading(true);
-      setSaveSuccess(false);
 
       if (!childId) {
         throw new Error("Child ID not found");
@@ -91,6 +94,7 @@ const MyCourses = () => {
 
       const childSessionRequest = buildChildSessionRequest({
         method: "PUT",
+        childId,
         headers: {
           "Content-Type": "application/json",
         },
@@ -116,7 +120,6 @@ const MyCourses = () => {
         throw new Error(errorData.message || "Failed to save courses");
       }
 
-      setSaveSuccess(true);
       setTimeout(() => {
         navigate(`/Dashboard/myAllCourses/${childId}`);
       }, 1500);

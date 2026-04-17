@@ -5,12 +5,15 @@ import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
 import { fetchSessionJson } from "../../lib/api";
 import { formatDisplayDate, normalizeParentRecord } from "../../lib/robogenius";
+import { getActiveChildId } from "../../utils/childSessionRequest";
+
 const RoboGeniusProgressCertificate = () => {
   const navigate = useNavigate();
   const [children, setChildren] = useState([]);
 
   const { currentUser } = useAuth();
   const userId = currentUser?._id;
+  const activeChildId = getActiveChildId();
 
   useEffect(() => {
     const fetchParentData = async () => {
@@ -70,13 +73,17 @@ const RoboGeniusProgressCertificate = () => {
                   <button
                     className="mt-3 w-full text-sm poppins-light border border-lin rounded-lg px-3 py-2 bg-yellow text-white hover:bg-yellow-600 transition-colors"
                     onClick={() => {
-                      localStorage.setItem('selectedChildId', child._id);
+                      if (activeChildId !== child._id) {
+                        navigate("/Dashboard/ChildProfile");
+                        return;
+                      }
+
                       navigate(
                         `/Dashboard/ProgressCertificate/ProgressPage?childId=${child._id}`
                       );
                     }}
                   >
-                    View Progress
+                    {activeChildId === child._id ? "View Progress" : "Unlock in Child Accounts"}
                   </button>
                 </div>
               </div>

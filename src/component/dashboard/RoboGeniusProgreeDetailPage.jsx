@@ -3,7 +3,10 @@ import { FaFilePdf } from "react-icons/fa6";
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { normalizeProgressPayload } from "../../lib/robogenius";
-import { buildOptionalChildSessionRequest } from "../../utils/childSessionRequest";
+import {
+  buildChildSessionRequest,
+  getActiveChildSession,
+} from "../../utils/childSessionRequest";
 
 const RoboGeniusProgreeDetailPage = () => {
   const [progressData, setProgressData] = useState(null);
@@ -14,12 +17,18 @@ const RoboGeniusProgreeDetailPage = () => {
   const childId = searchParams.get('childId');
   const [downloadingCourseId, setDownloadingCourseId] = useState(null);
   const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
-  const selectedChildId = childId || localStorage.getItem('selectedChildId');
+  const activeChildSession = getActiveChildSession(childId || undefined);
+  const selectedChildId = activeChildSession?.childId || null;
 
   const fetchProgressPayload = useCallback(async (nextChildId) => {
-    const progressRequest = buildOptionalChildSessionRequest({
+    const progressRequest = buildChildSessionRequest({
       method: "GET",
-    }) || { method: "GET" };
+      childId: nextChildId,
+    });
+
+    if (!progressRequest) {
+      throw new Error('Child session not found. Please re-enter the PIN.');
+    }
 
     const response = await fetch(
       `${import.meta.env.VITE_BACKEND_URL}/api/${nextChildId}/progress`,
@@ -35,7 +44,7 @@ const RoboGeniusProgreeDetailPage = () => {
 
   const fetchProgressData = useCallback(async () => {
     if (!selectedChildId) {
-      setError('Child ID not found in URL');
+      setError('Child session not found. Please re-enter the PIN from Child Accounts.');
       setLoading(false);
       return;
     }
@@ -62,8 +71,9 @@ const RoboGeniusProgreeDetailPage = () => {
     setDownloadErrors(prev => ({ ...prev, [courseId]: null }));
     
     try {
-      const generateRequest = buildOptionalChildSessionRequest({
+      const generateRequest = buildChildSessionRequest({
         method: 'POST',
+        childId: selectedChildId,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -73,10 +83,11 @@ const RoboGeniusProgreeDetailPage = () => {
         },
       });
 
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/generate`,
-        generateRequest
-      );
+      if (!generateRequest) {
+        throw new Error('Child session not found. Please re-enter the PIN.');
+      }
+
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/generate`, generateRequest);
 
       // Check if the response is OK (status 200-299)
       if (!response.ok) {
@@ -87,14 +98,21 @@ const RoboGeniusProgreeDetailPage = () => {
       const result = await response.json();
 
       // Download the generated certificate
+      const downloadRequest = buildChildSessionRequest({
+        method: "GET",
+        childId: selectedChildId,
+      });
+
+      if (!downloadRequest) {
+        throw new Error('Child session not found. Please re-enter the PIN.');
+      }
+
       const downloadResponse = await fetch(
         new URL(
           result.downloadUrl || `/api/certificates/download/${result.certificateId}`,
           import.meta.env.VITE_BACKEND_URL
         ).toString(),
-        buildOptionalChildSessionRequest({
-          method: "GET",
-        }) || { method: "GET" }
+        downloadRequest
       );
 
       if (!downloadResponse.ok) {

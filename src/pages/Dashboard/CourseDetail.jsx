@@ -10,7 +10,10 @@ import { FaLaptopCode } from "react-icons/fa";
 import { MdAssignment } from "react-icons/md";
 import { AiOutlineRight } from "react-icons/ai";
 import ChatSupport from "../../component/ChatSupport"
-import { buildChildSessionRequest } from "../../utils/childSessionRequest";
+import {
+  buildChildSessionRequest,
+  getActiveChildSession,
+} from "../../utils/childSessionRequest";
 import {
   normalizeChildCourse,
   normalizeCourseDetail,
@@ -33,6 +36,8 @@ const isProtectedCourseDownload = (value) =>
 
 const CourseDetail = () => {
   const { id } = useParams();
+  const activeChildSession = getActiveChildSession();
+  const childId = activeChildSession?.childId || null;
   const [courseData, setCourseData] = useState(null);
   const [childCourseData, setChildCourseData] = useState(null);
   const [plan, setPlan] = useState(null);
@@ -53,15 +58,14 @@ const CourseDetail = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const childId = localStorage.getItem('selectedChildId');
-
       try {
         if (!childId) {
-          throw new Error("Child session not found. Select a child again.");
+          throw new Error("Child session not found. Please re-enter the PIN.");
         }
 
         const childCourseRequest = buildChildSessionRequest({
           method: "GET",
+          childId,
         });
 
         if (!childCourseRequest) {
@@ -91,7 +95,7 @@ const CourseDetail = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [childId, id]);
 
   const isSectionUnlocked = (section, sectionIndex) => {
     if (!section?.startDate || !section?.endDate) return true;
@@ -119,10 +123,14 @@ const CourseDetail = () => {
   };
 
 const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) => {
-  const childId = localStorage.getItem('selectedChildId');
   try {
+    if (!childId) {
+      throw new Error("Child session not found. Please re-enter the PIN.");
+    }
+
     const childSessionRequest = buildChildSessionRequest({
       method: 'PUT',
+      childId,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -168,10 +176,10 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
   };
 
   const handleDownloadContent = async (content) => {
-    const childId = localStorage.getItem("selectedChildId");
     const contentId = content?.id || content?._id;
 
     if (!childId || !contentId) {
+      setError("Child session not found. Please re-enter the PIN.");
       return;
     }
 
@@ -182,6 +190,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
 
     const childSessionRequest = buildChildSessionRequest({
       method: "GET",
+      childId,
     });
 
     if (!childSessionRequest) {
@@ -512,7 +521,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                               <div className="mb-6 p-4 bg-gray rounded-lg border border-gray">
                                 <div className="flex items-center mb-3">
                                   <h4 className="poppins-semibold text-black">
-                                    What You'll Learn in this lecture
+                                    What You&apos;ll Learn in this lecture
                                   </h4>
                                 </div>
                                 <ul className="space-y-2">
@@ -605,7 +614,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                         {attemptsExhausted ? (
                           <div className="p-4 bg-white rounded-lg shadow-sm">
                             <div className="poppins-bold text-red-600 text-lg mb-2">
-                              You've used all {maxAttempts} attempts for today.
+                              You&apos;ve used all {maxAttempts} attempts for today.
                             </div>
                             <div className="poppins-light text-gray-700">
                               {childPlan === 'basic' ?
@@ -695,7 +704,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                                         isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) &&
                                         childSection.quiz.attempts >= maxAttempts ? (
                                         <div className="mt-4 poppins-medium text-gray-600">
-                                          You've used all {maxAttempts} attempts for today. Try again tomorrow.
+                                          You&apos;ve used all {maxAttempts} attempts for today. Try again tomorrow.
                                         </div>
                                       ) : (
                                         <button

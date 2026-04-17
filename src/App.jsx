@@ -101,7 +101,7 @@ function App() {
         <Route path="/Dashboard/userInfoForm" element={<Navigate to="/Dashboard/userInfo" replace />} />
         <Route path="/Dashboard/courseDetail/:id" element={<ProtectedChild><CourseDetail /></ProtectedChild>} />
         <Route path="/Dashboard/ProgressCertificate" element={<ProtectedRoute><ProgressCertificate /></ProtectedRoute>} />
-        <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<ProtectedRoute><RoboGeniusProgressPage /></ProtectedRoute>} />
+        <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<ProtectedChild><RoboGeniusProgressPage /></ProtectedChild>} />
         <Route path="/404" element={<Error />} />
 
         <Route path="/International/myRobot" element={<MyRobort />} />

@@ -4,7 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { DASHBOARD_CHILD_PROFILE_PATH } from '../router/paths';
-import { clearActiveChildSession, getActiveChildSession } from '../utils/childSessionRequest';
+import {
+  buildChildSessionRequest,
+  clearActiveChildSession,
+  getActiveChildSession,
+} from '../utils/childSessionRequest';
 
 const ProtectedChild = ({ children }) => {
   const [isValidSession, setIsValidSession] = useState(true);
@@ -12,39 +16,53 @@ const ProtectedChild = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const invalidateChildSession = () => {
+      clearActiveChildSession();
+      setIsValidSession(false);
+      setShowSessionPopup(true);
+    };
+
     const checkSession = async () => {
       const activeChildSession = getActiveChildSession();
 
       if (!activeChildSession) {
-        clearActiveChildSession();
-        setIsValidSession(false);
-        setShowSessionPopup(true);
+        invalidateChildSession();
         return;
       }
 
-      const { childId: selectedChildId, sessionId: childSession } = activeChildSession;
+      const { childId, sessionId } = activeChildSession;
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/verifyChildSession`, {
+        const childSessionRequest = buildChildSessionRequest({
           method: 'POST',
+          childId,
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ childId: selectedChildId, sessionId: childSession }),
+          body: {
+            childId,
+            sessionId,
+          },
         });
+
+        if (!childSessionRequest) {
+          invalidateChildSession();
+          return;
+        }
+
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/verifyChildSession`,
+          childSessionRequest
+        );
 
         const data = await response.json();
         
         if (!response.ok || !data.isValid) {
-          clearActiveChildSession();
-          setIsValidSession(false);
-          setShowSessionPopup(true);
+          invalidateChildSession();
         }
       } catch (error) {
         console.error('Session check failed:', error);
-        clearActiveChildSession();
-        setIsValidSession(false);
-        setShowSessionPopup(true);
+        invalidateChildSession();
       }
     };
 

@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import LeftNav from "./leftNav";
 import { FaStar } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import { buildChildSessionRequest } from "../../utils/childSessionRequest";
+import {
+  buildChildSessionRequest,
+  getActiveChildSession,
+} from "../../utils/childSessionRequest";
 
 const extractActiveCourses = (payload) => {
   if (Array.isArray(payload?.data?.activeCourses)) return payload.data.activeCourses;
@@ -21,7 +24,8 @@ const MyAllCourses = () => {
   const coursesPerPage = 9;
   const navigate = useNavigate();
   const { id: routeChildId } = useParams();
-  const childId = routeChildId || localStorage.getItem("selectedChildId");
+  const activeChildSession = getActiveChildSession(routeChildId);
+  const childId = activeChildSession?.childId || null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +38,7 @@ const MyAllCourses = () => {
 
         const childSessionRequest = buildChildSessionRequest({
           method: "GET",
+          childId,
         });
 
         if (!childSessionRequest) {
