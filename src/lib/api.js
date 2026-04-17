@@ -21,8 +21,17 @@ export const getApiErrorMessage = (response, payload) =>
   payload?.error ||
   `Request failed with status ${response.status}`;
 
+const buildJsonHeaders = (headers = {}, includeContentType = false) => ({
+  Accept: "application/json",
+  ...(includeContentType ? { "Content-Type": "application/json" } : {}),
+  ...headers,
+});
+
 export const fetchBackendJson = async (path, options = {}) => {
-  const response = await fetch(toBackendUrl(path), options);
+  const response = await fetch(toBackendUrl(path), {
+    ...options,
+    headers: buildJsonHeaders(options.headers),
+  });
   const payload = await parseResponseBody(response);
 
   if (!response.ok) {
@@ -44,19 +53,13 @@ export const fetchSessionJson = (path, options = {}) =>
 export const sendSessionJson = (path, { body, headers, ...options } = {}) =>
   fetchSessionJson(path, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
+    headers: buildJsonHeaders(headers, true),
     body: body === undefined ? undefined : JSON.stringify(body),
   });
 
 export const sendJson = (path, { body, headers, ...options } = {}) =>
   fetchBackendJson(path, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
+    headers: buildJsonHeaders(headers, true),
     body: body === undefined ? undefined : JSON.stringify(body),
   });

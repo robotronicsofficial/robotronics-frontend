@@ -8,7 +8,7 @@ import PinModal from "./popUps/PinModal";
 import ChangePinModal from "./popUps/ChangePinModal";
 import ErrorModal from "./popUps/ErrorModal";
 import { useAuth } from "../../contexts/AuthContext";
-import { fetchBackendJson, fetchSessionJson, sendJson } from "../../lib/api";
+import { fetchSessionJson, sendSessionJson } from "../../lib/api";
 import { clearActiveChildSession, setActiveChildSession } from "../../utils/childSessionRequest";
 import {
   ensureArray,
@@ -99,7 +99,7 @@ const RoboGeniusChildProfile = () => {
       }
 
       // For changing PIN
-      await sendJson(`/api/children/${selectedChildId}/pin`, {
+      await sendSessionJson(`/api/children/${selectedChildId}/pin`, {
         method: 'PATCH',
         body: {
           oldPin: pinData.oldPin,
@@ -129,7 +129,7 @@ const RoboGeniusChildProfile = () => {
       }
 
       const childData = children.find(child => child._id === selectedChildId) || {};
-      await sendJson("/api/AddChildData", {
+      await sendSessionJson("/api/AddChildData", {
         method: 'POST',
         body: {
           ...childData,
@@ -153,7 +153,7 @@ const handleVerifyPinSubmit = async (pinData) => {
   try {
     setPinError(null);
     
-    const data = await sendJson("/api/verifyChildPin", {
+    const data = await sendSessionJson("/api/verifyChildPin", {
       method: 'POST',
       body: {
         childId: selectedChildId,
@@ -180,11 +180,10 @@ const handleVerifyPinSubmit = async (pinData) => {
         childId: selectedChildId,
         sessionId: data.sessionId,
       });
-      localStorage.setItem('selectedChildId', selectedChildId);
     }
 
     // Fetch child's courses data
-    const coursesData = await fetchBackendJson(`/api/getChild/${selectedChildId}`);
+    const coursesData = await fetchSessionJson(`/api/getChild/${selectedChildId}`);
     const selectedCourses = ensureArray(coursesData?.courses);
     
     // Navigate based on whether courses exist
