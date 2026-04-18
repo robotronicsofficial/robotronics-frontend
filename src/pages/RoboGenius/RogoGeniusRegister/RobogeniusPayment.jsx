@@ -167,8 +167,12 @@ const RobogeniusPayment = ({ onNext }) => {
         <div className="space-y-3">
           <p className="text-3xl font-bold text-[#362D2C]">Payment Details</p>
           <p className="text-sm text-[#7E7F7C]">
-            Store the billing details for this RoboGenius subscription before the final review step.
+            Save the billing details for this RoboGenius checkout in this browser before the final review step.
           </p>
+        </div>
+
+        <div className="mt-6 rounded-[20px] border border-[#E6D7B8] bg-[#FFF8E8] p-4 text-sm text-[#362D2C]">
+          This screen saves billing details locally for review. It does not create a backend payment record or invoice on its own.
         </div>
 
         <div className="mt-8 rounded-[20px] bg-[#362D2C] p-5 text-white">
@@ -266,7 +270,7 @@ const RobogeniusPayment = ({ onNext }) => {
               />
             ) : (
               <div className="rounded-[20px] border border-dashed border-[#D4D4D4] bg-[#F8F7F5] p-4 text-sm text-[#7E7F7C]">
-                EasyPaisa billing will be attached to the account number above.
+                EasyPaisa details will be saved against the account number above for review.
               </div>
             )}
             {selectedMethod === "credit-card" ? (
@@ -280,7 +284,7 @@ const RobogeniusPayment = ({ onNext }) => {
               />
             ) : (
               <div className="rounded-[20px] border border-dashed border-[#D4D4D4] bg-[#F8F7F5] p-4 text-sm text-[#7E7F7C]">
-                Final confirmation happens on the next step after billing details are saved.
+                The next step only confirms the saved review details. It does not charge the payment method yet.
               </div>
             )}
           </div>

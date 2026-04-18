@@ -119,7 +119,7 @@ const ShopPaymentMethod = ({ onNext }) => {
             <div className="space-y-2">
               <p className="text-3xl text-brown poppins-bold">SHIPPING & PAYMENT</p>
               <p className="text-sm text-brown poppins-light">
-                Save the delivery service and billing method for this order.
+                Save the delivery service and billing method in this browser for this checkout draft.
               </p>
             </div>
             <button
@@ -129,6 +129,10 @@ const ShopPaymentMethod = ({ onNext }) => {
             >
               Edit address
             </button>
+          </div>
+
+          <div className="rounded-[20px] border border-[#E6D7B8] bg-[#FFF8E8] p-4 text-sm text-brown">
+            This storefront flow only stores billing details locally in your browser. It does not create a backend payment record or invoice yet.
           </div>
 
           {addressReady ? (
@@ -154,7 +158,7 @@ const ShopPaymentMethod = ({ onNext }) => {
           <div className="space-y-2">
             <p className="text-3xl text-brown poppins-bold">SHIPPING SERVICE</p>
             <p className="text-sm text-brown poppins-light">
-              Choose the delivery partner you want saved with this checkout.
+              Choose the delivery partner you want stored with this checkout draft.
             </p>
           </div>
 
@@ -197,7 +201,7 @@ const ShopPaymentMethod = ({ onNext }) => {
           <div className="space-y-2">
             <p className="text-3xl text-brown poppins-bold">PAYMENT METHOD</p>
             <p className="text-sm text-brown poppins-light">
-              Save the billing method you want associated with this order.
+              Save the billing method you want attached to this browser-only checkout draft.
             </p>
           </div>
 
@@ -240,7 +244,7 @@ const ShopPaymentMethod = ({ onNext }) => {
           <div className="space-y-2">
             <p className="text-3xl text-brown poppins-bold">BILLING DETAILS</p>
             <p className="text-sm text-brown poppins-light">
-              These details are used for the order summary and saved payment reference.
+              These details are used for the order summary and kept locally in this browser until backend checkout is wired.
             </p>
           </div>
 

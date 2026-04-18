@@ -43,8 +43,12 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         <div className="lg:space-y-6 space-y-4">
           <p className="lg:text-4xl text-2xl poppins-bold text-brown">CHECKOUT SUMMARY</p>
           <p className="font-lato font-medium text-base leading-5 text-[#7E7F7C]">
-            Review the address, delivery service, payment reference, and products for this order.
+            Review the address, delivery service, locally saved payment reference, and products for this checkout draft.
           </p>
+        </div>
+
+        <div className="rounded-[20px] border border-[#E6D7B8] bg-[#FFF8E8] p-4 text-sm text-brown">
+          This page reflects browser-saved checkout details only. It does not mean a payment was charged or that an invoice was created on the backend.
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
@@ -90,7 +94,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-lg poppins-extrabold">PAYMENT DETAILS</p>
-                <p className="text-sm poppins-light">Saved billing method and courier selection.</p>
+                <p className="text-sm poppins-light">Saved locally in this browser for the current checkout draft.</p>
               </div>
               <button
                 type="button"
@@ -128,7 +132,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
               </div>
             ) : (
               <p className="text-sm poppins-light">
-                No payment method is saved yet for this checkout.
+                No local payment details are saved yet for this checkout.
               </p>
             )}
           </section>

@@ -7,7 +7,7 @@ const Robogeniuspaymentcustomercart = () => {
       <div className="px-4 pb-6 pt-20 text-center md:px-10">
         <p className="text-4xl font-bold text-brown">Payment Process</p>
         <p className="mt-4 text-sm text-brown/80">
-          Complete the RoboGenius subscription billing details before the final review.
+          Save the RoboGenius billing details in this browser before the final review.
         </p>
       </div>
       <div className="px-4 pb-10 md:px-10">

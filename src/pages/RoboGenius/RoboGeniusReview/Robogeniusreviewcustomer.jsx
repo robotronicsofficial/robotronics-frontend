@@ -36,7 +36,7 @@ const Robogeniusreviewcustomer = () => {
   }
 
   const handleConfirmOrder = () => {
-    const confirmedCheckout = updateRobogeniusCheckout({ status: "confirmed" });
+    const confirmedCheckout = updateRobogeniusCheckout({ status: "details-confirmed" });
     setCheckout(confirmedCheckout);
   };
 
@@ -138,18 +138,18 @@ const Robogeniusreviewcustomer = () => {
               className="rounded-full bg-[#362D2C] px-6 py-3 text-sm font-semibold text-[#F5AB34]"
               onClick={handleConfirmOrder}
             >
-              Confirm Subscription
+              Save Review Details
             </button>
           </div>
         </div>
 
         <div className="space-y-6 rounded-[24px] bg-[#EEE8E4] p-6 shadow-sm md:p-10">
           <p className="text-2xl font-bold text-[#362D2C]">Subscription Status</p>
-          {checkout.status === "confirmed" ? (
+          {checkout.status === "details-confirmed" ? (
             <div className="space-y-4 rounded-[20px] bg-white p-6">
-              <p className="text-xl font-bold text-[#362D2C]">Subscription confirmed</p>
+              <p className="text-xl font-bold text-[#362D2C]">Review details saved</p>
               <p className="text-sm text-[#7E7F7C]">
-                The checkout details are saved and the parent dashboard can now use the registered child records.
+                These billing details are saved in this browser for review. This step does not create a backend payment record or invoice.
               </p>
               <div className="space-y-3">
                 <ReviewRow label="Order code" value={checkout.orderCode} />
@@ -159,7 +159,7 @@ const Robogeniusreviewcustomer = () => {
                   value={checkout.payment.label || "Not selected"}
                 />
                 <ReviewRow
-                  label="Total billed"
+                  label="Checkout total"
                   value={formatCheckoutCurrency(checkout.totalPrice)}
                   highlight
                 />
@@ -185,7 +185,7 @@ const Robogeniusreviewcustomer = () => {
             <div className="space-y-4 rounded-[20px] bg-white p-6">
               <p className="text-lg font-bold text-[#362D2C]">Ready for confirmation</p>
               <p className="text-sm text-[#7E7F7C]">
-                Review the billing and child details on the left, then confirm the subscription once everything matches.
+                Review the child and billing details on the left, then save this review state once everything matches.
               </p>
               <div className="space-y-3">
                 <ReviewRow
