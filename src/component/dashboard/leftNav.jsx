@@ -4,6 +4,7 @@ import { RiArrowDropDownLine, RiRobot3Fill } from "react-icons/ri";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { CONTACT_PATH } from "../../router/paths";
 
 const LeftNav = () => {
   const { currentUser, logout } = useAuth();
@@ -45,7 +46,7 @@ const LeftNav = () => {
         { name: "• Payment History", href: "/Dashboard/PaymentHistory" },
       ],
     },
-    { name: "Support", href: "/404", icon: <FaHeadphones className="text-brown" /> },
+    { name: "Support", href: CONTACT_PATH, icon: <FaHeadphones className="text-brown" /> },
   ];
 
   return (
@@ -59,20 +60,38 @@ const LeftNav = () => {
         <ul className="space-y-4">
           {menuItems.map((item, index) => (
             <li key={index}>
-              <div
-                className={`flex items-center justify-between px-4 py-2 rounded-lg text-brown hover:bg-gold ${
-                  activeIndex === index ? "bg-gold" : ""
-                }`}
-                onClick={() => (item.subMenu ? toggleSubMenu(index) : setActiveIndex(index))}
-              >
-                <div className="flex items-center space-x-3">
-                  {item.icon}
-                  <Link to={item.href} className="text-base lg:text-xl font-medium text-lightblack">
-                    {item.name}
-                  </Link>
-                </div>
-                {item.subMenu && item.dropdownIcon}
-              </div>
+              {item.subMenu ? (
+                <button
+                  type="button"
+                  className={`flex w-full items-center justify-between rounded-lg px-4 py-2 text-brown hover:bg-gold ${
+                    activeIndex === index ? "bg-gold" : ""
+                  }`}
+                  onClick={() => toggleSubMenu(index)}
+                >
+                  <div className="flex items-center space-x-3">
+                    {item.icon}
+                    <span className="text-base font-medium text-lightblack lg:text-xl">
+                      {item.name}
+                    </span>
+                  </div>
+                  {item.dropdownIcon}
+                </button>
+              ) : (
+                <Link
+                  to={item.href}
+                  className={`flex items-center justify-between rounded-lg px-4 py-2 text-brown hover:bg-gold ${
+                    activeIndex === index ? "bg-gold" : ""
+                  }`}
+                  onClick={() => setActiveIndex(index)}
+                >
+                  <div className="flex items-center space-x-3">
+                    {item.icon}
+                    <span className="text-base font-medium text-lightblack lg:text-xl">
+                      {item.name}
+                    </span>
+                  </div>
+                </Link>
+              )}
               {item.subMenu && showSubMenu[index] && (
                 <ul className="pl-6 pt-2 space-y-1">
                   {item.subMenu.map((subItem, subIndex) => (

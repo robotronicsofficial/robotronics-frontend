@@ -29,7 +29,6 @@ const Blog = lazy(() => import("./pages/Blog/blog"));
 const BlogDetail = lazy(() => import("./pages/Blog/blogDetail"));
 const ContactUs = lazy(() => import("./pages/contactUs/contactUs"));
 const UserInfo = lazy(() => import("./pages/Dashboard/userInfo"));
-const Order = lazy(() => import("./pages/Dashboard/order"));
 const MyCoursesPage = lazy(() => import("./pages/Dashboard/myCoursesPage"));
 const WishList = lazy(() => import("./pages/Dashboard/wishList"));
 const Payment = lazy(() => import("./pages/Dashboard/Payment"));
@@ -94,7 +93,6 @@ function App() {
           <Route path="/BlogDetail/:id" element={<BlogDetail />} />
           <Route path={CONTACT_PATH} element={<ContactUs />} />
           <Route path="/Dashboard/userInfo" element={<ProtectedRoute><UserInfo /></ProtectedRoute>} />
-          <Route path="/Dashboard/order" element={<ProtectedRoute><Order /></ProtectedRoute>} />
 
           <Route path="/Dashboard/MyCoursesPage/:id" element={<ProtectedChild><MyCoursesPage /></ProtectedChild>} />
           <Route path="/Dashboard/MyCoursesPage" element={<ProtectedChild><MyCoursesPage /></ProtectedChild>} />
