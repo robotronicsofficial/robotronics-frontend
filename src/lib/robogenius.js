@@ -31,12 +31,9 @@ export const normalizeParentRecord = (parent = {}) => ({
   children: ensureArray(parent.children).map(normalizeChildProfile),
 });
 
-export const normalizeChildCourseRecord = (childCourse = {}) => ({
-  ...childCourse,
+export const normalizeChildAccessRecord = (childCourse = {}) => ({
   childId: childCourse.childId || "",
-  hasPin: Boolean(childCourse.hasPin || childCourse.pin),
-  pin: typeof childCourse.pin === "string" ? childCourse.pin : null,
-  courses: ensureArray(childCourse.courses),
+  hasPin: Boolean(childCourse.hasPin),
 });
 
 export const formatDisplayDate = (value) => {

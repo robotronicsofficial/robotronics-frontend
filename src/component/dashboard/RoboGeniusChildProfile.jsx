@@ -13,18 +13,24 @@ import { clearActiveChildSession, setActiveChildSession } from "../../utils/chil
 import {
   ensureArray,
   formatDisplayDate,
-  normalizeChildCourseRecord,
+  normalizeChildAccessRecord,
   normalizeParentRecord,
 } from "../../lib/robogenius";
 
-const mergeChildrenWithCourses = (parentChildren, childCourseList) =>
+const resolveChildAccess = (child, childAccessList) => (
+  childAccessList.find((access) => (
+    access.childId === child._id || access.childId === child.roboChildId
+  )) || null
+);
+
+const mergeChildrenWithAccess = (parentChildren, childAccessList) =>
   parentChildren.map((child) => {
-    const childCourse = childCourseList.find((course) => course.childId === child._id);
+    const childAccess = resolveChildAccess(child, childAccessList);
 
     return {
       ...child,
-      hasPin: Boolean(childCourse?.hasPin),
-      courses: Array.isArray(childCourse?.courses) ? childCourse.courses : [],
+      accessChildId: childAccess?.childId || child._id || child.roboChildId || "",
+      hasPin: Boolean(childAccess?.hasPin),
     };
   });
 
@@ -36,7 +42,7 @@ const loadChildDashboardData = async (userId) => {
 
   return {
     parentChildren: normalizeParentRecord(parentData).children,
-    childCourseList: ensureArray(childCoursesData?.childCourse).map(normalizeChildCourseRecord),
+    childAccessList: ensureArray(childCoursesData?.childCourse).map(normalizeChildAccessRecord),
   };
 };
 
@@ -59,8 +65,8 @@ const RoboGeniusChildProfile = () => {
       const fetchData = async () => {
         try {
           setLoading(true);
-          const { parentChildren, childCourseList } = await loadChildDashboardData(currentUser._id);
-          setChildren(mergeChildrenWithCourses(parentChildren, childCourseList));
+          const { parentChildren, childAccessList } = await loadChildDashboardData(currentUser._id);
+          setChildren(mergeChildrenWithAccess(parentChildren, childAccessList));
         } catch (err) {
           setError(err.message);
         } finally {
@@ -80,8 +86,8 @@ const RoboGeniusChildProfile = () => {
         throw new Error("Parent account not found");
       }
 
-      const { parentChildren, childCourseList } = await loadChildDashboardData(currentUser._id);
-      setChildren(mergeChildrenWithCourses(parentChildren, childCourseList));
+      const { parentChildren, childAccessList } = await loadChildDashboardData(currentUser._id);
+      setChildren(mergeChildrenWithAccess(parentChildren, childAccessList));
     } catch (err) {
       console.error('Error refreshing child data:', err);
       setError(err.message);
@@ -99,7 +105,14 @@ const RoboGeniusChildProfile = () => {
       }
 
       // For changing PIN
-      await sendSessionJson(`/api/children/${selectedChildId}/pin`, {
+      const selectedChild = children.find((child) => child._id === selectedChildId);
+      if (!selectedChild) {
+        throw new Error("Child account not found");
+      }
+
+      const childAccessId = selectedChild?.accessChildId || selectedChildId;
+
+      await sendSessionJson(`/api/children/${childAccessId}/pin`, {
         method: 'PATCH',
         body: {
           oldPin: pinData.oldPin,
@@ -128,13 +141,33 @@ const RoboGeniusChildProfile = () => {
         return;
       }
 
-      const childData = children.find(child => child._id === selectedChildId) || {};
+      const childData = children.find((child) => child._id === selectedChildId);
+      if (!childData) {
+        throw new Error("Child account not found");
+      }
+
+      if (!childData.plan?.name || childData.plan?.price === undefined || !childData.plan?.billingCycle) {
+        throw new Error("Child subscription plan is missing. Refresh the page and try again.");
+      }
+
       await sendSessionJson("/api/AddChildData", {
         method: 'POST',
         body: {
-          ...childData,
+          _id: childData._id,
+          firstName: childData.firstName,
+          lastName: childData.lastName,
+          email: childData.email,
+          phone: childData.phone,
+          dateOfBirth: childData.dateOfBirth,
+          country: childData.country,
+          schoolName: childData.schoolName,
+          streetAddress: childData.streetAddress,
+          city: childData.city,
+          postalCode: childData.postalCode,
+          gender: childData.gender,
+          plan: childData.plan,
           pin: pinData,
-          userId: currentUser._id
+          userId: currentUser._id,
         },
       });
       
@@ -149,59 +182,64 @@ const RoboGeniusChildProfile = () => {
     }
   };
 
-const handleVerifyPinSubmit = async (pinData) => {
-  try {
-    setPinError(null);
-    
-    const data = await sendSessionJson("/api/verifyChildPin", {
-      method: 'POST',
-      body: {
-        childId: selectedChildId,
-        pin: pinData,
-      },
-    });
- 
+  const handleVerifyPinSubmit = async (pinData) => {
+    try {
+      setPinError(null);
+      const selectedChild = children.find((child) => child._id === selectedChildId);
+      if (!selectedChild) {
+        throw new Error("Child account not found");
+      }
 
-    if (
-      data.message === 'Another session is active. Please try again later.' ||
-      data.message === 'Account is already active on another device'
-    ) {
-      setPinError("Another child is currently using this account. Please try again later.");
-      setIsErrorModalOpen(true);
-      return;
-    }
-
-    setIsVerifyPinModalOpen(false);
-    
-    // Store session ID locally so ProtectedChild can validate the same child session.
-    if (data.sessionId) {
-      clearActiveChildSession();
-      setActiveChildSession({
-        childId: selectedChildId,
-        sessionId: data.sessionId,
+      const childAccessId = selectedChild?.accessChildId || selectedChildId;
+      
+      const data = await sendSessionJson("/api/verifyChildPin", {
+        method: 'POST',
+        body: {
+          childId: childAccessId,
+          pin: pinData,
+        },
       });
-    }
 
-    // Fetch child's courses data
-    const coursesData = await fetchSessionJson(`/api/getChild/${selectedChildId}`);
-    const selectedCourses = ensureArray(coursesData?.courses);
-    
-    // Navigate based on whether courses exist
-    if (selectedCourses.length > 0) {
-      navigate(`/Dashboard/myAllCourses/${selectedChildId}`);
-    } else {
-      navigate(`/Dashboard/MyCoursesPage/${selectedChildId}`);
+      if (
+        data.message === 'Another session is active. Please try again later.' ||
+        data.message === 'Account is already active on another device'
+      ) {
+        setPinError("Another child is currently using this account. Please try again later.");
+        setIsErrorModalOpen(true);
+        return;
+      }
+
+      setIsVerifyPinModalOpen(false);
+      
+      // Store session ID locally so ProtectedChild can validate the same child session.
+      if (data.sessionId) {
+        clearActiveChildSession();
+        setActiveChildSession({
+          childId: childAccessId,
+          sessionId: data.sessionId,
+        });
+      }
+
+      // Fetch child's courses data
+      const coursesData = await fetchSessionJson(`/api/getChild/${childAccessId}`);
+      const selectedCourses = ensureArray(coursesData?.courses);
+      
+      // Navigate based on whether courses exist
+      if (selectedCourses.length > 0) {
+        navigate(`/Dashboard/myAllCourses/${childAccessId}`);
+      } else {
+        navigate(`/Dashboard/MyCoursesPage/${childAccessId}`);
+      }
+    } catch (err) {
+      console.error('Error verifying PIN:', err);
+      setPinError(err.message);
+      setIsErrorModalOpen(true);
     }
-  } catch (err) {
-    console.error('Error verifying PIN:', err);
-    setPinError(err.message);
-    setIsErrorModalOpen(true);
-  }
-};
+  };
 
   const handleViewCourses = async (childId) => {
     setSelectedChildId(childId);
-    const child = children.find(c => c._id === childId);
+    const child = children.find((currentChild) => currentChild._id === childId);
     
     if (!child?.hasPin) return;
     

@@ -16,7 +16,7 @@ const CHILD_PARAM_ROUTE_PREFIXES = [
 ];
 
 const ProtectedChild = ({ children }) => {
-  const [isValidSession, setIsValidSession] = useState(true);
+  const [sessionStatus, setSessionStatus] = useState('checking');
   const [showSessionPopup, setShowSessionPopup] = useState(false);
   const [sessionMessage, setSessionMessage] = useState('This child session is no longer valid. Re-enter the PIN to continue.');
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const ProtectedChild = ({ children }) => {
       }
 
       setSessionMessage(message);
-      setIsValidSession(false);
+      setSessionStatus('invalid');
       setShowSessionPopup(true);
     };
 
@@ -109,7 +109,7 @@ const ProtectedChild = ({ children }) => {
         }
 
         setSessionMessage('This child session is no longer valid. Re-enter the PIN to continue.');
-        setIsValidSession(true);
+        setSessionStatus('valid');
         setShowSessionPopup(false);
       } catch (error) {
         console.error('Session check failed:', error);
@@ -117,7 +117,7 @@ const ProtectedChild = ({ children }) => {
       }
     };
 
-    setIsValidSession(true);
+    setSessionStatus('checking');
     setShowSessionPopup(false);
     checkSession();
 
@@ -135,7 +135,11 @@ const ProtectedChild = ({ children }) => {
 
   return (
     <ProtectedRoute>
-      {isValidSession ? (
+      {sessionStatus === 'checking' ? (
+        <div className="bg-gray-100 min-h-screen flex justify-center items-center">
+          Validating child access...
+        </div>
+      ) : sessionStatus === 'valid' ? (
         children
       ) : (
         <>
