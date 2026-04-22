@@ -96,12 +96,11 @@ const CustomerInfomation = ({ onNext }) => {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          userId: currentUser._id,
-          notes: noteFromCart,
-        }),
-      });
+          body: JSON.stringify({
+            ...form,
+            notes: noteFromCart,
+          }),
+        });
       
 
       if (!response.ok) {

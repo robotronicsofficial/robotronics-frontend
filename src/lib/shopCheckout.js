@@ -9,6 +9,7 @@ const getStorage = () => (
 const isBrowser = () => Boolean(getStorage());
 
 export const normalizeCheckoutAddress = (address = {}) => ({
+  addressId: address?.addressId || address?._id || "",
   firstName: address?.firstName || "",
   lastName: address?.lastName || "",
   country: address?.country || "",
@@ -20,6 +21,7 @@ export const normalizeCheckoutAddress = (address = {}) => ({
   phone: address?.phone || "",
   postalCode: address?.postalCode || "",
   deliveryInstruction: address?.deliveryInstruction || "",
+  notes: address?.notes || "",
 });
 
 export const normalizeCheckoutPayment = (payment = {}) => ({
@@ -100,6 +102,19 @@ export const clearShopCheckout = () => {
 
   getStorage()?.removeItem(STORAGE_KEY);
 };
+
+export const buildShopCheckoutIntentRequest = ({ checkout = {}, cart = [] } = {}) => ({
+  addressId: checkout?.address?.addressId || null,
+  address: normalizeCheckoutAddress(checkout?.address || {}),
+  payment: normalizeCheckoutPayment(checkout?.payment || {}),
+  items: (Array.isArray(cart) ? cart : [])
+    .map((item) => ({
+      productId: item?._id || item?.id || "",
+      quantity: Number(item?.quantity) || 0,
+    }))
+    .filter((item) => item.productId && item.quantity > 0),
+  note: checkout?.address?.notes || "",
+});
 
 export const formatShopCurrency = (amount) =>
   `PKR ${Number(amount || 0).toLocaleString()}`;

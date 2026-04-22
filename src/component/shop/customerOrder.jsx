@@ -6,10 +6,14 @@ import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 const CustomerOrder = ({
   onNext,
   buttonLabel = "CONTINUE TO SHIPPING",
+  buttonDisabled = false,
+  itemsOverride = null,
+  summaryOverride = null,
   showContinueButton = true,
 }) => {
   const { cart } = useSelector((state) => state.cart);
-  const summary = calculateCartSummary(cart);
+  const items = Array.isArray(itemsOverride) ? itemsOverride : cart;
+  const summary = summaryOverride || calculateCartSummary(items);
 
   return (
     <div
@@ -28,13 +32,13 @@ const CustomerOrder = ({
 
       {/* map product */}
       <div className="lg:space-y-5 space-y-2 poppins-extralight">
-        {cart.length > 0 ? (
-          cart.map((product) => (
+        {items.length > 0 ? (
+          items.map((product) => (
             <CustomerProduct
-              key={product._id || product.id}
+              key={product._id || product.id || product.productId}
               title={product.name}
               image={resolveBackendAssetUrl(product?.images?.[0], "")}
-              price={Number(product.price || 0).toLocaleString()}
+              price={Number(product.price ?? product.unitPrice ?? 0).toLocaleString()}
               item={product.quantity}
             />
           ))
@@ -77,7 +81,7 @@ const CustomerOrder = ({
               type="button"
               className="text-center lg:text-xl text-sm poppins-bold text-gold bg-brown py-2 lg:px-20 px-5"
               onClick={onNext}
-              disabled={!cart.length}
+              disabled={buttonDisabled || !items.length}
             >
               {buttonLabel}
             </button>

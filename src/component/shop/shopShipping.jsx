@@ -1,23 +1,35 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import CustomerOrder from "./customerOrder";
 import {
+  buildShopCheckoutIntentRequest,
   calculateCartSummary,
+  clearShopCheckout,
   formatShopCurrency,
   hasCheckoutAddress,
   hasCheckoutPayment,
   loadShopCheckout,
 } from "../../lib/shopCheckout";
+import { clearCart } from "../../store/cart/cartSlice";
+import { useAuth } from "../../contexts/AuthContext";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { currentUser } = useAuth();
   const { cart } = useSelector((state) => state.cart);
   const checkout = useMemo(() => loadShopCheckout(), []);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState({ type: "", message: "" });
+  const [submittedIntent, setSubmittedIntent] = useState(null);
   const summary = calculateCartSummary(cart);
   const addressReady = hasCheckoutAddress(checkout.address);
   const paymentReady = hasCheckoutPayment(checkout.payment);
+  const displayItems = submittedIntent?.items || cart;
+  const displaySummary = submittedIntent?.pricing || summary;
 
   const handleEditCustomer = () => {
     if (onEditCustomer) {
@@ -37,6 +49,65 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
     navigate("/ShippingService");
   };
 
+  const handleSubmitCheckoutIntent = async () => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+
+    if (!addressReady) {
+      handleEditCustomer();
+      return;
+    }
+
+    if (!paymentReady) {
+      handleEditPayment();
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus({ type: "", message: "" });
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/shop-checkout-intents`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(
+            buildShopCheckoutIntentRequest({
+              checkout,
+              cart,
+            }),
+          ),
+        },
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to submit checkout intent");
+      }
+
+      setSubmittedIntent(data.checkoutIntent || null);
+      setSubmitStatus({
+        type: "success",
+        message: data.message || "Checkout intent submitted successfully.",
+      });
+      clearShopCheckout();
+      dispatch(clearCart());
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message: error.message || "Failed to submit checkout intent.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="lg:flex flex-row bg-gray gap-6">
       <div className="lg:pt-8 pt-4 lg:space-y-12 space-y-8 lg:w-2/3">
@@ -48,8 +119,22 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         </div>
 
         <div className="rounded-[20px] border border-[#E6D7B8] bg-[#FFF8E8] p-4 text-sm text-brown">
-          This page reflects browser-saved checkout details only. It does not mean a payment was charged or that an invoice was created on the backend.
+          {submittedIntent
+            ? "This checkout request has been submitted to Robotronics for follow-up and CRM handling."
+            : "Review the saved checkout details, then submit the order request so Robotronics can process it in CRM."}
         </div>
+
+        {submitStatus.message ? (
+          <div
+            className={`rounded-[20px] border p-4 text-sm ${
+              submitStatus.type === "success"
+                ? "border-green-200 bg-green-50 text-green-700"
+                : "border-red-200 bg-red-50 text-red-700"
+            }`}
+          >
+            {submitStatus.message}
+          </div>
+        ) : null}
 
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="bg-brown p-5 space-y-4 text-white">
@@ -67,20 +152,28 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
               </button>
             </div>
 
-            {addressReady ? (
+            {addressReady || submittedIntent ? (
               <div className="space-y-2 text-sm poppins-light">
                 <p className="text-base poppins-extrabold">
-                  {checkout.address.firstName} {checkout.address.lastName}
+                  {(submittedIntent?.address?.firstName || checkout.address.firstName)}{" "}
+                  {(submittedIntent?.address?.lastName || checkout.address.lastName)}
                 </p>
-                <p>{checkout.address.phone}</p>
-                <p>{checkout.address.streetAddress}</p>
-                {checkout.address.aptSuite ? <p>{checkout.address.aptSuite}</p> : null}
+                <p>{submittedIntent?.address?.phone || checkout.address.phone}</p>
+                <p>{submittedIntent?.address?.streetAddress || checkout.address.streetAddress}</p>
+                {(submittedIntent?.address?.aptSuite || checkout.address.aptSuite) ? (
+                  <p>{submittedIntent?.address?.aptSuite || checkout.address.aptSuite}</p>
+                ) : null}
                 <p>
-                  {checkout.address.city}, {checkout.address.state}, {checkout.address.country}
+                  {submittedIntent?.address?.city || checkout.address.city},{" "}
+                  {submittedIntent?.address?.state || checkout.address.state},{" "}
+                  {submittedIntent?.address?.country || checkout.address.country}
                 </p>
-                <p>{checkout.address.postalCode}</p>
-                {checkout.address.deliveryInstruction ? (
-                  <p>Instruction: {checkout.address.deliveryInstruction}</p>
+                <p>{submittedIntent?.address?.postalCode || checkout.address.postalCode}</p>
+                {(submittedIntent?.address?.deliveryInstruction || checkout.address.deliveryInstruction) ? (
+                  <p>
+                    Instruction:{" "}
+                    {submittedIntent?.address?.deliveryInstruction || checkout.address.deliveryInstruction}
+                  </p>
                 ) : null}
               </div>
             ) : (
@@ -105,28 +198,30 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
               </button>
             </div>
 
-            {paymentReady ? (
+            {paymentReady || submittedIntent ? (
               <div className="space-y-2 text-sm poppins-light">
                 <p>
                   <span className="font-semibold">Shipping service:</span>{" "}
-                  {checkout.payment.shippingService}
+                  {submittedIntent?.payment?.shippingService || checkout.payment.shippingService}
                 </p>
                 <p>
                   <span className="font-semibold">Payment method:</span>{" "}
-                  {checkout.payment.paymentMethod}
+                  {submittedIntent?.payment?.paymentMethod || checkout.payment.paymentMethod}
                 </p>
                 <p>
                   <span className="font-semibold">Billing email:</span>{" "}
-                  {checkout.payment.billingEmail}
+                  {submittedIntent?.payment?.billingEmail || checkout.payment.billingEmail}
                 </p>
                 <p>
                   <span className="font-semibold">Account ending:</span>{" "}
-                  **** {checkout.payment.accountLast4}
+                  **** {submittedIntent?.payment?.accountLast4 || checkout.payment.accountLast4}
                 </p>
-                {checkout.payment.expiryMonth && checkout.payment.expiryYear ? (
+                {(submittedIntent?.payment?.expiryMonth || checkout.payment.expiryMonth) &&
+                (submittedIntent?.payment?.expiryYear || checkout.payment.expiryYear) ? (
                   <p>
                     <span className="font-semibold">Expiry:</span>{" "}
-                    {checkout.payment.expiryMonth}/{checkout.payment.expiryYear}
+                    {submittedIntent?.payment?.expiryMonth || checkout.payment.expiryMonth}/
+                    {submittedIntent?.payment?.expiryYear || checkout.payment.expiryYear}
                   </p>
                 ) : null}
               </div>
@@ -149,11 +244,11 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           </div>
 
           <div className="space-y-4">
-            {cart.length > 0 ? (
-              cart.map((product) => (
+            {displayItems.length > 0 ? (
+              displayItems.map((product) => (
                 <div
                   className="flex flex-row space-x-3 border border-lightgray bg-white p-4"
-                  key={product._id || product.id}
+                  key={product._id || product.id || product.productId}
                 >
                   <img
                     className="lg:h-24 lg:w-28 object-cover"
@@ -166,7 +261,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                   <div className="flex flex-col gap-1 text-sm text-brown">
                     <p className="font-bold">{product.name}</p>
                     <p>Quantity: {product.quantity}</p>
-                    <p>{formatShopCurrency(product.price)}</p>
+                    <p>{formatShopCurrency(product.price ?? product.unitPrice)}</p>
                   </div>
                 </div>
               ))
@@ -180,10 +275,10 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
         <section className="border border-lightgray bg-white p-5 space-y-4 text-brown">
           <p className="text-xl poppins-bold">TOTALS</p>
-          <SummaryRow label="Shipping" value={formatShopCurrency(summary.shipping)} />
-          <SummaryRow label="Discount 10%" value={`- ${formatShopCurrency(summary.discount)}`} />
-          <SummaryRow label="Price" value={formatShopCurrency(summary.subtotal)} />
-          <SummaryRow label="Total Price" value={formatShopCurrency(summary.total)} highlight />
+          <SummaryRow label="Shipping" value={formatShopCurrency(displaySummary.shipping)} />
+          <SummaryRow label="Discount 10%" value={`- ${formatShopCurrency(displaySummary.discount)}`} />
+          <SummaryRow label="Price" value={formatShopCurrency(displaySummary.subtotal)} />
+          <SummaryRow label="Total Price" value={formatShopCurrency(displaySummary.total)} highlight />
         </section>
       </div>
 
@@ -193,8 +288,19 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
       <div className="lg:w-1/3">
         <CustomerOrder
-          onNext={paymentReady ? handleEditPayment : handleEditPayment}
-          buttonLabel={paymentReady ? "UPDATE PAYMENT DETAILS" : "ADD PAYMENT DETAILS"}
+          onNext={handleSubmitCheckoutIntent}
+          buttonDisabled={isSubmitting || Boolean(submittedIntent)}
+          buttonLabel={
+            submittedIntent
+              ? "ORDER REQUEST SUBMITTED"
+              : isSubmitting
+                ? "SUBMITTING ORDER REQUEST..."
+                : paymentReady
+                  ? "SUBMIT ORDER REQUEST"
+                  : "ADD PAYMENT DETAILS"
+          }
+          itemsOverride={displayItems}
+          summaryOverride={displaySummary}
         />
       </div>
     </div>
