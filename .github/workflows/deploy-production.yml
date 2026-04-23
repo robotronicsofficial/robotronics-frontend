@@ -1,0 +1,125 @@
+name: Deploy Production
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: robotronics-frontend-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Package frontend release
+        run: |
+          set -euo pipefail
+          archive="robotronics-frontend-${GITHUB_SHA}.tar.gz"
+          archive_path="${RUNNER_TEMP}/${archive}"
+          test -f build/index.html
+          tar --exclude-vcs -czf "${archive_path}" build
+          echo "RELEASE_ARCHIVE=${archive}" >> "${GITHUB_ENV}"
+          echo "RELEASE_ARCHIVE_PATH=${archive_path}" >> "${GITHUB_ENV}"
+
+      - name: Configure SSH
+        env:
+          PRODUCTION_SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
+          PRODUCTION_SSH_HOST: ${{ secrets.PRODUCTION_SSH_HOST }}
+        run: |
+          set -euo pipefail
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "${PRODUCTION_SSH_KEY}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${PRODUCTION_SSH_HOST}" >> ~/.ssh/known_hosts
+
+      - name: Upload frontend release
+        env:
+          PRODUCTION_SSH_HOST: ${{ secrets.PRODUCTION_SSH_HOST }}
+          PRODUCTION_SSH_PORT: ${{ secrets.PRODUCTION_SSH_PORT }}
+          PRODUCTION_SSH_USER: ${{ secrets.PRODUCTION_SSH_USER }}
+        run: |
+          set -euo pipefail
+          ssh_port="${PRODUCTION_SSH_PORT:-22}"
+          scp -P "${ssh_port}" "${RELEASE_ARCHIVE_PATH}" \
+            "${PRODUCTION_SSH_USER}@${PRODUCTION_SSH_HOST}:/tmp/${RELEASE_ARCHIVE}"
+
+      - name: Promote frontend release
+        env:
+          PRODUCTION_SSH_HOST: ${{ secrets.PRODUCTION_SSH_HOST }}
+          PRODUCTION_SSH_PORT: ${{ secrets.PRODUCTION_SSH_PORT }}
+          PRODUCTION_SSH_USER: ${{ secrets.PRODUCTION_SSH_USER }}
+        run: |
+          set -euo pipefail
+          ssh_port="${PRODUCTION_SSH_PORT:-22}"
+          ssh -p "${ssh_port}" \
+            "${PRODUCTION_SSH_USER}@${PRODUCTION_SSH_HOST}" \
+            "GITHUB_SHA='${GITHUB_SHA}' RELEASE_ARCHIVE='${RELEASE_ARCHIVE}' bash -s" <<'EOF'
+          set -euo pipefail
+
+          release_root="/srv/robotronics/frontend"
+          release_dir="${release_root}/releases/${GITHUB_SHA}"
+          current_link="${release_root}/current"
+          archive_path="/tmp/${RELEASE_ARCHIVE}"
+          previous_target="$(readlink -f "${current_link}" || true)"
+          previous_release=""
+
+          if [ -n "${previous_target}" ]; then
+            previous_release="$(dirname "${previous_target}")"
+          fi
+
+          install -d -m 755 "${release_root}/releases"
+          rm -rf "${release_dir}"
+          mkdir -p "${release_dir}"
+          tar -xzf "${archive_path}" -C "${release_dir}"
+
+          ln -sfn "${release_dir}/build" "${current_link}"
+
+          if ! sudo nginx -t || ! sudo systemctl reload nginx || ! curl --fail --silent --show-error --resolve robotronics.ai:443:127.0.0.1 https://robotronics.ai/ > /dev/null; then
+            if [ -n "${previous_target}" ] && [ -d "${previous_target}" ]; then
+              ln -sfn "${previous_target}" "${current_link}"
+              sudo nginx -t
+              sudo systemctl reload nginx
+            fi
+
+            exit 1
+          fi
+
+          mapfile -t stale_releases < <(
+            find "${release_root}/releases" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' \
+              | sort -nr \
+              | awk 'NR > 5 { print $2 }'
+          )
+
+          for stale_release in "${stale_releases[@]}"; do
+            if [ -n "${previous_release}" ] && [ "${stale_release}" = "${previous_release}" ]; then
+              continue
+            fi
+
+            rm -rf "${stale_release}"
+          done
+
+          rm -f "${archive_path}"
+          EOF
