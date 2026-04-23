@@ -51,6 +51,7 @@ const CoursesProductDetail = () => {
         title={course?.title}
         image={course?.thumbnail}
         price={course?.price}
+        category={course?.category}
       />
       <Decription
         description={course?.description}

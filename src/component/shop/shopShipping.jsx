@@ -8,10 +8,12 @@ import {
   calculateCartSummary,
   clearShopCheckout,
   formatShopCurrency,
+  hasCheckoutCustomer,
   hasCheckoutAddress,
   hasCheckoutPayment,
   loadShopCheckout,
 } from "../../lib/shopCheckout";
+import { hasShippableCommerceItems } from "../../lib/commerceItems";
 import { clearCart } from "../../store/cart/cartSlice";
 import { useAuth } from "../../contexts/AuthContext";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
@@ -26,8 +28,12 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const [submitStatus, setSubmitStatus] = useState({ type: "", message: "" });
   const [submittedIntent, setSubmittedIntent] = useState(null);
   const summary = calculateCartSummary(cart);
-  const addressReady = hasCheckoutAddress(checkout.address);
-  const paymentReady = hasCheckoutPayment(checkout.payment);
+  const requiresShipping = submittedIntent
+    ? hasShippableCommerceItems(submittedIntent.items)
+    : summary.requiresShipping;
+  const customerReady = hasCheckoutCustomer(checkout.customer);
+  const addressReady = hasCheckoutAddress(checkout.address, { requiresShipping });
+  const paymentReady = hasCheckoutPayment(checkout.payment, { requiresShipping });
   const displayItems = submittedIntent?.items || cart;
   const displaySummary = submittedIntent?.pricing || summary;
 
@@ -55,7 +61,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       return;
     }
 
-    if (!addressReady) {
+    if (!customerReady || (requiresShipping && !addressReady)) {
       handleEditCustomer();
       return;
     }
@@ -114,7 +120,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         <div className="lg:space-y-6 space-y-4">
           <p className="lg:text-4xl text-2xl poppins-bold text-brown">CHECKOUT SUMMARY</p>
           <p className="font-lato font-medium text-base leading-5 text-[#7E7F7C]">
-            Review the address, delivery service, locally saved payment reference, and products for this checkout draft.
+            Review the saved customer details, fulfillment requirements, locally saved payment reference, and items for this checkout draft.
           </p>
         </div>
 
@@ -140,8 +146,14 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           <section className="bg-brown p-5 space-y-4 text-white">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-lg poppins-extrabold">DELIVERY ADDRESS</p>
-                <p className="text-sm poppins-light">Saved shipping details for this order.</p>
+                <p className="text-lg poppins-extrabold">
+                  {requiresShipping ? "DELIVERY DETAILS" : "CUSTOMER DETAILS"}
+                </p>
+                <p className="text-sm poppins-light">
+                  {requiresShipping
+                    ? "Saved customer and delivery details for this order."
+                    : "Saved customer details for this digital order."}
+                </p>
               </div>
               <button
                 type="button"
@@ -152,33 +164,38 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
               </button>
             </div>
 
-            {addressReady || submittedIntent ? (
+            {customerReady || submittedIntent ? (
               <div className="space-y-2 text-sm poppins-light">
                 <p className="text-base poppins-extrabold">
-                  {(submittedIntent?.address?.firstName || checkout.address.firstName)}{" "}
-                  {(submittedIntent?.address?.lastName || checkout.address.lastName)}
+                  {submittedIntent?.customer?.name || `${checkout.customer?.firstName || ""} ${checkout.customer?.lastName || ""}`.trim()}
                 </p>
-                <p>{submittedIntent?.address?.phone || checkout.address.phone}</p>
-                <p>{submittedIntent?.address?.streetAddress || checkout.address.streetAddress}</p>
-                {(submittedIntent?.address?.aptSuite || checkout.address.aptSuite) ? (
-                  <p>{submittedIntent?.address?.aptSuite || checkout.address.aptSuite}</p>
-                ) : null}
-                <p>
-                  {submittedIntent?.address?.city || checkout.address.city},{" "}
-                  {submittedIntent?.address?.state || checkout.address.state},{" "}
-                  {submittedIntent?.address?.country || checkout.address.country}
-                </p>
-                <p>{submittedIntent?.address?.postalCode || checkout.address.postalCode}</p>
-                {(submittedIntent?.address?.deliveryInstruction || checkout.address.deliveryInstruction) ? (
-                  <p>
-                    Instruction:{" "}
-                    {submittedIntent?.address?.deliveryInstruction || checkout.address.deliveryInstruction}
-                  </p>
-                ) : null}
+                <p>{submittedIntent?.customer?.phone || checkout.customer?.phone}</p>
+                {requiresShipping ? (
+                  <>
+                    <p>{submittedIntent?.address?.streetAddress || checkout.address?.streetAddress}</p>
+                    {(submittedIntent?.address?.aptSuite || checkout.address?.aptSuite) ? (
+                      <p>{submittedIntent?.address?.aptSuite || checkout.address?.aptSuite}</p>
+                    ) : null}
+                    <p>
+                      {submittedIntent?.address?.city || checkout.address?.city},{" "}
+                      {submittedIntent?.address?.state || checkout.address?.state},{" "}
+                      {submittedIntent?.address?.country || checkout.address?.country}
+                    </p>
+                    <p>{submittedIntent?.address?.postalCode || checkout.address?.postalCode}</p>
+                    {(submittedIntent?.address?.deliveryInstruction || checkout.address?.deliveryInstruction) ? (
+                      <p>
+                        Instruction:{" "}
+                        {submittedIntent?.address?.deliveryInstruction || checkout.address?.deliveryInstruction}
+                      </p>
+                    ) : null}
+                  </>
+                ) : (
+                  <p>No shipping address is required for this order.</p>
+                )}
               </div>
             ) : (
               <p className="text-sm poppins-light">
-                No shipping address is saved yet for this checkout.
+                No customer details are saved yet for this checkout.
               </p>
             )}
           </section>
@@ -200,10 +217,12 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
             {paymentReady || submittedIntent ? (
               <div className="space-y-2 text-sm poppins-light">
-                <p>
-                  <span className="font-semibold">Shipping service:</span>{" "}
-                  {submittedIntent?.payment?.shippingService || checkout.payment.shippingService}
-                </p>
+                {requiresShipping ? (
+                  <p>
+                    <span className="font-semibold">Shipping service:</span>{" "}
+                    {submittedIntent?.payment?.shippingService || checkout.payment.shippingService}
+                  </p>
+                ) : null}
                 <p>
                   <span className="font-semibold">Payment method:</span>{" "}
                   {submittedIntent?.payment?.paymentMethod || checkout.payment.paymentMethod}
@@ -248,12 +267,12 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
               displayItems.map((product) => (
                 <div
                   className="flex flex-row space-x-3 border border-lightgray bg-white p-4"
-                  key={product._id || product.id || product.productId}
+                  key={`${product.itemType}:${product.itemId}`}
                 >
                   <img
                     className="lg:h-24 lg:w-28 object-cover"
                     src={resolveBackendAssetUrl(
-                      product?.images?.[0],
+                      product?.image || product?.images?.[0],
                       "https://via.placeholder.com/300x200"
                     )}
                     alt={product.name}

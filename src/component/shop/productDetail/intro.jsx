@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../../store/cart/cartSlice";
+import { createProductCommerceItem } from "../../../lib/commerceItems";
 
 import robo from "../../../assets/images/shopRobot.svg";
 import star from "../../../assets/images/shopStar.svg";
@@ -167,8 +168,13 @@ const Intro = () => {
               <button
                 className="bg-yellow p-2 lg:px-7 text-white poppins-medium rounded-lg"
                 onClick={() => {
-                  for (let i = 0; i < quantity; i++) {
-                    dispatch(addToCart(product));
+                  const cartItem = createProductCommerceItem({
+                    ...product,
+                    quantity,
+                  });
+
+                  if (cartItem) {
+                    dispatch(addToCart(cartItem));
                   }
                 }}
               >

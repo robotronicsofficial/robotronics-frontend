@@ -1,4 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  getCommerceItemKey,
+  normalizeCommerceCartItem,
+} from "../../lib/commerceItems";
 
 // Async thunk for fetching products
 export const fetchProducts = createAsyncThunk(
@@ -23,24 +27,15 @@ const initialState = {
   totalPrice: 0,
 };
 
-const normalizeCartItem = (payload = {}) => {
-  const _id = payload._id ?? payload.id;
-  const price = Number(payload.price) || 0;
-  const images = Array.isArray(payload.images)
-    ? payload.images.filter(Boolean)
-    : payload.thumbnail
-      ? [payload.thumbnail]
-      : payload.image
-        ? [payload.image]
-        : [];
-
-  return {
-    ...payload,
-    _id,
-    name: payload.name ?? payload.title ?? "Item",
-    price,
-    images,
-  };
+const recalculateCartTotals = (state) => {
+  state.totalQuantity = state.cart.reduce(
+    (runningTotal, item) => runningTotal + (Number(item.quantity) || 0),
+    0,
+  );
+  state.totalPrice = state.cart.reduce(
+    (runningTotal, item) => runningTotal + (Number(item.price) || 0) * (Number(item.quantity) || 0),
+    0,
+  );
 };
 
 const cartSlice = createSlice({
@@ -48,46 +43,48 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const normalizedItem = normalizeCartItem(action.payload);
-      if (!normalizedItem._id) {
+      const normalizedItem = normalizeCommerceCartItem(action.payload);
+      if (!normalizedItem?.itemId) {
         return;
       }
 
-      const existingItem = state.cart.find((item) => item._id === normalizedItem._id);
+      const itemKey = getCommerceItemKey(normalizedItem);
+      const existingItem = state.cart.find((item) => getCommerceItemKey(item) === itemKey);
+      const quantityToAdd = Number(normalizedItem.quantity) || 1;
+
       if (existingItem) {
-        existingItem.quantity += 1;
+        existingItem.quantity += quantityToAdd;
       } else {
-        state.cart.push({ ...normalizedItem, quantity: 1 });
+        state.cart.push({ ...normalizedItem, quantity: quantityToAdd });
       }
 
-      state.totalQuantity += 1;
-      state.totalPrice += normalizedItem.price;
+      recalculateCartTotals(state);
     },
 
     removeFromCart: (state, action) => {
-      const normalizedItem = normalizeCartItem(action.payload);
-      const existingItem = state.cart.find((item) => item._id === normalizedItem._id);
+      const normalizedItem = normalizeCommerceCartItem(action.payload);
+      if (!normalizedItem?.itemId) {
+        return;
+      }
+
+      const itemKey = getCommerceItemKey(normalizedItem);
+      const existingItem = state.cart.find((item) => getCommerceItemKey(item) === itemKey);
     
       if (existingItem) {
-        const itemPrice = Number(existingItem.price ?? normalizedItem.price) || 0;
         if (existingItem.quantity > 1) {
           existingItem.quantity -= 1;
-          state.totalQuantity -= 1;
-          state.totalPrice -= itemPrice;
         } else {
-          // If quantity is 1, remove the product from cart
-          state.cart = state.cart.filter((item) => item._id !== normalizedItem._id);
-          state.totalQuantity -= 1;
-          state.totalPrice -= itemPrice;
+          state.cart = state.cart.filter((item) => getCommerceItemKey(item) !== itemKey);
         }
+
+        recalculateCartTotals(state);
       }
     },
     
 
     clearCart: (state) => {
       state.cart = [];
-      state.totalQuantity = 0;
-      state.totalPrice = 0;
+      recalculateCartTotals(state);
     },
   },
 

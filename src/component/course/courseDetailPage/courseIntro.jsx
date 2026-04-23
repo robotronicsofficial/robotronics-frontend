@@ -5,8 +5,9 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { addToCart } from "../../../store/cart/cartSlice";
+import { createCourseCommerceItem } from "../../../lib/commerceItems";
 import { CART_PATH } from "../../../router/paths";
-const CourseIntro = ({ title, id, image, price }) => {
+const CourseIntro = ({ title, id, image, price, category }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const resolvedImage = image
@@ -16,15 +17,17 @@ const CourseIntro = ({ title, id, image, price }) => {
     : python;
 
   const handleAddToCart = () => {
-    dispatch(
-      addToCart({
-        _id: id,
-        name: title || "Course",
-        price: Number(price) || 0,
-        images: image ? [image] : [],
-        category: "Course",
-      })
-    );
+    const cartItem = createCourseCommerceItem({
+      _id: id,
+      title,
+      price,
+      thumbnail: image,
+      category,
+    });
+
+    if (cartItem) {
+      dispatch(addToCart(cartItem));
+    }
   };
 
   const handleBuyNow = () => {

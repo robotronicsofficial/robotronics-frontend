@@ -1,3 +1,5 @@
+import { hasShippableCommerceItems } from "./commerceItems";
+
 const STORAGE_KEY = "shop_checkout";
 export const SHIPPING_COST = 500;
 export const DISCOUNT_RATE = 0.1;
@@ -7,6 +9,16 @@ const getStorage = () => (
 );
 
 const isBrowser = () => Boolean(getStorage());
+
+export const normalizeCheckoutNote = (note = "") => (
+  typeof note === "string" ? note : ""
+);
+
+export const normalizeCheckoutCustomer = (customer = {}) => ({
+  firstName: customer?.firstName || "",
+  lastName: customer?.lastName || "",
+  phone: customer?.phone || "",
+});
 
 export const normalizeCheckoutAddress = (address = {}) => ({
   addressId: address?.addressId || address?._id || "",
@@ -25,7 +37,7 @@ export const normalizeCheckoutAddress = (address = {}) => ({
 });
 
 export const normalizeCheckoutPayment = (payment = {}) => ({
-  shippingService: payment?.shippingService || "TCS Express",
+  shippingService: payment?.shippingService || "",
   paymentMethod: payment?.paymentMethod || "Credit Card",
   billingEmail: payment?.billingEmail || "",
   cardholderName: payment?.cardholderName || "",
@@ -34,7 +46,15 @@ export const normalizeCheckoutPayment = (payment = {}) => ({
   expiryYear: String(payment?.expiryYear || "").slice(0, 4),
 });
 
-export const hasCheckoutAddress = (address) =>
+export const hasCheckoutCustomer = (customer) =>
+  Boolean(
+    customer?.firstName &&
+      customer?.lastName &&
+      customer?.phone
+  );
+
+export const hasCheckoutAddress = (address, { requiresShipping = true } = {}) =>
+  !requiresShipping ||
   Boolean(
     address?.firstName &&
       address?.lastName &&
@@ -46,9 +66,9 @@ export const hasCheckoutAddress = (address) =>
       address?.postalCode
   );
 
-export const hasCheckoutPayment = (payment) =>
+export const hasCheckoutPayment = (payment, { requiresShipping = true } = {}) =>
   Boolean(
-    payment?.shippingService &&
+    (!requiresShipping || payment?.shippingService) &&
       payment?.paymentMethod &&
       payment?.billingEmail &&
       payment?.cardholderName &&
@@ -57,38 +77,46 @@ export const hasCheckoutPayment = (payment) =>
 
 export const loadShopCheckout = () => {
   if (!isBrowser()) {
-    return { address: null, payment: null };
+    return { customer: null, address: null, payment: null, note: "" };
   }
 
   try {
     const rawValue = getStorage()?.getItem(STORAGE_KEY);
     if (!rawValue) {
-      return { address: null, payment: null };
+      return { customer: null, address: null, payment: null, note: "" };
     }
 
     const parsedValue = JSON.parse(rawValue);
     return {
+      customer: parsedValue?.customer ? normalizeCheckoutCustomer(parsedValue.customer) : null,
       address: parsedValue?.address ? normalizeCheckoutAddress(parsedValue.address) : null,
       payment: parsedValue?.payment ? normalizeCheckoutPayment(parsedValue.payment) : null,
+      note: normalizeCheckoutNote(parsedValue?.note),
     };
   } catch {
-    return { address: null, payment: null };
+    return { customer: null, address: null, payment: null, note: "" };
   }
 };
 
 export const saveShopCheckout = (partialState = {}) => {
   if (!isBrowser()) {
-    return { address: null, payment: null };
+    return { customer: null, address: null, payment: null, note: "" };
   }
 
   const currentState = loadShopCheckout();
   const nextState = {
-    address: partialState.address
-      ? normalizeCheckoutAddress(partialState.address)
+    customer: Object.prototype.hasOwnProperty.call(partialState, "customer")
+      ? (partialState.customer ? normalizeCheckoutCustomer(partialState.customer) : null)
+      : currentState.customer,
+    address: Object.prototype.hasOwnProperty.call(partialState, "address")
+      ? (partialState.address ? normalizeCheckoutAddress(partialState.address) : null)
       : currentState.address,
-    payment: partialState.payment
-      ? normalizeCheckoutPayment(partialState.payment)
+    payment: Object.prototype.hasOwnProperty.call(partialState, "payment")
+      ? (partialState.payment ? normalizeCheckoutPayment(partialState.payment) : null)
       : currentState.payment,
+    note: Object.prototype.hasOwnProperty.call(partialState, "note")
+      ? normalizeCheckoutNote(partialState.note)
+      : currentState.note,
   };
 
   getStorage()?.setItem(STORAGE_KEY, JSON.stringify(nextState));
@@ -103,18 +131,24 @@ export const clearShopCheckout = () => {
   getStorage()?.removeItem(STORAGE_KEY);
 };
 
-export const buildShopCheckoutIntentRequest = ({ checkout = {}, cart = [] } = {}) => ({
-  addressId: checkout?.address?.addressId || null,
-  address: normalizeCheckoutAddress(checkout?.address || {}),
-  payment: normalizeCheckoutPayment(checkout?.payment || {}),
-  items: (Array.isArray(cart) ? cart : [])
-    .map((item) => ({
-      productId: item?._id || item?.id || "",
-      quantity: Number(item?.quantity) || 0,
-    }))
-    .filter((item) => item.productId && item.quantity > 0),
-  note: checkout?.address?.notes || "",
-});
+export const buildShopCheckoutIntentRequest = ({ checkout = {}, cart = [] } = {}) => {
+  const requiresShipping = hasShippableCommerceItems(cart);
+
+  return {
+    customer: normalizeCheckoutCustomer(checkout?.customer || {}),
+    addressId: requiresShipping ? checkout?.address?.addressId || null : null,
+    address: requiresShipping ? normalizeCheckoutAddress(checkout?.address || {}) : null,
+    payment: normalizeCheckoutPayment(checkout?.payment || {}),
+    items: (Array.isArray(cart) ? cart : [])
+      .map((item) => ({
+        itemType: item?.itemType || "",
+        itemId: item?.itemId || "",
+        quantity: Number(item?.quantity) || 0,
+      }))
+      .filter((item) => item.itemType && item.itemId && item.quantity > 0),
+    note: normalizeCheckoutNote(checkout?.note),
+  };
+};
 
 export const formatShopCurrency = (amount) =>
   `PKR ${Number(amount || 0).toLocaleString()}`;
@@ -125,12 +159,15 @@ export const calculateCartSummary = (cart = []) => {
     0
   );
   const discount = subtotal * DISCOUNT_RATE;
-  const total = subtotal - discount + SHIPPING_COST;
+  const requiresShipping = hasShippableCommerceItems(cart);
+  const shipping = requiresShipping ? SHIPPING_COST : 0;
+  const total = subtotal - discount + shipping;
 
   return {
     subtotal,
     discount,
-    shipping: SHIPPING_COST,
+    shipping,
     total,
+    requiresShipping,
   };
 };

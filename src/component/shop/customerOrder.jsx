@@ -1,6 +1,7 @@
 import CustomerProduct from "../../component/shop/customerProduct";
 import { useSelector } from "react-redux";
 import { calculateCartSummary, formatShopCurrency } from "../../lib/shopCheckout";
+import { getCommerceItemKey } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const CustomerOrder = ({
@@ -35,9 +36,9 @@ const CustomerOrder = ({
         {items.length > 0 ? (
           items.map((product) => (
             <CustomerProduct
-              key={product._id || product.id || product.productId}
+              key={getCommerceItemKey(product)}
               title={product.name}
-              image={resolveBackendAssetUrl(product?.images?.[0], "")}
+              image={resolveBackendAssetUrl(product?.image || product?.images?.[0], "")}
               price={Number(product.price ?? product.unitPrice ?? 0).toLocaleString()}
               item={product.quantity}
             />

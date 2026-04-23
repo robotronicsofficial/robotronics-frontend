@@ -1,12 +1,15 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import mastercard from "../../assets/images/mastercard.svg";
 import CustomerOrder from "./customerOrder";
 import {
+  hasCheckoutCustomer,
   hasCheckoutAddress,
   loadShopCheckout,
   saveShopCheckout,
 } from "../../lib/shopCheckout";
+import { hasShippableCommerceItems } from "../../lib/commerceItems";
 
 const SHIPPING_SERVICES = [
   {
@@ -34,9 +37,11 @@ const PAYMENT_METHODS = [
 
 const ShopPaymentMethod = ({ onNext }) => {
   const navigate = useNavigate();
+  const { cart } = useSelector((state) => state.cart);
   const storedCheckout = useMemo(() => loadShopCheckout(), []);
+  const requiresShipping = hasShippableCommerceItems(cart);
   const [selectedService, setSelectedService] = useState(
-    storedCheckout.payment?.shippingService || SHIPPING_SERVICES[0].value
+    storedCheckout.payment?.shippingService || (requiresShipping ? SHIPPING_SERVICES[0].value : "")
   );
   const [selectedMethod, setSelectedMethod] = useState(
     storedCheckout.payment?.paymentMethod || PAYMENT_METHODS[0].value
@@ -57,12 +62,14 @@ const ShopPaymentMethod = ({ onNext }) => {
     storedCheckout.payment?.expiryYear || ""
   );
 
+  const savedCustomer = storedCheckout.customer;
   const savedAddress = storedCheckout.address;
-  const addressReady = hasCheckoutAddress(savedAddress);
+  const customerReady = hasCheckoutCustomer(savedCustomer);
+  const addressReady = hasCheckoutAddress(savedAddress, { requiresShipping });
   const isCardPayment = selectedMethod === "Credit Card";
 
   const handleContinue = () => {
-    if (!addressReady) {
+    if (!customerReady || (requiresShipping && !addressReady)) {
       navigate("/CustomerInfo");
       return;
     }
@@ -88,7 +95,7 @@ const ShopPaymentMethod = ({ onNext }) => {
 
     saveShopCheckout({
       payment: {
-        shippingService: selectedService,
+        shippingService: requiresShipping ? selectedService : "",
         paymentMethod: selectedMethod,
         billingEmail: trimmedEmail,
         cardholderName: trimmedName,
@@ -119,7 +126,7 @@ const ShopPaymentMethod = ({ onNext }) => {
             <div className="space-y-2">
               <p className="text-3xl text-brown poppins-bold">SHIPPING & PAYMENT</p>
               <p className="text-sm text-brown poppins-light">
-                Save the delivery service and billing method in this browser for this checkout draft.
+                Save the payment details for this checkout draft. Shipping is only required when your cart has physical products.
               </p>
             </div>
             <button
@@ -135,73 +142,83 @@ const ShopPaymentMethod = ({ onNext }) => {
             This storefront flow only stores billing details locally in your browser. It does not create a backend payment record or invoice yet.
           </div>
 
-          {addressReady ? (
+          {customerReady ? (
             <div className="grid gap-2 text-sm text-brown sm:grid-cols-2">
               <p className="font-semibold">
-                {savedAddress.firstName} {savedAddress.lastName}
+                {savedCustomer.firstName} {savedCustomer.lastName}
               </p>
-              <p className="sm:text-right">{savedAddress.phone}</p>
-              <p className="sm:col-span-2">
-                {savedAddress.streetAddress}
-                {savedAddress.aptSuite ? `, ${savedAddress.aptSuite}` : ""}
-                {`, ${savedAddress.city}, ${savedAddress.state}, ${savedAddress.country}`}
-              </p>
+              <p className="sm:text-right">{savedCustomer.phone}</p>
+              {requiresShipping && addressReady ? (
+                <p className="sm:col-span-2">
+                  {savedAddress.streetAddress}
+                  {savedAddress.aptSuite ? `, ${savedAddress.aptSuite}` : ""}
+                  {`, ${savedAddress.city}, ${savedAddress.state}, ${savedAddress.country}`}
+                </p>
+              ) : (
+                <p className="sm:col-span-2 text-brown/70">Digital order. No delivery address is required.</p>
+              )}
             </div>
           ) : (
             <div className="border border-dashed border-[#BCBABA] bg-[#F7F3F1] p-4 text-sm text-brown">
-              Add your address before choosing shipping and payment details.
+              Add your customer details before choosing payment information.
             </div>
           )}
         </div>
 
-        <section className="space-y-5">
-          <div className="space-y-2">
-            <p className="text-3xl text-brown poppins-bold">SHIPPING SERVICE</p>
-            <p className="text-sm text-brown poppins-light">
-              Choose the delivery partner you want stored with this checkout draft.
-            </p>
-          </div>
+        {requiresShipping ? (
+          <section className="space-y-5">
+            <div className="space-y-2">
+              <p className="text-3xl text-brown poppins-bold">SHIPPING SERVICE</p>
+              <p className="text-sm text-brown poppins-light">
+                Choose the delivery partner you want stored with this checkout draft.
+              </p>
+            </div>
 
-          <div className="space-y-4">
-            {SHIPPING_SERVICES.map((service) => {
-              const isSelected = selectedService === service.value;
+            <div className="space-y-4">
+              {SHIPPING_SERVICES.map((service) => {
+                const isSelected = selectedService === service.value;
 
-              return (
-                <button
-                  key={service.value}
-                  type="button"
-                  className={`w-full border p-5 text-left transition ${
-                    isSelected ? "bg-brown text-white border-brown" : "bg-white text-brown border-lightgray"
-                  }`}
-                  onClick={() => setSelectedService(service.value)}
-                >
-                  <div className="flex items-start gap-4">
-                    <input
-                      type="radio"
-                      value={service.value}
-                      name="shippingService"
-                      checked={isSelected}
-                      onChange={() => setSelectedService(service.value)}
-                    />
-                    <div className="w-full space-y-2">
-                      <div className="flex justify-between gap-4">
-                        <p className="poppins-bold">{service.value}</p>
-                        <p className="text-sm">{service.note}</p>
+                return (
+                  <button
+                    key={service.value}
+                    type="button"
+                    className={`w-full border p-5 text-left transition ${
+                      isSelected ? "bg-brown text-white border-brown" : "bg-white text-brown border-lightgray"
+                    }`}
+                    onClick={() => setSelectedService(service.value)}
+                  >
+                    <div className="flex items-start gap-4">
+                      <input
+                        type="radio"
+                        value={service.value}
+                        name="shippingService"
+                        checked={isSelected}
+                        onChange={() => setSelectedService(service.value)}
+                      />
+                      <div className="w-full space-y-2">
+                        <div className="flex justify-between gap-4">
+                          <p className="poppins-bold">{service.value}</p>
+                          <p className="text-sm">{service.note}</p>
+                        </div>
+                        <p className="text-sm poppins-light">{service.description}</p>
                       </div>
-                      <p className="text-sm poppins-light">{service.description}</p>
                     </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </section>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        ) : (
+          <section className="rounded-[20px] border border-[#E6D7B8] bg-[#FFF8E8] p-4 text-sm text-brown">
+            This checkout only contains digital items, so no shipping service needs to be selected.
+          </section>
+        )}
 
         <section className="space-y-5">
           <div className="space-y-2">
             <p className="text-3xl text-brown poppins-bold">PAYMENT METHOD</p>
             <p className="text-sm text-brown poppins-light">
-              Save the billing method you want attached to this browser-only checkout draft.
+              Save the billing method you want attached to this checkout draft.
             </p>
           </div>
 
@@ -244,7 +261,7 @@ const ShopPaymentMethod = ({ onNext }) => {
           <div className="space-y-2">
             <p className="text-3xl text-brown poppins-bold">BILLING DETAILS</p>
             <p className="text-sm text-brown poppins-light">
-              These details are used for the order summary and kept locally in this browser until backend checkout is wired.
+              These details are used for the order summary and kept locally in this browser until you submit the checkout request.
             </p>
           </div>
 

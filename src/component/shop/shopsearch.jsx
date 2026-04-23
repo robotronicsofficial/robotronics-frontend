@@ -4,6 +4,7 @@ import { FaArrowRight, FaRegHeart } from "react-icons/fa";
 import { BsHandbag } from "react-icons/bs";
 import { IoIosSearch } from "react-icons/io";
 import { fetchProducts, addToCart } from "../../store/cart/cartSlice";
+import { createProductCommerceItem } from "../../lib/commerceItems";
 import Shopfilter from "../shop/shopfilter";
 import Shopproduct from "../shop/shopproduct";
 import ShopPages from "../shop/shopPages";
@@ -151,7 +152,12 @@ const Shopsearch = () => {
               price={product.price}
               image={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
               onAddToWishlist={() => setWishlistCount((prev) => prev + 1)}
-              onAddToCart={() => dispatch(addToCart(product))}
+              onAddToCart={() => {
+                const cartItem = createProductCommerceItem(product);
+                if (cartItem) {
+                  dispatch(addToCart(cartItem));
+                }
+              }}
               productId={product._id}
             />
           ))}

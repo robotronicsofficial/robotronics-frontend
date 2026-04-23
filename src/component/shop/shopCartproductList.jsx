@@ -4,36 +4,23 @@ import { addToCart, removeFromCart } from "../../store/cart/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
+import {
+  calculateCartSummary,
+  formatShopCurrency,
+  loadShopCheckout,
+  saveShopCheckout,
+} from "../../lib/shopCheckout";
+import { getCommerceItemKey } from "../../lib/commerceItems";
 import "react-toastify/dist/ReactToastify.css";
-
-const CHECKOUT_NOTE_STORAGE_KEY = "checkoutNote";
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
 
-const getStoredCheckoutNote = () => (
-  typeof window === "undefined" ? "" : window.sessionStorage.getItem(CHECKOUT_NOTE_STORAGE_KEY) || ""
-);
-const setStoredCheckoutNote = (value) => {
-  if (typeof window !== "undefined") {
-    window.sessionStorage.setItem(CHECKOUT_NOTE_STORAGE_KEY, value);
-  }
-};
-
 const ShopCartproductList = ({ onNext }) => {
-  const { cart, totalPrice } = useSelector((state) => state.cart);
+  const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-  const discountPercentage = 10;
-  const [notes, setNotes] = useState(() => getStoredCheckoutNote());
+  const [notes, setNotes] = useState(() => loadShopCheckout().note || "");
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  const discountAmount = useMemo(
-    () => (totalPrice * discountPercentage) / 100,
-    [totalPrice, discountPercentage]
-  );
-
-  const discountedPrice = useMemo(
-    () => totalPrice - discountAmount,
-    [totalPrice, discountAmount]
-  );
+  const summary = useMemo(() => calculateCartSummary(cart), [cart]);
 
   const resolveImageUrl = (image) => {
     if (!image) return "https://via.placeholder.com/300x200";
@@ -43,14 +30,14 @@ const ShopCartproductList = ({ onNext }) => {
 
   const [itemQuantity, setItemQuantity] = useState(
     cart.reduce((acc, product) => {
-      acc[product._id || product.id] = product.quantity;
+      acc[getCommerceItemKey(product)] = product.quantity;
       return acc;
     }, {})
   );
 
   const handleAddToCart = useCallback(
     (product) => {
-      const productId = product._id || product.id;
+      const productId = getCommerceItemKey(product);
       setItemQuantity((prev) => ({
         ...prev,
         [productId]: (prev[productId] || 0) + 1,
@@ -62,7 +49,7 @@ const ShopCartproductList = ({ onNext }) => {
 
   const handleRemoveFromCart = useCallback(
     (product) => {
-      const productId = product._id || product.id;
+      const productId = getCommerceItemKey(product);
       setItemQuantity((prev) => ({
         ...prev,
         [productId]: prev[productId] > 1 ? prev[productId] - 1 : 1,
@@ -104,11 +91,11 @@ const ShopCartproductList = ({ onNext }) => {
       <div className="lg:w-2/3 flex-col pr-5">
         {cart.length > 0 ? (
           cart.map((product) => (
-            <div className="max-w-4xl mx-auto py-8" key={product._id || product.id}>
+            <div className="max-w-4xl mx-auto py-8" key={getCommerceItemKey(product)}>
               <div className="flex flex-col sm:flex-row gap-6">
                 <div className="w-[15vw] h-[15vw] overflow-hidden">
                   <img
-                    src={resolveImageUrl(product.images?.[0])}
+                    src={resolveImageUrl(product.image || product.images?.[0])}
                     alt={product.name}
                     width={200}
                     height={200}
@@ -137,7 +124,7 @@ const ShopCartproductList = ({ onNext }) => {
                       <input
                         type="number"
                         className="lg:w-24 w-10 lg:px-3 px-1 py-1 text-sm rounded-md focus:outline-none text-center"
-                        value={itemQuantity[product._id || product.id] || 1}
+                        value={itemQuantity[getCommerceItemKey(product)] || 1}
                         readOnly
                       />
                       <button
@@ -174,19 +161,25 @@ const ShopCartproductList = ({ onNext }) => {
           <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Price</span>
             <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#362D2C] bg-transparent">
-              PKR {Number(totalPrice || 0).toLocaleString()}
+              {formatShopCurrency(summary.subtotal)}
             </span>
           </div>
           <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
-            <span>Discount ({discountPercentage}%)</span>
+            <span>Discount (10%)</span>
             <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#362D2C] bg-transparent">
-              - PKR {Number(discountAmount || 0).toLocaleString()}
+              - {formatShopCurrency(summary.discount)}
+            </span>
+          </div>
+          <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
+            <span>Shipping</span>
+            <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#362D2C] bg-transparent">
+              {formatShopCurrency(summary.shipping)}
             </span>
           </div>
           <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Total Price</span>
             <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-yellow bg-transparent">
-              PKR {Number(discountedPrice || 0).toLocaleString()}
+              {formatShopCurrency(summary.total)}
             </span>
           </div>
         </div>
@@ -210,7 +203,7 @@ const ShopCartproductList = ({ onNext }) => {
               value={notes}
               onChange={(e) => {
                 setNotes(e.target.value);
-                setStoredCheckoutNote(e.target.value);
+                saveShopCheckout({ note: e.target.value });
               }}
             style={{
               width: '401px',

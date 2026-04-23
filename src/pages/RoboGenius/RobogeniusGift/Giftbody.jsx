@@ -61,13 +61,14 @@ const Giftbody = ({ onNext }) => {
     try {
       const cartItems = cart
         .map((item) => ({
-          productId: item._id || item.id || "",
+          itemType: item.itemType || "",
+          itemId: item.itemId || "",
           quantity: Number(item.quantity) || 0,
         }))
-        .filter((item) => item.productId && item.quantity > 0);
+        .filter((item) => item.itemType && item.itemId && item.quantity > 0);
 
       if (!cartItems.length) {
-        throw new Error("Add at least one product before sending a gift request.");
+        throw new Error("Add at least one saved item before sending a gift request.");
       }
 
       const response = await fetch(
