@@ -109,7 +109,7 @@ const BlogPost = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:8080/getAllBlogs');
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getAllBlogs`);
         if (!response.ok) {
           throw new Error('Failed to fetch blogs');
         }

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const RoboGeniusProgreeDetailPage = () => {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [progressData, setProgressData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,7 +23,7 @@ const RoboGeniusProgreeDetailPage = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:8080/api/${childId}/progress`);
+        const response = await fetch(`${backendUrl}/api/${childId}/progress`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -49,7 +50,7 @@ const RoboGeniusProgreeDetailPage = () => {
     
     try {
       // Single API call to generate and get download URL
-      const response = await fetch(`http://localhost:8080/api/generate`, {
+      const response = await fetch(`${backendUrl}/api/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +73,7 @@ const RoboGeniusProgreeDetailPage = () => {
 
       // Download the generated certificate
       const downloadResponse = await fetch(
-        `http://localhost:8080/api/download/${result.certificateId}`
+        `${backendUrl}/api/download/${result.certificateId}`
       );
 
       if (!downloadResponse.ok) {
@@ -91,7 +92,7 @@ const RoboGeniusProgreeDetailPage = () => {
 
       // Refresh progress data
       try {
-        const updatedProgress = await fetch(`http://localhost:8080/api/${childId}/progress`);
+        const updatedProgress = await fetch(`${backendUrl}/api/${childId}/progress`);
         if (updatedProgress.ok) {
           const updatedData = await updatedProgress.json();
           setProgressData(updatedData);

@@ -2,8 +2,6 @@
 // import { useNavigate } from "react-router-dom";
 // import robot from "../../../assets/images/IServicesS4.svg"; // Fallback image
 
-// const BASE_URL = "http://localhost:8080/";
-
 // const OurServices = () => {
 //   const [services, setServices] = useState([]);
 //   const [error, setError] = useState(null);
