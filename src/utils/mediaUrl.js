@@ -1,6 +1,8 @@
+import { resolveBackendUrl } from "../lib/api";
+
 export const resolveBackendAssetUrl = (value, fallback = "") => {
   if (!value) return fallback;
   if (/^https?:\/\//i.test(value)) return value;
 
-  return `${import.meta.env.VITE_BACKEND_URL}/${value.replace(/\\/g, "/")}`;
+  return resolveBackendUrl(value);
 };

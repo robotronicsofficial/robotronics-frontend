@@ -2,6 +2,7 @@ import LeftNav from "./leftNav";
 import { FaFilePdf } from "react-icons/fa6";
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { resolveBackendUrl } from "../../lib/api";
 import { normalizeProgressPayload } from "../../lib/robogenius";
 import {
   buildChildSessionRequest,
@@ -31,7 +32,7 @@ const RoboGeniusProgreeDetailPage = () => {
     }
 
     const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/api/${nextChildId}/progress`,
+      resolveBackendUrl(`/api/${nextChildId}/progress`),
       progressRequest
     );
 
@@ -87,7 +88,7 @@ const RoboGeniusProgreeDetailPage = () => {
         throw new Error('Child session not found. Please re-enter the PIN.');
       }
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/generate`, generateRequest);
+      const response = await fetch(resolveBackendUrl("/api/generate"), generateRequest);
 
       // Check if the response is OK (status 200-299)
       if (!response.ok) {
@@ -108,10 +109,7 @@ const RoboGeniusProgreeDetailPage = () => {
       }
 
       const downloadResponse = await fetch(
-        new URL(
-          result.downloadUrl || `/api/certificates/download/${result.certificateId}`,
-          import.meta.env.VITE_BACKEND_URL
-        ).toString(),
+        resolveBackendUrl(result.downloadUrl || `/api/certificates/download/${result.certificateId}`),
         downloadRequest
       );
 
