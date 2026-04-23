@@ -10,11 +10,9 @@ import { useState } from "react";
 const CourseProduct = ({
   title,
   id,
-  description,
   image,
   price,
   duration,
-  category,
 }) => {
   const [wishList, setWishList] = useState(0);
   const resolvedImage = image
@@ -30,14 +28,14 @@ const CourseProduct = ({
       const response = await fetch(
         isAdding
           ? `${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist`
-          : `${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist/${id}`,
+          : `${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist/course/${id}`,
         {
           method: isAdding ? "POST" : "DELETE",
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
-          body: isAdding ? JSON.stringify({ productId: id }) : undefined,
+          body: isAdding ? JSON.stringify({ itemType: "course", itemId: id }) : undefined,
         }
       );
 
