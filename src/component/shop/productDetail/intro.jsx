@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../../store/cart/cartSlice";
 import { createProductCommerceItem } from "../../../lib/commerceItems";
@@ -11,6 +11,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const Intro = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const products = useSelector((state) => state.cart.items);
 

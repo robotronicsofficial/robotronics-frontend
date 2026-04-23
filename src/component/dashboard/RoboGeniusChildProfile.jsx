@@ -9,7 +9,11 @@ import ChangePinModal from "./popUps/ChangePinModal";
 import ErrorModal from "./popUps/ErrorModal";
 import { useAuth } from "../../contexts/AuthContext";
 import { fetchSessionJson, sendSessionJson } from "../../lib/api";
-import { clearActiveChildSession, setActiveChildSession } from "../../utils/childSessionRequest";
+import {
+  clearActiveChildSession,
+  getChildSessionIdentifiers,
+  setActiveChildSession,
+} from "../../utils/childSessionRequest";
 import {
   ensureArray,
   formatDisplayDate,
@@ -216,6 +220,7 @@ const RoboGeniusChildProfile = () => {
         clearActiveChildSession();
         setActiveChildSession({
           childId: childAccessId,
+          childIds: getChildSessionIdentifiers(selectedChild),
           sessionId: data.sessionId,
         });
       }

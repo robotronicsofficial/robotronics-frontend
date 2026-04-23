@@ -4,6 +4,50 @@ export const CHILD_SESSION_TTL_MS = Number(
 
 const CHILD_SESSION_STORAGE_KEY = "robotronics.activeChildSession";
 
+const normalizeChildIdentifier = (value) => {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  const normalizedValue = String(value).trim();
+  return normalizedValue.length > 0 ? normalizedValue : null;
+};
+
+export const getChildSessionIdentifiers = (child = {}) => {
+  const identifiers = [
+    child.accessChildId,
+    child.childId,
+    child.roboChildId,
+    child._id,
+    child.id,
+  ]
+    .map(normalizeChildIdentifier)
+    .filter(Boolean);
+
+  return [...new Set(identifiers)];
+};
+
+export const matchesChildSessionIdentifier = (child, childId) => {
+  const normalizedChildId = normalizeChildIdentifier(childId);
+
+  if (!normalizedChildId) {
+    return false;
+  }
+
+  return getChildSessionIdentifiers(child).includes(normalizedChildId);
+};
+
+export const resolveChildSessionIdentifier = (child, preferredChildId) => {
+  const normalizedPreferredChildId = normalizeChildIdentifier(preferredChildId);
+  const childIdentifiers = getChildSessionIdentifiers(child);
+
+  if (normalizedPreferredChildId && childIdentifiers.includes(normalizedPreferredChildId)) {
+    return normalizedPreferredChildId;
+  }
+
+  return childIdentifiers[0] || null;
+};
+
 const getSessionStorage = () => {
   if (typeof window === "undefined") {
     return null;
@@ -13,7 +57,12 @@ const getSessionStorage = () => {
 };
 
 const normalizeChildSession = (value) => {
-  if (!value?.childId || !value?.sessionId) {
+  const childIds = [...new Set([
+    normalizeChildIdentifier(value?.childId),
+    ...(Array.isArray(value?.childIds) ? value.childIds.map(normalizeChildIdentifier) : []),
+  ].filter(Boolean))];
+
+  if (childIds.length === 0 || !value?.sessionId) {
     return null;
   }
 
@@ -23,7 +72,8 @@ const normalizeChildSession = (value) => {
   }
 
   return {
-    childId: String(value.childId),
+    childId: childIds[0],
+    childIds,
     sessionId: String(value.sessionId),
     expiresAt,
   };
@@ -68,9 +118,15 @@ const readStoredChildSession = () => {
 
 let activeChildSession = readStoredChildSession();
 
-export const setActiveChildSession = ({ childId, sessionId }) => {
+export const setActiveChildSession = ({ childId, childIds = [], sessionId }) => {
+  const nextChildIds = [...new Set([
+    normalizeChildIdentifier(childId),
+    ...childIds.map(normalizeChildIdentifier),
+  ].filter(Boolean))];
+
   activeChildSession = {
-    childId,
+    childId: nextChildIds[0],
+    childIds: nextChildIds,
     sessionId,
     expiresAt: Date.now() + CHILD_SESSION_TTL_MS,
   };
@@ -92,12 +148,14 @@ export const getActiveChildSession = (expectedChildId) => {
 
   activeChildSession = nextSession;
 
-  if (expectedChildId && nextSession.childId !== expectedChildId) {
+  const normalizedExpectedChildId = normalizeChildIdentifier(expectedChildId);
+  if (normalizedExpectedChildId && !nextSession.childIds.includes(normalizedExpectedChildId)) {
     return null;
   }
 
   return {
     childId: nextSession.childId,
+    childIds: nextSession.childIds,
     sessionId: nextSession.sessionId,
   };
 };

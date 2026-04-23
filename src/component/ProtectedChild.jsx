@@ -65,11 +65,12 @@ const ProtectedChild = ({ children }) => {
         return;
       }
 
-      const { childId, sessionId } = activeChildSession;
+      const { childId, childIds = [], sessionId } = activeChildSession;
 
-      if (expectedChildId && childId !== expectedChildId) {
+      if (expectedChildId && !childIds.includes(expectedChildId)) {
         invalidateChildSession({
           message: 'This page belongs to a different child account. Return to Child Accounts and open the correct child from there.',
+          clearSession: false,
         });
         return;
       }
