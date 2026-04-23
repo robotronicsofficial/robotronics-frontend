@@ -20,10 +20,10 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -97,7 +97,7 @@ jobs:
 
           ln -sfn "${release_dir}/build" "${current_link}"
 
-          if ! sudo nginx -t || ! sudo systemctl reload nginx; then
+          if ! sudo nginx -t || ! sudo systemctl reload nginx || ! curl --fail --silent --show-error --resolve robotronics.ai:443:127.0.0.1 https://robotronics.ai/ > /dev/null; then
             if [ -n "${previous_target}" ] && [ -d "${previous_target}" ]; then
               ln -sfn "${previous_target}" "${current_link}"
               sudo nginx -t
