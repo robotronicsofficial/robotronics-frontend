@@ -69,7 +69,7 @@ const CareerJobDetail = ({ job }) => {
         </div>
 
         <div id="application-form" className="scroll-mt-28">
-          <JobApplicationForm />
+          <JobApplicationForm job={job} />
         </div>
 
         <div className="flex flex-row justify-between border border-smallText lg:p-10 p-5 rounded-xl">

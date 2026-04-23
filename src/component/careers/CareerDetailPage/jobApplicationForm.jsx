@@ -1,7 +1,9 @@
 import { useRef, useState } from "react";
 
-const JobApplicationForm = () => {
+const JobApplicationForm = ({ job = null }) => {
   const fileInputRef = useRef(null);
+  const jobId = job?._id || "";
+  const jobTitle = job?.title || job?.position || "";
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -31,7 +33,13 @@ const JobApplicationForm = () => {
     setStatus({ type: "", message: "" });
 
     try {
+      if (!jobId || !jobTitle) {
+        throw new Error("Please apply from a specific job listing.");
+      }
+
       const formData = new FormData();
+      formData.append("jobId", jobId);
+      formData.append("jobTitle", jobTitle);
       formData.append("firstName", form.firstName);
       formData.append("lastName", form.lastName);
       formData.append("email", form.email);
@@ -105,9 +113,14 @@ const JobApplicationForm = () => {
     <div className="space-y-5 mx-10 my-8 lg:px-24"  >
           <h1 className="text-4xl poppins-bold text-brown"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"  >Job Application</h1>
           <h2 className="text-xl poppins-light text-brown"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"  >
-            Submit your details and CV
+            Submit your details and CV for {jobTitle || "the selected role"}
           </h2>
         </div>
+    {!jobId || !jobTitle ? (
+      <div className="mx-auto max-w-4xl rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        Open a specific job listing before submitting an application so the role is attached to your CV.
+      </div>
+    ) : null}
     <form
       onSubmit={handleSubmit}
       className="space-y-6 bg-background p-6 max-w-4xl mx-auto"
