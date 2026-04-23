@@ -9,11 +9,25 @@ import StarIcon from "@mui/icons-material/Star";
 import MenuIcon from "@mui/icons-material/Menu"; // Import a proper menu icon
 import { CART_PATH, CONTACT_PATH } from "../router/paths";
 
+const readCurrentUserLabel = (currentUser) => {
+  if (!currentUser) {
+    return "";
+  }
+
+  const displayName = currentUser.name || currentUser.username || currentUser.firstName;
+  if (displayName) {
+    return displayName;
+  }
+
+  return currentUser.email?.split("@")[0] || "";
+};
+
 export default function Header() {
   const { totalQuantity } = useSelector((state) => state.cart);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
+  const currentUserLabel = readCurrentUserLabel(currentUser);
 
   useEffect(() => {
     Aos.init(); // Initialize AOS library
@@ -123,9 +137,7 @@ export default function Header() {
                       navigate("/Dashboard/userInfo");
                     }}
                   >
-                    {currentUser.firstName
-                      ? currentUser.firstName
-                      : currentUser.email.split("@")[0]}
+                    {currentUserLabel}
                   </span>
 
                   <button
