@@ -1,4 +1,5 @@
-const SAVED_ITEMS_ENDPOINT = `${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist`;
+import { BACKEND_BASE_URL } from "./api";
+const SAVED_ITEMS_ENDPOINT = `${BACKEND_BASE_URL}/wishlists/wishlist`;
 
 const parseSavedItemsResponse = async (response, fallbackMessage) => {
   const payload = await response.json().catch(() => ({}));

@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const resolveImageUrl = (image) => {
   if (!image) return undefined;
   if (image.startsWith("http")) return image;
-  return `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`;
+  return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
 };
 
 const Intro = ({ blog }) => {

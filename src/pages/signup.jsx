@@ -9,7 +9,12 @@ import hide from "../assets/images/hide.svg";
 import robot from "../assets/images/SignupRobot.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
-import { getApiErrorMessage } from "../lib/api";
+import { sendJson, resolveBackendUrl } from "../lib/api";
+import {
+  getPasswordValidationState,
+  hasValidPasswordRequirements,
+  PASSWORD_POLICY_MESSAGE,
+} from "../utils/passwordPolicy";
 
 const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,13 +29,11 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-  const [passwordErrors, setPasswordErrors] = useState({
-    length: false,
-    number: false,
-    symbol: false,
-    match: false
-  });
   const phoneInputRef = useRef(null);
+  const passwordErrors = getPasswordValidationState(
+    formData.password,
+    formData.confirmPassword,
+  );
   useEffect(() => {
     // This effect will run after the component mounts
     if (phoneInputRef.current) {
@@ -65,24 +68,6 @@ const Signup = () => {
       ...prev,
       [name]: value
     }));
-
-    // Password validation
-    if (name === "password") {
-      setPasswordErrors({
-        length: value.length >= 8,
-        number: /\d/.test(value),
-        symbol: /[!@#$%^&*(),.?":{}|<>]/.test(value),
-        match: value === formData.confirmPassword && formData.confirmPassword !== ""
-      });
-    }
-
-    // Confirm password validation
-    if (name === "confirmPassword") {
-      setPasswordErrors(prev => ({
-        ...prev,
-        match: value === formData.password && formData.password !== ""
-      }));
-    }
   };
 
   const handlePhoneChange = (value) => {
@@ -93,16 +78,13 @@ const Signup = () => {
   };
 
   const validateForm = () => {
-    // Check all password requirements
-    const isPasswordValid = (
-      passwordErrors.length &&
-      passwordErrors.number &&
-      passwordErrors.symbol &&
-      passwordErrors.match
-    );
+    if (!hasValidPasswordRequirements(passwordErrors)) {
+      toast.error(PASSWORD_POLICY_MESSAGE);
+      return false;
+    }
 
-    if (!isPasswordValid) {
-      toast.error("Please ensure your password meets all requirements");
+    if (!passwordErrors.match) {
+      toast.error("Passwords do not match");
       return false;
     }
 
@@ -119,28 +101,20 @@ const Signup = () => {
 
     setIsLoading(true); // Start loading
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
+      await sendJson('/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
           phone: formData.phoneNumber,
           password: formData.password
-        }),
+        },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast.error(`Error: ${getApiErrorMessage(response, errorData)}`);
-      } else {
-        toast.success("Email sent successfully! Please verify your email.");
-      }
+      toast.success("Email sent successfully! Please verify your email.");
     } catch (error) {
-      toast.error(`An error occurred: ${error.message}. Please try again.`);
+      toast.error(error.message);
     } finally {
       setIsLoading(false); // Stop loading regardless of success/error
     }
@@ -148,7 +122,7 @@ const Signup = () => {
   };
 
   const handleSocialLogin = (provider) => {
-    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`;
+    window.location.assign(resolveBackendUrl(`/auth/${provider}`));
   };
 
   return (

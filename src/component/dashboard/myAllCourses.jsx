@@ -6,6 +6,7 @@ import {
   buildChildSessionRequest,
   getActiveChildSession,
 } from "../../utils/childSessionRequest";
+import { resolveBackendUrl } from "../../lib/api";
 
 const extractActiveCourses = (payload) => {
   if (Array.isArray(payload?.data?.activeCourses)) return payload.data.activeCourses;
@@ -46,7 +47,7 @@ const MyAllCourses = () => {
         }
 
         // Fetch all courses
-        const allCoursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+        const allCoursesResponse = await fetch(resolveBackendUrl("/get-courses"));
         if (!allCoursesResponse.ok) {
           throw new Error("Failed to fetch all courses");
         }
@@ -55,7 +56,7 @@ const MyAllCourses = () => {
   
         // Fetch child's data
         const childResponse = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/child/${childId}/courses`,
+          resolveBackendUrl(`/api/child/${childId}/courses`),
           childSessionRequest
         );
         if (!childResponse.ok) {
@@ -194,7 +195,7 @@ const MyAllCourses = () => {
                     className="w-full h-48 object-cover"
                     src={
                       course.thumbnail
-                        ? `${import.meta.env.VITE_BACKEND_URL}/${course.thumbnail.replace(/\\/g, "/")}`
+                        ? resolveBackendUrl(course.thumbnail)
                         : "https://via.placeholder.com/300x200"
                     }
                     alt={course.title}

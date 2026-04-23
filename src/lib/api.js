@@ -1,4 +1,5 @@
 const trimTrailingSlash = (value) => String(value || "").trim().replace(/\/+$/, "");
+const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost"]);
 
 const normalizeBackendPath = (value) => {
   if (typeof value !== "string") {
@@ -8,26 +9,49 @@ const normalizeBackendPath = (value) => {
   return value.trim().replace(/\\/g, "/");
 };
 
-const BACKEND_URL = trimTrailingSlash(import.meta.env.VITE_BACKEND_URL);
+const resolveLoopbackBackendUrl = (value) => {
+  const normalizedValue = trimTrailingSlash(value);
+
+  if (!normalizedValue || typeof window === "undefined" || !/^https?:\/\//i.test(normalizedValue)) {
+    return normalizedValue;
+  }
+
+  try {
+    const backendUrl = new URL(normalizedValue);
+    const currentHost = window.location.hostname;
+
+    if (!LOOPBACK_HOSTS.has(currentHost) || !LOOPBACK_HOSTS.has(backendUrl.hostname)) {
+      return normalizedValue;
+    }
+
+    backendUrl.protocol = window.location.protocol;
+    backendUrl.hostname = currentHost;
+    return trimTrailingSlash(backendUrl.href);
+  } catch {
+    return normalizedValue;
+  }
+};
+
+export const BACKEND_BASE_URL = resolveLoopbackBackendUrl(import.meta.env.VITE_BACKEND_URL);
 
 export const resolveBackendUrl = (path = "") => {
   const normalizedPath = normalizeBackendPath(path);
 
   if (!normalizedPath) {
-    return BACKEND_URL;
+    return BACKEND_BASE_URL;
   }
 
   if (/^https?:\/\//i.test(normalizedPath)) {
     return normalizedPath;
   }
 
-  if (!BACKEND_URL) {
+  if (!BACKEND_BASE_URL) {
     return normalizedPath.startsWith("/") ? normalizedPath : `/${normalizedPath}`;
   }
 
   return normalizedPath.startsWith("/")
-    ? `${BACKEND_URL}${normalizedPath}`
-    : `${BACKEND_URL}/${normalizedPath}`;
+    ? `${BACKEND_BASE_URL}${normalizedPath}`
+    : `${BACKEND_BASE_URL}/${normalizedPath}`;
 };
 
 const parseResponseBody = async (response) => {

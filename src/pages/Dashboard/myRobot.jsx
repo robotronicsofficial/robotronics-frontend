@@ -6,6 +6,7 @@ import LeftNav from "../../component/dashboard/leftNav";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const MyRobot = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
@@ -16,7 +17,7 @@ const MyRobot = () => {
     const loadWishlist = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist`, {
+        const response = await fetch(`${BACKEND_BASE_URL}/wishlists/wishlist`, {
           credentials: "include",
         });
 
@@ -45,7 +46,7 @@ const MyRobot = () => {
   const handleRemove = async (item) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist/${item.itemType}/${item.itemId}`,
+        `${BACKEND_BASE_URL}/wishlists/wishlist/${item.itemType}/${item.itemId}`,
         {
           method: "DELETE",
           credentials: "include",

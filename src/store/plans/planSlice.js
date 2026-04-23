@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 export const fetchPlans = createAsyncThunk(
   "plans/fetchPlans",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getAllPlans`);
+      const response = await fetch(`${BACKEND_BASE_URL}/api/getAllPlans`);
       if (!response.ok) throw new Error("Failed to fetch plans");
       const data = await response.json();
       return data.plans || data; // Handle both formats (data.plans or direct array)

@@ -6,6 +6,7 @@ import { COMMERCE_ITEM_TYPES } from "../../lib/commerceItems";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const CoursesProductDetail = () => {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
@@ -16,7 +17,7 @@ const CoursesProductDetail = () => {
     const fetchCourse = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/coursesById/${id}`);
+        const response = await fetch(`${BACKEND_BASE_URL}/coursesById/${id}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch course: ${response.status}`);
         }

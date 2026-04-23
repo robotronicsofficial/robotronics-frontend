@@ -6,10 +6,11 @@ import LeftNav from "./leftNav";
 import { addToCart } from "../../store/cart/cartSlice";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const resolveImageUrl = (image) => {
   if (!image) return "https://via.placeholder.com/160";
   if (image.startsWith("http")) return image;
-  return `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`;
+  return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
 };
 
 const WishListD = () => {
@@ -22,7 +23,7 @@ const WishListD = () => {
   const fetchWishlist = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/wishlists/wishlist`, {
         credentials: "include",
       });
 
@@ -47,7 +48,7 @@ const WishListD = () => {
   const handleRemove = async (item) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist/${item.itemType}/${item.itemId}`,
+        `${BACKEND_BASE_URL}/wishlists/wishlist/${item.itemType}/${item.itemId}`,
         {
         method: "DELETE",
         credentials: "include",

@@ -1,8 +1,28 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import hide from "../assets/images/hide.svg";
+
+import { sendJson } from "../lib/api";
+import {
+  getPasswordValidationState,
+  hasValidPasswordRequirements,
+  PASSWORD_POLICY_MESSAGE,
+} from "../utils/passwordPolicy";
+
+const RequirementCheck = ({ isValid, text }) => (
+  <div className="flex items-center">
+    <span className={`inline-block w-4 h-4 rounded-full mr-2 ${isValid ? 'bg-green-500' : 'bg-red-500'}`}></span>
+    <span className={`text-xs ${isValid ? 'text-green-500' : 'text-red-500'}`}>{text}</span>
+  </div>
+);
+
+RequirementCheck.propTypes = {
+  isValid: PropTypes.bool.isRequired,
+  text: PropTypes.string.isRequired,
+};
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -14,11 +34,13 @@ const ResetPassword = () => {
   const token = searchParams.get("token");
   const navigate = useNavigate();
 
-  // Password validation checks
-  const hasMinLength = password.length >= 8;
-  const hasNumber = /\d/.test(password);
-  const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-  const passwordsMatch = password === confirmPassword && confirmPassword !== "";
+  const passwordValidation = getPasswordValidationState(password, confirmPassword);
+  const {
+    length: hasMinLength,
+    number: hasNumber,
+    symbol: hasSymbol,
+    match: passwordsMatch,
+  } = passwordValidation;
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -32,8 +54,12 @@ const ResetPassword = () => {
     e.preventDefault();
     setError("");
 
-    if (!hasMinLength || !hasNumber || !hasSymbol) {
-      return setError("Password does not meet requirements");
+    if (!token) {
+      return setError("Reset token is missing");
+    }
+
+    if (!hasValidPasswordRequirements(passwordValidation)) {
+      return setError(PASSWORD_POLICY_MESSAGE);
     }
 
     if (!passwordsMatch) {
@@ -41,35 +67,18 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/reset-password`, {
+      await sendJson('/auth/reset-password', {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token, password }),
+        body: { token, password },
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to reset password");
-      }
 
       toast.success("Password reset successfully!");
       setTimeout(() => navigate("/Login"), 2000);
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : "Failed to reset password");
       console.error("Reset password error:", err);
     }
   };
-
-  // Password requirement check component - matching Signup style
-  const RequirementCheck = ({ isValid, text }) => (
-    <div className="flex items-center">
-      <span className={`inline-block w-4 h-4 rounded-full mr-2 ${isValid ? 'bg-green-500' : 'bg-red-500'}`}></span>
-      <span className={`text-xs ${isValid ? 'text-green-500' : 'text-red-500'}`}>{text}</span>
-    </div>
-  );
 
   return (
     <div className="bg-gray" id="reset-password">

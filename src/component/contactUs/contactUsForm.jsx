@@ -11,6 +11,7 @@ import { TfiEmail } from "react-icons/tfi";
 import { FaLocationDot } from "react-icons/fa6";
 import { useState } from "react";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const ContactUsForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -72,7 +73,7 @@ const ContactUsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/contact`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

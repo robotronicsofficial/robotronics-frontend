@@ -12,6 +12,7 @@ import {
 } from "../../lib/shopCheckout";
 import { getCommerceItemKey } from "../../lib/commerceItems";
 import "react-toastify/dist/ReactToastify.css";
+import { BACKEND_BASE_URL } from "../../lib/api";
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
 
 const ShopCartproductList = ({ onNext }) => {
@@ -25,7 +26,7 @@ const ShopCartproductList = ({ onNext }) => {
   const resolveImageUrl = (image) => {
     if (!image) return "https://via.placeholder.com/300x200";
     if (image.startsWith("http")) return image;
-    return `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`;
+    return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
   };
 
   const [itemQuantity, setItemQuantity] = useState(

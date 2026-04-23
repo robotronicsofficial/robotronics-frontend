@@ -18,6 +18,7 @@ import { clearCart } from "../../store/cart/cartSlice";
 import { useAuth } from "../../contexts/AuthContext";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -76,7 +77,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/shop-checkout-intents`,
+        `${BACKEND_BASE_URL}/api/shop-checkout-intents`,
         {
           method: "POST",
           credentials: "include",

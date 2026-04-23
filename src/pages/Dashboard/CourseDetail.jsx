@@ -19,6 +19,7 @@ import {
   normalizeChildCourse,
   normalizeCourseDetail,
 } from "../../lib/robogenius";
+import { resolveBackendUrl } from "../../lib/api";
 
 const MAX_ATTEMPTS = {
   BASIC: 2,
@@ -28,7 +29,7 @@ const MAX_ATTEMPTS = {
 const toAssetUrl = (path) => {
   if (!path) return "";
   if (path.startsWith("http://") || path.startsWith("https://")) return path;
-  return `${import.meta.env.VITE_BACKEND_URL}/${path.replace(/\\/g, "/")}`;
+  return resolveBackendUrl(path);
 };
 
 const isExternalUrl = (value) => /^https?:\/\//i.test(String(value || ""));
@@ -77,7 +78,7 @@ const CourseDetail = () => {
         }
 
         const childCourseRes = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/getChildById/${childId}/ByCourseId/${id}`,
+          resolveBackendUrl(`/api/getChildById/${childId}/ByCourseId/${id}`),
           childCourseRequest
         );
 
@@ -150,7 +151,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
     }
 
     const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/api/updateChildCourse/${childId}`,
+      resolveBackendUrl(`/api/updateChildCourse/${childId}`),
       childSessionRequest
     );
 
@@ -206,7 +207,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/child/${childId}/courses/${id}/content/${contentId}/download`,
+        resolveBackendUrl(`/api/child/${childId}/courses/${id}/content/${contentId}/download`),
         childSessionRequest
       );
 

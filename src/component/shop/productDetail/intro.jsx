@@ -9,6 +9,7 @@ import robo from "../../../assets/images/shopRobot.svg";
 import star from "../../../assets/images/shopStar.svg";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
+import { BACKEND_BASE_URL } from "../../../lib/api";
 const Intro = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Intro = () => {
   const resolveImageUrl = (image) => {
     if (!image) return robo;
     if (image.startsWith("http")) return image;
-    return `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`;
+    return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
   };
 
   useEffect(() => {
@@ -48,7 +49,7 @@ const Intro = () => {
 
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getProductById/${id}`);
+        const response = await fetch(`${BACKEND_BASE_URL}/getProductById/${id}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch product: ${response.status}`);
         }

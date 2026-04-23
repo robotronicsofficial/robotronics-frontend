@@ -7,7 +7,12 @@ import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
 import { useAuth } from "../contexts/AuthContext";
 
+import { resolveBackendUrl, sendJson } from "../lib/api";
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
+
+const isSafeRedirectPath = (value) => (
+  typeof value === "string" && value.startsWith("/") && !value.startsWith("//")
+);
 
 const Login = () => {
   const { currentUser, login } = useAuth();
@@ -41,13 +46,17 @@ const Login = () => {
 
     if (currentUser) {
       const redirectPath = window.sessionStorage.getItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
-      if (redirectPath) {
+      if (isSafeRedirectPath(redirectPath)) {
         window.sessionStorage.removeItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
         navigate(redirectPath, { replace: true });
         return;
       }
 
-      navigate(redirectFromState || "/", { replace: true });
+      if (redirectPath) {
+        window.sessionStorage.removeItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
+      }
+
+      navigate(isSafeRedirectPath(redirectFromState) ? redirectFromState : "/", { replace: true });
     }
   }, [location.state, currentUser, navigate, redirectFromState]);
 
@@ -70,21 +79,14 @@ const Login = () => {
     setError('');
   
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/forgot-password`, {
+      const payload = await sendJson('/auth/forgot-password', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: forgotEmail }),
+        body: { email: forgotEmail },
       });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong');
-      }
-  
-      toast.success('Password reset instructions sent to your email');
+
+      toast.success(payload?.message || 'Password reset instructions sent to your email');
+      setForgotPasswordMode(false);
+      setForgotEmail('');
     } catch (err) {
       setError(err.message);
       console.error('Forgot password error:', err);
@@ -92,7 +94,7 @@ const Login = () => {
   };
 
   const handleSocialLogin = (provider) => {
-    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`;
+    window.location.assign(resolveBackendUrl(`/auth/${provider}`));
   };
 
   if (forgotPasswordMode) {

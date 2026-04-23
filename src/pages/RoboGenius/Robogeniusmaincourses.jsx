@@ -3,6 +3,7 @@ import { FaStar, FaArrowDown } from "react-icons/fa";
 import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const Robogeniusmaincourses = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
@@ -14,7 +15,7 @@ const Robogeniusmaincourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
         const data = await response.json();
         if (data?.courses) {
           setCourses(data.courses);
@@ -87,7 +88,7 @@ const Robogeniusmaincourses = () => {
               <div className="bg-white p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
                 <img
                     className="rounded-xl w-full h-48 sm:h-56 object-cover"
-                    src={course.thumbnail ? `${import.meta.env.VITE_BACKEND_URL}/${course.thumbnail.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x200"}
+                    src={course.thumbnail ? `${BACKEND_BASE_URL}/${course.thumbnail.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x200"}
                     alt={course.title || "Course"}
                     loading="lazy"
                     decoding="async"

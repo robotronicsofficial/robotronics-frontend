@@ -7,13 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { addToCart } from "../../../store/cart/cartSlice";
 import { createCourseCommerceItem } from "../../../lib/commerceItems";
 import { CART_PATH } from "../../../router/paths";
+import { BACKEND_BASE_URL } from "../../../lib/api";
 const CourseIntro = ({ title, id, image, price, category }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const resolvedImage = image
     ? image.startsWith("http")
       ? image
-      : `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`
+      : `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`
     : python;
 
   const handleAddToCart = () => {

@@ -1,3 +1,4 @@
+import { BACKEND_BASE_URL } from "../../lib/api";
 // import CourseProduct from "../course/courseProduct";
 // import icon from "../../assets/logo/searchicon.svg";
 // import arow from "../../assets/logo/shopArowIcon.svg";
@@ -191,7 +192,7 @@ const ShopCoursesIntro = () => {
     const fetchCourses = async () => {
       try {
         // Fetch data from the backend
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
         if (!response.ok) {
           throw new Error(`Failed to fetch courses: ${response.status}`);
         }

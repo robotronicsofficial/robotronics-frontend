@@ -4,12 +4,13 @@ import {
   normalizeCommerceCartItem,
 } from "../../lib/commerceItems";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 // Async thunk for fetching products
 export const fetchProducts = createAsyncThunk(
   "cart/fetchProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getProducts`);
+      const response = await fetch(`${BACKEND_BASE_URL}/getProducts`);
       if (!response.ok) throw new Error("Failed to fetch products");
       const data = await response.json();
       return data.products;

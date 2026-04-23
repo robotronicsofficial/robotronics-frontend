@@ -12,6 +12,7 @@ import {
 import { hasShippableCommerceItems } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const STATES = [
   { value: "BAL", label: "Balochistan" },
   { value: "KP", label: "Khyber Pakhtunkhwa" },
@@ -115,7 +116,7 @@ const CustomerInfomation = ({ onNext }) => {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/addresses`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/api/addresses`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

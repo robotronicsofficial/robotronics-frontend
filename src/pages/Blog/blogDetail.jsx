@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Intro from "../../component/blog/intro";
 import BlogDetailBody from "../../component/blog/blogDetailBody";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const BlogDetail = () => {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
@@ -22,8 +23,8 @@ const BlogDetail = () => {
       try {
         setLoading(true);
         const [blogResponse, allBlogsResponse] = await Promise.all([
-          fetch(`${import.meta.env.VITE_BACKEND_URL}/getBlogById/${id}`),
-          fetch(`${import.meta.env.VITE_BACKEND_URL}/getAllBlogs`),
+          fetch(`${BACKEND_BASE_URL}/getBlogById/${id}`),
+          fetch(`${BACKEND_BASE_URL}/getAllBlogs`),
         ]);
 
         if (!blogResponse.ok) {

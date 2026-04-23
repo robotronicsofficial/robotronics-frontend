@@ -10,6 +10,7 @@ import {
 import { COURSE_PATH } from "../../../router/paths";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 
+import { BACKEND_BASE_URL } from "../../../lib/api";
 const RELATED_ITEM_CONFIG = {
   [COMMERCE_ITEM_TYPES.product]: {
     endpoint: "/getProducts",
@@ -47,7 +48,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
     const loadItems = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${config.endpoint}`);
+        const response = await fetch(`${BACKEND_BASE_URL}${config.endpoint}`);
         if (!response.ok) {
           throw new Error(`${config.errorLabel}: ${response.status}`);
         }

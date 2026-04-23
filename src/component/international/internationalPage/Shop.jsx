@@ -5,6 +5,7 @@ import robo from "../../../assets/logo/Robotrinic.svg";
 import { FaStar } from "react-icons/fa";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 
+import { BACKEND_BASE_URL } from "../../../lib/api";
 const Shop = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
@@ -15,7 +16,7 @@ const Shop = () => {
     const loadCourses = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
         if (!response.ok) {
           throw new Error(`Failed to fetch courses: ${response.status}`);
         }

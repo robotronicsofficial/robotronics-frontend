@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const BlogCard = ({ cardData }) => {
   // Map backend data structure to match your cardData props
   const mappedData = {
@@ -116,7 +117,7 @@ const BlogPost = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getAllBlogs`);
+        const response = await fetch(`${BACKEND_BASE_URL}/getAllBlogs`);
         if (!response.ok) {
           throw new Error('Failed to fetch blogs');
         }

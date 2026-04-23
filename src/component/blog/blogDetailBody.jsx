@@ -9,10 +9,11 @@ import {
   FaLinkedin,
 } from "react-icons/fa";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const resolveImageUrl = (image) => {
   if (!image) return "https://via.placeholder.com/160";
   if (image.startsWith("http")) return image;
-  return `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`;
+  return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
 };
 
 const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {

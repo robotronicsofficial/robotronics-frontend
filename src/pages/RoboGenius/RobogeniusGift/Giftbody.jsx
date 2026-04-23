@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import { BACKEND_BASE_URL } from "../../../lib/api";
 const buildCurrentUserName = (currentUser) => (
   [
     currentUser?.firstName,
@@ -73,7 +74,7 @@ const Giftbody = ({ onNext }) => {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/gift-courses`,
+        `${BACKEND_BASE_URL}/api/gift-courses`,
         {
           method: "POST",
           headers: {

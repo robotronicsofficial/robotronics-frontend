@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import { resolveBackendUrl } from '../lib/api';
 import { DASHBOARD_CHILD_PROFILE_PATH } from '../router/paths';
 import {
   buildChildSessionRequest,
@@ -94,7 +95,7 @@ const ProtectedChild = ({ children }) => {
         }
 
         const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/verifyChildSession`,
+          resolveBackendUrl("/api/verifyChildSession"),
           childSessionRequest
         );
 

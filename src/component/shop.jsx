@@ -8,6 +8,7 @@ import { LuClock } from "react-icons/lu";
 import { IoVideocamOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
+import { BACKEND_BASE_URL } from "../lib/api";
 const ServiceCard = ({ service }) => {
   return (
     <div className="p-3 sm:p-4 lg:p-5" data-aos="fade-up">
@@ -16,7 +17,7 @@ const ServiceCard = ({ service }) => {
         <img
           className="rounded-xl w-full h-48 sm:h-56 object-fit"
 
-          src={`${import.meta.env.VITE_BACKEND_URL}/${service.thumbnail}`}
+          src={`${BACKEND_BASE_URL}/${service.thumbnail}`}
 
           alt={service.title || "Course image"}
         />
@@ -72,7 +73,7 @@ const Shop = () => {
     const fetchServices = async () => {
       try {
 
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
 
         if (!response.ok) throw new Error("Failed to fetch services");
         const data = await response.json();

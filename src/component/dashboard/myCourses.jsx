@@ -6,6 +6,7 @@ import {
   buildChildSessionRequest,
   getActiveChildSession,
 } from "../../utils/childSessionRequest";
+import { resolveBackendUrl } from "../../lib/api";
 import { ensureArray } from "../../lib/robogenius";
 
 const MyCourses = () => {
@@ -41,7 +42,7 @@ const MyCourses = () => {
 
         // First fetch child data to get the plan
         const childResponse = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/getChildPlan/${childId}`,
+          resolveBackendUrl(`/api/getChildPlan/${childId}`),
           childSessionRequest
         );
         if (!childResponse.ok) {
@@ -55,7 +56,7 @@ const MyCourses = () => {
         setMaxCourses(courseLimit);
 
         // Then fetch courses
-        const coursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+        const coursesResponse = await fetch(resolveBackendUrl("/get-courses"));
         if (!coursesResponse.ok) {
           throw new Error(`HTTP error! status: ${coursesResponse.status}`);
         }
@@ -111,7 +112,7 @@ const MyCourses = () => {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/${childId}/courses`,
+        resolveBackendUrl(`/api/${childId}/courses`),
         childSessionRequest
       );
 
@@ -231,7 +232,7 @@ const MyCourses = () => {
                 }`}>
                 <img
                   className="w-full h-48 object-cover"
-                  src={course.thumbnail ? `${import.meta.env.VITE_BACKEND_URL}/${course.thumbnail.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x200"}
+                  src={course.thumbnail ? resolveBackendUrl(course.thumbnail) : "https://via.placeholder.com/300x200"}
                   alt={course.title}
                   onError={(e) => {
                     e.target.src = "https://via.placeholder.com/300x200";

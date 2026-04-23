@@ -22,7 +22,7 @@ if [ -e vercel.json ]; then
   exit 1
 fi
 
-if rg -n "workflow_dispatch:" .github/workflows/deploy-production.yml >/dev/null; then
+if grep -n "workflow_dispatch:" .github/workflows/deploy-production.yml >/dev/null 2>&1; then
   echo "Production deploy workflow must stay merge-driven only."
   exit 1
 fi

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import WorkshopCard from "./WorkshopCard";
 import Pagination from "../../blog/Pagination";
 
+import { BACKEND_BASE_URL } from "../../../lib/api";
 const categories = [
   "RoboGenius Program",
   "Robotics Workshops",
@@ -114,7 +115,7 @@ const Intro = () => {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/allVideoGallery`);
+        const response = await fetch(`${BACKEND_BASE_URL}/allVideoGallery`);
         if (!response.ok) {
           throw new Error("Failed to fetch services data");
         }

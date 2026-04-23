@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 
+import { BACKEND_BASE_URL } from "../../../lib/api";
 const JobApplicationForm = ({ job = null }) => {
   const fileInputRef = useRef(null);
   const jobId = job?._id || "";
@@ -57,7 +58,7 @@ const JobApplicationForm = ({ job = null }) => {
         formData.append("cvFile", form.cvFile);
       }
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/cvForm`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/cvForm`, {
         method: "POST",
         body: formData,
       });

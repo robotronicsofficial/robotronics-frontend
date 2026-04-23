@@ -8,6 +8,7 @@ import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { useState } from "react";
 import { toggleSavedItem } from "../../lib/savedItems";
+import { BACKEND_BASE_URL } from "../../lib/api";
 const CourseProduct = ({
   title,
   id,
@@ -19,7 +20,7 @@ const CourseProduct = ({
   const resolvedImage = image
     ? image.startsWith("http")
       ? image
-      : `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`
+      : `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`
     : python;
   const toggleWishList = async () => {
     try {

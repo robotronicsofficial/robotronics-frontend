@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Container, Box, Typography, CircularProgress, Button } from '@mui/material';
 
+import { resolveBackendUrl } from "../lib/api";
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState('verifying');
@@ -16,8 +17,16 @@ const VerifyEmail = () => {
       verificationStarted.current = true;
       
       const token = searchParams.get('token');
+      if (!token) {
+        setStatus('error');
+        setMessage('Verification token is missing');
+        return;
+      }
+
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/verify-email?token=${token}`);
+        const response = await fetch(
+          resolveBackendUrl(`/auth/verify-email?token=${encodeURIComponent(token)}`),
+        );
         const data = await response.json();
 
         if (response.ok) {
@@ -31,7 +40,7 @@ const VerifyEmail = () => {
           setStatus('error');
           setMessage(data.message);
         }
-      } catch (error) {
+      } catch {
         setStatus('error');
         setMessage('An error occurred during verification');
       }

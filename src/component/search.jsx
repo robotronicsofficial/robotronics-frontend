@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { resolveBackendAssetUrl } from "../utils/mediaUrl";
 
+import { BACKEND_BASE_URL } from "../lib/api";
 const Search = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
@@ -14,7 +15,7 @@ const Search = () => {
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getProducts`);
+        const response = await fetch(`${BACKEND_BASE_URL}/getProducts`);
         if (!response.ok) {
           throw new Error(`Failed to fetch products: ${response.status}`);
         }
