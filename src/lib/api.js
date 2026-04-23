@@ -99,6 +99,7 @@ export const fetchBackendJson = async (path, options = {}) => {
 export const fetchSessionJson = (path, options = {}) =>
   fetchBackendJson(path, {
     credentials: "include",
+    cache: options.cache ?? "no-store",
     ...options,
   });
 
