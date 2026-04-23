@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../../store/cart/cartSlice";
 import { createProductCommerceItem } from "../../../lib/commerceItems";
+import { fetchSavedItems, toggleSavedItem } from "../../../lib/savedItems";
 
 import robo from "../../../assets/images/shopRobot.svg";
 import star from "../../../assets/images/shopStar.svg";
-import { FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const Intro = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const products = useSelector((state) => state.cart.items);
 
@@ -20,6 +19,7 @@ const Intro = () => {
   const [error, setError] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(robo);
+  const [isSaved, setIsSaved] = useState(false);
 
   const resolveImageUrl = (image) => {
     if (!image) return robo;
@@ -82,9 +82,57 @@ const Intro = () => {
     }
   }, [product]);
 
+  useEffect(() => {
+    if (!id) {
+      setIsSaved(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadSavedState = async () => {
+      try {
+        const savedItems = await fetchSavedItems();
+        if (!cancelled) {
+          setIsSaved(
+            savedItems.some((item) => item.itemType === "product" && item.itemId === id),
+          );
+        }
+      } catch (savedItemsError) {
+        if (!cancelled) {
+          console.error("Failed to load saved items:", savedItemsError);
+        }
+      }
+    };
+
+    loadSavedState();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
   const handleIncrease = () => setQuantity((prev) => prev + 1);
   const handleDecrease = () => {
     if (quantity > 1) setQuantity((prev) => prev - 1);
+  };
+
+  const handleToggleSavedItem = async () => {
+    if (!product?._id) {
+      return;
+    }
+
+    try {
+      const nextIsSaved = await toggleSavedItem({
+        itemType: "product",
+        itemId: product._id,
+        isSaved,
+      });
+
+      setIsSaved(nextIsSaved);
+    } catch (savedItemsError) {
+      console.error("Failed to update saved items:", savedItemsError);
+    }
   };
 
   if (loading) return <p className="p-10 text-center text-lg">Loading product...</p>;
@@ -181,8 +229,13 @@ const Intro = () => {
                 ADD TO CART
               </button>
             </div>
-            <button className="bg-gray p-2 px-3 poppins-medium rounded-lg">
-              <FaRegHeart />
+            <button
+              type="button"
+              className="bg-gray p-2 px-3 poppins-medium rounded-lg"
+              onClick={handleToggleSavedItem}
+              aria-label={isSaved ? "Remove from saved items" : "Save item"}
+            >
+              {isSaved ? <FaHeart /> : <FaRegHeart />}
             </button>
           </div>
         </div>

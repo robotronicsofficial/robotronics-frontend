@@ -7,6 +7,7 @@ import { NavLink } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { useState } from "react";
+import { toggleSavedItem } from "../../lib/savedItems";
 const CourseProduct = ({
   title,
   id,
@@ -14,39 +15,23 @@ const CourseProduct = ({
   price,
   duration,
 }) => {
-  const [wishList, setWishList] = useState(0);
+  const [isSaved, setIsSaved] = useState(false);
   const resolvedImage = image
     ? image.startsWith("http")
       ? image
       : `${import.meta.env.VITE_BACKEND_URL}/${image.replace(/\\/g, "/")}`
     : python;
   const toggleWishList = async () => {
-    const newWishListValue = wishList === 0 ? 1 : 0;
-
     try {
-      const isAdding = newWishListValue === 1;
-      const response = await fetch(
-        isAdding
-          ? `${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist`
-          : `${import.meta.env.VITE_BACKEND_URL}/wishlists/wishlist/course/${id}`,
-        {
-          method: isAdding ? "POST" : "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: isAdding ? JSON.stringify({ itemType: "course", itemId: id }) : undefined,
-        }
-      );
+      const nextIsSaved = await toggleSavedItem({
+        itemType: "course",
+        itemId: id,
+        isSaved,
+      });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      // Update the state only if the API call succeeds
-      setWishList(newWishListValue);
+      setIsSaved(nextIsSaved);
     } catch (error) {
-      console.error("Failed to update wishlist:", error);
+      console.error("Failed to update saved items:", error);
     }
   };
   return (
@@ -65,7 +50,7 @@ const CourseProduct = ({
             <img src={shopStar} alt="" />
           </div>
           <div onClick={toggleWishList} className="cursor-pointer">
-            {wishList === 0 ? (
+            {!isSaved ? (
               <div className="flex justify-between">
                 <CiStar className="w-6 h-6 self-center" />
                 <p className="lg:text-xl text-gold font-bold">

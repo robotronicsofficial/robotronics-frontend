@@ -1,9 +1,17 @@
-import { FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 
-const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, productId }) => {
+const Shopproduct = ({
+  title,
+  price,
+  image,
+  onAddToWishlist,
+  onAddToCart,
+  productId,
+  isSaved = false,
+}) => {
 
   const navigate = useNavigate();
 
@@ -52,9 +60,8 @@ const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, product
             onAddToWishlist(); // Trigger add to wishlist
           }}
         >
-          <FaRegHeart className="mr-5 ml-3"/>
-
-          Add to Wishlist
+          {isSaved ? <FaHeart className="mr-5 ml-3" /> : <FaRegHeart className="mr-5 ml-3" />}
+          {isSaved ? "Saved" : "Add to Wishlist"}
         </button>
       </div>
     </div>
