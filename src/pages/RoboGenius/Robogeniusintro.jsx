@@ -8,7 +8,7 @@ import { MdCheckBox } from "react-icons/md";
 const Robogeniusintro = () => {
   const [showShare, setShowShare] = useState(false);
   const shareRef = useRef(null);
-  const shareUrl = "http://localhost:5173/Robogeniushome"; // Replace with actual URL
+  const shareUrl = `${window.location.origin}/Robogeniushome`;
 
   // Close share menu on outside click
   useEffect(() => {

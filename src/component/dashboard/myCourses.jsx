@@ -1,8 +1,13 @@
 import LeftNav from "./leftNav";
 import { FaStar, FaArrowDown } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-// import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  buildChildSessionRequest,
+  getActiveChildSession,
+} from "../../utils/childSessionRequest";
+import { resolveBackendUrl } from "../../lib/api";
+import { ensureArray } from "../../lib/robogenius";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -11,45 +16,52 @@ const MyCourses = () => {
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
-  const [saveSuccess, setSaveSuccess] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxCourses, setMaxCourses] = useState(2); // Default to Basic plan limit
   const coursesPerPage = 9;
   const navigate = useNavigate();
-
-  // Extract childId from the URL path (last segment)
-  const pathSegments = window.location.pathname.split('/');
-  const childId = pathSegments[pathSegments.length - 1];
-
-  console.log("Extracted Child ID:", childId); // Debug log
+  const { id: routeChildId } = useParams();
+  const activeChildSession = getActiveChildSession(routeChildId);
+  const childId = activeChildSession?.childId || null;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!childId || childId === "MyCoursesPage") {
+        if (!childId) {
           throw new Error("Child ID not found in URL");
         }
 
+        const childSessionRequest = buildChildSessionRequest({
+          method: "GET",
+          childId,
+        });
+
+        if (!childSessionRequest) {
+          throw new Error("Child session not found. Please re-enter the PIN.");
+        }
+
         // First fetch child data to get the plan
-        const childResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/getChildPlan/${childId}`);
+        const childResponse = await fetch(
+          resolveBackendUrl(`/api/getChildPlan/${childId}`),
+          childSessionRequest
+        );
         if (!childResponse.ok) {
           throw new Error(`HTTP error! status: ${childResponse.status}`);
         }
         const childData = await childResponse.json();
-        console.log("Child Data", childData);
 
         // Set max courses based on plan
-        const planName = childData.courses.plan?.name || 'Basic';
-        const courseLimit = planName === 'Pro' ? 4 : 2;
+        const planName = childData?.plan?.name || "Basic";
+        const courseLimit = planName.toLowerCase() === "pro" ? 4 : 2;
         setMaxCourses(courseLimit);
 
         // Then fetch courses
-        const coursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+        const coursesResponse = await fetch(resolveBackendUrl("/get-courses"));
         if (!coursesResponse.ok) {
           throw new Error(`HTTP error! status: ${coursesResponse.status}`);
         }
         const coursesData = await coursesResponse.json();
-        setCourses(coursesData.courses);
+        setCourses(ensureArray(coursesData?.courses));
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -76,33 +88,41 @@ const MyCourses = () => {
   const saveSelectedCourses = async () => {
     try {
       setSaveLoading(true);
-      setSaveSuccess(false);
 
       if (!childId) {
         throw new Error("Child ID not found");
       }
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${childId}/courses`, {
+      const childSessionRequest = buildChildSessionRequest({
         method: "PUT",
+        childId,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: {
           courses: selectedCourses.map((courseId, index) => ({
             courseId,
             status: index === 0 ? "active" : "pending"
           }))
-        }),
+        },
       });
+
+      if (!childSessionRequest) {
+        throw new Error("Child session not found. Please re-enter the PIN.");
+      }
+
+      const response = await fetch(
+        resolveBackendUrl(`/api/${childId}/courses`),
+        childSessionRequest
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to save courses");
       }
 
-      setSaveSuccess(true);
       setTimeout(() => {
-        navigate(`/dashboard/myAllCourses/${childId}`);
+        navigate(`/Dashboard/myAllCourses/${childId}`);
       }, 1500);
     } catch (err) {
       console.error("Error saving courses:", err);
@@ -212,7 +232,7 @@ const MyCourses = () => {
                 }`}>
                 <img
                   className="w-full h-48 object-cover"
-                  src={course.thumbnail ? `${import.meta.env.VITE_BACKEND_URL}/${course.thumbnail.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x200"}
+                  src={course.thumbnail ? resolveBackendUrl(course.thumbnail) : "https://via.placeholder.com/300x200"}
                   alt={course.title}
                   onError={(e) => {
                     e.target.src = "https://via.placeholder.com/300x200";

@@ -1,7 +1,18 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContext';
+import {
+  calculateCartSummary,
+  formatShopCurrency,
+  hasCheckoutCustomer,
+  loadShopCheckout,
+  saveShopCheckout,
+} from "../../lib/shopCheckout";
+import { hasShippableCommerceItems } from "../../lib/commerceItems";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const STATES = [
   { value: "BAL", label: "Balochistan" },
   { value: "KP", label: "Khyber Pakhtunkhwa" },
@@ -46,18 +57,26 @@ const SelectField = ({ label, name, value, onChange, options, required = false }
 );
 
 const CustomerInfomation = ({ onNext }) => {
-  const { cart, totalPrice } = useSelector((state) => state.cart);
+  const { cart } = useSelector((state) => state.cart);
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const storedCheckout = loadShopCheckout();
+  const requiresShipping = hasShippableCommerceItems(cart);
 
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    firstName: "", lastName: "", country: "", companyName: "",
-    streetAddress: "", aptSuite: "", city: "", state: "",
-    phone: "", postalCode: "", deliveryInstruction: "",
+    firstName: storedCheckout.customer?.firstName || "",
+    lastName: storedCheckout.customer?.lastName || "",
+    phone: storedCheckout.customer?.phone || "",
+    country: storedCheckout.address?.country || "",
+    companyName: storedCheckout.address?.companyName || "",
+    streetAddress: storedCheckout.address?.streetAddress || "",
+    aptSuite: storedCheckout.address?.aptSuite || "",
+    city: storedCheckout.address?.city || "",
+    state: storedCheckout.address?.state || "",
+    postalCode: storedCheckout.address?.postalCode || "",
+    deliveryInstruction: storedCheckout.address?.deliveryInstruction || "",
   });
-
-  const SHIPPING_COST = 500;
-  const DISCOUNT_PERCENTAGE = 0.10;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -70,19 +89,42 @@ const CustomerInfomation = ({ onNext }) => {
     setLoading(true);
 
     try {
-      const noteFromCart = localStorage.getItem('checkoutNote') || '';
+      const customer = {
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        phone: form.phone.trim(),
+      };
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/addresses`, {
+      if (!hasCheckoutCustomer(customer)) {
+        throw new Error("First name, last name, and phone are required.");
+      }
+
+      const note = storedCheckout.note || "";
+
+      if (!requiresShipping) {
+        saveShopCheckout({
+          customer,
+          address: null,
+        });
+
+        if (onNext) {
+          onNext();
+          return;
+        }
+
+        navigate("/ShippingService");
+        return;
+      }
+
+      const response = await fetch(`${BACKEND_BASE_URL}/api/addresses`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
-          userId: currentUser._id,
-          notes: noteFromCart,
+          notes: note,
         }),
       });
-      
 
       if (!response.ok) {
         const { message } = await response.json();
@@ -90,11 +132,17 @@ const CustomerInfomation = ({ onNext }) => {
       }
 
       const data = await response.json();
-      console.log('Address saved:', data);
+      saveShopCheckout({
+        customer,
+        address: data?.address || form,
+      });
 
-      localStorage.removeItem('checkoutNote');
+      if (onNext) {
+        onNext();
+        return;
+      }
 
-      onNext?.();
+      navigate("/ShippingService");
     } catch (err) {
       alert(err.message);
     } finally {
@@ -103,9 +151,7 @@ const CustomerInfomation = ({ onNext }) => {
   };
 
   // --- Discount Calculation ---
-  const discountAmount = totalPrice * DISCOUNT_PERCENTAGE;
-  const totalAfterDiscount = totalPrice - discountAmount;
-  const finalTotalPrice = totalAfterDiscount + SHIPPING_COST;
+  const summary = calculateCartSummary(cart);
 
   return (
     <div className="lg:flex flex-row bg-gray">
@@ -116,36 +162,43 @@ const CustomerInfomation = ({ onNext }) => {
             <InputField label="Last Name" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name" required />
           </div>
 
-          {/* Additional Form Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InputField label="Country / Region" name="country" value={form.country} onChange={handleChange} placeholder="Country" required />
-            <InputField label="Company Name" name="companyName" value={form.companyName} onChange={handleChange} placeholder="Company (optional)" />
-          </div>
+          <InputField label="Phone" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" required />
 
-          <InputField label="Residential Address" name="streetAddress" value={form.streetAddress} onChange={handleChange} placeholder="House number and street name" required />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InputField label="City" name="city" value={form.city} onChange={handleChange} placeholder="City" required />
-            <SelectField label="State" name="state" value={form.state} onChange={handleChange} options={STATES} required />
-          </div>
+          {requiresShipping ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InputField label="Country / Region" name="country" value={form.country} onChange={handleChange} placeholder="Country" required />
+                <InputField label="Company Name" name="companyName" value={form.companyName} onChange={handleChange} placeholder="Company (optional)" />
+              </div>
 
-          {/* Other Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InputField label="Phone" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" required />
-            <InputField label="Postal Code" name="postalCode" value={form.postalCode} onChange={handleChange} placeholder="Postal Code" required />
-          </div>
+              <InputField label="Residential Address" name="streetAddress" value={form.streetAddress} onChange={handleChange} placeholder="House number and street name" required />
 
-          <div>
-            <label htmlFor="deliveryInstruction" className="block text-sm poppins-light text-gray-700">Delivery Instruction</label>
-            <textarea
-              name="deliveryInstruction"
-              id="deliveryInstruction"
-              value={form.deliveryInstruction}
-              onChange={handleChange}
-              className="p-7 mt-1 block w-full border-gray-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              placeholder="Delivery Instruction"
-            />
-          </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InputField label="City" name="city" value={form.city} onChange={handleChange} placeholder="City" required />
+                <SelectField label="State" name="state" value={form.state} onChange={handleChange} options={STATES} required />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InputField label="Postal Code" name="postalCode" value={form.postalCode} onChange={handleChange} placeholder="Postal Code" required />
+              </div>
+
+              <div>
+                <label htmlFor="deliveryInstruction" className="block text-sm poppins-light text-gray-700">Delivery Instruction</label>
+                <textarea
+                  name="deliveryInstruction"
+                  id="deliveryInstruction"
+                  value={form.deliveryInstruction}
+                  onChange={handleChange}
+                  className="p-7 mt-1 block w-full border-gray-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  placeholder="Delivery Instruction"
+                />
+              </div>
+            </>
+          ) : (
+            <div className="rounded-[20px] border border-[#E6D7B8] bg-[#FFF8E8] p-4 text-sm text-brown">
+              This order only contains digital items, so we only need your contact details here.
+            </div>
+          )}
         </form>
       </div>
 
@@ -167,12 +220,16 @@ const CustomerInfomation = ({ onNext }) => {
         <div className="lg:space-y-5 space-y-2 poppins-extralight">
           {cart.length > 0 ? (
             cart.map((product) => (
-              <div className="flex flex-row space-x-3" key={product.id}>
-                <img className="lg:h-20 lg:w-24" src={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`} alt={product.name} />
+              <div className="flex flex-row space-x-3" key={`${product.itemType}:${product.itemId}`}>
+                <img
+                  className="lg:h-20 lg:w-24 object-cover"
+                  src={resolveBackendAssetUrl(product.image || product.images?.[0], "https://via.placeholder.com/300x200")}
+                  alt={product.name}
+                />
                 <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
                   <p className="font-bold text-wrap">{product.name}</p>
                   <div className="flex gap-2"><span>Quantity:</span><p>{product.quantity}</p></div>
-                  <p className="font-bold">PKR {product.price.toLocaleString()}</p>
+                  <p className="font-bold">PKR {Number(product.price || 0).toLocaleString()}</p>
                 </div>
               </div>
             ))
@@ -185,10 +242,10 @@ const CustomerInfomation = ({ onNext }) => {
 
         <div className="space-y-2">
           {/* Summary Items */}
-          <SummaryItem label="Shipping" value={`PKR ${SHIPPING_COST}`} />
-          <SummaryItem label="Discount 10%" value={`- PKR ${discountAmount.toLocaleString()}`} />
-          <SummaryItem label="Price" value={`PKR ${totalPrice.toLocaleString()}`} />
-          <SummaryItem label="Total Price" value={`PKR ${finalTotalPrice.toLocaleString()}`} highlight />
+          <SummaryItem label="Shipping" value={formatShopCurrency(summary.shipping)} />
+          <SummaryItem label="Discount 10%" value={`- ${formatShopCurrency(summary.discount)}`} />
+          <SummaryItem label="Price" value={formatShopCurrency(summary.subtotal)} />
+          <SummaryItem label="Total Price" value={formatShopCurrency(summary.total)} highlight />
         </div>
 
         <div className="h-0 border border-[#D4D4D4]"></div>
@@ -200,7 +257,7 @@ const CustomerInfomation = ({ onNext }) => {
             onClick={handleSubmit}
             disabled={loading}
           >
-            {loading ? "Processing..." : "CONTINUE TO SHIPPING"}
+            {loading ? "Processing..." : requiresShipping ? "CONTINUE TO SHIPPING" : "CONTINUE TO PAYMENT"}
           </button>
         </div>
       </div>

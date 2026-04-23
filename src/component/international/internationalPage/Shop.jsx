@@ -1,77 +1,41 @@
-import robo from "../../../assets/logo/Robotrinic.svg";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { FaStar } from "react-icons/fa";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MdOutlineNotificationsActive } from "react-icons/md";
-import JS from "../../../assets/images/JS-MyCouses.svg";
+import robo from "../../../assets/logo/Robotrinic.svg";
+import { FaStar } from "react-icons/fa";
+import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
+
+import { BACKEND_BASE_URL } from "../../../lib/api";
 const Shop = () => {
-  const courses = [
-    {
-      id: 1,
-      title: "Learning JavaScript With Imagination",
-      author: "David Millar",
-      rating: 4.8,
-      reviews: 4.8,
-      category: "Development",
-      image: JS, // Replace with your image path
-      buttonText: "Buy Now",
-      status: "Purchased",
-    },
-    {
-      id: 2,
-      title: "The Complete Graphic Design for Beginners",
-      author: "Jenny Wilson",
-      rating: 4.5,
-      reviews: 4.5,
-      category: "Design",
-      image: JS, // Replace with your image path
-      buttonText: "Buy Now",
-      status: "Purchased",
-    },
-    {
-      id: 3,
-      title: "Learning Digital Marketing on Facebook",
-      author: "Wade Warren",
-      rating: 4.3,
-      reviews: 4.3,
-      category: "Marketing",
-      image: JS, // Replace with your image path
-      buttonText: "Buy Now",
-      status: "Purchased",
-    },
-    {
-      id: 4,
-      title: "Financial Analyst Training & Investing Course",
-      author: "Robert Fox",
-      rating: 4.8,
-      reviews: 4.8,
-      category: "Business",
-      image: JS, // Replace with your image path
-      buttonText: "Buy Now",
-      status: "Purchased",
-    },
-    {
-      id: 5,
-      title: "Data Analysis & Visualization Masterclass",
-      author: "Guy Hawkins",
-      rating: 4.5,
-      reviews: 4.5,
-      category: "Data Science",
-      image: JS, // Replace with your image path
-      buttonText: "Buy Now",
-      status: "Purchased",
-    },
-    {
-      id: 6,
-      title: "Master the Fundamentals of Math",
-      author: "Sawpawlo Mark",
-      rating: 4.7,
-      reviews: 4.7,
-      category: "Mathematics",
-      image: JS, // Replace with your image path
-      buttonText: "Buy Now",
-      status: "Purchased",
-    },
-  ];
+  const navigate = useNavigate();
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadCourses = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch courses: ${response.status}`);
+        }
+
+        const payload = await response.json();
+        setCourses(Array.isArray(payload?.courses) ? payload.courses : []);
+        setError("");
+      } catch (fetchError) {
+        setError(fetchError.message || "Failed to load courses");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCourses();
+  }, []);
+
+  const featuredCourses = useMemo(() => courses.slice(0, 6), [courses]);
+
   return (
     <div>
       {/* intro */}
@@ -87,59 +51,72 @@ const Shop = () => {
               Gear up for some Fun
             </div>
           </div>
-          {/* Two circular buttons on the right  */}
-          {/* <div className="flex self-center gap-x-2">
-            <button className="flex lg:w-20 w-10 h-10 lg:h-20 justify-center items-center rounded-full border border-black ">
-              <FaArrowLeft className="text-yellow" />
-            </button>
-            <button className="flex lg:w-20 lg:h-20 w-10 h-10 justify-center items-center rounded-full border border-black ">
-              <FaArrowRight className="text-yellow" />
-            </button>
-          </div> */}
+          <div className="self-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-brown shadow-sm">
+            {courses.length} live courses
+          </div>
         </div>
       </div>
       {/* Shop Items */}
       <div className="md:px-10 px-5 pb-10">
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-20">
-    {courses.map((course) => (
-      <div
-        key={course.id}
-        className="max-w-sm rounded overflow-hidden p-2 shadow-lg bg-white"
-      >
-        <img className="w-full" src={course.image} alt="Course" />
-        <div className="px-4 py-4">
-          <div className="flex justify-between items-center">
-            <p className="text-gray-700 poppins-bold rounded-lg px-2 text-base">
-              {course.category}
-            </p>
-            <div className="flex items-center">
-              <FaStar style={{ color: "#f8bc24" }} />
-              <p className="text-gray-700 text-base ml-2">
-                {course.rating} ({course.reviews} Reviews)
-              </p>
-            </div>
+        {loading ? (
+          <div className="rounded-2xl bg-white p-10 text-center text-brown shadow-sm">
+            Loading live courses...
           </div>
-          <div className="poppins-bold text-xl my-4">{course.title}</div>
-          <div className="flex items-center">
-            <p className="text-gray-700 mr-2">by</p>
-            <h3 className="text-line poppins-light text-xl">{course.author}</h3>
+        ) : error ? (
+          <div className="rounded-2xl bg-white p-10 text-center text-red-600 shadow-sm">
+            {error}
           </div>
-        </div>
-        <div className="flex items-center justify-center my-2">
-          <button
-            style={{ backgroundColor: "#ffc224" }}
-            className="text-white poppins-bold py-2 px-4 rounded-full"
-          >
-            <div className="flex items-center">
-              <p className="poppins-medium text-xl px-4">Notify Me</p>
-              <MdOutlineNotificationsActive className="text-center text-xl" />
-            </div>
-          </button>
-        </div>
+        ) : featuredCourses.length === 0 ? (
+          <div className="rounded-2xl bg-white p-10 text-center text-brown shadow-sm">
+            No courses available right now.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-8 px-0 sm:grid-cols-2 lg:grid-cols-3 lg:px-20">
+            {featuredCourses.map((course) => (
+              <button
+                key={course._id}
+                type="button"
+                onClick={() => navigate(`/CoursesProduct/${course._id}`)}
+                className="overflow-hidden rounded-2xl bg-white p-2 text-left shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
+              >
+                <img
+                  className="h-56 w-full object-cover"
+                  src={resolveBackendAssetUrl(course?.thumbnail, "https://via.placeholder.com/300x200")}
+                  alt={course?.title || "Course"}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="px-4 py-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="rounded-lg bg-[#F3F0EA] px-2 py-1 text-base font-bold text-gray-700">
+                      {course?.category || "General"}
+                    </p>
+                    <div className="flex items-center">
+                      <FaStar style={{ color: "#f8bc24" }} />
+                      <p className="ml-2 text-base text-gray-700">
+                        {Number(course?.reviews || 0)} Reviews
+                      </p>
+                    </div>
+                  </div>
+                  <div className="my-4 text-xl font-bold text-brown">
+                    {course?.title || "Untitled course"}
+                  </div>
+                  <div className="flex items-center justify-between gap-4 text-sm text-[#7E7F7C]">
+                    <p>{course?.month ? `${course.month} months` : "Flexible duration"}</p>
+                    <p>{course?.studentsDownloaded ?? 0} enrolled</p>
+                  </div>
+                </div>
+                <div className="my-2 flex items-center justify-center">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-[#ffc224] px-4 py-2 font-bold text-white">
+                    <p className="poppins-medium text-base px-2">View Course</p>
+                    <MdOutlineNotificationsActive className="text-center text-lg" />
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-    ))}
-  </div>
-</div>
 
     </div>
   );

@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Container, Box, Typography, CircularProgress } from '@mui/material';
+import { Container, Box, Typography, CircularProgress, Button } from '@mui/material';
 
+import { resolveBackendUrl } from "../lib/api";
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState('verifying');
@@ -16,8 +17,16 @@ const VerifyEmail = () => {
       verificationStarted.current = true;
       
       const token = searchParams.get('token');
+      if (!token) {
+        setStatus('error');
+        setMessage('Verification token is missing');
+        return;
+      }
+
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/verify-email?token=${token}`);
+        const response = await fetch(
+          resolveBackendUrl(`/auth/verify-email?token=${encodeURIComponent(token)}`),
+        );
         const data = await response.json();
 
         if (response.ok) {
@@ -25,13 +34,13 @@ const VerifyEmail = () => {
           setMessage(data.message);
           // Redirect to login after 3 seconds with success state
           setTimeout(() => {
-            navigate('/login', { state: { emailVerified: true } });
+            navigate('/Login', { state: { emailVerified: true } });
           }, 3000);
         } else {
           setStatus('error');
           setMessage(data.message);
         }
-      } catch (error) {
+      } catch {
         setStatus('error');
         setMessage('An error occurred during verification');
       }
@@ -78,7 +87,7 @@ const VerifyEmail = () => {
             <Button
               variant="outlined"
               color="primary"
-              onClick={() => navigate('/register')}
+              onClick={() => navigate('/Signup')}
             >
               Try Again
             </Button>

@@ -1,85 +1,177 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import { resolveBackendUrl } from '../lib/api';
+import { DASHBOARD_CHILD_PROFILE_PATH } from '../router/paths';
+import {
+  buildChildSessionRequest,
+  clearActiveChildSession,
+  getActiveChildSession,
+} from '../utils/childSessionRequest';
+
+const CHILD_PARAM_ROUTE_PREFIXES = [
+  '/Dashboard/MyCoursesPage/',
+  '/Dashboard/myAllCourses/',
+];
 
 const ProtectedChild = ({ children }) => {
-  const [isValidSession, setIsValidSession] = useState(true);
+  const [sessionStatus, setSessionStatus] = useState('checking');
   const [showSessionPopup, setShowSessionPopup] = useState(false);
+  const [sessionMessage, setSessionMessage] = useState('This child session is no longer valid. Re-enter the PIN to continue.');
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = useParams();
+  const [searchParams] = useSearchParams();
+
+  const expectedChildId = useMemo(() => {
+    const childIdFromQuery = searchParams.get('childId');
+    if (childIdFromQuery) {
+      return childIdFromQuery;
+    }
+
+    const usesChildIdInPath = CHILD_PARAM_ROUTE_PREFIXES.some((prefix) =>
+      location.pathname.startsWith(prefix)
+    );
+
+    return usesChildIdInPath && params.id ? String(params.id) : null;
+  }, [location.pathname, params.id, searchParams]);
 
   useEffect(() => {
+    let isMounted = true;
+
+    const invalidateChildSession = ({
+      message = 'This child session is no longer valid. Re-enter the PIN to continue.',
+      clearSession = true,
+    } = {}) => {
+      if (clearSession) {
+        clearActiveChildSession();
+      }
+
+      if (!isMounted) {
+        return;
+      }
+
+      setSessionMessage(message);
+      setSessionStatus('invalid');
+      setShowSessionPopup(true);
+    };
+
     const checkSession = async () => {
-      console.log("Enter");
-      const selectedChildId = localStorage.getItem('selectedChildId');
-      
-      if (!selectedChildId) {
-        setIsValidSession(false);
-        setShowSessionPopup(true);
+      const activeChildSession = getActiveChildSession();
+
+      if (!activeChildSession) {
+        invalidateChildSession();
+        return;
+      }
+
+      const { childId, childIds = [], sessionId } = activeChildSession;
+
+      if (expectedChildId && !childIds.includes(expectedChildId)) {
+        invalidateChildSession({
+          message: 'This page belongs to a different child account. Return to Child Accounts and open the correct child from there.',
+          clearSession: false,
+        });
         return;
       }
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/verifyChildSession`, {
+        const childSessionRequest = buildChildSessionRequest({
           method: 'POST',
+          childId,
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ childId: selectedChildId }),
+          body: {
+            childId,
+            sessionId,
+          },
         });
+
+        if (!childSessionRequest) {
+          invalidateChildSession();
+          return;
+        }
+
+        const response = await fetch(
+          resolveBackendUrl("/api/verifyChildSession"),
+          childSessionRequest
+        );
 
         const data = await response.json();
         
-        if (!data.isValid) {
-          setIsValidSession(false);
-          localStorage.removeItem('selectedChildId');
-          setShowSessionPopup(true);
+        if (!response.ok || !data.isValid) {
+          invalidateChildSession();
+          return;
         }
+
+        if (!isMounted) {
+          return;
+        }
+
+        setSessionMessage('This child session is no longer valid. Re-enter the PIN to continue.');
+        setSessionStatus('valid');
+        setShowSessionPopup(false);
       } catch (error) {
         console.error('Session check failed:', error);
-        setIsValidSession(false);
-        setShowSessionPopup(true);
+        invalidateChildSession();
       }
     };
 
+    setSessionStatus('checking');
+    setShowSessionPopup(false);
     checkSession();
 
     const interval = setInterval(checkSession, 30000);
-    return () => clearInterval(interval);
-  }, [navigate]);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [expectedChildId]);
 
   const handlePopupClose = () => {
     setShowSessionPopup(false);
-    navigate('/Dashboard/userInfo');
+    navigate(DASHBOARD_CHILD_PROFILE_PATH);
   };
 
-  if (!isValidSession) {
-    return (
-      <>
-        <Dialog
-          open={showSessionPopup}
-          onClose={handlePopupClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Session Alert</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              You are logged in to another PC. Please log in again to continue.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handlePopupClose} color="primary" autoFocus>
-              OK
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <div>Session expired. Redirecting to login...</div>
-      </>
-    );
-  }
+  return (
+    <ProtectedRoute>
+      {sessionStatus === 'checking' ? (
+        <div className="bg-gray-100 min-h-screen flex justify-center items-center">
+          Validating child access...
+        </div>
+      ) : sessionStatus === 'valid' ? (
+        children
+      ) : (
+        <>
+          <Dialog
+            open={showSessionPopup}
+            onClose={handlePopupClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Child Access Required</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {sessionMessage}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handlePopupClose} color="primary" autoFocus>
+                OK
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <div>{sessionMessage}</div>
+        </>
+      )}
+    </ProtectedRoute>
+  );
+};
 
-  return <ProtectedRoute>{children}</ProtectedRoute>;
+ProtectedChild.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default ProtectedChild;

@@ -1,26 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import img3 from "../../assets/images/5.svg";
 import { FiArrowUpRight } from 'react-icons/fi';
+import { useNavigate } from "react-router-dom";
+import { fetchJobs, getJobsErrorMessage } from "../../lib/jobs";
 
 const CareerJoinTeam = () => {
+  const navigate = useNavigate();
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const jobs = [
-    {
-      position: "UX/UI Designer",
-      experience: "MId-level/Senior ",
-      location: "lahore/Remort",
-    },
-    {
-      position: "UX/UI Designer",
-      experience: "MId-level/Senior ",
-      location: "lahore/Remort",
-    },
-    {
-      position: "UX/UI Designer",
-      experience: "MId-level/Senior ",
-      location: "lahore/Remort",
-    },
-  ];
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+
+    const loadJobs = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchJobs();
+
+        if (active) {
+          setJobs(Array.isArray(data) ? data : []);
+          setError("");
+        }
+      } catch (fetchError) {
+        if (active) {
+          setJobs([]);
+          setError(getJobsErrorMessage(fetchError));
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadJobs();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const jobSummary = (job) =>
+    job.description?.trim()
+      ? `${job.description.trim().slice(0, 140)}${job.description.trim().length > 140 ? "..." : ""}`
+      : "Open role details available in the job description.";
+
   return (
     <div className="bg-gray p-5 ">
       {/* text */}
@@ -28,7 +54,7 @@ const CareerJoinTeam = () => {
         <p className="text-2xl poppins-bold text-brown "data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
           Are you looking for a new career opportunity?
         </p>
-        <p className="text-5xl text-brown poppins-extrabold "data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">jon the A-Team!</p>
+        <p className="text-5xl text-brown poppins-extrabold "data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">join the A-Team!</p>
       </div>
       {/* img */}
       <div className="lg:flex flex-row p-10 space-x-8">
@@ -42,36 +68,64 @@ const CareerJoinTeam = () => {
       </div>
       {/* jobs */}
       <div className="p-4 lg:px-14">
-        {jobs.map((job, index) => (
-          <div
-            key={index}
-            className="flex flex-row flex-wrap mb-6 border-b border-lin p-4 justify-between relative"
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
-            {/* Button Container */}
-            {hoveredIndex === index && (
-              <a className="absolute left-0 top-0 transform -translate-x-full"
-                href="/CareerDetailPage"
-              >
-                <button className="border border-brown p-3 bg-white rounded-full hover:bg-brown hover:text-white">
+        {loading ? (
+          <p className="poppins-regular text-brown px-4 py-6">Loading open roles...</p>
+        ) : error ? (
+          <p className="poppins-regular text-red-600 px-4 py-6">{error}</p>
+        ) : jobs.length === 0 ? (
+          <p className="poppins-regular text-brown px-4 py-6">No open roles are available right now.</p>
+        ) : (
+          jobs.map((job, index) => (
+            <article
+              key={job._id}
+              className="group relative flex flex-col gap-4 mb-6 border-b border-line p-4 pr-10 md:pr-16 justify-between cursor-pointer"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onClick={() => navigate(`/CareerDetailPage/${job._id}`)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  navigate(`/CareerDetailPage/${job._id}`);
+                }
+              }}
+            >
+              {hoveredIndex === index && (
+                <button
+                  type="button"
+                  className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 border border-brown p-3 bg-white rounded-full hover:bg-brown hover:text-white"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    navigate(`/CareerDetailPage/${job._id}`);
+                  }}
+                  aria-label={`View ${job.position || job.title}`}
+                >
                   <FiArrowUpRight />
                 </button>
-              </a>
-            )}
+              )}
 
-            {/* Job Content */}
-            <div className="flex-1 mb-2"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
-              <span className="poppins-bold">Position:</span> {job.position}
-            </div>
-            <div className="flex-1 mb-2"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
-              <span className="poppins-bold">Experience:</span> {job.experience}
-            </div>
-            <div className="flex-1 mb-2"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
-              <span className="poppins-bold">Location:</span> {job.location}
-            </div>
-          </div>
-        ))}
+              <div className="grid gap-4 md:grid-cols-3" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-[0.2em] text-smallText">Position</p>
+                  <p className="poppins-bold text-xl text-brown">{job.position || job.title}</p>
+                  <p className="text-sm text-smallText">{job.title}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-[0.2em] text-smallText">Experience</p>
+                  <p className="poppins-regular text-brown">{job.experience}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-[0.2em] text-smallText">Location</p>
+                  <p className="poppins-regular text-brown">{job.location}</p>
+                </div>
+              </div>
+              <p className="max-w-3xl text-sm md:text-base text-brown/80 poppins-light">
+                {jobSummary(job)}
+              </p>
+            </article>
+          ))
+        )}
       </div>
     </div>
   );

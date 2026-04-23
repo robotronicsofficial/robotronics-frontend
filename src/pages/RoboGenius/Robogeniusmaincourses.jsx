@@ -3,6 +3,7 @@ import { FaStar, FaArrowDown } from "react-icons/fa";
 import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const Robogeniusmaincourses = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
@@ -14,7 +15,7 @@ const Robogeniusmaincourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
         const data = await response.json();
         if (data?.courses) {
           setCourses(data.courses);
@@ -41,12 +42,14 @@ const Robogeniusmaincourses = () => {
 
 
   const prevCourse = () => {
+    if (!courses.length) return;
     setStartIndex((prevIndex) =>
       prevIndex === 0 ? courses.length - visibleCourses : prevIndex - 1
     );
   };
 
   const nextCourse = () => {
+    if (!courses.length) return;
     setStartIndex((prevIndex) =>
       prevIndex + visibleCourses >= courses.length ? 0 : prevIndex + 1
     );
@@ -85,8 +88,10 @@ const Robogeniusmaincourses = () => {
               <div className="bg-white p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
                 <img
                     className="rounded-xl w-full h-48 sm:h-56 object-cover"
-                    src={`${import.meta.env.VITE_BACKEND_URL}/${course.thumbnail.replace(/\\/g, "/")}`}
-                    alt={course.title}
+                    src={course.thumbnail ? `${BACKEND_BASE_URL}/${course.thumbnail.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x200"}
+                    alt={course.title || "Course"}
+                    loading="lazy"
+                    decoding="async"
                 />
                 <div className="px-4 lg:px-6 py-2 flex-grow">
                   <div className="flex flex-row mb-2 flex-wrap justify-between my-3">
@@ -96,13 +101,13 @@ const Robogeniusmaincourses = () => {
                     <div className="flex items-center">
                       <FaStar className="text-yellow" />
                       <p className="text-gray-700 poppins-light text-sm sm:text-base ml-2">
-                        ({course.reviews} Reviews)
+                        ({course.reviews || 0} Reviews)
                       </p>
                     </div>
                   </div>
 
                   <div className="font-bold text-lg sm:text-xl p-2 poppins-bold text-left text-wrap">
-                    {course.title}
+                    {course.title || "Untitled course"}
                   </div>
                 </div>
                 <div className="px-4 sm:px-8 mb-4 flex flex-col sm:flex-row gap-2 py-4">

@@ -1,36 +1,72 @@
+import { useEffect, useMemo, useState } from "react";
 import { FaTimes } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import Intro from "../../component/dashboard/intro"
 import LeftNav from "../../component/dashboard/leftNav";
-import img from "../../assets/images/Order-legoRobots.svg";
+import { getCommerceItemRoute } from "../../lib/commerceItems";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 const MyRobot = () => {
- 
-  const robot = [
-    {
-      name: "Lego Robot",
-      Quantity: "1",
-      color: "Yellow",
-      price: "Pkr 2229.00",
-    },
-    {
-      name: "Lego Robot",
-      Quantity: "1",
-      color: "Yellow",
-      price: "Pkr 7678.00",
-    },
-    {
-      name: "Lego Robot",
-      Quantity: "1",
-      color: "Yellow",
-      price: "Pkr 2229.00",
-    },
-    {
-      name: "Lego Robot",
-      Quantity: "1",
-      color: "Yellow",
-      price: "Pkr 7678.00",
-    },
-  ];
+  const navigate = useNavigate();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadWishlist = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${BACKEND_BASE_URL}/wishlists/wishlist`, {
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to load saved items: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setItems(Array.isArray(data?.items) ? data.items : []);
+        setError("");
+      } catch (fetchError) {
+        setError(fetchError.message || "Failed to load saved items");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadWishlist();
+  }, []);
+
+  const totalValue = useMemo(
+    () => items.reduce((sum, item) => sum + Number(item?.price || 0), 0),
+    [items]
+  );
+
+  const handleRemove = async (item) => {
+    try {
+      const response = await fetch(
+        `${BACKEND_BASE_URL}/wishlists/wishlist/${item.itemType}/${item.itemId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to remove saved item: ${response.status}`);
+      }
+
+      setItems((currentItems) =>
+        currentItems.filter(
+          (currentItem) =>
+            currentItem.itemType !== item.itemType || currentItem.itemId !== item.itemId,
+        ),
+      );
+    } catch (removeError) {
+      setError(removeError.message || "Failed to remove saved item");
+    }
+  };
 
   return (
     <div className="bg-background min-h-screen"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >
@@ -46,50 +82,83 @@ const MyRobot = () => {
         </div>
         {/* products */}
         <div className="w-full py-10">
-          <h1 className="text-lightblack poppins-bold lg:text-2xl text-base lg:ml-14 ml-8">My Robots</h1>
-          {robot.map((card, index) => (
-            <div
-              key={index}
-              className="flex flex-row justify-between items-center px-14 py-5 mb-5"
-            >
-              {/* left */}
-              <div className="lg:flex flex-row space-x-5 items-center">
-                {/* remove */}
-                <div>
-                  <FaTimes className="text-gray-600 cursor-pointer" />
-                </div>
-                {/* img */}
-                <div>
-                  <img src={img} className="lg:w-20 lg:h-20" alt="Product" />
-                </div>
-                {/* text */}
-                <div className="flex flex-col space-y-2">
-                  <p className="text-brown poppins-bold text-xl">{card.name}</p>
-                  <div className="flex flex-row items-center">
-                    <p className="text-brown poppins-bold text-sm mr-2">Color:</p>
-                    <p className="text-sm poppins-light">{card.color}</p>
-                  </div>
-                  <div className="flex flex-row items-center">
-                    <p className="text-brown poppins-bold text-sm mr-2">Quantity:</p>
-                    <p className="text-sm poppins-bold">{card.Quantity}</p>
-                  </div>
-                </div>
-              </div>
-              {/* right */}
-              <div className="flex flex-col items-end space-y-2">
-                {/* price */}
-                <div>
-                  <p className="text-xl poppins-bold">{card.price}</p>
-                </div>
-                {/* button */}
-                <div>
-                  <button className="bg-orange-500 poppins-bold text-white px-4 py-2 rounded-lg">
-                    Reorder
-                  </button>
-                </div>
-              </div>
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4 px-8 lg:px-14">
+            <div>
+              <h1 className="text-lightblack poppins-bold lg:text-2xl text-base">My Saved Items</h1>
+              <p className="text-sm text-[#7E7F7C]">Items you saved for later from the live catalog.</p>
             </div>
-          ))}
+            <div className="rounded-xl bg-white px-4 py-3 text-sm text-brown shadow-sm">
+              Saved items: <span className="font-bold">{items.length}</span> · Value: <span className="font-bold">PKR {Number(totalValue || 0).toLocaleString()}</span>
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="px-8 lg:px-14 py-12 text-brown">Loading saved items...</div>
+          ) : error ? (
+            <div className="px-8 lg:px-14 py-12 text-red-600">{error}</div>
+          ) : items.length === 0 ? (
+            <div className="px-8 lg:px-14 py-12 space-y-4 text-brown">
+              <p>No saved items yet.</p>
+              <button
+                type="button"
+                onClick={() => navigate("/shop")}
+                className="rounded-lg bg-brown px-5 py-3 font-semibold text-gold"
+              >
+                Browse products
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-5 px-8 lg:px-14">
+              {items.map((item) => (
+                <div
+                  key={`${item.itemType}:${item.itemId}`}
+                  className="flex flex-col gap-5 rounded-2xl bg-white p-5 shadow-sm lg:flex-row lg:items-center lg:justify-between"
+                >
+                  <div className="flex flex-row items-center gap-5">
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(item)}
+                      className="text-gray-600 transition hover:text-red-600"
+                      aria-label={`Remove ${item.name || "item"} from saved items`}
+                    >
+                      <FaTimes />
+                    </button>
+                    <button type="button" onClick={() => navigate(getCommerceItemRoute(item))}>
+                      <img
+                        src={resolveBackendAssetUrl(item?.image || item?.images?.[0], "https://via.placeholder.com/160")}
+                        className="h-20 w-20 rounded-xl object-cover"
+                        alt={item?.name || "Item"}
+                      />
+                    </button>
+                    <div className="space-y-2">
+                      <button
+                        type="button"
+                        onClick={() => navigate(getCommerceItemRoute(item))}
+                        className="text-left text-xl font-bold text-brown"
+                      >
+                        {item?.name || "Item"}
+                      </button>
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[#7E7F7C]">
+                        <span>Category: {item?.category || "General"}</span>
+                        <span>Type: {item?.itemType || "item"}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-start gap-3 lg:items-end">
+                    <p className="text-xl font-bold text-brown">PKR {Number(item?.price || 0).toLocaleString()}</p>
+                    <button
+                      type="button"
+                      onClick={() => navigate(getCommerceItemRoute(item))}
+                      className="rounded-lg bg-orange-500 px-4 py-2 font-semibold text-white"
+                    >
+                      {item?.itemType === "course" ? "View course" : "View product"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

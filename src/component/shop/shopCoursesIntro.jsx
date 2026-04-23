@@ -1,3 +1,4 @@
+import { BACKEND_BASE_URL } from "../../lib/api";
 // import CourseProduct from "../course/courseProduct";
 // import icon from "../../assets/logo/searchicon.svg";
 // import arow from "../../assets/logo/shopArowIcon.svg";
@@ -191,12 +192,14 @@ const ShopCoursesIntro = () => {
     const fetchCourses = async () => {
       try {
         // Fetch data from the backend
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/all/courses`);
+        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch courses: ${response.status}`);
+        }
         const data = await response.json();
 
         // Update state with the fetched data
-        // console.log(data);
-        setCourses(data);
+        setCourses(Array.isArray(data.courses) ? data.courses : []);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -204,7 +207,6 @@ const ShopCoursesIntro = () => {
 
     fetchCourses();
   }, []); 
-  console.log("Here Course ",courses);
   // Filter courses based on selected filter
   const filteredCourses =
     selectedFilter === ""
@@ -335,16 +337,16 @@ const ShopCoursesIntro = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:px-10">
             {/* Check if courses is an array before mapping */}
             {courses.length > 0 ? (
-              courses.map((course) => (
+              filteredCourses.map((course) => (
                 <CourseProduct
                   key={course?._id}
                   id={course?._id}
                   title={course?.title}
                   description={course?.description}
-                  image={course?.image}
+                  image={course?.thumbnail}
                   price={course?.price}
                   category={course?.category}
-                  duration={course?.duration}
+                  duration={course?.month}
                 />
               ))
             ) : (

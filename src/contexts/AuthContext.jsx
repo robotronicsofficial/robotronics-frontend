@@ -1,6 +1,18 @@
+import PropTypes from 'prop-types';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  fetchSessionJson,
+  sendJson,
+  sendSessionJson,
+} from '../lib/api';
+import { clearActiveChildSession } from '../utils/childSessionRequest';
 
 const AuthContext = createContext();
+const AUTH_USER_PATH = '/auth/user';
+const AUTH_LOGIN_PATH = '/auth/login';
+const AUTH_REGISTER_PATH = '/auth/register';
+const AUTH_LOGOUT_PATH = '/auth/logout';
 
 export function useAuth() {
   const context = useContext(AuthContext);
@@ -13,20 +25,13 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchUser = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/user`, {
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch user');
-      }
-      
-      const data = await response.json();
+      const data = await fetchSessionJson(AUTH_USER_PATH);
       setCurrentUser(data);
-    } catch (err) {
+    } catch {
       setCurrentUser(null);
     } finally {
       setLoading(false);
@@ -34,70 +39,37 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (email, password) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ email, password })
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Login failed');
-      }
-      
-      await fetchUser();
-    } catch (err) {
-      throw err;
-    }
+    await sendSessionJson(AUTH_LOGIN_PATH, {
+      method: 'POST',
+      body: { email, password },
+    });
+
+    await fetchUser();
   };
 
   const register = async (firstName, lastName, email, phone, countryCode, password) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          phone,
-          countryCode,
-          password
-        })
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Registration failed');
-      }
-      
-      await fetchUser();
-    } catch (err) {
-      throw err;
-    }
+    return sendJson(AUTH_REGISTER_PATH, {
+      method: 'POST',
+      body: {
+        firstName,
+        lastName,
+        email,
+        phone,
+        countryCode,
+        password,
+      },
+    });
   };
 
   const logout = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        throw new Error('Logout failed');
-      }
+      await sendSessionJson(AUTH_LOGOUT_PATH, { method: 'POST' });
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
+      clearActiveChildSession();
       setCurrentUser(null);
-      window.location.href = '/';
+      navigate('/', { replace: true });
     }
   };
 
@@ -119,3 +91,7 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

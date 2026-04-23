@@ -3,27 +3,36 @@ import { useNavigate } from "react-router-dom";
 import LeftNav from "./leftNav";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
+import { fetchSessionJson } from "../../lib/api";
+import { formatDisplayDate, normalizeParentRecord } from "../../lib/robogenius";
+import {
+  getActiveChildId,
+  matchesChildSessionIdentifier,
+  resolveChildSessionIdentifier,
+} from "../../utils/childSessionRequest";
+
 const RoboGeniusProgressCertificate = () => {
   const navigate = useNavigate();
   const [children, setChildren] = useState([]);
 
   const { currentUser } = useAuth();
-  const userId = currentUser._id;
+  const userId = currentUser?._id;
+  const activeChildId = getActiveChildId();
 
   useEffect(() => {
     const fetchParentData = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/parents/${userId}`
-        );
-        const data = await response.json();
-        console.log("Fetched Parent Data:", data);
+      if (!userId) {
+        return;
+      }
 
-        if (data.children) {
-          setChildren(data.children);
-        }
+      try {
+        const data = normalizeParentRecord(
+          await fetchSessionJson(`/api/parents/${userId}`)
+        );
+        setChildren(data.children);
       } catch (error) {
         console.error("Error fetching parent data:", error);
+        setChildren([]);
       }
     };
 
@@ -41,43 +50,53 @@ const RoboGeniusProgressCertificate = () => {
 
         <div className="flex flex-wrap p-1 sm:p-3 lg:p-5">
           {children.length > 0 ? (
-            children.map((child, index) => (
-              <div
-                key={index}
-                className="w-full p-2 sm:w-1/2 md:p-3"
-              >
-                <div className="flex flex-col space-y-3 bg-white rounded-xl p-5 shadow-lg w-full min-w-[280px] md:w-[27vw] max-w-[450px]">
-                  <div className="flex items-center gap-4 mb-3">
-                    <FaUserCircle className="text-4xl text-gray-600" />
-                    <p className="text-xl font-semibold text-gray-800">
-                      {child.firstName} {child.lastName}
-                    </p>
-                  </div>
+            children.map((child, index) => {
+              const isUnlockedChild = matchesChildSessionIdentifier(child, activeChildId);
+              const childRouteId = resolveChildSessionIdentifier(child, activeChildId);
 
-                  <div className="text-sm text-gray-700 space-y-1">
-                    <p><strong>Email:</strong> {child.email}</p>
-                    <p><strong>Phone:</strong> {child.phone}</p>
-                    <p><strong>DOB:</strong> {new Date(child.dateOfBirth).toLocaleDateString()}</p>
-                    <p><strong>Country:</strong> {child.country}</p>
-                    <p><strong>School:</strong> {child.schoolName}</p>
-                    <p><strong>Street Address:</strong> {child.streetAddress}</p>
-                    <p><strong>City:</strong> {child.city}</p>
-                    <p><strong>Postal Code:</strong> {child.postalCode}</p>
-                  </div>
+              return (
+                <div
+                  key={index}
+                  className="w-full p-2 sm:w-1/2 md:p-3"
+                >
+                  <div className="flex flex-col space-y-3 bg-white rounded-xl p-5 shadow-lg w-full min-w-[280px] md:w-[27vw] max-w-[450px]">
+                    <div className="flex items-center gap-4 mb-3">
+                      <FaUserCircle className="text-4xl text-gray-600" />
+                      <p className="text-xl font-semibold text-gray-800">
+                        {child.firstName} {child.lastName}
+                      </p>
+                    </div>
 
-                  <button
-                    className="mt-3 w-full text-sm poppins-light border border-lin rounded-lg px-3 py-2 bg-yellow text-white hover:bg-yellow-600 transition-colors"
-                    onClick={() =>
-                      navigate(
-                        `/Dashboard/ProgressCertificate/ProgressPage?childId=${child._id}`
-                      )
-                    }
-                  >
-                    View Progress
-                  </button>
+                    <div className="text-sm text-gray-700 space-y-1">
+                      <p><strong>Email:</strong> {child.email}</p>
+                      <p><strong>Phone:</strong> {child.phone}</p>
+                      <p><strong>DOB:</strong> {formatDisplayDate(child.dateOfBirth)}</p>
+                      <p><strong>Country:</strong> {child.country}</p>
+                      <p><strong>School:</strong> {child.schoolName}</p>
+                      <p><strong>Street Address:</strong> {child.streetAddress}</p>
+                      <p><strong>City:</strong> {child.city}</p>
+                      <p><strong>Postal Code:</strong> {child.postalCode}</p>
+                    </div>
+
+                    <button
+                      className="mt-3 w-full text-sm poppins-light border border-lin rounded-lg px-3 py-2 bg-yellow text-white hover:bg-yellow-600 transition-colors"
+                      onClick={() => {
+                        if (!isUnlockedChild || !childRouteId) {
+                          navigate("/Dashboard/ChildProfile");
+                          return;
+                        }
+
+                        navigate(
+                          `/Dashboard/ProgressCertificate/ProgressPage?childId=${childRouteId}`
+                        );
+                      }}
+                    >
+                      {isUnlockedChild ? "View Progress" : "Unlock in Child Accounts"}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p>No children found.</p>
           )}

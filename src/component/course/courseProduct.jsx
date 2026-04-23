@@ -7,36 +7,32 @@ import { NavLink } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { useState } from "react";
+import { toggleSavedItem } from "../../lib/savedItems";
+import { BACKEND_BASE_URL } from "../../lib/api";
 const CourseProduct = ({
   title,
   id,
-  description,
   image,
   price,
   duration,
-  category,
 }) => {
-  const [wishList, setWishList] = useState(0);
+  const [isSaved, setIsSaved] = useState(false);
+  const resolvedImage = image
+    ? image.startsWith("http")
+      ? image
+      : `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`
+    : python;
   const toggleWishList = async () => {
-    const newWishListValue = wishList === 0 ? 1 : 0;
-
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/wishlist`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ _id: id }),
+      const nextIsSaved = await toggleSavedItem({
+        itemType: "course",
+        itemId: id,
+        isSaved,
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      // Update the state only if the API call succeeds
-      setWishList(newWishListValue);
+      setIsSaved(nextIsSaved);
     } catch (error) {
-      console.error("Failed to update wishlist:", error);
+      console.error("Failed to update saved items:", error);
     }
   };
   return (
@@ -44,7 +40,7 @@ const CourseProduct = ({
       <div className="rounded-2xl p-2 bg-white">
         {/* img */}
         <div className=""data-aos="fade-right">
-          <img src={python} alt="" />
+          <img src={resolvedImage} alt={title || "Course"} />
         </div>
         {/* title */}
         <div>
@@ -55,15 +51,19 @@ const CourseProduct = ({
             <img src={shopStar} alt="" />
           </div>
           <div onClick={toggleWishList} className="cursor-pointer">
-            {wishList === 0 ? (
+            {!isSaved ? (
               <div className="flex justify-between">
                 <CiStar className="w-6 h-6 self-center" />
-                <p className="lg:text-xl text-gold font-bold">PKR {price}</p>
+                <p className="lg:text-xl text-gold font-bold">
+                  {price != null ? `PKR ${price}` : "Included"}
+                </p>
               </div>
             ) : (
               <div className="flex justify-between">
                 <FaStar className="w-6 h-6 self-center" />
-                <p className="lg:text-xl text-gold font-bold">PKR {price}</p>
+                <p className="lg:text-xl text-gold font-bold">
+                  {price != null ? `PKR ${price}` : "Included"}
+                </p>
               </div>
             )}
           </div>

@@ -1,50 +1,40 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo/robotronicsCharacter.svg";
 import basket from "../assets/logo/basket.svg";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useAuth } from "../contexts/AuthContext";
 import Aos from "aos";
 import { useSelector } from "react-redux";
 import StarIcon from "@mui/icons-material/Star";
 import MenuIcon from "@mui/icons-material/Menu"; // Import a proper menu icon
+import { CART_PATH, CONTACT_PATH } from "../router/paths";
+
+const readCurrentUserLabel = (currentUser) => {
+  if (!currentUser) {
+    return "";
+  }
+
+  const displayName = currentUser.name || currentUser.username || currentUser.firstName;
+  if (displayName) {
+    return displayName;
+  }
+
+  return currentUser.email?.split("@")[0] || "";
+};
 
 export default function Header() {
   const { totalQuantity } = useSelector((state) => state.cart);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const {
-    loginWithRedirect,
-    isAuthenticated: isAuth0Authenticated,
-    logout: auth0Logout,
-  } = useAuth0();
   const { currentUser, logout } = useAuth();
-  const cartItems = useSelector((state) => state.cart.items) || 0;
-  const totalItems = Object.values(cartItems).reduce(
-    (acc, item) => acc + item.count,
-    0
-  );
+  const currentUserLabel = readCurrentUserLabel(currentUser);
 
   useEffect(() => {
     Aos.init(); // Initialize AOS library
-    console.log("Current User:", currentUser);
   }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
-  };
-
-  const handleLogout = () => {
-    logout();
-    if (isAuth0Authenticated) {
-      auth0Logout({ logoutParams: { returnTo: window.location.origin } });
-    }
-  };
-
-  // Close mobile menu when navigating
-  const handleNavigation = (path) => {
-    setMenuOpen(false);
-    navigate(path);
   };
 
   return (
@@ -52,8 +42,8 @@ export default function Header() {
       <div className="w-full h-full flex items-center justify-center absolute">
         <div className="bg-white flex flex-wrap items-center justify-between p-3 sm:p-5 shadow w-[95vw] mt-6 mb-6 rounded-2xl">
           {/* Logo */}
-          <a
-            href="/"
+          <Link
+            to="/"
             className="flex items-center"
             data-aos="fade-right"
             data-aos-duration="2000"
@@ -64,7 +54,7 @@ export default function Header() {
               <br />
               <p className="poppins-bold text-gold">P A K I S T A N</p>
             </h1>
-          </a>
+          </Link>
 
           {/* Navigation - Desktop */}
           <nav
@@ -117,7 +107,7 @@ export default function Header() {
 
               <NavLink
                 className="mr-1 sm:mr-2 cursor-pointer hover:text-black poppins-light hover:border-b hover:border-black text-black text-sm lg:text-lg"
-                to="/COntactUS"
+                to={CONTACT_PATH}
               >
                 Contact
               </NavLink>
@@ -147,13 +137,11 @@ export default function Header() {
                       navigate("/Dashboard/userInfo");
                     }}
                   >
-                    {currentUser.firstName
-                      ? currentUser.firstName
-                      : currentUser.email.split("@")[0]}
+                    {currentUserLabel}
                   </span>
 
                   <button
-                    onClick={handleLogout}
+                    onClick={logout}
                     className="py-1 px-2 rounded bg-signin text-white hover:bg-opacity-90 transition duration-300"
                   >
                     Logout
@@ -178,7 +166,7 @@ export default function Header() {
               <div
                 className="relative cursor-pointer"
                 onClick={() => {
-                  navigate("/cart");
+                  navigate(CART_PATH);
                 }}
               >
                 <img
@@ -201,7 +189,7 @@ export default function Header() {
             <div
               className="relative cursor-pointer mr-2"
               onClick={() => {
-                navigate("/cart");
+                navigate(CART_PATH);
               }}
             >
               <img src={basket} alt="basket" className="w-6 h-6" />
@@ -315,7 +303,7 @@ export default function Header() {
               </NavLink>
               <NavLink
                 className="py-3 border-b cursor-pointer hover:bg-gray-100 px-2"
-                to="/COntactUS"
+                to={CONTACT_PATH}
                 onClick={() => setMenuOpen(false)}
               >
                 Contact
@@ -346,7 +334,7 @@ export default function Header() {
                   </span>
                   <button
                     onClick={() => {
-                      handleLogout();
+                      logout();
                       setMenuOpen(false);
                     }}
                     className="mt-4 py-2 px-4 rounded bg-signin text-white hover:bg-opacity-90 transition duration-300 w-full"

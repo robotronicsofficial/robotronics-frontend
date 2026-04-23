@@ -1,13 +1,20 @@
 import { useState, useRef, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import PropTypes from "prop-types";
 import hide from "../assets/images/hide.svg";
 import robot from "../assets/images/SignupRobot.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
-import apple from "../assets/images/Applelogo.svg";
+import { sendJson, resolveBackendUrl } from "../lib/api";
+import {
+  getPasswordValidationState,
+  hasValidPasswordRequirements,
+  PASSWORD_POLICY_MESSAGE,
+} from "../utils/passwordPolicy";
 
 const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,13 +29,11 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-  const [passwordErrors, setPasswordErrors] = useState({
-    length: false,
-    number: false,
-    symbol: false,
-    match: false
-  });
   const phoneInputRef = useRef(null);
+  const passwordErrors = getPasswordValidationState(
+    formData.password,
+    formData.confirmPassword,
+  );
   useEffect(() => {
     // This effect will run after the component mounts
     if (phoneInputRef.current) {
@@ -63,24 +68,6 @@ const Signup = () => {
       ...prev,
       [name]: value
     }));
-
-    // Password validation
-    if (name === "password") {
-      setPasswordErrors({
-        length: value.length >= 8,
-        number: /\d/.test(value),
-        symbol: /[!@#$%^&*(),.?":{}|<>]/.test(value),
-        match: value === formData.confirmPassword && formData.confirmPassword !== ""
-      });
-    }
-
-    // Confirm password validation
-    if (name === "confirmPassword") {
-      setPasswordErrors(prev => ({
-        ...prev,
-        match: value === formData.password && formData.password !== ""
-      }));
-    }
   };
 
   const handlePhoneChange = (value) => {
@@ -91,16 +78,13 @@ const Signup = () => {
   };
 
   const validateForm = () => {
-    // Check all password requirements
-    const isPasswordValid = (
-      passwordErrors.length &&
-      passwordErrors.number &&
-      passwordErrors.symbol &&
-      passwordErrors.match
-    );
+    if (!hasValidPasswordRequirements(passwordErrors)) {
+      toast.error(PASSWORD_POLICY_MESSAGE);
+      return false;
+    }
 
-    if (!isPasswordValid) {
-      toast.error("Please ensure your password meets all requirements");
+    if (!passwordErrors.match) {
+      toast.error("Passwords do not match");
       return false;
     }
 
@@ -117,43 +101,28 @@ const Signup = () => {
 
     setIsLoading(true); // Start loading
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
+      await sendJson('/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
           phone: formData.phoneNumber,
           password: formData.password
-        }),
+        },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast.error(`Error: ${errorData.msg || "Failed to create account"}`);
-      } else {
-        toast.success("Email sent successfully! Please verify your email.");
-      }
+      toast.success("Email sent successfully! Please verify your email.");
     } catch (error) {
-      toast.error(`An error occurred: ${error.message}. Please try again.`);
+      toast.error(error.message);
     } finally {
       setIsLoading(false); // Stop loading regardless of success/error
     }
 
   };
 
-  // Password requirement check icons
-  const RequirementCheck = ({ isValid, text }) => (
-    <div className="flex items-center">
-      <span className={`inline-block w-4 h-4 rounded-full mr-2 ${isValid ? 'bg-green-500' : 'bg-red-500'}`}></span>
-      <span className={`text-xs ${isValid ? 'text-green-500' : 'text-red-500'}`}>{text}</span>
-    </div>
-  );
   const handleSocialLogin = (provider) => {
-    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`;
+    window.location.assign(resolveBackendUrl(`/auth/${provider}`));
   };
 
   return (
@@ -363,13 +332,13 @@ const Signup = () => {
                   className="ms-2 text-sm font-medium text-gray-900 text-wrap"
                 >
                   By creating an account, I agree to our{" "}
-                  <a href="#" className="underline underline-offset-4">
+                  <Link to="/TermsConditions" className="underline underline-offset-4">
                     Terms of use
-                  </a>{" "}
+                  </Link>{" "}
                   and{" "}
-                  <a href="#" className="underline underline-offset-4">
+                  <Link to="/PrivacyPolicy" className="underline underline-offset-4">
                     Privacy Policy
-                  </a>
+                  </Link>
                 </label>
               </div>
               <button
@@ -392,12 +361,12 @@ const Signup = () => {
             </div>
             <p className="text-sm">
               Already have an account?{" "}
-              <a
-                href="/Login"
+              <Link
+                to="/Login"
                 className="cursor-pointer underline underline-offset-4"
               >
                 Log in
-              </a>
+              </Link>
             </p>
           </div>
           <div className="flex flex-col lg:py-10 py-5">
@@ -423,21 +392,30 @@ const Signup = () => {
                 <img className="h-6 w-8" src={google} alt="Google" />
                 Continue with Google
               </button>
-              <button
-                type="button"
-                className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14"
-                onClick={() => handleSocialLogin('apple')}
-              >
-                <img className="h-6 w-8" src={apple} alt="Apple" />
-                Continue with Apple
-              </button>
             </div>
           </div>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
+};
+
+const RequirementCheck = ({ isValid, text }) => (
+  <div className="flex items-center">
+    <span
+      className={`inline-block w-4 h-4 rounded-full mr-2 ${
+        isValid ? "bg-green-500" : "bg-red-500"
+      }`}
+    ></span>
+    <span className={`text-xs ${isValid ? "text-green-500" : "text-red-500"}`}>
+      {text}
+    </span>
+  </div>
+);
+
+RequirementCheck.propTypes = {
+  isValid: PropTypes.bool.isRequired,
+  text: PropTypes.string.isRequired,
 };
 
 export default Signup;

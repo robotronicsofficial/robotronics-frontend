@@ -85,35 +85,47 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import robot from "../../../assets/images/IServicesS4.svg"; // Fallback image
-
-const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/`;
+import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
+import { fetchServices } from "../../../lib/services";
 
 const OurServices = () => {
   const [services, setServices] = useState([]);
   const [error, setError] = useState(null);
-  const [showAll, setShowAll] = useState(false); // State to toggle visibility
+  const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${BASE_URL}api/getAllService`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+    let active = true;
+
+    const loadServices = async () => {
+      try {
+        const nextServices = await fetchServices();
+
+        if (!active) {
+          return;
         }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Fetched Services:", data);
-        setServices(data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching services:", error);
-        setError(error.message);
-      });
+
+        setServices(nextServices);
+        setError(null);
+      } catch (nextError) {
+        if (!active) {
+          return;
+        }
+
+        console.error("Error fetching services:", nextError);
+        setError(nextError.message || "Failed to load services");
+      }
+    };
+
+    loadServices();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const handleNavigate = (service) => {
-    navigate("/serviceDetail", { state: { service } });
+    navigate(`/ServiceDetail/${service._id}`, { state: { service } });
   };
 
   return (
@@ -126,9 +138,7 @@ const OurServices = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.length > 0 ? (
             (showAll ? services : services.slice(0, 6)).map((service) => {
-              const imageUrl = service.thumbnailImage
-                ? `${BASE_URL}${service.thumbnailImage.replace("\\", "/")}`
-                : robot;
+              const imageUrl = resolveBackendAssetUrl(service.thumbnailImage, robot);
 
               return (
                 <div
@@ -157,7 +167,6 @@ const OurServices = () => {
           )}
         </div>
 
-        {/* Show More / Show Less Button */}
         {services.length > 6 && (
           <div className="text-center mt-8">
             <button

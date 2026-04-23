@@ -1,8 +1,17 @@
-import { FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 
-const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, productId }) => {
+const Shopproduct = ({
+  title,
+  price,
+  image,
+  onAddToWishlist,
+  onAddToCart,
+  productId,
+  isSaved = false,
+}) => {
 
   const navigate = useNavigate();
 
@@ -19,15 +28,17 @@ const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, product
         <div className="w-[18vw] h-[17vw] rounded-2xl overflow-hidden">
           <img
             className="h-full w-full object-fit group-hover:opacity-50"
-            src={image}
+            src={resolveBackendAssetUrl(image, "https://via.placeholder.com/300x200")}
             alt="Product"
+            loading="lazy"
+            decoding="async"
           />
         </div>
         <div className="text-wrap w-full">
           <p className="text-[#362D2C] hover:text-black text-xl poppins-bold my-2">
             {title}
           </p>
-          <p className="text-[#C86400] poppins-bold text-xl">PKR {price.toLocaleString()}</p>
+          <p className="text-[#C86400] poppins-bold text-xl">PKR {Number(price || 0).toLocaleString()}</p>
         </div>
       </div>
 
@@ -49,9 +60,8 @@ const Shopproduct = ({ title, price, image,onAddToWishlist, onAddToCart, product
             onAddToWishlist(); // Trigger add to wishlist
           }}
         >
-          <FaRegHeart className="mr-5 ml-3"/>
-
-          Add to Wishlist
+          {isSaved ? <FaHeart className="mr-5 ml-3" /> : <FaRegHeart className="mr-5 ml-3" />}
+          {isSaved ? "Saved" : "Add to Wishlist"}
         </button>
       </div>
     </div>

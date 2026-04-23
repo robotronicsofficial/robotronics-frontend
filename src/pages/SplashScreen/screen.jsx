@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import img from '../../assets/images/bosten.svg';
 
 const Screen = () => {
@@ -19,11 +20,12 @@ const Screen = () => {
             {/* Section 2 */}
             <div className="flex flex-row px-10 justify-end">
                 <div className="flex lg:space-x-32">
-                    <a className="pt-24" href="/">
-                        <button className="text-sm md:text-lg border border-brown rounded-full w-32 h-32 hover:bg-black hover:text-white transition-all duration-300">
-                            Explore Us →
-                        </button>
-                    </a>
+                    <Link
+                        className="pt-24 text-sm md:text-lg border border-brown rounded-full w-32 h-32 hover:bg-black hover:text-white transition-all duration-300 inline-flex items-center justify-center"
+                        to="/"
+                    >
+                        Explore Us →
+                    </Link>
 
                     <div className="mt-12">
                         <img

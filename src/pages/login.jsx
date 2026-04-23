@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import hide from "../assets/images/hide.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
-import apple from "../assets/images/Applelogo.svg";
 import { useAuth } from "../contexts/AuthContext";
+
+import { resolveBackendUrl, sendJson } from "../lib/api";
+const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
+
+const isSafeRedirectPath = (value) => (
+  typeof value === "string" && value.startsWith("/") && !value.startsWith("//")
+);
 
 const Login = () => {
   const { currentUser, login } = useAuth();
@@ -18,6 +24,9 @@ const Login = () => {
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const redirectFromState = location.state?.from
+    ? `${location.state.from.pathname || ""}${location.state.from.search || ""}${location.state.from.hash || ""}`
+    : null;
 
   useEffect(() => {
     if (location.state?.emailVerified) {
@@ -35,48 +44,29 @@ const Login = () => {
       window.history.replaceState({}, document.title);
     }
 
-    // Redirect if already logged in
     if (currentUser) {
-      navigate("/");
+      const redirectPath = window.sessionStorage.getItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
+      if (isSafeRedirectPath(redirectPath)) {
+        window.sessionStorage.removeItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
+        navigate(redirectPath, { replace: true });
+        return;
+      }
+
+      if (redirectPath) {
+        window.sessionStorage.removeItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
+      }
+
+      navigate(isSafeRedirectPath(redirectFromState) ? redirectFromState : "/", { replace: true });
     }
-  }, [location.state, currentUser, navigate]);
+  }, [location.state, currentUser, navigate, redirectFromState]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || "Login failed. Please check your credentials and try again."
-        );
-      }
-
-      // Call the login function from AuthContext
-      // await login(data.user, data.token);
+      await login(email, password);
       toast.success("Login successful!");
-      const redirectPath = localStorage.getItem('redirectAfterLogin');
-      console.log(redirectPath);
-      if (redirectPath) {
-        localStorage.removeItem('redirectAfterLogin');
-        // navigate(redirectPath);
-        window.location.href = `${import.meta.env.VITE_FRONTEND_URL}${redirectPath}`;
-      } else {
-        window.location.href = "/";
-      }
-
-
     } catch (error) {
       console.error("Error during login:", error);
       setError(error.message);
@@ -89,21 +79,14 @@ const Login = () => {
     setError('');
   
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/forgot-password`, {
+      const payload = await sendJson('/auth/forgot-password', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: forgotEmail }),
+        body: { email: forgotEmail },
       });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong');
-      }
-  
-      toast.success('Password reset instructions sent to your email');
+
+      toast.success(payload?.message || 'Password reset instructions sent to your email');
+      setForgotPasswordMode(false);
+      setForgotEmail('');
     } catch (err) {
       setError(err.message);
       console.error('Forgot password error:', err);
@@ -111,7 +94,7 @@ const Login = () => {
   };
 
   const handleSocialLogin = (provider) => {
-    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`;
+    window.location.assign(resolveBackendUrl(`/auth/${provider}`));
   };
 
   if (forgotPasswordMode) {
@@ -149,7 +132,6 @@ const Login = () => {
           </form>
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>
-        <ToastContainer />
       </div>
     );
   }
@@ -181,14 +163,6 @@ const Login = () => {
           >
             <img className="h-6 w-8" src={google} alt="Google" />
             Continue with Google
-          </button>
-          <button 
-            type="button"
-            className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14"
-            onClick={() => handleSocialLogin('apple')}
-          >
-            <img className="h-6 w-8" src={apple} alt="Apple" />
-            Continue with Apple
           </button>
         </div>
         <div
@@ -271,20 +245,19 @@ const Login = () => {
             <div className="h-0 lg:w-60 w-48 border border-line"></div>
           </div>
           <p className="text-center poppins-regular justify-center lg:py-10 py-5 lg:text-3xl text-xl text-brown">
-            Don't have an account?
+            Don&apos;t have an account?
           </p>
           <div className="lg:pb-10 pb-4">
             <button 
               type="button"
               className="bg-gray border border-line text-brown poppins-regular rounded-3xl items-center justify-center py-3 lg:px-32 px-14"
-              onClick={() => navigate('/register')}
+              onClick={() => navigate('/Signup')}
             >
               Sign up
             </button>
           </div>
         </form>
       </div>
-      <ToastContainer />
     </div>
   );
 };

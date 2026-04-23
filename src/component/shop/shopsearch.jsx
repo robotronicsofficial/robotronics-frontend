@@ -4,10 +4,16 @@ import { FaArrowRight, FaRegHeart } from "react-icons/fa";
 import { BsHandbag } from "react-icons/bs";
 import { IoIosSearch } from "react-icons/io";
 import { fetchProducts, addToCart } from "../../store/cart/cartSlice";
+import {
+  createProductCommerceItem,
+  getCommerceItemKey,
+} from "../../lib/commerceItems";
+import { fetchSavedItems, toggleSavedItem } from "../../lib/savedItems";
 import Shopfilter from "../shop/shopfilter";
 import Shopproduct from "../shop/shopproduct";
 import ShopPages from "../shop/shopPages";
 import shopHome from "../../assets/shopHome.png";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const Shopsearch = () => {
   const dispatch = useDispatch();
@@ -20,7 +26,7 @@ const Shopsearch = () => {
   // Local state for filters & sorting
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [wishlistCount, setWishlistCount] = useState(0);
+  const [savedItemKeys, setSavedItemKeys] = useState(() => new Set());
   const [priceRange, setPriceRange] = useState([0, 600000]);
   const [shippingDays, setShippingDays] = useState(15);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -32,19 +38,44 @@ const Shopsearch = () => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadSavedItems = async () => {
+      try {
+        const savedItems = await fetchSavedItems();
+        if (cancelled) {
+          return;
+        }
+
+        setSavedItemKeys(new Set(savedItems.map(getCommerceItemKey)));
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Failed to load saved items:", error);
+        }
+      }
+    };
+
+    loadSavedItems();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const filteredProducts = useMemo(() => {
     return products
       .filter(({ name, price, shippingDays: days, category }) =>
-        name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        price >= priceRange[0] &&
-        price <= priceRange[1] &&
-        days <= shippingDays &&
+        String(name || "").toLowerCase().includes(searchQuery.toLowerCase()) &&
+        Number(price || 0) >= priceRange[0] &&
+        Number(price || 0) <= priceRange[1] &&
+        Number(days || 0) <= shippingDays &&
         (!selectedCategory || category === selectedCategory)
       )
       .sort((a, b) => {
-        if (sortOption === "Popularity") return b.ratings - a.ratings;
-        if (sortOption === "Price: Low to High") return a.price - b.price;
-        if (sortOption === "Price: High to Low") return b.price - a.price;
+        if (sortOption === "Popularity") return Number(b.ratings || 0) - Number(a.ratings || 0);
+        if (sortOption === "Price: Low to High") return Number(a.price || 0) - Number(b.price || 0);
+        if (sortOption === "Price: High to Low") return Number(b.price || 0) - Number(a.price || 0);
         return 0;
       });
   }, [products, searchQuery, priceRange, shippingDays, sortOption, selectedCategory]);
@@ -55,6 +86,38 @@ const Shopsearch = () => {
   }, [filteredProducts, currentPage]);
 
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const handleToggleSavedItem = async (product) => {
+    const catalogItem = createProductCommerceItem(product);
+    if (!catalogItem) {
+      return;
+    }
+
+    const itemKey = getCommerceItemKey(catalogItem);
+    const isSaved = savedItemKeys.has(itemKey);
+
+    try {
+      const nextIsSaved = await toggleSavedItem({
+        itemType: catalogItem.itemType,
+        itemId: catalogItem.itemId,
+        isSaved,
+      });
+
+      setSavedItemKeys((currentKeys) => {
+        const nextKeys = new Set(currentKeys);
+
+        if (nextIsSaved) {
+          nextKeys.add(itemKey);
+        } else {
+          nextKeys.delete(itemKey);
+        }
+
+        return nextKeys;
+      });
+    } catch (error) {
+      console.error("Failed to update saved items:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col bg-lightgray lg:px-20 px-2">
@@ -78,7 +141,7 @@ const Shopsearch = () => {
                   <FaRegHeart className="text-white" />
                 </div>
                 <p className="px-3 lg:text-base poppins-bold text-sm text-center">
-                  Wish List ({wishlistCount})
+                  Wish List ({savedItemKeys.size})
                 </p>
               </div>
               <FaArrowRight className="text-[#838383]" />
@@ -90,7 +153,7 @@ const Shopsearch = () => {
                   <BsHandbag className="text-white" />
                 </div>
                 <p className="px-3 lg:text-base text-sm poppins-bold text-center">
-                  {totalQuantity} Products - PKR {totalPrice.toLocaleString()}
+                  {totalQuantity} Products - PKR {Number(totalPrice || 0).toLocaleString()}
                 </p>
               </div>
               <FaArrowRight className="text-[#838383]" />
@@ -143,17 +206,27 @@ const Shopsearch = () => {
           onCategoryChange={setSelectedCategory}
         />
         <div className="flex flex-wrap justify-between gap-x-20 gap-y-4 px-5 lg:px-10 lg:py-10 min-h-[85vw]">
-          {currentProducts.map((product) => (
-            <Shopproduct
-              key={product._id}
-              title={product.name}
-              price={product.price}
-              image={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`}
-              onAddToWishlist={() => setWishlistCount((prev) => prev + 1)}
-              onAddToCart={() => dispatch(addToCart(product))}
-              productId={product._id}
-            />
-          ))}
+          {currentProducts.map((product) => {
+            const catalogItem = createProductCommerceItem(product);
+            const itemKey = catalogItem ? getCommerceItemKey(catalogItem) : "";
+
+            return (
+              <Shopproduct
+                key={product._id}
+                title={product.name}
+                price={product.price}
+                image={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
+                isSaved={itemKey ? savedItemKeys.has(itemKey) : false}
+                onAddToWishlist={() => handleToggleSavedItem(product)}
+                onAddToCart={() => {
+                  if (catalogItem) {
+                    dispatch(addToCart(catalogItem));
+                  }
+                }}
+                productId={product._id}
+              />
+            );
+          })}
           {currentProducts.length === 0 && <p className="text-center w-full">No products found.</p>}
         </div>
       </div>

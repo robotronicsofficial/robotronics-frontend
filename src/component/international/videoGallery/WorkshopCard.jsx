@@ -1,20 +1,39 @@
-import { BiPlayCircle } from "react-icons/bi";
-import img from "../../../assets/images/videoG.svg";
 import { RxClock } from "react-icons/rx";
 import PropTypes from "prop-types";
 import { LuMapPin } from "react-icons/lu";
+import { openExternalUrl } from "../../../utils/openExternalUrl";
 
-const WorkshopCard = ({ workshop }) => (
-  <div className="bg-white shadow-lg rounded-lg overflow-hidden " onClick={() => window.open(workshop.url, "_blank")}>
-    <div className="relative h-[16vw] cursor-pointer"
+const WorkshopCard = ({ workshop }) => {
+  const hasExternalUrl = Boolean(workshop?.url);
+
+  const handleOpenWorkshop = () => {
+    if (!hasExternalUrl) {
+      return;
+    }
+
+    openExternalUrl(workshop.url);
+  };
+
+  return (
+    <button
+      type="button"
+      className="w-full bg-white shadow-lg rounded-lg overflow-hidden text-left disabled:cursor-default"
+      onClick={handleOpenWorkshop}
+      disabled={!hasExternalUrl}
+      aria-label={
+        hasExternalUrl
+          ? `Open ${workshop.workshopName || "workshop"} in a new tab`
+          : `${workshop.workshopName || "Workshop"} has no external link`
+      }
     >
+      <div className="relative h-[16vw] cursor-pointer">
       <img
         src={workshop.thumbnail}
         alt={workshop.workshopName}
         className="w-full h-full object-fill"
       />
     </div>
-    <div className="px-3 py-4 bg-[#362d2c] relative h-[18vw] flex flex-col " onClick={() => window.open(workshop.url, "_blank")}>
+      <div className="px-3 py-4 bg-[#362d2c] relative h-[18vw] flex flex-col">
       <div className=" text-white  h-[2vw] ">
         <p className="text-gray-700 text-white poppins-medium z-50 my-3">
           {workshop.activity}
@@ -47,18 +66,22 @@ const WorkshopCard = ({ workshop }) => (
         </div>
       </div>
     </div>
-  </div>
-);
+    </button>
+  );
+};
 
 WorkshopCard.propTypes = {
   workshop: PropTypes.shape({
-    image: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    time: PropTypes.string.isRequired,
-    instructor: PropTypes.string.isRequired,
-    instructorpic: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
+    activity: PropTypes.string,
+    city: PropTypes.string,
+    description: PropTypes.string,
+    schoolLogo: PropTypes.string,
+    schoolName: PropTypes.string,
+    thumbnail: PropTypes.string,
+    timeFrom: PropTypes.string,
+    timeTo: PropTypes.string,
+    url: PropTypes.string,
+    workshopName: PropTypes.string,
   }).isRequired,
 };
 

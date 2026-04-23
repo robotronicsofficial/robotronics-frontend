@@ -7,6 +7,7 @@ import apple from "../assets/logo/apple.svg";
 import pstore from "../assets/logo/Playstor.svg";
 import Aos from "aos";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   FaFacebook,
   FaInstagram,
@@ -42,12 +43,10 @@ const Footer = () => {
             data-aos-duration="2000"
             onClick={goToTop}
           >
-            <a>
-              <img
-                className="flex lg:h-6 lg:w-14 md:h-4 md:w-10 h-3 w-7 lg:mt-2 mt-1 items-center justify-center "
-                src={up}
-              />
-            </a>
+            <img
+              className="flex lg:h-6 lg:w-14 md:h-4 md:w-10 h-3 w-7 lg:mt-2 mt-1 items-center justify-center "
+              src={up}
+            />
           </button>
         </div>
         {/* robotronics */}
@@ -77,96 +76,96 @@ const Footer = () => {
                 </h2>
                 <nav className="list-none space-y-2">
                   <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/aboutUs"
+                      to="/aboutUs"
                     >
                       About Us
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/CareerJob"
+                      to="/CareerJob"
                     >
                       Careers
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/shop"
+                      to="/shop"
                     >
                       Shop
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/Blog"
+                      to="/Blog"
                     >
                       Blog
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/Course"
+                      to="/Course"
                     >
                       Courses
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/International/videoGallery"
+                      to="/International/videoGallery"
                     >
                       Gallery
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/International/home"
+                      to="/International/home"
                     >
                       Robotronics International
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/TermsConditions"
+                      to="/TermsConditions"
                     >
                       Terms & Conditions
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/PrivacyPolicy"
+                      to="/PrivacyPolicy"
                     >
                       Privacy Policy
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/RefundPolicy"
+                      to="/RefundPolicy"
                     >
                       Refund Policy
-                    </a>
+                    </Link>
                   </li>
 
                    <li>
-                    <a
+                    <Link
                       className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
-                      href="/faqs"
+                      to="/faqs"
                     >
                       FAQs
-                    </a>
+                    </Link>
                   </li>
 
 

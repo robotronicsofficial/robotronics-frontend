@@ -1,67 +1,94 @@
 import LeftNav from "./leftNav";
 import { FaFilePdf } from "react-icons/fa6";
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { resolveBackendUrl } from "../../lib/api";
+import { normalizeProgressPayload } from "../../lib/robogenius";
+import {
+  buildChildSessionRequest,
+  getActiveChildSession,
+} from "../../utils/childSessionRequest";
 
 const RoboGeniusProgreeDetailPage = () => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [progressData, setProgressData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
   const [searchParams] = useSearchParams();
   const childId = searchParams.get('childId');
-  const [downloading, setDownloading] = useState(false);
+  const [downloadingCourseId, setDownloadingCourseId] = useState(null);
   const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
+  const activeChildSession = getActiveChildSession(childId || undefined);
+  const selectedChildId = activeChildSession?.childId || null;
+
+  const fetchProgressPayload = useCallback(async (nextChildId) => {
+    const progressRequest = buildChildSessionRequest({
+      method: "GET",
+      childId: nextChildId,
+    });
+
+    if (!progressRequest) {
+      throw new Error('Child session not found. Please re-enter the PIN.');
+    }
+
+    const response = await fetch(
+      resolveBackendUrl(`/api/${nextChildId}/progress`),
+      progressRequest
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return normalizeProgressPayload(await response.json());
+  }, []);
+
+  const fetchProgressData = useCallback(async () => {
+    if (!selectedChildId) {
+      setError('Child session not found. Please re-enter the PIN from Child Accounts.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setError(null);
+      setProgressData(await fetchProgressPayload(selectedChildId));
+    } catch {
+      setError('Failed to load progress data. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchProgressPayload, selectedChildId]);
 
   useEffect(() => {
-    const fetchProgressData = async () => {
-      if (!childId) {
-        setError('Child ID not found in URL');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const response = await fetch(`${backendUrl}/api/${childId}/progress`);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        setProgressData(data);
-      } catch (err) {
-        setError('Failed to load progress data. Please check your connection and try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProgressData();
-  }, [childId]);
+  }, [fetchProgressData]);
 
   const handleDownloadCertificate = async (courseId, courseName) => {
-    if (!childId || !courseId || downloading) return;
+    if (!selectedChildId || !courseId || downloadingCourseId) return;
 
-    setDownloading(true);
+    setDownloadingCourseId(courseId);
     // Clear any previous error for this course
     setDownloadErrors(prev => ({ ...prev, [courseId]: null }));
     
     try {
-      // Single API call to generate and get download URL
-      const response = await fetch(`${backendUrl}/api/generate`, {
+      const generateRequest = buildChildSessionRequest({
         method: 'POST',
+        childId: selectedChildId,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          childId,
+        body: {
+          childId: selectedChildId,
           courseId,
-          childName: progressData.childName,
-          courseName
-        })
+        },
       });
+
+      if (!generateRequest) {
+        throw new Error('Child session not found. Please re-enter the PIN.');
+      }
+
+      const response = await fetch(resolveBackendUrl("/api/generate"), generateRequest);
 
       // Check if the response is OK (status 200-299)
       if (!response.ok) {
@@ -72,8 +99,18 @@ const RoboGeniusProgreeDetailPage = () => {
       const result = await response.json();
 
       // Download the generated certificate
+      const downloadRequest = buildChildSessionRequest({
+        method: "GET",
+        childId: selectedChildId,
+      });
+
+      if (!downloadRequest) {
+        throw new Error('Child session not found. Please re-enter the PIN.');
+      }
+
       const downloadResponse = await fetch(
-        `${backendUrl}/api/download/${result.certificateId}`
+        resolveBackendUrl(result.downloadUrl || `/api/certificates/download/${result.certificateId}`),
+        downloadRequest
       );
 
       if (!downloadResponse.ok) {
@@ -92,11 +129,7 @@ const RoboGeniusProgreeDetailPage = () => {
 
       // Refresh progress data
       try {
-        const updatedProgress = await fetch(`${backendUrl}/api/${childId}/progress`);
-        if (updatedProgress.ok) {
-          const updatedData = await updatedProgress.json();
-          setProgressData(updatedData);
-        }
+        setProgressData(await fetchProgressPayload(selectedChildId));
       } catch (refreshError) {
         console.error("Failed to refresh progress data:", refreshError);
         // We don't throw this error as the download was successful
@@ -110,7 +143,7 @@ const RoboGeniusProgreeDetailPage = () => {
         [courseId]: err.message || 'Failed to download certificate. Please try again.' 
       }));
     } finally {
-      setDownloading(false);
+      setDownloadingCourseId(null);
     }
   };
 
@@ -129,7 +162,7 @@ const RoboGeniusProgreeDetailPage = () => {
         <h2 className="text-xl font-bold text-red-600 mb-4">Error</h2>
         <p className="text-gray-700 mb-4">{error}</p>
         <button 
-          onClick={() => window.location.reload()} 
+          onClick={fetchProgressData}
           className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded"
         >
           Try Again
@@ -148,7 +181,7 @@ const RoboGeniusProgreeDetailPage = () => {
 
   const filteredCourses = progressData.courses.filter(course => {
     if (filter === 'all') return true;
-    return course.status.toLowerCase() === filter;
+    return (course.status || 'active').toLowerCase() === filter;
   });
 
   return (
@@ -198,12 +231,13 @@ const RoboGeniusProgreeDetailPage = () => {
             </thead>
             <tbody>
               {filteredCourses.map((course, index) => {
-                const isDownloading = downloading === course.id;
-                const courseError = downloadErrors[course.id];
+                const courseId = course.courseId || course.id || course._id;
+                const isDownloading = downloadingCourseId === courseId;
+                const courseError = downloadErrors[courseId];
                 
                 return (
                   <tr key={index} className="text-gray-900 border-t">
-                    <td className="p-3">{course.name}</td>
+                    <td className="p-3">{course.name || course.courseName || "Course"}</td>
                     <td className="p-3">{course.completed}</td>
                     <td className="p-3">
                       <div className="flex flex-col">
@@ -212,7 +246,7 @@ const RoboGeniusProgreeDetailPage = () => {
                             <>
                               <button 
                                 className={`hover:text-yellow-600 ${isDownloading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer text-blue-600'}`}
-                                onClick={() => !isDownloading && handleDownloadCertificate(course.id, course.name)}
+                                onClick={() => !isDownloading && handleDownloadCertificate(courseId, course.name || course.courseName || "Course")}
                                 disabled={isDownloading}
                               >
                                 {isDownloading ? 'Generating...' : 'Download'}
@@ -232,22 +266,22 @@ const RoboGeniusProgreeDetailPage = () => {
                             </div>
                           )}
                         </div>
-                        {/* {courseError && (
+                        {courseError && (
                           <div className="text-red-500 text-xs mt-1 max-w-xs">
                             {courseError}
                             <button 
-                              onClick={() => setDownloadErrors(prev => ({ ...prev, [course.id]: null }))}
+                              onClick={() => setDownloadErrors(prev => ({ ...prev, [courseId]: null }))}
                               className="ml-2 text-gray-500 hover:text-gray-700"
                             >
                               Dismiss
                             </button>
                           </div>
-                        )} */}
+                        )}
                       </div>
                     </td>
                     <td className="p-3">
                       <span className={`px-2 py-1 rounded-full text-xs ${
-                        course.status.toLowerCase() === 'completed' 
+                        (course.status || 'active').toLowerCase() === 'completed' 
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-yellow-100 text-yellow-800'
                       }`}>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import img from "../../../assets/images/IServicesQuickContact.svg";
 
+import { BACKEND_BASE_URL } from "../../../lib/api";
 const QuickContact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -31,7 +32,7 @@ const QuickContact = () => {
 
     // Simulate form submission
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/quickContact`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/api/quickContact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

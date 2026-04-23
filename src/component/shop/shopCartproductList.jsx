@@ -4,38 +4,44 @@ import { addToCart, removeFromCart } from "../../store/cart/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
+import {
+  calculateCartSummary,
+  formatShopCurrency,
+  loadShopCheckout,
+  saveShopCheckout,
+} from "../../lib/shopCheckout";
+import { getCommerceItemKey } from "../../lib/commerceItems";
 import "react-toastify/dist/ReactToastify.css";
-
+import { BACKEND_BASE_URL } from "../../lib/api";
+const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
 
 const ShopCartproductList = ({ onNext }) => {
-  const { cart, totalPrice } = useSelector((state) => state.cart);
+  const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-  const discountPercentage = 10;
-  const [notes, setNotes] = useState(() => localStorage.getItem('checkoutNote') || '');
+  const [notes, setNotes] = useState(() => loadShopCheckout().note || "");
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  const discountAmount = useMemo(
-    () => (totalPrice * discountPercentage) / 100,
-    [totalPrice, discountPercentage]
-  );
+  const summary = useMemo(() => calculateCartSummary(cart), [cart]);
 
-  const discountedPrice = useMemo(
-    () => totalPrice - discountAmount,
-    [totalPrice, discountAmount]
-  );
+  const resolveImageUrl = (image) => {
+    if (!image) return "https://via.placeholder.com/300x200";
+    if (image.startsWith("http")) return image;
+    return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
+  };
 
   const [itemQuantity, setItemQuantity] = useState(
     cart.reduce((acc, product) => {
-      acc[product._id] = product.quantity;
+      acc[getCommerceItemKey(product)] = product.quantity;
       return acc;
     }, {})
   );
 
   const handleAddToCart = useCallback(
     (product) => {
+      const productId = getCommerceItemKey(product);
       setItemQuantity((prev) => ({
         ...prev,
-        [product._id]: (prev[product._id] || 0) + 1,
+        [productId]: (prev[productId] || 0) + 1,
       }));
       dispatch(addToCart(product));
     },
@@ -44,9 +50,10 @@ const ShopCartproductList = ({ onNext }) => {
 
   const handleRemoveFromCart = useCallback(
     (product) => {
+      const productId = getCommerceItemKey(product);
       setItemQuantity((prev) => ({
         ...prev,
-        [product._id]: prev[product._id] > 1 ? prev[product._id] - 1 : 1,
+        [productId]: prev[productId] > 1 ? prev[productId] - 1 : 1,
       }));
       dispatch(removeFromCart(product));
     },
@@ -55,8 +62,10 @@ const ShopCartproductList = ({ onNext }) => {
 
   const handleNext = useCallback(() => {
     if (!currentUser) {
-      // Store the current path to redirect back after login
-      localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      window.sessionStorage.setItem(
+        REDIRECT_AFTER_LOGIN_STORAGE_KEY,
+        `${window.location.pathname}${window.location.search}${window.location.hash}`
+      );
       
       // Show toast message
       toast.error("Please sign in to proceed to checkout", {
@@ -69,7 +78,7 @@ const ShopCartproductList = ({ onNext }) => {
       });
       
       // Redirect to login page
-      navigate("/login");
+      navigate("/Login");
       return;
     }
     
@@ -83,11 +92,11 @@ const ShopCartproductList = ({ onNext }) => {
       <div className="lg:w-2/3 flex-col pr-5">
         {cart.length > 0 ? (
           cart.map((product) => (
-            <div className="max-w-4xl mx-auto py-8" key={product._id}>
+            <div className="max-w-4xl mx-auto py-8" key={getCommerceItemKey(product)}>
               <div className="flex flex-col sm:flex-row gap-6">
                 <div className="w-[15vw] h-[15vw] overflow-hidden">
                   <img
-                    src={`${import.meta.env.VITE_BACKEND_URL}/${product.images[0]}`}
+                    src={resolveImageUrl(product.image || product.images?.[0])}
                     alt={product.name}
                     width={200}
                     height={200}
@@ -116,7 +125,7 @@ const ShopCartproductList = ({ onNext }) => {
                       <input
                         type="number"
                         className="lg:w-24 w-10 lg:px-3 px-1 py-1 text-sm rounded-md focus:outline-none text-center"
-                        value={itemQuantity[product._id] || 1}
+                        value={itemQuantity[getCommerceItemKey(product)] || 1}
                         readOnly
                       />
                       <button
@@ -128,7 +137,7 @@ const ShopCartproductList = ({ onNext }) => {
                     </div>
                   </div>
                   <div className="text-2xl font-bold text-right text-[#362D2C] pt-10">
-                    PKR {product.price.toLocaleString()}
+                    PKR {Number(product.price || 0).toLocaleString()}
                   </div>
                 </div>
 
@@ -153,19 +162,25 @@ const ShopCartproductList = ({ onNext }) => {
           <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Price</span>
             <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#362D2C] bg-transparent">
-              PKR {totalPrice.toLocaleString()}
+              {formatShopCurrency(summary.subtotal)}
             </span>
           </div>
           <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
-            <span>Discount ({discountPercentage}%)</span>
+            <span>Discount (10%)</span>
             <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#362D2C] bg-transparent">
-              - PKR {discountAmount.toLocaleString()}
+              - {formatShopCurrency(summary.discount)}
+            </span>
+          </div>
+          <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
+            <span>Shipping</span>
+            <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-[#362D2C] bg-transparent">
+              {formatShopCurrency(summary.shipping)}
             </span>
           </div>
           <div className="flex justify-between font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C] pb-2">
             <span>Total Price</span>
             <span className="font-extrabold text-[20px] leading-[28px] tracking-[0] text-right text-yellow bg-transparent">
-              PKR {discountedPrice.toLocaleString()}
+              {formatShopCurrency(summary.total)}
             </span>
           </div>
         </div>
@@ -186,11 +201,11 @@ const ShopCartproductList = ({ onNext }) => {
 
           <textarea
             className="block mt-1 p-7 font-poppins font-light shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            value={notes}
-            onChange={(e) => {
-              setNotes(e.target.value);
-              localStorage.setItem('checkoutNote', e.target.value);
-            }}
+              value={notes}
+              onChange={(e) => {
+                setNotes(e.target.value);
+                saveShopCheckout({ note: e.target.value });
+              }}
             style={{
               width: '401px',
               height: '139px',

@@ -1,11 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  getCommerceItemKey,
+  normalizeCommerceCartItem,
+} from "../../lib/commerceItems";
 
+import { BACKEND_BASE_URL } from "../../lib/api";
 // Async thunk for fetching products
 export const fetchProducts = createAsyncThunk(
   "cart/fetchProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getProducts`);
+      const response = await fetch(`${BACKEND_BASE_URL}/getProducts`);
       if (!response.ok) throw new Error("Failed to fetch products");
       const data = await response.json();
       return data.products;
@@ -23,44 +28,64 @@ const initialState = {
   totalPrice: 0,
 };
 
+const recalculateCartTotals = (state) => {
+  state.totalQuantity = state.cart.reduce(
+    (runningTotal, item) => runningTotal + (Number(item.quantity) || 0),
+    0,
+  );
+  state.totalPrice = state.cart.reduce(
+    (runningTotal, item) => runningTotal + (Number(item.price) || 0) * (Number(item.quantity) || 0),
+    0,
+  );
+};
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const existingItem = state.cart.find((item) => item._id === action.payload._id);
-      if (existingItem) {
-        existingItem.quantity += 1;
-      } else {
-        state.cart.push({ ...action.payload, quantity: 1 });
+      const normalizedItem = normalizeCommerceCartItem(action.payload);
+      if (!normalizedItem?.itemId) {
+        return;
       }
 
-      state.totalQuantity += 1;
-      state.totalPrice += action.payload.price;
+      const itemKey = getCommerceItemKey(normalizedItem);
+      const existingItem = state.cart.find((item) => getCommerceItemKey(item) === itemKey);
+      const quantityToAdd = Number(normalizedItem.quantity) || 1;
+
+      if (existingItem) {
+        existingItem.quantity += quantityToAdd;
+      } else {
+        state.cart.push({ ...normalizedItem, quantity: quantityToAdd });
+      }
+
+      recalculateCartTotals(state);
     },
 
     removeFromCart: (state, action) => {
-      const existingItem = state.cart.find((item) => item._id === action.payload._id);
+      const normalizedItem = normalizeCommerceCartItem(action.payload);
+      if (!normalizedItem?.itemId) {
+        return;
+      }
+
+      const itemKey = getCommerceItemKey(normalizedItem);
+      const existingItem = state.cart.find((item) => getCommerceItemKey(item) === itemKey);
     
       if (existingItem) {
         if (existingItem.quantity > 1) {
           existingItem.quantity -= 1;
-          state.totalQuantity -= 1;
-          state.totalPrice -= existingItem.price;
         } else {
-          // If quantity is 1, remove the product from cart
-          state.cart = state.cart.filter((item) => item._id !== action.payload._id);
-          state.totalQuantity -= 1;
-          state.totalPrice -= existingItem.price;
+          state.cart = state.cart.filter((item) => getCommerceItemKey(item) !== itemKey);
         }
+
+        recalculateCartTotals(state);
       }
     },
     
 
     clearCart: (state) => {
       state.cart = [];
-      state.totalQuantity = 0;
-      state.totalPrice = 0;
+      recalculateCartTotals(state);
     },
   },
 

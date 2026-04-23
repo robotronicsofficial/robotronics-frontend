@@ -1,8 +1,20 @@
 import { useState, useEffect } from "react";
 import LeftNav from "./leftNav";
 import { FaStar } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  buildChildSessionRequest,
+  getActiveChildSession,
+} from "../../utils/childSessionRequest";
+import { resolveBackendUrl } from "../../lib/api";
+
+const extractActiveCourses = (payload) => {
+  if (Array.isArray(payload?.data?.activeCourses)) return payload.data.activeCourses;
+  if (Array.isArray(payload?.activeCourses)) return payload.activeCourses;
+  if (Array.isArray(payload?.courses)) return payload.courses;
+  return [];
+};
+
 const MyAllCourses = () => {
   const [allCourses, setAllCourses] = useState([]);
   const [activeCourses, setActiveCourses] = useState([]);
@@ -12,13 +24,9 @@ const MyAllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 9;
   const navigate = useNavigate();
-  // let params = useParams();
-  // console.log("Parems ",params.id);
-  // Extract childId from URL path
-  const pathSegments = window.location.pathname.split('/');
-  const childId = pathSegments[pathSegments.length - 1];
-
-  console.log("Extracted Child ID:", childId); // Debug log
+  const { id: routeChildId } = useParams();
+  const activeChildSession = getActiveChildSession(routeChildId);
+  const childId = activeChildSession?.childId || null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,26 +36,36 @@ const MyAllCourses = () => {
         }
   
         setLoading(true);
-        
+
+        const childSessionRequest = buildChildSessionRequest({
+          method: "GET",
+          childId,
+        });
+
+        if (!childSessionRequest) {
+          throw new Error("Child session not found. Please re-enter the PIN.");
+        }
+
         // Fetch all courses
-        const allCoursesResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-courses`);
+        const allCoursesResponse = await fetch(resolveBackendUrl("/get-courses"));
         if (!allCoursesResponse.ok) {
           throw new Error("Failed to fetch all courses");
         }
         const allCoursesData = await allCoursesResponse.json();
-        setAllCourses(allCoursesData.courses);
+        setAllCourses(Array.isArray(allCoursesData.courses) ? allCoursesData.courses : []);
   
         // Fetch child's data
-        const childResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/child/${childId}/courses`);
+        const childResponse = await fetch(
+          resolveBackendUrl(`/api/child/${childId}/courses`),
+          childSessionRequest
+        );
         if (!childResponse.ok) {
           throw new Error(`Failed to fetch child data. Status: ${childResponse.status}`);
         }
-        let childData = await childResponse.json();
-        childData = childData.debug.fetchedCourses;
+        const childData = await childResponse.json();
+        const childCourses = extractActiveCourses(childData);
         
-        console.log("Child data response:", childData);
-        
-        setActiveCourses(childData);
+        setActiveCourses(childCourses);
         setLoading(false);
       } catch (err) {
         console.error("Error in fetchData:", err);
@@ -89,6 +107,30 @@ const MyAllCourses = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [viewMode]);
+
+  const activeCourseIds = new Set(
+    activeCourses
+      .map((course) => String(course?.courseId || course?._id || ""))
+      .filter(Boolean)
+  );
+
+  const resolveCourseId = (course) => String(course?.courseId || course?._id || "");
+  const isActiveCourse = (course) => activeCourseIds.has(resolveCourseId(course));
+
+  const handleCourseClick = (course) => {
+    const courseId = resolveCourseId(course);
+
+    if (!courseId) {
+      return;
+    }
+
+    if (isActiveCourse(course)) {
+      navigate(`/Dashboard/courseDetail/${courseId}`);
+      return;
+    }
+
+    navigate(`/CoursesProduct/${courseId}`);
+  };
 
   if (loading) {
     return (
@@ -153,7 +195,7 @@ const MyAllCourses = () => {
                     className="w-full h-48 object-cover"
                     src={
                       course.thumbnail
-                        ? `${import.meta.env.VITE_BACKEND_URL}/${course.thumbnail.replace(/\\/g, "/")}`
+                        ? resolveBackendUrl(course.thumbnail)
                         : "https://via.placeholder.com/300x200"
                     }
                     alt={course.title}
@@ -181,14 +223,10 @@ const MyAllCourses = () => {
 
                   <div className="pb-3 px-4">
                     <button
-                      onClick={() =>
-                        navigate(`/Dashboard/courseDetail/${course._id}`)
-                        // navigate(`/Dashboard/courseDetail`)
-
-                      }
+                      onClick={() => handleCourseClick(course)}
                       className="mt-2 bg-[#ffc224] w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-[#ffb700] transition-colors"
                     >
-                      <span>View Course</span>
+                      <span>{isActiveCourse(course) ? "View Course" : "View Details"}</span>
                     </button>
                   </div>
                 </div>

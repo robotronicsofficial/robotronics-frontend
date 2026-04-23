@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import WorkshopCard from "./WorkshopCard";
 import Pagination from "../../blog/Pagination";
 
+import { BACKEND_BASE_URL } from "../../../lib/api";
 const categories = [
   "RoboGenius Program",
   "Robotics Workshops",
@@ -114,14 +115,13 @@ const Intro = () => {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/allVideoGallery`);
+        const response = await fetch(`${BACKEND_BASE_URL}/allVideoGallery`);
         if (!response.ok) {
           throw new Error("Failed to fetch services data");
         }
         const data = await response.json();
         setWorkshopsData(data.data || []);
         setLoading(false);
-        console.log(data.data);
       } catch (err) {
         setError(err.message);
         setLoading(false);
@@ -144,17 +144,16 @@ const Intro = () => {
         const selectedCategoryFormatted = selectedCategory
           ? selectedCategory.trim().toLowerCase()
           : "";
+        const workshopDate = workshop.date ? new Date(workshop.date) : null;
 
         if (
           selectedDate &&
-          new Date(workshop.date).toISOString().split("T")[0] !== selectedDate
+          (!workshopDate || Number.isNaN(workshopDate.getTime()) || workshopDate.toISOString().split("T")[0] !== selectedDate)
         )
           return false;
         if (
           selectedSchool &&
-          !workshop.schoolName
-            .toLowerCase()
-            .includes(selectedSchool.toLowerCase())
+          !workshop.schoolName?.toLowerCase().includes(selectedSchool.toLowerCase())
         )
           return false;
         if (selectedCity && workshop.city !== selectedCity) return false;

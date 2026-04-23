@@ -1,49 +1,21 @@
 import CustomerProduct from "../../component/shop/customerProduct";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { calculateCartSummary, formatShopCurrency } from "../../lib/shopCheckout";
+import { getCommerceItemKey } from "../../lib/commerceItems";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
-const CustomerOrder = ({ onNext }) => {
-  const [showPopup, setShowPopup] = useState(false);
+const CustomerOrder = ({
+  onNext,
+  buttonLabel = "CONTINUE TO SHIPPING",
+  buttonDisabled = false,
+  itemsOverride = null,
+  summaryOverride = null,
+  showContinueButton = true,
+}) => {
+  const { cart } = useSelector((state) => state.cart);
+  const items = Array.isArray(itemsOverride) ? itemsOverride : cart;
+  const summary = summaryOverride || calculateCartSummary(items);
 
-  const handleOpenPopup = () => {
-    setShowPopup(true);
-  };
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
-
-  const products = [
-    {
-      id: 1,
-      title: "MORDERN BLACK STANDING LEGO",
-      description:
-        "High-quality wireless headphones with noise-cancelling technology.",
-      image: "https://example.com/images/wireless-headphones.jpg",
-      price: 79.99,
-      item: 2,
-      category: "Electronics",
-    },
-    {
-      id: 2,
-      title: "MORDERN BLACK STANDING LEGO",
-      description:
-        "Lightweight running shoes designed for maximum comfort and performance.",
-      image: "https://example.com/images/running-shoes.jpg",
-      price: 59.99,
-      item: 1,
-      category: "Footwear",
-    },
-    {
-      id: 3,
-      title: "MORDERN BLACK STANDING LEGO",
-      description:
-        "High-quality wireless headphones with noise-cancelling technology.",
-      image: "https://example.com/images/wireless-headphones.jpg",
-      price: 79.99,
-      item: 1,
-      category: "Electronics",
-    },
-  ];
   return (
     <div
       className="lg:px-14 px-5 lg:p-8 p-4 lg:space-y-20 space-y-8 "
@@ -61,63 +33,20 @@ const CustomerOrder = ({ onNext }) => {
 
       {/* map product */}
       <div className="lg:space-y-5 space-y-2 poppins-extralight">
-        {products.map((product) => {
-          return (
-            <CustomerProduct onNext={handleOpenPopup}
-              key={product.id}
-              title={product.title}
-              description={product.description}
-              image={product.image}
-              price={product.price}
-              item={product.item}
-              category={product.category}
+        {items.length > 0 ? (
+          items.map((product) => (
+            <CustomerProduct
+              key={getCommerceItemKey(product)}
+              title={product.name}
+              image={resolveBackendAssetUrl(product?.image || product?.images?.[0], "")}
+              price={Number(product.price ?? product.unitPrice ?? 0).toLocaleString()}
+              item={product.quantity}
             />
-          );
-        })}
+          ))
+        ) : (
+          <p className="text-sm text-[#7E7F7C]">Your cart is empty.</p>
+        )}
       </div>
-
-      {showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
-         <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg transform transition-transform scale-95 animate-fadeIn relative w-[90vw] sm:w-[70vw] md:w-[50vw] lg:w-[30vw] py-10">
-  {/* Close Button (X) */}
-  <button
-    className="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-xl"
-    onClick={handleClosePopup}
-  >
-    &times;
-  </button>
-
-  {/* Heart Icon & Content */}
-  <div className="flex flex-col items-center text-center px-2 sm:px-4">
-    {/* Message */}
-    <p className="text-xl sm:text-2xl lg:text-3xl font-semibold my-4 text-wrap">
-      Are you sure you want to delete this product?
-    </p>
-
-    <p className="text-sm sm:text-base text-[#807D7E] mt-2 mb-6">
-      This will delete product from the cart
-    </p>
-
-    {/* Buttons */}
-    <div className="flex flex-col sm:flex-row gap-4 sm:gap-16">
-      <button
-        className="px-4 py-2 text-red-600 rounded hover:bg-red-200 transition duration-200 w-28"
-        onClick={handleClosePopup}
-      >
-        YES
-      </button>
-      <button
-        className="px-4 py-2 text-green-600 rounded hover:bg-green-200 transition duration-200 w-28"
-        onClick={handleClosePopup}
-      >
-        CANCEL
-      </button>
-    </div>
-  </div>
-</div>
-
-        </div>
-      )}
 
       {/* line  */}
       <div className="flex flex-col lg:py-5 py-2 ">
@@ -128,35 +57,37 @@ const CustomerOrder = ({ onNext }) => {
       <div className="justify-between lg:space-y-5 space-y-2  ">
         <div className="flex flex-row justify-between">
           <p className="text-sm poppins-light">Shipping</p>
-          <p className="lg:text-xl text-sm poppins-bold">Pkr 1,125.00</p>
+          <p className="lg:text-xl text-sm poppins-bold">{formatShopCurrency(summary.shipping)}</p>
         </div>
         <div className="flex flex-row justify-between">
           <p className="text-sm poppins-light">Discount 10%</p>
-          <p className="text-sm poppins-bold">_</p>
+          <p className="text-sm poppins-bold">- {formatShopCurrency(summary.discount)}</p>
         </div>
         <div className="flex flex-row  justify-between">
           <p className="text-sm poppins-light">Price</p>
-          <p className="text-xl poppins-bold">Pkr 1,225.00</p>
+          <p className="text-xl poppins-bold">{formatShopCurrency(summary.subtotal)}</p>
         </div>
         <div className="flex flex-row justify-between">
           <p className="text-sm poppins-light">Total Price</p>
-          <p className="text-xl text-yellow poppins-bold">Pkr 1,725.00</p>
+          <p className="text-xl text-yellow poppins-bold">{formatShopCurrency(summary.total)}</p>
         </div>
         {/* line */}
         <div className="lg:space-y-3 space-y-1 lg:py-4 py-2">
           <div className="h-0 border border-lightgray "></div>
         </div>
         {/* button */}
-        <div className="flex justify-center lg:py-4 py-2">
-          {/* form submit buttom */}
-          <button
-            type="submit"
-            className="text-center lg:text-xl text-sm poppins-bold text-gold bg-brown py-2 lg:px-20 px-5"
-            onClick={onNext}
-          >
-            CONTINUE TO SHIPPING
-          </button>
-        </div>
+        {showContinueButton ? (
+          <div className="flex justify-center lg:py-4 py-2">
+            <button
+              type="button"
+              className="text-center lg:text-xl text-sm poppins-bold text-gold bg-brown py-2 lg:px-20 px-5"
+              onClick={onNext}
+              disabled={buttonDisabled || !items.length}
+            >
+              {buttonLabel}
+            </button>
+          </div>
+        ) : null}
       </div>
     </div>
   );

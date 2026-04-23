@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Slider, alpha, styled } from "@mui/material";
 import RobogeniusCustomerInformation from "./RobogeniusCustomerInformation";
-import RobogeniusPayment from "./RobogeniusPayment"
+import RobogeniusPayment from "./RobogeniusPayment";
 import userIcon from "../../../assets/user-circle.png";
 import cardIcon from "../../../assets/credit-card.png";
 
@@ -55,10 +55,7 @@ const Step = ({ icon, title, description, isActive, onClick }) => (
 
 
 const Robogeniuscustomercart = () => {
-
   const [currentStep, setCurrentStep] = useState(0);
-  const [savedChildren, setSavedChildren] = useState([]);
-
 
   const steps = [
     {
@@ -67,8 +64,7 @@ const Robogeniuscustomercart = () => {
       description: "Add your name, phone number and address.",
       content: (
         <RobogeniusCustomerInformation 
-          onNext={() => setCurrentStep(1)} 
-          onSaveChildren={setSavedChildren}
+          onNext={() => setCurrentStep(1)}
         />
       ),
     },
@@ -76,16 +72,11 @@ const Robogeniuscustomercart = () => {
       icon: cardIcon,
       title: "SUBSCRIPTION PAYMENT",
       description: "Submit your Payment Information",
-      content: (
-        <RobogeniusPayment 
-          onNext={() => setCurrentStep(2)} 
-          savedChildren={savedChildren}
-        />
-      ),
+      content: <RobogeniusPayment />,
     },
   ];
 
-  const progressMap = [50, 100 ];
+  const progressMap = [50, 100];
   const progressValue = progressMap[currentStep] || 0;
 
   return (

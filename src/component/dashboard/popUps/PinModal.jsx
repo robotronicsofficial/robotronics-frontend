@@ -9,21 +9,6 @@ const PinModal = ({
   description = "Enter your 4 digits pin"
 }) => {
   const [pin, setPin] = useState(["", "", "", ""]); // Array to store each digit of the PIN
-  const [counter, setCounter] = useState(30); // 30-second timer
-  const [isResendDisabled, setIsResendDisabled] = useState(true);
-
-  // Handle timer countdown
-  useEffect(() => {
-    let timer;
-    if (isOpen && counter > 0) {
-      timer = setInterval(() => {
-        setCounter((prevCounter) => prevCounter - 1);
-      }, 1000);
-    } else if (counter === 0) {
-      setIsResendDisabled(false);
-    }
-    return () => clearInterval(timer);
-  }, [isOpen, counter]);
 
   // Reset pin when modal opens/closes
   useEffect(() => {
@@ -45,14 +30,6 @@ const PinModal = ({
     if (value && index < 3) {
       document.getElementById(`pin-input-${index + 1}`).focus();
     }
-  };
-
-  // Handle resend PIN
-  const handleResend = () => {
-    setCounter(30);
-    setIsResendDisabled(true);
-    // Add logic to resend the PIN here
-    console.log("Resend PIN clicked");
   };
 
   // Handle form submission

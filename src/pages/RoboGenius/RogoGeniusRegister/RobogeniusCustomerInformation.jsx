@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import robo from "../../../assets/child.png";
 import { FaTrash } from "react-icons/fa"; // Import delete icon
+import { fetchSessionJson, sendSessionJson } from "../../../lib/api";
+import { normalizeParentRecord } from "../../../lib/robogenius";
+import { buildRobogeniusCheckout, saveRobogeniusCheckout } from "../../../lib/robogeniusCheckout";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -57,7 +60,6 @@ const SelectField = ({ label, name, value, onChange, options, required = false }
 const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  console.log(currentUser);
   const { plan, price, billingCycle } = useSelector((state) => state.plans);
 
   const [loading, setLoading] = useState(false);
@@ -81,23 +83,9 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
     if (!currentUser?._id) return;
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/parents/${currentUser._id}`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      console.log(res);
-
-      if (!res.ok) {
-        if (res.status !== 404) {
-          throw new Error("Failed to fetch parent data");
-        }
-        return; 
-      }
-
-      const parentData = await res.json();
+      const parentData = normalizeParentRecord(
+        await fetchSessionJson(`/api/parents/${currentUser._id}`)
+      );
       setParentForm({
         firstName: parentData.firstName || "",
         lastName: parentData.lastName || "",
@@ -113,6 +101,9 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
         deliveryInstruction: parentData.deliveryInstruction || ""
       });
     } catch (error) {
+      if (error.status === 404) {
+        return;
+      }
       console.error("Error fetching parent info:", error);
     }
   };
@@ -208,12 +199,12 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
     // Validation checks
     if (!currentUser) {
       alert("Please log in to continue.");
-      return navigate("/login"); // Redirect to login
+      return navigate("/Login"); // Redirect to login
     }
 
     if (!plan) {
       alert("Please select a plan before continuing");
-      return navigate("/plans"); // Redirect to plans page
+      return navigate("/Robogeniushome"); // Redirect to plans page
     }
 
     // Check for unsaved children
@@ -234,14 +225,11 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
     }
 
     setLoading(true);
-    console.log(plan);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/parents`, {
+      const data = await sendSessionJson("/api/parents", {
         method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           parent: {
             ...parentForm,
             userId: currentUser._id,
@@ -256,27 +244,32 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
             price,
             billingCycle
           }
-        }),
+        },
       });
 
-      const data = await response.json();
+      const persistedParent = normalizeParentRecord(
+        data?.parent || {
+          ...parentForm,
+          children: childrenForms.map(({ saved, ...child }) => child),
+        }
+      );
+      const persistedChildren = persistedParent.children;
+      const checkout = buildRobogeniusCheckout({
+        parent: persistedParent,
+        children: persistedChildren,
+        plan: {
+          name: plan,
+          price,
+          billingCycle,
+        },
+      });
 
-      onSaveChildren(childrenForms.filter(child => child.saved));
+      saveRobogeniusCheckout(checkout);
+      onSaveChildren?.(persistedChildren);
 
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
-
-      // Successful submission
-      console.log('Registration successful:', data);
-
-      // Option 1: Call onNext if provided
       if (onNext) {
-        onNext(data); // Pass response data to next step
+        onNext(checkout);
       }
-      // Option 2: Navigate to success page
-      // navigate("/registration-success");
 
     } catch (error) {
       console.error('Registration error:', error);
