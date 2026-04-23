@@ -5,6 +5,7 @@ import ReactPlayer from "react-player";
 import ReviewsComponent from "../../../pages/RoboGenius/Robogeniusreview";
 
 const CourseDescription = () => {
+  const courseMaterialUrl = `${import.meta.env.VITE_BACKEND_URL}/uploads/Courses/1.pdf`;
   // Sample course data in JSON format
   const courseData = {
     _id: {
@@ -64,13 +65,13 @@ const CourseDescription = () => {
                 id: "fc51ced4-5b85-4cf2-9b60-673f52e9f199",
                 type: "pdf",
                 name: "Project Code",
-                file: "http://localhost:8080/uploads/Courses/1.pdf",
+                file: courseMaterialUrl,
               },
               {
                 id: "fc51ced4-5b85-4cf2-9b60-673f52e9f190",
                 type: "pdf",
                 name: "Practice Assignment",
-                file: "http://localhost:8080/uploads/Courses/1.pdf",
+                file: courseMaterialUrl,
               },
             ],
           },
@@ -88,13 +89,13 @@ const CourseDescription = () => {
                 id: "fc51ced4-5b85-4cf2-9b60-673f52e9f199",
                 type: "pdf",
                 name: "Project Code",
-                file: "http://localhost:8080/uploads/Courses/1.pdf",
+                file: courseMaterialUrl,
               },
               {
                 id: "fc51ced4-5b85-4cf2-9b60-673f52e9f190",
                 type: "pdf",
                 name: "Practice Assignment",
-                file: "http://localhost:8080/uploads/Courses/1.pdf",
+                file: courseMaterialUrl,
               },
             ],
          
@@ -113,13 +114,13 @@ const CourseDescription = () => {
                 id: "fc51ced4-5b85-4cf2-9b60-673f52e9f199",
                 type: "pdf",
                 name: "Project Code",
-                file: "http://localhost:8080/uploads/Courses/1.pdf",
+                file: courseMaterialUrl,
               },
               {
                 id: "fc51ced4-5b85-4cf2-9b60-673f52e9f190",
                 type: "pdf",
                 name: "Practice Assignment",
-                file: "http://localhost:8080/uploads/Courses/1.pdf",
+                file: courseMaterialUrl,
               },
             ],
           
@@ -138,13 +139,13 @@ const CourseDescription = () => {
                 id: "fc51ced4-5b85-4cf2-9b60-673f52e9f199",
                 type: "pdf",
                 name: "Project Code",
-                file: "http://localhost:8080/uploads/Courses/1.pdf",
+                file: courseMaterialUrl,
               },
               {
                 id: "fc51ced4-5b85-4cf2-9b60-673f52e9f190",
                 type: "pdf",
                 name: "Practice Assignment",
-                file: "http://localhost:8080/uploads/Courses/1.pdf",
+                file: courseMaterialUrl,
               },
             ],
           
