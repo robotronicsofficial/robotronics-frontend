@@ -2,6 +2,7 @@ import YtVideos from "../../component/course/courseDetailPage/ytVideos";
 import Decription from "../../component/shop/productDetail/decription";
 import CourseIntro from "../../component/course/courseDetailPage/courseIntro";
 import MoreProduct from "../../component/shop/productDetail/moreProduct";
+import { COMMERCE_ITEM_TYPES } from "../../lib/commerceItems";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -58,7 +59,7 @@ const CoursesProductDetail = () => {
         category={course?.category}
         duration={course?.month}
       />
-      <MoreProduct />
+      <MoreProduct itemType={COMMERCE_ITEM_TYPES.course} />
       <YtVideos />
     </div>
   );
