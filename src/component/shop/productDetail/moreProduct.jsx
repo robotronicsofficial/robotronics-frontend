@@ -7,6 +7,7 @@ import {
   getCommerceItemKey,
   getCommerceItemRoute,
 } from "../../../lib/commerceItems";
+import { COURSE_PATH } from "../../../router/paths";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 
 const RELATED_ITEM_CONFIG = {
@@ -24,7 +25,7 @@ const RELATED_ITEM_CONFIG = {
   [COMMERCE_ITEM_TYPES.course]: {
     endpoint: "/get-courses",
     payloadKey: "courses",
-    browsePath: "/courses",
+    browsePath: COURSE_PATH,
     browseLabel: "Browse courses",
     emptyLabel: "No other courses are available right now.",
     subtitle: "Top Selling Courses",
