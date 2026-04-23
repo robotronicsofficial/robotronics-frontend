@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -10,12 +11,10 @@ import {
   Legend,
 } from "chart.js";
 import logo from "../assets/logo/Robotrinic.svg";
-import robot from "../assets/images/robot(1).svg";
+import robot from "../assets/images/robot-1.png";
 import circleg from "../assets/logo/goldencircle.svg";
 import circleb from "../assets/logo/browncircle.svg";
-import { useEffect } from "react";
-import Aos from "aos";
-import "aos/dist/aos.css"; // Ensure AOS styles are imported
+import AppImage from "./AppImage";
 
 // Register Chart.js modules
 ChartJS.register(
@@ -32,7 +31,7 @@ ChartJS.register(
 const Header = () => (
   <div className="flex space-x-5 text-center bg-gray mt-8">
     <div className="md:ml-20 p-5 hidden sm:block ">
-      <img
+      <AppImage
         className="w-40 h-60"
         src={logo}
         alt="Logo"
@@ -77,7 +76,7 @@ const InfoSection = () => (
     <div className="relative flex  w-full">
       <div className="hidden md:flex flex-col w-[14vw] h-[10vh] mt-36">
         <div className="flex items-center">
-          <img
+          <AppImage
             src={circleg}
             alt="Progress"
             className="mr-2"
@@ -86,7 +85,7 @@ const InfoSection = () => (
           <span>No. of Students</span>
         </div>
         <div className="flex items-center">
-          <img
+          <AppImage
             src={circleb}
             alt="Target"
             className="mr-2"
@@ -96,7 +95,7 @@ const InfoSection = () => (
         </div>
       </div>
       <div className="w-[24vw] ">
-        <img
+        <AppImage
           data-aos="fade-up"
           src={robot}
           alt="Robot illustration"
@@ -113,12 +112,13 @@ const ChartSection = ({ data, options }) => (
   </div>
 );
 
+ChartSection.propTypes = {
+  data: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired,
+};
+
 // Main Component
 const Graph = () => {
-  useEffect(() => {
-    Aos.init({ duration: 1200 }); // Initialize AOS with animation duration
-  }, []);
-
   // Chart data
   const data = {
     labels: ["2000", "2010", "2020", "2023", "2024"], // X-axis labels

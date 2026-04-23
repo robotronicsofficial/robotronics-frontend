@@ -1,4 +1,6 @@
-import python from "../../assets/images/python.svg";
+import PropTypes from "prop-types";
+import AppImage from "../AppImage";
+import python from "../../assets/images/python.webp";
 import shopStar from "../../assets/logo/shopStars.svg";
 import time from "../../assets/logo/time-svgrepo-com 1.svg";
 import download from "../../assets/logo/download.svg";
@@ -8,20 +10,12 @@ import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { useState } from "react";
 import { toggleSavedItem } from "../../lib/savedItems";
-import { BACKEND_BASE_URL } from "../../lib/api";
-const CourseProduct = ({
-  title,
-  id,
-  image,
-  price,
-  duration,
-}) => {
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+
+const CourseProduct = ({ title, id, image, price, duration }) => {
   const [isSaved, setIsSaved] = useState(false);
-  const resolvedImage = image
-    ? image.startsWith("http")
-      ? image
-      : `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`
-    : python;
+  const resolvedImage = resolveBackendAssetUrl(image, python);
+
   const toggleWishList = async () => {
     try {
       const nextIsSaved = await toggleSavedItem({
@@ -39,8 +33,8 @@ const CourseProduct = ({
     <div className="p-2  " data-aos="fade-up">
       <div className="rounded-2xl p-2 bg-white">
         {/* img */}
-        <div className=""data-aos="fade-right">
-          <img src={resolvedImage} alt={title || "Course"} />
+        <div className="" data-aos="fade-right">
+          <AppImage src={resolvedImage} alt={title || "Course"} />
         </div>
         {/* title */}
         <div>
@@ -100,6 +94,14 @@ const CourseProduct = ({
       </div>
     </div>
   );
+};
+
+CourseProduct.propTypes = {
+  title: PropTypes.string,
+  id: PropTypes.string,
+  image: PropTypes.string,
+  price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  duration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default CourseProduct;

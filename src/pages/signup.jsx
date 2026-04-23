@@ -5,8 +5,9 @@ import "react-toastify/dist/ReactToastify.css";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import PropTypes from "prop-types";
+import AppImage from "../component/AppImage";
 import hide from "../assets/images/hide.svg";
-import robot from "../assets/images/SignupRobot.svg";
+import robot from "../assets/images/shopRobot.webp";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
 import { sendJson, resolveBackendUrl } from "../lib/api";
@@ -133,42 +134,43 @@ const Signup = () => {
             <p
               className="text-6xl text-white text-wrap poppins-bold"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               Robotics
             </p>
             <p
               className="text-2xl poppins-light text-white"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               Access to courses and <br /> Products
             </p>
           </div>
           <div className="flex items-end">
-            <img
+            <AppImage
               className=" w-full items-end"
               src={robot}
-              alt=""
+              alt="Robotronics signup illustration"
+              loading="eager"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             />
           </div>
           <div
             className="w-full border border-line"
             data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
+
+
           ></div>
         </div>
         <div
           className="flex flex-col bg-gray rounded-lg lg:p-14 p-5 mt-32 md:mt-0"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           <div className="lg:space-y-3 space-y-1">
             <p className="md:text-3xl text-2xl font-bold lg:pb-5 pb-2 poppins-bold ">

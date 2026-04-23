@@ -14,25 +14,25 @@ const CareerJobDetail = ({ job }) => {
 
   return (
     <div className="lg:px-56 px-10 bg-background">
-      <h1 className="lg:text-4xl text-xl poppins-extrabold mb-4" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <h1 className="lg:text-4xl text-xl poppins-extrabold mb-4" data-aos="fade-up">
         {displayTitle}
       </h1>
-      <p className="mb-4 poppins-light" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <p className="mb-4 poppins-light" data-aos="fade-up">
         {description}
       </p>
 
-      <h2 className="text-xl poppins-bold font-bold mb-2" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <h2 className="text-xl poppins-bold font-bold mb-2" data-aos="fade-up">
         Role Overview:
       </h2>
-      <p className="mb-4" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <p className="mb-4" data-aos="fade-up">
         {roleOverview}
       </p>
 
-      <h2 className="text-xl poppins-bold mb-2" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <h2 className="text-xl poppins-bold mb-2" data-aos="fade-up">
         Key Responsibilities:
       </h2>
       {keyResponsibilities.length > 0 ? (
-        <ul className="list-disc poppins-light list-inside mb-4" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <ul className="list-disc poppins-light list-inside mb-4" data-aos="fade-up">
           {keyResponsibilities.map((item, index) => (
             <li key={index} className="mb-2">
               {item}
@@ -43,11 +43,11 @@ const CareerJobDetail = ({ job }) => {
         <p className="mb-4 poppins-light text-brown/80">Responsibilities will be shared during the hiring process.</p>
       )}
 
-      <h2 className="text-xl poppins-bold mb-2" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <h2 className="text-xl poppins-bold mb-2" data-aos="fade-up">
         Required Skills:
       </h2>
       {requiredSkills.length > 0 ? (
-        <ul className="list-disc poppins-light list-inside mb-4" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <ul className="list-disc poppins-light list-inside mb-4" data-aos="fade-up">
           {requiredSkills.map((item, index) => (
             <li key={index} className="mb-2">
               {item}
@@ -58,7 +58,7 @@ const CareerJobDetail = ({ job }) => {
         <p className="mb-4 poppins-light text-brown/80">Skills requirements will be shared during the hiring process.</p>
       )}
 
-      <div className="lg:pb-20 pb-10" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <div className="lg:pb-20 pb-10" data-aos="fade-up">
         <div className="lg:py-20 py-10">
           <p className="text-wrap text-brown poppins-medium lg:text-2xl text-xl mb-10">
             Jumpstart your journey with Robotronics by sending your CV and details using the form below.

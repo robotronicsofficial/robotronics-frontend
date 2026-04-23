@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "./cart/cartSlice";
 import planReducer from "./plans/planSlice";
 import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // Uses localStorage by default
+import storage from "redux-persist/es/storage";
 import { combineReducers } from "redux";
 
 // Persist config

@@ -1,5 +1,6 @@
+import AppImage from "../AppImage";
 import { useEffect, useState } from "react";
-import img3 from "../../assets/images/5.svg";
+import img3 from "../../assets/images/5.webp";
 import { FiArrowUpRight } from 'react-icons/fi';
 import { useNavigate } from "react-router-dom";
 import { fetchJobs, getJobsErrorMessage } from "../../lib/jobs";
@@ -51,15 +52,15 @@ const CareerJoinTeam = () => {
     <div className="bg-gray p-5 ">
       {/* text */}
       <div className="p-10">
-        <p className="text-2xl poppins-bold text-brown "data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <p className="text-2xl poppins-bold text-brown "data-aos="fade-up">
           Are you looking for a new career opportunity?
         </p>
-        <p className="text-5xl text-brown poppins-extrabold "data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">join the A-Team!</p>
+        <p className="text-5xl text-brown poppins-extrabold "data-aos="fade-up">join the A-Team!</p>
       </div>
       {/* img */}
       <div className="lg:flex flex-row p-10 space-x-8">
-        <img src={img3} alt="" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"/>
-        <p className="text-xl text-brown poppins-regular text-wrap py-10"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <AppImage src={img3} alt="" data-aos="fade-up" />
+        <p className="text-xl text-brown poppins-regular text-wrap py-10"data-aos="fade-up">
           The average employment period in our company is currently 4,5 years.
           Our People have the opportunity to work in a relaxed and friendly
           environment, with to industry partners on the most significant
@@ -105,7 +106,7 @@ const CareerJoinTeam = () => {
                 </button>
               )}
 
-              <div className="grid gap-4 md:grid-cols-3" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+              <div className="grid gap-4 md:grid-cols-3" data-aos="fade-up">
                 <div className="space-y-1">
                   <p className="text-xs uppercase tracking-[0.2em] text-smallText">Position</p>
                   <p className="poppins-bold text-xl text-brown">{job.position || job.title}</p>

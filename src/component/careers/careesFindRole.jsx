@@ -9,6 +9,7 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"; // Assuming React Router is used
+import { getAosStaggerDelay } from "../../utils/motion";
 
 const CareesFindRole = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const CareesFindRole = () => {
         <p
           className="text-wrap font-light text-brown text-5xl lg:text-7xl mb-10"
           data-aos="fade-up"
-          data-aos-duration="2000"
+
         >
           Can't find a role <br />
           for you?
@@ -33,7 +34,7 @@ const CareesFindRole = () => {
         <div
           className="flex space-x-5"
           data-aos="fade-up"
-          data-aos-duration="2000"
+
         >
           <button
             onClick={handleSendResume}
@@ -67,8 +68,7 @@ const CareesFindRole = () => {
             rel="noopener noreferrer"
             className="p-3 border border-brown rounded-xl hover:bg-brown hover:text-white transition transform hover:scale-105"
             data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay={`${index * 300}`}
+            data-aos-delay={getAosStaggerDelay(index)}
           >
             {icon}
           </a>

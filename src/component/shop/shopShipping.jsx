@@ -15,7 +15,7 @@ import {
 } from "../../lib/shopCheckout";
 import { hasShippableCommerceItems } from "../../lib/commerceItems";
 import { clearCart } from "../../store/cart/cartSlice";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/useAuth";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 import { BACKEND_BASE_URL } from "../../lib/api";

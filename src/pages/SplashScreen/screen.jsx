@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import img from '../../assets/images/bosten.svg';
+import img from '../../assets/images/bosten.png';
 
 const Screen = () => {
     return (

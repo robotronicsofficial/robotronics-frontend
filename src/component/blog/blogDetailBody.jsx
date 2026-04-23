@@ -24,7 +24,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
 
   return (
     <div className="bg-background md:p-20 p-10">
-      <div className="lg:flex flex-row" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <div className="lg:flex flex-row" data-aos="fade-up">
         <div className="flex flex-row space-x-6">
           <div className="space-y-6">
             <div className="flex flex-col space-y-2">
@@ -82,7 +82,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         </div>
       </div>
 
-      <div className="space-y-8" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <div className="space-y-8" data-aos="fade-up">
         <div className="flex flex-row space-y-5">
           <div className="lg:w-2/3">
             <FaQuoteLeft size={24} className="text-quote" />

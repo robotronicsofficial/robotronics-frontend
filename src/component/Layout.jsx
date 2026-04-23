@@ -1,11 +1,14 @@
-import { useLocation } from 'react-router'
+import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 import Header from "../component/header";
-import Footer from './footer';
+import Footer from "./footer";
 import { SCREEN_PATH } from "../router/paths";
+import useAos from "../hooks/useAos";
 
 const Layout = ({ children }) => {
   const hideNavbarPaths = ["/Search", SCREEN_PATH, "/JobApplicationForm"];
-  const location = useLocation(); // from react-router-dom
+  const location = useLocation();
+  useAos();
 
   const showNavbar =
     !hideNavbarPaths.includes(location.pathname) &&
@@ -13,12 +16,15 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      {showNavbar && <Header/>} {/* Global navigation bar */}
+      {showNavbar && <Header />}
       <main>{children}</main>
-      {/* Footer */}
       <Footer />
     </>
   );
+};
+
+Layout.propTypes = {
+  children: PropTypes.node,
 };
 
 export default Layout;

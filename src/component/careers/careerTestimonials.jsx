@@ -1,5 +1,6 @@
 import { useState } from "react";
-import robot from "../../assets/images/file (2) (1).png";
+import AppImage from "../AppImage";
+import robot from "../../assets/images/careerTestimonial.webp";
 
 const CareerTestimonials = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -17,17 +18,17 @@ const CareerTestimonials = () => {
       job: "Software Engineer",
       image: robot,
       quote: `Famous soccer athlete, Pele who appeared to be born with plenty
-              of natural talent, continues this quote by adding “It is hard work, 
-              perseverance, learning, studying, sacrifice and most of all, love 
+              of natural talent, continues this quote by adding “It is hard work,
+              perseverance, learning, studying, sacrifice and most of all, love
               of what you are doing.`,
     },
     {
       name: "Ali",
       job: "Software Engineer",
       image: robot,
-      quote: `This quote by George Bernard Shaw is a critical one for every 
+      quote: `This quote by George Bernard Shaw is a critical one for every
               entrepreneur who will succeed through both good and bad  times
-              and bull runs and recessions. Sometimes business and revenues 
+              and bull runs and recessions. Sometimes business and revenues
               will come easy. Other times you need to create it.`,
     },
   ];
@@ -46,12 +47,12 @@ const CareerTestimonials = () => {
     <div className="lg:flex flex-row justify-between bg-black p-5">
       {/* left */}
       <div>
-        <img
+        <AppImage
           src={image}
           alt="robot"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         />
       </div>
       {/* right */}
@@ -60,14 +61,14 @@ const CareerTestimonials = () => {
         <div
           className="flex flex-row content-center"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           {/* text */}
           <div className="flex flex-col justify-between lg:py-10 py-5">
             <div></div>
             <div>
-              <p className="text-xl poppins-ligt text-white">Our Employee's</p>
+              <p className="text-xl poppins-ligt text-white">Our Employees</p>
               <p className="lg:text-6xl poppins-bold text-3xl text-gold font-bold">
                 TESTIMONIALS
               </p>
@@ -75,15 +76,15 @@ const CareerTestimonials = () => {
           </div>
           {/* img */}
           <div>
-            <img src={robot} className="h-34 w-64" alt="robot" />
+            <AppImage src={robot} className="h-34 w-64" alt="robot" />
           </div>
         </div>
         {/* message */}
         <div
           className="w-full bg-white rounded-xl"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           <blockquote className="text-xl italic font-semibold text-gray-900 p-10 dark:text-white">
             <svg
@@ -111,8 +112,8 @@ const CareerTestimonials = () => {
         <div
           className="py-5"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           <p className="text-gold poppins-extralight text-2xl">{name}</p>
           <p className="text-white poppins-extralight">{job}</p>

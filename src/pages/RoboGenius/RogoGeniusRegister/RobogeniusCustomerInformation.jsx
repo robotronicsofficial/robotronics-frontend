@@ -1,8 +1,10 @@
+import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/useAuth";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import robo from "../../../assets/child.png";
+import AppImage from "../../../component/AppImage";
+import robo from "../../../assets/child.webp";
 import { FaTrash } from "react-icons/fa"; // Import delete icon
 import { fetchSessionJson, sendSessionJson } from "../../../lib/api";
 import { normalizeParentRecord } from "../../../lib/robogenius";
@@ -21,6 +23,11 @@ const GENDER_OPTIONS = [
   { value: "female", label: "Female" }
 ];
 
+const withoutSavedFlag = (child) => {
+  const nextChild = { ...child };
+  delete nextChild.saved;
+  return nextChild;
+};
 
 const InputField = ({ label, name, value, onChange, placeholder, required = false, type = "text" }) => (
   <div>
@@ -37,6 +44,16 @@ const InputField = ({ label, name, value, onChange, placeholder, required = fals
     />
   </div>
 );
+
+InputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  required: PropTypes.bool,
+  type: PropTypes.string,
+};
 
 const SelectField = ({ label, name, value, onChange, options, required = false }) => (
   <div>
@@ -56,6 +73,20 @@ const SelectField = ({ label, name, value, onChange, options, required = false }
     </select>
   </div>
 );
+
+SelectField.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  required: PropTypes.bool,
+};
 
 const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
   const navigate = useNavigate();
@@ -234,11 +265,7 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
             ...parentForm,
             userId: currentUser._id,
           },
-          children: childrenForms.map(child => ({
-            ...child,
-         
-            saved: undefined
-          })),
+          children: childrenForms.map(withoutSavedFlag),
           plan: {
             name: plan,
             price,
@@ -250,7 +277,7 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
       const persistedParent = normalizeParentRecord(
         data?.parent || {
           ...parentForm,
-          children: childrenForms.map(({ saved, ...child }) => child),
+          children: childrenForms.map(withoutSavedFlag),
         }
       );
       const persistedChildren = persistedParent.children;
@@ -417,7 +444,7 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
           savedChildren.map((child, index) => (
             <div key={index} className="lg:space-y-5 space-y-2 poppins-extralight">
               <div className="flex flex-row space-x-3">
-                <img className="lg:h-24 lg:w-24" src={robo} alt="img" />
+                <AppImage className="lg:h-24 lg:w-24" src={robo} alt="" />
                 <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
                   <p className="text-wrap">
                     <span className="font-bold">Plan:</span> <span className="font-normal">{plan}</span>
@@ -482,6 +509,11 @@ const RobogeniusCustomerInformation = ({ onNext, onSaveChildren }) => {
       </div>
     </div>
   );
+};
+
+RobogeniusCustomerInformation.propTypes = {
+  onNext: PropTypes.func,
+  onSaveChildren: PropTypes.func,
 };
 
 export default RobogeniusCustomerInformation;

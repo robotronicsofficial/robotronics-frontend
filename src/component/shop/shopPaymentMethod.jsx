@@ -118,8 +118,8 @@ const ShopPaymentMethod = ({ onNext }) => {
       <div
         className="lg:w-2/3 space-y-10"
         data-aos="fade-up"
-        data-aos-duration="2000"
-        data-aos-delay="4000"
+
+
       >
         <div className="bg-white border border-lightgray p-6 space-y-4">
           <div className="flex items-start justify-between gap-4">
@@ -317,8 +317,8 @@ const ShopPaymentMethod = ({ onNext }) => {
       <div
         className="px-1"
         data-aos="fade-up"
-        data-aos-duration="2000"
-        data-aos-delay="4000"
+
+
       >
         <div className="h-full w-0 border border-lightgray"></div>
       </div>
@@ -326,8 +326,8 @@ const ShopPaymentMethod = ({ onNext }) => {
       <div
         className="lg:w-1/2"
         data-aos="fade-up"
-        data-aos-duration="2000"
-        data-aos-delay="4000"
+
+
       >
         <CustomerOrder onNext={handleContinue} buttonLabel="REVIEW ORDER" />
       </div>

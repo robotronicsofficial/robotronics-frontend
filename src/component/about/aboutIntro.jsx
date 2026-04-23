@@ -1,7 +1,3 @@
-import { useEffect } from "react";
-// import { Link } from "react-scroll";
-import "aos/dist/aos.css"; // Import CSS for AOS
-import Aos from "aos";
 import {
   FaFacebook,
   FaInstagram,
@@ -10,12 +6,9 @@ import {
   FaWhatsapp,
   FaYoutube,
 } from "react-icons/fa";
+import { getAosStaggerDelay } from "../../utils/motion";
 
 const Iaboutntro = () => {
-  useEffect(() => {
-    Aos.init(); // Initialize AOS library
-  }, []);
-
   return (
     <>
       <div className="abouthero relative w-full" id="abouthero">
@@ -24,7 +17,7 @@ const Iaboutntro = () => {
             {/* text */}
             <div className="space-y-5 pt-40 md:pt-48 lg:w-1/2 md:ml-10">
               {/* Text */}
-              <div className="space-y-2"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+              <div className="space-y-2"data-aos="fade-up">
                 <div className="flex flex-row space-x-2 ">
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-thin">WELCOME TO THE </h1>
                   <h1 className="lg:text-3xl md:text-2xl text-white poppins-extralight">WORLD OF</h1>
@@ -53,8 +46,7 @@ const Iaboutntro = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     data-aos="fade-up"
-                    data-aos-duration="2000"
-                    data-aos-delay={index * 300}
+                    data-aos-delay={getAosStaggerDelay(index)}
                     className="lg:p-3 p-1 border border-brown bg-white rounded-xl hover:bg-brown hover:text-white"
                   >
                     {icon}

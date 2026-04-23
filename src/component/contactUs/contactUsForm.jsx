@@ -1,7 +1,6 @@
 import {
   FaPhoneAlt,
   FaFacebook,
-  FaTwitter,
   FaYoutube,
   FaInstagram,
   FaLinkedin,
@@ -99,7 +98,7 @@ const ContactUsForm = () => {
       } else {
         setStatus(`Error: ${result.message}`);
       }
-    } catch (error) {
+    } catch {
       setStatus("An error occurred while sending the message.");
     }
   };
@@ -108,8 +107,8 @@ const ContactUsForm = () => {
     <div className="lg:p-20 p-8 bg-background space-y-10">
       {/* line */}
       <div className="space-y-10">
-        <div className="w-full border border-lin " data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"></div>
-        <button className="border border-lightbrown poppins-light p-2 rounded-full px-5" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <div className="w-full border border-lin " data-aos="fade-up"></div>
+        <button className="border border-lightbrown poppins-light p-2 rounded-full px-5" data-aos="fade-up">
           Get In Touch
         </button>
       </div>
@@ -118,13 +117,13 @@ const ContactUsForm = () => {
         {/* Text */}
         <div className="lg:w-2/3">
           <div className="space-y-10">
-            <h1 className="text-5xl poppins-bold text-brown" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">Contact Us</h1>
-            <p className="text-xl poppins-light text-wrap" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+            <h1 className="text-5xl poppins-bold text-brown" data-aos="fade-up">Contact Us</h1>
+            <p className="text-xl poppins-light text-wrap" data-aos="fade-up">
               Get in touch with us today to start your Robotics journey...
             </p>
           </div>
           {/* contact icons & Text */}
-          <div className="py-5 space-y-2" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+          <div className="py-5 space-y-2" data-aos="fade-up">
             {/* phone */}
             <div className="flex flex-row space-x-2">
               <div className="rounded-full p-2">
@@ -175,7 +174,7 @@ const ContactUsForm = () => {
 
         {/* Line */}
         <div>
-          <div className="h-4/5 w-0 border border-lin" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"></div>
+          <div className="h-4/5 w-0 border border-lin" data-aos="fade-up"></div>
         </div>
 
         {/* Form */}
@@ -380,7 +379,7 @@ const ContactUsForm = () => {
             )}
 
             {/* Submit button */}
-            <div className="text-end p-5" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+            <div className="text-end p-5" data-aos="fade-up">
               <button type="submit" className="justify-between poppins-light hover:bg-yellow hover:text-brown bg-brown p-2 px-3 rounded-md text-white">
                 Send Now
               </button>
@@ -391,7 +390,7 @@ const ContactUsForm = () => {
 
       {/* Line */}
       <div>
-        <div className="h-0 w-full border border-lin" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"></div>
+        <div className="h-0 w-full border border-lin" data-aos="fade-up"></div>
       </div>
     </div>
   );

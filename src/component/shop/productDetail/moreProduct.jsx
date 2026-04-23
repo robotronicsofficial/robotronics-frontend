@@ -81,8 +81,8 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
         <p
           className="lg:text-5xl text-2xl poppins-bold text-brown text-center"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           You May Also Like This
         </p>
@@ -91,8 +91,8 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
         <p
           className="text-line text-wrap poppins-light text-center"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           {config.subtitle}
         </p>
@@ -123,8 +123,8 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
           <div
             className="grid gap-6 lg:grid-cols-3"
             data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
+
+
           >
             {topThree.map((item, index) => (
               <button

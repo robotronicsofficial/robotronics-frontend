@@ -6,7 +6,6 @@ import Marquee from "../component/marquee";
 import logo1 from "../assets/imagesContent/schoollogos/logo1.jpg";
 import logo2 from "../assets/imagesContent/schoollogos/logo2.png";
 import logo3 from "../assets/imagesContent/schoollogos/logo3.png";
-import logo4 from "../assets/imagesContent/schoollogos/logo4.jpg";
 import logo5 from "../assets/imagesContent/schoollogos/logo5.png";
 import logo6 from "../assets/imagesContent/schoollogos/logo6.jpg";
 import logo7 from "../assets/imagesContent/schoollogos/logo7.png";

@@ -7,7 +7,7 @@ import Modal from "react-modal";
 import PinModal from "./popUps/PinModal";
 import ChangePinModal from "./popUps/ChangePinModal";
 import ErrorModal from "./popUps/ErrorModal";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/useAuth";
 import { fetchSessionJson, sendSessionJson } from "../../lib/api";
 import {
   clearActiveChildSession,

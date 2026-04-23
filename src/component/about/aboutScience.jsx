@@ -1,7 +1,5 @@
-import video2 from "../../assets/images/aboutvideo.svg";
-import b5 from "../../assets/imagesContent/bannercode/b5.jpg";
-import b2 from "../../assets/imagesContent/bannercode/b2.jpg";
-import b6 from "../../assets/imagesContent/bannercode/b6.jpg";
+import AppImage from "../AppImage";
+import b6 from "../../assets/imagesContent/bannercode/b6-optimized.webp";
 const AboutScience = () => {
   return (
     <div className="lg:flex flex-col bg-black">
@@ -12,23 +10,23 @@ const AboutScience = () => {
           <p
             className="text-white lg:text-7xl text-2xl poppins-bold"
             data-aos="fade-down"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
+
+
           >
             Turning science <br /> Fiction into <br />{" "}
             <p
               className=" text-yellow poppins-bold pb-2"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               Reality
             </p>
             <p
               className="flex border border-gold h-0 w-32 "
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             ></p>
           </p>
         </div>
@@ -37,14 +35,14 @@ const AboutScience = () => {
           <div
             className="bg-yellow w-32 h-32 rounded-full absolute top-0 left-0"
             data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
+
+
           ></div>
           <p
             className="relative z-10 text-sm text-wrap poppins-light leading-relaxed pt-4 pl-4"
             data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
+
+
           >
             Personal computers have transformed our lives in ways science
             fiction writers could not have imagined. Helper robots have the
@@ -59,14 +57,14 @@ const AboutScience = () => {
             <div
               className="border-t border-yellow pt-4"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               <h2
                 className="text-yellow pb-2 text-xl md:text-3xl "
                 data-aos="fade-up"
-                data-aos-duration="2000"
-                data-aos-delay="4000"
+
+
               ></h2>
             </div>
             <div className="bg-black">
@@ -74,14 +72,14 @@ const AboutScience = () => {
                 <div
                   className="border-t border-white pt-4"
                   data-aos="fade-up"
-                  data-aos-duration="2000"
-                  data-aos-delay="4000"
+
+
                 >
                   <h2
                     className="text-yellow text-xl md:text-3xl font-semibold"
                     data-aos="fade-up"
-                    data-aos-duration="2000"
-                    data-aos-delay="4000"
+
+
                   >
                     Solving Small TO Big
                   </h2>
@@ -92,12 +90,13 @@ const AboutScience = () => {
         </div>
       </div>
       <div className="h-[50vh] md:h-[80vh] w-100 px-10 overflow-hidden ">
-        <img
+        <AppImage
           className="h-full w-full object-cover"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
           src={b6}
+          alt="Science showcase"
         />
       </div>
     </div>

@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo/robotronicsCharacter.svg";
 import basket from "../assets/logo/basket.svg";
-import { useAuth } from "../contexts/AuthContext";
-import Aos from "aos";
+import { useAuth } from "../contexts/useAuth";
 import { useSelector } from "react-redux";
-import StarIcon from "@mui/icons-material/Star";
-import MenuIcon from "@mui/icons-material/Menu"; // Import a proper menu icon
+import { HiOutlineMenuAlt3 } from "react-icons/hi";
+import { IoStarSharp } from "react-icons/io5";
 import { CART_PATH, CONTACT_PATH } from "../router/paths";
 
 const readCurrentUserLabel = (currentUser) => {
@@ -29,10 +28,6 @@ export default function Header() {
   const { currentUser, logout } = useAuth();
   const currentUserLabel = readCurrentUserLabel(currentUser);
 
-  useEffect(() => {
-    Aos.init(); // Initialize AOS library
-  }, []);
-
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
@@ -46,7 +41,7 @@ export default function Header() {
             to="/"
             className="flex items-center"
             data-aos="fade-right"
-            data-aos-duration="2000"
+
           >
             <img src={logo} alt="logo" className="w-12 h-12 sm:w-20 sm:h-20" />
             <h1 className="text-[10px] sm:text-xs poppins-bold">
@@ -60,7 +55,7 @@ export default function Header() {
           <nav
             className="hidden md:flex md:items-center md:justify-center flex-grow"
             data-aos="fade-down"
-            data-aos-duration="2000"
+
           >
             <div className="flex lg:space-x-6 space-x-2 flex-row flex-wrap justify-center">
               <NavLink
@@ -116,7 +111,7 @@ export default function Header() {
                 className="cursor-pointer hover:text-black poppins-light hover:border-b hover:border-black text-black text-sm lg:text-lg font-bold bg-yellow rounded-lg px-2 lg:px-4 flex items-center"
                 to="/Robogeniushome"
               >
-                <StarIcon fontSize="small" />
+                <IoStarSharp className="text-sm" />
                 <span className="ml-1">RoboGenius</span>
               </NavLink>
             </div>
@@ -126,7 +121,7 @@ export default function Header() {
           <div
             className="hidden md:flex md:items-center"
             data-aos="fade-left"
-            data-aos-duration="2000"
+
           >
             <div className="flex gap-x-2 items-center ">
               {currentUser ? (
@@ -204,11 +199,11 @@ export default function Header() {
             <button
               className="block md:hidden rounded-md p-1"
               data-aos="fade-left"
-              data-aos-duration="2000"
+
               onClick={toggleMenu}
               aria-label="Toggle menu"
             >
-              <MenuIcon fontSize="medium" />
+              <HiOutlineMenuAlt3 className="text-2xl" />
             </button>
           </div>
 
@@ -313,7 +308,7 @@ export default function Header() {
                 to="/Robogeniushome"
                 onClick={() => setMenuOpen(false)}
               >
-                <StarIcon fontSize="small" />
+                <IoStarSharp className="text-sm" />
                 <span className="ml-1">RoboGenius</span>
               </NavLink>
 

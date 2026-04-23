@@ -1,4 +1,3 @@
-import Footer from "../../../component/footer";
 import Giftbody from "./Giftbody";
 
 

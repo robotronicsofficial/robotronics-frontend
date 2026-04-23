@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import hide from "../assets/images/hide.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/useAuth";
 
 import { resolveBackendUrl, sendJson } from "../lib/api";
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
@@ -39,7 +39,7 @@ const Login = () => {
         draggable: true,
         progress: undefined,
       });
-      
+
       // Clear the state
       window.history.replaceState({}, document.title);
     }
@@ -77,7 +77,7 @@ const Login = () => {
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     setError('');
-  
+
     try {
       const payload = await sendJson('/auth/forgot-password', {
         method: 'POST',
@@ -142,13 +142,13 @@ const Login = () => {
         <div
           className="flex flex-col lg:space-y-4 space-y-1 items-center justify-center md:pt-36 py-5 pt-32"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="500"
+
+
         >
           <p className="text-center text-wrap justify-center lg:py-10 py-5 md:text-3xl text-2xl poppins-bold text-brown">
             Log in to your account
           </p>
-          <button 
+          <button
             type="button"
             className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-28 px-12"
             onClick={() => handleSocialLogin('facebook')}
@@ -156,7 +156,7 @@ const Login = () => {
             <img className="h-6 w-8" src={facebook} alt="Facebook" />
             Continue with Facebook
           </button>
-          <button 
+          <button
             type="button"
             className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14"
             onClick={() => handleSocialLogin('google')}
@@ -168,8 +168,8 @@ const Login = () => {
         <div
           className="flex flex-row justify-center items-center"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           <div className="h-0 lg:w-52 w-44 border border-line"></div>
           <p className="text-xl font-bold p-2">OR</p>
@@ -179,8 +179,8 @@ const Login = () => {
           onSubmit={handleLogin}
           className="flex flex-col items-center space-y-3"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="2000"
+
+
         >
           <div className="lg:py-8 py-4">
             <p className="text-sm poppins-regular ">Email address</p>
@@ -248,7 +248,7 @@ const Login = () => {
             Don&apos;t have an account?
           </p>
           <div className="lg:pb-10 pb-4">
-            <button 
+            <button
               type="button"
               className="bg-gray border border-line text-brown poppins-regular rounded-3xl items-center justify-center py-3 lg:px-32 px-14"
               onClick={() => navigate('/Signup')}

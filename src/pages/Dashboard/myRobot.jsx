@@ -69,7 +69,7 @@ const MyRobot = () => {
   };
 
   return (
-    <div className="bg-background min-h-screen"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >
+    <div className="bg-background min-h-screen"data-aos="fade-up" >
       {/* intro */}
       <div className="px-4 md:px-20">
         <Intro/>

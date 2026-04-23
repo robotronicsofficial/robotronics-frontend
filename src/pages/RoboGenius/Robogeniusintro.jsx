@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
+import AppImage from "../../component/AppImage";
 import bg from "../../assets/images/courses_details.svg";
-import yt from "../../assets/images/courseDetailsYoutube.svg";
+import yt from "../../assets/images/courseDetailsYoutube.webp";
 import { IoMdShare } from "react-icons/io";
 import { FaFacebookF, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import { MdCheckBox } from "react-icons/md";
@@ -30,12 +31,12 @@ const Robogeniusintro = () => {
             <div
               className="w-full lg:w-2/3 flex flex-col justify-between"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               {/* Image */}
               <div>
-                <img
+                <AppImage
                   src={bg}
                   alt="Course"
                   className="w-full h-auto rounded-2xl shadow-md"
@@ -109,12 +110,12 @@ const Robogeniusintro = () => {
             <div
               className="w-full lg:w-1/3 mt-10 lg:mt-0 space-y-6"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               {/* Video */}
               <div className="bg-gray-300 w-full rounded-md flex justify-center items-center">
-                <img
+                <AppImage
                   src={yt}
                   alt="Course"
                   className="w-full h-auto rounded-md shadow-md"
@@ -135,7 +136,7 @@ const Robogeniusintro = () => {
                     "Easy to Understand Language",
                     "24/7 LIVE Chat Support for Pro Users",
                     "Multiple Child Accounts under one Parent",
-                    
+
                   ].map((item, index) => (
                     <li
                       key={index}

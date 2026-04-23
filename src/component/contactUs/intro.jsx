@@ -1,14 +1,24 @@
-import img from "../../assets/images/contactUsBG.svg"
+import AppImage from "../AppImage";
+import img from "../../assets/images/contactUsBG.webp";
+
 const Intro = () => {
   return (
     <div className="contactUs bg-contactbg" >
-        
-        <div className="w-2/4 text-center lg:p-14 lg:py-14 py-5"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >
+
+        <div className="w-2/4 text-center lg:p-14 lg:py-14 py-5"data-aos="fade-up" >
             <p className="lg:text-6xl text-2xl poppins-extrabold text-[#f5ab34] mt-40" >CONTACT US</p>
-        </div> 
+        </div>
         <div className="px-44" >
             {/* image */}
-            <img src={img} alt="Contact_US" className=""data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"/>
+            <AppImage
+              src={img}
+              alt="Contact_US"
+              loading="eager"
+              className=""
+              data-aos="fade-up"
+
+
+            />
         </div>
     </div>
   )

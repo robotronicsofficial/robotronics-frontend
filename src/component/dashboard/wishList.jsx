@@ -84,7 +84,7 @@ const WishListD = () => {
 
   return (
     <div className="bg-background">
-      <div className="flex flex-row" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <div className="flex flex-row" data-aos="fade-up">
         <div className="w-1/3">
           <LeftNav />
         </div>

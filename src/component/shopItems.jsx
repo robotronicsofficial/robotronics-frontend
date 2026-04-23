@@ -1,4 +1,5 @@
-import python from "../assets/images/python.svg"
+import AppImage from "./AppImage";
+import python from "../assets/images/python.webp"
 import time from "../assets/logo/time-svgrepo-com 1.svg"
 import download from "../assets/logo/download.svg"
 import sale from "../assets/logo/sales.svg" 
@@ -9,7 +10,7 @@ const ShopItems = () => {
         <div className="flex-1 xl:w-1/4 md:w-1/2 p-4"  >
             <div>
               <div className="bg-white p-6 rounded-xl">
-                <img
+                <AppImage
                   className="h-50 rounded-xl w-full object-cover object-center"
                   src={python}
                   alt="content"

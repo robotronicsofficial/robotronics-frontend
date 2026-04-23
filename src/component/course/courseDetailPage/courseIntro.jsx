@@ -1,5 +1,7 @@
-import robo from "../../../assets/images/shopRobot.svg";
-import python from "../../../assets/images/python.svg";
+import PropTypes from "prop-types";
+import AppImage from "../../AppImage";
+import robo from "../../../assets/images/shopRobot.webp";
+import python from "../../../assets/images/python.webp";
 import star from "../../../assets/images/shopStar.svg";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,15 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { addToCart } from "../../../store/cart/cartSlice";
 import { createCourseCommerceItem } from "../../../lib/commerceItems";
 import { CART_PATH } from "../../../router/paths";
-import { BACKEND_BASE_URL } from "../../../lib/api";
+import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 const CourseIntro = ({ title, id, image, price, category }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const resolvedImage = image
-    ? image.startsWith("http")
-      ? image
-      : `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`
-    : python;
+  const resolvedImage = resolveBackendAssetUrl(image, python);
 
   const handleAddToCart = () => {
     const cartItem = createCourseCommerceItem({
@@ -37,17 +35,18 @@ const CourseIntro = ({ title, id, image, price, category }) => {
   };
 
   return (
-    <div className="bg-lightgray"data-aos="fade-right" data-aos-duration="2000" data-aos-delay="4000">
+    <div className="bg-lightgray"data-aos="fade-right">
       {/* parent */}
       <div className=" p-10 lg:flex flex-row ">
         {/* left */}
         <div className="lg:flex flex-row justify-center ">
           {/* img */}
           <div className="rounded-full bg-gray max-w-full max-h-full flex items-center justify-center">
-            <img
+            <AppImage
               src={resolvedImage}
               className="rounded-full object-cover md:w-full md:h-full"
               alt={title || "Course"}
+              loading="eager"
             />
           </div>
 
@@ -55,19 +54,19 @@ const CourseIntro = ({ title, id, image, price, category }) => {
           <div className="flex flex-row space-x-3 py-10">
             {/* pic 1 */}
             <div className="h-10 w-10 bg-white shadow-lg">
-              <img src={robo} className="h-10 w-10" alt="" />
+              <AppImage src={robo} className="h-10 w-10" alt="" />
             </div>
             {/* pic 2 */}
             <div className="h-10 w-10 bg-white shadow-lg">
-              <img src={robo} className="h-10 w-10" alt="" />
+              <AppImage src={robo} className="h-10 w-10" alt="" />
             </div>
             {/* pic 3 */}
             <div className="h-10 w-10 bg-white shadow-lg">
-              <img src={robo} className="h-10 w-10" alt="" />
+              <AppImage src={robo} className="h-10 w-10" alt="" />
             </div>
             {/* pic 4 */}
             <div className="h-10 w-10 bg-white shadow-lg">
-              <img src={robo} className="h-10 w-10" alt="" />
+              <AppImage src={robo} className="h-10 w-10" alt="" />
             </div>
           </div>
         </div>
@@ -132,6 +131,14 @@ const CourseIntro = ({ title, id, image, price, category }) => {
       </div>
     </div>
   );
+};
+
+CourseIntro.propTypes = {
+  title: PropTypes.string,
+  id: PropTypes.string,
+  image: PropTypes.string,
+  price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  category: PropTypes.string,
 };
 
 export default CourseIntro;
