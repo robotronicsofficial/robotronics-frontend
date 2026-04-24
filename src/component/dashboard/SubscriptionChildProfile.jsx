@@ -200,9 +200,9 @@ const SubscriptionChildProfile = () => {
       
       // Navigate based on whether courses exist
       if (selectedCourses.length > 0) {
-        navigate(`/Dashboard/myAllCourses/${childAccessId}`);
+        navigate("/Dashboard/myAllCourses");
       } else {
-        navigate(`/Dashboard/MyCoursesPage/${childAccessId}`);
+        navigate("/Dashboard/MyCoursesPage");
       }
     } catch (err) {
       console.error('Error verifying PIN:', err);

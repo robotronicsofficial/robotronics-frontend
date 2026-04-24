@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { Button } from '@/components/ui/button';
 import DialogShell from '@/components/ui/dialog-shell';
@@ -11,18 +11,11 @@ import {
 } from '../utils/childSessionRequest';
 import { useChildSessionVerification } from '../hooks/useChildSessionQuery';
 
-const CHILD_PARAM_ROUTE_PREFIXES = [
-  '/Dashboard/MyCoursesPage/',
-  '/Dashboard/myAllCourses/',
-];
-
 const ProtectedChild = ({ children }) => {
   const [sessionStatus, setSessionStatus] = useState('checking');
   const [showSessionPopup, setShowSessionPopup] = useState(false);
   const [sessionMessage, setSessionMessage] = useState('This child session is no longer valid. Re-enter the PIN to continue.');
   const navigate = useNavigate();
-  const location = useLocation();
-  const params = useParams();
   const [searchParams] = useSearchParams();
   const activeChildSession = getActiveChildSession();
   const childId = activeChildSession?.childId || null;
@@ -31,16 +24,8 @@ const ProtectedChild = ({ children }) => {
 
   const expectedChildId = useMemo(() => {
     const childIdFromQuery = searchParams.get('childId');
-    if (childIdFromQuery) {
-      return childIdFromQuery;
-    }
-
-    const usesChildIdInPath = CHILD_PARAM_ROUTE_PREFIXES.some((prefix) =>
-      location.pathname.startsWith(prefix)
-    );
-
-    return usesChildIdInPath && params.id ? String(params.id) : null;
-  }, [location.pathname, params.id, searchParams]);
+    return childIdFromQuery ? String(childIdFromQuery) : null;
+  }, [searchParams]);
   const expectedChildMatchesSession = !expectedChildId || childIds.includes(expectedChildId);
   const sessionQuery = useChildSessionVerification({
     childId,

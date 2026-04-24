@@ -52,7 +52,7 @@ const MyCourses = () => {
       await saveChildCoursesMutation.mutateAsync({ childId, courseIds: selectedCourses });
 
       setTimeout(() => {
-        navigate(`/Dashboard/myAllCourses/${childId}`);
+        navigate("/Dashboard/myAllCourses");
       }, 1500);
     } catch (err) {
       console.error("Error saving courses:", err);
