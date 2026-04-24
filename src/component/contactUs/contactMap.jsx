@@ -73,7 +73,7 @@ const ContactMap = () => {
             address={officeLocation.address}
           />
         </MapContainer>
-        <div className="absolute bottom-8 right-8 rounded-lg bg-overlay p-4 text-white shadow-lg">
+        <div className="absolute bottom-8 right-8 rounded-lg bg-overlay p-4 text-background shadow-lg">
           <h1 className="text-xl font-bold mb-2">Our Footprint</h1>
           <h2 className="text-3xl font-bold text-primary">In Lahore</h2>
         </div>

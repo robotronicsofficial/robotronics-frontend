@@ -126,7 +126,7 @@ const GiftCourseBody = () => {
             </div>
 
             {!courseItems.length ? (
-              <div className="mx-auto mb-6 max-w-4xl rounded-md bg-white p-5 text-foreground">
+              <div className="mx-auto mb-6 max-w-4xl rounded-md bg-card p-5 text-foreground">
                 <p className="poppins-medium">
                   Choose at least one course before sending a gift request.
                 </p>
@@ -270,7 +270,7 @@ const GiftCourseBody = () => {
               <div className="flex flex-wrap gap-3">
                 <button
                   type="button"
-                  className="poppins-bold rounded-lg bg-white px-5 py-2 text-sm text-muted-foreground lg:px-12 lg:text-xl"
+                  className="poppins-bold rounded-lg bg-card px-5 py-2 text-sm text-muted-foreground lg:px-12 lg:text-xl"
                   onClick={() => navigate(COURSE_PATH)}
                   disabled={isSubmitting}
                 >
@@ -278,7 +278,7 @@ const GiftCourseBody = () => {
                 </button>
                 <button
                   type="submit"
-                  className="poppins-bold rounded-lg bg-foreground px-5 py-2 text-sm text-white disabled:opacity-60 lg:px-12 lg:text-xl"
+                  className="poppins-bold rounded-lg bg-foreground px-5 py-2 text-sm text-background disabled:opacity-60 lg:px-12 lg:text-xl"
                   disabled={isSubmitting || !courseItems.length}
                 >
                   {isSubmitting ? "Sending..." : "Send Gift"}

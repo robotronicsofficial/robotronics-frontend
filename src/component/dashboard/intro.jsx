@@ -13,7 +13,7 @@ const Intro = () => {
                 <a
                   href={breadcrumb.href}
                   className={`text-xs lg:text-sm poppins-extralight ${
-                    index === breadcrumbs.length - 1 ? "text-black" : ""
+                    index === breadcrumbs.length - 1 ? "text-foreground" : ""
                   }`}
                 >
                   {breadcrumb.name}

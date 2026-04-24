@@ -248,7 +248,7 @@ const SubscriptionChildProfile = () => {
               const hasPin = child.hasPin;
               return (
                 <div key={child._id} className="w-full p-2 md:w-1/2 md:p-3">
-                  <div className="flex flex-col space-y-5 bg-white rounded-xl p-5 shadow-lg w-full md:w-[25vw] min-w-[280px]">
+                  <div className="flex flex-col space-y-5 bg-card rounded-xl p-5 shadow-lg w-full md:w-[25vw] min-w-[280px]">
                     <div className="space-y-6 md:space-y-8">
                       <div className="flex items-center gap-4 md:gap-6">
                         <FaUserCircle className="text-3xl md:text-4xl" />
@@ -280,7 +280,7 @@ const SubscriptionChildProfile = () => {
                         <button
                           onClick={() => handleViewCourses(child._id)}
                           className={`text-xs sm:text-sm poppins-light border border-border rounded-lg px-2 py-1 sm:px-3 sm:py-2 ${
-                            hasPin ? 'bg-primary text-white cursor-pointer' : 'bg-background-300 text-muted-foreground-500 cursor-not-allowed'
+                            hasPin ? 'bg-primary text-background cursor-pointer' : 'bg-background-300 text-muted-foreground-500 cursor-not-allowed'
                           } md:text-base`}
                           disabled={!hasPin}
                         >
@@ -288,7 +288,7 @@ const SubscriptionChildProfile = () => {
                         </button>
                         <button
                           onClick={() => openPinModal(child._id, hasPin)}
-                          className="text-xs sm:text-sm poppins-light border border-border rounded-lg px-2 py-1 sm:px-3 sm:py-2 bg-primary text-white md:text-base"
+                          className="text-xs sm:text-sm poppins-light border border-border rounded-lg px-2 py-1 sm:px-3 sm:py-2 bg-primary text-background md:text-base"
                         >
                           {hasPin ? 'Change PIN' : 'Create Login Pin'}
                         </button>

@@ -8,7 +8,7 @@ const Decription = ({ description }) => {
         <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
           PRODUCT DETAIL
         </p>
-        <p className="h-8 w-0 border border-black "></p>
+        <p className="h-8 w-0 border border-foreground "></p>
         <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
           DELIVERY AND RETURN
         </p>

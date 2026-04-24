@@ -114,7 +114,7 @@ const ShopCartproductList = ({ onNext }) => {
                     ))}
                   </div>
                   <div className="mb-4 flex justify-end gap-4">
-                    <div className="flex items-center justify-center bg-white">
+                    <div className="flex items-center justify-center bg-card">
                       <button
                         type="button"
                         onClick={() => handleRemoveFromCart(product)}
@@ -213,7 +213,7 @@ const ShopCartproductList = ({ onNext }) => {
             type="button"
             onClick={handleNext}
             aria-label="Proceed to Checkout"
-            className="flex h-11 w-[408px] items-center justify-center gap-2.5 bg-foreground p-3 font-semibold text-white transition"
+            className="flex h-11 w-[408px] items-center justify-center gap-2.5 bg-foreground p-3 font-semibold text-background transition"
           >
             PROCEED TO CHECKOUT
           </button>

@@ -109,7 +109,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-3">
             {tags.map((tag, index) => (
-              <span key={`${tag}-${index}`} className="bg-white border border-border px-4 py-2 rounded-full text-sm poppins-light">
+              <span key={`${tag}-${index}`} className="bg-card border border-border px-4 py-2 rounded-full text-sm poppins-light">
                 {tag}
               </span>
             ))}
@@ -131,23 +131,23 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         <div className="flex w-5/6 justify-center gap-2">
           {previousBlog ? (
             <Link to={`/BlogDetail/${previousBlog._id}`}>
-              <button className="bg-foreground text-white poppins-light hover:bg-primary py-2 px-8 rounded-md">
+              <button className="bg-foreground text-background poppins-light hover:bg-primary py-2 px-8 rounded-md">
                 Previous
               </button>
             </Link>
           ) : (
-            <button className="bg-background-300 text-white poppins-light py-2 px-8 rounded-md cursor-not-allowed" disabled>
+            <button className="bg-background-300 text-background poppins-light py-2 px-8 rounded-md cursor-not-allowed" disabled>
               Previous
             </button>
           )}
           {nextBlog ? (
             <Link to={`/BlogDetail/${nextBlog._id}`}>
-              <button className="bg-foreground text-white hover:bg-primary poppins-light py-2 px-12 rounded-md">
+              <button className="bg-foreground text-background hover:bg-primary poppins-light py-2 px-12 rounded-md">
                 Next
               </button>
             </Link>
           ) : (
-            <button className="bg-background-300 text-white poppins-light py-2 px-12 rounded-md cursor-not-allowed" disabled>
+            <button className="bg-background-300 text-background poppins-light py-2 px-12 rounded-md cursor-not-allowed" disabled>
               Next
             </button>
           )}

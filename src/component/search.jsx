@@ -37,9 +37,9 @@ const Search = () => {
   }, [products, searchTerm, category]);
 
   return (
-    <div className="min-h-screen bg-background-50 text-white p-4">
+    <div className="min-h-screen bg-background-50 text-background p-4">
       {/* Search Bar and Filters */}
-      <div className="rounded-2xl bg-white p-6 text-foreground shadow-sm">
+      <div className="rounded-2xl bg-card p-6 text-foreground shadow-sm">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.2em] text-accent">Live catalog</p>
@@ -77,15 +77,15 @@ const Search = () => {
       {/* Results Grid */}
       <div className="my-6">
         {loading ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-foreground shadow-sm">
+          <div className="rounded-2xl bg-card p-10 text-center text-foreground shadow-sm">
             Loading live products...
           </div>
         ) : error ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-red-600 shadow-sm">
+          <div className="rounded-2xl bg-card p-10 text-center text-red-600 shadow-sm">
             We couldn&apos;t load products right now.
           </div>
         ) : filteredProducts.length === 0 ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-foreground shadow-sm">
+          <div className="rounded-2xl bg-card p-10 text-center text-foreground shadow-sm">
             No products matched your search.
           </div>
         ) : (
@@ -95,7 +95,7 @@ const Search = () => {
                 key={product._id}
                 type="button"
                 onClick={() => navigate(`/ProductDetailPage/${product._id}`)}
-                className="overflow-hidden rounded-2xl bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="overflow-hidden rounded-2xl bg-card text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
                 <img
                   src={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}

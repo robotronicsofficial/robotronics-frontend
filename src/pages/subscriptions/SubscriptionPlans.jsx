@@ -54,7 +54,7 @@ const SubscriptionPlans = () => {
 
               <button
                 type="button"
-                className={`w-14 h-7 bg-white rounded-full flex items-center p-1 ${
+                className={`w-14 h-7 bg-card rounded-full flex items-center p-1 ${
                   isAnnual ? "justify-end" : "justify-start"
                 }`}
                 onClick={() => setIsAnnual((currentValue) => !currentValue)}
@@ -80,7 +80,7 @@ const SubscriptionPlans = () => {
             ) : null}
 
             <button
-              className="bg-orange-400 text-white py-2 px-6 rounded-lg mb-4 w-fit poppins-light"
+              className="bg-orange-400 text-background py-2 px-6 rounded-lg mb-4 w-fit poppins-light"
               onClick={() => handleRegisterClick(membership)}
             >
               Start Membership

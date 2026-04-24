@@ -49,7 +49,7 @@ const MyRobot = () => {
             <h1 className="text-foreground poppins-bold lg:text-2xl text-base">My Saved Items</h1>
             <p className="text-sm text-muted-foreground">Items you saved for later from the live catalog.</p>
           </div>
-          <div className="rounded-xl bg-white px-4 py-3 text-sm text-foreground shadow-sm">
+          <div className="rounded-xl bg-card px-4 py-3 text-sm text-foreground shadow-sm">
             Saved items: <span className="font-bold">{items.length}</span> · Value: <span className="font-bold">PKR {Number(totalValue || 0).toLocaleString()}</span>
           </div>
         </div>
@@ -74,7 +74,7 @@ const MyRobot = () => {
             {items.map((item) => (
               <div
                 key={`${item.itemType}:${item.itemId}`}
-                className="flex flex-col gap-5 rounded-2xl bg-white p-5 shadow-sm lg:flex-row lg:items-center lg:justify-between"
+                className="flex flex-col gap-5 rounded-2xl bg-card p-5 shadow-sm lg:flex-row lg:items-center lg:justify-between"
               >
                 <div className="flex items-center gap-5">
                   <button
@@ -112,7 +112,7 @@ const MyRobot = () => {
                   <button
                     type="button"
                     onClick={() => navigate(getCommerceItemRoute(item))}
-                    className="rounded-lg bg-orange-500 px-4 py-2 font-semibold text-white"
+                    className="rounded-lg bg-orange-500 px-4 py-2 font-semibold text-background"
                   >
                     {item?.itemType === "course" ? "View course" : "View product"}
                   </button>

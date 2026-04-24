@@ -91,7 +91,7 @@ const SocialLink = ({ Icon, className, href }) => (
     rel="noopener noreferrer"
     className={`rounded-xl bg-foreground p-1 shadow-md transition-colors duration-300 ease-out hover:shadow-lg lg:p-3 ${className}`}
   >
-    <Icon className="text-white" />
+    <Icon className="text-background" />
   </a>
 );
 
@@ -324,7 +324,7 @@ const ContactUsForm = () => {
               <button
                 type="submit"
                 disabled={contactRequestMutation.isPending}
-                className="justify-between rounded-md bg-foreground p-2 px-3 text-white poppins-light hover:bg-primary hover:text-foreground"
+                className="justify-between rounded-md bg-foreground p-2 px-3 text-background poppins-light hover:bg-primary hover:text-foreground"
               >
                 {contactRequestMutation.isPending ? "Sending..." : "Send Now"}
               </button>

@@ -21,7 +21,7 @@ const Screen = () => {
             <div className="flex flex-row px-10 justify-end">
                 <div className="flex lg:space-x-32">
                     <Link
-                        className="pt-24 text-sm md:text-lg border border-foreground rounded-full w-32 h-32 hover:bg-black hover:text-white transition-all duration-300 inline-flex items-center justify-center"
+                        className="pt-24 text-sm md:text-lg border border-foreground rounded-full w-32 h-32 hover:bg-foreground hover:text-background transition-all duration-300 inline-flex items-center justify-center"
                         to="/"
                     >
                         Explore Us →

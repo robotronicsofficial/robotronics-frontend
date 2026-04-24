@@ -80,7 +80,7 @@ const ShopCoursesIntro = () => {
             <p className="text-xl poppins-bold lg:text-2xl">Catalog</p>
             <div className="flex lg:gap-3">
               <div className="flex flex-1">
-                <button type="button" className="border border-border bg-white p-2">
+                <button type="button" className="border border-border bg-card p-2">
                   <img src={icon} alt="search" />
                 </button>
                 <input
@@ -91,7 +91,7 @@ const ShopCoursesIntro = () => {
               </div>
 
               <div className="flex">
-                <button type="button" className="border border-border bg-white">
+                <button type="button" className="border border-border bg-card">
                   <img src={arow} alt="arrow" />
                 </button>
                 <input
@@ -114,8 +114,8 @@ const ShopCoursesIntro = () => {
                 type="button"
                 onClick={() => setSelectedFilter(filter.value)}
                 className={cn(
-                  "block pt-2 text-left text-sm poppins-light hover:text-black lg:pt-5 lg:text-base",
-                  selectedFilter === filter.value ? "text-black" : "text-foreground",
+                  "block pt-2 text-left text-sm poppins-light hover:text-foreground lg:pt-5 lg:text-base",
+                  selectedFilter === filter.value ? "text-foreground" : "text-foreground",
                 )}
               >
                 {filter.label}
@@ -152,7 +152,7 @@ const ShopCoursesIntro = () => {
               <button
                 type="button"
                 key={page}
-                className="bg-white p-1 px-3 text-sm hover:bg-primary lg:text-base"
+                className="bg-card p-1 px-3 text-sm hover:bg-primary lg:text-base"
                 data-aos="fade-up"
               >
                 {page}

@@ -51,14 +51,14 @@ const CheckoutIntro = ({ activeStep = 1 }) => {
 
         <div className="self-center w-full max-w-6xl px-4 lg:px-8">
           <div className="p-2">
-            <div className="relative h-0 border border-black">
+            <div className="relative h-0 border border-foreground">
               {STEPS.map((_, index) => {
                 return (
                   <div
                     key={index}
                     className={cn(
                       "absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full",
-                      index <= activeIndex ? "bg-black" : "bg-background",
+                      index <= activeIndex ? "bg-foreground" : "bg-background",
                       STEP_DOT_POSITIONS[index],
                     )}
                   />

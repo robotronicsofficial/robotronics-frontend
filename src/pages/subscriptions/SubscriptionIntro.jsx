@@ -49,7 +49,7 @@ const SubscriptionIntro = () => {
                   <h1 className="text-3xl sm:text-3xl lg:text-5xl text-foreground font-medium pt-6 lg:pt-0 poppins-bold">
                     Learning Subscription
                   </h1>
-                  <button className="border bg-red-600 text-white text-sm md:text-base lg:text-lg px-4 md:px-6 py-2 md:py-3 w-full sm:w-auto rounded-lg pointer-events-none">
+                  <button className="border bg-red-600 text-background text-sm md:text-base lg:text-lg px-4 md:px-6 py-2 md:py-3 w-full sm:w-auto rounded-lg pointer-events-none">
                     ON SALE
                   </button>
                 </div>
@@ -74,7 +74,7 @@ const SubscriptionIntro = () => {
 
                     {/* Share Options */}
                     {showShare && (
-                      <div className="absolute top-8 right-0 z-dropdown bg-white rounded shadow-md p-2 flex flex-col gap-2 min-w-[140px]">
+                      <div className="absolute top-8 right-0 z-dropdown bg-card rounded shadow-md p-2 flex flex-col gap-2 min-w-[140px]">
                         <a
                           href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
                           target="_blank"
@@ -123,7 +123,7 @@ const SubscriptionIntro = () => {
               </div>
 
               {/* Features */}
-              <div className="bg-white px-4 sm:px-6 md:px-10 lg:px-8 py-6 sm:py-7 rounded-md shadow-md w-full">
+              <div className="bg-card px-4 sm:px-6 md:px-10 lg:px-8 py-6 sm:py-7 rounded-md shadow-md w-full">
                 <h3 className="text-lg sm:text-xl mb-4 font-semibold poppins-bold">
                 Subscription features:
                 </h3>

@@ -34,7 +34,7 @@ const SubscriptionProgressCertificate = () => {
                   key={index}
                   className="w-full p-2 sm:w-1/2 md:p-3"
                 >
-                  <div className="flex flex-col space-y-3 bg-white rounded-xl p-5 shadow-lg w-full min-w-[280px] md:w-[27vw] max-w-[450px]">
+                  <div className="flex flex-col space-y-3 bg-card rounded-xl p-5 shadow-lg w-full min-w-[280px] md:w-[27vw] max-w-[450px]">
                     <div className="flex items-center gap-4 mb-3">
                       <FaUserCircle className="text-4xl text-muted-foreground-600" />
                       <p className="text-xl font-semibold text-muted-foreground-800">
@@ -54,7 +54,7 @@ const SubscriptionProgressCertificate = () => {
                     </div>
 
                     <button
-                      className="mt-3 w-full text-sm poppins-light border border-border rounded-lg px-3 py-2 bg-primary text-white hover:bg-primary-600 transition-colors"
+                      className="mt-3 w-full text-sm poppins-light border border-border rounded-lg px-3 py-2 bg-primary text-background hover:bg-primary-600 transition-colors"
                       onClick={() => {
                         if (!isUnlockedChild || !childRouteId) {
                           navigate("/Dashboard/ChildProfile");

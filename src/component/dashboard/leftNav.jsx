@@ -97,7 +97,7 @@ const LeftNav = () => {
                   {item.subMenu.map((subItem, subIndex) => (
                     <li
                       key={subIndex}
-                      className="text-foreground hover:text-black hover:bg-primary rounded-md px-2 py-1"
+                      className="text-foreground hover:text-foreground hover:bg-primary rounded-md px-2 py-1"
                     >
                       <Link to={subItem.href}>{subItem.name}</Link>
                     </li>

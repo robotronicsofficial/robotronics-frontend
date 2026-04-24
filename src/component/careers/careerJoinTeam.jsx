@@ -68,7 +68,7 @@ const CareerJoinTeam = () => {
               {hoveredIndex === index && (
                 <button
                   type="button"
-                  className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 border border-foreground p-3 bg-white rounded-full hover:bg-foreground hover:text-white"
+                  className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 border border-foreground p-3 bg-card rounded-full hover:bg-foreground hover:text-background"
                   onClick={(event) => {
                     event.stopPropagation();
                     navigate(`/CareerDetailPage/${job._id}`);

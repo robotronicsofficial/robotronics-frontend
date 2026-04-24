@@ -35,7 +35,7 @@ const Shopproduct = ({
           />
         </div>
         <div className="text-wrap w-full">
-          <p className="text-foreground hover:text-black text-xl poppins-bold my-2">
+          <p className="text-foreground hover:text-foreground text-xl poppins-bold my-2">
             {title}
           </p>
           <p className="text-accent poppins-bold text-xl">PKR {Number(price || 0).toLocaleString()}</p>

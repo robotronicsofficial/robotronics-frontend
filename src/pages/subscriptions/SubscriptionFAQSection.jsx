@@ -76,7 +76,7 @@ const SubscriptionFAQSection = () => {
       {faqs.map((faq, index) => (
         <div
           key={index}
-          className="bg-white rounded-xl p-5 shadow-sm cursor-pointer"
+          className="bg-card rounded-xl p-5 shadow-sm cursor-pointer"
           onClick={() => toggleFAQ(index)}
         >
           <div className="flex justify-between items-center">

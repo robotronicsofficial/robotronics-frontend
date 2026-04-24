@@ -120,7 +120,7 @@ const ShopPaymentMethod = ({ onNext }) => {
         className="flex flex-col gap-10 lg:w-2/3"
         data-aos="fade-up"
       >
-        <div className="flex flex-col gap-4 border border-muted bg-white p-6">
+        <div className="flex flex-col gap-4 border border-muted bg-card p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-2">
               <p className="text-3xl text-foreground poppins-bold">SHIPPING & PAYMENT</p>
@@ -182,7 +182,7 @@ const ShopPaymentMethod = ({ onNext }) => {
                     key={service.value}
                     type="button"
                     className={`w-full border p-5 text-left transition ${
-                      isSelected ? "bg-foreground text-white border-foreground" : "bg-white text-foreground border-muted"
+                      isSelected ? "bg-foreground text-background border-foreground" : "bg-card text-foreground border-muted"
                     }`}
                     onClick={() => setSelectedService(service.value)}
                   >
@@ -230,7 +230,7 @@ const ShopPaymentMethod = ({ onNext }) => {
                   key={method.value}
                   type="button"
                   className={`border p-5 text-left transition ${
-                    isSelected ? "bg-foreground text-white border-foreground" : "bg-white text-foreground border-muted"
+                    isSelected ? "bg-foreground text-background border-foreground" : "bg-card text-foreground border-muted"
                   }`}
                   onClick={() => setSelectedMethod(method.value)}
                 >
@@ -305,7 +305,7 @@ const ShopPaymentMethod = ({ onNext }) => {
                 />
               </div>
             ) : (
-              <div className="border border-dashed border-border bg-white p-4 text-sm text-foreground">
+              <div className="border border-dashed border-border bg-card p-4 text-sm text-foreground">
                 The last four digits of your account number will be stored with the order summary.
               </div>
             )}

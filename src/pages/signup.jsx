@@ -131,7 +131,7 @@ const Signup = () => {
         <div className="hidden lg:block">
           <div className="flex flex-col items-start gap-5 p-5">
             <p
-              className="text-6xl text-white text-wrap poppins-bold"
+              className="text-6xl text-background text-wrap poppins-bold"
               data-aos="fade-up"
 
 
@@ -139,7 +139,7 @@ const Signup = () => {
               Robotics
             </p>
             <p
-              className="text-2xl poppins-light text-white"
+              className="text-2xl poppins-light text-background"
               data-aos="fade-up"
 
 
@@ -222,7 +222,7 @@ const Signup = () => {
                   }}
                   countrySelectProps={{
                     className: "absolute left-0 top-0 h-full flex items-center pl-2 touch-manipulation",
-                    dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-white shadow-lg border border-border-200 rounded-md w-60 max-w-full mt-1",
+                    dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-card shadow-lg border border-border-200 rounded-md w-60 max-w-full mt-1",
                     buttonClass: "flex items-center justify-center h-full px-2 focus:outline-none"
                   }}
                   containerClass="relative w-full"
@@ -322,7 +322,7 @@ const Signup = () => {
               >
                 {registerMutation.isPending ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-background" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>

@@ -17,10 +17,10 @@ const Offers = () => {
      </div>
    </div>
    <div className="text-center sm:text-left">
-     <h3 className="text-white poppins-bold text-xl sm:text-2xl">
+     <h3 className="text-background poppins-bold text-xl sm:text-2xl">
        Innovations
      </h3>
-     <p className="text-white poppins-medium text-xs xs:text-sm sm:text-base mt-2 sm:mt-3 max-w-[280px] xs:max-w-none mx-auto sm:mx-0 text-wrap">
+     <p className="text-background poppins-medium text-xs xs:text-sm sm:text-base mt-2 sm:mt-3 max-w-[280px] xs:max-w-none mx-auto sm:mx-0 text-wrap">
        Innovation in robotics refers to the ability to develop new ideas, techniques or technologies that improve or redefine robotic systems.
      </p>
    </div>
@@ -34,10 +34,10 @@ const Offers = () => {
      </div>
    </div>
    <div className="text-center sm:text-left">
-     <h3 className="text-white poppins-bold text-xl sm:text-2xl">
+     <h3 className="text-background poppins-bold text-xl sm:text-2xl">
        Critical Thinking
      </h3>
-     <p className="text-white poppins-medium text-xs xs:text-sm sm:text-base mt-2 sm:mt-3 max-w-[280px] xs:max-w-none mx-auto sm:mx-0 text-wrap">
+     <p className="text-background poppins-medium text-xs xs:text-sm sm:text-base mt-2 sm:mt-3 max-w-[280px] xs:max-w-none mx-auto sm:mx-0 text-wrap">
        Critical thinking skills in robotics involve analyzing and evaluating problems logically to make informed decisions.
      </p>
    </div>
@@ -51,10 +51,10 @@ const Offers = () => {
      </div>
    </div>
    <div className="text-center sm:text-left">
-     <h3 className="text-white poppins-bold text-xl sm:text-2xl">
+     <h3 className="text-background poppins-bold text-xl sm:text-2xl">
        Problem Solving
      </h3>
-     <p className="text-white poppins-medium text-xs xs:text-sm sm:text-base mt-2 sm:mt-3 max-w-[280px] xs:max-w-none mx-auto sm:mx-0 text-wrap">
+     <p className="text-background poppins-medium text-xs xs:text-sm sm:text-base mt-2 sm:mt-3 max-w-[280px] xs:max-w-none mx-auto sm:mx-0 text-wrap">
        Problem-solving ability in robotics focuses on identifying challenges and developing practical solutions through systematic approaches.
      </p>
    </div>

@@ -54,7 +54,7 @@ const SubscriptionCourses = () => {
       {/* Left Button - Hidden on mobile */}
       <button
         onClick={prevCourse}
-        className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 bg-white text-black p-3 rounded-full shadow-md hover:bg-background-300 transition mx-4 md:mx-12 lg:mx-24"
+        className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 bg-card text-foreground p-3 rounded-full shadow-md hover:bg-background-300 transition mx-4 md:mx-12 lg:mx-24"
       >
         <FaCircleArrowLeft />
       </button>
@@ -69,7 +69,7 @@ const SubscriptionCourses = () => {
               className="w-full max-w-xs sm:max-w-none sm:w-1/2 lg:w-1/3 px-2 sm:px-4 mb-2 p-2 sm:p-6"
             >
 
-              <div className="bg-white p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
+              <div className="bg-card p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
                 <img
                     className="rounded-xl w-full h-48 sm:h-56 object-cover"
                     src={resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")}
@@ -97,7 +97,7 @@ const SubscriptionCourses = () => {
                 <div className="px-4 sm:px-8 mb-4 flex flex-col sm:flex-row gap-2 py-4">
                   <div className="w-full flex justify-center mb-4 py-4">
                     <button onClick={handleViewDetails}
-                    className="bg-primary text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
+                    className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
                       <span>View Course</span>
                       <FaArrowDown className="text-xs -rotate-90" />
                     </button>
@@ -106,7 +106,7 @@ const SubscriptionCourses = () => {
 
 
                   {/* 
-                  <button className="bg-primary text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
+                  <button className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
                     <span>Activate Course</span>
                   </button> */}
                 </div>
@@ -118,7 +118,7 @@ const SubscriptionCourses = () => {
       {/* Right Button - Hidden on mobile */}
       <button
         onClick={nextCourse}
-        className="hidden sm:block absolute right-0 top-1/2 transform -translate-y-1/2 bg-white text-black p-3 rounded-full shadow-md hover:bg-background-300 transition mx-4 md:mx-12 lg:mx-24"
+        className="hidden sm:block absolute right-0 top-1/2 transform -translate-y-1/2 bg-card text-foreground p-3 rounded-full shadow-md hover:bg-background-300 transition mx-4 md:mx-12 lg:mx-24"
       >
         <FaCircleArrowRight />
       </button>
@@ -127,13 +127,13 @@ const SubscriptionCourses = () => {
       <div className="sm:hidden flex justify-center gap-4 mt-4">
         <button
           onClick={prevCourse}
-          className="bg-white text-black p-2 rounded-full shadow-md hover:bg-background-300 transition"
+          className="bg-card text-foreground p-2 rounded-full shadow-md hover:bg-background-300 transition"
         >
           <FaCircleArrowLeft />
         </button>
         <button
           onClick={nextCourse}
-          className="bg-white text-black p-2 rounded-full shadow-md hover:bg-background-300 transition"
+          className="bg-card text-foreground p-2 rounded-full shadow-md hover:bg-background-300 transition"
         >
           <FaCircleArrowRight />
         </button>

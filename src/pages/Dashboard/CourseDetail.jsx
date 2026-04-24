@@ -267,7 +267,7 @@ const CourseDetail = () => {
                   />
                 </div>
                 <div className="flex items-center gap-8 pt-4">
-                  <span className="bg-background-200 text-muted-foreground-800 text-sm font-medium px-3 py-1 bg-white rounded-full">
+                  <span className="bg-background-200 text-muted-foreground-800 text-sm font-medium px-3 py-1 bg-card rounded-full">
                     {courseData.category}
                   </span>
                   <div className="flex items-center justify-center gap-2">
@@ -281,7 +281,7 @@ const CourseDetail = () => {
                         } else if (i === fullStars && hasHalfStar) {
                           return <span key={i} className="text-primary text-2xl">☆</span>;
                         } else {
-                          return <span key={i} className="text-white text-2xl">★</span>;
+                          return <span key={i} className="text-background text-2xl">★</span>;
                         }
                       })}
                     </div>
@@ -331,7 +331,7 @@ const CourseDetail = () => {
       <>
         <div className="bg-background lg:px-24 py-8 rounded-3xl">
           <div
-            className="bg-white p-8 py-10 shadow-xl rounded-md"
+            className="bg-card p-8 py-10 shadow-xl rounded-md"
             data-aos="fade-up"
 
 
@@ -358,7 +358,7 @@ const CourseDetail = () => {
                   {courseSections.map((item, index) => (
                     <li key={index} className="flex items-start">
                       <div className="bg-primary rounded-full h-4 w-4 flex items-center justify-center mt-1 mr-2 flex-shrink-0">
-                        <AiOutlineRight className="text-white text-xs" />
+                        <AiOutlineRight className="text-background text-xs" />
                       </div>
                       <span className="poppins-light text-foreground">{item.name}</span>
                     </li>
@@ -415,7 +415,7 @@ const CourseDetail = () => {
                       return (
                         <div
                           key={moduleKey}
-                          className={`mb-6 rounded-lg ${sectionUnlocked ? "bg-white" : "bg-background-100 opacity-80"
+                          className={`mb-6 rounded-lg ${sectionUnlocked ? "bg-card" : "bg-background-100 opacity-80"
                             } transition-colors duration-200`}
                         >
                           {/* Module Header */}
@@ -454,7 +454,7 @@ const CourseDetail = () => {
                               {module.learningObjectives && module.learningObjectives.length > 0 && (
                                 <div className="mb-6 p-4 bg-background rounded-lg border border-border">
                                   <div className="flex items-center mb-3">
-                                    <h4 className="poppins-semibold text-black">
+                                    <h4 className="poppins-semibold text-foreground">
                                       What You&apos;ll Learn in this lecture
                                     </h4>
                                   </div>
@@ -538,7 +538,7 @@ const CourseDetail = () => {
                         } ${!sectionUnlocked ? 'opacity-60' : ''}`}>
                         <div className="flex items-center mb-4">
                           <div className="w-3 h-8 bg-primary rounded mr-3"></div>
-                          <h3 className="poppins-bold text-xl text-black">
+                          <h3 className="poppins-bold text-xl text-foreground">
                             Module {sectionIndex + 1} Quiz
                             {!sectionUnlocked && " (Locked)"}
                             {quizCompleted && " (Completed)"}
@@ -547,7 +547,7 @@ const CourseDetail = () => {
                         </div>
 
                         {attemptsExhausted ? (
-                          <div className="p-4 bg-white rounded-lg shadow-sm">
+                          <div className="p-4 bg-card rounded-lg shadow-sm">
                             <div className="poppins-bold text-red-600 text-lg mb-2">
                               You&apos;ve used all {maxAttempts} attempts for today.
                             </div>
@@ -558,7 +558,7 @@ const CourseDetail = () => {
                             </div>
                           </div>
                         ) : (
-                          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                          <div className="bg-card rounded-lg shadow-sm overflow-hidden">
                             {/* Quiz Header */}
                             <div
                               className="p-4 flex justify-between items-center cursor-pointer hover:bg-background-50 transition-colors duration-200"
@@ -621,7 +621,7 @@ const CourseDetail = () => {
                             {expandedModules[`quiz-${sectionIndex}`] && sectionUnlocked && (
                               <div className="px-6 py-4 bg-background-50 border-t border-border-200">
                                 {showQuizResults ? (
-                                  <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
+                                  <div className="bg-card p-4 rounded-lg shadow-sm mb-4">
                                     <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-green-600' : 'text-red-600'}`}>
                                       Quiz Results: {childSection.quiz.obtainedScore}/{quizQuestions.length}
                                       {quizCompleted ? " (Passed)" : " (Failed - Score at least 60% to unlock next module)"}
@@ -708,7 +708,7 @@ const CourseDetail = () => {
                                       </div>
                                     )}
                                     {quizQuestions.map((question, qIndex) => (
-                                      <div key={question._id} className="bg-white p-4 rounded-lg shadow-sm">
+                                      <div key={question._id} className="bg-card p-4 rounded-lg shadow-sm">
                                         <div className="poppins-medium mb-2">
                                           {qIndex + 1}. {question.questionText}
                                         </div>
@@ -732,7 +732,7 @@ const CourseDetail = () => {
                                     <button
                                       onClick={() => submitQuiz(sectionIndex)}
                                       disabled={updateChildCourseProgressMutation.isPending}
-                                      className="poppins-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                                      className="poppins-medium bg-blue-600 hover:bg-blue-700 text-background px-4 py-2 rounded-lg"
                                     >
                                       {updateChildCourseProgressMutation.isPending ? "Submitting..." : "Submit Quiz"}
                                     </button>

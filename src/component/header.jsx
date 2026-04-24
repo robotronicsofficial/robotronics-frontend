@@ -47,8 +47,8 @@ const navLinkClass = ({ isActive }) =>
     "cursor-pointer whitespace-nowrap poppins-light text-sm lg:text-base transition duration-200",
     "border-b-2",
     isActive
-      ? "text-black border-accent"
-      : "text-black border-transparent hover:border-black",
+      ? "text-foreground border-accent"
+      : "text-foreground border-transparent hover:border-foreground",
   ].join(" ");
 
 const readCurrentUserLabel = (currentUser) => {
@@ -102,8 +102,8 @@ function NavDropdown({ label, items }) {
           "cursor-pointer whitespace-nowrap poppins-light text-sm lg:text-base transition duration-200",
           "border-b-2 inline-flex items-center gap-1",
           hasActive
-            ? "text-black border-accent"
-            : "text-black border-transparent hover:border-black",
+            ? "text-foreground border-accent"
+            : "text-foreground border-transparent hover:border-foreground",
         ].join(" ")}
       >
         <span>{label}</span>
@@ -117,7 +117,7 @@ function NavDropdown({ label, items }) {
       {open && (
         <div
           role="menu"
-          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] rounded-xl bg-white shadow-xl ring-1 ring-black/10 z-dropdown py-2"
+          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] rounded-xl bg-card shadow-xl ring-1 ring-black/10 z-dropdown py-2"
         >
           {items.map((item) => (
             <NavLink
@@ -127,7 +127,7 @@ function NavDropdown({ label, items }) {
               className={({ isActive }) =>
                 [
                   "flex flex-col px-4 py-2 transition duration-150",
-                  isActive ? "bg-background-50 text-accent" : "text-black hover:bg-background-50",
+                  isActive ? "bg-background-50 text-accent" : "text-foreground hover:bg-background-50",
                 ].join(" ")
               }
             >
@@ -171,7 +171,7 @@ function UserMenu({ label, onProfile, onLogout }) {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 mt-2 min-w-[14rem] rounded-lg bg-white shadow-lg ring-1 ring-black/10 z-dropdown py-1"
+          className="absolute right-0 mt-2 min-w-[14rem] rounded-lg bg-card shadow-lg ring-1 ring-black/10 z-dropdown py-1"
         >
           <div className="px-4 py-2 border-b border-border-100">
             <div className="text-xs text-muted-foreground-500">Signed in as</div>
@@ -184,7 +184,7 @@ function UserMenu({ label, onProfile, onLogout }) {
               setOpen(false);
               onProfile();
             }}
-            className="block w-full text-left px-4 py-2 text-sm poppins-light text-black hover:bg-background-50 transition duration-150"
+            className="block w-full text-left px-4 py-2 text-sm poppins-light text-foreground hover:bg-background-50 transition duration-150"
           >
             Dashboard
           </button>
@@ -216,7 +216,7 @@ function CartButton({ totalQuantity, onClick, className = "" }) {
     >
       <img src={basket} alt="" className="w-6 h-6" />
       {totalQuantity > 0 && (
-        <span className="absolute -top-2 -right-2 bg-accent text-white rounded-full text-xs font-bold px-1.5 py-0.5 min-w-[1.25rem] text-center">
+        <span className="absolute -top-2 -right-2 bg-accent text-background rounded-full text-xs font-bold px-1.5 py-0.5 min-w-[1.25rem] text-center">
           {totalQuantity}
         </span>
       )}
@@ -232,7 +232,7 @@ function SubscribeCTA({ onClick }) {
       className={({ isActive }) =>
         [
           "poppins-bold whitespace-nowrap text-sm lg:text-base rounded-lg px-4 py-2 inline-flex items-center gap-1.5 transition duration-200 shrink-0",
-          "bg-primary text-black hover:bg-accent hover:text-white",
+          "bg-primary text-foreground hover:bg-accent hover:text-background",
           isActive ? "ring-2 ring-signin ring-offset-2" : "",
         ].join(" ")
       }
@@ -322,7 +322,7 @@ export default function Header() {
   return (
     <header className="bg-transparent relative top-20 z-header w-full">
       <div className="w-full h-full flex items-center justify-center absolute">
-        <div className="bg-white flex items-center gap-4 lg:gap-6 p-3 sm:p-5 shadow w-[95vw] mt-6 mb-6 rounded-2xl">
+        <div className="bg-card flex items-center gap-4 lg:gap-6 p-3 sm:p-5 shadow w-[95vw] mt-6 mb-6 rounded-2xl">
           <NavLink
             to="/"
             end
@@ -379,13 +379,13 @@ export default function Header() {
               <div className="flex border rounded-lg">
                 <NavLink
                   to="/Signup"
-                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-accent hover:text-white"
+                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-accent hover:text-background"
                 >
                   Sign Up
                 </NavLink>
                 <NavLink
                   to="/Login"
-                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-accent hover:text-white"
+                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-accent hover:text-background"
                 >
                   Login
                 </NavLink>
@@ -409,7 +409,7 @@ export default function Header() {
           </div>
 
           <div
-            className={`${menuOpen ? "fixed" : "hidden"} inset-0 bg-black/50 z-overlay lg:hidden`}
+            className={`${menuOpen ? "fixed" : "hidden"} inset-0 bg-foreground/50 z-overlay lg:hidden`}
             onClick={closeMenu}
             aria-hidden="true"
           />
@@ -417,7 +417,7 @@ export default function Header() {
           <nav
             className={`${
               menuOpen ? "fixed" : "hidden"
-            } lg:hidden top-0 right-0 h-full w-3/4 bg-white shadow-lg z-modal p-4 overflow-y-auto transition-all duration-300 ease-in-out`}
+            } lg:hidden top-0 right-0 h-full w-3/4 bg-card shadow-lg z-modal p-4 overflow-y-auto transition-all duration-300 ease-in-out`}
             aria-label="Mobile navigation"
           >
             <div className="flex justify-between items-center mb-6">
@@ -426,7 +426,7 @@ export default function Header() {
                 type="button"
                 onClick={closeMenu}
                 aria-label="Close menu"
-                className="text-muted-foreground-500 hover:text-black p-1"
+                className="text-muted-foreground-500 hover:text-foreground p-1"
               >
                 <IoClose className="text-2xl" />
               </button>
@@ -442,7 +442,7 @@ export default function Header() {
                 onClick={closeMenu}
                 className={({ isActive }) =>
                   `flex items-center gap-2 py-3 mt-4 rounded-lg cursor-pointer px-4 poppins-bold transition duration-150 ${
-                    isActive ? "bg-accent text-white" : "bg-primary text-black hover:bg-accent hover:text-white"
+                    isActive ? "bg-accent text-background" : "bg-primary text-foreground hover:bg-accent hover:text-background"
                   }`
                 }
               >
@@ -472,7 +472,7 @@ export default function Header() {
                     logout();
                     closeMenu();
                   }}
-                  className="py-2 px-4 rounded border border-accent text-accent hover:bg-accent hover:text-white transition duration-200 w-full"
+                  className="py-2 px-4 rounded border border-accent text-accent hover:bg-accent hover:text-background transition duration-200 w-full"
                 >
                   Logout
                 </button>
@@ -481,7 +481,7 @@ export default function Header() {
               <div className="flex flex-col gap-2">
                 <NavLink
                   to="/Signup"
-                  className="py-2 px-4 rounded cursor-pointer bg-accent text-white text-center transition duration-200"
+                  className="py-2 px-4 rounded cursor-pointer bg-accent text-background text-center transition duration-200"
                   onClick={closeMenu}
                 >
                   Sign Up

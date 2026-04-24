@@ -17,7 +17,7 @@ const WorkshopCard = ({ workshop }) => {
   return (
     <button
       type="button"
-      className="w-full bg-white shadow-lg rounded-lg overflow-hidden text-left disabled:cursor-default"
+      className="w-full bg-card shadow-lg rounded-lg overflow-hidden text-left disabled:cursor-default"
       onClick={handleOpenWorkshop}
       disabled={!hasExternalUrl}
       aria-label={
@@ -34,11 +34,11 @@ const WorkshopCard = ({ workshop }) => {
         />
       </div>
       <div className="px-3 py-4 bg-foreground relative h-[18vw] flex flex-col">
-        <div className="h-[2vw] text-white">
+        <div className="h-[2vw] text-background">
           <p className="poppins-medium my-3">
             {workshop.activity}
           </p>
-          <div className="absolute right-2 -top-10 size-20 overflow-hidden rounded-full border-2 border-white bg-primary">
+          <div className="absolute right-2 -top-10 size-20 overflow-hidden rounded-full border-2 border-card bg-primary">
             <img
               src={workshop.schoolLogo}
               alt={workshop.schoolName}
@@ -48,15 +48,15 @@ const WorkshopCard = ({ workshop }) => {
         </div>
 
         <div className="mt-2 flex h-[20vw] flex-col">
-          <h3 className="text-lg text-white poppins-bold text-wrap leading-none my-4">
+          <h3 className="text-lg text-background poppins-bold text-wrap leading-none my-4">
             {workshop.workshopName}
           </h3>
-          <p className="text-white text-wrap poppins-light md:text-xs">
+          <p className="text-background text-wrap poppins-light md:text-xs">
             {workshop.description}
           </p>
         </div>
 
-        <div className="mt-4 flex items-center justify-between gap-1 px-2 text-white poppins-light">
+        <div className="mt-4 flex items-center justify-between gap-1 px-2 text-background poppins-light">
           <p className="flex items-center gap-2 text-sm">
             <RxClock />
             {workshop.timeFrom} To {workshop.timeTo}{" "}

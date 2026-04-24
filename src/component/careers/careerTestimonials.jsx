@@ -44,7 +44,7 @@ const CareerTestimonials = () => {
   const { name, job, image, quote } = data[currentTestimonial];
 
   return (
-    <div className="lg:flex flex-row justify-between bg-black p-5">
+    <div className="lg:flex flex-row justify-between bg-foreground p-5">
       {/* left */}
       <div>
         <AppImage
@@ -68,7 +68,7 @@ const CareerTestimonials = () => {
           <div className="flex flex-col justify-between lg:py-10 py-5">
             <div></div>
             <div>
-              <p className="text-xl poppins-ligt text-white">Our Employees</p>
+              <p className="text-xl poppins-ligt text-background">Our Employees</p>
               <p className="lg:text-6xl poppins-bold text-3xl text-primary font-bold">
                 TESTIMONIALS
               </p>
@@ -81,12 +81,12 @@ const CareerTestimonials = () => {
         </div>
         {/* message */}
         <div
-          className="w-full bg-white rounded-xl"
+          className="w-full bg-card rounded-xl"
           data-aos="fade-up"
 
 
         >
-          <blockquote className="text-xl italic font-semibold text-muted-foreground-900 p-10 dark:text-white">
+          <blockquote className="text-xl italic font-semibold text-muted-foreground-900 p-10 dark:text-background">
             <svg
               className="w-8 h-8 text-foreground mb-4"
               aria-hidden="true"
@@ -116,21 +116,21 @@ const CareerTestimonials = () => {
 
         >
           <p className="text-primary poppins-extralight text-2xl">{name}</p>
-          <p className="text-white poppins-extralight">{job}</p>
+          <p className="text-background poppins-extralight">{job}</p>
         </div>
         {/* Buttons */}
         <div className="space-x-2">
           <button
             onClick={previousTestimonial}
-            className="h-3 w-3 rounded-full bg-white hover:bg-primary"
+            className="h-3 w-3 rounded-full bg-card hover:bg-primary"
           ></button>
           <button
             onClick={nextTestimonial}
-            className="h-3 w-3 rounded-full bg-white hover:bg-primary"
+            className="h-3 w-3 rounded-full bg-card hover:bg-primary"
           ></button>
           <button
             onClick={previousTestimonial}
-            className="h-3 w-3 rounded-full bg-white hover:bg-primary"
+            className="h-3 w-3 rounded-full bg-card hover:bg-primary"
           ></button>
         </div>
       </div>

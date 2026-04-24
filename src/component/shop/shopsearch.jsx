@@ -120,11 +120,11 @@ const Shopsearch = () => {
 
           <div className="flex w-[50%] justify-between gap-10 pr-10" data-aos="fade-up">
             <HeaderSummaryItem
-              icon={<FaRegHeart className="text-white" />}
+              icon={<FaRegHeart className="text-background" />}
               label={`Wish List (${savedItemKeys.size})`}
             />
             <HeaderSummaryItem
-              icon={<BsHandbag className="text-white" />}
+              icon={<BsHandbag className="text-background" />}
               label={`${totalQuantity} Products - PKR ${Number(totalPrice || 0).toLocaleString()}`}
             />
           </div>
@@ -140,7 +140,7 @@ const Shopsearch = () => {
           <div className="h-1.5 w-14 border bg-foreground border-foreground mt-4"></div>
         </div>
 
-        <div className="flex items-center border border-border bg-white px-2 rounded-md h-12 w-[55vw]">
+        <div className="flex items-center border border-border bg-card px-2 rounded-md h-12 w-[55vw]">
           <IoIosSearch className="text-muted-foreground-500 text-xl" />
           <input
             type="text"
@@ -153,7 +153,7 @@ const Shopsearch = () => {
 
         <div className="relative h-12 w-64">
           <select
-            className="border bg-white h-full w-full px-2 rounded-md outline-none"
+            className="border bg-card h-full w-full px-2 rounded-md outline-none"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value)}
           >
@@ -203,7 +203,7 @@ const Shopsearch = () => {
             <button
               type="button"
               key={i}
-              className={cn("p-2 px-4", currentPage === i + 1 ? "bg-primary" : "bg-white")}
+              className={cn("p-2 px-4", currentPage === i + 1 ? "bg-primary" : "bg-card")}
               onClick={() => setCurrentPage(i + 1)}
             >
               {i + 1}

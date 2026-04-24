@@ -72,12 +72,12 @@ const SubscriptionProgressDetailPage = () => {
   
   if (progressErrorMessage) return (
     <CenteredState className="bg-background-100 min-h-screen">
-      <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
+      <div className="bg-card p-6 rounded-lg shadow-md max-w-md w-full">
         <h2 className="text-xl font-bold text-red-600 mb-4">Error</h2>
         <p className="text-muted-foreground-700 mb-4">{progressErrorMessage}</p>
         <button 
           onClick={() => refetch()}
-          className="bg-primary-500 hover:bg-primary-600 text-white py-2 px-4 rounded"
+          className="bg-primary-500 hover:bg-primary-600 text-background py-2 px-4 rounded"
         >
           Try Again
         </button>
@@ -87,7 +87,7 @@ const SubscriptionProgressDetailPage = () => {
   
   if (!progressData) return (
     <CenteredState className="bg-background-100 min-h-screen">
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="bg-card p-6 rounded-lg shadow-md">
         <p className="text-muted-foreground-700">No progress data found for this student.</p>
       </div>
     </CenteredState>
@@ -106,26 +106,26 @@ const SubscriptionProgressDetailPage = () => {
         <div className="flex gap-4 mb-6">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-full ${filter === 'all' ? 'bg-primary text-white' : 'bg-background-200'}`}
+            className={`px-4 py-2 rounded-full ${filter === 'all' ? 'bg-primary text-background' : 'bg-background-200'}`}
           >
             All
           </button>
           <button
             onClick={() => setFilter('active')}
-            className={`px-4 py-2 rounded-full ${filter === 'active' ? 'bg-primary text-white' : 'bg-background-200'}`}
+            className={`px-4 py-2 rounded-full ${filter === 'active' ? 'bg-primary text-background' : 'bg-background-200'}`}
           >
             Active
           </button>
           <button
             onClick={() => setFilter('completed')}
-            className={`px-4 py-2 rounded-full ${filter === 'completed' ? 'bg-primary text-white' : 'bg-background-200'}`}
+            className={`px-4 py-2 rounded-full ${filter === 'completed' ? 'bg-primary text-background' : 'bg-background-200'}`}
           >
             Completed
           </button>
         </div>
 
         {/* Course Progress Table */}
-        <div className="bg-white p-4 rounded-lg shadow-md overflow-x-auto">
+        <div className="bg-card p-4 rounded-lg shadow-md overflow-x-auto">
           <h2 className="text-xl font-semibold mb-3">Course Progress</h2>
           <table className="w-full min-w-[600px] border-collapse">
             <thead>
@@ -167,7 +167,7 @@ const SubscriptionProgressDetailPage = () => {
                             >
                               <span className="text-muted-foreground-400">Download</span>
                               <FaFilePdf className="text-muted-foreground-400 inline ml-2" />
-                              <span className="absolute hidden group-hover:block bg-background-700 text-white text-xs rounded py-1 px-2 bottom-full mb-2 whitespace-nowrap left-1/2 transform -translate-x-1/2">
+                              <span className="absolute hidden group-hover:block bg-background-700 text-background text-xs rounded py-1 px-2 bottom-full mb-2 whitespace-nowrap left-1/2 transform -translate-x-1/2">
                                 Complete the course to download
                               </span>
                             </div>

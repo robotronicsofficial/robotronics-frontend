@@ -136,7 +136,7 @@ const MyCourses = () => {
           >
             {saveChildCoursesMutation.isPending ? (
               <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
@@ -192,8 +192,8 @@ const MyCourses = () => {
                   <button
                     onClick={() => toggleCourseSelection(course._id)}
                     className={`py-2 px-6 rounded-full transition-colors ${selectedCourses.includes(course._id)
-                      ? "bg-red-500 hover:bg-red-600 text-white"
-                      : "bg-green-500 hover:bg-green-600 text-white"
+                      ? "bg-red-500 hover:bg-red-600 text-background"
+                      : "bg-green-500 hover:bg-green-600 text-background"
                       }`}
                   >
                     {selectedCourses.includes(course._id)
@@ -205,7 +205,7 @@ const MyCourses = () => {
                 <div className="pb-3 px-4">
                   <button
                     onClick={() => navigate(`/Dashboard/courseDetail/${course._id}`)}
-                    className="mt-2 bg-primary w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-accent transition-colors"
+                    className="mt-2 bg-primary w-full text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-accent transition-colors"
                   >
                     <span>View Detail</span>
                     <FaArrowDown className="text-xs" />
@@ -223,7 +223,7 @@ const MyCourses = () => {
               disabled={currentPage === 1}
               className={`py-2 px-4 rounded-full ${currentPage === 1
                 ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
-                : "bg-background-300 hover:bg-background-400 text-black"
+                : "bg-background-300 hover:bg-background-400 text-foreground"
                 }`}
             >
               Previous
@@ -234,8 +234,8 @@ const MyCourses = () => {
                 key={number}
                 onClick={() => paginate(number)}
                 className={`py-2 px-4 rounded-full ${currentPage === number
-                  ? "bg-primary text-black font-bold"
-                  : "bg-background-200 hover:bg-background-300 text-black"
+                  ? "bg-primary text-foreground font-bold"
+                  : "bg-background-200 hover:bg-background-300 text-foreground"
                   }`}
               >
                 {number}
@@ -247,7 +247,7 @@ const MyCourses = () => {
               disabled={currentPage === totalPages}
               className={`py-2 px-4 rounded-full ${currentPage === totalPages
                 ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
-                : "bg-background-300 hover:bg-background-400 text-black"
+                : "bg-background-300 hover:bg-background-400 text-foreground"
                 }`}
             >
               Next
@@ -271,7 +271,7 @@ const MyCourses = () => {
             </p>
             <Button
               type="button"
-              className="mx-auto min-w-32 rounded-full bg-primary text-black hover:bg-accent hover:text-white"
+              className="mx-auto min-w-32 rounded-full bg-primary text-foreground hover:bg-accent hover:text-background"
               onClick={() => setShowModal(false)}
             >
               Close

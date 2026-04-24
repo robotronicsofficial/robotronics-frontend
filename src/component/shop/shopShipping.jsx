@@ -133,7 +133,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         ) : null}
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <section className="flex flex-col gap-4 bg-foreground p-5 text-white">
+          <section className="flex flex-col gap-4 bg-foreground p-5 text-background">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-lg poppins-extrabold">
@@ -147,7 +147,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
               </div>
               <button
                 type="button"
-                className="border border-white px-3 py-2 text-xs uppercase tracking-wide"
+                className="border border-card px-3 py-2 text-xs uppercase tracking-wide"
                 onClick={handleEditCustomer}
               >
                 Edit
@@ -190,7 +190,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
             )}
           </section>
 
-          <section className="flex flex-col gap-4 border border-muted bg-white p-5 text-foreground">
+          <section className="flex flex-col gap-4 border border-muted bg-card p-5 text-foreground">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-lg poppins-extrabold">PAYMENT DETAILS</p>
@@ -255,7 +255,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           <div className="flex flex-col gap-4">
             {displayItems.length > 0 ? (
               displayItems.map((product) => (
-                <div className="border border-muted bg-white p-4" key={getCommerceItemKey(product)}>
+                <div className="border border-muted bg-card p-4" key={getCommerceItemKey(product)}>
                   <CustomerProduct
                     title={product.name}
                     item={product.quantity}
@@ -270,14 +270,14 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                 </div>
               ))
             ) : (
-              <div className="border border-dashed border-border bg-white p-4 text-sm text-foreground">
+              <div className="border border-dashed border-border bg-card p-4 text-sm text-foreground">
                 Your cart is empty.
               </div>
             )}
           </div>
         </section>
 
-        <section className="flex flex-col gap-4 border border-muted bg-white p-5 text-foreground">
+        <section className="flex flex-col gap-4 border border-muted bg-card p-5 text-foreground">
           <p className="text-xl poppins-bold">TOTALS</p>
           <OrderSummaryLine
             label="Shipping"

@@ -345,7 +345,7 @@ const JobApplicationForm = ({ job = null }) => {
       <div className="mt-6 space-y-4">
         <button
           type="submit"
-          className="bg-foreground text-white py-2 px-4 rounded-md shadow-sm hover:bg-foreground-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-foreground disabled:opacity-60"
+          className="bg-foreground text-background py-2 px-4 rounded-md shadow-sm hover:bg-foreground-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-foreground disabled:opacity-60"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Submitting..." : "Submit Application"}

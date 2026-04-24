@@ -22,7 +22,7 @@ const BlogCard = ({ cardData }) => {
   };
 
   return (
-    <div className="lg:max-w-[25vw] max-w-sm rounded overflow-hidden shadow-lg bg-white">
+    <div className="lg:max-w-[25vw] max-w-sm rounded overflow-hidden shadow-lg bg-card">
       <div className="relative">
         <Link to={`/BlogDetail/${cardData._id}`}>
           <img
@@ -37,14 +37,14 @@ const BlogCard = ({ cardData }) => {
           {mappedData.tags.map((tag, index) => (
             <span
               key={index}
-              className="bg-background-800 text-white text-sm poppins-light px-2 py-1 rounded"
+              className="bg-background-800 text-background text-sm poppins-light px-2 py-1 rounded"
             >
               {tag}
             </span>
           ))}
         </div>
         <div className="absolute right-4 top-4">
-          <button className="bg-white p-2 rounded-full shadow-md">
+          <button className="bg-card p-2 rounded-full shadow-md">
             <FaShareAlt />
           </button>
         </div>

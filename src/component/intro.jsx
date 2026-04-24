@@ -24,23 +24,23 @@ const Intro = () => {
               {/* Text */}
               <div className="space-y-2  flex flex-col gap-6 mt-8  w-full" data-aos="fade-up">
                 <div className="flex flex-row  space-x-2 ">
-                  <h1 className="lg:text-3xl md:text-2xl text-white poppins-thin">
+                  <h1 className="lg:text-3xl md:text-2xl text-background poppins-thin">
                WELCOME TO THE{" "}
                   </h1>
-                  <h1 className="lg:text-3xl md:text-2xl text-white poppins-extralight">
+                  <h1 className="lg:text-3xl md:text-2xl text-background poppins-extralight">
                     WORLD OF
                   </h1>
                 </div>
                 <div className="flex flex-wrap">
                   
-                  <p className="lg:text-8xl md:text-xl text-4xl font-bold text-white poppins-bold">
+                  <p className="lg:text-8xl md:text-xl text-4xl font-bold text-background poppins-bold">
                     RO
                   </p>
                   <p className="lg:text-8xl md:text-6xl text-4xl font-bold text-primary poppins-bold">
                   BOTRONICS
                   </p>
                 </div>
-                <p className="text-wrap text-sm poppins-light text-white mb-10">
+                <p className="text-wrap text-sm poppins-light text-background mb-10">
                 Your gateway to the future of Robotics, Coding and STEM Education. We offer hands-on learning experiences, empowering students of all ages to explore, create and innovate in the exciting world of Robotics.
                 </p>
                 {/* Buttons */}
@@ -49,14 +49,14 @@ const Intro = () => {
                   to="section2"
                   onClick={() => navigate("/subscriptions")}
                   offset={-70}
-                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-black hover:text-white bg-primary poppins-bold hover:bg-border shadow-xl rounded-md"
+                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-foreground hover:text-background bg-primary poppins-bold hover:bg-border shadow-xl rounded-md"
                 >
                   Get Enrolled
                 </button>
                 {/* <button
                   to="section1"
                   offset={-70}
-                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-black hover:text-white bg-primary poppins-bold hover:bg-border shadow-xl rounded-md"
+                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-foreground hover:text-background bg-primary poppins-bold hover:bg-border shadow-xl rounded-md"
                 >
                   Get Started
                 </button> */}
@@ -82,7 +82,7 @@ const Intro = () => {
                     rel="noopener noreferrer"
                     data-aos="fade-up"
                     data-aos-delay={getAosStaggerDelay(index)}
-                    className="lg:p-3 p-1 border border-foreground bg-white rounded-xl hover:bg-foreground hover:text-white"
+                    className="lg:p-3 p-1 border border-foreground bg-card rounded-xl hover:bg-foreground hover:text-background"
                   >
                     {icon}
                   </a>

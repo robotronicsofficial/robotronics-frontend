@@ -38,7 +38,7 @@ const RELATED_ITEM_CONFIG = {
 const RelatedItemsMessage = ({ children, tone = "default" }) => (
   <div
     className={cn(
-      "rounded-2xl bg-white p-10 text-center shadow-sm",
+      "rounded-2xl bg-card p-10 text-center shadow-sm",
       tone === "error" ? "text-red-600" : "text-foreground",
     )}
   >
@@ -109,7 +109,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                 key={getCommerceItemKey(item) || index}
                 type="button"
                 onClick={() => navigate(getCommerceItemRoute(item))}
-                className="overflow-hidden rounded-2xl bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="overflow-hidden rounded-2xl bg-card text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
                 <img
                   src={resolveBackendAssetUrl(item?.images?.[0], "https://via.placeholder.com/300x200")}

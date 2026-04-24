@@ -32,7 +32,7 @@ const PayHistory = () => {
           <p className="text-muted-foreground-600">No backend payment records were found for this account.</p>
         ) : (
           invoices.map((invoice, index) => (
-            <div key={index} className="bg-white p-4 sm:p-6 rounded-lg shadow mb-4 sm:mb-6 border border-border-200">
+            <div key={index} className="bg-card p-4 sm:p-6 rounded-lg shadow mb-4 sm:mb-6 border border-border-200">
               <h3 className="font-semibold text-base sm:text-lg md:text-xl text-muted-foreground-800 mb-3 sm:mb-4">
                 {[currentUser?.firstName, currentUser?.lastName].filter(Boolean).join(" ") || "User"}
               </h3>
@@ -68,7 +68,7 @@ const PayHistory = () => {
                     type="button"
                     className={`px-4 sm:px-6 py-1 sm:py-2 text-xs sm:text-sm md:text-base font-medium rounded-lg transition-colors whitespace-nowrap ${
                       resolveInvoiceUrl(invoice)
-                        ? "bg-orange-500 text-white hover:bg-orange-600"
+                        ? "bg-orange-500 text-background hover:bg-orange-600"
                         : "bg-background-200 text-muted-foreground-500 cursor-not-allowed"
                     }`}
                     disabled={!resolveInvoiceUrl(invoice)}

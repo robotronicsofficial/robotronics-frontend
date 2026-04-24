@@ -23,7 +23,7 @@ const BOT_RESPONSE_DELAY = 1000;
 // Memoized sub-components
 const ChatHeader = memo(function ChatHeader({ isMaximized, toggleMaximize, toggleChat }) {
   return (
-  <div className="bg-white text-black p-4 flex justify-between items-center border-b border-border">
+  <div className="bg-card text-foreground p-4 flex justify-between items-center border-b border-border">
     <h2 className="text-xl font-bold">Robotronics AI</h2>
     <div className="flex items-center space-x-2">
       <button
@@ -50,8 +50,8 @@ const Message = memo(function Message({ message }) {
   return (
   <div
     className={`max-w-[80%] p-4 rounded-lg ${message.sender === 'user'
-      ? 'bg-primary text-white rounded-br-none'
-      : 'bg-white text-muted-foreground-800 rounded-bl-none border border-border'}`}
+      ? 'bg-primary text-background rounded-br-none'
+      : 'bg-card text-muted-foreground-800 rounded-bl-none border border-border'}`}
     role={message.sender === 'user' ? 'status' : 'article'}
     aria-live={message.sender === 'bot' ? 'polite' : 'off'}
   >
@@ -64,7 +64,7 @@ const Message = memo(function Message({ message }) {
     <div className="text-base break-words whitespace-pre-wrap">
       {message.text}
     </div>
-    <div className={`text-xs mt-2 ${message.sender === 'user' ? 'text-white' : 'text-muted-foreground-500'}`}>
+    <div className={`text-xs mt-2 ${message.sender === 'user' ? 'text-background' : 'text-muted-foreground-500'}`}>
       {message.time}
     </div>
   </div>
@@ -267,7 +267,7 @@ const ChatSupport = () => {
             fixed ${isMaximized ?
               'inset-0 m-auto w-[95vw] h-[95vh] rounded-3xl flex' :
               'bottom-0 right-0 w-[450px] h-[600px] rounded-3xl'
-            } bg-white shadow-xl overflow-hidden border border-primary transition-all duration-300 relative
+            } bg-card shadow-xl overflow-hidden border border-primary transition-all duration-300 relative
           `}
           role="dialog"
           aria-modal="true"
@@ -305,7 +305,7 @@ const ChatSupport = () => {
               </div>
               <div className="p-4 border-t border-border">
                 <button
-                  className="w-full py-2 bg-primary text-white rounded-lg hover:bg-accent transition-colors"
+                  className="w-full py-2 bg-primary text-background rounded-lg hover:bg-accent transition-colors"
                   onClick={initializeChat}
                   aria-label="Start new chat"
                 >
@@ -323,7 +323,7 @@ const ChatSupport = () => {
             />
 
             <div
-              className="flex-1 p-4 overflow-y-auto overflow-x-hidden bg-white"
+              className="flex-1 p-4 overflow-y-auto overflow-x-hidden bg-card"
               aria-live="polite"
               aria-atomic="true"
             >
@@ -337,7 +337,7 @@ const ChatSupport = () => {
               ))}
               {isBotTyping && (
                 <div className="mb-4 flex justify-start">
-                  <div className="max-w-[80%] p-4 rounded-lg bg-white text-muted-foreground-800 rounded-bl-none border border-border">
+                  <div className="max-w-[80%] p-4 rounded-lg bg-card text-muted-foreground-800 rounded-bl-none border border-border">
                     <div className="flex space-x-2">
                       <div className="w-2 h-2 rounded-full bg-background-400 animate-bounce"></div>
                       <div className="w-2 h-2 rounded-full bg-background-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -373,7 +373,7 @@ const ChatSupport = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type your message..."
-                  className="w-full border border-black rounded-3xl px-14 py-3 bg-transparent shadow-md focus:outline-none focus:ring-2 focus:ring-ring text-base"
+                  className="w-full border border-foreground rounded-3xl px-14 py-3 bg-transparent shadow-md focus:outline-none focus:ring-2 focus:ring-ring text-base"
                   aria-label="Type your message"
                   disabled={isSending}
                 />

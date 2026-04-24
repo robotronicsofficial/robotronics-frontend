@@ -35,7 +35,7 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
   };
   return (
     <div className="p-2  " data-aos="fade-up">
-      <div className="rounded-2xl p-2 bg-white">
+      <div className="rounded-2xl p-2 bg-card">
         {/* img */}
         <div className="" data-aos="fade-right">
           <AppImage src={resolvedImage} alt={title || "Course"} />
@@ -68,7 +68,7 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
         </div>
         {/* line */}
         <div className="py-5">
-          <div className="w-full h-0.5 border border-dotted border-black"></div>
+          <div className="w-full h-0.5 border border-dotted border-foreground"></div>
         </div>
         {/* details */}
         <div className="flex flex-wrap justify-center lg:space-x-2 items-center">

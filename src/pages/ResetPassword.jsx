@@ -143,7 +143,7 @@ const ResetPassword = () => {
 
           <button
             type="submit"
-            className="bg-foreground border border-border text-white poppins-regular rounded-3xl py-3 lg:px-32 px-14 w-full"
+            className="bg-foreground border border-border text-background poppins-regular rounded-3xl py-3 lg:px-32 px-14 w-full"
             disabled={!hasMinLength || !hasNumber || !hasSymbol || !passwordsMatch}
           >
             Reset Password

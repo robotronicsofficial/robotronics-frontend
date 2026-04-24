@@ -55,7 +55,7 @@ const FAQs = () => {
         <h1 className="text-4xl poppins-bold text-foreground mb-6">Frequently Asked Questions (FAQs)</h1>
         <div className="space-y-6">
           {faqs.map((f, idx) => (
-            <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm">
+            <div key={idx} className="bg-card p-6 rounded-2xl shadow-sm">
               <h3 className="text-xl poppins-semibold">{f.question}</h3>
               <p className="text-base poppins-light mt-2">{f.answer}</p>
             </div>

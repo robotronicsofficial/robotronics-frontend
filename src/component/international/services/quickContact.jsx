@@ -117,7 +117,7 @@ const QuickContact = () => {
             <button
               type="submit"
               disabled={quickContactRequestMutation.isPending}
-              className="w-full text-white poppins-bold bg-primary font-bold py-3 mt-4"
+              className="w-full text-background poppins-bold bg-primary font-bold py-3 mt-4"
             >
               {quickContactRequestMutation.isPending ? "Sending..." : "Send Message"}
             </button>

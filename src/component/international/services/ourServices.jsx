@@ -35,13 +35,13 @@ const OurServices = () => {
               return (
                 <div
                   key={service._id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+                  className="bg-card rounded-lg shadow-md overflow-hidden cursor-pointer"
                   onClick={() => handleNavigate(service)}
                 >
                   <div className="flex justify-center relative">
-                    <div className="absolute inset-0 bg-black opacity-40 hover:bg-black hover:opacity-20 transition-all duration-100 ease-in-out"></div>
+                    <div className="absolute inset-0 bg-foreground opacity-40 hover:bg-foreground hover:opacity-20 transition-all duration-100 ease-in-out"></div>
                     <div className="absolute mt-10 z-raised">
-                      <h3 className="text-3xl text-white poppins-bold mb-2 text-wrap text-center">
+                      <h3 className="text-3xl text-background poppins-bold mb-2 text-wrap text-center">
                         {service.name}
                       </h3>
                     </div>
@@ -64,7 +64,7 @@ const OurServices = () => {
         {services.length > 6 && (
           <div className="text-center mt-8">
             <button
-              className="bg-foreground text-white px-6 py-2 rounded-lg text-lg hover:bg-opacity-80 transition"
+              className="bg-foreground text-background px-6 py-2 rounded-lg text-lg hover:bg-opacity-80 transition"
               onClick={() => setShowAll(!showAll)}
             >
               {showAll ? "Show Less" : "Show More"}

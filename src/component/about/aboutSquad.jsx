@@ -72,15 +72,15 @@ const AboutSquad = () => {
               />
             </div>
             <div
-              className="bg-black flex flex-col items-center justify-center py-4 w-full"
+              className="bg-foreground flex flex-col items-center justify-center py-4 w-full"
               data-aos="fade-up"
 
 
             >
-              <p className="text-white poppins-regular text-lg sm:text-xl">
+              <p className="text-background poppins-regular text-lg sm:text-xl">
                 {founder.name}
               </p>
-              <p className="text-white poppins-regular text-sm sm:text-base text-center">
+              <p className="text-background poppins-regular text-sm sm:text-base text-center">
                 {founder.title}
               </p>
             </div>
@@ -99,7 +99,7 @@ const AboutSquad = () => {
 
 
             >
-              <div className="h-0 lg:w-16 w-8 border border-black"></div>
+              <div className="h-0 lg:w-16 w-8 border border-foreground"></div>
               <div className="h-0 lg:w-48 w-20 border border-border"></div>
             </div>
             {/* text */}

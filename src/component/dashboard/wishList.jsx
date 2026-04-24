@@ -102,7 +102,7 @@ const WishListD = () => {
                   <button
                     type="button"
                     onClick={() => handleMoveToCart(item)}
-                    className="rounded-lg bg-orange-500 px-4 py-2 text-white poppins-bold"
+                    className="rounded-lg bg-orange-500 px-4 py-2 text-background poppins-bold"
                   >
                     Add to Cart
                   </button>

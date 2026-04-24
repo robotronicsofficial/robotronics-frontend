@@ -31,7 +31,7 @@ const Shop = () => {
               Gear up for some Fun
             </div>
           </div>
-          <div className="self-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-foreground shadow-sm">
+          <div className="self-center rounded-full bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-sm">
             {courses.length} live courses
           </div>
         </div>
@@ -39,15 +39,15 @@ const Shop = () => {
       {/* Shop Items */}
       <div className="md:px-10 px-5 pb-10">
         {loading ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-foreground shadow-sm">
+          <div className="rounded-2xl bg-card p-10 text-center text-foreground shadow-sm">
             Loading live courses...
           </div>
         ) : error ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-red-600 shadow-sm">
+          <div className="rounded-2xl bg-card p-10 text-center text-red-600 shadow-sm">
             We couldn&apos;t load courses right now.
           </div>
         ) : featuredCourses.length === 0 ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-foreground shadow-sm">
+          <div className="rounded-2xl bg-card p-10 text-center text-foreground shadow-sm">
             No courses available right now.
           </div>
         ) : (
@@ -57,7 +57,7 @@ const Shop = () => {
                 key={course._id}
                 type="button"
                 onClick={() => navigate(`/CoursesProduct/${course._id}`)}
-                className="overflow-hidden rounded-2xl bg-white p-2 text-left shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
+                className="overflow-hidden rounded-2xl bg-card p-2 text-left shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
               >
                 <img
                   className="h-56 w-full object-cover"
@@ -87,7 +87,7 @@ const Shop = () => {
                   </div>
                 </div>
                 <div className="my-2 flex items-center justify-center">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 font-bold text-white">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 font-bold text-background">
                     <p className="poppins-medium text-base px-2">View Course</p>
                     <MdOutlineNotificationsActive className="text-center text-lg" />
                   </span>

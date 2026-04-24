@@ -23,7 +23,7 @@ const Services = () => {
         {/* Left text */}
         <div className="flex justify-start lg:p-10 p-2">
           <div className="p-5 pt-10">
-            <h2 className="text-white lg:text-6xl font-bold poppins-black text-2xl">
+            <h2 className="text-background lg:text-6xl font-bold poppins-black text-2xl">
               Our Top <span className="text-primary">Services-</span> <br />{"Let's"} Browse Through
             </h2>
           </div>
@@ -45,40 +45,40 @@ const Services = () => {
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
     {loading ? (
       <div className="col-span-full py-10">
-        <p className="text-center text-white text-lg sm:text-xl">Loading services...</p>
+        <p className="text-center text-background text-lg sm:text-xl">Loading services...</p>
       </div>
     ) : services.length > 0 ? (
       services.slice(0,6).map((service) => (
         <div
           key={service._id}
-          className="h-full flex flex-col p-4 sm:p-5 border border-white rounded-xl sm:rounded-2xl transition-all hover:scale-[1.02]"
+          className="h-full flex flex-col p-4 sm:p-5 border border-card rounded-xl sm:rounded-2xl transition-all hover:scale-[1.02]"
         >
           {/* Icon with consistent size */}
-          <div className="text-4xl sm:text-5xl md:text-6xl text-white mb-3 sm:mb-4">
+          <div className="text-4xl sm:text-5xl md:text-6xl text-background mb-3 sm:mb-4">
             <FaRobot />
           </div>
 
           {/* Title with fixed height */}
           <div className="min-h-[60px] sm:min-h-[70px] flex items-center">
-            <h3 className="text-white poppins-bold text-lg sm:text-xl md:text-2xl lg:text-3xl line-clamp-2 text-wrap">
+            <h3 className="text-background poppins-bold text-lg sm:text-xl md:text-2xl lg:text-3xl line-clamp-2 text-wrap">
               {service.name}
             </h3>
           </div>
 
           {/* Description with fixed height and consistent alignment */}
           <div className="min-h-[100px] sm:min-h-[120px] mb-4 sm:mb-6 flex flex-col justify-center">
-            <p className="text-white poppins-light text-sm sm:text-base line-clamp-3 text-wrap">
+            <p className="text-background poppins-light text-sm sm:text-base line-clamp-3 text-wrap">
               {service.description}
             </p>
           </div>
 
           {/* Bottom section with consistent alignment */}
-          <div className="mt-auto border-t border-white/50 pt-3 sm:pt-4">
+          <div className="mt-auto border-t border-card/50 pt-3 sm:pt-4">
             <div
               className="flex items-center gap-2 cursor-pointer group"
               onClick={() => handleServiceNavigate(service)}
             >
-              <div className="text-white text-sm sm:text-base underline poppins-light group-hover:text-primary transition-colors">
+              <div className="text-background text-sm sm:text-base underline poppins-light group-hover:text-primary transition-colors">
                 View Detail
               </div>
               <MdArrowOutward className="text-lg sm:text-xl text-primary group-hover:translate-x-1 transition-transform" />
@@ -88,7 +88,7 @@ const Services = () => {
       ))
     ) : !error ? (
       <div className="col-span-full py-10">
-        <p className="text-center text-white text-lg sm:text-xl">No services available right now.</p>
+        <p className="text-center text-background text-lg sm:text-xl">No services available right now.</p>
       </div>
     ) : null}
   </div>

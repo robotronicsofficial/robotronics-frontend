@@ -31,7 +31,7 @@ const Footer = () => {
         {/* up button */}
         <div className="lg:w-1/4 md:w-1/3 w-1/2">
           <button
-            className="flex lg:w-12 lg:h-12 md:h-8 md:w-8 h-6 w-6 top-btn border border-white rounded-full"
+            className="flex lg:w-12 lg:h-12 md:h-8 md:w-8 h-6 w-6 top-btn border border-card rounded-full"
             data-aos="fade-up"
 
             onClick={goToTop}
@@ -46,7 +46,7 @@ const Footer = () => {
         {/* robotronics */}
         <div className="text-left">
           <p
-            className="text-black text-wrap font-black lg:text-8xl md:text-6xl text-4xl custom-outline"
+            className="text-foreground text-wrap font-black lg:text-8xl md:text-6xl text-4xl custom-outline"
             data-aos="fade-down"
 
           >
@@ -55,7 +55,7 @@ const Footer = () => {
         </div>
       </div>
       {/* links */}
-      <footer className="text-white body-font">
+      <footer className="text-background body-font">
         <div className="container p-4 mx-auto">
           <div className="flex flex-wrap justify-between lg:text-center md:text-center text-left">
             <div
@@ -71,7 +71,7 @@ const Footer = () => {
                 <nav className="list-none space-y-2">
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/aboutUs"
                     >
                       About Us
@@ -79,7 +79,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/CareerJob"
                     >
                       Careers
@@ -87,7 +87,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/shop"
                     >
                       Shop
@@ -95,7 +95,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/Blog"
                     >
                       Blog
@@ -103,7 +103,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/Course"
                     >
                       Courses
@@ -111,7 +111,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/International/videoGallery"
                     >
                       Gallery
@@ -119,7 +119,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/International/home"
                     >
                       Robotronics International
@@ -128,7 +128,7 @@ const Footer = () => {
 
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/TermsConditions"
                     >
                       Terms & Conditions
@@ -137,7 +137,7 @@ const Footer = () => {
 
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/PrivacyPolicy"
                     >
                       Privacy Policy
@@ -146,7 +146,7 @@ const Footer = () => {
 
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/RefundPolicy"
                     >
                       Refund Policy
@@ -155,7 +155,7 @@ const Footer = () => {
 
                    <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
+                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/faqs"
                     >
                       FAQs
@@ -174,34 +174,34 @@ const Footer = () => {
                 </h2>
                 <nav className="list-none space-y-4">
                   <li>
-                    <span className="text-white font-bold poppins-medium lg:text-xl">
+                    <span className="text-background font-bold poppins-medium lg:text-xl">
                       Email
                     </span>
-                    <p className="text-white text-sm text-wrap poppins-regular font-thin">
+                    <p className="text-background text-sm text-wrap poppins-regular font-thin">
                       support@robotronicsofficial.com
                     </p>
                   </li>
                   <li>
-                    <span className="text-white font-bold poppins-medium lg:text-xl">
+                    <span className="text-background font-bold poppins-medium lg:text-xl">
                       Phone
                     </span>
-                    <p className="text-white text-wrap poppins-regular font-thin">
+                    <p className="text-background text-wrap poppins-regular font-thin">
                       +92 320 7626 842
                     </p>
                   </li>
                   <li>
-                    <span className="text-white font-bold poppins-medium lg:text-xl">
+                    <span className="text-background font-bold poppins-medium lg:text-xl">
                       Location
                     </span>
-                    <p className="text-white text-wrap poppins-regular font-thin">
+                    <p className="text-background text-wrap poppins-regular font-thin">
                       Phase-4, DHA, Lahore, Pakistan
                     </p>
                   </li>
                   <li>
-                    <span className="text-white font-bold poppins-medium lg:text-xl">
+                    <span className="text-background font-bold poppins-medium lg:text-xl">
                       Mo - Fr
                     </span>
-                    <p className="text-white text-wrap poppins-regular font-thin">
+                    <p className="text-background text-wrap poppins-regular font-thin">
                       9am - 6pm
                     </p>
                   </li>
@@ -228,10 +228,10 @@ const Footer = () => {
                     type="text"
                     id="footer-field"
                     placeholder="SUBSCRIBE NOW"
-                    className="w-full placeholder-opacity-25 bg-transparent border border-white rounded py-2 px-4 text-white focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-colors duration-200 ease-in-out"
+                    className="w-full placeholder-opacity-25 bg-transparent border border-card rounded py-2 px-4 text-background focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-colors duration-200 ease-in-out"
                   />
                 </div>
-                <button className="w-full lg:w-auto flex items-center justify-center text-white bg-primary px-6 py-3 rounded hover:bg-primary-dark focus:outline-none transition-colors duration-200">
+                <button className="w-full lg:w-auto flex items-center justify-center text-background bg-primary px-6 py-3 rounded hover:bg-primary-dark focus:outline-none transition-colors duration-200">
                   <AppImage src={img} alt="Subscribe Button Icon" />
                 </button>
               </div>
@@ -257,11 +257,11 @@ const Footer = () => {
 
 
                 <div className="lg:w-1/2 md:2/3 flex flex-col flex-wrap items-center text-wrap lg:items-start text-center lg:text-left">
-                  <p className="text-2xl text-white poppins-bold mb-8 ">
+                  <p className="text-2xl text-background poppins-bold mb-8 ">
                     READY TO LAUNCH IN...
                   </p>
                   <div
-                    className="flex flex-wrap justify-center gap-4 text-white lg:justify-start"
+                    className="flex flex-wrap justify-center gap-4 text-background lg:justify-start"
                     data-aos="fade-up"
                   >
                     <div className="text-center">
@@ -297,13 +297,13 @@ const Footer = () => {
                   {/* App Store Buttons */}
                   <div className="flex flex-col gap-y-6 my-10">
                     <button
-                      className="mb-4 border border-white p-4 rounded-xl flex items-center gap-12 hover:bg-background-800 transition-colors duration-200"
+                      className="mb-4 border border-card p-4 rounded-xl flex items-center gap-12 hover:bg-background-800 transition-colors duration-200"
                       data-aos="fade-up"
 
 
                     >
                       <AppImage className="h-11 w-14" src={apple} alt="apple" />
-                      <div className="text-white">
+                      <div className="text-background">
                         <p className="text-sm text-wrap">Download on the</p>
                         <p className="text-2xl text-wrap font-bold">
                           APP STORE
@@ -311,7 +311,7 @@ const Footer = () => {
                       </div>
                     </button>
                     <button
-                      className="border border-white p-4 rounded-xl flex items-center gap-12 hover:bg-background-800 transition-colors duration-200"
+                      className="border border-card p-4 rounded-xl flex items-center gap-12 hover:bg-background-800 transition-colors duration-200"
                       data-aos="fade-up"
 
 
@@ -321,7 +321,7 @@ const Footer = () => {
                         src={pstore}
                         alt="play-store"
                       />
-                      <div className="text-white">
+                      <div className="text-background">
                         <p className="text-sm text-wrap ">Download on the</p>
                         <p className="text-2xl text-wrap font-bold">
                           PLAY STORE
@@ -336,9 +336,9 @@ const Footer = () => {
         </div>
 
         {/* Footer Bottom */}
-        <div className="bg-black border-t px-10   py-4">
+        <div className="bg-foreground border-t px-10   py-4">
           <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center text-center lg:text-left">
-            <p className="text-sm poppins-medium text-wrap  text-white">
+            <p className="text-sm poppins-medium text-wrap  text-background">
               Copyright © 2025. All Rights Reserved. Powered by Robotronics.
             </p>
             <div className="flex flex-row space-x-2 lg:space-x-5">
@@ -373,7 +373,7 @@ const Footer = () => {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="lg:p-3 p-1 border border-foreground bg-white rounded-xl hover:bg-foreground hover:text-white text-black"
+                  className="lg:p-3 p-1 border border-foreground bg-card rounded-xl hover:bg-foreground hover:text-background text-foreground"
                 >
                   {icon}
                 </a>

@@ -126,7 +126,7 @@ const MyAllCourses = () => {
                   <div className="pb-3 px-4">
                     <button
                       onClick={() => handleCourseClick(course)}
-                      className="mt-2 bg-primary w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-accent transition-colors"
+                      className="mt-2 bg-primary w-full text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-accent transition-colors"
                     >
                       <span>View Course</span>
                     </button>
@@ -153,7 +153,7 @@ const MyAllCourses = () => {
                 className={`py-2 px-4 rounded-full ${
                   currentPage === 1
                     ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
-                    : "bg-background-300 hover:bg-background-400 text-black"
+                    : "bg-background-300 hover:bg-background-400 text-foreground"
                 }`}
               >
                 Previous
@@ -165,8 +165,8 @@ const MyAllCourses = () => {
                   onClick={() => paginate(number)}
                   className={`py-2 px-4 rounded-full ${
                     currentPage === number
-                      ? "bg-primary text-black font-bold"
-                      : "bg-background-200 hover:bg-background-300 text-black"
+                      ? "bg-primary text-foreground font-bold"
+                      : "bg-background-200 hover:bg-background-300 text-foreground"
                   }`}
                 >
                   {number}
@@ -179,7 +179,7 @@ const MyAllCourses = () => {
                 className={`py-2 px-4 rounded-full ${
                   currentPage === totalPages
                     ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
-                    : "bg-background-300 hover:bg-background-400 text-black"
+                    : "bg-background-300 hover:bg-background-400 text-foreground"
                 }`}
               >
                 Next

@@ -379,7 +379,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                   <button
                     type="button"
                     onClick={() => saveChildForm(index)}
-                    className="text-center lg:text-xl text-sm poppins-bold text-white bg-green-600 py-2 lg:px-20 px-5 hover:bg-green-700"
+                    className="text-center lg:text-xl text-sm poppins-bold text-background bg-green-600 py-2 lg:px-20 px-5 hover:bg-green-700"
                   >
                     SAVE CHILD
                   </button>
@@ -404,7 +404,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
 
           {/* Cancel */}
           <div className="flex flex-col md:flex-row justify-between mt-6 space-y-4 md:space-y-0 md:space-x-4">
-            <button type="button" onClick={() => navigate("/subscriptions")} className="poppins-bold text-muted-foreground-700 bg-white py-2 px-6 border border-border-300 hover:bg-background-50 w-full md:w-auto">
+            <button type="button" onClick={() => navigate("/subscriptions")} className="poppins-bold text-muted-foreground-700 bg-card py-2 px-6 border border-border-300 hover:bg-background-50 w-full md:w-auto">
               CANCEL
             </button>
           </div>

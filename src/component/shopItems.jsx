@@ -9,7 +9,7 @@ const ShopItems = () => {
     <div>
         <div className="flex-1 xl:w-1/4 md:w-1/2 p-4"  >
             <div>
-              <div className="bg-white p-6 rounded-xl">
+              <div className="bg-card p-6 rounded-xl">
                 <AppImage
                   className="h-50 rounded-xl w-full object-cover object-center"
                   src={python}
@@ -27,7 +27,7 @@ const ShopItems = () => {
                   </div>
                 </div>
                 {/*doted line */}
-                <div className="w-full h-0.5 border border-dotted border-black"></div>
+                <div className="w-full h-0.5 border border-dotted border-foreground"></div>
                 <div className="flex justify-center items-center">
                   <div className="flex m-5">
                     <img className="p-1" src={time} />

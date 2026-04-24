@@ -89,7 +89,7 @@ const SubscriptionDetail = () => {
   return (
     <div className="bg-background lg:px-24 py-5">
       <div
-        className="bg-white p-8 py-6 rounded-xl"
+        className="bg-card p-8 py-6 rounded-xl"
         data-aos="fade-up"
 
 
@@ -189,7 +189,7 @@ const SubscriptionDetail = () => {
                   </div>
                   <div className="p-4 px-8">
                     <a href="/Dashboard/courseDetail">
-                      <button className="bg-primary text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
+                      <button className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
                         <span>{course.buttonText}</span>
                         <FaArrowDown className="text-xs -rotate-90" />
                       </button>
@@ -205,7 +205,7 @@ const SubscriptionDetail = () => {
             <div className="w-full flex justify-end pr-4">
               <button
                 onClick={handleViewMore}
-                className="bg-primary text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2"
+                className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2"
               >
                 <span>View More</span>
                 <FaArrowDown className="text-xs transform -rotate-120" />

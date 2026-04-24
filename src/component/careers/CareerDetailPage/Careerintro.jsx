@@ -67,7 +67,7 @@ const Careerintro = ({ job }) => {
               href="https://www.facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
               <FaFacebook className="text-muted-foreground-800" />
             </a>
@@ -75,7 +75,7 @@ const Careerintro = ({ job }) => {
               href="https://www.twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
               <FaTwitter className="text-muted-foreground-800" />
             </a>
@@ -83,7 +83,7 @@ const Careerintro = ({ job }) => {
               href="https://www.youtube.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
               <FaYoutube className="text-muted-foreground-800" />
             </a>
@@ -91,7 +91,7 @@ const Careerintro = ({ job }) => {
               href="https://www.instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
               <FaInstagram className="text-muted-foreground-800" />
             </a>
@@ -99,7 +99,7 @@ const Careerintro = ({ job }) => {
               href="https://www.linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
               <FaLinkedin className="text-muted-foreground-800" />
             </a>
@@ -107,7 +107,7 @@ const Careerintro = ({ job }) => {
               href="https://api.whatsapp.com/send?phone=1234567890"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
               <FaWhatsapp className="text-muted-foreground-800" />
             </a>
@@ -128,7 +128,7 @@ const Careerintro = ({ job }) => {
               className="w-full rounded-xl"
               loading="eager"
             />
-            <div className="absolute inset-0 flex flex-row justify-around items-center text-white">
+            <div className="absolute inset-0 flex flex-row justify-around items-center text-background">
               <div className="text-center">
                 <p className="poppins-bold text-xs">Date</p>
                 <p className="text-xs poppins-extralight ">{displayDate}</p>

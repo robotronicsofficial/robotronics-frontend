@@ -102,7 +102,7 @@ const Intro = () => {
               <button
                 key={`${img}-${idx}`}
                 type="button"
-                className="size-10 border-0 bg-white p-0 shadow-lg"
+                className="size-10 border-0 bg-card p-0 shadow-lg"
                 onClick={() => setSelectedImage(resolveImageUrl(img))}
               >
                 <AppImage
@@ -131,13 +131,13 @@ const Intro = () => {
                   } else if (i === fullStars && hasHalfStar) {
                     return <span key={i} className="text-primary">☆</span>;
                   } else {
-                    return <span key={i} className="text-white">★</span>;
+                    return <span key={i} className="text-background">★</span>;
                   }
                 })}
               </div>
               {product.onSale && (
                 <div className="bg-red-600 p-1 px-2">
-                  <span className="text-white">ON SALE</span>
+                  <span className="text-background">ON SALE</span>
                 </div>
               )}
             </div>
@@ -151,11 +151,11 @@ const Intro = () => {
             </div>
           </div>
           <div className="flex gap-2 lg:justify-start">
-            <div className="bg-white lg:px-5">
+            <div className="bg-card lg:px-5">
               <p>{product.category}</p>
             </div>
 
-            <div className="flex items-center bg-white">
+            <div className="flex items-center bg-card">
               <button
                 type="button"
                 className="rounded-md bg-background-200 px-1 lg:px-3 lg:py-1"
@@ -181,7 +181,7 @@ const Intro = () => {
             <div className="flex gap-5">
               <button
                 type="button"
-                className="rounded-lg bg-primary p-2 text-white poppins-medium lg:px-7"
+                className="rounded-lg bg-primary p-2 text-background poppins-medium lg:px-7"
                 onClick={() => {
                   const cartItem = createProductCommerceItem({
                     ...product,
@@ -213,7 +213,7 @@ const Intro = () => {
           <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
             PRODUCT DETAIL
           </p>
-          <p className="h-8 w-0 border border-black"></p>
+          <p className="h-8 w-0 border border-foreground"></p>
           <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
             DELIVERY AND RETURN
           </p>
@@ -263,13 +263,13 @@ const Intro = () => {
                 Keep exploring
               </p>
               <p
-                className="flex text-white lg:text-4xl text-2xl font-bold"
+                className="flex text-background lg:text-4xl text-2xl font-bold"
                 data-aos="fade-left"
               >
                 Live catalog
               </p>
               <p
-                className="mt-4 max-w-xl text-white/80 lg:text-lg text-sm"
+                className="mt-4 max-w-xl text-background/80 lg:text-lg text-sm"
                 data-aos="fade-up"
               >
                 Browse the live store inventory instead of a filler promo block.

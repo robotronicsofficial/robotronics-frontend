@@ -77,7 +77,7 @@ const CareerJobDetail = ({ job }) => {
             Interested in this position?
           </p>
           <a
-            className="bg-foreground text-white poppins-medium hover:text-foreground hover:bg-primary lg:text-xl text-sm p-3 rounded-xl self-center inline-flex items-center gap-2"
+            className="bg-foreground text-background poppins-medium hover:text-foreground hover:bg-primary lg:text-xl text-sm p-3 rounded-xl self-center inline-flex items-center gap-2"
             href="#application-form"
           >
             Apply Now

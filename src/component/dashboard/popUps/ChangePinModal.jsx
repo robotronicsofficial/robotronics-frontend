@@ -84,7 +84,7 @@ const ChangePinModal = ({
           onChange={setConfirmPin}
         />
 
-        <Button type="submit" className="w-full bg-primary text-white hover:bg-accent">
+        <Button type="submit" className="w-full bg-primary text-background hover:bg-accent">
           CHANGE PIN
         </Button>
       </form>

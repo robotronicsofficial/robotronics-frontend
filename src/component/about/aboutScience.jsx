@@ -2,13 +2,13 @@ import AppImage from "../AppImage";
 import b6 from "../../assets/imagesContent/bannercode/b6-optimized.webp";
 const AboutScience = () => {
   return (
-    <div className="lg:flex flex-col bg-black">
+    <div className="lg:flex flex-col bg-foreground">
       {/* block 1 */}
       <div className="lg:flex flex-row justify-between lg:p-5 p-3 items-center  ">
         {/* div 1 */}
         <div className="lg:pl-20 pl-8 lg:py-16 py-8">
           <p
-            className="text-white lg:text-7xl text-2xl poppins-bold"
+            className="text-background lg:text-7xl text-2xl poppins-bold"
             data-aos="fade-down"
 
 
@@ -31,7 +31,7 @@ const AboutScience = () => {
           </p>
         </div>
         {/* div 2 */}
-        <div className="bg-black text-white p-6 relative max-w-md">
+        <div className="bg-foreground text-background p-6 relative max-w-md">
           <div
             className="bg-primary w-32 h-32 rounded-full absolute top-0 left-0"
             data-aos="fade-up"
@@ -67,10 +67,10 @@ const AboutScience = () => {
 
               ></h2>
             </div>
-            <div className="bg-black">
+            <div className="bg-foreground">
               <div className="max-w-4xl mx-auto">
                 <div
-                  className="border-t border-white pt-4"
+                  className="border-t border-card pt-4"
                   data-aos="fade-up"
 
 

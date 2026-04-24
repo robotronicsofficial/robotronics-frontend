@@ -81,7 +81,7 @@ const UserInfoIntro = () => {
 
           <div className="flex flex-wrap p-2 lg:p-5">
             <div className="w-full p-3">
-              <div className="flex w-full flex-col gap-4 rounded-xl bg-white p-5 shadow-lg">
+              <div className="flex w-full flex-col gap-4 rounded-xl bg-card p-5 shadow-lg">
                 <AccountSummaryLine label="Name" value={displayName} />
                 <AccountSummaryLine label="Email" value={displayEmail} />
                 {currentUser?.phone && (

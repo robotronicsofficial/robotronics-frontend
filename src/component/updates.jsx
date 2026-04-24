@@ -13,9 +13,9 @@ const Updates = () => {
       {/* layer 1 */}
       <div className="lg:flex lg:p-1 p-5 w-full">
         {/* div 1 */}
-        <div className="flex-1 text-white space-y-4 ">
+        <div className="flex-1 text-background space-y-4 ">
           <p
-            className="text-white px-4 lg:px-14 py-14 poppins-extrabold text-2xl lg:text-5xl "
+            className="text-background px-4 lg:px-14 py-14 poppins-extrabold text-2xl lg:text-5xl "
             data-aos="fade-up"
 
           >
@@ -26,7 +26,7 @@ const Updates = () => {
           </p>
 
           <h1
-            className="text-white text-wrap px-4 poppins-regular lg:px-14 text-sm lg:text-lg "
+            className="text-background text-wrap px-4 poppins-regular lg:px-14 text-sm lg:text-lg "
             data-aos="fade-up"
 
           >Be informed about the latest updates in the world of Robotics.
@@ -42,7 +42,7 @@ const Updates = () => {
           />
         </div>
         {/* div 2 */}
-        <div className="flex-1 text-white">
+        <div className="flex-1 text-background">
           {/* images */}
           <div
             className="flex space-between justify-center"
@@ -59,34 +59,34 @@ const Updates = () => {
 
           >
             <div className="text-wrap mt-4">
-              <p className="text-white lg:text-2xl lg:p-3 text-xl font-bold text-wrap">
+              <p className="text-background lg:text-2xl lg:p-3 text-xl font-bold text-wrap">
                 01
               </p>
-              <p className="text-white lg:text-xl lg:p-3 poppins-thin  text-wrap tracking-wide">
+              <p className="text-background lg:text-xl lg:p-3 poppins-thin  text-wrap tracking-wide">
               Upcoming Headstart Robotics Competition in Islamabad on 14th-1th February 2025
               </p>
             </div>
             <div className="text-wrap">
-              <p className="text-white lg:text-2xl lg:p-3 font-bold text-xl text-wrap">
+              <p className="text-background lg:text-2xl lg:p-3 font-bold text-xl text-wrap">
                 02
               </p>
-              <p className="text-white lg:text-xl lg:p-3 poppins-thin text-wrap tracking-wide">
+              <p className="text-background lg:text-xl lg:p-3 poppins-thin text-wrap tracking-wide">
               Robotics Exhibition being held in Cornerstone School and College Global Campus on 9th April 2025
               </p>
             </div>
             <div className="text-wrap">
-              <p className="text-white lg:text-2xl lg:p-3 font-bold text-xl text-wrap">
+              <p className="text-background lg:text-2xl lg:p-3 font-bold text-xl text-wrap">
                 03
               </p>
-              <p className="text-white lg:text-xl lg:p-3 poppins-thin text-wrap tracking-wide">
+              <p className="text-background lg:text-xl lg:p-3 poppins-thin text-wrap tracking-wide">
               Major schools in Punjab incline towards the Robotronics Curriculum to be integrated in their Curriculum
               </p>
             </div>
             <div className="text-wrap">
-              <p className="text-white lg:text-2xl lg:p-3 font-bold text-xl text-wrap">
+              <p className="text-background lg:text-2xl lg:p-3 font-bold text-xl text-wrap">
                 04
               </p>
-              <p className="text-white lg:text-xl lg:p-3 poppins-thin text-wrap tracking-wide">
+              <p className="text-background lg:text-xl lg:p-3 poppins-thin text-wrap tracking-wide">
               Major schools in Punjab incline towards the Robotronics Curriculum to be integrated in their Curriculum
               </p>
             </div>

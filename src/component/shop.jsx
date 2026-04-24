@@ -15,7 +15,7 @@ import { useCourses } from "../hooks/useCourses";
 const ServiceCard = ({ service }) => {
   return (
     <div className="p-3 sm:p-4 lg:p-5" data-aos="fade-up">
-      <div className="bg-white p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
+      <div className="bg-card p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
         {/* Image */}
         <AppImage
           className="rounded-xl w-full h-48 sm:h-56 object-fit"
@@ -38,7 +38,7 @@ const ServiceCard = ({ service }) => {
           </div>
 
           {/* Divider */}
-          <div className="w-full h-0.5 border border-dotted border-black my-2 sm:my-3"></div>
+          <div className="w-full h-0.5 border border-dotted border-foreground my-2 sm:my-3"></div>
 
           {/* Details */}
           <div className="flex justify-between items-center mt-auto ">
@@ -131,14 +131,14 @@ const Shop = () => {
             <button
               onClick={handlePrevious}
               disabled={currentIndex === 0}
-              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-black hover:bg-background-100 transition-colors disabled:opacity-50"
+              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-foreground hover:bg-background-100 transition-colors disabled:opacity-50"
             >
               <img src={leftArrow} alt="Previous" className="w-6 h-6" />
             </button>
             <button
               onClick={handleNext}
               disabled={currentIndex + servicesPerPage >= services.length}
-              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-black hover:bg-background-100 transition-colors disabled:opacity-50"
+              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-foreground hover:bg-background-100 transition-colors disabled:opacity-50"
             >
               <img src={rightArrow} alt="Next" className="w-6 h-6" />
             </button>

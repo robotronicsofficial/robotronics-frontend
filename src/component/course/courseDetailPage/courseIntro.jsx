@@ -49,19 +49,19 @@ const CourseIntro = ({ id, title, image, price, category }) => {
           {/* pic's */}
           <div className="flex flex-row space-x-3 py-10">
             {/* pic 1 */}
-            <div className="h-10 w-10 bg-white shadow-lg">
+            <div className="h-10 w-10 bg-card shadow-lg">
               <AppImage src={robo} className="h-10 w-10" alt="" />
             </div>
             {/* pic 2 */}
-            <div className="h-10 w-10 bg-white shadow-lg">
+            <div className="h-10 w-10 bg-card shadow-lg">
               <AppImage src={robo} className="h-10 w-10" alt="" />
             </div>
             {/* pic 3 */}
-            <div className="h-10 w-10 bg-white shadow-lg">
+            <div className="h-10 w-10 bg-card shadow-lg">
               <AppImage src={robo} className="h-10 w-10" alt="" />
             </div>
             {/* pic 4 */}
-            <div className="h-10 w-10 bg-white shadow-lg">
+            <div className="h-10 w-10 bg-card shadow-lg">
               <AppImage src={robo} className="h-10 w-10" alt="" />
             </div>
           </div>
@@ -83,7 +83,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
               </div>
               {/* button */}
               <div className="bg-red-600 p-1 px-2">
-                <button className="text-white poppins-bold">ON SALE</button>
+                <button className="text-background poppins-bold">ON SALE</button>
               </div>
             </div>
             {/* text */}
@@ -106,7 +106,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
                 <button
                   type="button"
                   onClick={handleViewPlans}
-                  className="bg-foreground p-2 poppins-medium lg:px-6 text-white rounded-lg"
+                  className="bg-foreground p-2 poppins-medium lg:px-6 text-background rounded-lg"
                 >
                   VIEW SUBSCRIPTION PLANS
                 </button>
@@ -115,7 +115,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
                 <button
                   type="button"
                   onClick={handleGiftCourse}
-                  className="mt-3 rounded-lg border border-foreground bg-white p-2 poppins-medium text-foreground lg:mt-0 lg:px-6"
+                  className="mt-3 rounded-lg border border-foreground bg-card p-2 poppins-medium text-foreground lg:mt-0 lg:px-6"
                 >
                   GIFT THIS COURSE
                 </button>

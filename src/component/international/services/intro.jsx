@@ -26,10 +26,10 @@ const Intro = () => {
 
 
             >
-              {/* <h1 className=" md:text-3xl text-xl poppins-extralight text-white">
+              {/* <h1 className=" md:text-3xl text-xl poppins-extralight text-background">
                 ROBOTRONICS
               </h1>
-              <h1 className=" md:text-3xl tex-xl poppins-bold text-white font-bold">
+              <h1 className=" md:text-3xl tex-xl poppins-bold text-background font-bold">
                 WELCOMES
               </h1> */}
             </div>
@@ -42,12 +42,12 @@ const Intro = () => {
               <p className="lg:text-8xl text-4xl poppins-bold text-primary">
                 OUR&nbsp;
               </p>
-              <p className="lg:text-8xl text-4xl poppins-bold text-white">
+              <p className="lg:text-8xl text-4xl poppins-bold text-background">
                 SERVICES
               </p>
             </div>
             <p
-              className="text-wrap text-sm poppins-extralight text-white  p-1 backdrop-blur-sm"
+              className="text-wrap text-sm poppins-extralight text-background  p-1 backdrop-blur-sm"
               data-aos="fade-up"
 
 
@@ -95,7 +95,7 @@ const Intro = () => {
                 rel="noopener noreferrer"
                 data-aos="fade-up"
                 data-aos-delay={getAosStaggerDelay(index)}
-                className="lg:p-3 p-2 border border-foreground bg-white rounded-xl hover:bg-foreground hover:text-white"
+                className="lg:p-3 p-2 border border-foreground bg-card rounded-xl hover:bg-foreground hover:text-background"
               >
                 {icon}
               </a>

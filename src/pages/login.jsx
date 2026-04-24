@@ -118,7 +118,7 @@ const Login = () => {
             </div>
             <button
               type="submit"
-              className="bg-foreground border border-border text-white poppins-regular rounded-3xl py-3 lg:px-32 px-14"
+              className="bg-foreground border border-border text-background poppins-regular rounded-3xl py-3 lg:px-32 px-14"
             >
               Send Reset Instructions
             </button>
@@ -223,7 +223,7 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="rounded-3xl border border-border bg-foreground px-14 py-3 text-white poppins-regular lg:px-32"
+            className="rounded-3xl border border-border bg-foreground px-14 py-3 text-background poppins-regular lg:px-32"
           >
             Log in
           </button>
