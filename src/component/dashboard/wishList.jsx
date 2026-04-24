@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
+import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { addToCart } from "../../store/cart/cartSlice";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
@@ -75,16 +76,16 @@ const WishListD = () => {
   };
 
   if (loading) {
-    return <div className="bg-background min-h-screen flex items-center justify-center">Loading wishlist...</div>;
+    return <CenteredState className="bg-background min-h-screen">Loading wishlist...</CenteredState>;
   }
 
   if (error) {
-    return <div className="bg-background min-h-screen flex items-center justify-center text-red-500">{error}</div>;
+    return <CenteredState className="bg-background min-h-screen text-red-500">{error}</CenteredState>;
   }
 
   return (
     <DashboardLayout
-      className="bg-background min-h-0 flex flex-row md:flex-row px-0"
+      className="bg-background min-h-0 flex px-0"
       contentClassName="w-full py-10 p-0"
       navClassName="w-1/3"
       navProps={{ "data-aos": "fade-up" }}
@@ -98,9 +99,9 @@ const WishListD = () => {
           items.map((item) => (
             <div
               key={`${item.itemType}:${item.itemId}`}
-              className="flex flex-row justify-between items-center px-14 py-5 mb-5"
+              className="mb-5 flex items-center justify-between px-14 py-5"
             >
-              <div className="flex flex-row space-x-5 items-center">
+              <div className="flex items-center gap-5">
                 <div>
                   <button
                     type="button"
@@ -114,11 +115,11 @@ const WishListD = () => {
                 <button type="button" onClick={() => navigate(getCommerceItemRoute(item))}>
                   <img
                     src={resolveImageUrl(item.image || item.images?.[0])}
-                    className="w-20 h-20 object-cover"
+                    className="size-20 object-cover"
                     alt={item.name || "Saved item"}
                   />
                 </button>
-                <div className="flex flex-col space-y-2">
+                <div className="flex flex-col gap-2">
                   <button
                     type="button"
                     onClick={() => navigate(getCommerceItemRoute(item))}
@@ -126,17 +127,17 @@ const WishListD = () => {
                   >
                     {item.name || "Saved item"}
                   </button>
-                  <div className="flex flex-row items-center">
-                    <p className="text-brown poppins-bold text-sm mr-2">Category:</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-brown poppins-bold text-sm">Category:</p>
                     <p className="text-sm">{item.category || "General"}</p>
                   </div>
-                  <div className="flex flex-row items-center">
-                    <p className="text-brown font-bold text-sm mr-2">Type:</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-brown font-bold text-sm">Type:</p>
                     <p className="text-sm poppins-bold">{item.itemType}</p>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row items-end space-x-5">
+              <div className="flex items-end gap-5">
                 <div>
                   <p className="text-xl poppins-bold">PKR {Number(item.price || 0).toLocaleString()}</p>
                 </div>
