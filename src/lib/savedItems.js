@@ -3,16 +3,8 @@ import { fetchSessionJson, sendSessionJson } from "./api";
 const SAVED_ITEMS_ENDPOINT = "/wishlists/wishlist";
 
 export const fetchSavedItems = async () => {
-  try {
-    const data = await fetchSessionJson(SAVED_ITEMS_ENDPOINT);
-    return Array.isArray(data?.items) ? data.items : [];
-  } catch (error) {
-    if (error.status === 401) {
-      return [];
-    }
-
-    throw error;
-  }
+  const data = await fetchSessionJson(SAVED_ITEMS_ENDPOINT);
+  return Array.isArray(data?.items) ? data.items : [];
 };
 
 export const getSavedItems = fetchSavedItems;
