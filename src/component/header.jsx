@@ -4,6 +4,8 @@ import logo from "../assets/logo/robotronicsCharacter.svg";
 import basket from "../assets/logo/basket.svg";
 import { useAuth } from "../contexts/useAuth";
 import { ChevronDown, Menu, Star, UserCircle, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { CART_PATH, CONTACT_PATH } from "../router/paths";
 import { selectCartQuantity, useCartStore } from "../stores/cartStore";
 
@@ -91,12 +93,15 @@ function NavDropdown({ label, items }) {
 
   return (
     <div className="relative" ref={ref}>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="sm"
         onClick={() => setOpen((prev) => !prev)}
         aria-haspopup="menu"
         aria-expanded={open}
         className={[
+          "h-auto rounded-none bg-transparent px-0 py-0 hover:bg-transparent",
           "cursor-pointer whitespace-nowrap poppins-light text-sm lg:text-base transition duration-200",
           "border-b-2 inline-flex items-center gap-1",
           hasActive
@@ -110,7 +115,7 @@ function NavDropdown({ label, items }) {
             open ? "rotate-180" : ""
           }`}
         />
-      </button>
+      </Button>
 
       {open && (
         <div
@@ -147,13 +152,15 @@ function UserMenu({ label, onProfile, onLogout }) {
 
   return (
     <div className="relative" ref={ref}>
-      <button
+      <Button
         type="button"
+        variant="outline"
+        size="sm"
         onClick={() => setOpen((prev) => !prev)}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`Account menu for ${label}`}
-        className="flex items-center gap-2 whitespace-nowrap rounded-full border border-border px-2 py-1 hover:bg-muted transition duration-200"
+        className="h-auto gap-2 whitespace-nowrap rounded-full px-2 py-1"
       >
         <UserCircle className="text-xl text-foreground" />
         <span className="poppins-light text-sm capitalize hidden xl:inline max-w-[8rem] truncate">
@@ -164,7 +171,7 @@ function UserMenu({ label, onProfile, onLogout }) {
             open ? "rotate-180" : ""
           }`}
         />
-      </button>
+      </Button>
 
       {open && (
         <div
@@ -175,29 +182,31 @@ function UserMenu({ label, onProfile, onLogout }) {
             <div className="text-xs text-muted-foreground">Signed in as</div>
             <div className="poppins-light text-sm capitalize truncate">{label}</div>
           </div>
-          <button
+          <Button
             type="button"
+            variant="ghost"
             role="menuitem"
             onClick={() => {
               setOpen(false);
               onProfile();
             }}
-            className="block w-full text-left px-4 py-2 text-sm poppins-light text-foreground hover:bg-muted transition duration-150"
+            className="h-auto w-full justify-start rounded-none px-4 py-2 text-left text-sm text-foreground poppins-light"
           >
             Dashboard
-          </button>
-          <div className="border-t border-border my-1" aria-hidden="true" />
-          <button
+          </Button>
+          <Separator className="my-1" />
+          <Button
             type="button"
+            variant="ghost"
             role="menuitem"
             onClick={() => {
               setOpen(false);
               onLogout();
             }}
-            className="block w-full text-left px-4 py-2 text-sm poppins-light text-accent hover:bg-muted transition duration-150"
+            className="h-auto w-full justify-start rounded-none px-4 py-2 text-left text-sm text-accent poppins-light"
           >
             Logout
-          </button>
+          </Button>
         </div>
       )}
     </div>
@@ -206,8 +215,10 @@ function UserMenu({ label, onProfile, onLogout }) {
 
 function CartButton({ totalQuantity, onClick, className = "" }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="icon-sm"
       onClick={onClick}
       aria-label={`Cart${totalQuantity > 0 ? `, ${totalQuantity} items` : ""}`}
       className={`relative cursor-pointer ${className}`}
@@ -218,7 +229,7 @@ function CartButton({ totalQuantity, onClick, className = "" }) {
           {totalQuantity}
         </span>
       )}
-    </button>
+    </Button>
   );
 }
 
@@ -268,11 +279,12 @@ function MobileGroup({ group, onNavigate }) {
 
   return (
     <div className="border-b">
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => setOpen((prev) => !prev)}
         aria-expanded={open}
-        className="w-full flex items-center justify-between py-3 px-2 poppins-light text-left hover:bg-muted transition duration-150"
+        className="h-auto w-full justify-between rounded-none py-3 px-2 text-left poppins-light"
       >
         <span>{group.label}</span>
         <ChevronDown
@@ -280,7 +292,7 @@ function MobileGroup({ group, onNavigate }) {
             open ? "rotate-180" : ""
           }`}
         />
-      </button>
+      </Button>
       {open && (
         <ul className="pl-4 pb-2 flex flex-col gap-1">
           {group.items.map((item) => (
@@ -394,8 +406,10 @@ export default function Header() {
 
           <div className="flex items-center lg:hidden gap-3 shrink-0 ml-auto">
             <CartButton totalQuantity={totalQuantity} onClick={goToCart} />
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon-sm"
               className="rounded-md p-1"
               data-aos="fade-left"
               onClick={toggleMenu}
@@ -403,7 +417,7 @@ export default function Header() {
               aria-expanded={menuOpen}
             >
               <Menu className="text-2xl" />
-            </button>
+            </Button>
           </div>
 
           <div
@@ -420,14 +434,16 @@ export default function Header() {
           >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">Menu</h2>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon-sm"
                 onClick={closeMenu}
                 aria-label="Close menu"
                 className="text-muted-foreground hover:text-foreground p-1"
               >
                 <X className="text-2xl" />
-              </button>
+              </Button>
             </div>
 
             <div className="flex flex-col">
@@ -449,12 +465,13 @@ export default function Header() {
               </NavLink>
             </div>
 
-            <div className="my-4 border-t" />
+            <Separator className="my-4" />
 
             {currentUser ? (
               <div className="flex flex-col gap-2">
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
                   className="flex items-center gap-2 py-3 px-2 text-left capitalize poppins-light hover:bg-muted transition duration-150 rounded"
                   onClick={() => {
                     closeMenu();
@@ -463,17 +480,18 @@ export default function Header() {
                 >
                   <UserCircle className="text-xl text-foreground" />
                   <span className="truncate">{currentUserLabel}</span>
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() => {
                     logout();
                     closeMenu();
                   }}
-                  className="py-2 px-4 rounded border border-accent text-accent hover:bg-accent hover:text-background transition duration-200 w-full"
+                  className="h-auto w-full border-accent px-4 py-2 text-accent hover:bg-accent hover:text-background"
                 >
                   Logout
-                </button>
+                </Button>
               </div>
             ) : (
               <div className="flex flex-col gap-2">

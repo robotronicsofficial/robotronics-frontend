@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import AppImage from "../AppImage";
 import img from "../../assets/images/customerProduct.webp";
 import { Pencil, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const CustomerProduct = ({
   title,
@@ -32,19 +33,21 @@ const CustomerProduct = ({
         <div className="flex items-center gap-3">
           <p className="font-bold">{priceLabel ? `${priceLabel} ` : ""}{price}</p>
           {onEdit ? (
-            <button type="button" aria-label="Edit product" className="inline-flex" onClick={onEdit}>
+            <Button type="button" aria-label="Edit product" variant="ghost" size="icon-sm" onClick={onEdit}>
               <Pencil />
-            </button>
+            </Button>
           ) : null}
           {onDelete ? (
-            <button
+            <Button
               type="button"
               aria-label="Delete product"
-              className="inline-flex text-destructive"
+              variant="ghost"
+              size="icon-sm"
+              className="text-destructive"
               onClick={onDelete}
             >
               <Trash2 />
-            </button>
+            </Button>
           ) : null}
         </div>
       </div>

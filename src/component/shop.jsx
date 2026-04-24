@@ -6,6 +6,9 @@ import rightArrow from "../assets/logo/arrow-up-right.svg";
 import { Clock, Star, Video } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { resolveBackendAssetUrl } from "../utils/mediaUrl";
 import AppImage from "./AppImage";
 import { useCourses } from "../hooks/useCourses";
@@ -13,7 +16,8 @@ import { useCourses } from "../hooks/useCourses";
 const ServiceCard = ({ service }) => {
   return (
     <div className="p-3 sm:p-4 lg:p-5" data-aos="fade-up">
-      <div className="bg-card p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
+      <Card className="h-full rounded-xl py-0 shadow-md transition-all hover:shadow-lg">
+        <CardContent className="flex h-full flex-col p-4 sm:p-5">
         {/* Image */}
         <AppImage
           className="rounded-xl w-full h-48 sm:h-56 object-fit"
@@ -36,7 +40,7 @@ const ServiceCard = ({ service }) => {
           </div>
 
           {/* Divider */}
-          <div className="w-full h-0.5 border border-dotted border-foreground my-2 sm:my-3"></div>
+          <Separator className="my-2 border border-dotted border-foreground sm:my-3" />
 
           {/* Details */}
           <div className="flex justify-between items-center mt-auto ">
@@ -54,7 +58,8 @@ const ServiceCard = ({ service }) => {
             </div>
           </div>
         </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
@@ -126,20 +131,26 @@ const Shop = () => {
 
           {/* Navigation Arrows - Below on mobile, to the right on desktop */}
           <div className="flex gap-3 sm:gap-4 md:ml-4">
-            <button
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-lg"
               onClick={handlePrevious}
               disabled={currentIndex === 0}
-              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-foreground hover:bg-muted transition-colors disabled:opacity-50"
+              className="size-12 rounded-full border-2 border-foreground hover:bg-muted sm:size-14 md:size-16"
             >
               <img src={leftArrow} alt="Previous" className="w-6 h-6" />
-            </button>
-            <button
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-lg"
               onClick={handleNext}
               disabled={currentIndex + servicesPerPage >= services.length}
-              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-foreground hover:bg-muted transition-colors disabled:opacity-50"
+              className="size-12 rounded-full border-2 border-foreground hover:bg-muted sm:size-14 md:size-16"
             >
               <img src={rightArrow} alt="Next" className="w-6 h-6" />
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -154,12 +165,13 @@ const Shop = () => {
 
         {/* Enrollment Button */}
         <div className="flex justify-center">
-          <button
+          <Button
+            type="button"
             onClick={() => navigate("/subscriptions")}
-            className="bg-primary hover:bg-primary text-foreground text-lg sm:text-xl font-bold poppins-bold px-8 py-3 rounded-full transition-colors shadow-md hover:shadow-lg"
+            className="h-auto rounded-full bg-primary px-8 py-3 text-lg text-foreground shadow-md poppins-bold hover:bg-primary hover:shadow-lg sm:text-xl"
           >
             Get Enrolled
-          </button>
+          </Button>
         </div>
       </div>
     </section>

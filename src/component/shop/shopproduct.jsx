@@ -1,5 +1,6 @@
 import { Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 
@@ -24,7 +25,7 @@ const Shopproduct = ({
   return (
     <div className="group relative w-full max-w-72">
        {/* Image and Title wrapped in a clickable div that triggers navigation */}
-       <div onClick={handleProductClick} className="cursor-pointer">
+       <Button type="button" variant="ghost" onClick={handleProductClick} className="h-auto w-full flex-col items-stretch p-0 text-left hover:bg-transparent">
         <div className="aspect-square w-full overflow-hidden rounded-2xl">
           <img
             className="h-full w-full object-fit group-hover:opacity-50"
@@ -40,21 +41,24 @@ const Shopproduct = ({
           </p>
           <p className="text-accent poppins-bold text-xl">PKR {Number(price || 0).toLocaleString()}</p>
         </div>
-      </div>
+      </Button>
 
       {/* Add to Cart and Add to Wishlist buttons */}
       <div className="absolute left-1/2 top-1/2 flex w-11/12 -translate-x-1/2 -translate-y-1/2 transform flex-col opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <button
-          className="bg-muted/30 p-2 text-foreground poppins-medium rounded-lg mb-2"
+        <Button
+          type="button"
+          variant="secondary"
+          className="mb-2 h-auto bg-muted/30 p-2 text-foreground poppins-medium"
           onClick={(e) => {
             e.stopPropagation(); // Prevent link navigation
             onAddToCart(); // Trigger add to cart
           }}
         >
           Add to Cart
-        </button>
-        <button
-          className="bg-accent p-2 text-foreground poppins-medium rounded-lg flex items-center"
+        </Button>
+        <Button
+          type="button"
+          className="h-auto bg-accent p-2 text-foreground poppins-medium"
           onClick={(e) => {
             e.stopPropagation(); // Prevent link navigation
             onAddToWishlist(); // Trigger add to wishlist
@@ -62,7 +66,7 @@ const Shopproduct = ({
         >
           {isSaved ? <Heart className="mr-5 ml-3"  fill="currentColor" /> : <Heart className="mr-5 ml-3"  />}
           {isSaved ? "Saved" : "Add to Wishlist"}
-        </button>
+        </Button>
       </div>
     </div>
   );

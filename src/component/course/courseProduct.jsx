@@ -7,6 +7,9 @@ import download from "../../assets/logo/download.svg";
 import sale from "../../assets/logo/sales.svg";
 import { NavLink } from "react-router-dom";
 import { Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import {
   useSavedItems,
@@ -34,7 +37,8 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
   };
   return (
     <div className="p-2  " data-aos="fade-up">
-      <div className="rounded-2xl p-2 bg-card">
+      <Card className="rounded-2xl p-0">
+        <CardContent className="p-2">
         {/* img */}
         <div className="" data-aos="fade-right">
           <AppImage src={resolvedImage} alt={title || "Course"} />
@@ -67,7 +71,7 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
         </div>
         {/* line */}
         <div className="py-5">
-          <div className="w-full h-0.5 border border-dotted border-foreground"></div>
+          <Separator className="border border-dotted border-foreground" />
         </div>
         {/* details */}
         <div className="flex flex-wrap justify-center lg:gap-x-2 items-center">
@@ -84,14 +88,15 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
             250 Sales
           </div>
         </div>
-      </div>
+        </CardContent>
+      </Card>
       {/* button */}
       <div className="py-2">
         <NavLink to={`/CoursesProduct/${id}`}>
           <div className="text-center bg-primary p-2">
-            <button className="bg-primary text-xl p-3 font-bold rounded">
+            <Button className="h-auto bg-primary p-3 text-xl font-bold">
               View Course
-            </button>
+            </Button>
           </div>
         </NavLink>
       </div>

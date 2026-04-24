@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { ArrowLeftCircle, ArrowRightCircle, MoveDown, Star } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { useCourses } from "../../hooks/useCourses";
 const SubscriptionCourses = () => {
@@ -51,12 +53,15 @@ const SubscriptionCourses = () => {
       </div>
 
       {/* Left Button - Hidden on mobile */}
-      <button
+      <Button
+        type="button"
+        variant="outline"
+        size="icon-lg"
         onClick={prevCourse}
-        className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 bg-card text-foreground p-3 rounded-full shadow-md hover:bg-muted transition mx-4 md:mx-12 lg:mx-24"
+        className="absolute left-0 top-1/2 mx-4 hidden -translate-y-1/2 rounded-full bg-card p-3 text-foreground shadow-md hover:bg-muted sm:block md:mx-12 lg:mx-24"
       >
         <ArrowLeftCircle />
-      </button>
+      </Button>
 
       {/* Courses Container */}
       <div className="flex justify-center gap-4 md:gap-6 overflow-hidden">
@@ -68,7 +73,8 @@ const SubscriptionCourses = () => {
               className="w-full max-w-xs sm:max-w-none sm:w-1/2 lg:w-1/3 px-2 sm:px-4 mb-2 p-2 sm:p-6"
             >
 
-              <div className="bg-card p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
+              <Card className="h-full rounded-xl py-0 shadow-md transition-all hover:shadow-lg">
+                <CardContent className="flex h-full flex-col p-4 sm:p-5">
                 <img
                     className="rounded-xl w-full h-48 sm:h-56 object-cover"
                     src={resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")}
@@ -95,11 +101,11 @@ const SubscriptionCourses = () => {
                 </div>
                 <div className="px-4 sm:px-8 mb-4 flex flex-col sm:flex-row gap-2 py-4">
                   <div className="w-full flex justify-center mb-4 py-4">
-                    <button onClick={handleViewDetails}
-                    className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2 text-sm sm:text-base">
+                    <Button type="button" onClick={handleViewDetails}
+                    className="h-auto rounded-full bg-primary px-4 py-2 text-sm text-foreground shadow-xl sm:text-base">
                       <span>View Course</span>
                       <MoveDown className="text-xs -rotate-90" />
-                    </button>
+                    </Button>
                   </div>
 
 
@@ -109,33 +115,43 @@ const SubscriptionCourses = () => {
                     <span>Activate Course</span>
                   </button> */}
                 </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           ))}
       </div>
 
       {/* Right Button - Hidden on mobile */}
-      <button
+      <Button
+        type="button"
+        variant="outline"
+        size="icon-lg"
         onClick={nextCourse}
-        className="hidden sm:block absolute right-0 top-1/2 transform -translate-y-1/2 bg-card text-foreground p-3 rounded-full shadow-md hover:bg-muted transition mx-4 md:mx-12 lg:mx-24"
+        className="absolute right-0 top-1/2 mx-4 hidden -translate-y-1/2 rounded-full bg-card p-3 text-foreground shadow-md hover:bg-muted sm:block md:mx-12 lg:mx-24"
       >
         <ArrowRightCircle />
-      </button>
+      </Button>
 
       {/* Mobile navigation buttons */}
       <div className="sm:hidden flex justify-center gap-4 mt-4">
-        <button
+        <Button
+          type="button"
+          variant="outline"
+          size="icon-lg"
           onClick={prevCourse}
-          className="bg-card text-foreground p-2 rounded-full shadow-md hover:bg-muted transition"
+          className="rounded-full bg-card p-2 text-foreground shadow-md hover:bg-muted"
         >
           <ArrowLeftCircle />
-        </button>
-        <button
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon-lg"
           onClick={nextCourse}
-          className="bg-card text-foreground p-2 rounded-full shadow-md hover:bg-muted transition"
+          className="rounded-full bg-card p-2 text-foreground shadow-md hover:bg-muted"
         >
           <ArrowRightCircle />
-        </button>
+        </Button>
       </div>
     </div>
   );
