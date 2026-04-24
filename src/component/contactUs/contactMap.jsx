@@ -2,17 +2,23 @@ import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { createRoot } from 'react-dom/client';
-import { Avatar, Tooltip } from '@mui/material';
 
-// Custom MUI Marker Component
 const MaterialMarker = ({ position, name, address }) => {
   const map = useMap();
 
   useEffect(() => {
     const markerDiv = L.divIcon({
       className: '',
-      html: `<div id="mui-marker-${position[0]}-${position[1]}" style="position: relative;"></div>`,
+      html: `
+        <div class="group relative flex size-[50px] items-center justify-center rounded-full border-2 border-brown bg-card shadow-md">
+          <span class="sr-only">${name}</span>
+          <span class="size-4 rounded-full bg-primary"></span>
+          <div class="pointer-events-none absolute bottom-14 left-1/2 hidden w-56 -translate-x-1/2 rounded-lg bg-popover p-3 text-center text-sm text-popover-foreground shadow-lg group-hover:block">
+            <strong>${name}</strong><br />
+            <span>${address}</span>
+          </div>
+        </div>
+      `,
       iconSize: [50, 50],
       iconAnchor: [25, 50],
     });
@@ -22,35 +28,7 @@ const MaterialMarker = ({ position, name, address }) => {
     return () => {
       map.removeLayer(marker);
     };
-  }, [map, position]);
-
-  useEffect(() => {
-    const markerElement = document.getElementById(`mui-marker-${position[0]}-${position[1]}`);
-    if (!markerElement) {
-      return undefined;
-    }
-
-    const root = createRoot(markerElement);
-    root.render(
-      <Tooltip title={<div><strong>{name}</strong><br />{address}</div>} arrow>
-        <Avatar
-          sx={{
-            width: 50,
-            height: 50,
-            backgroundColor: '#fff',
-            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
-            border: '2px solid #000',
-          }}
-          alt={name}
-          src="/path/to/your/custom-marker-icon.png"
-        />
-      </Tooltip>,
-    );
-
-    return () => {
-      root.unmount();
-    };
-  }, [position, name, address]);
+  }, [address, map, name, position]);
 
   return null;
 };
@@ -95,7 +73,7 @@ const ContactMap = () => {
             address={officeLocation.address}
           />
         </MapContainer>
-        <div className="absolute bottom-8 right-8 bg-black bg-opacity-50 text-white p-4 rounded-lg shadow-lg">
+        <div className="absolute bottom-8 right-8 rounded-lg bg-overlay p-4 text-white shadow-lg">
           <h1 className="text-xl font-bold mb-2">Our Footprint</h1>
           <h2 className="text-3xl font-bold text-gold">In Lahore</h2>
         </div>

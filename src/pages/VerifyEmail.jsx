@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Container, Box, Typography, CircularProgress, Button } from '@mui/material';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import { useVerifyEmailMutation } from '../hooks/useAuthMutations';
 
 const VerifyEmail = () => {
@@ -49,51 +50,42 @@ const VerifyEmail = () => {
   }, [searchParams, navigate, verifyEmailMutation]);
 
   return (
-    <Container maxWidth="sm">
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        minHeight="80vh"
-        textAlign="center"
-      >
+    <main className="mx-auto flex min-h-[80vh] max-w-xl flex-col items-center justify-center px-4 text-center">
         {status === 'verifying' && (
           <>
-            <CircularProgress size={60} />
-            <Typography variant="h6" mt={3}>Verifying your email...</Typography>
+            <Spinner className="size-14 text-primary" />
+            <h1 className="mt-6 text-xl font-semibold text-foreground">Verifying your email...</h1>
           </>
         )}
 
         {status === 'success' && (
           <>
-            <Typography variant="h4" color="success.main" gutterBottom>
+            <h1 className="text-3xl font-bold text-primary">
               Email Verified!
-            </Typography>
-            <Typography variant="body1" mb={3}>
+            </h1>
+            <p className="mb-6 mt-3 text-muted-foreground">
               {message} Redirecting to login page...
-            </Typography>
-            <CircularProgress size={30} />
+            </p>
+            <Spinner className="size-8 text-primary" />
           </>
         )}
 
         {status === 'error' && (
           <>
-            <Typography variant="h4" color="error.main" gutterBottom>
+            <h1 className="text-3xl font-bold text-destructive">
               Verification Failed
-            </Typography>
-            <Typography variant="body1" mb={3}>{message}</Typography>
+            </h1>
+            <p className="mb-6 mt-3 text-muted-foreground">{message}</p>
             <Button
-              variant="outlined"
-              color="primary"
+              type="button"
+              variant="outline"
               onClick={() => navigate('/Signup')}
             >
               Try Again
             </Button>
           </>
         )}
-      </Box>
-    </Container>
+    </main>
   );
 };
 
