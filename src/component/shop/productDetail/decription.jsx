@@ -3,9 +3,8 @@ import ShopPages from "../shopPages";
 
 const Decription = ({ description }) => {
   return (
-    <div className="bg-gray lg:p-14 p-2">
-      {/* div 1 */}
-      <div className="px-2 flex flex-row lg:justify-center lg:space-x-10 space-x-4 "data-aos="fade-down">
+    <div className="bg-gray p-2 lg:p-14">
+      <div className="flex gap-4 px-2 lg:justify-center lg:gap-10" data-aos="fade-down">
         <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-brown">
           PRODUCT DETAIL
         </p>
@@ -14,19 +13,18 @@ const Decription = ({ description }) => {
           DELIVERY AND RETURN
         </p>
       </div>
-      {/* div 2 */}
-      <div className="p-5 flex flex-row justify-between ">
-        <div className=" p-2 w-1/2 space-y-2">
-          <p className="lg:text-2xl text-xl poppins-semibold text-brown"data-aos="fade-up">
+      <div className="flex justify-between p-5">
+        <div className="flex w-1/2 flex-col gap-2 p-2">
+          <p className="text-xl poppins-semibold text-brown lg:text-2xl" data-aos="fade-up">
             DESCRIPTION
           </p>
           <p className="text-wrap text-xs poppins-medium text-line ">
             {description}
           </p>
         </div>
-        <div className="p-2 w-1/2">
-          <div className="text-wrap text-line space-y-2 lg:px-20 px-4"data-aos="fade-up">
-            <p className="lg:text-2xl text-xl  poppins-semibold text-brown">
+        <div className="w-1/2 p-2">
+          <div className="flex flex-col gap-2 px-4 text-wrap text-line lg:px-20" data-aos="fade-up">
+            <p className="text-xl poppins-semibold text-brown lg:text-2xl">
               FITS AND FEATURES
             </p>
             <p className="text-xs poppins-medium ">
