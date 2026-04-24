@@ -3,7 +3,7 @@ import AppImage from "../AppImage";
 import img from "../../assets/images/customerProduct.webp";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 
-const CustomerProduct = ({ title, item, price, image, onDelete, onEdit }) => {
+const CustomerProduct = ({ title, item, price, image, onDelete, onEdit, priceLabel = "Pkr" }) => {
   return (
     <div className="flex gap-3">
       <div>
@@ -21,7 +21,7 @@ const CustomerProduct = ({ title, item, price, image, onDelete, onEdit }) => {
         </div>
 
         <div className="flex items-center gap-3">
-          <p className="font-bold">Pkr {price}</p>
+          <p className="font-bold">{priceLabel} {price}</p>
           {onEdit ? (
             <button type="button" aria-label="Edit product" className="inline-flex" onClick={onEdit}>
               <MdModeEdit />
@@ -50,6 +50,7 @@ CustomerProduct.propTypes = {
   image: PropTypes.string,
   onDelete: PropTypes.func,
   onEdit: PropTypes.func,
+  priceLabel: PropTypes.string,
 };
 
 export default CustomerProduct;

@@ -1,7 +1,10 @@
+import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from '../../contexts/useAuth';
+import { useAuth } from "../../contexts/useAuth";
+import CustomerProduct from "./customerProduct";
+import OrderSummaryLine from "./OrderSummaryLine";
 import {
   calculateCartSummary,
   formatShopCurrency,
@@ -9,10 +12,10 @@ import {
   loadShopCheckout,
   saveShopCheckout,
 } from "../../lib/shopCheckout";
-import { hasShippableCommerceItems } from "../../lib/commerceItems";
+import { getCommerceItemKey, hasShippableCommerceItems } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
-
 import { BACKEND_BASE_URL } from "../../lib/api";
+
 const STATES = [
   { value: "BAL", label: "Balochistan" },
   { value: "KP", label: "Khyber Pakhtunkhwa" },
@@ -20,6 +23,10 @@ const STATES = [
   { value: "ICT", label: "Islamabad Capital Territory" },
   { value: "SIN", label: "Sindh" },
 ];
+const summaryLabelClassName = "font-lato text-base text-[#7E7F7C]";
+const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
+const summaryValueClassName = `${summaryValueBaseClassName} text-[#362D2C]`;
+const summaryTotalValueClassName = `${summaryValueBaseClassName} text-yellow`;
 
 const InputField = ({ label, name, value, onChange, placeholder, required = false, type = "text" }) => (
   <div>
@@ -154,10 +161,10 @@ const CustomerInfomation = ({ onNext }) => {
   const summary = calculateCartSummary(cart);
 
   return (
-    <div className="lg:flex flex-row bg-gray">
+    <div className="bg-gray lg:flex">
       <div className="flex flex-col lg:w-4/5">
-        <form onSubmit={handleSubmit} className="space-y-6 bg-background p-6 max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="mx-auto flex max-w-4xl flex-col gap-6 bg-background p-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <InputField label="First Name" name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name" required />
             <InputField label="Last Name" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name" required />
           </div>
@@ -166,19 +173,19 @@ const CustomerInfomation = ({ onNext }) => {
 
           {requiresShipping ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <InputField label="Country / Region" name="country" value={form.country} onChange={handleChange} placeholder="Country" required />
                 <InputField label="Company Name" name="companyName" value={form.companyName} onChange={handleChange} placeholder="Company (optional)" />
               </div>
 
               <InputField label="Residential Address" name="streetAddress" value={form.streetAddress} onChange={handleChange} placeholder="House number and street name" required />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <InputField label="City" name="city" value={form.city} onChange={handleChange} placeholder="City" required />
                 <SelectField label="State" name="state" value={form.state} onChange={handleChange} options={STATES} required />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <InputField label="Postal Code" name="postalCode" value={form.postalCode} onChange={handleChange} placeholder="Postal Code" required />
               </div>
 
@@ -204,34 +211,29 @@ const CustomerInfomation = ({ onNext }) => {
 
       {/* Divider Line */}
       <div className="px-1">
-        <div className="h-full w-0 border border-[#D4D4D4] ml-8"></div>
+        <div className="ml-8 h-full w-0 border border-[#D4D4D4]"></div>
       </div>
 
       {/* Right - Cart Summary */}
-      <div className="lg:px-14 px-5 lg:p-8 p-4 lg:space-y-20 space-y-8">
-        <div className="lg:space-y-8 space-y-4">
+      <div className="flex flex-col gap-8 p-4 px-5 lg:gap-20 lg:p-8 lg:px-14">
+        <div className="flex flex-col gap-4 lg:gap-8">
           <p className="lg:text-4xl poppins-bold text-brown">YOUR ORDER</p>
           <p className="font-lato font-medium text-base leading-5 text-[#7E7F7C]">
             Review all the products you want to buy
           </p>
-
         </div>
 
-        <div className="lg:space-y-5 space-y-2 poppins-extralight">
+        <div className="flex flex-col gap-2 poppins-extralight lg:gap-5">
           {cart.length > 0 ? (
             cart.map((product) => (
-              <div className="flex flex-row space-x-3" key={`${product.itemType}:${product.itemId}`}>
-                <img
-                  className="lg:h-20 lg:w-24 object-cover"
-                  src={resolveBackendAssetUrl(product.image || product.images?.[0], "https://via.placeholder.com/300x200")}
-                  alt={product.name}
-                />
-                <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
-                  <p className="font-bold text-wrap">{product.name}</p>
-                  <div className="flex gap-2"><span>Quantity:</span><p>{product.quantity}</p></div>
-                  <p className="font-bold">PKR {Number(product.price || 0).toLocaleString()}</p>
-                </div>
-              </div>
+              <CustomerProduct
+                key={getCommerceItemKey(product)}
+                title={product.name}
+                item={product.quantity}
+                price={Number(product.price || 0).toLocaleString()}
+                priceLabel="PKR"
+                image={resolveBackendAssetUrl(product.image || product.images?.[0], "https://via.placeholder.com/300x200")}
+              />
             ))
           ) : (
             <p className="p-5 text-center text-gray-500">Your cart is empty.</p>
@@ -240,12 +242,31 @@ const CustomerInfomation = ({ onNext }) => {
 
         <div className="h-0 border border-[#D4D4D4]"></div>
 
-        <div className="space-y-2">
-          {/* Summary Items */}
-          <SummaryItem label="Shipping" value={formatShopCurrency(summary.shipping)} />
-          <SummaryItem label="Discount 10%" value={`- ${formatShopCurrency(summary.discount)}`} />
-          <SummaryItem label="Price" value={formatShopCurrency(summary.subtotal)} />
-          <SummaryItem label="Total Price" value={formatShopCurrency(summary.total)} highlight />
+        <div className="flex flex-col gap-2">
+          <OrderSummaryLine
+            label="Shipping"
+            value={formatShopCurrency(summary.shipping)}
+            labelClassName={summaryLabelClassName}
+            valueClassName={summaryValueClassName}
+          />
+          <OrderSummaryLine
+            label="Discount 10%"
+            value={`- ${formatShopCurrency(summary.discount)}`}
+            labelClassName={summaryLabelClassName}
+            valueClassName={summaryValueClassName}
+          />
+          <OrderSummaryLine
+            label="Price"
+            value={formatShopCurrency(summary.subtotal)}
+            labelClassName={summaryLabelClassName}
+            valueClassName={summaryValueClassName}
+          />
+          <OrderSummaryLine
+            label="Total Price"
+            value={formatShopCurrency(summary.total)}
+            labelClassName={summaryLabelClassName}
+            valueClassName={summaryTotalValueClassName}
+          />
         </div>
 
         <div className="h-0 border border-[#D4D4D4]"></div>
@@ -265,14 +286,32 @@ const CustomerInfomation = ({ onNext }) => {
   );
 };
 
-// Summary display line
-const SummaryItem = ({ label, value, highlight = false }) => (
-  <div className="flex justify-between">
-    <p className="text-[#7E7F7C] font-lato text-base">{label}</p>
-    <p className={`font-lato text-[20px] font-extrabold ${highlight ? 'text-yellow' : 'text-[#362D2C]'}`}>
-      {value}
-    </p>
-  </div>
-);
+InputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  required: PropTypes.bool,
+  type: PropTypes.string,
+};
+
+SelectField.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  required: PropTypes.bool,
+};
+
+CustomerInfomation.propTypes = {
+  onNext: PropTypes.func,
+};
 
 export default CustomerInfomation;
