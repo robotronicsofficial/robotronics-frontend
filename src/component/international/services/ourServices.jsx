@@ -4,6 +4,8 @@ import AppImage from "../../AppImage";
 import robot from "../../../assets/images/IServicesS4.webp";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 import { useServices } from "../../../hooks/useServices";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 const OurServices = () => {
   const {
@@ -33,10 +35,18 @@ const OurServices = () => {
               const imageUrl = resolveBackendAssetUrl(service.thumbnailImage, robot);
 
               return (
-                <div
+                <Card
                   key={service._id}
-                  className="bg-card rounded-lg shadow-md overflow-hidden cursor-pointer"
+                  className="overflow-hidden rounded-lg bg-card p-0 shadow-md"
                   onClick={() => handleNavigate(service)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      handleNavigate(service);
+                    }
+                  }}
                 >
                   <div className="flex justify-center relative">
                     <div className="absolute inset-0 bg-foreground opacity-40 hover:bg-foreground hover:opacity-20 transition-all duration-100 ease-in-out"></div>
@@ -51,7 +61,7 @@ const OurServices = () => {
                       alt={`Image representing ${service.name}`}
                     />
                   </div>
-                </div>
+                </Card>
               );
             })
           ) : !error ? (
@@ -63,12 +73,13 @@ const OurServices = () => {
 
         {services.length > 6 && (
           <div className="text-center mt-8">
-            <button
-              className="bg-foreground text-background px-6 py-2 rounded-lg text-lg hover:bg-foreground/80 transition"
+            <Button
+              type="button"
+              className="h-auto rounded-lg bg-foreground px-6 py-2 text-lg text-background hover:bg-foreground/80"
               onClick={() => setShowAll(!showAll)}
             >
               {showAll ? "Show Less" : "Show More"}
-            </button>
+            </Button>
           </div>
         )}
       </div>

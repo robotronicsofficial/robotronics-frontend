@@ -4,6 +4,9 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 import CenteredState from "../../components/layout/CenteredState";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 import { useBlogs } from "../../hooks/useBlogs";
 const BlogCard = ({ cardData }) => {
@@ -22,7 +25,7 @@ const BlogCard = ({ cardData }) => {
   };
 
   return (
-    <div className="w-full lg:max-w-sm max-w-sm rounded overflow-hidden shadow-lg bg-card">
+    <Card className="w-full max-w-sm overflow-hidden rounded p-0 shadow-lg lg:max-w-sm">
       <div className="relative">
         <Link to={`/BlogDetail/${cardData._id}`}>
           <img
@@ -35,29 +38,29 @@ const BlogCard = ({ cardData }) => {
         </Link>
         <div className="absolute left-4 top-4 flex flex-wrap gap-2">
           {mappedData.tags.map((tag, index) => (
-            <span
+            <Badge
               key={index}
-              className="bg-muted text-background text-sm poppins-light px-2 py-1 rounded"
+              className="rounded bg-muted px-2 py-1 text-sm font-normal text-background"
             >
               {tag}
-            </span>
+            </Badge>
           ))}
         </div>
         <div className="absolute right-4 top-4">
-          <button className="bg-card p-2 rounded-full shadow-md">
+          <Button type="button" variant="secondary" size="icon" className="rounded-full bg-card shadow-md">
             <Share2 />
-          </button>
+          </Button>
         </div>
       </div>
-      <div className="px-6 py-4">
+      <CardContent className="px-6 py-4">
         <div className="font-bold text-wrap poppins-bold text-xl mb-2">
           {mappedData.title}
         </div>
         <p className="text-muted-foreground text-wrap poppins-light text-base">
           {mappedData.description}
         </p>
-      </div>
-      <div className="px-6 pt-4 pb-2 flex flex-col justify-between">
+      </CardContent>
+      <CardFooter className="flex flex-col justify-between px-6 pb-2 pt-4">
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex items-center gap-4">
             <img
@@ -86,8 +89,8 @@ const BlogCard = ({ cardData }) => {
             </span>
           </div>
         </div>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 };
 

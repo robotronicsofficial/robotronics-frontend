@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { BarChart2, Quote, Share2 } from "lucide-react";
 
 import { BrandIcon } from "../../components/ui/brand-icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
@@ -102,9 +104,9 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-3">
             {tags.map((tag, index) => (
-              <span key={`${tag}-${index}`} className="bg-card border border-border px-4 py-2 rounded-full text-sm poppins-light">
+              <Badge key={`${tag}-${index}`} variant="outline" className="rounded-full bg-card px-4 py-2 text-sm font-normal">
                 {tag}
-              </span>
+              </Badge>
             ))}
           </div>
         )}
@@ -123,26 +125,26 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
 
         <div className="flex w-5/6 justify-center gap-2">
           {previousBlog ? (
-            <Link to={`/BlogDetail/${previousBlog._id}`}>
-              <button className="bg-foreground text-background poppins-light hover:bg-primary py-2 px-8 rounded-md">
+            <Button asChild className="h-auto bg-foreground px-8 py-2 text-background hover:bg-primary">
+              <Link to={`/BlogDetail/${previousBlog._id}`}>
                 Previous
-              </button>
-            </Link>
+              </Link>
+            </Button>
           ) : (
-            <button className="bg-muted text-background poppins-light py-2 px-8 rounded-md cursor-not-allowed" disabled>
+            <Button className="h-auto cursor-not-allowed bg-muted px-8 py-2 text-background" disabled>
               Previous
-            </button>
+            </Button>
           )}
           {nextBlog ? (
-            <Link to={`/BlogDetail/${nextBlog._id}`}>
-              <button className="bg-foreground text-background hover:bg-primary poppins-light py-2 px-12 rounded-md">
+            <Button asChild className="h-auto bg-foreground px-12 py-2 text-background hover:bg-primary">
+              <Link to={`/BlogDetail/${nextBlog._id}`}>
                 Next
-              </button>
-            </Link>
+              </Link>
+            </Button>
           ) : (
-            <button className="bg-muted text-background poppins-light py-2 px-12 rounded-md cursor-not-allowed" disabled>
+            <Button className="h-auto cursor-not-allowed bg-muted px-12 py-2 text-background" disabled>
               Next
-            </button>
+            </Button>
           )}
         </div>
       </div>

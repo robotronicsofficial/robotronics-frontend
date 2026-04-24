@@ -3,6 +3,7 @@ import Robort from "../assets/images/heroRobot.webp";
 import AppImage from "./AppImage";
 import { BrandIcon } from "../components/ui/brand-icons";
 import { getAosStaggerDelay } from "../utils/motion";
+import { Button } from "@/components/ui/button";
 
 const Intro = () => {
   const navigate = useNavigate();
@@ -38,21 +39,13 @@ const Intro = () => {
                 </p>
                 {/* Buttons */}
               <div className="flex flex-col gap-x-3 mt-10" data-aos="fade-up">
-                <button
-                  to="section2"
+                <Button
+                  type="button"
                   onClick={() => navigate("/subscriptions")}
-                  offset={-70}
-                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-foreground hover:text-background bg-primary poppins-bold hover:bg-border shadow-xl rounded-md"
+                  className="h-auto items-center justify-center rounded-md bg-primary p-3 px-4 text-sm text-foreground shadow-xl hover:bg-border hover:text-background lg:text-lg"
                 >
                   Get Enrolled
-                </button>
-                {/* <button
-                  to="section1"
-                  offset={-70}
-                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-foreground hover:text-background bg-primary poppins-bold hover:bg-border shadow-xl rounded-md"
-                >
-                  Get Started
-                </button> */}
+                </Button>
               </div>
               </div>
 

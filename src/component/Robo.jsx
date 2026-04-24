@@ -1,6 +1,7 @@
 import robot from "../assets/imagesContent/roboo/roboposter.webp";
 import { useNavigate } from "react-router-dom";
 import AppImage from "./AppImage";
+import { Button } from "@/components/ui/button";
 
 const Robo = () => {
   const navigate = useNavigate();
@@ -14,12 +15,13 @@ const Robo = () => {
           className="w-full h-full  object-fill"
         />
       </div>
-      <button
-          onClick={() => navigate("/subscriptions")}
-          className="absolute bottom-[8vh] left-[14vw] items-center justify-center py-8 px-10 md:text-3xl text-sm text-primary  bg-card poppins-bold  shadow-xl rounded-[6vw] border-foreground border-4"
-        >
-          Subscribe Now
-        </button>
+      <Button
+        type="button"
+        onClick={() => navigate("/subscriptions")}
+        className="absolute bottom-[8vh] left-[14vw] h-auto items-center justify-center rounded-[6vw] border-4 border-foreground bg-card px-10 py-8 text-sm text-primary shadow-xl hover:bg-card/90 md:text-3xl"
+      >
+        Subscribe Now
+      </Button>
     </div>
   );
 };

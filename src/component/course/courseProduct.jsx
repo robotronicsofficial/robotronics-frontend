@@ -51,23 +51,18 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
             </p>
             <img src={shopStar} alt="" />
           </div>
-          <div onClick={toggleWishList} className="cursor-pointer">
-            {!isSaved ? (
-              <div className="flex justify-between">
-                <Star className="w-6 h-6 self-center" />
-                <p className="lg:text-xl text-primary font-bold">
-                  {price != null ? `PKR ${price}` : "Included"}
-                </p>
-              </div>
-            ) : (
-              <div className="flex justify-between">
-                <Star className="w-6 h-6 self-center" />
-                <p className="lg:text-xl text-primary font-bold">
-                  {price != null ? `PKR ${price}` : "Included"}
-                </p>
-              </div>
-            )}
-          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            className="h-auto w-full justify-between p-0 hover:bg-transparent"
+            onClick={toggleWishList}
+            aria-pressed={isSaved}
+          >
+            <Star className="w-6 h-6 self-center" fill={isSaved ? "currentColor" : "none"} />
+            <span className="lg:text-xl text-primary font-bold">
+              {price != null ? `PKR ${price}` : "Included"}
+            </span>
+          </Button>
         </div>
         {/* line */}
         <div className="py-5">
@@ -92,13 +87,13 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
       </Card>
       {/* button */}
       <div className="py-2">
-        <NavLink to={`/CoursesProduct/${id}`}>
-          <div className="text-center bg-primary p-2">
-            <Button className="h-auto bg-primary p-3 text-xl font-bold">
+        <div className="text-center bg-primary p-2">
+          <Button asChild className="h-auto bg-primary p-3 text-xl font-bold">
+            <NavLink to={`/CoursesProduct/${id}`}>
               View Course
-            </Button>
-          </div>
-        </NavLink>
+            </NavLink>
+          </Button>
+        </div>
       </div>
     </div>
   );

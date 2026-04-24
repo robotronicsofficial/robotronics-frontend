@@ -5,6 +5,8 @@ import python from "../../../assets/images/python.webp";
 import star from "../../../assets/images/shopStar.svg";
 import { createCourseCommerceItem } from "../../../lib/commerceItems";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 import { useCartStore } from "../../../stores/cartStore";
@@ -82,9 +84,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
                 <img src={star} alt="" />
               </div>
               {/* button */}
-              <div className="bg-destructive p-1 px-2">
-                <button className="text-background poppins-bold">ON SALE</button>
-              </div>
+              <Badge className="rounded-none bg-destructive px-2 py-1 font-bold text-background">ON SALE</Badge>
             </div>
             {/* text */}
             <div className="flex flex-row gap-x-2">
@@ -103,22 +103,23 @@ const CourseIntro = ({ id, title, image, price, category }) => {
           <div className="lg:flex flex-row lg:gap-x-10">
             <div className="flex flex-row gap-x-5">
               <div>
-                <button
+                <Button
                   type="button"
                   onClick={handleViewPlans}
-                  className="bg-foreground p-2 poppins-medium lg:px-6 text-background rounded-lg"
+                  className="h-auto rounded-lg bg-foreground p-2 text-background lg:px-6"
                 >
                   VIEW SUBSCRIPTION PLANS
-                </button>
+                </Button>
               </div>
               <div>
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={handleGiftCourse}
-                  className="mt-3 rounded-lg border border-foreground bg-card p-2 poppins-medium text-foreground lg:mt-0 lg:px-6"
+                  className="mt-3 h-auto rounded-lg border-foreground bg-card p-2 text-foreground lg:mt-0 lg:px-6"
                 >
                   GIFT THIS COURSE
-                </button>
+                </Button>
               </div>
             </div>
           </div>

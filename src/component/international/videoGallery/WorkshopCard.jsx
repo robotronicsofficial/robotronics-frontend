@@ -1,6 +1,7 @@
 import { Clock, MapPin } from "lucide-react";
 import PropTypes from "prop-types";
 import { openExternalUrl } from "../../../utils/openExternalUrl";
+import { Button } from "@/components/ui/button";
 
 const WorkshopCard = ({ workshop }) => {
   const hasExternalUrl = Boolean(workshop?.url);
@@ -14,9 +15,10 @@ const WorkshopCard = ({ workshop }) => {
   };
 
   return (
-    <button
+    <Button
       type="button"
-      className="w-full bg-card shadow-lg rounded-lg overflow-hidden text-left disabled:cursor-default"
+      variant="ghost"
+      className="h-auto w-full flex-col items-stretch overflow-hidden rounded-lg bg-card p-0 text-left shadow-lg disabled:cursor-default"
       onClick={handleOpenWorkshop}
       disabled={!hasExternalUrl}
       aria-label={
@@ -66,7 +68,7 @@ const WorkshopCard = ({ workshop }) => {
           </div>
         </div>
       </div>
-    </button>
+    </Button>
   );
 };
 

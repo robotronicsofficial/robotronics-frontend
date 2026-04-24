@@ -8,6 +8,8 @@ import pstore from "../assets/logo/Playstor.svg";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "../components/ui/brand-icons";
 import AppImage from "./AppImage";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const Footer = () => {
   const goToTop = () => {
@@ -23,10 +25,12 @@ const Footer = () => {
       <div className="flex items-center lg:text-center p-10 ">
         {/* up button */}
         <div className="lg:w-1/4 md:w-1/3 w-1/2">
-          <button
-            className="flex lg:w-12 lg:h-12 md:h-8 md:w-8 h-6 w-6 top-btn border border-card rounded-full"
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="top-btn flex h-6 w-6 rounded-full border-card bg-transparent p-0 hover:bg-card/10 md:h-8 md:w-8 lg:h-12 lg:w-12"
             data-aos="fade-up"
-
             onClick={goToTop}
           >
             <AppImage
@@ -34,7 +38,7 @@ const Footer = () => {
               src={up}
               alt="Scroll to top"
             />
-          </button>
+          </Button>
         </div>
         {/* robotronics */}
         <div className="text-left">
@@ -217,16 +221,20 @@ const Footer = () => {
               {/* Subscribe Section */}
               <div className="flex flex-col lg:flex-row items-center lg:items-start mb-4 gap-y-4 lg:gap-y-0 lg:gap-x-4">
                 <div className="relative w-full">
-                  <input
+                  <Input
                     type="text"
                     id="footer-field"
                     placeholder="SUBSCRIBE NOW"
-                    className="w-full placeholder-opacity-25 bg-transparent border border-card rounded py-2 px-4 text-background focus:ring-2 focus:ring-ring/20 focus:border-ring outline-none transition-colors duration-200 ease-in-out"
+                    className="w-full border-card bg-transparent text-background placeholder:text-background/25"
                   />
                 </div>
-                <button className="w-full lg:w-auto flex items-center justify-center text-background bg-primary px-6 py-3 rounded hover:bg-primary/80 focus:outline-none transition-colors duration-200">
+                <Button
+                  type="button"
+                  className="h-auto w-full rounded bg-primary px-6 py-3 text-background hover:bg-primary/80 lg:w-auto"
+                  aria-label="Subscribe"
+                >
                   <AppImage src={img} alt="Subscribe Button Icon" />
-                </button>
+                </Button>
               </div>
 
               {/* Launch Countdown */}
@@ -289,38 +297,38 @@ const Footer = () => {
 
                   {/* App Store Buttons */}
                   <div className="flex flex-col gap-y-6 my-10">
-                    <button
-                      className="mb-4 border border-card p-4 rounded-xl flex items-center gap-12 hover:bg-muted transition-colors duration-200"
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="mb-4 h-auto rounded-xl border-card bg-transparent p-4 text-background hover:bg-muted"
                       data-aos="fade-up"
-
-
                     >
                       <AppImage className="h-11 w-14" src={apple} alt="apple" />
-                      <div className="text-background">
+                      <div className="text-left text-background">
                         <p className="text-sm text-wrap">Download on the</p>
                         <p className="text-2xl text-wrap font-bold">
                           APP STORE
                         </p>
                       </div>
-                    </button>
-                    <button
-                      className="border border-card p-4 rounded-xl flex items-center gap-12 hover:bg-muted transition-colors duration-200"
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="h-auto rounded-xl border-card bg-transparent p-4 text-background hover:bg-muted"
                       data-aos="fade-up"
-
-
                     >
                       <AppImage
                         className="h-11 w-14"
                         src={pstore}
                         alt="play-store"
                       />
-                      <div className="text-background">
+                      <div className="text-left text-background">
                         <p className="text-sm text-wrap ">Download on the</p>
                         <p className="text-2xl text-wrap font-bold">
                           PLAY STORE
                         </p>
                       </div>
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
