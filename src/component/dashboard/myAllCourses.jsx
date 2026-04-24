@@ -7,6 +7,7 @@ import { Spinner } from "../../components/ui/spinner";
 import { getActiveChildSession } from "../../utils/childSessionRequest";
 import { useChildCourses } from "../../hooks/useChildCourses";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import { Button } from "@/components/ui/button";
 
 const MyAllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -124,12 +125,13 @@ const MyAllCourses = () => {
                   </div>
 
                   <div className="pb-3 px-4">
-                    <button
+                    <Button
+                      type="button"
                       onClick={() => handleCourseClick(course)}
-                      className="mt-2 bg-primary w-full text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2 hover:bg-accent transition-colors"
+                      className="mt-2 h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground shadow-xl hover:bg-accent"
                     >
                       <span>View Course</span>
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -147,43 +149,46 @@ const MyAllCourses = () => {
         {displayedCourses.length > coursesPerPage && (
           <div className="flex flex-col items-center justify-center mt-10 gap-4">
             <div className="flex items-center gap-x-4">
-              <button
+              <Button
+                type="button"
                 onClick={prevPage}
                 disabled={currentPage === 1}
-                className={`py-2 px-4 rounded-full ${
+                className={`h-auto rounded-full px-4 py-2 ${
                   currentPage === 1
                     ? "bg-muted text-muted-foreground cursor-not-allowed"
                     : "bg-muted hover:bg-muted text-foreground"
                 }`}
               >
                 Previous
-              </button>
+              </Button>
 
               {Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => (
-                <button
+                <Button
+                  type="button"
                   key={number}
                   onClick={() => paginate(number)}
-                  className={`py-2 px-4 rounded-full ${
+                  className={`h-auto rounded-full px-4 py-2 ${
                     currentPage === number
                       ? "bg-primary text-foreground font-bold"
                       : "bg-muted hover:bg-muted text-foreground"
                   }`}
                 >
                   {number}
-                </button>
+                </Button>
               ))}
 
-              <button
+              <Button
+                type="button"
                 onClick={nextPage}
                 disabled={currentPage === totalPages}
-                className={`py-2 px-4 rounded-full ${
+                className={`h-auto rounded-full px-4 py-2 ${
                   currentPage === totalPages
                     ? "bg-muted text-muted-foreground cursor-not-allowed"
                     : "bg-muted hover:bg-muted text-foreground"
                 }`}
               >
                 Next
-              </button>
+              </Button>
             </div>
           </div>
         )}

@@ -9,6 +9,7 @@ import {
   useChildProgress,
   useDownloadChildCertificateMutation,
 } from "../../hooks/useChildCourses";
+import { Button } from "@/components/ui/button";
 
 const SubscriptionProgressDetailPage = () => {
   const [filter, setFilter] = useState('all');
@@ -75,12 +76,13 @@ const SubscriptionProgressDetailPage = () => {
       <div className="bg-card p-6 rounded-lg shadow-md max-w-md w-full">
         <h2 className="text-xl font-bold text-destructive mb-4">Error</h2>
         <p className="text-muted-foreground mb-4">{progressErrorMessage}</p>
-        <button
+        <Button
+          type="button"
           onClick={() => refetch()}
-          className="bg-primary hover:bg-primary text-background py-2 px-4 rounded"
+          className="h-auto rounded bg-primary px-4 py-2 text-background hover:bg-primary"
         >
           Try Again
-        </button>
+        </Button>
       </div>
     </CenteredState>
   );
@@ -104,24 +106,27 @@ const SubscriptionProgressDetailPage = () => {
 
         {/* Filter Buttons */}
         <div className="flex gap-4 mb-6">
-          <button
+          <Button
+            type="button"
             onClick={() => setFilter('all')}
             className={`px-4 py-2 rounded-full ${filter === 'all' ? 'bg-primary text-background' : 'bg-muted'}`}
           >
             All
-          </button>
-          <button
+          </Button>
+          <Button
+            type="button"
             onClick={() => setFilter('active')}
             className={`px-4 py-2 rounded-full ${filter === 'active' ? 'bg-primary text-background' : 'bg-muted'}`}
           >
             Active
-          </button>
-          <button
+          </Button>
+          <Button
+            type="button"
             onClick={() => setFilter('completed')}
             className={`px-4 py-2 rounded-full ${filter === 'completed' ? 'bg-primary text-background' : 'bg-muted'}`}
           >
             Completed
-          </button>
+          </Button>
         </div>
 
         {/* Course Progress Table */}
@@ -151,13 +156,15 @@ const SubscriptionProgressDetailPage = () => {
                         <div className="flex items-center gap-2">
                           {course.certificateAvailable ? (
                             <>
-                              <button
+                              <Button
+                                type="button"
+                                variant="link"
                                 className={`hover:text-primary ${isDownloading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer text-info'}`}
                                 onClick={() => !isDownloading && handleDownloadCertificate(courseId, course.name || course.courseName || "Course")}
                                 disabled={isDownloading}
                               >
                                 {isDownloading ? 'Generating...' : 'Download'}
-                              </button>
+                              </Button>
                               <FileText className="text-destructive" />
                             </>
                           ) : (
@@ -176,12 +183,14 @@ const SubscriptionProgressDetailPage = () => {
                         {courseError && (
                           <div className="text-destructive text-xs mt-1 max-w-xs">
                             {courseError}
-                            <button
+                            <Button
+                              type="button"
+                              variant="link"
                               onClick={() => setDownloadErrors(prev => ({ ...prev, [courseId]: null }))}
-                              className="ml-2 text-muted-foreground hover:text-muted-foreground"
+                              className="ml-2 h-auto p-0 text-muted-foreground hover:text-muted-foreground"
                             >
                               Dismiss
-                            </button>
+                            </Button>
                           </div>
                         )}
                       </div>

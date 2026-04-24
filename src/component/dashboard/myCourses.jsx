@@ -126,9 +126,10 @@ const MyCourses = () => {
             )}
           </div>
 
-          <button
+          <Button
+            type="button"
             onClick={saveSelectedCourses}
-            className={`py-2 px-6 rounded-full shadow-xl ${!canSaveCourses
+            className={`h-auto rounded-full px-6 py-2 shadow-xl ${!canSaveCourses
                 ? "bg-muted cursor-not-allowed"
                 : "bg-primary hover:bg-accent"
               } transition-colors`}
@@ -145,7 +146,7 @@ const MyCourses = () => {
             ) : (
               hasFixedCourseLimit ? `Save ${maxCourses} Courses` : "Save Courses"
             )}
-          </button>
+          </Button>
 
           {/* ... rest of the button section ... */}
         </div>
@@ -189,9 +190,10 @@ const MyCourses = () => {
 
                 {/* Toggle Button */}
                 <div className="py-3 px-4 flex justify-center">
-                  <button
+                  <Button
+                    type="button"
                     onClick={() => toggleCourseSelection(course._id)}
-                    className={`py-2 px-6 rounded-full transition-colors ${selectedCourses.includes(course._id)
+                    className={`h-auto rounded-full px-6 py-2 transition-colors ${selectedCourses.includes(course._id)
                       ? "bg-destructive hover:bg-destructive text-background"
                       : "bg-success hover:bg-success text-background"
                       }`}
@@ -199,17 +201,18 @@ const MyCourses = () => {
                     {selectedCourses.includes(course._id)
                       ? "Deselect"
                       : "Select"}
-                  </button>
+                  </Button>
                 </div>
 
                 <div className="pb-3 px-4">
-                  <button
+                  <Button
+                    type="button"
                     onClick={() => navigate(`/Dashboard/courseDetail/${course._id}`)}
-                    className="mt-2 bg-primary w-full text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2 hover:bg-accent transition-colors"
+                    className="mt-2 h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground shadow-xl hover:bg-accent"
                   >
                     <span>View Detail</span>
                     <MoveDown className="text-xs" />
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -218,40 +221,43 @@ const MyCourses = () => {
 
         <div className="flex flex-col items-center justify-center mt-10 gap-4">
           <div className="flex items-center gap-x-4">
-            <button
+            <Button
+              type="button"
               onClick={prevPage}
               disabled={currentPage === 1}
-              className={`py-2 px-4 rounded-full ${currentPage === 1
+              className={`h-auto rounded-full px-4 py-2 ${currentPage === 1
                 ? "bg-muted text-muted-foreground cursor-not-allowed"
                 : "bg-muted hover:bg-muted text-foreground"
                 }`}
             >
               Previous
-            </button>
+            </Button>
 
             {Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => (
-              <button
+              <Button
+                type="button"
                 key={number}
                 onClick={() => paginate(number)}
-                className={`py-2 px-4 rounded-full ${currentPage === number
+                className={`h-auto rounded-full px-4 py-2 ${currentPage === number
                   ? "bg-primary text-foreground font-bold"
                   : "bg-muted hover:bg-muted text-foreground"
                   }`}
               >
                 {number}
-              </button>
+              </Button>
             ))}
 
-            <button
+            <Button
+              type="button"
               onClick={nextPage}
               disabled={currentPage === totalPages}
-              className={`py-2 px-4 rounded-full ${currentPage === totalPages
+              className={`h-auto rounded-full px-4 py-2 ${currentPage === totalPages
                 ? "bg-muted text-muted-foreground cursor-not-allowed"
                 : "bg-muted hover:bg-muted text-foreground"
                 }`}
             >
               Next
-            </button>
+            </Button>
           </div>
         </div>
         <div className="mb-20"></div>

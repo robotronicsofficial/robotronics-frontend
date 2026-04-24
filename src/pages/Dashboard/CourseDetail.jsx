@@ -30,6 +30,8 @@ import DialogShell from "../../components/ui/dialog-shell";
 import { Spinner } from "../../components/ui/spinner";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import StarRating from "../../components/rating/StarRating";
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const MAX_ATTEMPTS = {
   BASIC: 2,
@@ -468,12 +470,14 @@ const CourseDetail = () => {
                                         {content.type === "video" && (
                                           <>
                                             <CirclePlayIcon className="text-primary text-lg" />
-                                            <button
+                                            <Button
+                                              type="button"
+                                              variant="link"
                                               onClick={() => handlePlayVideo(fileUrl)}
-                                              className="poppins-light"
+                                              className="h-auto p-0 font-normal text-foreground"
                                             >
                                               {content.name}
-                                            </button>
+                                            </Button>
                                           </>
                                         )}
                                         {(content.type === "assignment" || content.type === "book") && (
@@ -496,14 +500,15 @@ const CourseDetail = () => {
                                           </span>
                                         )}
                                         {(content.type === "assignment" || content.type === "book") && (
-                                          <button
+                                          <Button
                                             type="button"
+                                            variant="link"
                                             onClick={() => handleDownloadContent(content)}
-                                            className="flex items-center poppins-medium text-primary text-sm hover:text-primary"
+                                            className="h-auto p-0 text-sm font-medium text-primary hover:text-primary"
                                           >
                                             <DownloadIcon className="mr-1" />
                                             Download
-                                          </button>
+                                          </Button>
                                         )}
                                       </div>
                                     </div>
@@ -654,7 +659,9 @@ const CourseDetail = () => {
                                           You&apos;ve used all {maxAttempts} attempts for today. Try again tomorrow.
                                         </div>
                                       ) : (
-                                        <button
+                                        <Button
+                                          type="button"
+                                          variant="link"
                                           onClick={() => {
                                             setQuizResults(prev => {
                                               const newResults = { ...prev };
@@ -675,14 +682,14 @@ const CourseDetail = () => {
                                               [sectionIndex]: true
                                             }));
                                           }}
-                                          className="mt-4 poppins-medium text-info hover:text-info"
+                                          className="mt-4 h-auto p-0 font-medium text-info hover:text-info"
                                         >
                                           {childPlan === 'basic' ?
                                             (isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) ?
                                               `Retake Quiz (Attempt ${childSection.quiz.attempts + 1} of ${maxAttempts} today)` :
                                               `Retake Quiz (${maxAttempts} fresh attempts available)`) :
                                             'Retake Quiz'}
-                                        </button>
+                                        </Button>
                                       )
                                     )}
                                   </div>
@@ -698,30 +705,31 @@ const CourseDetail = () => {
                                         <div className="poppins-medium mb-2">
                                           {qIndex + 1}. {question.questionText}
                                         </div>
-                                        <div className="flex flex-col gap-y-2">
+                                        <RadioGroup
+                                          value={quizAnswers[`${sectionIndex}-${question._id}`] || ""}
+                                          onValueChange={(option) => handleQuizAnswer(sectionIndex, question._id, option)}
+                                          className="flex flex-col gap-y-2"
+                                        >
                                           {(question.options || []).map((option, oIndex) => (
                                             <label key={oIndex} className="flex items-center gap-x-2 poppins-light">
-                                              <input
-                                                type="radio"
-                                                name={`quiz-${sectionIndex}-${question._id}`}
+                                              <RadioGroupItem
                                                 value={option}
-                                                checked={quizAnswers[`${sectionIndex}-${question._id}`] === option}
-                                                onChange={() => handleQuizAnswer(sectionIndex, question._id, option)}
-                                                className="text-info focus:ring-info"
+                                                id={`quiz-${sectionIndex}-${question._id}-${oIndex}`}
                                               />
                                               <span>{option}</span>
                                             </label>
                                           ))}
-                                        </div>
+                                        </RadioGroup>
                                       </div>
                                     ))}
-                                    <button
+                                    <Button
+                                      type="button"
                                       onClick={() => submitQuiz(sectionIndex)}
                                       disabled={updateChildCourseProgressMutation.isPending}
-                                      className="poppins-medium bg-info hover:bg-info text-background px-4 py-2 rounded-lg"
+                                      className="h-auto rounded-lg bg-info px-4 py-2 font-medium text-background hover:bg-info"
                                     >
                                       {updateChildCourseProgressMutation.isPending ? "Submitting..." : "Submit Quiz"}
-                                    </button>
+                                    </Button>
                                     <div className="poppins-light text-sm text-muted-foreground mt-2">
                                       Note: You need to score at least 60% to unlock the next module.
                                     </div>

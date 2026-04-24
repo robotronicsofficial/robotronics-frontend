@@ -24,6 +24,7 @@ import {
   useVerifyChildPinMutation,
 } from "../../hooks/useAccount";
 import { queryKeys } from "../../lib/queryKeys";
+import { Button } from "@/components/ui/button";
 
 const resolveChildAccess = (child, childAccessList) => (
   childAccessList.find((access) => (
@@ -277,21 +278,23 @@ const SubscriptionChildProfile = () => {
                       </div>
 
                       <div className="flex flex-col gap-y-3 sm:flex-row sm:gap-y-0 sm:gap-x-3 md:gap-x-5">
-                        <button
+                        <Button
+                          type="button"
                           onClick={() => handleViewCourses(child._id)}
-                          className={`text-xs sm:text-sm poppins-light border border-border rounded-lg px-2 py-1 sm:px-3 sm:py-2 ${
+                          className={`h-auto rounded-lg border border-border px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm ${
                             hasPin ? 'bg-primary text-background cursor-pointer' : 'bg-muted text-muted-foreground cursor-not-allowed'
                           } md:text-base`}
                           disabled={!hasPin}
                         >
                           View My Courses
-                        </button>
-                        <button
+                        </Button>
+                        <Button
+                          type="button"
                           onClick={() => openPinModal(child._id, hasPin)}
-                          className="text-xs sm:text-sm poppins-light border border-border rounded-lg px-2 py-1 sm:px-3 sm:py-2 bg-primary text-background md:text-base"
+                          className="h-auto rounded-lg border border-border bg-primary px-2 py-1 text-xs text-background sm:px-3 sm:py-2 sm:text-sm md:text-base"
                         >
                           {hasPin ? 'Change PIN' : 'Create Login Pin'}
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </div>
