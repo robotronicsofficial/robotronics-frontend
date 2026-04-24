@@ -10,14 +10,14 @@ import { FaUserCircle } from "react-icons/fa";
 import { CART_PATH, CONTACT_PATH } from "../router/paths";
 
 const PRIMARY_ITEMS = [
+  { to: "/Course", label: "Courses" },
   { to: "/International/Iservices", label: "Services" },
   { to: "/shop", label: "Shop" },
 ];
 
 const LEARN_GROUP = {
-  label: "Learn",
+  label: "Resources",
   items: [
-    { to: "/Course", label: "Courses", description: "Browse full catalog" },
     { to: "/International/videoGallery", label: "Events", description: "Workshops and competitions" },
     { to: "/Blog", label: "Blog", description: "Articles and tutorials" },
   ],
@@ -348,9 +348,6 @@ export default function Header() {
                   Home
                 </NavLink>
               </li>
-              <li>
-                <NavDropdown label={LEARN_GROUP.label} items={LEARN_GROUP.items} />
-              </li>
               {PRIMARY_ITEMS.map((item) => (
                 <li key={item.to}>
                   <NavLink to={item.to} className={navLinkClass}>
@@ -358,6 +355,9 @@ export default function Header() {
                   </NavLink>
                 </li>
               ))}
+              <li>
+                <NavDropdown label={LEARN_GROUP.label} items={LEARN_GROUP.items} />
+              </li>
               <li>
                 <NavDropdown label={COMPANY_GROUP.label} items={COMPANY_GROUP.items} />
               </li>
