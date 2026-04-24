@@ -5,6 +5,8 @@ import { getCommerceItemKey } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import OrderSummaryLine from "./OrderSummaryLine";
 import { selectCart, useCartStore } from "../../stores/cartStore";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 const summaryLabelClassName = "text-sm poppins-light";
 
@@ -49,7 +51,7 @@ const CustomerOrder = ({
       </div>
 
       <div className="flex flex-col py-2 lg:py-5">
-        <div className="h-0 border border-muted"></div>
+        <Separator className="bg-muted" />
       </div>
 
       <div className="flex flex-col gap-2 lg:gap-5">
@@ -78,18 +80,18 @@ const CustomerOrder = ({
           valueClassName="text-xl text-primary poppins-bold"
         />
         <div className="flex flex-col gap-1 py-2 lg:gap-3 lg:py-4">
-          <div className="h-0 border border-muted"></div>
+          <Separator className="bg-muted" />
         </div>
         {showContinueButton ? (
           <div className="flex justify-center py-2 lg:py-4">
-            <button
+            <Button
               type="button"
-              className="text-center lg:text-xl text-sm poppins-bold text-primary bg-foreground py-2 lg:px-20 px-5"
+              className="h-auto bg-foreground px-5 py-2 text-center text-sm font-bold text-primary lg:px-20 lg:text-xl"
               onClick={onNext}
               disabled={buttonDisabled || !items.length}
             >
               {buttonLabel}
-            </button>
+            </Button>
           </div>
         ) : null}
       </div>

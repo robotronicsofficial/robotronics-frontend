@@ -4,12 +4,16 @@ import time from "../assets/logo/time-svgrepo-com 1.svg"
 import download from "../assets/logo/download.svg"
 import sale from "../assets/logo/sales.svg" 
 import img7 from "../assets/logo/shopStars.svg"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 const ShopItems = () => {
   return (
     <div>
         <div className="flex-1 xl:w-1/4 md:w-1/2 p-4"  >
             <div>
-              <div className="bg-card p-6 rounded-xl">
+              <Card className="rounded-xl bg-card p-0">
+                <CardContent className="p-6">
                 <AppImage
                   className="h-50 rounded-xl w-full object-cover object-center"
                   src={python}
@@ -27,7 +31,7 @@ const ShopItems = () => {
                   </div>
                 </div>
                 {/*doted line */}
-                <div className="w-full h-0.5 border border-dotted border-foreground"></div>
+                <Separator className="border border-dotted border-foreground" />
                 <div className="flex justify-center items-center">
                   <div className="flex m-5">
                     <img className="p-1" src={time} />
@@ -42,11 +46,12 @@ const ShopItems = () => {
                     250 Sales
                   </div>
                 </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
-            <button className="bg-primary text-xl px-40 font-bold mt-4 p-4 rounded flex justify-center items-center" data-aos="fade-up" >
+            <Button className="mt-4 h-auto rounded bg-primary p-4 px-40 text-xl font-bold" data-aos="fade-up" >
               Join Course
-            </button>
+            </Button>
           </div> 
     </div>
   )

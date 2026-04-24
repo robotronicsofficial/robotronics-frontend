@@ -20,6 +20,8 @@ import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 import { selectCart, useCartStore } from "../../stores/cartStore";
 import { useSubmitShopCheckoutIntentMutation } from "../../hooks/useShopOrders";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const summaryLabelClassName = "font-lato text-base text-muted-foreground";
 const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
@@ -114,11 +116,13 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
+        <Card className="rounded-2xl border-primary/30 bg-primary/10 p-0 text-sm text-foreground">
+          <CardContent className="p-4">
           {submittedIntent
             ? "This checkout request has been submitted to Robotronics for follow-up and CRM handling."
             : "Review the saved checkout details, then submit the order request so Robotronics can process it in CRM."}
-        </div>
+          </CardContent>
+        </Card>
 
         {submitStatus.message ? (
           <div
@@ -145,13 +149,14 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                     : "Saved customer details for this digital order."}
                 </p>
               </div>
-              <button
+              <Button
                 type="button"
-                className="border border-card px-3 py-2 text-xs uppercase tracking-wide"
+                variant="outline"
+                className="h-auto border-card bg-transparent px-3 py-2 text-xs uppercase tracking-wide text-background hover:bg-card/10"
                 onClick={handleEditCustomer}
               >
                 Edit
-              </button>
+              </Button>
             </div>
 
             {customerReady || submittedIntent ? (
@@ -196,13 +201,13 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                 <p className="text-lg poppins-extrabold">PAYMENT DETAILS</p>
                 <p className="text-sm poppins-light">Saved locally in this browser for the current checkout draft.</p>
               </div>
-              <button
+              <Button
                 type="button"
-                className="bg-foreground px-3 py-2 text-xs uppercase tracking-wide text-primary"
+                className="h-auto bg-foreground px-3 py-2 text-xs uppercase tracking-wide text-primary"
                 onClick={handleEditPayment}
               >
                 Edit
-              </button>
+              </Button>
             </div>
 
             {paymentReady || submittedIntent ? (

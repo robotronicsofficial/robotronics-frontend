@@ -14,6 +14,9 @@ import {
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { selectCart, useCartStore } from "../../stores/cartStore";
 import StarRating from "../../components/rating/StarRating";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import "react-toastify/dist/ReactToastify.css";
 
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
@@ -112,26 +115,30 @@ const ShopCartproductList = ({ onNext }) => {
                   <StarRating value={5} className="my-6 text-2xl" label="5 out of 5" />
                   <div className="mb-4 flex justify-end gap-4">
                     <div className="flex items-center justify-center bg-card">
-                      <button
+                      <Button
                         type="button"
                         onClick={() => handleRemoveFromCart(product)}
-                        className="rounded-md bg-muted px-3 py-1 text-muted-foreground hover:bg-muted focus:outline-none"
+                        variant="secondary"
+                        size="sm"
+                        className="rounded-md bg-muted px-3 py-1 text-muted-foreground hover:bg-muted"
                       >
                         -
-                      </button>
-                      <input
+                      </Button>
+                      <Input
                         type="number"
-                        className="w-10 rounded-md px-1 py-1 text-center text-sm focus:outline-none lg:w-24 lg:px-3"
+                        className="h-auto w-10 rounded-md px-1 py-1 text-center text-sm lg:w-24 lg:px-3"
                         value={itemQuantity[getCommerceItemKey(product)] || 1}
                         readOnly
                       />
-                      <button
+                      <Button
                         type="button"
                         onClick={() => handleAddToCart(product)}
-                        className="rounded-md bg-muted px-1 text-muted-foreground hover:bg-muted focus:outline-none lg:px-3 lg:py-1"
+                        variant="secondary"
+                        size="sm"
+                        className="rounded-md bg-muted px-1 text-muted-foreground hover:bg-muted lg:px-3 lg:py-1"
                       >
                         +
-                      </button>
+                      </Button>
                     </div>
                   </div>
                   <div className="pt-10 text-right text-2xl font-bold text-foreground">
@@ -182,10 +189,10 @@ const ShopCartproductList = ({ onNext }) => {
           />
         </div>
         <div className="mt-6">
-          <input
+          <Input
             id="voucher"
             type="text"
-            className="mt-2 w-full border-b bg-background p-2 font-poppins text-[16px] font-medium leading-[20px] tracking-[0] text-muted-foreground"
+            className="mt-2 h-auto w-full rounded-none border-x-0 border-t-0 bg-background p-2 font-poppins text-[16px] font-medium leading-[20px] tracking-[0] text-muted-foreground"
             placeholder="Your voucher code"
           />
         </div>
@@ -195,8 +202,8 @@ const ShopCartproductList = ({ onNext }) => {
             Write your special notes here...
           </span>
 
-          <textarea
-            className="mt-1 block h-[139px] w-[401px] border border-border bg-background p-7 font-poppins font-light shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
+          <Textarea
+            className="mt-1 block h-[139px] w-[401px] border-border bg-background p-7 font-poppins font-light shadow-sm"
             value={notes}
             onChange={(e) => {
               setNotes(e.target.value);
@@ -206,14 +213,14 @@ const ShopCartproductList = ({ onNext }) => {
         </div>
 
         <div className="flex justify-center mt-20">
-          <button
+          <Button
             type="button"
             onClick={handleNext}
             aria-label="Proceed to Checkout"
-            className="flex h-11 w-[408px] items-center justify-center gap-2.5 bg-foreground p-3 font-semibold text-background transition"
+            className="h-11 w-[408px] gap-2.5 bg-foreground p-3 font-semibold text-background"
           >
             PROCEED TO CHECKOUT
-          </button>
+          </Button>
         </div>
       </div>
     </div>

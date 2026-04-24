@@ -11,6 +11,10 @@ import {
 } from "../../lib/shopCheckout";
 import { hasShippableCommerceItems } from "../../lib/commerceItems";
 import { selectCart, useCartStore } from "../../stores/cartStore";
+import { FormInput } from "@/components/forms/FormControls";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const SHIPPING_SERVICES = [
   {
@@ -128,13 +132,13 @@ const ShopPaymentMethod = ({ onNext }) => {
                 Save the payment details for this checkout draft. Shipping is only required when your cart has physical products.
               </p>
             </div>
-            <button
+            <Button
               type="button"
-              className="text-sm text-primary bg-foreground px-4 py-2"
+              className="h-auto bg-foreground px-4 py-2 text-sm text-primary"
               onClick={() => navigate("/CustomerInfo")}
             >
               Edit address
-            </button>
+            </Button>
           </div>
 
           <div className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
@@ -173,26 +177,21 @@ const ShopPaymentMethod = ({ onNext }) => {
               </p>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <RadioGroup value={selectedService} onValueChange={setSelectedService} className="flex flex-col gap-4">
               {SHIPPING_SERVICES.map((service) => {
                 const isSelected = selectedService === service.value;
 
                 return (
-                  <button
+                  <Label
                     key={service.value}
-                    type="button"
                     className={`w-full border p-5 text-left transition ${
                       isSelected ? "bg-foreground text-background border-foreground" : "bg-card text-foreground border-muted"
                     }`}
-                    onClick={() => setSelectedService(service.value)}
                   >
                     <div className="flex items-start gap-4">
-                      <input
-                        type="radio"
+                      <RadioGroupItem
                         value={service.value}
-                        name="shippingService"
-                        checked={isSelected}
-                        onChange={() => setSelectedService(service.value)}
+                        id={`shipping-${service.value}`}
                       />
                       <div className="flex w-full flex-col gap-2">
                         <div className="flex justify-between gap-4">
@@ -202,10 +201,10 @@ const ShopPaymentMethod = ({ onNext }) => {
                         <p className="text-sm poppins-light">{service.description}</p>
                       </div>
                     </div>
-                  </button>
+                  </Label>
                 );
               })}
-            </div>
+            </RadioGroup>
           </section>
         ) : (
           <section className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
@@ -221,26 +220,21 @@ const ShopPaymentMethod = ({ onNext }) => {
             </p>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-2">
+          <RadioGroup value={selectedMethod} onValueChange={setSelectedMethod} className="grid gap-4 lg:grid-cols-2">
             {PAYMENT_METHODS.map((method) => {
               const isSelected = selectedMethod === method.value;
 
               return (
-                <button
+                <Label
                   key={method.value}
-                  type="button"
                   className={`border p-5 text-left transition ${
                     isSelected ? "bg-foreground text-background border-foreground" : "bg-card text-foreground border-muted"
                   }`}
-                  onClick={() => setSelectedMethod(method.value)}
                 >
                   <div className="flex items-start gap-4">
-                    <input
-                      type="radio"
+                    <RadioGroupItem
                       value={method.value}
-                      name="paymentMethod"
-                      checked={isSelected}
-                      onChange={() => setSelectedMethod(method.value)}
+                      id={`payment-${method.value}`}
                     />
                     <div className="flex w-full flex-col gap-2">
                       <div className="flex items-center justify-between gap-4">
@@ -250,10 +244,10 @@ const ShopPaymentMethod = ({ onNext }) => {
                       <p className="text-sm poppins-light">{method.description}</p>
                     </div>
                   </div>
-                </button>
+                </Label>
               );
             })}
-          </div>
+          </RadioGroup>
         </section>
 
         <section className="flex flex-col gap-5">
@@ -331,17 +325,16 @@ const ShopPaymentMethod = ({ onNext }) => {
 };
 
 const Field = ({ id, label, value, onChange, placeholder, type = "text" }) => (
-  <label className="flex flex-col gap-2">
-    <span className="block text-sm text-foreground poppins-light">{label}</span>
-    <input
-      id={id}
-      type={type}
-      value={value}
-      onChange={(event) => onChange(event.target.value)}
-      placeholder={placeholder}
-      className="block w-full border-b-2 border-border bg-transparent py-2.5 text-sm text-foreground focus:border-foreground focus:outline-none"
-    />
-  </label>
+  <FormInput
+    id={id}
+    name={id}
+    label={label}
+    type={type}
+    value={value}
+    onChange={(event) => onChange(event.target.value)}
+    placeholder={placeholder}
+    controlClassName="rounded-none border-x-0 border-t-0 border-border bg-transparent px-0 py-2.5 text-sm text-foreground focus:border-foreground"
+  />
 );
 
 ShopPaymentMethod.propTypes = {

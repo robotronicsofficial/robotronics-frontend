@@ -6,6 +6,8 @@ import { cn } from "../../lib/utils";
 import CourseProduct from "../course/courseProduct";
 import ShopPages from "../shop/shopPages";
 import { useCourses } from "../../hooks/useCourses";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const COURSE_FILTERS = [
   { label: "All", value: "" },
@@ -78,23 +80,23 @@ const ShopCoursesIntro = () => {
             <p className="text-xl poppins-bold lg:text-2xl">Catalog</p>
             <div className="flex lg:gap-3">
               <div className="flex flex-1">
-                <button type="button" className="border border-border bg-card p-2">
+                <Button type="button" variant="outline" size="icon" className="h-auto rounded-none border-border bg-card p-2">
                   <img src={icon} alt="search" />
-                </button>
-                <input
+                </Button>
+                <Input
                   type="text"
-                  className="w-full border border-border"
+                  className="w-full rounded-none border-border"
                   placeholder="Search for courses"
                 />
               </div>
 
               <div className="flex">
-                <button type="button" className="border border-border bg-card">
+                <Button type="button" variant="outline" size="icon" className="h-auto rounded-none border-border bg-card">
                   <img src={arow} alt="arrow" />
-                </button>
-                <input
+                </Button>
+                <Input
                   type="text"
-                  className="border border-border lg:h-10 lg:w-64"
+                  className="rounded-none border-border lg:h-10 lg:w-64"
                   placeholder="Popular"
                 />
               </div>
@@ -107,17 +109,18 @@ const ShopCoursesIntro = () => {
         <div className="flex">
           <div className="lg:w-1/5">
             {COURSE_FILTERS.map((filter) => (
-              <button
+              <Button
                 key={filter.value || "all"}
                 type="button"
+                variant="ghost"
                 onClick={() => setSelectedFilter(filter.value)}
                 className={cn(
-                  "block pt-2 text-left text-sm poppins-light hover:text-foreground lg:pt-5 lg:text-base",
+                  "block h-auto justify-start rounded-none px-0 pt-2 text-left text-sm hover:bg-transparent hover:text-foreground lg:pt-5 lg:text-base",
                   selectedFilter === filter.value ? "text-foreground" : "text-foreground",
                 )}
               >
                 {filter.label}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -147,14 +150,15 @@ const ShopCoursesIntro = () => {
         <div className="justify-between lg:flex lg:p-5">
           <div className="flex">
             {paginationPages.map((page) => (
-              <button
+              <Button
                 type="button"
                 key={page}
-                className="bg-card p-1 px-3 text-sm hover:bg-primary lg:text-base"
+                variant="secondary"
+                className="h-auto rounded-none bg-card p-1 px-3 text-sm hover:bg-primary lg:text-base"
                 data-aos="fade-up"
               >
                 {page}
-              </button>
+              </Button>
             ))}
           </div>
 

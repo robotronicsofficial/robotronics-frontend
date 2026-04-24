@@ -13,6 +13,9 @@ import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 import { cn } from "../../../lib/utils";
 import { useCourses } from "../../../hooks/useCourses";
 import { useProducts } from "../../../hooks/useProducts";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const RELATED_ITEM_CONFIG = {
   [COMMERCE_ITEM_TYPES.product]: {
@@ -90,13 +93,13 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
           <RelatedItemsMessage>
             {config.emptyLabel}
             <div className="mt-4">
-              <button
+              <Button
                 type="button"
                 onClick={() => navigate(config.browsePath)}
-                className="rounded-lg bg-foreground px-5 py-3 font-semibold text-primary"
+                className="h-auto rounded-lg bg-foreground px-5 py-3 font-semibold text-primary"
               >
                 {config.browseLabel}
-              </button>
+              </Button>
             </div>
           </RelatedItemsMessage>
         ) : (
@@ -105,11 +108,18 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
             data-aos="fade-up"
           >
             {topThree.map((item, index) => (
-              <button
+              <Card
                 key={getCommerceItemKey(item) || index}
-                type="button"
                 onClick={() => navigate(getCommerceItemRoute(item))}
                 className="overflow-hidden rounded-2xl bg-card text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    navigate(getCommerceItemRoute(item));
+                  }
+                }}
               >
                 <img
                   src={resolveBackendAssetUrl(item?.images?.[0], "https://via.placeholder.com/300x200")}
@@ -118,19 +128,19 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                   loading="lazy"
                   decoding="async"
                 />
-                <div className="flex flex-col gap-3 p-5 text-foreground">
+                <CardContent className="flex flex-col gap-3 p-5 text-foreground">
                   <div className="flex items-start justify-between gap-3">
-                    <p className="rounded-full bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+                    <Badge variant="secondary" className="rounded-full bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                       {item?.category || "General"}
-                    </p>
+                    </Badge>
                     <p className="text-sm font-semibold">PKR {Number(item?.price || 0).toLocaleString()}</p>
                   </div>
                   <h3 className="text-lg font-bold leading-snug">{item?.name || "Item"}</h3>
                   <p className="line-clamp-2 text-sm text-muted-foreground">
                     {item?.description || "Live catalog listing from Robotronics."}
                   </p>
-                </div>
-              </button>
+                </CardContent>
+              </Card>
             ))}
           </div>
         )}

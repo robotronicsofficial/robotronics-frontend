@@ -13,6 +13,9 @@ import { useProduct, useProducts } from "../../../hooks/useProducts";
 import { useCartStore } from "../../../stores/cartStore";
 import { useSavedItems, useToggleSavedItemMutation } from "../../../hooks/useSavedItems";
 import StarRating from "../../../components/rating/StarRating";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const resolveImageUrl = (image) => resolveBackendAssetUrl(image, robo);
 
@@ -100,10 +103,12 @@ const Intro = () => {
           </div>
           <div className="flex gap-3 py-10">
             {(product.images || []).map((img, idx) => (
-              <button
+              <Button
                 key={`${img}-${idx}`}
                 type="button"
-                className="size-10 border-0 bg-card p-0 shadow-lg"
+                variant="secondary"
+                size="icon"
+                className="size-10 rounded-none border-0 bg-card p-0 shadow-lg"
                 onClick={() => setSelectedImage(resolveImageUrl(img))}
               >
                 <AppImage
@@ -111,7 +116,7 @@ const Intro = () => {
                   alt={`thumb-${idx}`}
                   className="size-10"
                 />
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -123,9 +128,7 @@ const Intro = () => {
             <div className="flex items-center gap-8 lg:gap-14">
               <StarRating value={Number(product.ratings || 0)} className="my-6 text-2xl" />
               {product.onSale && (
-                <div className="bg-destructive p-1 px-2">
-                  <span className="text-background">ON SALE</span>
-                </div>
+                <Badge className="rounded-none bg-destructive px-2 py-1 text-background">ON SALE</Badge>
               )}
             </div>
             <div className="flex gap-2">
@@ -143,21 +146,25 @@ const Intro = () => {
             </div>
 
             <div className="flex items-center bg-card">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
+                size="sm"
                 className="rounded-md bg-muted px-1 lg:px-3 lg:py-1"
                 onClick={handleDecrease}
               >
                 -
-              </button>
-              <input type="number" className="w-10 text-center lg:w-24" value={quantity} readOnly />
-              <button
+              </Button>
+              <Input type="number" className="h-auto w-10 text-center lg:w-24" value={quantity} readOnly />
+              <Button
                 type="button"
+                variant="secondary"
+                size="sm"
                 className="rounded-md bg-muted px-3 py-1"
                 onClick={handleIncrease}
               >
                 +
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -166,9 +173,9 @@ const Intro = () => {
               PKR {Number(product.price || 0).toLocaleString()}
             </div>
             <div className="flex gap-5">
-              <button
+              <Button
                 type="button"
-                className="rounded-lg bg-primary p-2 text-background poppins-medium lg:px-7"
+                className="h-auto rounded-lg bg-primary p-2 text-background lg:px-7"
                 onClick={() => {
                   const cartItem = createProductCommerceItem({
                     ...product,
@@ -181,16 +188,17 @@ const Intro = () => {
                 }}
               >
                 ADD TO CART
-              </button>
+              </Button>
             </div>
-            <button
+            <Button
               type="button"
-              className="rounded-lg bg-background p-2 px-3 poppins-medium"
+              variant="secondary"
+              className="h-auto rounded-lg bg-background p-2 px-3"
               onClick={handleToggleSavedItem}
               aria-label={isSaved ? "Remove from saved items" : "Save item"}
             >
               {isSaved ? <Heart  fill="currentColor" /> : <Heart  />}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -263,13 +271,13 @@ const Intro = () => {
               </p>
             </div>
             <div className="mt-6 flex flex-wrap items-center gap-4">
-              <button
+              <Button
                 type="button"
                 onClick={() => navigate("/shop")}
-                className="rounded-lg bg-primary px-5 py-3 font-semibold text-foreground transition hover:opacity-90"
+                className="h-auto rounded-lg bg-primary px-5 py-3 font-semibold text-foreground hover:opacity-90"
               >
                 Browse all products
-              </button>
+              </Button>
             </div>
             <img src={star} className="mt-6" data-aos="fade-up" alt="" />
           </div>

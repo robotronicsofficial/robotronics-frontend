@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import RangeSlider from "@/components/forms/RangeSlider";
 import { cn } from "../../lib/utils";
+import { Button } from "@/components/ui/button";
 
 const categories = [
   "Lego Robots",
@@ -49,23 +50,26 @@ const Shopfilter = ({
       <div className="lg:pt-6 pt-3 text-foreground">
         <div className="flex justify-between">
           <p className="poppins-semibold lg:text-2xl text-xl">All PRODUCTS</p>
-          <button
+          <Button
             type="button"
-            className="lg:text-xl text-sm"
+            variant="ghost"
+            size="icon"
+            className="h-auto w-auto text-sm lg:text-xl"
             onClick={() => setIsOpenProducts(!isOpenProducts)}
           >
             {isOpenProducts ? "-" : "+"}
-          </button>
+          </Button>
         </div>
         <div className="h-0 lg:w-full border border-foreground"></div>
         {isOpenProducts && (
           <div className="flex flex-col">
             {categories.map((category) => (
-              <button
+              <Button
                 type="button"
                 key={category}
+                variant="ghost"
                 className={cn(
-                  "flex pt-2 text-left text-sm transition-colors duration-200 lg:pt-5 lg:text-base",
+                  "h-auto justify-start rounded-none px-0 pt-2 text-left text-sm transition-colors duration-200 hover:bg-transparent lg:pt-5 lg:text-base",
                   selectedCategory === category
                     ? "font-semibold text-accent"
                     : "text-muted-foreground hover:text-foreground",
@@ -73,7 +77,7 @@ const Shopfilter = ({
                 onClick={() => handleCategoryClick(category)}
               >
                 {category}
-              </button>
+              </Button>
             ))}
           </div>
         )}
@@ -83,13 +87,15 @@ const Shopfilter = ({
       <div className="lg:pt-20 pt-8">
         <div className="flex justify-between">
           <p className="text-bold font-bold lg:text-2xl text-xl">SHIPPING</p>
-          <button
+          <Button
             type="button"
-            className="lg:text-xl text-sm"
+            variant="ghost"
+            size="icon"
+            className="h-auto w-auto text-sm lg:text-xl"
             onClick={() => setIsOpenShipping(!isOpenShipping)}
           >
             {isOpenShipping ? "-" : "+"}
-          </button>
+          </Button>
         </div>
         <div className="h-0 lg:w-full border border-foreground"></div>
         {isOpenShipping && (
@@ -115,13 +121,15 @@ const Shopfilter = ({
       {/* Price Filter */}
       <div className="flex justify-between mt-6">
         <p className="text-bold font-bold lg:text-2xl text-xl">PRICE</p>
-        <button
+        <Button
           type="button"
-          className="lg:text-xl text-sm"
+          variant="ghost"
+          size="icon"
+          className="h-auto w-auto text-sm lg:text-xl"
           onClick={() => setIsOpenPrice(!isOpenPrice)}
         >
           {isOpenPrice ? "-" : "+"}
-        </button>
+        </Button>
       </div>
       <div className="mb-8 border bg-foreground border-foreground"></div>
       {isOpenPrice && (
