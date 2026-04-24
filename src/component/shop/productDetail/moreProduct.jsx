@@ -41,7 +41,7 @@ const RELATED_ITEM_CONFIG = {
 const RelatedItemsMessage = ({ children, tone = "default" }) => (
   <div
     className={cn(
-      "rounded-2xl bg-card p-10 text-center shadow-sm",
+      "rounded-2xl border border-border bg-card p-10 text-center",
       tone === "error" ? "text-destructive" : "text-foreground",
     )}
   >
@@ -111,7 +111,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
               <Card
                 key={getCommerceItemKey(item) || index}
                 onClick={() => navigate(getCommerceItemRoute(item))}
-                className="overflow-hidden rounded-2xl bg-card text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="overflow-hidden rounded-2xl bg-card text-left transition-colors hover:bg-muted/40"
                 role="button"
                 tabIndex={0}
                 onKeyDown={(event) => {

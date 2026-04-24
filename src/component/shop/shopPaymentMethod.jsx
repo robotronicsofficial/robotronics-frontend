@@ -121,10 +121,10 @@ const ShopPaymentMethod = ({ onNext }) => {
   return (
     <div className="bg-background p-5 lg:flex lg:gap-6">
       <div
-        className="flex flex-col gap-10 lg:w-2/3"
+        className="flex flex-col border border-border bg-card lg:w-2/3"
         data-aos="fade-up"
       >
-        <div className="flex flex-col gap-4 border border-muted bg-card p-6">
+        <section className="flex flex-col gap-4 p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-2">
               <p className="text-3xl text-foreground poppins-bold">SHIPPING & PAYMENT</p>
@@ -141,9 +141,9 @@ const ShopPaymentMethod = ({ onNext }) => {
             </Button>
           </div>
 
-          <div className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
+          <p className="bg-primary/10 p-4 text-sm text-foreground">
             This storefront flow only stores billing details locally in your browser. It does not create a backend payment record or invoice yet.
-          </div>
+          </p>
 
           {customerReady ? (
             <div className="grid gap-2 text-sm text-foreground sm:grid-cols-2">
@@ -162,14 +162,14 @@ const ShopPaymentMethod = ({ onNext }) => {
               )}
             </div>
           ) : (
-            <div className="border border-dashed border-border bg-muted p-4 text-sm text-foreground">
+            <p className="bg-muted p-4 text-sm text-foreground">
               Add your customer details before choosing payment information.
-            </div>
+            </p>
           )}
-        </div>
+        </section>
 
         {requiresShipping ? (
-          <section className="flex flex-col gap-5">
+          <section className="flex flex-col gap-5 border-t border-border p-6">
             <div className="flex flex-col gap-2">
               <p className="text-3xl text-foreground poppins-bold">SHIPPING SERVICE</p>
               <p className="text-sm text-foreground poppins-light">
@@ -185,7 +185,7 @@ const ShopPaymentMethod = ({ onNext }) => {
                   <Label
                     key={service.value}
                     className={`w-full border p-5 text-left transition ${
-                      isSelected ? "bg-foreground text-background border-foreground" : "bg-card text-foreground border-muted"
+                      isSelected ? "bg-foreground text-background border-foreground" : "bg-background text-foreground border-border"
                     }`}
                   >
                     <div className="flex items-start gap-4">
@@ -207,12 +207,14 @@ const ShopPaymentMethod = ({ onNext }) => {
             </RadioGroup>
           </section>
         ) : (
-          <section className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
-            This checkout only contains digital items, so no shipping service needs to be selected.
+          <section className="border-t border-border p-6">
+            <p className="bg-primary/10 p-4 text-sm text-foreground">
+              This checkout only contains digital items, so no shipping service needs to be selected.
+            </p>
           </section>
         )}
 
-        <section className="flex flex-col gap-5">
+        <section className="flex flex-col gap-5 border-t border-border p-6">
           <div className="flex flex-col gap-2">
             <p className="text-3xl text-foreground poppins-bold">PAYMENT METHOD</p>
             <p className="text-sm text-foreground poppins-light">
@@ -228,7 +230,7 @@ const ShopPaymentMethod = ({ onNext }) => {
                 <Label
                   key={method.value}
                   className={`border p-5 text-left transition ${
-                    isSelected ? "bg-foreground text-background border-foreground" : "bg-card text-foreground border-muted"
+                    isSelected ? "bg-foreground text-background border-foreground" : "bg-background text-foreground border-border"
                   }`}
                 >
                   <div className="flex items-start gap-4">
@@ -250,7 +252,7 @@ const ShopPaymentMethod = ({ onNext }) => {
           </RadioGroup>
         </section>
 
-        <section className="flex flex-col gap-5">
+        <section className="flex flex-col gap-5 border-t border-border p-6">
           <div className="flex flex-col gap-2">
             <p className="text-3xl text-foreground poppins-bold">BILLING DETAILS</p>
             <p className="text-sm text-foreground poppins-light">
@@ -299,9 +301,9 @@ const ShopPaymentMethod = ({ onNext }) => {
                 />
               </div>
             ) : (
-              <div className="border border-dashed border-border bg-card p-4 text-sm text-foreground">
+              <p className="bg-muted p-4 text-sm text-foreground">
                 The last four digits of your account number will be stored with the order summary.
-              </div>
+              </p>
             )}
           </div>
         </section>

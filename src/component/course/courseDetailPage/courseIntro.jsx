@@ -7,9 +7,13 @@ import { createCourseCommerceItem } from "../../../lib/commerceItems";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import AvatarStack from "@/components/ui/avatar-stack";
 
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 import { useCartStore } from "../../../stores/cartStore";
+
+const INSTRUCTOR_AVATARS = [robo, robo, robo, robo];
+
 const CourseIntro = ({ id, title, image, price, category }) => {
   const navigate = useNavigate();
   const addToCart = useCartStore((state) => state.addToCart);
@@ -48,25 +52,8 @@ const CourseIntro = ({ id, title, image, price, category }) => {
             />
           </div>
 
-          {/* pic's */}
-          <div className="flex flex-row gap-x-3 py-10">
-            {/* pic 1 */}
-            <div className="h-10 w-10 bg-card shadow-lg">
-              <AppImage src={robo} className="h-10 w-10" alt="" />
-            </div>
-            {/* pic 2 */}
-            <div className="h-10 w-10 bg-card shadow-lg">
-              <AppImage src={robo} className="h-10 w-10" alt="" />
-            </div>
-            {/* pic 3 */}
-            <div className="h-10 w-10 bg-card shadow-lg">
-              <AppImage src={robo} className="h-10 w-10" alt="" />
-            </div>
-            {/* pic 4 */}
-            <div className="h-10 w-10 bg-card shadow-lg">
-              <AppImage src={robo} className="h-10 w-10" alt="" />
-            </div>
-          </div>
+          {/* Instructor avatars */}
+          <AvatarStack images={INSTRUCTOR_AVATARS} className="py-10" alt="Instructor" />
         </div>
 
         {/* right */}

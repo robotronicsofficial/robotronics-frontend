@@ -71,21 +71,19 @@ const InfoSection = () => (
     </div>
 
     <div className="relative flex  w-full">
-      <div className="hidden md:flex flex-col w-56 mt-36">
-        <div className="flex items-center">
+      <div className="hidden md:flex flex-col gap-2 w-56 mt-36">
+        <div className="flex items-center gap-2">
           <AppImage
             src={circleg}
             alt="Progress"
-            className="mr-2"
             aria-label="Progress Circle"
           />
           <span>No. of Students</span>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <AppImage
             src={circleb}
             alt="Target"
-            className="mr-2"
             aria-label="Target Circle"
           />
           <span>No. of Schools</span>

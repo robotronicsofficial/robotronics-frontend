@@ -12,7 +12,7 @@ const ShopItems = () => {
     <div>
         <div className="flex-1 xl:w-1/4 md:w-1/2 p-4"  >
             <div>
-              <Card className="rounded-xl bg-card p-0">
+              <Card className="rounded-xl p-0">
                 <CardContent className="p-6">
                 <AppImage
                   className="h-50 rounded-xl w-full object-cover object-center"

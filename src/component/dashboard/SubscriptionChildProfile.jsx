@@ -24,7 +24,9 @@ import {
   useVerifyChildPinMutation,
 } from "../../hooks/useAccount";
 import { queryKeys } from "../../lib/queryKeys";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const resolveChildAccess = (child, childAccessList) => (
   childAccessList.find((access) => (
@@ -236,77 +238,81 @@ const SubscriptionChildProfile = () => {
   }
 
   if (error) {
-    return <CenteredState className="bg-muted min-h-screen">Error: {error}</CenteredState>;
+    return (
+      <CenteredState className="min-h-screen bg-muted px-6">
+        <Alert variant="destructive" className="max-w-md">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      </CenteredState>
+    );
   }
 
   return (
     <DashboardLayout contentClassName="px-6">
-        <h1 className="text-2xl font-bold mb-4 md:text-3xl pl-4">Child Accounts</h1>
+        <h1 className="pl-4 mb-4 text-2xl font-bold md:text-3xl">Child Accounts</h1>
 
-        <div className="flex flex-wrap p-2 lg:p-5">
-          {children.length > 0 ? (
-            children.map((child) => {
+        {children.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 p-4 md:grid-cols-2 lg:p-5">
+            {children.map((child) => {
               const hasPin = child.hasPin;
               return (
-                <div key={child._id} className="w-full p-2 md:w-1/2 md:p-3">
-                  <div className="flex flex-col gap-y-5 bg-card rounded-xl p-5 shadow-lg w-full md:max-w-sm min-w-[280px]">
-                    <div className="flex flex-col gap-y-6 md:gap-y-8">
-                      <div className="flex items-center gap-4 md:gap-6">
-                        <UserCircle className="text-3xl md:text-4xl" />
-                        <p className="text-foreground poppins-bold text-xl md:text-2xl">
-                          {child.firstName} {child.lastName}
-                        </p>
-                      </div>
-                      <div className="flex flex-col gap-y-2">
-                        <p className="text-foreground poppins-bold text-sm md:text-base">
-                          <span className="font-semibold">Email:</span> {child.email}
-                        </p>
-                        {child.dateOfBirth && (
-                          <p className="text-foreground poppins-bold text-sm md:text-base">
-                            <span className="font-semibold">Date of Birth:</span> {formatDisplayDate(child.dateOfBirth)}
-                          </p>
-                        )}
-                        <p className="text-foreground poppins-bold text-sm md:text-base">
-                          <span className="font-semibold">Phone:</span> {child.phone}
-                        </p>
-                        <p className="text-foreground poppins-bold text-sm md:text-base">
-                          <span className="font-semibold">School:</span> {child.schoolName}
-                        </p>
-                        <p className="text-foreground poppins-bold text-sm md:text-base text-wrap">
-                          <span className="font-semibold">Address:</span> {child.streetAddress}, {child.city}, {child.postalCode}
-                        </p>
-                      </div>
-
-                      <div className="flex flex-col gap-y-3 sm:flex-row sm:gap-y-0 sm:gap-x-3 md:gap-x-5">
-                        <Button
-                          type="button"
-                          onClick={() => handleViewCourses(child._id)}
-                          className={`h-auto rounded-lg border border-border px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm ${
-                            hasPin ? 'bg-primary text-background cursor-pointer' : 'bg-muted text-muted-foreground cursor-not-allowed'
-                          } md:text-base`}
-                          disabled={!hasPin}
-                        >
-                          View My Courses
-                        </Button>
-                        <Button
-                          type="button"
-                          onClick={() => openPinModal(child._id, hasPin)}
-                          className="h-auto rounded-lg border border-border bg-primary px-2 py-1 text-xs text-background sm:px-3 sm:py-2 sm:text-sm md:text-base"
-                        >
-                          {hasPin ? 'Change PIN' : 'Create Login Pin'}
-                        </Button>
-                      </div>
+                <Card key={child._id} className="h-full">
+                  <CardContent className="flex flex-col gap-6">
+                    <div className="flex items-center gap-4">
+                      <UserCircle className="size-10" />
+                      <p className="text-foreground poppins-bold text-xl md:text-2xl">
+                        {child.firstName} {child.lastName}
+                      </p>
                     </div>
-                  </div>
-                </div>
+                    <div className="flex flex-col gap-2">
+                      <p className="text-foreground poppins-bold text-sm md:text-base">
+                        <span className="font-semibold">Email:</span> {child.email}
+                      </p>
+                      {child.dateOfBirth && (
+                        <p className="text-foreground poppins-bold text-sm md:text-base">
+                          <span className="font-semibold">Date of Birth:</span> {formatDisplayDate(child.dateOfBirth)}
+                        </p>
+                      )}
+                      <p className="text-foreground poppins-bold text-sm md:text-base">
+                        <span className="font-semibold">Phone:</span> {child.phone}
+                      </p>
+                      <p className="text-foreground poppins-bold text-sm md:text-base">
+                        <span className="font-semibold">School:</span> {child.schoolName}
+                      </p>
+                      <p className="text-foreground poppins-bold text-sm md:text-base text-wrap">
+                        <span className="font-semibold">Address:</span> {child.streetAddress}, {child.city}, {child.postalCode}
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-3 sm:flex-row">
+                      <Button
+                        type="button"
+                        onClick={() => handleViewCourses(child._id)}
+                        className={`h-auto rounded-lg border border-border px-3 py-2 text-sm md:text-base ${
+                          hasPin ? 'bg-primary text-background cursor-pointer' : 'bg-muted text-muted-foreground cursor-not-allowed'
+                        }`}
+                        disabled={!hasPin}
+                      >
+                        View My Courses
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={() => openPinModal(child._id, hasPin)}
+                        className="h-auto rounded-lg border border-border bg-primary px-3 py-2 text-sm text-background md:text-base"
+                      >
+                        {hasPin ? 'Change PIN' : 'Create Login Pin'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               );
-            })
-          ) : (
-            <div className="w-full p-4 text-center">
-              <p className="text-lg">No child accounts found</p>
-            </div>
-          )}
-        </div>
+            })}
+          </div>
+        ) : (
+          <div className="w-full p-4 text-center">
+            <p className="text-lg">No child accounts found</p>
+          </div>
+        )}
 
       <SuccessModal
         isOpen={isSuccessModalOpen}

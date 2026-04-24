@@ -203,7 +203,7 @@ const ShopCartproductList = ({ onNext }) => {
           </span>
 
           <Textarea
-            className="mt-1 block h-[139px] w-[401px] border-border bg-background p-7 font-poppins font-light shadow-sm"
+            className="mt-1 block h-[139px] w-[401px] border-border bg-background p-7 font-poppins font-light"
             value={notes}
             onChange={(e) => {
               setNotes(e.target.value);

@@ -3,7 +3,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
+import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardFooter } from "../../components/ui/card";
 import DialogShell from "../../components/ui/dialog-shell";
 import { Spinner } from "../../components/ui/spinner";
 import { getActiveChildSession } from "../../utils/childSessionRequest";
@@ -95,8 +97,11 @@ const MyCourses = () => {
 
   if (error) {
     return (
-      <CenteredState className="h-screen">
-        <div className="text-destructive">Error: {error.message}</div>
+      <CenteredState className="min-h-screen bg-muted px-6">
+        <Alert variant="destructive" className="max-w-md">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error.message}</AlertDescription>
+        </Alert>
       </CenteredState>
     );
   }
@@ -128,7 +133,7 @@ const MyCourses = () => {
           <Button
             type="button"
             onClick={saveSelectedCourses}
-            className={`h-auto rounded-full px-6 py-2 shadow-xl ${!canSaveCourses
+            className={`h-auto rounded-full px-6 py-2 ${!canSaveCourses
                 ? "bg-muted cursor-not-allowed"
                 : "bg-primary hover:bg-accent"
               } transition-colors`}
@@ -151,71 +156,61 @@ const MyCourses = () => {
         </div>
 
         {/* Courses */}
-        <div className="flex flex-wrap justify-between gap-y-6">
-          {currentCourses.map((course) => (
-            <div
-              key={course._id}
-              className="relative w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-card p-6"
-            >
-              <div className={`rounded-xl overflow-hidden shadow-lg h-full flex flex-col transition-all ${selectedCourses.includes(course._id)
-                ? "border-4 border-primary transform scale-[1.02]"
-                : "border hover:shadow-md"
-                }`}>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {currentCourses.map((course) => {
+            const isSelected = selectedCourses.includes(course._id);
+            return (
+              <Card
+                key={course._id}
+                className={`h-full transition-colors ${isSelected ? "border-2 border-primary" : ""}`}
+              >
                 <img
-                  className="w-full h-48 object-cover"
+                  className="h-48 w-full object-cover"
                   src={resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")}
                   alt={course.title}
                   onError={(e) => {
                     e.target.src = "https://via.placeholder.com/300x200";
                   }}
                 />
-                <div className="px-6 md:px-2 py-2 flex-grow flex flex-col gap-2">
-                  <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                    <p className="text-muted-foreground text-wrap text-center px-4 py-1 rounded-full bg-muted text-base mb-4 md:mb-0">
+                <CardContent className="flex flex-1 flex-col gap-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="rounded-full bg-muted px-4 py-1 text-base text-muted-foreground">
                       {course.category}
                     </p>
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-2">
                       <Star className="text-primary" />
-                      <p className="text-muted-foreground poppins-light text-base ml-2">
+                      <p className="text-muted-foreground poppins-light text-base">
                         ({course.reviews || 0} Rating)
                       </p>
                     </div>
                   </div>
-
-                  <div className="font-bold text-xl p-2 poppins-bold text-left text-wrap mb-2">
+                  <div className="poppins-bold text-left text-xl font-bold text-wrap">
                     {course.title}
                   </div>
-                </div>
-
-                {/* Toggle Button */}
-                <div className="py-3 px-4 flex justify-center">
+                </CardContent>
+                <CardFooter className="flex flex-col gap-3">
                   <Button
                     type="button"
                     onClick={() => toggleCourseSelection(course._id)}
-                    className={`h-auto rounded-full px-6 py-2 transition-colors ${selectedCourses.includes(course._id)
+                    className={`h-auto w-full rounded-full px-6 py-2 transition-colors ${isSelected
                       ? "bg-destructive hover:bg-destructive text-background"
                       : "bg-success hover:bg-success text-background"
                       }`}
                   >
-                    {selectedCourses.includes(course._id)
-                      ? "Deselect"
-                      : "Select"}
+                    {isSelected ? "Deselect" : "Select"}
                   </Button>
-                </div>
-
-                <div className="pb-3 px-4">
                   <Button
                     type="button"
                     onClick={() => navigate(`/Dashboard/courseDetail/${course._id}`)}
-                    className="mt-2 h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground shadow-xl hover:bg-accent"
+                    className="h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground hover:bg-accent"
                   >
                     <span>View Detail</span>
                     <MoveDown className="text-xs" />
                   </Button>
-                </div>
-              </div>
-            </div>
-          ))}
+                </CardFooter>
+              </Card>
+            );
+          })}
         </div>
 
         <div className="flex flex-col items-center justify-center mt-10 gap-4">

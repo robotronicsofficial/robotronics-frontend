@@ -71,11 +71,11 @@ const VerifyEmail = () => {
         )}
 
         {status === 'error' && (
-          <>
+          <div role="alert" className="flex flex-col items-center gap-6">
             <h1 className="text-3xl font-bold text-destructive">
               Verification Failed
             </h1>
-            <p className="mb-6 mt-3 text-muted-foreground">{message}</p>
+            <p className="text-muted-foreground">{message}</p>
             <Button
               type="button"
               variant="outline"
@@ -83,7 +83,7 @@ const VerifyEmail = () => {
             >
               Try Again
             </Button>
-          </>
+          </div>
         )}
     </main>
   );

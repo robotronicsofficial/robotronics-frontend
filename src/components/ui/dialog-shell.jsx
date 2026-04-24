@@ -31,7 +31,7 @@ const DialogShell = ({
       <DialogContent
         showCloseButton={showCloseButton}
         className={cn(
-          "max-h-[90vh] overflow-y-auto rounded-lg bg-card p-6 text-card-foreground sm:max-w-md",
+          "max-h-[90vh] overflow-y-auto p-6 sm:max-w-md",
           className
         )}
       >

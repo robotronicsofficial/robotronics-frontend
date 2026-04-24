@@ -86,13 +86,13 @@ const ResetPassword = () => {
 
   return (
     <div className="bg-background" id="reset-password">
-      <div className={getHeaderOffsetClass("page", "flex flex-col items-center justify-center pb-20")}>
+      <div className={getHeaderOffsetClass("page", "mx-auto flex w-full max-w-md flex-col items-center gap-6 px-6 pb-20 md:px-10 lg:px-16")}>
         <p className="text-4xl poppins-bold text-foreground">Reset Password</p>
         <form
           onSubmit={handleSubmit}
-          className="flex w-full max-w-md flex-col items-center gap-4"
+          className="flex w-full flex-col gap-4"
         >
-          <div className="w-full">
+          <div className="flex w-full flex-col gap-1">
             <div className="flex items-center justify-between">
               <Label className="text-sm poppins-light">New Password</Label>
               <PasswordVisibilityButton
@@ -107,7 +107,7 @@ const ResetPassword = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <div className="grid grid-cols-2 gap-2 mt-2">
+            <div className="mt-2 grid grid-cols-2 gap-2">
               <RequirementCheck
                 isValid={hasMinLength}
                 text="8+ characters"
@@ -123,7 +123,7 @@ const ResetPassword = () => {
             </div>
           </div>
 
-          <div className="w-full">
+          <div className="flex w-full flex-col gap-1">
             <div className="flex items-center justify-between">
               <Label className="text-sm poppins-light">Confirm Password</Label>
               <PasswordVisibilityButton
@@ -139,7 +139,7 @@ const ResetPassword = () => {
               required
             />
             {confirmPassword && (
-              <p className={`text-xs mt-1 ${passwordsMatch ? 'text-success' : 'text-destructive'}`}>
+              <p className={`text-xs ${passwordsMatch ? 'text-success' : 'text-destructive'}`}>
                 {passwordsMatch ? 'Passwords match!' : 'Passwords do not match'}
               </p>
             )}
@@ -147,7 +147,7 @@ const ResetPassword = () => {
 
           <Button
             type="submit"
-            className="h-auto w-full rounded-3xl bg-foreground px-14 py-3 text-background poppins-regular lg:px-32"
+            className="h-auto w-full rounded-3xl bg-foreground py-3 text-background poppins-regular"
             disabled={!hasMinLength || !hasNumber || !hasSymbol || !passwordsMatch}
           >
             Reset Password
@@ -157,12 +157,12 @@ const ResetPassword = () => {
             type="button"
             onClick={() => navigate('/Login')}
             variant="link"
-            className="mt-2 text-foreground poppins-regular"
+            className="text-foreground poppins-regular"
           >
             Back to Login
           </Button>
         </form>
-        {error && <p className="text-destructive text-sm mt-2 poppins-regular">{error}</p>}
+        {error && <p role="alert" className="text-destructive text-sm poppins-regular">{error}</p>}
       </div>
     </div>
   );

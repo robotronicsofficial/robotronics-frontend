@@ -296,25 +296,23 @@ const Footer = () => {
                   </div>
 
                   {/* App Store Buttons */}
-                  <div className="flex flex-col gap-y-6 my-10">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="mb-4 h-auto rounded-xl border-card bg-transparent p-4 text-background hover:bg-muted"
+                  <div className="flex flex-col gap-6 my-10">
+                    <a
+                      href="#"
+                      className="flex items-center gap-3 rounded-xl border border-card p-4 text-background hover:bg-muted"
                       data-aos="fade-up"
                     >
                       <AppImage className="h-11 w-14" src={apple} alt="apple" />
-                      <div className="text-left text-background">
+                      <div className="flex flex-col text-left text-background">
                         <p className="text-sm text-wrap">Download on the</p>
                         <p className="text-2xl text-wrap font-bold">
                           APP STORE
                         </p>
                       </div>
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="h-auto rounded-xl border-card bg-transparent p-4 text-background hover:bg-muted"
+                    </a>
+                    <a
+                      href="#"
+                      className="flex items-center gap-3 rounded-xl border border-card p-4 text-background hover:bg-muted"
                       data-aos="fade-up"
                     >
                       <AppImage
@@ -322,13 +320,13 @@ const Footer = () => {
                         src={pstore}
                         alt="play-store"
                       />
-                      <div className="text-left text-background">
+                      <div className="flex flex-col text-left text-background">
                         <p className="text-sm text-wrap ">Download on the</p>
                         <p className="text-2xl text-wrap font-bold">
                           PLAY STORE
                         </p>
                       </div>
-                    </Button>
+                    </a>
                   </div>
                 </div>
               </div>

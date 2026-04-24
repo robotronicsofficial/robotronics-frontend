@@ -274,26 +274,12 @@ const ChatSupport = () => {
             fixed ${isMaximized ?
               'inset-0 m-auto w-chat-panel-width h-chat-panel-height rounded-3xl flex' :
               'bottom-0 right-0 w-[450px] h-[600px] rounded-3xl'
-            } bg-card shadow-xl overflow-hidden border border-primary transition-all duration-300 relative
+            } bg-card shadow-lg overflow-hidden border border-border transition-all duration-300 relative
           `}
           role="dialog"
           aria-modal="true"
           aria-labelledby="chat-header"
         >
-          <div
-  className={`
-    absolute bottom-0 left-1/2 transform -translate-x-1/2
-    ${isMaximized ? 'w-[900px] h-[400px] left-[calc(50%+130px)]' : 'w-[600px] h-[300px]'}
-    bg-gradient-to-br from-primary to-accent
-    opacity-35 blur-xl z-base
-    rounded-t-full
-    pointer-events-none
-  `}
-/>
-
-
-
-
           {isMaximized && (
             <div className="w-64 bg-info/10 border-r border-border flex flex-col">
               <div className="p-4 border-b border-border">
@@ -383,7 +369,7 @@ const ChatSupport = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type your message..."
-                  className="h-auto w-full rounded-3xl border-foreground bg-transparent px-14 py-3 text-base shadow-md"
+                  className="h-auto w-full rounded-3xl border-foreground bg-transparent px-14 py-3 text-base"
                   aria-label="Type your message"
                   disabled={isSending}
                 />

@@ -42,7 +42,7 @@ const Intro = () => {
                 <Button
                   type="button"
                   onClick={() => navigate("/subscriptions")}
-                  className="h-auto items-center justify-center rounded-md bg-primary p-3 px-4 text-sm text-foreground shadow-xl hover:bg-border hover:text-background lg:text-lg"
+                  className="h-auto items-center justify-center rounded-md bg-primary p-3 px-4 text-sm text-foreground hover:bg-border hover:text-background lg:text-lg"
                 >
                   Get Enrolled
                 </Button>

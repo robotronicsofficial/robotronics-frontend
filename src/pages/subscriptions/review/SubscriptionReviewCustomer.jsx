@@ -71,7 +71,7 @@ const SubscriptionReviewCustomer = () => {
   return (
     <div>
       <div className="grid gap-6 px-4 py-8 md:px-10 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="flex flex-col gap-y-6 rounded-3xl bg-card p-6 shadow-sm md:p-10">
+        <div className="flex flex-col gap-y-6 rounded-3xl border border-border bg-card p-6 md:p-10">
           <div className="flex flex-col gap-y-3">
             <p className="text-4xl font-bold text-foreground">Review Your Subscription</p>
             <p className="text-sm text-muted-foreground">
@@ -173,7 +173,7 @@ const SubscriptionReviewCustomer = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-y-6 rounded-3xl bg-muted p-6 shadow-sm md:p-10">
+        <div className="flex flex-col gap-y-6 rounded-3xl border border-border bg-muted p-6 md:p-10">
           <p className="text-2xl font-bold text-foreground">Subscription Status</p>
           {checkout.status === "active" ? (
             <div className="flex flex-col gap-y-4 rounded-2xl bg-card p-6">

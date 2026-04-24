@@ -17,26 +17,18 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
       <div className="lg:flex" data-aos="fade-up">
         <div className="flex gap-6">
           <div className="flex flex-col gap-6">
-            <div className="flex flex-col gap-2">
-              <BarChart2 size={20} className="text-muted-foreground self-center" />
-              <div>
-                <p className="text-sm poppins-extralight text-center">views</p>
-                <p className="text-sm poppins-extralight text-center">{Number(blog?.views || 0).toLocaleString()}</p>
-              </div>
+            <div className="flex flex-col items-start gap-1">
+              <BarChart2 size={20} className="text-muted-foreground" />
+              <span className="text-sm poppins-extralight">views</span>
+              <span className="text-sm poppins-extralight">{Number(blog?.views || 0).toLocaleString()}</span>
             </div>
-            <div className="flex flex-col gap-2">
-              <Share2 size={20} className="text-muted-foreground self-center" />
-              <div>
-                <p className="text-sm poppins-extralight text-center">shares</p>
-                <p className="text-sm poppins-extralight text-center">{Number(blog?.shares || 0).toLocaleString()}</p>
-              </div>
+            <div className="flex flex-col items-start gap-1">
+              <Share2 size={20} className="text-muted-foreground" />
+              <span className="text-sm poppins-extralight">shares</span>
+              <span className="text-sm poppins-extralight">{Number(blog?.shares || 0).toLocaleString()}</span>
             </div>
-            <div className="flex flex-col gap-2">
-              <BrandIcon brand="facebook" size={20} className="poppins-extralight self-center" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <BrandIcon brand="twitter" size={20} className="poppins-extralight self-center" />
-            </div>
+            <BrandIcon brand="facebook" size={20} className="poppins-extralight" />
+            <BrandIcon brand="twitter" size={20} className="poppins-extralight" />
           </div>
 
           <div className="flex flex-col justify-center gap-5 md:p-5 md:px-10">

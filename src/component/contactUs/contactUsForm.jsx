@@ -91,7 +91,7 @@ const SocialLink = ({ brand, className, href }) => (
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className={`rounded-xl bg-foreground p-1 shadow-md transition-colors duration-300 ease-out hover:shadow-lg lg:p-3 ${className}`}
+    className={`rounded-xl border border-border bg-foreground p-1 transition-colors duration-300 ease-out lg:p-3 ${className}`}
   >
     <BrandIcon brand={brand} className="text-background" />
   </a>
@@ -274,22 +274,24 @@ const ContactUsForm = () => {
             />
 
             {formData.userType && (
-              <div className="mb-5">
-                <Label className="mb-2 block text-sm text-muted-foreground">
+              <div className="flex flex-col gap-2 mb-5">
+                <Label className="text-sm text-muted-foreground">
                   Services I'm interested in:
                 </Label>
                 <div className="flex flex-col gap-2">
                   {CONTACT_SERVICES[formData.userType].map((service) => (
-                    <div key={service} className="flex items-center gap-2">
+                    <Label
+                      key={service}
+                      htmlFor={`service-${service}`}
+                      className="flex items-center gap-2 text-sm"
+                    >
                       <Checkbox
                         id={`service-${service}`}
                         checked={formData.selectedServices.includes(service)}
                         onCheckedChange={() => handleServiceToggle(service)}
                       />
-                      <Label htmlFor={`service-${service}`} className="text-sm">
-                        {service}
-                      </Label>
-                    </div>
+                      {service}
+                    </Label>
                   ))}
                 </div>
               </div>

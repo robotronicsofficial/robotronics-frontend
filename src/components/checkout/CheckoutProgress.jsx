@@ -30,7 +30,7 @@ const CheckoutStepButton = ({ icon, title, description, isActive, onClick }) => 
   >
     <span
       className={cn(
-        "flex size-16 items-center justify-center rounded-full shadow-md transition-colors",
+        "flex size-16 items-center justify-center rounded-full border border-border transition-colors",
         isActive ? "bg-foreground" : "bg-muted"
       )}
     >

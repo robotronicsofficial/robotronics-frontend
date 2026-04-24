@@ -37,7 +37,7 @@ const OurServices = () => {
               return (
                 <Card
                   key={service._id}
-                  className="overflow-hidden rounded-lg bg-card p-0 shadow-md"
+                  className="overflow-hidden rounded-lg p-0"
                   onClick={() => handleNavigate(service)}
                   role="button"
                   tabIndex={0}
@@ -48,18 +48,17 @@ const OurServices = () => {
                     }
                   }}
                 >
-                  <div className="flex justify-center relative">
-                    <div className="absolute inset-0 bg-foreground opacity-40 hover:bg-foreground hover:opacity-20 transition-all duration-100 ease-in-out"></div>
-                    <div className="absolute mt-10 z-raised">
-                      <h3 className="text-3xl text-background poppins-bold mb-2 text-wrap text-center">
-                        {service.name}
-                      </h3>
-                    </div>
+                  <div className="relative">
                     <AppImage
                       className="w-full object-cover"
                       src={imageUrl}
                       alt={`Image representing ${service.name}`}
                     />
+                    <div className="absolute inset-x-0 top-0 flex justify-center bg-foreground/50 p-4">
+                      <h3 className="text-3xl text-background poppins-bold text-wrap text-center">
+                        {service.name}
+                      </h3>
+                    </div>
                   </div>
                 </Card>
               );

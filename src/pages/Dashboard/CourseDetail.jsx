@@ -30,6 +30,7 @@ import DialogShell from "../../components/ui/dialog-shell";
 import { Spinner } from "../../components/ui/spinner";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import StarRating from "../../components/rating/StarRating";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
@@ -233,8 +234,10 @@ const CourseDetail = () => {
 
   if (error) {
     return (
-      <CenteredState className="h-screen">
-        <div className="text-destructive poppins-medium">{error.message}</div>
+      <CenteredState className="min-h-screen bg-muted px-6">
+        <Alert variant="destructive" className="max-w-md">
+          <AlertDescription>{error.message}</AlertDescription>
+        </Alert>
       </CenteredState>
     );
   }
@@ -260,11 +263,11 @@ const CourseDetail = () => {
 
 
               >
-                <div className="">
+                <div>
                   <img
                     src={resolveBackendAssetUrl(courseData.banner)}
                     alt="Course"
-                    className="aspect-video w-full rounded-2xl object-cover object-center shadow-md"
+                    className="aspect-video w-full rounded-2xl object-cover object-center"
                   />
                 </div>
                 <div className="flex items-center gap-8 pt-4">
@@ -319,15 +322,13 @@ const CourseDetail = () => {
       <>
         <div className="bg-background lg:px-24 py-8 rounded-3xl">
           <div
-            className="bg-card p-8 py-10 shadow-xl rounded-md"
+            className="rounded-md border border-border bg-card p-8 py-10"
             data-aos="fade-up"
-
-
           >
             {actionError ? (
-              <div className="mb-4 rounded-lg bg-destructive/10 p-4 text-sm font-semibold text-destructive">
-                {actionError}
-              </div>
+              <Alert variant="destructive" className="mb-4">
+                <AlertDescription>{actionError}</AlertDescription>
+              </Alert>
             ) : null}
             {/* Course Description */}
             <div className="py-5">
@@ -538,7 +539,7 @@ const CourseDetail = () => {
                         </div>
 
                         {attemptsExhausted ? (
-                          <div className="p-4 bg-card rounded-lg shadow-sm">
+                          <div className="rounded-lg border border-border bg-card p-4">
                             <div className="poppins-bold text-destructive text-lg mb-2">
                               You&apos;ve used all {maxAttempts} attempts for today.
                             </div>
@@ -549,7 +550,7 @@ const CourseDetail = () => {
                             </div>
                           </div>
                         ) : (
-                          <div className="bg-card rounded-lg shadow-sm overflow-hidden">
+                          <div className="overflow-hidden rounded-lg border border-border bg-card">
                             {/* Quiz Header */}
                             <div
                               className="p-4 flex justify-between items-center cursor-pointer hover:bg-muted transition-colors duration-200"
@@ -612,7 +613,7 @@ const CourseDetail = () => {
                             {expandedModules[`quiz-${sectionIndex}`] && sectionUnlocked && (
                               <div className="px-6 py-4 bg-muted border-t border-border">
                                 {showQuizResults ? (
-                                  <div className="bg-card p-4 rounded-lg shadow-sm mb-4">
+                                  <div className="mb-4 rounded-lg border border-border bg-card p-4">
                                     <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-success' : 'text-destructive'}`}>
                                       Quiz Results: {childSection.quiz.obtainedScore}/{quizQuestions.length}
                                       {quizCompleted ? " (Passed)" : " (Failed - Score at least 60% to unlock next module)"}
@@ -701,7 +702,7 @@ const CourseDetail = () => {
                                       </div>
                                     )}
                                     {quizQuestions.map((question, qIndex) => (
-                                      <div key={question._id} className="bg-card p-4 rounded-lg shadow-sm">
+                                      <div key={question._id} className="rounded-lg border border-border bg-card p-4">
                                         <div className="poppins-medium mb-2">
                                           {qIndex + 1}. {question.questionText}
                                         </div>

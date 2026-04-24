@@ -33,11 +33,11 @@ const CareesFindRole = () => {
           <Button
             type="button"
             onClick={handleSendResume}
-            className="h-auto rounded-full bg-foreground px-6 py-3 font-light text-background shadow-md hover:bg-foreground/90 lg:text-2xl"
+            className="h-auto rounded-full bg-foreground px-6 py-3 font-light text-background hover:bg-foreground/90 lg:text-2xl"
           >
             Send Your Resume
           </Button>
-          <Button type="button" variant="outline" size="icon" className="h-auto rounded-full border-foreground bg-card px-4 py-3 text-foreground shadow-md hover:bg-foreground hover:text-background">
+          <Button type="button" variant="outline" size="icon" className="h-auto rounded-full border-foreground bg-card px-4 py-3 text-foreground hover:bg-foreground hover:text-background">
             <ArrowUpRight size={24} />
           </Button>
         </div>

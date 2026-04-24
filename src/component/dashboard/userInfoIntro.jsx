@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import Intro from "../dashboard/intro";
 import DashboardLayout from "../../components/layout/DashboardLayout";
+import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "../../contexts/useAuth";
 
 const MASKED_PASSWORD = "••••••••";
@@ -79,18 +80,16 @@ const UserInfoIntro = () => {
             <p className="text-base lg:text-xl poppins-bold text-foreground">Account Summary</p>
           </div>
 
-          <div className="flex flex-wrap p-2 lg:p-5">
-            <div className="w-full p-3">
-              <div className="flex w-full flex-col gap-4 rounded-xl bg-card p-5 shadow-lg">
-                <AccountSummaryLine label="Name" value={displayName} />
-                <AccountSummaryLine label="Email" value={displayEmail} />
-                {currentUser?.phone && (
-                  <AccountSummaryLine label="Phone" value={currentUser.phone} />
-                )}
-                <AccountSummaryLine label="Member Since" value={memberSince} />
-              </div>
-            </div>
-          </div>
+          <Card className="mt-4">
+            <CardContent className="flex flex-col gap-4">
+              <AccountSummaryLine label="Name" value={displayName} />
+              <AccountSummaryLine label="Email" value={displayEmail} />
+              {currentUser?.phone && (
+                <AccountSummaryLine label="Phone" value={currentUser.phone} />
+              )}
+              <AccountSummaryLine label="Member Since" value={memberSince} />
+            </CardContent>
+          </Card>
         </div>
       </DashboardLayout>
     </div>

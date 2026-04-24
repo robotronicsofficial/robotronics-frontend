@@ -14,7 +14,7 @@ const DashboardLayout = ({
 }) => (
   <div
     className={cn(
-      "bg-muted min-h-screen flex flex-col md:flex-row bg-background px-4 md:px-20",
+      "bg-background min-h-screen flex flex-col md:flex-row px-4 md:px-20",
       withHeaderOffset && getHeaderOffsetClass(headerOffsetVariant),
       className,
     )}

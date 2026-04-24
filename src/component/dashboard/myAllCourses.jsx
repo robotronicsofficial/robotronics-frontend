@@ -7,7 +7,9 @@ import { Spinner } from "../../components/ui/spinner";
 import { getActiveChildSession } from "../../utils/childSessionRequest";
 import { useChildCourses } from "../../hooks/useChildCourses";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 const MyAllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,8 +70,11 @@ const MyAllCourses = () => {
 
   if (error) {
     return (
-      <CenteredState className="h-screen">
-        <div className="text-destructive">Error: {error.message}</div>
+      <CenteredState className="min-h-screen bg-muted px-6">
+        <Alert variant="destructive" className="max-w-md">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error.message}</AlertDescription>
+        </Alert>
       </CenteredState>
     );
   }
@@ -87,62 +92,55 @@ const MyAllCourses = () => {
         </h1>
 
         {/* Courses */}
-        <div className="flex flex-wrap justify-between gap-y-6">
-          {currentCourses.length > 0 ? (
-            currentCourses.map((course) => (
-              <div
-                key={course._id}
-                className="relative w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-card p-6"
-              >
-                <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col">
-                  <img
-                    className="w-full h-48 object-cover"
-                    src={
-                      resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")
-                    }
-                    alt={course.title}
-                    onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/300x200";
-                    }}
-                  />
-                  <div className="px-6 md:px-2 py-2 flex-grow flex flex-col gap-2">
-                    <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                      <p className="text-muted-foreground text-wrap text-center px-4 py-1 rounded-full bg-muted text-base mb-4 md:mb-0">
-                        {course.category}
+        {currentCourses.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {currentCourses.map((course) => (
+              <Card key={course._id} className="h-full">
+                <img
+                  className="h-48 w-full object-cover"
+                  src={
+                    resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")
+                  }
+                  alt={course.title}
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/300x200";
+                  }}
+                />
+                <CardContent className="flex flex-1 flex-col gap-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="rounded-full bg-muted px-4 py-1 text-base text-muted-foreground">
+                      {course.category}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Star className="text-primary" />
+                      <p className="text-muted-foreground poppins-light text-base">
+                        ({course.reviews || 0} Rating)
                       </p>
-                      <div className="flex items-center">
-                        <Star className="text-primary" />
-                        <p className="text-muted-foreground poppins-light text-base ml-2">
-                          ({course.reviews || 0} Rating)
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="font-bold text-xl p-2 poppins-bold text-left text-wrap mb-2">
-                      {course.title}
                     </div>
                   </div>
-
-                  <div className="pb-3 px-4">
-                    <Button
-                      type="button"
-                      onClick={() => handleCourseClick(course)}
-                      className="mt-2 h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground shadow-xl hover:bg-accent"
-                    >
-                      <span>View Course</span>
-                    </Button>
+                  <div className="poppins-bold text-left text-xl font-bold text-wrap">
+                    {course.title}
                   </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="w-full text-center py-10">
-              <p className="text-muted-foreground text-lg">
-                You don't have any active courses yet.
-              </p>
-            </div>
-          )}
-        </div>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    type="button"
+                    onClick={() => handleCourseClick(course)}
+                    className="h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground hover:bg-accent"
+                  >
+                    <span>View Course</span>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="w-full py-10 text-center">
+            <p className="text-muted-foreground text-lg">
+              You don&apos;t have any active courses yet.
+            </p>
+          </div>
+        )}
 
         {/* Pagination */}
         {displayedCourses.length > coursesPerPage && (

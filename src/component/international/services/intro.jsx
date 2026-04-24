@@ -40,10 +40,8 @@ const Intro = () => {
               </p>
             </div>
             <p
-              className="text-wrap text-sm poppins-extralight text-background  p-1 backdrop-blur-sm"
+              className="text-wrap text-sm poppins-extralight text-background"
               data-aos="fade-up"
-
-
             >
               Robotronics has successfully taught 15,000+ International Student
               across the globe. International Students are invited to explore

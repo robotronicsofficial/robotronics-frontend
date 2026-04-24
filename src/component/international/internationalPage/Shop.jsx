@@ -33,7 +33,7 @@ const Shop = () => {
               Gear up for some Fun
             </div>
           </div>
-          <Badge variant="secondary" className="self-center rounded-full bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-sm">
+          <Badge variant="secondary" className="self-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground">
             {courses.length} live courses
           </Badge>
         </div>
@@ -41,15 +41,15 @@ const Shop = () => {
       {/* Shop Items */}
       <div className="md:px-10 px-5 pb-10">
         {loading ? (
-          <div className="rounded-2xl bg-card p-10 text-center text-foreground shadow-sm">
+          <div className="rounded-2xl border border-border bg-card p-10 text-center text-foreground">
             Loading live courses...
           </div>
         ) : error ? (
-          <div className="rounded-2xl bg-card p-10 text-center text-destructive shadow-sm">
+          <div className="rounded-2xl border border-border bg-card p-10 text-center text-destructive">
             We couldn&apos;t load courses right now.
           </div>
         ) : featuredCourses.length === 0 ? (
-          <div className="rounded-2xl bg-card p-10 text-center text-foreground shadow-sm">
+          <div className="rounded-2xl border border-border bg-card p-10 text-center text-foreground">
             No courses available right now.
           </div>
         ) : (
@@ -58,7 +58,7 @@ const Shop = () => {
               <Card
                 key={course._id}
                 onClick={() => navigate(`/CoursesProduct/${course._id}`)}
-                className="overflow-hidden rounded-2xl bg-card p-2 text-left shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
+                className="overflow-hidden text-left"
                 role="button"
                 tabIndex={0}
                 onKeyDown={(event) => {

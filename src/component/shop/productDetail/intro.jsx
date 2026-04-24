@@ -108,7 +108,7 @@ const Intro = () => {
                 type="button"
                 variant="secondary"
                 size="icon"
-                className="size-10 rounded-none border-0 bg-card p-0 shadow-lg"
+                className="size-10 rounded-none border border-border bg-card p-0"
                 onClick={() => setSelectedImage(resolveImageUrl(img))}
               >
                 <AppImage

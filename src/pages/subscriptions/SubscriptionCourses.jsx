@@ -58,7 +58,7 @@ const SubscriptionCourses = () => {
         variant="outline"
         size="icon-lg"
         onClick={prevCourse}
-        className="absolute left-0 top-1/2 mx-4 hidden -translate-y-1/2 rounded-full bg-card p-3 text-foreground shadow-md hover:bg-muted sm:block md:mx-12 lg:mx-24"
+        className="absolute left-0 top-1/2 mx-4 hidden -translate-y-1/2 rounded-full border border-border bg-card p-3 text-foreground hover:bg-muted sm:block md:mx-12 lg:mx-24"
       >
         <ArrowLeftCircle />
       </Button>
@@ -73,7 +73,7 @@ const SubscriptionCourses = () => {
               className="w-full max-w-xs sm:max-w-none sm:w-1/2 lg:w-1/3 px-2 sm:px-4 mb-2 p-2 sm:p-6"
             >
 
-              <Card className="h-full rounded-xl py-0 shadow-md transition-all hover:shadow-lg">
+              <Card className="h-full rounded-xl py-0 transition-colors hover:bg-muted/40">
                 <CardContent className="flex h-full flex-col p-4 sm:p-5">
                 <img
                     className="rounded-xl w-full h-48 sm:h-56 object-cover"
@@ -102,7 +102,7 @@ const SubscriptionCourses = () => {
                 <div className="px-4 sm:px-8 mb-4 flex flex-col sm:flex-row gap-2 py-4">
                   <div className="w-full flex justify-center mb-4 py-4">
                     <Button type="button" onClick={handleViewDetails}
-                    className="h-auto rounded-full bg-primary px-4 py-2 text-sm text-foreground shadow-xl sm:text-base">
+                    className="h-auto rounded-full bg-primary px-4 py-2 text-sm text-foreground sm:text-base">
                       <span>View Course</span>
                       <MoveDown className="text-xs -rotate-90" />
                     </Button>
@@ -120,7 +120,7 @@ const SubscriptionCourses = () => {
         variant="outline"
         size="icon-lg"
         onClick={nextCourse}
-        className="absolute right-0 top-1/2 mx-4 hidden -translate-y-1/2 rounded-full bg-card p-3 text-foreground shadow-md hover:bg-muted sm:block md:mx-12 lg:mx-24"
+        className="absolute right-0 top-1/2 mx-4 hidden -translate-y-1/2 rounded-full border border-border bg-card p-3 text-foreground hover:bg-muted sm:block md:mx-12 lg:mx-24"
       >
         <ArrowRightCircle />
       </Button>
@@ -132,7 +132,7 @@ const SubscriptionCourses = () => {
           variant="outline"
           size="icon-lg"
           onClick={prevCourse}
-          className="rounded-full bg-card p-2 text-foreground shadow-md hover:bg-muted"
+          className="rounded-full border border-border bg-card p-2 text-foreground hover:bg-muted"
         >
           <ArrowLeftCircle />
         </Button>
@@ -141,7 +141,7 @@ const SubscriptionCourses = () => {
           variant="outline"
           size="icon-lg"
           onClick={nextCourse}
-          className="rounded-full bg-card p-2 text-foreground shadow-md hover:bg-muted"
+          className="rounded-full border border-border bg-card p-2 text-foreground hover:bg-muted"
         >
           <ArrowRightCircle />
         </Button>

@@ -40,7 +40,7 @@ const SubscriptionIntro = () => {
                 <AppImage
                   src={bg}
                   alt="Course"
-                  className="w-full h-auto rounded-2xl shadow-md"
+                  className="w-full h-auto rounded-2xl"
                 />
               </div>
 
@@ -121,12 +121,12 @@ const SubscriptionIntro = () => {
                 <AppImage
                   src={yt}
                   alt="Course"
-                  className="w-full h-auto rounded-md shadow-md"
+                  className="w-full h-auto rounded-md"
                 />
               </div>
 
               {/* Features */}
-              <div className="bg-card px-4 sm:px-6 md:px-10 lg:px-8 py-6 sm:py-7 rounded-md shadow-md w-full">
+              <div className="w-full rounded-md border border-border bg-background px-4 py-6 sm:px-6 sm:py-7 md:px-10 lg:px-8">
                 <h3 className="text-lg sm:text-xl mb-4 font-semibold poppins-bold">
                 Subscription features:
                 </h3>

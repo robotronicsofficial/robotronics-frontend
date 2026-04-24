@@ -9,6 +9,7 @@ import {
 } from "../../utils/childSessionRequest";
 import { useParent } from "../../hooks/useAccount";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const SubscriptionProgressCertificate = () => {
   const navigate = useNavigate();
@@ -21,27 +22,24 @@ const SubscriptionProgressCertificate = () => {
 
   return (
     <DashboardLayout>
-        <h1 className="text-2xl md:text-3xl font-bold mb-4">Child Accounts</h1>
+        <h1 className="mb-4 text-2xl font-bold md:text-3xl">Child Accounts</h1>
 
-        <div className="flex flex-wrap p-1 sm:p-3 lg:p-5">
-          {children.length > 0 ? (
-            children.map((child, index) => {
+        {children.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 p-3 sm:grid-cols-2 lg:p-5">
+            {children.map((child, index) => {
               const isUnlockedChild = matchesChildSessionIdentifier(child, activeChildId);
 
               return (
-                <div
-                  key={index}
-                  className="w-full p-2 sm:w-1/2 md:p-3"
-                >
-                  <div className="flex flex-col gap-y-3 bg-card rounded-xl p-5 shadow-lg w-full min-w-[280px] md:max-w-md max-w-[450px]">
-                    <div className="flex items-center gap-4 mb-3">
-                      <UserCircle className="text-4xl text-muted-foreground" />
+                <Card key={index} className="h-full">
+                  <CardContent className="flex flex-col gap-4">
+                    <div className="flex items-center gap-4">
+                      <UserCircle className="size-10 text-muted-foreground" />
                       <p className="text-xl font-semibold text-muted-foreground">
                         {child.firstName} {child.lastName}
                       </p>
                     </div>
 
-                    <div className="flex flex-col text-sm text-muted-foreground gap-y-1">
+                    <div className="flex flex-col gap-1 text-sm text-muted-foreground">
                       <p><strong>Email:</strong> {child.email}</p>
                       <p><strong>Phone:</strong> {child.phone}</p>
                       <p><strong>DOB:</strong> {formatDisplayDate(child.dateOfBirth)}</p>
@@ -54,7 +52,7 @@ const SubscriptionProgressCertificate = () => {
 
                     <Button
                       type="button"
-                      className="mt-3 h-auto w-full rounded-lg border border-border bg-primary px-3 py-2 text-sm text-background hover:bg-primary"
+                      className="h-auto w-full rounded-lg border border-border bg-primary px-3 py-2 text-sm text-background hover:bg-primary"
                       onClick={() => {
                         if (!isUnlockedChild) {
                           navigate("/Dashboard/ChildProfile");
@@ -66,14 +64,14 @@ const SubscriptionProgressCertificate = () => {
                     >
                       {isUnlockedChild ? "View Progress" : "Unlock in Child Accounts"}
                     </Button>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               );
-            })
-          ) : (
-            <p>No children found.</p>
-          )}
-        </div>
+            })}
+          </div>
+        ) : (
+          <p>No children found.</p>
+        )}
     </DashboardLayout>
   );
 };

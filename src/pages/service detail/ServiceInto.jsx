@@ -16,7 +16,7 @@ const ServiceInto = ({ service }) => {
           />
         )}
         <div className="relative flex items-center justify-center">
-          <div className="bg-muted-foreground/20 backdrop-blur-2xl text-background p-8 w-full max-w-5xl rounded-3xl border border-card/30 shadow-lg leading-none mb-10">
+          <div className="bg-foreground/50 text-background p-8 w-full max-w-5xl rounded-3xl border border-border leading-none mb-10">
             <div>
               <p className="text-[3vw] md:text-[2vw] font-semibold pb-6">
                 {service?.name || "Service"}

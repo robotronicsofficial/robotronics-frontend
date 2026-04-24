@@ -18,7 +18,7 @@ const Robo = () => {
       <Button
         type="button"
         onClick={() => navigate("/subscriptions")}
-        className="absolute bottom-[8vh] left-[14vw] h-auto items-center justify-center rounded-[6vw] border-4 border-foreground bg-card px-10 py-8 text-sm text-primary shadow-xl hover:bg-card/90 md:text-3xl"
+        className="absolute bottom-[8vh] left-[14vw] h-auto items-center justify-center rounded-[6vw] border-4 border-foreground bg-card px-10 py-8 text-sm text-primary hover:bg-card/90 md:text-3xl"
       >
         Subscribe Now
       </Button>

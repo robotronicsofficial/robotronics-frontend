@@ -8,7 +8,7 @@ import sale from "../../assets/logo/sales.svg";
 import { NavLink } from "react-router-dom";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import {
@@ -36,15 +36,10 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
     }
   };
   return (
-    <div className="p-2  " data-aos="fade-up">
-      <Card className="rounded-2xl p-0">
-        <CardContent className="p-2">
-        {/* img */}
-        <div className="" data-aos="fade-right">
-          <AppImage src={resolvedImage} alt={title || "Course"} />
-        </div>
-        {/* title */}
-        <div>
+    <Card className="rounded-2xl p-0" data-aos="fade-up">
+      <CardContent className="flex flex-col gap-4 p-2">
+        <AppImage src={resolvedImage} alt={title || "Course"} />
+        <div className="flex flex-col gap-2">
           <div className="flex flex-row flex-wrap justify-between">
             <p className="lg:text-xl p-1 text-center text-wrap font-bold">
               {title}
@@ -64,38 +59,28 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
             </span>
           </Button>
         </div>
-        {/* line */}
-        <div className="py-5">
-          <Separator className="border border-dotted border-foreground" />
-        </div>
-        {/* details */}
-        <div className="flex flex-wrap justify-center lg:gap-x-2 items-center">
-          <div className="flex ">
-            <img className=" text-xs" src={time} />
+        <Separator className="border border-dotted border-foreground" />
+        <div className="flex flex-wrap justify-center items-center gap-x-2">
+          <div className="flex">
+            <img className="text-xs" src={time} />
             {duration}
           </div>
           <div className="flex">
-            <img className=" text-xs" src={download} />
+            <img className="text-xs" src={download} />
             34 Course
           </div>
           <div className="flex">
-            <img className=" text-xs" src={sale} />
+            <img className="text-xs" src={sale} />
             250 Sales
           </div>
         </div>
-        </CardContent>
-      </Card>
-      {/* button */}
-      <div className="py-2">
-        <div className="text-center bg-primary p-2">
-          <Button asChild className="h-auto bg-primary p-3 text-xl font-bold">
-            <NavLink to={`/CoursesProduct/${id}`}>
-              View Course
-            </NavLink>
-          </Button>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter className="justify-center bg-primary p-2">
+        <Button asChild className="h-auto bg-primary p-3 text-xl font-bold">
+          <NavLink to={`/CoursesProduct/${id}`}>View Course</NavLink>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 

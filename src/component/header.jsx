@@ -120,7 +120,7 @@ function NavDropdown({ label, items }) {
       {open && (
         <div
           role="menu"
-          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] rounded-xl bg-card shadow-xl ring-1 ring-foreground/10 z-dropdown py-2"
+          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] rounded-xl bg-card border border-border shadow-lg z-dropdown py-2"
         >
           {items.map((item) => (
             <NavLink
@@ -176,7 +176,7 @@ function UserMenu({ label, onProfile, onLogout }) {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 mt-2 min-w-[14rem] rounded-lg bg-card shadow-lg ring-1 ring-foreground/10 z-dropdown py-1"
+          className="absolute right-0 mt-2 min-w-[14rem] rounded-lg bg-card border border-border shadow-lg z-dropdown py-1"
         >
           <div className="px-4 py-2 border-b border-border">
             <div className="text-xs text-muted-foreground">Signed in as</div>
@@ -332,7 +332,7 @@ export default function Header() {
   return (
     <header className="bg-transparent relative top-20 z-header w-full">
       <div className="w-full h-full flex items-center justify-center absolute">
-        <div className="bg-card flex items-center gap-4 lg:gap-6 p-3 sm:p-5 shadow w-site-shell mt-6 mb-6 rounded-2xl">
+        <div className="bg-card flex items-center gap-4 lg:gap-6 p-3 sm:p-5 border border-border w-site-shell mt-6 mb-6 rounded-2xl">
           <NavLink
             to="/"
             end

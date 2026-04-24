@@ -150,7 +150,7 @@ const SubscriptionPayment = ({ onNext }) => {
           {checkout.children.map((child) => (
             <Card
               key={child.childCode || `${child.firstName}-${child.lastName}`}
-              className="rounded-2xl p-0 shadow-sm"
+              className="rounded-2xl p-0"
             >
               <CardContent className="flex items-center gap-4 p-4">
                 <AppImage className="h-16 w-16 rounded-2xl bg-muted p-2" src={robo} alt="" />
@@ -173,7 +173,7 @@ const SubscriptionPayment = ({ onNext }) => {
           ))}
         </div>
 
-        <Card className="mt-8 rounded-2xl shadow-sm">
+        <Card className="mt-8 rounded-2xl">
           <CardContent className="flex flex-col gap-y-4 p-5">
             <SummaryRow label="Order code" value={checkout.orderCode} />
             <SummaryRow label="Registered on" value={formatDisplayDate(checkout.orderDate)} />
@@ -187,7 +187,7 @@ const SubscriptionPayment = ({ onNext }) => {
         </Card>
       </div>
 
-      <Card className="mt-6 flex-1 rounded-3xl py-0 shadow-sm md:mt-0">
+      <Card className="mt-6 flex-1 rounded-3xl py-0 md:mt-0">
         <CardContent className="p-6 md:p-10">
         <div className="flex flex-col gap-y-3">
           <p className="text-3xl font-bold text-foreground">Payment Details</p>

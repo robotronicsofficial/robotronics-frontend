@@ -8,6 +8,7 @@ import {
   useChildProgress,
   useDownloadChildCertificateMutation,
 } from "../../hooks/useChildCourses";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
 const SubscriptionProgressDetailPage = () => {
@@ -69,10 +70,12 @@ const SubscriptionProgressDetailPage = () => {
   );
 
   if (progressErrorMessage) return (
-    <CenteredState className="bg-muted min-h-screen">
-      <div className="bg-card p-6 rounded-lg shadow-md max-w-md w-full">
-        <h2 className="text-xl font-bold text-destructive mb-4">Error</h2>
-        <p className="text-muted-foreground mb-4">{progressErrorMessage}</p>
+    <CenteredState className="bg-muted min-h-screen px-6">
+      <div className="flex w-full max-w-md flex-col gap-4">
+        <Alert variant="destructive">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{progressErrorMessage}</AlertDescription>
+        </Alert>
         <Button
           type="button"
           onClick={() => refetch()}
@@ -85,10 +88,10 @@ const SubscriptionProgressDetailPage = () => {
   );
 
   if (!progressData) return (
-    <CenteredState className="bg-muted min-h-screen">
-      <div className="bg-card p-6 rounded-lg shadow-md">
-        <p className="text-muted-foreground">No progress data found for this student.</p>
-      </div>
+    <CenteredState className="bg-muted min-h-screen px-6">
+      <Alert className="max-w-md">
+        <AlertDescription>No progress data found for this student.</AlertDescription>
+      </Alert>
     </CenteredState>
   );
 
@@ -127,7 +130,7 @@ const SubscriptionProgressDetailPage = () => {
         </div>
 
         {/* Course Progress Table */}
-        <div className="bg-card p-4 rounded-lg shadow-md overflow-x-auto">
+        <div className="overflow-x-auto rounded-lg border border-border bg-card p-4">
           <h2 className="text-xl font-semibold mb-3">Course Progress</h2>
           <table className="w-full min-w-[600px] border-collapse">
             <thead>

@@ -25,7 +25,7 @@ const BlogCard = ({ cardData }) => {
   };
 
   return (
-    <Card className="w-full max-w-sm overflow-hidden rounded p-0 shadow-lg lg:max-w-sm">
+    <Card className="w-full max-w-sm overflow-hidden rounded p-0 lg:max-w-sm">
       <div className="relative">
         <Link to={`/BlogDetail/${cardData._id}`}>
           <img
@@ -47,7 +47,7 @@ const BlogCard = ({ cardData }) => {
           ))}
         </div>
         <div className="absolute right-4 top-4">
-          <Button type="button" variant="secondary" size="icon" className="rounded-full bg-card shadow-md">
+          <Button type="button" variant="ghost" size="icon" className="rounded-full border border-border">
             <Share2 />
           </Button>
         </div>

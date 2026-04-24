@@ -68,7 +68,7 @@ const SubscriptionFAQSection = () => {
 
   return (
     <div className="px-4 py-10 bg-background sm:px-24">
-  <div className="bg-muted p-6 sm:p-10 rounded-xl bg-muted py-12">
+  <div className="bg-muted p-6 sm:p-10 rounded-xl py-12">
     <h2 className="text-2xl font-bold mb-6 text-center sm:text-left poppins-bold">
       Frequently Asked Questions
     </h2>
@@ -76,7 +76,7 @@ const SubscriptionFAQSection = () => {
       {faqs.map((faq, index) => (
         <div
           key={index}
-          className="bg-card rounded-xl p-5 shadow-sm cursor-pointer"
+          className="bg-card rounded-xl p-5 border border-border cursor-pointer"
           onClick={() => toggleFAQ(index)}
         >
           <div className="flex justify-between items-center">

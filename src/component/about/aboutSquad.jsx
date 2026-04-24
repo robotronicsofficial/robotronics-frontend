@@ -1,8 +1,8 @@
-import AppImage from "../AppImage";
 import founder1 from "../../assets/imagesContent/team/farhan.jpg";
 import founder2 from "../../assets/imagesContent/team/mfarhan.jpg";
 import founder3 from "../../assets/imagesContent/team/salman.jpg";
 import founder4 from "../../assets/imagesContent/team/rehan.webp";
+import FounderCard from "./founderCard";
 
 const AboutSquad = () => {
   const founders = [
@@ -54,37 +54,7 @@ const AboutSquad = () => {
       {/* block 2 - team members */}
       <div className="flex flex-wrap justify-center">
         {founders.map((founder) => (
-          <div
-            key={founder.id}
-            className="w-full sm:w-1/2 lg:w-1/4 p-4 flex flex-col items-center"
-          >
-            <div
-              className="w-full h-80 sm:h-96 md:h-[28rem] overflow-hidden rounded-tl-md rounded-tr-md shadow-2xl"
-
-              data-aos="fade-down"
-
-
-            >
-              <AppImage
-                src={founder.imgSrc}
-                alt={founder.title}
-                className="w-full h-full object-cover "
-              />
-            </div>
-            <div
-              className="bg-foreground flex flex-col items-center justify-center py-4 w-full"
-              data-aos="fade-up"
-
-
-            >
-              <p className="text-background poppins-regular text-lg sm:text-xl">
-                {founder.name}
-              </p>
-              <p className="text-background poppins-regular text-sm sm:text-base text-center">
-                {founder.title}
-              </p>
-            </div>
-          </div>
+          <FounderCard key={founder.id} founder={founder} />
         ))}
       </div>
 

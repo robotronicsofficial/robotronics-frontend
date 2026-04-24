@@ -18,7 +18,7 @@ const WorkshopCard = ({ workshop }) => {
     <Button
       type="button"
       variant="ghost"
-      className="h-auto w-full flex-col items-stretch overflow-hidden rounded-lg bg-card p-0 text-left shadow-lg disabled:cursor-default"
+      className="h-auto w-full flex-col items-stretch overflow-hidden rounded-lg border border-border bg-card p-0 text-left disabled:cursor-default"
       onClick={handleOpenWorkshop}
       disabled={!hasExternalUrl}
       aria-label={

@@ -46,7 +46,7 @@ const Search = () => {
   return (
     <div className="min-h-screen bg-muted text-background p-4">
       {/* Search Bar and Filters */}
-      <Card className="rounded-2xl py-0 shadow-sm">
+      <Card className="rounded-2xl py-0">
         <CardContent className="p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
@@ -81,15 +81,15 @@ const Search = () => {
       {/* Results Grid */}
       <div className="my-6">
         {loading ? (
-          <div className="rounded-2xl bg-card p-10 text-center text-foreground shadow-sm">
+          <div className="rounded-2xl border border-border p-10 text-center text-foreground">
             Loading live products...
           </div>
         ) : error ? (
-          <div className="rounded-2xl bg-card p-10 text-center text-destructive shadow-sm">
+          <div className="rounded-2xl border border-border p-10 text-center text-destructive">
             We couldn&apos;t load products right now.
           </div>
         ) : filteredProducts.length === 0 ? (
-          <div className="rounded-2xl bg-card p-10 text-center text-foreground shadow-sm">
+          <div className="rounded-2xl border border-border p-10 text-center text-foreground">
             No products matched your search.
           </div>
         ) : (
@@ -100,7 +100,7 @@ const Search = () => {
                 type="button"
                 variant="ghost"
                 onClick={() => navigate(`/ProductDetailPage/${product._id}`)}
-                className="h-auto flex-col items-stretch overflow-hidden rounded-2xl bg-card p-0 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="h-auto flex-col items-stretch overflow-hidden rounded-2xl bg-card border border-border p-0 text-left transition hover:-translate-y-1"
               >
                 <img
                   src={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}

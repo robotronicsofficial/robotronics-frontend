@@ -31,18 +31,10 @@ const AboutScience = () => {
           </p>
         </div>
         {/* div 2 */}
-        <div className="bg-foreground text-background p-6 relative max-w-md">
-          <div
-            className="bg-primary w-32 h-32 rounded-full absolute top-0 left-0"
-            data-aos="fade-up"
-
-
-          ></div>
+        <div className="bg-foreground text-background p-6 max-w-md">
           <p
-            className="relative z-raised text-sm text-wrap poppins-light leading-relaxed pt-4 pl-4"
+            className="text-sm text-wrap poppins-light leading-relaxed"
             data-aos="fade-up"
-
-
           >
             Personal computers have transformed our lives in ways science
             fiction writers could not have imagined. Helper robots have the

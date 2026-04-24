@@ -134,78 +134,68 @@ const Signup = () => {
 
   return (
     <div className="signin" id="signin">
-      <div className="justify-between p-5 lg:flex lg:p-14 lg:py-40">
-        <div className="hidden lg:block">
-          <div className="flex flex-col items-start gap-5 p-5">
+      <div className="flex flex-col gap-8 px-6 py-10 md:px-10 lg:flex-row lg:items-start lg:justify-between lg:gap-16 lg:px-16 lg:py-40">
+        <div className="hidden lg:flex lg:flex-col lg:gap-6">
+          <div className="flex flex-col items-start gap-5">
             <p
               className="text-6xl text-background text-wrap poppins-bold"
               data-aos="fade-up"
-
-
             >
               Robotics
             </p>
             <p
               className="text-2xl poppins-light text-background"
               data-aos="fade-up"
-
-
             >
               Access to courses and <br /> Products
             </p>
           </div>
           <div className="flex items-end">
             <AppImage
-              className=" w-full items-end"
+              className="w-full items-end"
               src={robot}
               alt="Robotronics signup illustration"
               loading="eager"
               data-aos="fade-up"
-
-
             />
           </div>
           <div
             className="w-full border border-border"
             data-aos="fade-up"
-
-
           ></div>
         </div>
         <div
-          className="flex flex-col bg-background rounded-lg lg:p-14 p-5 mt-header-auth md:mt-0"
+          className="mt-header-auth flex flex-col md:mt-0"
           data-aos="fade-up"
-
-
         >
-          <div className="flex flex-col gap-1 lg:gap-3">
-            <p className="md:text-3xl text-2xl font-bold lg:pb-5 pb-2 poppins-bold ">
+          <div className="flex flex-col gap-3">
+            <p className="md:text-3xl text-2xl font-bold pb-2 lg:pb-5 poppins-bold">
               Sign Up Now
             </p>
-            <div className="gap-2 lg:flex">
-              <div className="flex flex-col">
+            <div className="flex flex-col gap-3 lg:flex-row lg:gap-4">
+              <div className="flex flex-1 flex-col gap-1">
                 <Label className="text-sm poppins-light">First name</Label>
                 <Input
-                  className="h-auto rounded-xl bg-background p-2 lg:px-8"
+                  className="h-auto rounded-xl bg-background px-3 py-2"
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-1 flex-col gap-1">
                 <Label className="text-sm poppins-light">Last name</Label>
                 <Input
-                  className="h-auto rounded-xl bg-background p-2 lg:px-8"
+                  className="h-auto rounded-xl bg-background px-3 py-2"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
                 />
               </div>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
               <Label className="text-sm poppins-light">Email address</Label>
               <Input
-                className="h-auto rounded-xl bg-background p-2"
+                className="h-auto rounded-xl bg-background px-3 py-2"
                 type="email"
                 name="email"
                 value={formData.email}
@@ -213,8 +203,7 @@ const Signup = () => {
               />
             </div>
 
-
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
               <Label className="text-sm poppins-light">Phone number</Label>
               <div className="relative" ref={phoneInputRef}>
                 <PhoneInput

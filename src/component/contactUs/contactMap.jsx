@@ -10,10 +10,10 @@ const MaterialMarker = ({ position, name, address }) => {
     const markerDiv = L.divIcon({
       className: '',
       html: `
-        <div class="group relative flex size-[50px] items-center justify-center rounded-full border-2 border-foreground bg-card shadow-md">
+        <div class="group relative flex size-[50px] items-center justify-center rounded-full border-2 border-foreground bg-card">
           <span class="sr-only">${name}</span>
           <span class="size-4 rounded-full bg-primary"></span>
-          <div class="pointer-events-none absolute bottom-14 left-1/2 hidden w-56 -translate-x-1/2 rounded-lg bg-popover p-3 text-center text-sm text-popover-foreground shadow-lg group-hover:block">
+          <div class="pointer-events-none absolute bottom-14 left-1/2 hidden w-56 -translate-x-1/2 rounded-lg border border-border bg-popover p-3 text-center text-sm text-popover-foreground group-hover:block">
             <strong>${name}</strong><br />
             <span>${address}</span>
           </div>
@@ -52,12 +52,14 @@ const ContactMap = () => {
 
   return (
     <div
-      className="flex bg-background"
+      className="flex flex-col bg-background"
       data-aos="fade-up"
-
-
     >
-      <div className="lg:p-32 py-32 relative h-screen w-screen">
+      <div className="flex flex-col gap-2 px-8 pt-12 lg:px-32 lg:pt-16">
+        <h1 className="text-xl font-bold text-foreground">Our Footprint</h1>
+        <h2 className="text-3xl font-bold text-primary">In Lahore</h2>
+      </div>
+      <div className="lg:p-32 py-12 lg:py-16 px-8 h-screen w-screen">
         <MapContainer
           center={officeLocation.coords}
           zoom={15}
@@ -73,10 +75,6 @@ const ContactMap = () => {
             address={officeLocation.address}
           />
         </MapContainer>
-        <div className="absolute bottom-8 right-8 rounded-lg bg-overlay p-4 text-background shadow-lg">
-          <h1 className="text-xl font-bold mb-2">Our Footprint</h1>
-          <h2 className="text-3xl font-bold text-primary">In Lahore</h2>
-        </div>
       </div>
     </div>
   );

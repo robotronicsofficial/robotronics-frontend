@@ -105,16 +105,16 @@ const Login = () => {
   if (forgotPasswordMode) {
     return (
       <div className="bg-background" id="forgot-password">
-        <div className={getHeaderOffsetClass("page", "flex flex-col items-center justify-center pb-20")}>
+        <div className={getHeaderOffsetClass("page", "flex flex-col items-center justify-center gap-6 px-6 pb-20 md:px-10 lg:px-16")}>
           <p className="text-4xl poppins-bold text-foreground">Forgot Password</p>
           <form
             onSubmit={handleForgotPassword}
-            className="flex flex-col items-center gap-4"
+            className="flex w-full max-w-md flex-col gap-4"
           >
-            <div>
+            <div className="flex flex-col gap-1">
               <Label className="text-sm poppins-regular">Email address</Label>
               <Input
-                className="h-auto rounded-xl bg-background py-3 px-14 lg:px-32"
+                className="h-auto rounded-xl bg-background px-4 py-3"
                 type="email"
                 value={forgotEmail}
                 onChange={(e) => setForgotEmail(e.target.value)}
@@ -123,7 +123,7 @@ const Login = () => {
             </div>
             <Button
               type="submit"
-              className="h-auto rounded-3xl bg-foreground px-14 py-3 text-background poppins-regular lg:px-32"
+              className="h-auto w-full rounded-3xl bg-foreground py-3 text-background poppins-regular"
             >
               Send Reset Instructions
             </Button>
@@ -131,12 +131,12 @@ const Login = () => {
               type="button"
               onClick={() => setForgotPasswordMode(false)}
               variant="link"
-              className="mt-2 text-foreground"
+              className="text-foreground"
             >
               Back to Login
             </Button>
           </form>
-          {error && <p className="text-destructive text-sm mt-2">{error}</p>}
+          {error && <p role="alert" className="text-destructive text-sm">{error}</p>}
         </div>
       </div>
     );
@@ -144,52 +144,52 @@ const Login = () => {
 
   return (
     <div className="bg-background" id="signin">
-      <div>
+      <div className={getHeaderOffsetClass("auth", "mx-auto flex w-full max-w-md flex-col gap-6 px-6 py-8 md:px-10 lg:px-16")}>
         <div
-          className={getHeaderOffsetClass("auth", "flex flex-col items-center justify-center gap-1 py-5 lg:gap-4")}
+          className="flex flex-col items-center gap-4"
           data-aos="fade-up"
         >
-          <p className="text-center text-wrap justify-center lg:py-10 py-5 md:text-3xl text-2xl poppins-bold text-foreground">
+          <p className="text-center text-wrap md:text-3xl text-2xl poppins-bold text-foreground">
             Log in to your account
           </p>
           <AuthSocialButton
-            className="px-12 lg:px-28"
+            className="w-full"
             icon={facebook}
             label="Continue with Facebook"
             onClick={() => handleSocialLogin('facebook')}
           />
           <AuthSocialButton
-            className="px-14 lg:px-32"
+            className="w-full"
             icon={google}
             label="Continue with Google"
             onClick={() => handleSocialLogin('google')}
           />
         </div>
         <div
-          className="flex items-center justify-center"
+          className="flex items-center gap-3"
           data-aos="fade-up"
         >
-          <Separator className="lg:w-52 w-44" />
-          <p className="text-xl font-bold p-2">OR</p>
-          <Separator className="lg:w-52 w-44" />
+          <Separator className="flex-1" />
+          <p className="text-xl font-bold">OR</p>
+          <Separator className="flex-1" />
         </div>
         <form
           onSubmit={handleLogin}
-          className="flex flex-col items-center gap-3"
+          className="flex flex-col gap-4"
           data-aos="fade-up"
         >
-          <div className="lg:py-8 py-4">
+          <div className="flex flex-col gap-1">
             <Label className="text-sm poppins-regular">Email address</Label>
             <Input
-              className="h-auto rounded-xl bg-background py-3 px-14 lg:px-32"
+              className="h-auto rounded-xl bg-background px-4 py-3"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
-          <div className="flex flex-col">
-            <div className="flex justify-between">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center justify-between">
               <Label className="text-sm poppins-regular">Password</Label>
               <PasswordVisibilityButton
                 className="w-auto"
@@ -200,7 +200,7 @@ const Login = () => {
               />
             </div>
             <Input
-              className="h-auto rounded-xl bg-background py-3 px-14 lg:px-32"
+              className="h-auto rounded-xl bg-background px-4 py-3"
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -215,36 +215,33 @@ const Login = () => {
               Forget your password
             </Button>
           </div>
-          <div className="flex items-left lg:py-5 py-2">
+          <div className="flex items-center gap-2">
             <Checkbox
               id="keep-signed-in"
             />
             <Label
               htmlFor="keep-signed-in"
-              className="ms-2 text-sm poppins-regular text-muted-foreground"
+              className="text-sm poppins-regular text-muted-foreground"
             >
               Keep me signed in until I sign out
             </Label>
           </div>
           <Button
             type="submit"
-            className="h-auto rounded-3xl bg-foreground px-14 py-3 text-background poppins-regular lg:px-32"
+            className="h-auto w-full rounded-3xl bg-foreground py-3 text-background poppins-regular"
           >
             Log in
           </Button>
-          {error && <p className="text-destructive text-sm mt-2">{error}</p>}
-          <div className="flex items-center justify-center">
-            <Separator className="lg:w-56 w-44" />
-            <Separator className="lg:w-60 w-48" />
-          </div>
-          <p className="text-center poppins-regular justify-center lg:py-10 py-5 lg:text-3xl text-xl text-foreground">
-            Don&apos;t have an account?
-          </p>
-          <div className="lg:pb-10 pb-4">
+          {error && <p role="alert" className="text-destructive text-sm">{error}</p>}
+          <Separator />
+          <div className="flex flex-col items-center gap-4">
+            <p className="text-center poppins-regular lg:text-3xl text-xl text-foreground">
+              Don&apos;t have an account?
+            </p>
             <Button
               type="button"
               variant="outline"
-              className="h-auto rounded-3xl bg-background px-14 py-3 text-foreground poppins-regular lg:px-32"
+              className="h-auto w-full rounded-3xl bg-background py-3 text-foreground poppins-regular"
               onClick={() => navigate('/Signup')}
             >
               Sign up
