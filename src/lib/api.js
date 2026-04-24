@@ -156,3 +156,10 @@ export const sendJson = (path, { body, headers, ...options } = {}) =>
     headers: buildJsonHeaders(headers, true),
     body: body === undefined ? undefined : JSON.stringify(body),
   });
+
+export const sendFormData = (path, { body, headers, ...options } = {}) =>
+  fetchBackendJson(path, {
+    ...options,
+    headers: buildJsonHeaders(headers),
+    body,
+  });

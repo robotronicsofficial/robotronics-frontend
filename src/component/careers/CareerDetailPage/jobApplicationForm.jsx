@@ -1,25 +1,28 @@
 import { useRef, useState } from "react";
 
-import { BACKEND_BASE_URL } from "../../../lib/api";
+import { sendFormData } from "../../../lib/api";
+
+const initialApplicationForm = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  streetAddress: "",
+  city: "",
+  state: "",
+  postalCode: "",
+  education: "",
+  workExperience: "",
+  skills: "",
+  cvFile: null,
+  coverLetter: "",
+};
+
 const JobApplicationForm = ({ job = null }) => {
   const fileInputRef = useRef(null);
   const jobId = job?._id || "";
   const jobTitle = job?.title || job?.position || "";
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    streetAddress: "",
-    city: "",
-    state: "",
-    postalCode: "",
-    education: "",
-    workExperience: "",
-    skills: "",
-    cvFile: null,
-    coverLetter: "",
-  });
+  const [form, setForm] = useState(initialApplicationForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
 
@@ -58,32 +61,12 @@ const JobApplicationForm = ({ job = null }) => {
         formData.append("cvFile", form.cvFile);
       }
 
-      const response = await fetch(`${BACKEND_BASE_URL}/cvForm`, {
+      const data = await sendFormData("/cvForm", {
         method: "POST",
         body: formData,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || data.error || "Failed to submit application");
-      }
-
-      setForm({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        streetAddress: "",
-        city: "",
-        state: "",
-        postalCode: "",
-        education: "",
-        workExperience: "",
-        skills: "",
-        cvFile: null,
-        coverLetter: "",
-      });
+      setForm(initialApplicationForm);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -102,16 +85,16 @@ const JobApplicationForm = ({ job = null }) => {
   };
 
   const handleFileUpload = (e) => {
-    const file = e.target.files[0]; 
+    const file = e.target.files[0];
     setForm((prevForm) => ({
       ...prevForm,
-      cvFile: file, 
+      cvFile: file,
     }));
   };
 
   return (
     <>
-    <div className="space-y-5 mx-10 my-8 lg:px-24"  >
+    <div className="mx-10 my-8 flex flex-col gap-5 lg:px-24">
           <h1 className="text-4xl poppins-bold text-brown"data-aos="fade-up"  >Job Application</h1>
           <h2 className="text-xl poppins-light text-brown"data-aos="fade-up"  >
             Submit your details and CV for {jobTitle || "the selected role"}
