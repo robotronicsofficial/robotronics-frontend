@@ -1,9 +1,9 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import WorkshopCard from "./WorkshopCard";
 import Pagination from "../../blog/Pagination";
 
-import { fetchBackendJson, getContentLoadErrorMessage } from "../../../lib/api";
+import { useVideoGallery } from "../../../hooks/useVideoGallery";
 const categories = [
   "Subscription Courses",
   "Robotics Workshops",
@@ -108,24 +108,11 @@ const Intro = () => {
   const [selectedCity, setSelectedCity] = useState("");
   const [sortBy, setSortBy] = useState("Videos");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [workshopsData, setWorkshopsData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchGallery = async () => {
-      try {
-        const data = await fetchBackendJson("/allVideoGallery");
-        setWorkshopsData(Array.isArray(data?.data) ? data.data : []);
-        setLoading(false);
-      } catch (err) {
-        setError(getContentLoadErrorMessage(err, "We couldn't load the video gallery right now."));
-        setLoading(false);
-      }
-    };
-
-    fetchGallery();
-  }, []);
+  const {
+    data: workshopsData = [],
+    isLoading: loading,
+    error,
+  } = useVideoGallery();
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category.trim().toLowerCase());
@@ -184,7 +171,7 @@ const Intro = () => {
   );
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>Error: We couldn&apos;t load the video gallery right now.</div>;
 
   return (
     <div className="bg-gray p-14">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import robo from "../assets/logo/Robotrinic.svg";
 import leftArrow from "../assets/logo/arrow-up-left.svg";
@@ -8,10 +8,9 @@ import { LuClock } from "react-icons/lu";
 import { IoVideocamOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
-import { getContentLoadErrorMessage } from "../lib/api";
-import { fetchCourses } from "../lib/courses";
 import { resolveBackendAssetUrl } from "../utils/mediaUrl";
 import AppImage from "./AppImage";
+import { useCourses } from "../hooks/useCourses";
 
 const ServiceCard = ({ service }) => {
   return (
@@ -73,45 +72,13 @@ ServiceCard.propTypes = {
 
 const Shop = () => {
   const navigate = useNavigate();
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data: services = [],
+    isLoading: loading,
+    error,
+  } = useCourses();
   const [currentIndex, setCurrentIndex] = useState(0);
   const servicesPerPage = 3;
-
-  useEffect(() => {
-    let active = true;
-
-    const loadCourses = async () => {
-      try {
-        setLoading(true);
-        const nextCourses = await fetchCourses();
-
-        if (!active) {
-          return;
-        }
-
-        setServices(nextCourses);
-        setError(null);
-      } catch (err) {
-        if (!active) {
-          return;
-        }
-
-        setError(getContentLoadErrorMessage(err, "We couldn't load courses right now."));
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    };
-
-    loadCourses();
-
-    return () => {
-      active = false;
-    };
-  }, []);
 
   const handleNext = () => {
     if (currentIndex + servicesPerPage < services.length) {
@@ -132,7 +99,7 @@ const Shop = () => {
 
   if (loading) return <div className="text-center py-20">Loading...</div>;
   if (error)
-    return <div className="text-center py-20 text-red-500">{error}</div>;
+    return <div className="text-center py-20 text-red-500">We couldn&apos;t load courses right now.</div>;
 
   return (
     <section className="bg-gray py-8 md:py-12">

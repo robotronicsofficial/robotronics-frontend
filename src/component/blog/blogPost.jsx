@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
 import { FaShareAlt } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 import CenteredState from "../../components/layout/CenteredState";
 
-import { fetchBackendJson, getContentLoadErrorMessage } from "../../lib/api";
+import { useBlogs } from "../../hooks/useBlogs";
 const BlogCard = ({ cardData }) => {
   // Map backend data structure to match your cardData props
   const mappedData = {
@@ -108,34 +108,21 @@ BlogCard.propTypes = {
 
 const BlogPost = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data = [],
+    isLoading: loading,
+    error,
+  } = useBlogs();
   const itemsPerPage = 6;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const result = await fetchBackendJson("/getAllBlogs");
-        const blogs = Array.isArray(result) ? result : [];
-        setData(blogs);
-        setTotalPages(Math.ceil(blogs.length / itemsPerPage));
-      } catch (err) {
-        setError(getContentLoadErrorMessage(err, "We couldn't load blog posts right now."));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const totalPages = Math.ceil(data.length / itemsPerPage);
 
   // Get paginated data
-  const paginatedData = data.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  const paginatedData = useMemo(
+    () => data.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage,
+    ),
+    [currentPage, data],
   );
 
   if (loading) {
@@ -149,7 +136,9 @@ const BlogPost = () => {
   if (error) {
     return (
       <CenteredState className="h-screen">
-        <div className="text-xl text-red-500">{error}</div>
+        <div className="text-xl text-red-500">
+          {error.message || "We couldn't load blog posts right now."}
+        </div>
       </CenteredState>
     );
   }

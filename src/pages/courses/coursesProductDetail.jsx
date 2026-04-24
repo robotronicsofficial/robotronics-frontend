@@ -3,43 +3,23 @@ import Decription from "../../component/shop/productDetail/decription";
 import CourseIntro from "../../component/course/courseDetailPage/courseIntro";
 import MoreProduct from "../../component/shop/productDetail/moreProduct";
 import { COMMERCE_ITEM_TYPES } from "../../lib/commerceItems";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { fetchBackendJson, getContentLoadErrorMessage } from "../../lib/api";
+import { useCourse } from "../../hooks/useCourses";
 const CoursesProductDetail = () => {
   const { id } = useParams();
-  const [course, setCourse] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchCourse = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchBackendJson(`/coursesById/${id}`);
-        setCourse(data);
-      } catch (fetchError) {
-        setError(getContentLoadErrorMessage(fetchError, "We couldn't load this course right now."));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchCourse();
-    } else {
-      setError("Course ID not found");
-      setLoading(false);
-    }
-  }, [id]);
+  const {
+    data: course,
+    isLoading: loading,
+    error,
+  } = useCourse(id);
 
   if (loading) {
     return <div className="pt-[9rem] bg-lightgray text-center p-10">Loading course...</div>;
   }
 
-  if (error) {
-    return <div className="pt-[9rem] bg-lightgray text-center p-10 text-red-500">{error}</div>;
+  if (!id || error) {
+    return <div className="pt-[9rem] bg-lightgray text-center p-10 text-red-500">We couldn&apos;t load this course right now.</div>;
   }
 
   return (
