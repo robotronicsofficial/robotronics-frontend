@@ -10,48 +10,48 @@ import { TfiEmail } from "react-icons/tfi";
 import { FaLocationDot } from "react-icons/fa6";
 import { useState } from "react";
 
-import { BACKEND_BASE_URL } from "../../lib/api";
+import FloatingField from "../../components/forms/FloatingField";
+import { sendJson } from "../../lib/api";
+
+const CONTACT_SERVICES = {
+  school: [
+    "Course Membership",
+    "Robotics Curriculum Integration",
+    "Teacher Training Program",
+    "After-School Robotics Club",
+    "STEM Lab Setup Consultation",
+    "Competition Preparation",
+  ],
+  parent: [
+    "Course Membership",
+    "Weekend Robotics Classes",
+    "Holiday Robotics Camps",
+    "One-on-One Tutoring",
+    "Robotics Kit Purchase Guidance",
+    "Competition Registration Assistance",
+  ],
+};
+
 const ContactUsForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
-    userType: "", // 'school' or 'parent'
+    userType: "",
     schoolName: "",
     address: "",
     city: "",
     message: "",
-    selectedServices: [], // array to store selected services
+    selectedServices: [],
   });
 
   const [status, setStatus] = useState(null);
-
-  // Define services for each user type
-  const services = {
-    school: [
-      "Course Membership",
-      "Robotics Curriculum Integration",
-      "Teacher Training Program",
-      "After-School Robotics Club",
-      "STEM Lab Setup Consultation",
-      "Competition Preparation",
-    ],
-    parent: [
-      "Course Membership",
-      "Weekend Robotics Classes",
-      "Holiday Robotics Camps",
-      "One-on-One Tutoring",
-      "Robotics Kit Purchase Guidance",
-      "Competition Registration Assistance",
-    ],
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-      // Reset selected services when user type changes
       ...(name === "userType" && { selectedServices: [] }),
     });
   };
@@ -72,34 +72,25 @@ const ContactUsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${BACKEND_BASE_URL}/contact`, {
+      const result = await sendJson("/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: formData,
       });
 
-      const result = await response.json();
-
-      if (response.ok) {
-        setStatus("Message sent successfully!");
-        setFormData({
-          name: "",
-          phone: "",
-          email: "",
-          userType: "",
-          schoolName: "",
-          address: "",
-          city: "",
-          message: "",
-          selectedServices: [],
-        });
-      } else {
-        setStatus(`Error: ${result.message}`);
-      }
-    } catch {
-      setStatus("An error occurred while sending the message.");
+      setStatus(result?.message || "Message sent successfully!");
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        userType: "",
+        schoolName: "",
+        address: "",
+        city: "",
+        message: "",
+        selectedServices: [],
+      });
+    } catch (submitError) {
+      setStatus(`Error: ${submitError.message || "An error occurred while sending the message."}`);
     }
   };
 
@@ -181,151 +172,80 @@ const ContactUsForm = () => {
         <div className="lg:w-1/2 p-5">
           {/* Form starts here */}
           <form onSubmit={handleSubmit} className="w-full">
-            {/* Name */}
-            <div className="relative z-0 w-full mb-5 group">
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                required
-              />
-              <label
-                htmlFor="name"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Name
-              </label>
-            </div>
+            <FloatingField
+              type="text"
+              name="name"
+              id="name"
+              label="Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+            <FloatingField
+              type="tel"
+              name="phone"
+              id="phone"
+              label="Phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+            <FloatingField
+              type="email"
+              name="email"
+              id="email"
+              label="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <FloatingField
+              type="text"
+              name="city"
+              id="city"
+              label="City"
+              value={formData.city}
+              onChange={handleChange}
+              required
+            />
 
-            {/* Phone */}
-            <div className="relative z-0 w-full mb-5 group">
-              <input
-                type="tel"
-                name="phone"
-                id="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                required
-              />
-              <label
-                htmlFor="phone"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Phone
-              </label>
-            </div>
-
-            {/* Email */}
-            <div className="relative z-0 w-full mb-5 group">
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                required
-              />
-              <label
-                htmlFor="email"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Email
-              </label>
-            </div>
-
-             {/* City */}
-            <div className="relative z-0 w-full mb-5 group">
-              <input
-                type="text"
-                name="city"
-                id="city"
-                value={formData.city}
-                onChange={handleChange}
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                required
-              />
-              <label
-                htmlFor="city"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                City
-              </label>
-            </div>
-
-
-            {/* User Type Dropdown */}
-            <div className="relative z-0 w-full mb-5 group">
-              <select
-                name="userType"
-                id="userType"
-                value={formData.userType}
-                onChange={handleChange}
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                required
-              >
-                <option value="">Select an option</option>
-                <option value="school">School</option>
-                <option value="parent">Parent</option>
-              </select>
-              <label
-                htmlFor="userType"
-                className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                I am a...
-              </label>
-            </div>
+            <FloatingField
+              as="select"
+              name="userType"
+              id="userType"
+              label="I am a..."
+              labelClassName="text-lg"
+              value={formData.userType}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select an option</option>
+              <option value="school">School</option>
+              <option value="parent">Parent</option>
+            </FloatingField>
 
             {/* School Name (only shown when userType is school) */}
             {formData.userType === "school" && (
-              <div className="relative z-0 w-full mb-5 group">
-                <input
-                  type="text"
-                  name="schoolName"
-                  id="schoolName"
-                  value={formData.schoolName}
-                  onChange={handleChange}
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                  placeholder=" "
-                  required
-                />
-                <label
-                  htmlFor="schoolName"
-                  className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                >
-                  School Name
-                </label>
-              </div>
-            )}
-
-           
-            {/* Address */}
-            <div className="relative z-0 w-full mb-5 group">
-              <input
+              <FloatingField
                 type="text"
-                name="address"
-                id="address"
-                value={formData.address}
+                name="schoolName"
+                id="schoolName"
+                label="School Name"
+                value={formData.schoolName}
                 onChange={handleChange}
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
                 required
               />
-              <label
-                htmlFor="address"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                {formData.userType === "school" ? "School Address" : "Your Address"}
-              </label>
-            </div>
+            )}
+
+            <FloatingField
+              type="text"
+              name="address"
+              id="address"
+              label={formData.userType === "school" ? "School Address" : "Your Address"}
+              value={formData.address}
+              onChange={handleChange}
+              required
+            />
 
             {/* Services Section (only shown when userType is selected) */}
             {formData.userType && (
@@ -334,7 +254,7 @@ const ContactUsForm = () => {
                   Services I'm interested in:
                 </label>
                 <div className="space-y-2">
-                  {services[formData.userType].map((service) => (
+                  {CONTACT_SERVICES[formData.userType].map((service) => (
                     <div key={service} className="flex items-center">
                       <input
                         type="checkbox"
@@ -352,24 +272,15 @@ const ContactUsForm = () => {
               </div>
             )}
 
-            {/* Message */}
-            <div className="relative z-0 w-full mb-5 group">
-              <textarea
-                name="message"
-                id="message"
-                value={formData.message}
-                onChange={handleChange}
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-line appearance-none dark:text-brown dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                required
-              />
-              <label
-                htmlFor="message"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Message
-              </label>
-            </div>
+            <FloatingField
+              as="textarea"
+              name="message"
+              id="message"
+              label="Message"
+              value={formData.message}
+              onChange={handleChange}
+              required
+            />
 
             {/* Status message */}
             {status && (
