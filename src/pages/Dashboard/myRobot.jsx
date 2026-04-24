@@ -6,7 +6,7 @@ import DashboardLayout from "../../components/layout/DashboardLayout";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
-import { BACKEND_BASE_URL } from "../../lib/api";
+import { fetchSessionJson } from "../../lib/api";
 const MyRobot = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
@@ -17,15 +17,7 @@ const MyRobot = () => {
     const loadWishlist = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${BACKEND_BASE_URL}/wishlists/wishlist`, {
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to load saved items: ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await fetchSessionJson("/wishlists/wishlist");
         setItems(Array.isArray(data?.items) ? data.items : []);
         setError("");
       } catch (fetchError) {
@@ -45,17 +37,9 @@ const MyRobot = () => {
 
   const handleRemove = async (item) => {
     try {
-      const response = await fetch(
-        `${BACKEND_BASE_URL}/wishlists/wishlist/${item.itemType}/${item.itemId}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to remove saved item: ${response.status}`);
-      }
+      await fetchSessionJson(`/wishlists/wishlist/${item.itemType}/${item.itemId}`, {
+        method: "DELETE",
+      });
 
       setItems((currentItems) =>
         currentItems.filter(
@@ -75,7 +59,7 @@ const MyRobot = () => {
       </div>
 
       <DashboardLayout
-        className="bg-background min-h-0 block lg:flex flex-row"
+        className="block min-h-0 bg-background lg:flex"
         contentClassName="w-full py-10 p-0"
         headerOffsetVariant="dashboardWide"
         navClassName="lg:w-1/3 w-2/3"
@@ -95,7 +79,7 @@ const MyRobot = () => {
         ) : error ? (
           <div className="px-8 lg:px-14 py-12 text-red-600">{error}</div>
         ) : items.length === 0 ? (
-          <div className="px-8 lg:px-14 py-12 space-y-4 text-brown">
+          <div className="flex flex-col items-start gap-4 px-8 py-12 text-brown lg:px-14">
             <p>No saved items yet.</p>
             <button
               type="button"
@@ -106,13 +90,13 @@ const MyRobot = () => {
             </button>
           </div>
         ) : (
-          <div className="space-y-5 px-8 lg:px-14">
+          <div className="flex flex-col gap-5 px-8 lg:px-14">
             {items.map((item) => (
               <div
                 key={`${item.itemType}:${item.itemId}`}
                 className="flex flex-col gap-5 rounded-2xl bg-white p-5 shadow-sm lg:flex-row lg:items-center lg:justify-between"
               >
-                <div className="flex flex-row items-center gap-5">
+                <div className="flex items-center gap-5">
                   <button
                     type="button"
                     onClick={() => handleRemove(item)}
@@ -128,7 +112,7 @@ const MyRobot = () => {
                       alt={item?.name || "Item"}
                     />
                   </button>
-                  <div className="space-y-2">
+                  <div className="flex flex-col gap-2">
                     <button
                       type="button"
                       onClick={() => navigate(getCommerceItemRoute(item))}
