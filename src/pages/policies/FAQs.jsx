@@ -43,7 +43,7 @@ const faqs = [
   },
   {
     question: "What is the fee structure?",
-    answer: "Plans start from PKR 800/month (approx. USD 2.84/month) when paid annually. Exact pricing is displayed during checkout."
+    answer: "The current membership price is shown during checkout, with monthly and annual billing available."
   }
 ];
 
