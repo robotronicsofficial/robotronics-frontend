@@ -1,11 +1,14 @@
 import { Suspense, lazy } from "react";
 import { Navigate, Routes, Route } from "react-router-dom";
 import Layout from "./component/Layout";
-import ProtectedChild from "./component/ProtectedChild";
-import ProtectedRoute from './component/ProtectedRoute';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { CART_PATH, CONTACT_PATH, SCREEN_PATH } from "./router/paths";
+
+const ProtectedChild = lazy(() => import("./component/ProtectedChild"));
+const ProtectedRoute = lazy(() => import("./component/ProtectedRoute"));
+const ToastContainer = lazy(() => import("react-toastify").then((module) => ({
+  default: module.ToastContainer,
+})));
 
 const Home = lazy(() => import("./pages/home"));
 const AboutUs = lazy(() => import("./pages/about"));
@@ -128,17 +131,19 @@ function App() {
           <Route path="*" element={<Error />} />
         </Routes>
       </Suspense>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      <Suspense fallback={null}>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      </Suspense>
     </Layout>
   );
 }

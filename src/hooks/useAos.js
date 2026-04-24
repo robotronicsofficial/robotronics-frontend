@@ -1,18 +1,33 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import AOS from "aos";
 import { AOS_OPTIONS } from "../utils/motion";
 
 const useAos = () => {
   const location = useLocation();
 
   useEffect(() => {
-    AOS.init(AOS_OPTIONS);
+    let cancelled = false;
+
+    const loadAos = async () => {
+      const { default: AOS } = await import("aos");
+
+      if (!cancelled) {
+        AOS.init(AOS_OPTIONS);
+      }
+    };
+
+    void loadAos();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
     const frameId = window.requestAnimationFrame(() => {
-      AOS.refreshHard();
+      void import("aos").then(({ default: AOS }) => {
+        AOS.refreshHard();
+      });
     });
 
     return () => {
