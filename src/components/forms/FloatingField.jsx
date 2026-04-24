@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "../../lib/utils";
 
 const fieldClassName =
@@ -15,21 +17,25 @@ const FloatingField = ({
   label,
   labelClassName: labelClassNameOverride,
   ...props
-}) => (
-  <div className="relative mb-5 w-full group">
-    <Component
-      id={id}
-      className={cn(fieldClassName, className)}
-      placeholder={Component === "select" ? undefined : " "}
-      {...props}
-    >
-      {children}
-    </Component>
+}) => {
+  const Control = Component === "textarea" ? Textarea : Input;
+
+  return (
+    <div className="relative mb-5 w-full group">
+      <Control
+        id={id}
+        className={cn(fieldClassName, className)}
+        placeholder=" "
+        {...props}
+      >
+        {children}
+      </Control>
     <label htmlFor={id} className={cn(labelClassName, labelClassNameOverride)}>
       {label}
     </label>
   </div>
-);
+  );
+};
 
 FloatingField.propTypes = {
   as: PropTypes.elementType,

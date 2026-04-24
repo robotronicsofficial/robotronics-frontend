@@ -12,6 +12,9 @@ import shopHome from "../../assets/shopHome.png";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { cn } from "../../lib/utils";
 import { useProducts } from "../../hooks/useProducts";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { FormSelect } from "../../components/forms/FormControls";
 import {
   selectCartTotalPrice,
   selectCartQuantity,
@@ -140,9 +143,9 @@ const Shopsearch = () => {
 
         <div className="flex h-12 w-full flex-1 items-center rounded-md border border-border bg-card px-2">
           <Search className="text-muted-foreground text-xl" />
-          <input
+          <Input
             type="text"
-            className="w-full px-2 py-2 outline-none bg-transparent"
+            className="h-full border-0 bg-transparent px-2 py-2 shadow-none focus-visible:ring-0"
             placeholder="Search products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -150,15 +153,17 @@ const Shopsearch = () => {
         </div>
 
         <div className="relative h-12 w-64">
-          <select
-            className="border bg-card h-full w-full px-2 rounded-md outline-none"
+          <FormSelect
+            name="sortOption"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value)}
-          >
-            <option value="Popularity">Popularity</option>
-            <option value="Price: Low to High">Price: Low to High</option>
-            <option value="Price: High to Low">Price: High to Low</option>
-          </select>
+            options={[
+              { value: "Popularity", label: "Popularity" },
+              { value: "Price: Low to High", label: "Price: Low to High" },
+              { value: "Price: High to Low", label: "Price: High to Low" },
+            ]}
+            controlClassName="h-12 bg-card"
+          />
         </div>
       </div>
 
@@ -198,14 +203,15 @@ const Shopsearch = () => {
       <div className="justify-between lg:flex lg:p-5">
         <div className="flex">
           {Array.from({ length: totalPages }, (_, i) => (
-            <button
+            <Button
               type="button"
               key={i}
-              className={cn("p-2 px-4", currentPage === i + 1 ? "bg-primary" : "bg-card")}
+              variant={currentPage === i + 1 ? "default" : "outline"}
+              className={cn("h-auto p-2 px-4", currentPage !== i + 1 && "bg-card")}
               onClick={() => setCurrentPage(i + 1)}
             >
               {i + 1}
-            </button>
+            </Button>
           ))}
         </div>
         <p>SHOWING {Math.min(currentPage * productsPerPage, filteredProducts.length)} OF {filteredProducts.length} PRODUCTS</p>

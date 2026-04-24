@@ -6,6 +6,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
 import { getPasswordInputClassName } from "../components/auth/passwordInputClass";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useResetPasswordMutation } from "../hooks/useAuthMutations";
 import { getHeaderOffsetClass } from "../components/layout/headerOffset";
 import {
@@ -15,8 +19,8 @@ import {
 } from "../utils/passwordPolicy";
 
 const RequirementCheck = ({ isValid, text }) => (
-  <div className="flex items-center">
-    <span className={`inline-block w-4 h-4 rounded-full mr-2 ${isValid ? 'bg-success' : 'bg-destructive'}`}></span>
+  <div className="flex items-center gap-2">
+    <Badge variant={isValid ? "default" : "destructive"} className="size-4 rounded-full p-0" />
     <span className={`text-xs ${isValid ? 'text-success' : 'text-destructive'}`}>{text}</span>
   </div>
 );
@@ -90,13 +94,13 @@ const ResetPassword = () => {
         >
           <div className="w-full">
             <div className="flex items-center justify-between">
-              <p className="text-sm poppins-light">New Password</p>
+              <Label className="text-sm poppins-light">New Password</Label>
               <PasswordVisibilityButton
                 isVisible={showPassword}
                 onToggle={togglePasswordVisibility}
               />
             </div>
-            <input
+            <Input
               className={getPasswordInputClassName(password, hasMinLength && hasNumber && hasSymbol)}
               type={showPassword ? "text" : "password"}
               value={password}
@@ -121,13 +125,13 @@ const ResetPassword = () => {
 
           <div className="w-full">
             <div className="flex items-center justify-between">
-              <p className="text-sm poppins-light">Confirm Password</p>
+              <Label className="text-sm poppins-light">Confirm Password</Label>
               <PasswordVisibilityButton
                 isVisible={showConfirmPassword}
                 onToggle={toggleConfirmPasswordVisibility}
               />
             </div>
-            <input
+            <Input
               className={getPasswordInputClassName(confirmPassword, passwordsMatch)}
               type={showConfirmPassword ? "text" : "password"}
               value={confirmPassword}
@@ -141,21 +145,22 @@ const ResetPassword = () => {
             )}
           </div>
 
-          <button
+          <Button
             type="submit"
-            className="bg-foreground border border-border text-background poppins-regular rounded-3xl py-3 lg:px-32 px-14 w-full"
+            className="h-auto w-full rounded-3xl bg-foreground px-14 py-3 text-background poppins-regular lg:px-32"
             disabled={!hasMinLength || !hasNumber || !hasSymbol || !passwordsMatch}
           >
             Reset Password
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
             onClick={() => navigate('/Login')}
-            className="text-foreground underline mt-2 poppins-regular"
+            variant="link"
+            className="mt-2 text-foreground poppins-regular"
           >
             Back to Login
-          </button>
+          </Button>
         </form>
         {error && <p className="text-destructive text-sm mt-2 poppins-regular">{error}</p>}
       </div>

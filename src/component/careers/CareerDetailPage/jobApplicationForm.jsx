@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 
+import { Button } from "@/components/ui/button";
+import { FormInput, FormTextarea } from "../../../components/forms/FormControls";
 import { useJobApplicationMutation } from "../../../hooks/useIntake";
 
 const initialApplicationForm = {
@@ -17,6 +19,14 @@ const initialApplicationForm = {
   cvFile: null,
   coverLetter: "",
 };
+
+const ApplicationInput = (props) => (
+  <FormInput {...props} />
+);
+
+const ApplicationTextarea = (props) => (
+  <FormTextarea {...props} />
+);
 
 const JobApplicationForm = ({ job = null }) => {
   const fileInputRef = useRef(null);
@@ -106,192 +116,41 @@ const JobApplicationForm = ({ job = null }) => {
     >
       {/* First Name and Last Name */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="firstName" className="block text-sm text-muted-foreground">
-            First Name
-          </label>
-          <input
-            type="text"
-            name="firstName"
-            id="firstName"
-            value={form.firstName}
-            onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="First Name"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="lastName" className="block text-sm text-muted-foreground">
-            Last Name
-          </label>
-          <input
-            type="text"
-            name="lastName"
-            id="lastName"
-            value={form.lastName}
-            onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="Last Name"
-            required
-          />
-        </div>
+        <ApplicationInput label="First Name" name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name" required />
+        <ApplicationInput label="Last Name" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name" required />
       </div>
 
       {/* Email */}
       <div className="grid grid-cols-1">
-        <div>
-          <label htmlFor="email" className="block text-sm text-muted-foreground">
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={form.email}
-            onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="Email Address"
-            required
-          />
-        </div>
+        <ApplicationInput label="Email" type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email Address" required />
       </div>
 
       {/* Phone */}
       <div className="grid grid-cols-1">
-        <div>
-          <label htmlFor="phone" className="block text-sm text-muted-foreground">
-            Phone
-          </label>
-          <input
-            type="text"
-            name="phone"
-            id="phone"
-            value={form.phone}
-            onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="Phone Number"
-            required
-          />
-        </div>
+        <ApplicationInput label="Phone" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number" required />
       </div>
 
       {/* Address */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="streetAddress" className="block text-sm text-muted-foreground">
-            Street Address
-          </label>
-          <input
-            type="text"
-            name="streetAddress"
-            id="streetAddress"
-            value={form.streetAddress}
-            onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="Street Address"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="city" className="block text-sm text-muted-foreground">
-            City
-          </label>
-          <input
-            type="text"
-            name="city"
-            id="city"
-            value={form.city}
-            onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="City"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="state" className="block text-sm text-muted-foreground">
-            State
-          </label>
-          <input
-            type="text"
-            name="state"
-            id="state"
-            value={form.state}
-            onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="State"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="postalCode" className="block text-sm text-muted-foreground">
-            Postal Code
-          </label>
-          <input
-            type="text"
-            name="postalCode"
-            id="postalCode"
-            value={form.postalCode}
-            onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="Postal Code"
-            required
-          />
-        </div>
+        <ApplicationInput label="Street Address" name="streetAddress" value={form.streetAddress} onChange={handleChange} placeholder="Street Address" required />
+        <ApplicationInput label="City" name="city" value={form.city} onChange={handleChange} placeholder="City" required />
+        <ApplicationInput label="State" name="state" value={form.state} onChange={handleChange} placeholder="State" required />
+        <ApplicationInput label="Postal Code" name="postalCode" value={form.postalCode} onChange={handleChange} placeholder="Postal Code" required />
       </div>
 
       {/* Experience */}
       <div className="grid grid-cols-1">
-        <div>
-          <label htmlFor="workExperience" className="block text-sm text-muted-foreground">
-            Work Experience
-          </label>
-          <textarea
-            name="workExperience"
-            id="workExperience"
-            value={form.workExperience}
-            onChange={handleChange}
-            className="p-3 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="Describe your work experience"
-            required
-          ></textarea>
-        </div>
+        <ApplicationTextarea label="Work Experience" name="workExperience" value={form.workExperience} onChange={handleChange} placeholder="Describe your work experience" required />
       </div>
 
       {/* Education */}
       <div className="grid grid-cols-1">
-        <div>
-          <label htmlFor="education" className="block text-sm text-muted-foreground">
-            Education
-          </label>
-          <textarea
-            name="education"
-            id="education"
-            value={form.education}
-            onChange={handleChange}
-            className="p-3 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="Describe your educational background"
-            required
-          ></textarea>
-        </div>
+        <ApplicationTextarea label="Education" name="education" value={form.education} onChange={handleChange} placeholder="Describe your educational background" required />
       </div>
 
       {/* Skills */}
       <div className="grid grid-cols-1">
-        <div>
-          <label htmlFor="skills" className="block text-sm text-muted-foreground">
-            Skills
-          </label>
-          <textarea
-            name="skills"
-            id="skills"
-            value={form.skills}
-            onChange={handleChange}
-            className="p-3 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="List your skills"
-            required
-          ></textarea>
-        </div>
+        <ApplicationTextarea label="Skills" name="skills" value={form.skills} onChange={handleChange} placeholder="List your skills" required />
       </div>
 
       {/* CV Upload */}
@@ -300,13 +159,12 @@ const JobApplicationForm = ({ job = null }) => {
           <label htmlFor="cvFile" className="block text-sm text-muted-foreground">
             Upload CV
           </label>
-          <input
+          <FormInput
             type="file"
             name="cvFile"
-            id="cvFile"
+            label="Upload CV"
             ref={fileInputRef}
             onChange={handleFileUpload}
-            className="mt-1 block w-full border-border rounded-md shadow-sm"
             accept=".pdf,.doc,.docx"
             required
           />
@@ -314,19 +172,7 @@ const JobApplicationForm = ({ job = null }) => {
       </div>
 
       <div className="grid grid-cols-1">
-        <div>
-          <label htmlFor="coverLetter" className="block text-sm text-muted-foreground">
-            Cover Letter
-          </label>
-          <textarea
-            name="coverLetter"
-            id="coverLetter"
-            value={form.coverLetter}
-            onChange={handleChange}
-            className="p-3 mt-1 block w-full border-border rounded-md shadow-sm"
-            placeholder="Optional cover letter"
-          ></textarea>
-        </div>
+        <ApplicationTextarea label="Cover Letter" name="coverLetter" value={form.coverLetter} onChange={handleChange} placeholder="Optional cover letter" />
       </div>
 
       {status.message ? (
@@ -343,13 +189,13 @@ const JobApplicationForm = ({ job = null }) => {
 
       {/* Submit */}
       <div className="flex flex-col mt-6 gap-y-4">
-        <button
+        <Button
           type="submit"
-          className="bg-foreground text-background py-2 px-4 rounded-md shadow-sm hover:bg-foreground-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-foreground disabled:opacity-60"
+          className="h-auto bg-foreground px-4 py-2 text-background"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Submitting..." : "Submit Application"}
-        </button>
+        </Button>
       </div>
     </form>
     </>

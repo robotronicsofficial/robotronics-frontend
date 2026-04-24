@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 
 import hide from "../../assets/images/hide.svg";
+import { Button } from "@/components/ui/button";
 import { cn } from "../../lib/utils";
 
 const PasswordVisibilityButton = ({
@@ -10,8 +11,10 @@ const PasswordVisibilityButton = ({
   textClassName,
   showIconWhenHidden = false,
 }) => (
-  <button
-    className={cn("flex w-20 items-center justify-center gap-2", className)}
+  <Button
+    variant="ghost"
+    size="sm"
+    className={cn("h-auto w-20 gap-2 px-1 py-0", className)}
     onClick={onToggle}
     type="button"
   >
@@ -28,7 +31,7 @@ const PasswordVisibilityButton = ({
         <p className={cn("text-sm poppins-light", textClassName)}>Show</p>
       </>
     )}
-  </button>
+  </Button>
 );
 
 PasswordVisibilityButton.propTypes = {

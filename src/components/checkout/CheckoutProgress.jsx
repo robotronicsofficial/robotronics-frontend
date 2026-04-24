@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const getProgressWidthClass = (value) => {
@@ -17,12 +18,13 @@ const CheckoutProgress = ({ value }) => (
 );
 
 const CheckoutStepButton = ({ icon, title, description, isActive, onClick }) => (
-  <button
+  <Button
     type="button"
+    variant="ghost"
     onClick={onClick}
     disabled={!isActive}
     className={cn(
-      "flex flex-col items-center gap-2 text-center",
+      "h-auto flex-col items-center gap-2 text-center hover:bg-transparent",
       !isActive && "cursor-not-allowed opacity-50"
     )}
   >
@@ -38,7 +40,7 @@ const CheckoutStepButton = ({ icon, title, description, isActive, onClick }) => 
     <span className="mt-2 max-w-56 font-lato text-sm font-medium leading-5 text-muted-foreground">
       {description}
     </span>
-  </button>
+  </Button>
 );
 
 CheckoutProgress.propTypes = {

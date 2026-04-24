@@ -10,6 +10,10 @@ import {
   loadSubscriptionCheckout,
   updateSubscriptionCheckout,
 } from "../../../lib/subscriptionCheckout";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { FormInput } from "../../../components/forms/FormControls";
 
 const PAYMENT_OPTIONS = [
   {
@@ -51,19 +55,17 @@ SummaryRow.propTypes = {
 };
 
 const InputField = ({ label, name, value, onChange, placeholder, type = "text", maxLength }) => (
-  <label className="flex flex-col block gap-y-2">
-    <span className="text-sm font-semibold text-foreground">{label}</span>
-    <input
-      type={type}
-      name={name}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      maxLength={maxLength}
-      className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition focus:border-foreground"
-      required
-    />
-  </label>
+  <FormInput
+    label={label}
+    name={name}
+    value={value}
+    onChange={onChange}
+    placeholder={placeholder}
+    type={type}
+    maxLength={maxLength}
+    required
+    controlClassName="bg-card"
+  />
 );
 
 InputField.propTypes = {
@@ -146,42 +148,47 @@ const SubscriptionPayment = ({ onNext }) => {
 
         <div className="flex flex-col mt-8 gap-y-4">
           {checkout.children.map((child) => (
-            <div
+            <Card
               key={child.childCode || `${child.firstName}-${child.lastName}`}
-              className="flex items-center gap-4 rounded-2xl bg-card p-4 shadow-sm"
+              className="rounded-2xl p-0 shadow-sm"
             >
-              <AppImage className="h-16 w-16 rounded-2xl bg-muted p-2" src={robo} alt="" />
-              <div className="min-w-0 flex-1">
-                <p className="font-bold text-foreground">
-                  {[child.firstName, child.lastName].filter(Boolean).join(" ") || "Student"}
+              <CardContent className="flex items-center gap-4 p-4">
+                <AppImage className="h-16 w-16 rounded-2xl bg-muted p-2" src={robo} alt="" />
+                <div className="min-w-0 flex-1">
+                  <p className="font-bold text-foreground">
+                    {[child.firstName, child.lastName].filter(Boolean).join(" ") || "Student"}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {checkout.plan.name} · {checkout.plan.billingCycle || "Subscription"}
+                  </p>
+                  {child.childCode ? (
+                    <p className="text-xs uppercase tracking-[0.18em] text-accent">{child.childCode}</p>
+                  ) : null}
+                </div>
+                <p className="text-sm font-semibold text-foreground">
+                  {formatCheckoutCurrency(checkout.plan.price)}
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  {checkout.plan.name} · {checkout.plan.billingCycle || "Subscription"}
-                </p>
-                {child.childCode ? (
-                  <p className="text-xs uppercase tracking-[0.18em] text-accent">{child.childCode}</p>
-                ) : null}
-              </div>
-              <p className="text-sm font-semibold text-foreground">
-                {formatCheckoutCurrency(checkout.plan.price)}
-              </p>
-            </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
 
-        <div className="flex flex-col mt-8 gap-y-4 rounded-2xl bg-card p-5 shadow-sm">
-          <SummaryRow label="Order code" value={checkout.orderCode} />
-          <SummaryRow label="Registered on" value={formatDisplayDate(checkout.orderDate)} />
-          <SummaryRow label="Children" value={checkout.totalChildren} />
-          <SummaryRow label="Membership" value={checkout.plan.name || "Subscription"} />
-          <SummaryRow label="Billing cycle" value={checkout.plan.billingCycle || "N/A"} />
-          <div className="border-t border-border pt-4">
-            <SummaryRow label="Total" value={formatCheckoutCurrency(checkout.totalPrice)} highlight />
-          </div>
-        </div>
+        <Card className="mt-8 rounded-2xl shadow-sm">
+          <CardContent className="flex flex-col gap-y-4 p-5">
+            <SummaryRow label="Order code" value={checkout.orderCode} />
+            <SummaryRow label="Registered on" value={formatDisplayDate(checkout.orderDate)} />
+            <SummaryRow label="Children" value={checkout.totalChildren} />
+            <SummaryRow label="Membership" value={checkout.plan.name || "Subscription"} />
+            <SummaryRow label="Billing cycle" value={checkout.plan.billingCycle || "N/A"} />
+            <div className="border-t border-border pt-4">
+              <SummaryRow label="Total" value={formatCheckoutCurrency(checkout.totalPrice)} highlight />
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="mt-6 flex-1 rounded-3xl bg-card p-6 md:mt-0 md:p-10 shadow-sm">
+      <Card className="mt-6 flex-1 rounded-3xl py-0 shadow-sm md:mt-0">
+        <CardContent className="p-6 md:p-10">
         <div className="flex flex-col gap-y-3">
           <p className="text-3xl font-bold text-foreground">Payment Details</p>
           <p className="text-sm text-muted-foreground">
@@ -220,7 +227,11 @@ const SubscriptionPayment = ({ onNext }) => {
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               Payment method
             </p>
-            <div className="grid gap-4 md:grid-cols-2">
+            <RadioGroup
+              value={selectedMethod}
+              onValueChange={(value) => handleChange({ target: { name: "method", value } })}
+              className="grid gap-4 md:grid-cols-2"
+            >
               {PAYMENT_OPTIONS.map((option) => {
                 const isSelected = selectedMethod === option.value;
                 return (
@@ -232,12 +243,8 @@ const SubscriptionPayment = ({ onNext }) => {
                         : "border-border bg-muted text-foreground"
                     }`}
                   >
-                    <input
-                      type="radio"
-                      name="method"
+                    <RadioGroupItem
                       value={option.value}
-                      checked={isSelected}
-                      onChange={handleChange}
                       className="sr-only"
                     />
                     <p className="font-bold">{option.title}</p>
@@ -247,7 +254,7 @@ const SubscriptionPayment = ({ onNext }) => {
                   </label>
                 );
               })}
-            </div>
+            </RadioGroup>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
@@ -308,22 +315,24 @@ const SubscriptionPayment = ({ onNext }) => {
           </div>
 
           <div className="flex flex-wrap gap-3 pt-2">
-            <button
+            <Button
               type="button"
-              className="rounded-full border border-foreground px-6 py-3 text-sm font-semibold text-foreground"
+              variant="outline"
+              className="h-auto rounded-full border-foreground px-6 py-3 text-sm font-semibold text-foreground"
               onClick={() => navigate("/subscriptions/register")}
             >
               Back to Registration
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
-              className="rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-primary"
+              className="h-auto rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-primary"
             >
               Continue to Review
-            </button>
+            </Button>
           </div>
         </form>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

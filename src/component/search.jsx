@@ -2,6 +2,9 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { resolveBackendAssetUrl } from "../utils/mediaUrl";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { FormInput, FormSelect } from "../components/forms/FormControls";
 import { useProducts } from "../hooks/useProducts";
 const Search = () => {
   const navigate = useNavigate();
@@ -20,6 +23,10 @@ const Search = () => {
 
     return ["All categories", ...new Set(values)];
   }, [products]);
+  const categoryOptions = categories.map((cat) => ({
+    label: cat,
+    value: cat === "All categories" ? "all" : cat,
+  }));
 
   const filteredProducts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -39,7 +46,8 @@ const Search = () => {
   return (
     <div className="min-h-screen bg-muted text-background p-4">
       {/* Search Bar and Filters */}
-      <div className="rounded-2xl bg-card p-6 text-foreground shadow-sm">
+      <Card className="rounded-2xl py-0 shadow-sm">
+        <CardContent className="p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.2em] text-accent">Live catalog</p>
@@ -51,28 +59,24 @@ const Search = () => {
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-[1fr_240px]">
-          <input
-            type="text"
+          <FormInput
+            name="search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search products..."
-            className="w-full rounded-xl border border-border px-4 py-3 text-foreground outline-none focus:border-foreground"
+            controlClassName="text-foreground"
             aria-label="Search products"
           />
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full rounded-xl border border-border px-4 py-3 text-foreground outline-none focus:border-foreground"
+          <FormSelect
+            name="category"
+            value={category || "all"}
+            onChange={(e) => setCategory(e.target.value === "all" ? "" : e.target.value)}
+            options={categoryOptions}
             aria-label="Select a category"
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat === "All categories" ? "" : cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+          />
         </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Results Grid */}
       <div className="my-6">
@@ -91,11 +95,12 @@ const Search = () => {
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredProducts.map((product) => (
-              <button
+              <Button
                 key={product._id}
                 type="button"
+                variant="ghost"
                 onClick={() => navigate(`/ProductDetailPage/${product._id}`)}
-                className="overflow-hidden rounded-2xl bg-card text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="h-auto flex-col items-stretch overflow-hidden rounded-2xl bg-card p-0 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
                 <img
                   src={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
@@ -119,7 +124,7 @@ const Search = () => {
                     Stock: {product?.stock ?? "N/A"}
                   </p>
                 </div>
-              </button>
+              </Button>
             ))}
           </div>
         )}
@@ -127,13 +132,14 @@ const Search = () => {
 
       <div className="flex items-center justify-between px-2 pb-4 text-foreground">
         <p>{filteredProducts.length} results</p>
-        <button
+        <Button
           type="button"
-          className="text-foreground hover:underline"
+          variant="link"
+          className="text-foreground"
           onClick={() => navigate("/shop")}
         >
           Browse all products &rarr;
-        </button>
+        </Button>
       </div>
     </div>
   );

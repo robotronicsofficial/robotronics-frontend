@@ -12,6 +12,13 @@ import google from "../assets/images/Googlelogo.svg";
 import AuthSocialButton from "../components/auth/AuthSocialButton";
 import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
 import { getPasswordInputClassName } from "../components/auth/passwordInputClass";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 import { resolveBackendUrl } from "../lib/api";
 import { useRegisterMutation } from "../hooks/useAuthMutations";
 import {
@@ -177,18 +184,18 @@ const Signup = () => {
             </p>
             <div className="gap-2 lg:flex">
               <div className="flex flex-col">
-                <p className="text-sm poppins-light ">First name</p>
-                <input
-                  className="border border-border rounded-xl p-2 lg:px-8 bg-background"
+                <Label className="text-sm poppins-light">First name</Label>
+                <Input
+                  className="h-auto rounded-xl bg-background p-2 lg:px-8"
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
                 />
               </div>
               <div className="flex flex-col">
-                <p className="text-sm poppins-light ">Last name</p>
-                <input
-                  className="border border-border rounded-xl p-2 lg:px-8 bg-background"
+                <Label className="text-sm poppins-light">Last name</Label>
+                <Input
+                  className="h-auto rounded-xl bg-background p-2 lg:px-8"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
@@ -196,9 +203,9 @@ const Signup = () => {
               </div>
             </div>
             <div className="flex flex-col">
-              <p className="text-sm poppins-light ">Email address</p>
-              <input
-                className="border border-border rounded-xl p-2 bg-background"
+              <Label className="text-sm poppins-light">Email address</Label>
+              <Input
+                className="h-auto rounded-xl bg-background p-2"
                 type="email"
                 name="email"
                 value={formData.email}
@@ -208,7 +215,7 @@ const Signup = () => {
 
 
             <div className="flex flex-col">
-              <p className="text-sm poppins-light">Phone number</p>
+              <Label className="text-sm poppins-light">Phone number</Label>
               <div className="relative" ref={phoneInputRef}>
                 <PhoneInput
                   international
@@ -232,13 +239,13 @@ const Signup = () => {
 
             <div className="flex flex-col">
               <div className="flex items-center justify-between">
-                <p className="text-sm poppins-light">Password</p>
+                <Label className="text-sm poppins-light">Password</Label>
                 <PasswordVisibilityButton
                   isVisible={showPassword}
                   onToggle={togglePasswordVisibility}
                 />
               </div>
-              <input
+              <Input
                 className={getPasswordInputClassName(formData.password, passwordMeetsPolicy)}
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -263,13 +270,13 @@ const Signup = () => {
 
             <div className="flex flex-col mt-4">
               <div className="flex items-center justify-between">
-                <p className="text-sm poppins-light">Confirm Password</p>
+                <Label className="text-sm poppins-light">Confirm Password</Label>
                 <PasswordVisibilityButton
                   isVisible={showConfirmPassword}
                   onToggle={toggleConfirmPasswordVisibility}
                 />
               </div>
-              <input
+              <Input
                 className={getPasswordInputClassName(formData.confirmPassword, passwordErrors.match)}
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
@@ -286,13 +293,12 @@ const Signup = () => {
 
             <div className="flex flex-col gap-1 lg:gap-3">
               <div className="flex items-center py-5">
-                <input
+                <Checkbox
                   id="terms-checkbox"
-                  type="checkbox"
-                  className="w-4 h-4 text-foreground bg-muted border-border rounded focus:ring-2"
-                  onChange={(e) => setIsCheckboxChecked(e.target.checked)}
+                  checked={isCheckboxChecked}
+                  onCheckedChange={(checked) => setIsCheckboxChecked(Boolean(checked))}
                 />
-                <label
+                <Label
                   htmlFor="terms-checkbox"
                   className="ms-2 text-sm font-medium text-muted-foreground text-wrap"
                 >
@@ -304,25 +310,22 @@ const Signup = () => {
                   <Link to="/PrivacyPolicy" className="underline underline-offset-4">
                     Privacy Policy
                   </Link>
-                </label>
+                </Label>
               </div>
-              <button
-                className={`bg-foreground text-primary rounded-3xl px-5 py-2 w-full flex items-center justify-center ${!isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""}`}
+              <Button
+                className="h-auto w-full rounded-3xl bg-foreground px-5 py-2 text-primary"
                 onClick={handleSignUp}
                 disabled={!isCheckboxChecked || registerMutation.isPending}
               >
                 {registerMutation.isPending ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-background" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+                    <Spinner />
                     Processing...
                   </>
                 ) : (
                   "Sign up"
                 )}
-              </button>
+              </Button>
             </div>
             <p className="text-sm">
               Already have an account?{" "}
@@ -336,9 +339,9 @@ const Signup = () => {
           </div>
           <div className="flex flex-col lg:py-10 py-5">
             <div className="flex items-center justify-center">
-              <div className="h-0 w-52 border border-border "></div>
+              <Separator className="w-52" />
               <p className=" text-xl poppins-semibold p-2">OR</p>
-              <div className="h-0 w-52 border border-border"></div>
+              <Separator className="w-52" />
             </div>
             <div className="flex flex-col items-center justify-center gap-2 py-10 lg:gap-4 lg:py-20">
               <AuthSocialButton
@@ -362,12 +365,8 @@ const Signup = () => {
 };
 
 const RequirementCheck = ({ isValid, text }) => (
-  <div className="flex items-center">
-    <span
-      className={`inline-block w-4 h-4 rounded-full mr-2 ${
-        isValid ? "bg-success" : "bg-destructive"
-      }`}
-    ></span>
+  <div className="flex items-center gap-2">
+    <Badge variant={isValid ? "default" : "destructive"} className="size-4 rounded-full p-0" />
     <span className={`text-xs ${isValid ? "text-success" : "text-destructive"}`}>
       {text}
     </span>

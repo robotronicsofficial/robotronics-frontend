@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -6,16 +7,20 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   return (
     <div className="flex w-full items-center justify-center gap-1">
       {/* Previous button */}
-      <button
+      <Button
+        type="button"
+        size="icon-lg"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex size-10 items-center justify-center bg-foreground p-2 text-primary disabled:opacity-50"
+        className="bg-foreground p-2 text-primary"
       >
         <ChevronLeft className="text-background" />
-      </button>
+      </Button>
       {/* 1 - 5 */}
       {pages.map((page) => (
-        <button
+        <Button
+          type="button"
+          size="icon-lg"
           key={page}
           onClick={() => onPageChange(page)}
           className={`flex size-10 items-center justify-center p-2 ${
@@ -23,16 +28,18 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           }`}
         >
           {page}
-        </button>
+        </Button>
       ))}
       {/* Next button */}
-      <button
+      <Button
+        type="button"
+        size="icon-lg"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex size-10 items-center justify-center bg-foreground p-2 text-primary disabled:opacity-50"
+        className="bg-foreground p-2 text-primary"
       >
         <ChevronRight className="text-background" />
-      </button>
+      </Button>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import img from "../../../assets/images/IServicesQuickContact.svg";
 
+import { Button } from "@/components/ui/button";
+import { FormInput, FormTextarea } from "../../../components/forms/FormControls";
 import { useQuickContactRequestMutation } from "../../../hooks/useIntake";
 
 const initialQuickContactForm = {
@@ -70,57 +72,39 @@ const QuickContact = () => {
           </div>
           <form className="flex flex-col py-5" onSubmit={handleSubmit}>
             <div className="flex justify-between gap-2">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Name"
-                className="border-2 border-border p-3 w-full focus:outline-none"
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email"
-                className="border-2 border-border p-3 w-full focus:outline-none"
-                required
-              />
+              <FormInput name="name" value={formData.name} onChange={handleChange} placeholder="Name" required />
+              <FormInput type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" required />
             </div>
-            <input
-              type="text"
+            <FormInput
               name="course"
               value={formData.course}
               onChange={handleChange}
               placeholder="Course"
-              className="border-2 border-border p-3 w-full focus:outline-none mt-4"
+              className="mt-4"
             />
-            <input
-              type="text"
+            <FormInput
               name="phone"
               value={formData.phone}
               onChange={handleChange}
               placeholder="Phone"
-              className="border-2 border-border p-3 w-full focus:outline-none mt-4"
+              className="mt-4"
               required
             />
-            <textarea
+            <FormTextarea
               name="message"
               value={formData.message}
               onChange={handleChange}
               placeholder="Your Message"
-              className="border-2 border-border p-3 w-full focus:outline-none mt-4"
+              className="mt-4"
               required
             />
-            <button
+            <Button
               type="submit"
               disabled={quickContactRequestMutation.isPending}
-              className="w-full text-background poppins-bold bg-primary font-bold py-3 mt-4"
+              className="mt-4 h-auto w-full bg-primary py-3 text-background poppins-bold"
             >
               {quickContactRequestMutation.isPending ? "Sending..." : "Send Message"}
-            </button>
+            </Button>
           </form>
           {status && <p className="mt-4 text-destructive">{status}</p>}
         </div>

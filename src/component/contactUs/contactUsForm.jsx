@@ -3,6 +3,11 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 
 import { BrandIcon } from "../../components/ui/brand-icons";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { FormSelect } from "../../components/forms/FormControls";
 import FloatingField from "../../components/forms/FloatingField";
 import { useContactRequestMutation } from "../../hooks/useIntake";
 
@@ -24,6 +29,11 @@ const CONTACT_SERVICES = {
     "Competition Registration Assistance",
   ],
 };
+
+const CONTACT_USER_TYPES = [
+  { value: "school", label: "School" },
+  { value: "parent", label: "Parent" },
+];
 
 const CONTACT_METHODS = [
   { Icon: Phone, label: "+92 309-422-4016" },
@@ -156,14 +166,15 @@ const ContactUsForm = () => {
   return (
     <div className="flex flex-col gap-10 bg-background p-8 lg:p-20">
       <div className="flex flex-col gap-10">
-        <div className="w-full border border-border " data-aos="fade-up"></div>
-        <button
+        <Separator data-aos="fade-up" />
+        <Button
           type="button"
-          className="border border-border poppins-light p-2 rounded-full px-5"
+          variant="outline"
+          className="h-auto rounded-full px-5 p-2 poppins-light"
           data-aos="fade-up"
         >
           Get In Touch
-        </button>
+        </Button>
       </div>
 
       <div className="justify-between lg:flex">
@@ -189,7 +200,7 @@ const ContactUsForm = () => {
         </div>
 
         <div>
-          <div className="h-4/5 w-0 border border-border" data-aos="fade-up"></div>
+          <Separator orientation="vertical" className="h-4/5" data-aos="fade-up" />
         </div>
 
         <div className="lg:w-1/2 p-5">
@@ -231,20 +242,14 @@ const ContactUsForm = () => {
               required
             />
 
-            <FloatingField
-              as="select"
+            <FormSelect
               name="userType"
-              id="userType"
               label="I am a..."
-              labelClassName="text-lg"
               value={formData.userType}
               onChange={handleChange}
+              options={CONTACT_USER_TYPES}
               required
-            >
-              <option value="">Select an option</option>
-              <option value="school">School</option>
-              <option value="parent">Parent</option>
-            </FloatingField>
+            />
 
             {formData.userType === "school" && (
               <FloatingField
@@ -270,22 +275,20 @@ const ContactUsForm = () => {
 
             {formData.userType && (
               <div className="mb-5">
-                <label className="block text-sm text-muted-foreground mb-2">
+                <Label className="mb-2 block text-sm text-muted-foreground">
                   Services I'm interested in:
-                </label>
+                </Label>
                 <div className="flex flex-col gap-2">
                   {CONTACT_SERVICES[formData.userType].map((service) => (
-                    <div key={service} className="flex items-center">
-                      <input
-                        type="checkbox"
+                    <div key={service} className="flex items-center gap-2">
+                      <Checkbox
                         id={`service-${service}`}
                         checked={formData.selectedServices.includes(service)}
-                        onChange={() => handleServiceToggle(service)}
-                        className="mr-2"
+                        onCheckedChange={() => handleServiceToggle(service)}
                       />
-                      <label htmlFor={`service-${service}`} className="text-sm">
+                      <Label htmlFor={`service-${service}`} className="text-sm">
                         {service}
-                      </label>
+                      </Label>
                     </div>
                   ))}
                 </div>
@@ -313,20 +316,20 @@ const ContactUsForm = () => {
             )}
 
             <div className="text-end p-5" data-aos="fade-up">
-              <button
+              <Button
                 type="submit"
                 disabled={contactRequestMutation.isPending}
-                className="justify-between rounded-md bg-foreground p-2 px-3 text-background poppins-light hover:bg-primary hover:text-foreground"
+                className="h-auto justify-between rounded-md bg-foreground p-2 px-3 text-background poppins-light hover:bg-primary hover:text-foreground"
               >
                 {contactRequestMutation.isPending ? "Sending..." : "Send Now"}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
       </div>
 
       <div>
-        <div className="h-0 w-full border border-border" data-aos="fade-up"></div>
+        <Separator data-aos="fade-up" />
       </div>
     </div>
   );

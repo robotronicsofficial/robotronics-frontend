@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import WorkshopCard from "./WorkshopCard";
 import Pagination from "../../blog/Pagination";
+import { FormInput, FormSelect } from "../../../components/forms/FormControls";
 
 import { useVideoGallery } from "../../../hooks/useVideoGallery";
 const categories = [
@@ -18,6 +19,25 @@ const categories = [
   "Online Courses",
   "Robotic Competitions",
 ];
+const cityOptions = [
+  "Lahore",
+  "Karachi",
+  "Islamabad",
+  "Faisalabad",
+  "Rawalpindi",
+  "Multan",
+  "Peshawar",
+  "Quetta",
+  "Sialkot",
+  "Gujranwala",
+  "Hyderabad",
+  "Sargodha",
+  "Bahawalpur",
+  "Sukkur",
+  "Larkana",
+  "Sheikhupura",
+  "Kahror Pakka",
+].map((city) => ({ value: city, label: city }));
 
 const Filters = ({
   selectedDate,
@@ -31,69 +51,40 @@ const Filters = ({
 }) => (
   <div className="flex flex-wrap md:flex-nowrap gap-y-4 md:gap-y-0 md:gap-x-6 mb-6">
     <div className="w-full md:w-1/4">
-      <label className="block text-foreground poppins-medium mb-2">Date</label>
-      <input
+      <FormInput
+        label="Date"
+        name="selectedDate"
         type="date"
-        className="w-full p-2 border border-border rounded"
         value={selectedDate}
         onChange={(e) => setSelectedDate(e.target.value)}
       />
     </div>
     <div className="w-full md:w-1/4">
-      <label className="block text-foreground poppins-medium mb-2">
-        School Name
-      </label>
-      <input
-        type="text"
-        className="w-full p-2 border border-border rounded"
+      <FormInput
+        label="School Name"
+        name="selectedSchool"
         value={selectedSchool}
         onChange={(e) => setSelectedSchool(e.target.value)}
       />
     </div>
     <div className="w-full md:w-1/4">
-      <label className="block text-foreground poppins-medium mb-2">
-        Select City
-      </label>
-      <select
-        className="w-full p-2 border border-border rounded"
+      <FormSelect
+        label="Select City"
+        name="selectedCity"
         value={selectedCity}
         onChange={(e) => setSelectedCity(e.target.value)}
-      >
-        <option value="">City</option>
-        {[
-          "Lahore",
-          "Karachi",
-          "Islamabad",
-          "Faisalabad",
-          "Rawalpindi",
-          "Multan",
-          "Peshawar",
-          "Quetta",
-          "Sialkot",
-          "Gujranwala",
-          "Hyderabad",
-          "Sargodha",
-          "Bahawalpur",
-          "Sukkur",
-          "Larkana",
-          "Sheikhupura",
-          "Kahror Pakka",
-        ].map((city) => (
-          <option key={city} value={city}>
-            {city}
-          </option>
-        ))}
-      </select>
+        options={cityOptions}
+        placeholder="City"
+      />
     </div>
     <div className="w-full md:w-1/4">
-      <label className="block text-foreground poppins-medium mb-2">Sort by</label>
-      <select
-        className="w-full p-2 border border-border rounded"
+      <FormSelect
+        label="Sort by"
+        name="sortBy"
         value={sortBy}
         onChange={(e) => setSortBy(e.target.value)}
-      >
-        <option value="Date">Date</option>
-      </select>
+        options={[{ value: "Date", label: "Date" }, { value: "Videos", label: "Videos" }]}
+      />
     </div>
   </div>
 );

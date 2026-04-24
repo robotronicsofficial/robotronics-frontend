@@ -6,6 +6,10 @@ import { COURSE_PATH } from "../../router/paths";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { selectCart, useCartStore } from "../../stores/cartStore";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { FormInput, FormTextarea } from "../../components/forms/FormControls";
 
 const buildCurrentUserName = (currentUser) => (
   [
@@ -126,18 +130,20 @@ const GiftCourseBody = () => {
             </div>
 
             {!courseItems.length ? (
-              <div className="mx-auto mb-6 max-w-4xl rounded-md bg-card p-5 text-foreground">
+              <Card className="mx-auto mb-6 max-w-4xl rounded-md">
+                <CardContent className="p-5">
                 <p className="poppins-medium">
                   Choose at least one course before sending a gift request.
                 </p>
-                <button
+                <Button
                   type="button"
-                  className="mt-4 rounded-lg bg-foreground px-5 py-3 text-sm font-semibold text-primary"
+                  className="mt-4 h-auto rounded-lg bg-foreground px-5 py-3 text-sm font-semibold text-primary"
                   onClick={() => navigate(COURSE_PATH)}
                 >
                   Browse Courses
-                </button>
-              </div>
+                </Button>
+                </CardContent>
+              </Card>
             ) : null}
 
             <form
@@ -145,115 +151,20 @@ const GiftCourseBody = () => {
               className="mx-auto flex max-w-4xl flex-col gap-6 rounded-md bg-muted p-6"
             >
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div>
-                  <label htmlFor="senderName" className="poppins-regular block text-xl text-foreground">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    name="senderName"
-                    id="senderName"
-                    value={form.senderName}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-                    placeholder="Your name"
-                    required
-                  />
-                </div>
+                <FormInput label="Your Name" name="senderName" value={form.senderName} onChange={handleChange} placeholder="Your name" required />
 
-                <div>
-                  <label htmlFor="senderEmail" className="poppins-regular block text-xl text-foreground">
-                    Your Email
-                  </label>
-                  <input
-                    type="email"
-                    name="senderEmail"
-                    id="senderEmail"
-                    value={form.senderEmail}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-                    placeholder="you@example.com"
-                    required
-                  />
-                </div>
+                <FormInput label="Your Email" type="email" name="senderEmail" value={form.senderEmail} onChange={handleChange} placeholder="you@example.com" required />
               </div>
 
-              <div>
-                <label htmlFor="senderPhone" className="poppins-regular block text-xl text-foreground">
-                  Your Phone
-                </label>
-                <input
-                  type="tel"
-                  name="senderPhone"
-                  id="senderPhone"
-                  value={form.senderPhone}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-                  placeholder="0300 1234567"
-                  required
-                />
-              </div>
+              <FormInput label="Your Phone" type="tel" name="senderPhone" value={form.senderPhone} onChange={handleChange} placeholder="0300 1234567" required />
 
-              <div>
-                <label htmlFor="recipientName" className="poppins-regular block text-xl text-foreground">
-                  Recipient Name
-                </label>
-                <input
-                  type="text"
-                  name="recipientName"
-                  id="recipientName"
-                  value={form.recipientName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-                  placeholder="Recipient name"
-                  required
-                />
-              </div>
+              <FormInput label="Recipient Name" name="recipientName" value={form.recipientName} onChange={handleChange} placeholder="Recipient name" required />
 
-              <div>
-                <label htmlFor="recipientEmail" className="poppins-regular block text-xl text-foreground">
-                  Recipient Email
-                </label>
-                <input
-                  type="email"
-                  name="recipientEmail"
-                  id="recipientEmail"
-                  value={form.recipientEmail}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-                  placeholder="recipient@example.com"
-                  required
-                />
-              </div>
+              <FormInput label="Recipient Email" type="email" name="recipientEmail" value={form.recipientEmail} onChange={handleChange} placeholder="recipient@example.com" required />
 
-              <div>
-                <label htmlFor="date" className="poppins-regular block text-xl text-foreground">
-                  Send Date
-                </label>
-                <input
-                  type="date"
-                  name="date"
-                  id="date"
-                  value={form.date}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-                  required
-                />
-              </div>
+              <FormInput label="Send Date" type="date" name="date" value={form.date} onChange={handleChange} required />
 
-              <div>
-                <label htmlFor="message" className="poppins-regular block text-xl text-foreground">
-                  Your Message
-                </label>
-                <textarea
-                  name="message"
-                  id="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  className="mt-1 block h-40 w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-                  placeholder="Add your message"
-                />
-              </div>
+              <FormTextarea label="Your Message" name="message" value={form.message} onChange={handleChange} placeholder="Add your message" controlClassName="h-40" />
 
               {status.message ? (
                 <p
@@ -268,28 +179,29 @@ const GiftCourseBody = () => {
               ) : null}
 
               <div className="flex flex-wrap gap-3">
-                <button
+                <Button
                   type="button"
-                  className="poppins-bold rounded-lg bg-card px-5 py-2 text-sm text-muted-foreground lg:px-12 lg:text-xl"
+                  variant="outline"
+                  className="h-auto rounded-lg bg-card px-5 py-2 text-sm text-muted-foreground poppins-bold lg:px-12 lg:text-xl"
                   onClick={() => navigate(COURSE_PATH)}
                   disabled={isSubmitting}
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="poppins-bold rounded-lg bg-foreground px-5 py-2 text-sm text-background disabled:opacity-60 lg:px-12 lg:text-xl"
+                  className="h-auto rounded-lg bg-foreground px-5 py-2 text-sm text-background poppins-bold lg:px-12 lg:text-xl"
                   disabled={isSubmitting || !courseItems.length}
                 >
                   {isSubmitting ? "Sending..." : "Send Gift"}
-                </button>
+                </Button>
               </div>
             </form>
           </div>
         </div>
 
         <div className="px-1">
-          <div className="h-full w-0 border border-foreground" />
+          <Separator orientation="vertical" className="bg-foreground" />
         </div>
         <CustomerOrder
           itemsOverride={courseItems}

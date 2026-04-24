@@ -15,6 +15,9 @@ import { getCommerceItemKey, hasShippableCommerceItems } from "../../lib/commerc
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { selectCart, useCartStore } from "../../stores/cartStore";
 import { useSaveCheckoutAddressMutation } from "../../hooks/useShopOrders";
+import { FormInput, FormSelect, FormTextarea } from "../../components/forms/FormControls";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -29,38 +32,11 @@ const summaryValueClassName = `${summaryValueBaseClassName} text-foreground`;
 const summaryTotalValueClassName = `${summaryValueBaseClassName} text-primary`;
 
 const InputField = ({ label, name, value, onChange, placeholder, required = false, type = "text" }) => (
-  <div>
-    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground">{label}</label>
-    <input
-      type={type}
-      name={name}
-      id={name}
-      value={value}
-      onChange={onChange}
-      className="p-3 px-5 mt-1 block w-full border-border poppins-light rounded-md shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-      placeholder={placeholder}
-      required={required}
-    />
-  </div>
+  <FormInput label={label} name={name} value={value} onChange={onChange} placeholder={placeholder} required={required} type={type} />
 );
 
 const SelectField = ({ label, name, value, onChange, options, required = false }) => (
-  <div>
-    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground">{label}</label>
-    <select
-      name={name}
-      id={name}
-      value={value}
-      onChange={onChange}
-      required={required}
-      className="p-3 mt-1 block w-full border-border poppins-light rounded-md shadow-sm focus:border-primary focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-    >
-      <option value="">Select {label.toLowerCase()}</option>
-      {options.map((opt) => (
-        <option key={opt.value} value={opt.value}>{opt.label}</option>
-      ))}
-    </select>
-  </div>
+  <FormSelect label={label} name={name} value={value} onChange={onChange} options={options} required={required} />
 );
 
 const CustomerInfomation = ({ onNext }) => {
@@ -174,17 +150,13 @@ const CustomerInfomation = ({ onNext }) => {
                 <InputField label="Postal Code" name="postalCode" value={form.postalCode} onChange={handleChange} placeholder="Postal Code" required />
               </div>
 
-              <div>
-                <label htmlFor="deliveryInstruction" className="block text-sm poppins-light text-muted-foreground">Delivery Instruction</label>
-                <textarea
-                  name="deliveryInstruction"
-                  id="deliveryInstruction"
-                  value={form.deliveryInstruction}
-                  onChange={handleChange}
-                  className="p-7 mt-1 block w-full border-border poppins-light rounded-md shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-                  placeholder="Delivery Instruction"
-                />
-              </div>
+              <FormTextarea
+                label="Delivery Instruction"
+                name="deliveryInstruction"
+                value={form.deliveryInstruction}
+                onChange={handleChange}
+                placeholder="Delivery Instruction"
+              />
             </>
           ) : (
             <div className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
@@ -196,7 +168,7 @@ const CustomerInfomation = ({ onNext }) => {
 
       {/* Divider Line */}
       <div className="px-1">
-        <div className="ml-8 h-full w-0 border border-border"></div>
+        <Separator orientation="vertical" className="ml-8" />
       </div>
 
       {/* Right - Cart Summary */}
@@ -225,7 +197,7 @@ const CustomerInfomation = ({ onNext }) => {
           )}
         </div>
 
-        <div className="h-0 border border-border"></div>
+        <Separator />
 
         <div className="flex flex-col gap-2">
           <OrderSummaryLine
@@ -254,17 +226,17 @@ const CustomerInfomation = ({ onNext }) => {
           />
         </div>
 
-        <div className="h-0 border border-border"></div>
+        <Separator />
 
         <div className="flex justify-center">
-          <button
+          <Button
             type="submit"
-            className="text-center lg:text-xl text-sm poppins-bold text-primary bg-foreground py-2 lg:px-20 px-5"
+            className="h-auto bg-foreground py-2 text-center text-sm text-primary poppins-bold lg:px-20 lg:text-xl"
             onClick={handleSubmit}
             disabled={saveCheckoutAddressMutation.isPending}
           >
             {saveCheckoutAddressMutation.isPending ? "Processing..." : requiresShipping ? "CONTINUE TO SHIPPING" : "CONTINUE TO PAYMENT"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

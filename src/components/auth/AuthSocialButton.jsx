@@ -1,19 +1,22 @@
 import PropTypes from "prop-types";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "../../lib/utils";
 
 const AuthSocialButton = ({ icon, label, onClick, className }) => (
-  <button
+  <Button
     type="button"
+    variant="outline"
+    size="lg"
     className={cn(
-      "flex rounded-3xl border border-border bg-background py-3 text-foreground font-bold poppins-regular",
+      "h-auto rounded-3xl bg-background py-3 text-foreground font-bold poppins-regular",
       className,
     )}
     onClick={onClick}
   >
     <img className="h-6 w-8" src={icon} alt="" aria-hidden="true" />
     {label}
-  </button>
+  </Button>
 );
 
 AuthSocialButton.propTypes = {

@@ -12,6 +12,9 @@ import {
   useSelectedPlanStore,
 } from "../../../stores/selectedPlanStore";
 import { useParent, useSaveParentMutation } from "../../../hooks/useAccount";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { FormInput, FormSelect } from "../../../components/forms/FormControls";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -33,19 +36,7 @@ const withoutSavedFlag = (child) => {
 };
 
 const InputField = ({ label, name, value, onChange, placeholder, required = false, type = "text" }) => (
-  <div>
-    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground">{label}</label>
-    <input
-      type={type}
-      name={name}
-      id={name}
-      value={value}
-      onChange={onChange}
-      className="p-3 px-5 mt-1 block w-full border-border poppins-light rounded-md shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-      placeholder={placeholder}
-      required={required}
-    />
-  </div>
+  <FormInput label={label} name={name} value={value} onChange={onChange} placeholder={placeholder} required={required} type={type} />
 );
 
 InputField.propTypes = {
@@ -59,22 +50,7 @@ InputField.propTypes = {
 };
 
 const SelectField = ({ label, name, value, onChange, options, required = false }) => (
-  <div>
-    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground">{label}</label>
-    <select
-      name={name}
-      id={name}
-      value={value}
-      onChange={onChange}
-      required={required}
-      className="p-3 mt-1 block w-full border-border poppins-light rounded-md shadow-sm focus:border-primary focus:ring focus:ring-ring/20 focus:ring-opacity-50"
-    >
-      <option value="">Select {label.toLowerCase()}</option>
-      {options.map((opt) => (
-        <option key={opt.value} value={opt.value}>{opt.label}</option>
-      ))}
-    </select>
-  </div>
+  <FormSelect label={label} name={name} value={value} onChange={onChange} options={options} required={required} />
 );
 
 SelectField.propTypes = {
@@ -376,27 +352,28 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
 
               <div className="flex gap-x-4 mt-4">
                 {!child.saved && (
-                  <button
+                  <Button
                     type="button"
                     onClick={() => saveChildForm(index)}
-                    className="text-center lg:text-xl text-sm poppins-bold text-background bg-success py-2 lg:px-20 px-5 hover:bg-success"
+                    className="h-auto bg-success py-2 text-center text-sm text-background poppins-bold hover:bg-success/90 lg:px-20 lg:text-xl"
                   >
                     SAVE CHILD
-                  </button>
+                  </Button>
                 )}
                 {index === childrenForms.length - 1 && (
-                  <button type="button" onClick={addChildForm} className="text-center lg:text-xl text-sm poppins-bold text-primary bg-foreground py-2 lg:px-20 px-5">
+                  <Button type="button" onClick={addChildForm} className="h-auto bg-foreground py-2 text-center text-sm text-primary poppins-bold lg:px-20 lg:text-xl">
                     ADD ANOTHER CHILD
-                  </button>
+                  </Button>
                 )}
                 {index > 0 && (
-                  <button
+                  <Button
                     type="button"
                     onClick={() => removeChildForm(index)}
-                    className="text-center lg:text-xl text-sm poppins-bold text-destructive bg-background py-2 lg:px-5 px-3 hover:bg-destructive flex items-center"
+                    variant="destructive"
+                    className="h-auto py-2 text-center text-sm poppins-bold lg:px-5 lg:text-xl"
                   >
                     <Trash2 className="mr-2" />
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>
@@ -404,16 +381,16 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
 
           {/* Cancel */}
           <div className="flex flex-col md:flex-row justify-between mt-6 gap-y-4 md:gap-y-0 md:gap-x-4">
-            <button type="button" onClick={() => navigate("/subscriptions")} className="poppins-bold text-muted-foreground bg-card py-2 px-6 border border-border hover:bg-muted w-full md:w-auto">
+            <Button type="button" variant="outline" onClick={() => navigate("/subscriptions")} className="h-auto w-full bg-card px-6 py-2 text-muted-foreground poppins-bold md:w-auto">
               CANCEL
-            </button>
+            </Button>
           </div>
         </form>
       </div>
 
       {/* Divider */}
       <div className="px-1">
-        <div className="h-full w-0 border border-border ml-8"></div>
+        <Separator orientation="vertical" className="ml-8" />
       </div>
 
       {/* Right Side - Order Summary */}
@@ -454,7 +431,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
           </div>
         )}
 
-        <div className="h-0 border border-border"></div>
+        <Separator />
 
         <div className="flex flex-col gap-y-2">
           <div className="flex justify-between">
@@ -477,17 +454,17 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
           </div>
         </div>
 
-        <div className="h-0 border border-border"></div>
+        <Separator />
 
         <div className="flex justify-center">
-          <button
+          <Button
             type="submit"
-            className="text-center lg:text-xl text-sm poppins-bold text-primary bg-foreground py-2 lg:px-20 px-5"
+            className="h-auto bg-foreground py-2 text-center text-sm text-primary poppins-bold lg:px-20 lg:text-xl"
             onClick={handleSubmit}
             disabled={saveParentMutation.isPending}
           >
             {saveParentMutation.isPending ? "Processing..." : "CONTINUE TO REGISTER"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

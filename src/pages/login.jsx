@@ -6,6 +6,11 @@ import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
 import AuthSocialButton from "../components/auth/AuthSocialButton";
 import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { useAuth } from "../contexts/useAuth";
 
 import { resolveBackendUrl } from "../lib/api";
@@ -107,28 +112,29 @@ const Login = () => {
             className="flex flex-col items-center gap-4"
           >
             <div>
-              <p className="text-sm poppins-regular">Email address</p>
-              <input
-                className="border border-border rounded-xl py-3 lg:px-32 px-14 bg-background"
+              <Label className="text-sm poppins-regular">Email address</Label>
+              <Input
+                className="h-auto rounded-xl bg-background py-3 px-14 lg:px-32"
                 type="email"
                 value={forgotEmail}
                 onChange={(e) => setForgotEmail(e.target.value)}
                 required
               />
             </div>
-            <button
+            <Button
               type="submit"
-              className="bg-foreground border border-border text-background poppins-regular rounded-3xl py-3 lg:px-32 px-14"
+              className="h-auto rounded-3xl bg-foreground px-14 py-3 text-background poppins-regular lg:px-32"
             >
               Send Reset Instructions
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={() => setForgotPasswordMode(false)}
-              className="text-foreground underline mt-2"
+              variant="link"
+              className="mt-2 text-foreground"
             >
               Back to Login
-            </button>
+            </Button>
           </form>
           {error && <p className="text-destructive text-sm mt-2">{error}</p>}
         </div>
@@ -163,9 +169,9 @@ const Login = () => {
           className="flex items-center justify-center"
           data-aos="fade-up"
         >
-          <div className="h-0 lg:w-52 w-44 border border-border"></div>
+          <Separator className="lg:w-52 w-44" />
           <p className="text-xl font-bold p-2">OR</p>
-          <div className="h-0 lg:w-52 w-44 border border-border"></div>
+          <Separator className="lg:w-52 w-44" />
         </div>
         <form
           onSubmit={handleLogin}
@@ -173,9 +179,9 @@ const Login = () => {
           data-aos="fade-up"
         >
           <div className="lg:py-8 py-4">
-            <p className="text-sm poppins-regular ">Email address</p>
-            <input
-              className="border border-border rounded-xl py-3 lg:px-32 px-14 bg-background"
+            <Label className="text-sm poppins-regular">Email address</Label>
+            <Input
+              className="h-auto rounded-xl bg-background py-3 px-14 lg:px-32"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -184,7 +190,7 @@ const Login = () => {
           </div>
           <div className="flex flex-col">
             <div className="flex justify-between">
-              <p className="text-sm poppins-regular ">Password</p>
+              <Label className="text-sm poppins-regular">Password</Label>
               <PasswordVisibilityButton
                 className="w-auto"
                 isVisible={showPassword}
@@ -193,56 +199,56 @@ const Login = () => {
                 textClassName="poppins-regular"
               />
             </div>
-            <input
-              className="border border-border rounded-xl py-3 lg:px-32 px-14 bg-background"
+            <Input
+              className="h-auto rounded-xl bg-background py-3 px-14 lg:px-32"
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button
+            <Button
               type="button"
               onClick={() => setForgotPasswordMode(true)}
-              className="text-right text-sm font-bold underline underline-offset-4 poppins-regular"
+              variant="link"
+              className="h-auto justify-end p-0 text-right text-sm font-bold text-foreground poppins-regular"
             >
               Forget your password
-            </button>
+            </Button>
           </div>
           <div className="flex items-left lg:py-5 py-2">
-            <input
+            <Checkbox
               id="keep-signed-in"
-              type="checkbox"
-              className="w-4 h-4 text-foreground bg-muted border-border rounded focus:ring-2 focus:ring-foreground"
             />
-            <label
+            <Label
               htmlFor="keep-signed-in"
               className="ms-2 text-sm poppins-regular text-muted-foreground"
             >
               Keep me signed in until I sign out
-            </label>
+            </Label>
           </div>
-          <button
+          <Button
             type="submit"
-            className="rounded-3xl border border-border bg-foreground px-14 py-3 text-background poppins-regular lg:px-32"
+            className="h-auto rounded-3xl bg-foreground px-14 py-3 text-background poppins-regular lg:px-32"
           >
             Log in
-          </button>
+          </Button>
           {error && <p className="text-destructive text-sm mt-2">{error}</p>}
           <div className="flex items-center justify-center">
-            <div className="h-0 lg:w-56 w-44 border border-border"></div>
-            <div className="h-0 lg:w-60 w-48 border border-border"></div>
+            <Separator className="lg:w-56 w-44" />
+            <Separator className="lg:w-60 w-48" />
           </div>
           <p className="text-center poppins-regular justify-center lg:py-10 py-5 lg:text-3xl text-xl text-foreground">
             Don&apos;t have an account?
           </p>
           <div className="lg:pb-10 pb-4">
-            <button
+            <Button
               type="button"
-              className="items-center justify-center rounded-3xl border border-border bg-background px-14 py-3 text-foreground poppins-regular lg:px-32"
+              variant="outline"
+              className="h-auto rounded-3xl bg-background px-14 py-3 text-foreground poppins-regular lg:px-32"
               onClick={() => navigate('/Signup')}
             >
               Sign up
-            </button>
+            </Button>
           </div>
         </form>
       </div>
