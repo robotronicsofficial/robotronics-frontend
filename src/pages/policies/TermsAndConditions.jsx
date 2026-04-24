@@ -7,7 +7,7 @@ const TermsAndConditions = () => {
         <br></br>        <br></br>        <br></br>
 
 
-        <h1 className="text-4xl poppins-bold text-brown mb-6">Terms &amp; Conditions</h1>
+        <h1 className="text-4xl poppins-bold text-foreground mb-6">Terms &amp; Conditions</h1>
         <ol className="text-xl poppins-light space-y-4 list-decimal ml-6">
           <li>
             <strong>Acceptance of Terms:</strong> By accessing or using our website,

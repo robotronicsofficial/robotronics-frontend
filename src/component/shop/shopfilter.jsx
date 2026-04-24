@@ -46,7 +46,7 @@ const Shopfilter = ({
   return (
     <div className="hidden lg:block min-w-[16vw]">
       {/* All Products */}
-      <div className="lg:pt-6 pt-3 text-lightblack">
+      <div className="lg:pt-6 pt-3 text-foreground">
         <div className="flex justify-between">
           <p className="poppins-semibold lg:text-2xl text-xl">All PRODUCTS</p>
           <button
@@ -57,7 +57,7 @@ const Shopfilter = ({
             {isOpenProducts ? "-" : "+"}
           </button>
         </div>
-        <div className="h-0 lg:w-full border border-brown"></div>
+        <div className="h-0 lg:w-full border border-foreground"></div>
         {isOpenProducts && (
           <div className="flex flex-col">
             {categories.map((category) => (
@@ -91,7 +91,7 @@ const Shopfilter = ({
             {isOpenShipping ? "-" : "+"}
           </button>
         </div>
-        <div className="h-0 lg:w-full border border-brown"></div>
+        <div className="h-0 lg:w-full border border-foreground"></div>
         {isOpenShipping && (
           <div>
             <div className="mt-8">
@@ -123,7 +123,7 @@ const Shopfilter = ({
           {isOpenPrice ? "-" : "+"}
         </button>
       </div>
-      <div className="mb-8 border bg-brown border-brown"></div>
+      <div className="mb-8 border bg-foreground border-foreground"></div>
       {isOpenPrice && (
         <>
           <div className="mt-4">

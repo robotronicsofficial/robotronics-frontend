@@ -40,10 +40,10 @@ const ReviewsComponent = () => {
   ];
 
   return (
-    <div className="bg-[#ebe5e2]">
+    <div className="bg-background">
       <div className="w-full px-6 sm:px-12 lg:px-24">
         <div className="mx-4">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-brown text-center py-6 sm:py-8 poppins-bold">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-foreground text-center py-6 sm:py-8 poppins-bold">
             See what others are achieving through learning
           </h1>
         </div>
@@ -53,7 +53,7 @@ const ReviewsComponent = () => {
         {reviews.map((review, index) => (
           <div
             key={index}
-            className="p-4 sm:p-5 lg:p-6 border border-gray-200 rounded-2xl hover:shadow-sm transition-shadow"
+            className="p-4 sm:p-5 lg:p-6 border border-border-200 rounded-2xl hover:shadow-sm transition-shadow"
           >
             <div className="flex gap-3 sm:gap-4 lg:gap-6">
               <img
@@ -63,10 +63,10 @@ const ReviewsComponent = () => {
               />
               <div className="flex-1 flex flex-col gap-1 sm:gap-2">
                 <div>
-                  <p className="text-brown text-sm sm:text-base lg:text-lg font-bold poppins-bold">
+                  <p className="text-foreground text-sm sm:text-base lg:text-lg font-bold poppins-bold">
                     {review.name}
                   </p>
-                  <p className="text-brown text-xs sm:text-sm poppins-regular">
+                  <p className="text-foreground text-xs sm:text-sm poppins-regular">
                     {review.role}
                   </p>
                 </div>
@@ -77,7 +77,7 @@ const ReviewsComponent = () => {
                 />
               </div>
             </div>
-            <p className="mt-2 sm:mt-3 text-brown text-xs sm:text-sm lg:text-base text-wrap poppins-regular">
+            <p className="mt-2 sm:mt-3 text-foreground text-xs sm:text-sm lg:text-base text-wrap poppins-regular">
               {review.review}
             </p>
           </div>

@@ -34,14 +34,14 @@ const withoutSavedFlag = (child) => {
 
 const InputField = ({ label, name, value, onChange, placeholder, required = false, type = "text" }) => (
   <div>
-    <label htmlFor={name} className="block text-sm poppins-light text-gray-700">{label}</label>
+    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground-700">{label}</label>
     <input
       type={type}
       name={name}
       id={name}
       value={value}
       onChange={onChange}
-      className="p-3 px-5 mt-1 block w-full border-gray-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+      className="p-3 px-5 mt-1 block w-full border-border-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
       placeholder={placeholder}
       required={required}
     />
@@ -60,14 +60,14 @@ InputField.propTypes = {
 
 const SelectField = ({ label, name, value, onChange, options, required = false }) => (
   <div>
-    <label htmlFor={name} className="block text-sm poppins-light text-gray-700">{label}</label>
+    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground-700">{label}</label>
     <select
       name={name}
       id={name}
       value={value}
       onChange={onChange}
       required={required}
-      className="p-3 mt-1 block w-full border-gray-300 poppins-light rounded-md shadow-sm focus:border-yellow focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+      className="p-3 mt-1 block w-full border-border-300 poppins-light rounded-md shadow-sm focus:border-primary focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
     >
       <option value="">Select {label.toLowerCase()}</option>
       {options.map((opt) => (
@@ -302,7 +302,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   const totalPrice = savedChildren.length * price;
 
   return (
-    <div className="lg:flex flex-row bg-gray">
+    <div className="lg:flex flex-row bg-background">
       <div className="flex flex-col lg:w-3/5">
         <form onSubmit={handleSubmit} className="space-y-6 bg-background p-6 max-w-4xl ">
           {/* Parent Info */}
@@ -334,7 +334,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
           {childrenForms.map((child, index) => (
             <div key={index} className="w-full pt-6 space-y-6">
               <div className="space-y-5 px-6 md:px-10 py-4 md:py-8">
-                <h1 className="text-2xl md:text-4xl poppins-bold text-brown text-wrap">
+                <h1 className="text-2xl md:text-4xl poppins-bold text-foreground text-wrap">
                   {savedChildren.length === 0 ? "REGISTER YOUR CHILD" : `Child ${index + 1} Information`}
                 </h1>
               </div>
@@ -385,7 +385,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                   </button>
                 )}
                 {index === childrenForms.length - 1 && (
-                  <button type="button" onClick={addChildForm} className="text-center lg:text-xl text-sm poppins-bold text-gold bg-brown py-2 lg:px-20 px-5">
+                  <button type="button" onClick={addChildForm} className="text-center lg:text-xl text-sm poppins-bold text-primary bg-foreground py-2 lg:px-20 px-5">
                     ADD ANOTHER CHILD
                   </button>
                 )}
@@ -393,7 +393,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                   <button
                     type="button"
                     onClick={() => removeChildForm(index)}
-                    className="text-center lg:text-xl text-sm poppins-bold text-red-600 bg-gray py-2 lg:px-5 px-3 hover:bg-red-300 flex items-center"
+                    className="text-center lg:text-xl text-sm poppins-bold text-red-600 bg-background py-2 lg:px-5 px-3 hover:bg-red-300 flex items-center"
                   >
                     <FaTrash className="mr-2" />
                   </button>
@@ -404,7 +404,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
 
           {/* Cancel */}
           <div className="flex flex-col md:flex-row justify-between mt-6 space-y-4 md:space-y-0 md:space-x-4">
-            <button type="button" onClick={() => navigate("/subscriptions")} className="poppins-bold text-gray-700 bg-white py-2 px-6 border border-gray-300 hover:bg-gray-50 w-full md:w-auto">
+            <button type="button" onClick={() => navigate("/subscriptions")} className="poppins-bold text-muted-foreground-700 bg-white py-2 px-6 border border-border-300 hover:bg-background-50 w-full md:w-auto">
               CANCEL
             </button>
           </div>
@@ -413,13 +413,13 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
 
       {/* Divider */}
       <div className="px-1">
-        <div className="h-full w-0 border border-[#D4D4D4] ml-8"></div>
+        <div className="h-full w-0 border border-border ml-8"></div>
       </div>
 
       {/* Right Side - Order Summary */}
       <div className="lg:px-14 px-5 lg:p-8 p-4 lg:space-y-20 space-y-8">
         <div className="lg:space-y-8 space-y-4">
-          <p className="lg:text-4xl poppins-bold text-brown">REVIEW YOUR REGISTRATION</p>
+          <p className="lg:text-4xl poppins-bold text-foreground">REVIEW YOUR REGISTRATION</p>
         </div>
 
         {/* Saved Children Cards */}
@@ -450,39 +450,39 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
           ))
         ) : (
           <div className="lg:space-y-5 space-y-2 poppins-extralight">
-            <p className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C]">No children registered yet</p>
+            <p className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-muted-foreground">No children registered yet</p>
           </div>
         )}
 
-        <div className="h-0 border border-[#D4D4D4]"></div>
+        <div className="h-0 border border-border"></div>
 
         <div className="space-y-2">
           <div className="flex justify-between">
-            <p className="text-[#7E7F7C] font-lato text-base">Number of Children</p>
+            <p className="text-muted-foreground font-lato text-base">Number of Children</p>
             <p className="font-lato text-[20px]">
               {savedChildren.length}
             </p>
           </div>
           <div className="flex justify-between">
-            <p className="text-[#7E7F7C] font-lato text-base">Price per Child</p>
+            <p className="text-muted-foreground font-lato text-base">Price per Child</p>
             <p className="font-lato text-[20px]">
               PKR {price?.toLocaleString() || '0'}
             </p>
           </div>
           <div className="flex justify-between">
-            <p className="text-[#7E7F7C] font-lato text-base">Total Price</p>
+            <p className="text-muted-foreground font-lato text-base">Total Price</p>
             <p className="font-lato text-[20px] font-extrabold">
               PKR {totalPrice?.toLocaleString() || '0'}
             </p>
           </div>
         </div>
 
-        <div className="h-0 border border-[#D4D4D4]"></div>
+        <div className="h-0 border border-border"></div>
 
         <div className="flex justify-center">
           <button
             type="submit"
-            className="text-center lg:text-xl text-sm poppins-bold text-[#F5AB34] bg-[#362D2C] py-2 lg:px-20 px-5"
+            className="text-center lg:text-xl text-sm poppins-bold text-primary bg-foreground py-2 lg:px-20 px-5"
             onClick={handleSubmit}
             disabled={saveParentMutation.isPending}
           >

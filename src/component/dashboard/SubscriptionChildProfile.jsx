@@ -231,11 +231,11 @@ const SubscriptionChildProfile = () => {
   };
 
   if (loading) {
-    return <CenteredState className="bg-gray-100 min-h-screen">Loading...</CenteredState>;
+    return <CenteredState className="bg-background-100 min-h-screen">Loading...</CenteredState>;
   }
 
   if (error) {
-    return <CenteredState className="bg-gray-100 min-h-screen">Error: {error}</CenteredState>;
+    return <CenteredState className="bg-background-100 min-h-screen">Error: {error}</CenteredState>;
   }
 
   return (
@@ -252,26 +252,26 @@ const SubscriptionChildProfile = () => {
                     <div className="space-y-6 md:space-y-8">
                       <div className="flex items-center gap-4 md:gap-6">
                         <FaUserCircle className="text-3xl md:text-4xl" />
-                        <p className="text-lightblack poppins-bold text-xl md:text-2xl">
+                        <p className="text-foreground poppins-bold text-xl md:text-2xl">
                           {child.firstName} {child.lastName}
                         </p>
                       </div>
                       <div className="space-y-2">
-                        <p className="text-lightblack poppins-bold text-sm md:text-base">
+                        <p className="text-foreground poppins-bold text-sm md:text-base">
                           <span className="font-semibold">Email:</span> {child.email}
                         </p>
                         {child.dateOfBirth && (
-                          <p className="text-lightblack poppins-bold text-sm md:text-base">
+                          <p className="text-foreground poppins-bold text-sm md:text-base">
                             <span className="font-semibold">Date of Birth:</span> {formatDisplayDate(child.dateOfBirth)}
                           </p>
                         )}
-                        <p className="text-lightblack poppins-bold text-sm md:text-base">
+                        <p className="text-foreground poppins-bold text-sm md:text-base">
                           <span className="font-semibold">Phone:</span> {child.phone}
                         </p>
-                        <p className="text-lightblack poppins-bold text-sm md:text-base">
+                        <p className="text-foreground poppins-bold text-sm md:text-base">
                           <span className="font-semibold">School:</span> {child.schoolName}
                         </p>
-                        <p className="text-lightblack poppins-bold text-sm md:text-base text-wrap">
+                        <p className="text-foreground poppins-bold text-sm md:text-base text-wrap">
                           <span className="font-semibold">Address:</span> {child.streetAddress}, {child.city}, {child.postalCode}
                         </p>
                       </div>
@@ -279,8 +279,8 @@ const SubscriptionChildProfile = () => {
                       <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3 md:space-x-5">
                         <button
                           onClick={() => handleViewCourses(child._id)}
-                          className={`text-xs sm:text-sm poppins-light border border-lin rounded-lg px-2 py-1 sm:px-3 sm:py-2 ${
-                            hasPin ? 'bg-yellow text-white cursor-pointer' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          className={`text-xs sm:text-sm poppins-light border border-border rounded-lg px-2 py-1 sm:px-3 sm:py-2 ${
+                            hasPin ? 'bg-primary text-white cursor-pointer' : 'bg-background-300 text-muted-foreground-500 cursor-not-allowed'
                           } md:text-base`}
                           disabled={!hasPin}
                         >
@@ -288,7 +288,7 @@ const SubscriptionChildProfile = () => {
                         </button>
                         <button
                           onClick={() => openPinModal(child._id, hasPin)}
-                          className="text-xs sm:text-sm poppins-light border border-lin rounded-lg px-2 py-1 sm:px-3 sm:py-2 bg-yellow text-white md:text-base"
+                          className="text-xs sm:text-sm poppins-light border border-border rounded-lg px-2 py-1 sm:px-3 sm:py-2 bg-primary text-white md:text-base"
                         >
                           {hasPin ? 'Change PIN' : 'Create Login Pin'}
                         </button>

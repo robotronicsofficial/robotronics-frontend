@@ -49,9 +49,9 @@ const WishListD = () => {
       withHeaderOffset={false}
     >
       <div data-aos="fade-up">
-        <h1 className="ml-14 text-2xl text-lightblack poppins-bold">WishList</h1>
+        <h1 className="ml-14 text-2xl text-foreground poppins-bold">WishList</h1>
         {items.length === 0 ? (
-          <div className="px-14 py-12 text-gray-500">No saved items yet.</div>
+          <div className="px-14 py-12 text-muted-foreground-500">No saved items yet.</div>
         ) : (
           items.map((item) => (
             <div
@@ -63,7 +63,7 @@ const WishListD = () => {
                   <button
                     type="button"
                     onClick={() => handleRemove(item)}
-                    className="text-gray-600 transition hover:text-red-600"
+                    className="text-muted-foreground-600 transition hover:text-red-600"
                     aria-label={`Remove ${item.name}`}
                   >
                     <FaTimes />
@@ -80,16 +80,16 @@ const WishListD = () => {
                   <button
                     type="button"
                     onClick={() => navigate(getCommerceItemRoute(item))}
-                    className="text-left text-xl text-brown poppins-bold"
+                    className="text-left text-xl text-foreground poppins-bold"
                   >
                     {item.name || "Saved item"}
                   </button>
                   <div className="flex items-center gap-2">
-                    <p className="text-brown poppins-bold text-sm">Category:</p>
+                    <p className="text-foreground poppins-bold text-sm">Category:</p>
                     <p className="text-sm">{item.category || "General"}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <p className="text-brown font-bold text-sm">Type:</p>
+                    <p className="text-foreground font-bold text-sm">Type:</p>
                     <p className="text-sm poppins-bold">{item.itemType}</p>
                   </div>
                 </div>

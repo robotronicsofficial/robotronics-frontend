@@ -30,7 +30,7 @@ const Intro = ({ blog }) => {
         </div>
         <Link
           to="/Blog"
-          className="w-fit rounded-xl bg-white p-5 text-sm text-brown poppins-light lg:text-2xl"
+          className="w-fit rounded-xl bg-white p-5 text-sm text-foreground poppins-light lg:text-2xl"
           data-aos="fade-up"
         >
           Back to Blog

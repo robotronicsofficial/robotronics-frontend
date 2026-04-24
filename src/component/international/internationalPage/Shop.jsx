@@ -23,15 +23,15 @@ const Shop = () => {
         <div className="flex justify-between lg:px-8" data-aos="fade-up">
           <div className="flex lg:w-1/2 ">
             <img src={robo} />
-            <div className="m-4 content-center text-wrap text-brown text-2xl md:text-5xl poppins-bold">
+            <div className="m-4 content-center text-wrap text-foreground text-2xl md:text-5xl poppins-bold">
               Upcoming{" "}
-              <span className=" content-center text-gold text-2xl md:text-5xl poppins-bold">
+              <span className=" content-center text-primary text-2xl md:text-5xl poppins-bold">
                 Courses-
               </span>{" "}
               Gear up for some Fun
             </div>
           </div>
-          <div className="self-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-brown shadow-sm">
+          <div className="self-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-foreground shadow-sm">
             {courses.length} live courses
           </div>
         </div>
@@ -39,7 +39,7 @@ const Shop = () => {
       {/* Shop Items */}
       <div className="md:px-10 px-5 pb-10">
         {loading ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-brown shadow-sm">
+          <div className="rounded-2xl bg-white p-10 text-center text-foreground shadow-sm">
             Loading live courses...
           </div>
         ) : error ? (
@@ -47,7 +47,7 @@ const Shop = () => {
             We couldn&apos;t load courses right now.
           </div>
         ) : featuredCourses.length === 0 ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-brown shadow-sm">
+          <div className="rounded-2xl bg-white p-10 text-center text-foreground shadow-sm">
             No courses available right now.
           </div>
         ) : (
@@ -68,26 +68,26 @@ const Shop = () => {
                 />
                 <div className="px-4 py-4">
                   <div className="flex items-start justify-between gap-3">
-                    <p className="rounded-lg bg-[#F3F0EA] px-2 py-1 text-base font-bold text-gray-700">
+                    <p className="rounded-lg bg-muted px-2 py-1 text-base font-bold text-muted-foreground-700">
                       {course?.category || "General"}
                     </p>
                     <div className="flex items-center">
-                      <FaStar style={{ color: "#f8bc24" }} />
-                      <p className="ml-2 text-base text-gray-700">
+                      <FaStar className="text-primary" />
+                      <p className="ml-2 text-base text-muted-foreground-700">
                         {Number(course?.reviews || 0)} Reviews
                       </p>
                     </div>
                   </div>
-                  <div className="my-4 text-xl font-bold text-brown">
+                  <div className="my-4 text-xl font-bold text-foreground">
                     {course?.title || "Untitled course"}
                   </div>
-                  <div className="flex items-center justify-between gap-4 text-sm text-[#7E7F7C]">
+                  <div className="flex items-center justify-between gap-4 text-sm text-muted-foreground">
                     <p>{course?.month ? `${course.month} months` : "Flexible duration"}</p>
                     <p>{course?.studentsDownloaded ?? 0} enrolled</p>
                   </div>
                 </div>
                 <div className="my-2 flex items-center justify-center">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-[#ffc224] px-4 py-2 font-bold text-white">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 font-bold text-white">
                     <p className="poppins-medium text-base px-2">View Course</p>
                     <MdOutlineNotificationsActive className="text-center text-lg" />
                   </span>

@@ -39,12 +39,12 @@ const Careerintro = ({ job }) => {
             <h1 className=" poppins-bold text-xs">
               ROBOTRONICS
               <br />
-              <p className="text-xs poppins-bold text-yellow  ">P A K I S T A N</p>
+              <p className="text-xs poppins-bold text-primary  ">P A K I S T A N</p>
             </h1>
           </Link>
           {/* button */}
-          <button className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full border border-gray-300" data-aos="fade-up">
-            <BiMenuAltRight className="text-gray-700" size={24} />
+          <button className="flex items-center justify-center w-12 h-12 bg-background-100 rounded-full border border-border-300" data-aos="fade-up">
+            <BiMenuAltRight className="text-muted-foreground-700" size={24} />
           </button>
         </div>
         {/* lower */}
@@ -54,9 +54,9 @@ const Careerintro = ({ job }) => {
             <button
               type="button"
               onClick={() => navigate("/CareerJob")}
-              className="flex items-center justify-center lg:w-12 w-8 lg:h-12 h-8 bg-gray-100 rounded-full border border-gray-300"
+              className="flex items-center justify-center lg:w-12 w-8 lg:h-12 h-8 bg-background-100 rounded-full border border-border-300"
             >
-              <IoMdArrowBack className="text-gray-700" size={24} />
+              <IoMdArrowBack className="text-muted-foreground-700" size={24} />
             </button>
             <p className="lg:p-3 poppins-regular p-1">Back</p>
           </div>
@@ -67,49 +67,49 @@ const Careerintro = ({ job }) => {
               href="https://www.facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-brown rounded-xl hover:bg-brown hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
             >
-              <FaFacebook className="text-gray-800" />
+              <FaFacebook className="text-muted-foreground-800" />
             </a>
             <a
               href="https://www.twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-brown rounded-xl hover:bg-brown hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
             >
-              <FaTwitter className="text-gray-800" />
+              <FaTwitter className="text-muted-foreground-800" />
             </a>
             <a
               href="https://www.youtube.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-brown rounded-xl hover:bg-brown hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
             >
-              <FaYoutube className="text-gray-800" />
+              <FaYoutube className="text-muted-foreground-800" />
             </a>
             <a
               href="https://www.instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-brown rounded-xl hover:bg-brown hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
             >
-              <FaInstagram className="text-gray-800" />
+              <FaInstagram className="text-muted-foreground-800" />
             </a>
             <a
               href="https://www.linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-brown rounded-xl hover:bg-brown hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
             >
-              <FaLinkedin className="text-gray-800" />
+              <FaLinkedin className="text-muted-foreground-800" />
             </a>
             <a
               href="https://api.whatsapp.com/send?phone=1234567890"
               target="_blank"
               rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-brown rounded-xl hover:bg-brown hover:text-white"
+              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-white"
             >
-              <FaWhatsapp className="text-gray-800" />
+              <FaWhatsapp className="text-muted-foreground-800" />
             </a>
           </div>
         </div>
@@ -117,8 +117,8 @@ const Careerintro = ({ job }) => {
 
       {/* lower */}
       <div className="flex flex-col">
-        <div className="flex flex-col items-center bg-gray-800 p-5 rounded-xl mx-5" data-aos="fade-up">
-          <h2 className="lg:text-5xl poppins-bold text-3xl text-brown mb-5 text-center">
+        <div className="flex flex-col items-center bg-background-800 p-5 rounded-xl mx-5" data-aos="fade-up">
+          <h2 className="lg:text-5xl poppins-bold text-3xl text-foreground mb-5 text-center">
             {displayPosition}
           </h2>
           <div className="relative py-5 lg:py-24 w-full">

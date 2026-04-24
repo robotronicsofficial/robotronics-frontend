@@ -22,18 +22,18 @@ const CareerJoinTeam = () => {
       : "Open role details available in the job description.";
 
   return (
-    <div className="bg-gray p-5 ">
+    <div className="bg-background p-5 ">
       {/* text */}
       <div className="p-10">
-        <p className="text-2xl poppins-bold text-brown "data-aos="fade-up">
+        <p className="text-2xl poppins-bold text-foreground "data-aos="fade-up">
           Are you looking for a new career opportunity?
         </p>
-        <p className="text-5xl text-brown poppins-extrabold "data-aos="fade-up">join the A-Team!</p>
+        <p className="text-5xl text-foreground poppins-extrabold "data-aos="fade-up">join the A-Team!</p>
       </div>
       {/* img */}
       <div className="lg:flex flex-row p-10 space-x-8">
         <AppImage src={img3} alt="" data-aos="fade-up" />
-        <p className="text-xl text-brown poppins-regular text-wrap py-10"data-aos="fade-up">
+        <p className="text-xl text-foreground poppins-regular text-wrap py-10"data-aos="fade-up">
           The average employment period in our company is currently 4,5 years.
           Our People have the opportunity to work in a relaxed and friendly
           environment, with to industry partners on the most significant
@@ -43,16 +43,16 @@ const CareerJoinTeam = () => {
       {/* jobs */}
       <div className="p-4 lg:px-14">
         {loading ? (
-          <p className="poppins-regular text-brown px-4 py-6">Loading open roles...</p>
+          <p className="poppins-regular text-foreground px-4 py-6">Loading open roles...</p>
         ) : error ? (
           <p className="poppins-regular text-red-600 px-4 py-6">{getJobsErrorMessage(error)}</p>
         ) : jobs.length === 0 ? (
-          <p className="poppins-regular text-brown px-4 py-6">No open roles are available right now.</p>
+          <p className="poppins-regular text-foreground px-4 py-6">No open roles are available right now.</p>
         ) : (
           jobs.map((job, index) => (
             <article
               key={job._id}
-              className="group relative flex flex-col gap-4 mb-6 border-b border-line p-4 pr-10 md:pr-16 justify-between cursor-pointer"
+              className="group relative flex flex-col gap-4 mb-6 border-b border-border p-4 pr-10 md:pr-16 justify-between cursor-pointer"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               onClick={() => navigate(`/CareerDetailPage/${job._id}`)}
@@ -68,7 +68,7 @@ const CareerJoinTeam = () => {
               {hoveredIndex === index && (
                 <button
                   type="button"
-                  className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 border border-brown p-3 bg-white rounded-full hover:bg-brown hover:text-white"
+                  className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 border border-foreground p-3 bg-white rounded-full hover:bg-foreground hover:text-white"
                   onClick={(event) => {
                     event.stopPropagation();
                     navigate(`/CareerDetailPage/${job._id}`);
@@ -81,20 +81,20 @@ const CareerJoinTeam = () => {
 
               <div className="grid gap-4 md:grid-cols-3" data-aos="fade-up">
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-[0.2em] text-smallText">Position</p>
-                  <p className="poppins-bold text-xl text-brown">{job.position || job.title}</p>
-                  <p className="text-sm text-smallText">{job.title}</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Position</p>
+                  <p className="poppins-bold text-xl text-foreground">{job.position || job.title}</p>
+                  <p className="text-sm text-muted-foreground">{job.title}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-[0.2em] text-smallText">Experience</p>
-                  <p className="poppins-regular text-brown">{job.experience}</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Experience</p>
+                  <p className="poppins-regular text-foreground">{job.experience}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-[0.2em] text-smallText">Location</p>
-                  <p className="poppins-regular text-brown">{job.location}</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Location</p>
+                  <p className="poppins-regular text-foreground">{job.location}</p>
                 </div>
               </div>
-              <p className="max-w-3xl text-sm md:text-base text-brown/80 poppins-light">
+              <p className="max-w-3xl text-sm md:text-base text-foreground/80 poppins-light">
                 {jobSummary(job)}
               </p>
             </article>

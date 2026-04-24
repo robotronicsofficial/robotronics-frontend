@@ -36,7 +36,7 @@ const Intro = () => {
                   <p className="lg:text-8xl md:text-xl text-4xl font-bold text-white poppins-bold">
                     RO
                   </p>
-                  <p className="lg:text-8xl md:text-6xl text-4xl font-bold text-yellow poppins-bold">
+                  <p className="lg:text-8xl md:text-6xl text-4xl font-bold text-primary poppins-bold">
                   BOTRONICS
                   </p>
                 </div>
@@ -49,14 +49,14 @@ const Intro = () => {
                   to="section2"
                   onClick={() => navigate("/subscriptions")}
                   offset={-70}
-                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-black hover:text-white bg-gold poppins-bold hover:bg-lin shadow-xl rounded-md"
+                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-black hover:text-white bg-primary poppins-bold hover:bg-border shadow-xl rounded-md"
                 >
                   Get Enrolled
                 </button>
                 {/* <button
                   to="section1"
                   offset={-70}
-                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-black hover:text-white bg-gold poppins-bold hover:bg-lin shadow-xl rounded-md"
+                  className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-black hover:text-white bg-primary poppins-bold hover:bg-border shadow-xl rounded-md"
                 >
                   Get Started
                 </button> */}
@@ -82,7 +82,7 @@ const Intro = () => {
                     rel="noopener noreferrer"
                     data-aos="fade-up"
                     data-aos-delay={getAosStaggerDelay(index)}
-                    className="lg:p-3 p-1 border border-brown bg-white rounded-xl hover:bg-brown hover:text-white"
+                    className="lg:p-3 p-1 border border-foreground bg-white rounded-xl hover:bg-foreground hover:text-white"
                   >
                     {icon}
                   </a>

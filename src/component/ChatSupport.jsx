@@ -23,12 +23,12 @@ const BOT_RESPONSE_DELAY = 1000;
 // Memoized sub-components
 const ChatHeader = memo(function ChatHeader({ isMaximized, toggleMaximize, toggleChat }) {
   return (
-  <div className="bg-white text-black p-4 flex justify-between items-center border-b border-gray">
+  <div className="bg-white text-black p-4 flex justify-between items-center border-b border-border">
     <h2 className="text-xl font-bold">Robotronics AI</h2>
     <div className="flex items-center space-x-2">
       <button
         onClick={toggleMaximize}
-        className="text-gray-600 hover:text-gray-800 text-xl p-1"
+        className="text-muted-foreground-600 hover:text-muted-foreground-800 text-xl p-1"
         aria-label={isMaximized ? "Minimize" : "Maximize"}
         aria-expanded={isMaximized}
       >
@@ -36,7 +36,7 @@ const ChatHeader = memo(function ChatHeader({ isMaximized, toggleMaximize, toggl
       </button>
       <button
         onClick={toggleChat}
-        className="text-gray-600 hover:text-gray-800 text-xl p-1"
+        className="text-muted-foreground-600 hover:text-muted-foreground-800 text-xl p-1"
         aria-label="Close chat"
       >
         <RxCrossCircled size={20} />
@@ -50,8 +50,8 @@ const Message = memo(function Message({ message }) {
   return (
   <div
     className={`max-w-[80%] p-4 rounded-lg ${message.sender === 'user'
-      ? 'bg-[#FFAC1F] text-white rounded-br-none'
-      : 'bg-white text-gray-800 rounded-bl-none border border-gray'}`}
+      ? 'bg-primary text-white rounded-br-none'
+      : 'bg-white text-muted-foreground-800 rounded-bl-none border border-border'}`}
     role={message.sender === 'user' ? 'status' : 'article'}
     aria-live={message.sender === 'bot' ? 'polite' : 'off'}
   >
@@ -64,7 +64,7 @@ const Message = memo(function Message({ message }) {
     <div className="text-base break-words whitespace-pre-wrap">
       {message.text}
     </div>
-    <div className={`text-xs mt-2 ${message.sender === 'user' ? 'text-white' : 'text-gray-500'}`}>
+    <div className={`text-xs mt-2 ${message.sender === 'user' ? 'text-white' : 'text-muted-foreground-500'}`}>
       {message.time}
     </div>
   </div>
@@ -252,7 +252,7 @@ const ChatSupport = () => {
       {!isOpen ? (
         <button
           onClick={toggleChat}
-          className="focus:outline-none focus:ring-2 focus:ring-[#FFAC1F] rounded-2xl"
+          className="focus:outline-none focus:ring-2 focus:ring-ring rounded-2xl"
           aria-label="Open chat support"
         >
           <img
@@ -267,7 +267,7 @@ const ChatSupport = () => {
             fixed ${isMaximized ?
               'inset-0 m-auto w-[95vw] h-[95vh] rounded-3xl flex' :
               'bottom-0 right-0 w-[450px] h-[600px] rounded-3xl'
-            } bg-white shadow-xl overflow-hidden border border-yellow transition-all duration-300 relative
+            } bg-white shadow-xl overflow-hidden border border-primary transition-all duration-300 relative
           `}
           role="dialog"
           aria-modal="true"
@@ -277,7 +277,7 @@ const ChatSupport = () => {
   className={`
     absolute bottom-0 left-1/2 transform -translate-x-1/2
     ${isMaximized ? 'w-[900px] h-[400px] left-[calc(50%+130px)]' : 'w-[600px] h-[300px]'}
-    bg-gradient-to-br from-[#FFAC1F] to-[#FF8C00]
+    bg-gradient-to-br from-primary to-accent
     opacity-35 blur-xl z-base
     rounded-t-full
     pointer-events-none
@@ -288,24 +288,24 @@ const ChatSupport = () => {
 
 
           {isMaximized && (
-            <div className="w-64 bg-blue-50 border-r border-gray flex flex-col">
-              <div className="p-4 border-b border-gray">
+            <div className="w-64 bg-blue-50 border-r border-border flex flex-col">
+              <div className="p-4 border-b border-border">
                 <h2 className="text-lg font-semibold">Chat History</h2>
               </div>
               <div className="flex-1 overflow-y-auto p-2">
                 {[1, 2, 3].map((item) => (
                   <div
                     key={item}
-                    className="p-3 hover:bg-gray rounded-lg cursor-pointer border-t border-gray first:border-t-0"
+                    className="p-3 hover:bg-background rounded-lg cursor-pointer border-t border-border first:border-t-0"
                   >
                     <p className="text-sm font-medium truncate">Sample conversation {item}</p>
-                    <p className="text-xs text-gray-500">{item === 1 ? 'Yesterday' : `${item} days ago`}</p>
+                    <p className="text-xs text-muted-foreground-500">{item === 1 ? 'Yesterday' : `${item} days ago`}</p>
                   </div>
                 ))}
               </div>
-              <div className="p-4 border-t border-gray">
+              <div className="p-4 border-t border-border">
                 <button
-                  className="w-full py-2 bg-[#FFAC1F] text-white rounded-lg hover:bg-[#e69a1a] transition-colors"
+                  className="w-full py-2 bg-primary text-white rounded-lg hover:bg-accent transition-colors"
                   onClick={initializeChat}
                   aria-label="Start new chat"
                 >
@@ -337,11 +337,11 @@ const ChatSupport = () => {
               ))}
               {isBotTyping && (
                 <div className="mb-4 flex justify-start">
-                  <div className="max-w-[80%] p-4 rounded-lg bg-white text-gray-800 rounded-bl-none border border-gray">
+                  <div className="max-w-[80%] p-4 rounded-lg bg-white text-muted-foreground-800 rounded-bl-none border border-border">
                     <div className="flex space-x-2">
-                      <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce"></div>
-                      <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                      <div className="w-2 h-2 rounded-full bg-background-400 animate-bounce"></div>
+                      <div className="w-2 h-2 rounded-full bg-background-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 rounded-full bg-background-400 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                     </div>
                   </div>
                 </div>
@@ -351,15 +351,15 @@ const ChatSupport = () => {
 
             <form onSubmit={handleSendMessage} className="p-4  relative">
               {selectedFile && (
-                <div className="flex items-center justify-between mb-2 px-3 py-2 bg-gray-100 rounded-lg">
+                <div className="flex items-center justify-between mb-2 px-3 py-2 bg-background-100 rounded-lg">
                   <div className="flex items-center">
-                    <ImAttachment className="mr-2 text-gray-600" />
+                    <ImAttachment className="mr-2 text-muted-foreground-600" />
                     <span className="text-sm truncate max-w-xs">{selectedFile.name}</span>
                   </div>
                   <button
                     type="button"
                     onClick={() => setSelectedFile(null)}
-                    className="text-gray-500 hover:text-gray-700 ml-2"
+                    className="text-muted-foreground-500 hover:text-muted-foreground-700 ml-2"
                     aria-label="Remove file"
                   >
                     ×
@@ -373,7 +373,7 @@ const ChatSupport = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type your message..."
-                  className="w-full border border-black rounded-3xl px-14 py-3 bg-transparent shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFAC1F] text-base"
+                  className="w-full border border-black rounded-3xl px-14 py-3 bg-transparent shadow-md focus:outline-none focus:ring-2 focus:ring-ring text-base"
                   aria-label="Type your message"
                   disabled={isSending}
                 />
@@ -382,7 +382,7 @@ const ChatSupport = () => {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current.click()}
-                    className="text-gray-300 hover:text-[#FFAC1F] focus:text-[#FFAC1F] focus:outline-none"
+                    className="text-muted-foreground-300 hover:text-primary focus:text-primary focus:outline-none"
                     aria-label="Attach file"
                     disabled={isSending}
                   >
@@ -403,7 +403,7 @@ const ChatSupport = () => {
                     <button
                       type="button"
                       onClick={toggleVoiceInput}
-                      className={`${isListening ? 'text-red-500 animate-pulse' : 'text-gray-300 hover:text-[#FFAC1F]'} focus:outline-none`}
+                      className={`${isListening ? 'text-red-500 animate-pulse' : 'text-muted-foreground-300 hover:text-primary'} focus:outline-none`}
                       aria-label={isListening ? "Stop listening" : "Start voice input"}
                       disabled={isSending}
                     >
@@ -412,7 +412,7 @@ const ChatSupport = () => {
                   )}
                   <button
                     type="submit"
-                    className="text-[#FFAC1F] hover:text-[#e69a1a] disabled:opacity-50 focus:outline-none"
+                    className="text-primary hover:text-accent disabled:opacity-50 focus:outline-none"
                     disabled={isSending || (!inputMessage.trim() && !selectedFile)}
                     aria-label="Send message"
                   >
@@ -420,9 +420,9 @@ const ChatSupport = () => {
                   </button>
                 </div>
               </div>
-              <p className="text-xs text-gray-500 mt-2 text-center">
+              <p className="text-xs text-muted-foreground-500 mt-2 text-center">
                 Robotronics AI can make mistakes. Check our
-                <Link to="/TermsConditions" className="ml-1 text-[#FFAC1F] hover:underline">Terms & Conditions</Link>.
+                <Link to="/TermsConditions" className="ml-1 text-primary hover:underline">Terms & Conditions</Link>.
               </p>
             </form>
           </div>

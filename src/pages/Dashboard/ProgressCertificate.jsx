@@ -5,7 +5,7 @@ import SubscriptionProgressCertificate from '../../component/dashboard/Subscript
 const ProgressCertificate = () => {
   return (
     <div>
-      <div className='px-4 md:px-20 bg-[#ebe5e2]'>
+      <div className='px-4 md:px-20 bg-background'>
 
       <Intro/>
       </div>

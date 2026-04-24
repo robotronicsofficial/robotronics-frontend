@@ -21,10 +21,10 @@ import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { selectCart, useCartStore } from "../../stores/cartStore";
 import { useSubmitShopCheckoutIntentMutation } from "../../hooks/useShopOrders";
 
-const summaryLabelClassName = "font-lato text-base text-[#7E7F7C]";
+const summaryLabelClassName = "font-lato text-base text-muted-foreground";
 const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
-const summaryValueClassName = `${summaryValueBaseClassName} text-[#362D2C]`;
-const summaryTotalValueClassName = `${summaryValueBaseClassName} text-yellow`;
+const summaryValueClassName = `${summaryValueBaseClassName} text-foreground`;
+const summaryTotalValueClassName = `${summaryValueBaseClassName} text-primary`;
 
 const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const navigate = useNavigate();
@@ -105,16 +105,16 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   };
 
   return (
-    <div className="bg-gray lg:flex lg:gap-6">
+    <div className="bg-background lg:flex lg:gap-6">
       <div className="flex flex-col gap-8 pt-4 lg:w-2/3 lg:gap-12 lg:pt-8">
         <div className="flex flex-col gap-4 lg:gap-6">
-          <p className="lg:text-4xl text-2xl poppins-bold text-brown">CHECKOUT SUMMARY</p>
-          <p className="font-lato font-medium text-base leading-5 text-[#7E7F7C]">
+          <p className="lg:text-4xl text-2xl poppins-bold text-foreground">CHECKOUT SUMMARY</p>
+          <p className="font-lato font-medium text-base leading-5 text-muted-foreground">
             Review the saved customer details, fulfillment requirements, locally saved payment reference, and items for this checkout draft.
           </p>
         </div>
 
-        <div className="rounded-[20px] border border-[#E6D7B8] bg-[#FFF8E8] p-4 text-sm text-brown">
+        <div className="rounded-[20px] border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
           {submittedIntent
             ? "This checkout request has been submitted to Robotronics for follow-up and CRM handling."
             : "Review the saved checkout details, then submit the order request so Robotronics can process it in CRM."}
@@ -133,7 +133,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         ) : null}
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <section className="flex flex-col gap-4 bg-brown p-5 text-white">
+          <section className="flex flex-col gap-4 bg-foreground p-5 text-white">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-lg poppins-extrabold">
@@ -190,7 +190,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
             )}
           </section>
 
-          <section className="flex flex-col gap-4 border border-lightgray bg-white p-5 text-brown">
+          <section className="flex flex-col gap-4 border border-muted bg-white p-5 text-foreground">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-lg poppins-extrabold">PAYMENT DETAILS</p>
@@ -198,7 +198,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
               </div>
               <button
                 type="button"
-                className="bg-brown px-3 py-2 text-xs uppercase tracking-wide text-gold"
+                className="bg-foreground px-3 py-2 text-xs uppercase tracking-wide text-primary"
                 onClick={handleEditPayment}
               >
                 Edit
@@ -245,8 +245,8 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         <section className="flex flex-col gap-5">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-2xl text-brown poppins-bold">ORDER ITEMS</p>
-              <p className="text-sm text-[#7E7F7C]">
+              <p className="text-2xl text-foreground poppins-bold">ORDER ITEMS</p>
+              <p className="text-sm text-muted-foreground">
                 These items are currently in your cart and included in the checkout summary.
               </p>
             </div>
@@ -255,7 +255,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           <div className="flex flex-col gap-4">
             {displayItems.length > 0 ? (
               displayItems.map((product) => (
-                <div className="border border-lightgray bg-white p-4" key={getCommerceItemKey(product)}>
+                <div className="border border-muted bg-white p-4" key={getCommerceItemKey(product)}>
                   <CustomerProduct
                     title={product.name}
                     item={product.quantity}
@@ -270,14 +270,14 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                 </div>
               ))
             ) : (
-              <div className="border border-dashed border-[#BCBABA] bg-white p-4 text-sm text-brown">
+              <div className="border border-dashed border-border bg-white p-4 text-sm text-foreground">
                 Your cart is empty.
               </div>
             )}
           </div>
         </section>
 
-        <section className="flex flex-col gap-4 border border-lightgray bg-white p-5 text-brown">
+        <section className="flex flex-col gap-4 border border-muted bg-white p-5 text-foreground">
           <p className="text-xl poppins-bold">TOTALS</p>
           <OrderSummaryLine
             label="Shipping"
@@ -307,7 +307,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       </div>
 
       <div className="pt-4">
-        <div className="h-full w-0 border border-[#D4D4D4]"></div>
+        <div className="h-full w-0 border border-border"></div>
       </div>
 
       <div className="lg:w-1/3">

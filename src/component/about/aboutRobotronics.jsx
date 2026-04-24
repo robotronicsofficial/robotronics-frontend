@@ -6,16 +6,16 @@ import AppImage from "../AppImage";
 import robot from "../../assets/images/aboutrobot.webp";
 const AboutRobotronics = () => {
   return (
-    <div className="flex p-5 flex-col w-full bg-gray">
+    <div className="flex p-5 flex-col w-full bg-background">
       {/* block 1 */}
-      <div className="lg:text-yellow poppins-light lg:pt-10 pt-10 lg:text-6xl text-3xl justify-between text-right lg:px-10 px-4 md:text-5xl text-yellow"
+      <div className="lg:text-primary poppins-light lg:pt-10 pt-10 lg:text-6xl text-3xl justify-between text-right lg:px-10 px-4 md:text-5xl text-primary"
       data-aos="fade-up"
       >
        ROBOTRONICS
       </div>
       {/* line */}
       <div className="lg:mx-10"data-aos="fade-up">
-        <div className="h-0 w-full border border-brown"></div>
+        <div className="h-0 w-full border border-foreground"></div>
       </div>
       {/* block 2 */}
       <div className="lg:flex md:flex justify-between lg:p-5">
@@ -23,10 +23,10 @@ const AboutRobotronics = () => {
         <div className="flex-1 lg:pt-18 md:pt-10"data-aos="fade-up">
           {/* col */}
           <div className="flex flex-col">
-            <span className=" flex lg:text-yellow poppins-bold lg:text-4xl text-2xl text-right md:text4xl text-yellow text-wrap">
+            <span className=" flex lg:text-primary poppins-bold lg:text-4xl text-2xl text-right md:text4xl text-primary text-wrap">
               7+ YEARS
             </span>
-            <span className=" flex lg:text-yellow poppins-bold lg:text-4xl text-2xl text-right md:text-4xl text-yellow text-wrap">
+            <span className=" flex lg:text-primary poppins-bold lg:text-4xl text-2xl text-right md:text-4xl text-primary text-wrap">
               OF EXPERIENCE
             </span>
             <span className="flex lg:text-black poppins-regular pt-4 lg:text-4xl text-2xl text-right md:text-4xl text-black">

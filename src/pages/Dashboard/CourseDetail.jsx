@@ -225,7 +225,7 @@ const CourseDetail = () => {
   if (loading) {
     return (
       <CenteredState className="h-screen">
-        <Spinner className="size-12 text-yellow-500" />
+        <Spinner className="size-12 text-primary-500" />
       </CenteredState>
     );
   }
@@ -241,7 +241,7 @@ const CourseDetail = () => {
   if (!courseData || !childCourseData) {
     return (
       <CenteredState className="h-screen">
-        <div className="text-gray-500 poppins-medium">Course data not found</div>
+        <div className="text-muted-foreground-500 poppins-medium">Course data not found</div>
       </CenteredState>
     );
   }
@@ -249,7 +249,7 @@ const CourseDetail = () => {
   return (
     <div>
       <div className={getHeaderOffsetClass("page", "bg-background")}>
-        <div className="bg-gray-100 p-6">
+        <div className="bg-background-100 p-6">
           <div className="max-w-7xl mx-auto">
             <div className="lg:flex flex-wrap lg:flex-nowrap lg:space-x-6">
               {/* Left Side */}
@@ -267,7 +267,7 @@ const CourseDetail = () => {
                   />
                 </div>
                 <div className="flex items-center gap-8 pt-4">
-                  <span className="bg-gray-200 text-gray-800 text-sm font-medium px-3 py-1 bg-white rounded-full">
+                  <span className="bg-background-200 text-muted-foreground-800 text-sm font-medium px-3 py-1 bg-white rounded-full">
                     {courseData.category}
                   </span>
                   <div className="flex items-center justify-center gap-2">
@@ -277,30 +277,30 @@ const CourseDetail = () => {
                         const hasHalfStar = courseReviews % 1 >= 0.5;
 
                         if (i < fullStars) {
-                          return <span key={i} className="text-yellow text-2xl">★</span>;
+                          return <span key={i} className="text-primary text-2xl">★</span>;
                         } else if (i === fullStars && hasHalfStar) {
-                          return <span key={i} className="text-yellow text-2xl">☆</span>;
+                          return <span key={i} className="text-primary text-2xl">☆</span>;
                         } else {
                           return <span key={i} className="text-white text-2xl">★</span>;
                         }
                       })}
                     </div>
 
-                    <span className="text-brown text-sm">({courseReviews} Reviews)</span>
+                    <span className="text-foreground text-sm">({courseReviews} Reviews)</span>
                   </div>
                 </div>
                 <div>
                   <div className="flex items-center w-[40vw]">
-                    <h1 className="lg:text-5xl text-2xl text-brown font-medium mb-4">
+                    <h1 className="lg:text-5xl text-2xl text-foreground font-medium mb-4">
                       {courseData.title}
                     </h1>
                   </div>
-                  <div className="flex items-center space-x-2 text-[#7F7E97]">
+                  <div className="flex items-center space-x-2 text-muted-foreground">
                     <PiGraduationCapLight />
-                    <span className="text-gray-500 my-2">{courseData.studentsDownloaded ?? 0} Students Enrolled</span>
+                    <span className="text-muted-foreground-500 my-2">{courseData.studentsDownloaded ?? 0} Students Enrolled</span>
                   </div>
 
-                  <div className="h-[12vh] w-[40vw] bg-[#D9D9D9] flex items-center px-8 justify-between mt-6 rounded-lg text-[#7D7D7D]">
+                  <div className="h-[12vh] w-[40vw] bg-muted flex items-center px-8 justify-between mt-6 rounded-lg text-muted-foreground">
                     <div className="inline-block">{courseData.month ?? 0} Months </div>
                     <div className="inline-block">{courseData.numLessons ?? 0} Lectures</div>
                     <div className="inline-block">{courseData.numModules ?? 0} Module</div>
@@ -310,8 +310,8 @@ const CourseDetail = () => {
               </div>
 
               {/* Right Side with Video */}
-              <div className="w-full lg:w-1/3 mt-6 lg:mt-0 space-y-4 bg-[#0f1586] h-[23.8vw] rounded-2xl">
-                <div className="bg-gray-300 w-full h-full rounded-2xl overflow-hidden">
+              <div className="w-full lg:w-1/3 mt-6 lg:mt-0 space-y-4 bg-accent h-[23.8vw] rounded-2xl">
+                <div className="bg-background-300 w-full h-full rounded-2xl overflow-hidden">
                   <VideoPlayer
                     src={video}
                     title="Course preview video"
@@ -344,7 +344,7 @@ const CourseDetail = () => {
             {/* Course Description */}
             <div className="py-5">
               <h1 className="poppins-bold text-2xl mb-4">Course Description</h1>
-              <p className="poppins-light text-wrap text-lightblack">{courseData.description}</p>
+              <p className="poppins-light text-wrap text-foreground">{courseData.description}</p>
             </div>
 
             {/* What You'll Learn */}
@@ -357,10 +357,10 @@ const CourseDetail = () => {
                 <ul className="space-y-2">
                   {courseSections.map((item, index) => (
                     <li key={index} className="flex items-start">
-                      <div className="bg-yellow rounded-full h-4 w-4 flex items-center justify-center mt-1 mr-2 flex-shrink-0">
+                      <div className="bg-primary rounded-full h-4 w-4 flex items-center justify-center mt-1 mr-2 flex-shrink-0">
                         <AiOutlineRight className="text-white text-xs" />
                       </div>
-                      <span className="poppins-light text-lightblack">{item.name}</span>
+                      <span className="poppins-light text-foreground">{item.name}</span>
                     </li>
                   ))}
                 </ul>
@@ -388,9 +388,9 @@ const CourseDetail = () => {
                 return (
                   <div key={sectionIndex} className="mb-10">
                     <div className="flex items-center mb-6">
-                      <div className="w-3 h-8 bg-yellow rounded mr-3"></div>
+                      <div className="w-3 h-8 bg-primary rounded mr-3"></div>
                       <div className="flex justify-between items-center w-full">
-                        <h2 className="poppins-bold text-xl text-gray-800">
+                        <h2 className="poppins-bold text-xl text-muted-foreground-800">
                           Module {sectionIndex + 1}: {section.name}
                           {!sectionUnlocked && (
                             <span className="text-red-500 ml-2 text-sm">
@@ -401,7 +401,7 @@ const CourseDetail = () => {
                             </span>
                           )}
                         </h2>
-                        <div className="poppins-bold text-l text-yellow ml-4 flex gap-4">
+                        <div className="poppins-bold text-l text-primary ml-4 flex gap-4">
                           <span>{section.modules?.length || 0} Lectures </span> -
                           <span>{section.timeDuration} mins </span>
                         </div>
@@ -415,12 +415,12 @@ const CourseDetail = () => {
                       return (
                         <div
                           key={moduleKey}
-                          className={`mb-6 rounded-lg ${sectionUnlocked ? "bg-white" : "bg-gray-100 opacity-80"
+                          className={`mb-6 rounded-lg ${sectionUnlocked ? "bg-white" : "bg-background-100 opacity-80"
                             } transition-colors duration-200`}
                         >
                           {/* Module Header */}
                           <div
-                            className={`p-5 flex justify-between items-center ${sectionUnlocked ? 'cursor-pointer hover:bg-gray-50' : 'cursor-not-allowed'
+                            className={`p-5 flex justify-between items-center ${sectionUnlocked ? 'cursor-pointer hover:bg-background-50' : 'cursor-not-allowed'
                               } transition-colors duration-200`}
                             onClick={() => sectionUnlocked && toggleModule(moduleKey)}
                           >
@@ -428,19 +428,19 @@ const CourseDetail = () => {
                               {!sectionUnlocked && (
                                 <LockKeyholeIcon
                                   aria-hidden="true"
-                                  className={`${statusIconClassName} text-yellow-500`}
+                                  className={`${statusIconClassName} text-primary-500`}
                                 />
                               )}
-                              <span className="poppins-bold mr-3 text-yellow">
+                              <span className="poppins-bold mr-3 text-primary">
                                 <FaCirclePlay className="text-2xl" />
                               </span>
-                              <h3 className="poppins-bold text-gray-800">
-                                <span className="text-yellow-500">Lecture {moduleIndex + 1}:</span> {module.name}
+                              <h3 className="poppins-bold text-muted-foreground-800">
+                                <span className="text-primary-500">Lecture {moduleIndex + 1}:</span> {module.name}
                               </h3>
                             </div>
                             <div className="flex items-center space-x-6">
                               {sectionUnlocked && (
-                                <span className="poppins-bold text-yellow text-sm bg-gray-100 px-3 py-1 rounded-full">
+                                <span className="poppins-bold text-primary text-sm bg-background-100 px-3 py-1 rounded-full">
                                   Preview
                                 </span>
                               )}
@@ -449,10 +449,10 @@ const CourseDetail = () => {
 
                           {/* Module Content (collapsible) */}
                           {expandedModules[moduleKey] && sectionUnlocked && (
-                            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                            <div className="px-6 py-4 bg-background-50 border-t border-border-200">
                               {/* Learning Objectives */}
                               {module.learningObjectives && module.learningObjectives.length > 0 && (
-                                <div className="mb-6 p-4 bg-gray rounded-lg border border-gray">
+                                <div className="mb-6 p-4 bg-background rounded-lg border border-border">
                                   <div className="flex items-center mb-3">
                                     <h4 className="poppins-semibold text-black">
                                       What You&apos;ll Learn in this lecture
@@ -461,7 +461,7 @@ const CourseDetail = () => {
                                   <ul className="space-y-2">
                                     {module.learningObjectives.map((obj, idx) => (
                                       <li key={idx} className="flex items-start">
-                                        <span className="poppins-light text-gray-700">• {obj}</span>
+                                        <span className="poppins-light text-muted-foreground-700">• {obj}</span>
                                       </li>
                                     ))}
                                   </ul>
@@ -476,12 +476,12 @@ const CourseDetail = () => {
                                   return (
                                     <div
                                       key={content.id || content._id || `${moduleKey}-${content.type}-${content.name}`}
-                                      className="flex justify-between items-center p-3 hover:bg-gray rounded-lg transition-colors duration-200"
+                                      className="flex justify-between items-center p-3 hover:bg-background rounded-lg transition-colors duration-200"
                                     >
                                       <div className="flex items-center gap-2">
                                         {content.type === "video" && (
                                           <>
-                                            <FaCirclePlay className="text-yellow text-lg" />
+                                            <FaCirclePlay className="text-primary text-lg" />
                                             <button
                                               onClick={() => handlePlayVideo(fileUrl)}
                                               className="poppins-light"
@@ -493,9 +493,9 @@ const CourseDetail = () => {
                                         {(content.type === "assignment" || content.type === "book") && (
                                           <>
                                             {content.type === "assignment" ? (
-                                              <MdAssignment className="text-yellow text-lg" />
+                                              <MdAssignment className="text-primary text-lg" />
                                             ) : (
-                                              <FaLaptopCode className="text-yellow text-lg" />
+                                              <FaLaptopCode className="text-primary text-lg" />
                                             )}
                                             <span className="poppins-light">
                                               {content.name}
@@ -505,7 +505,7 @@ const CourseDetail = () => {
                                       </div>
                                       <div className="flex items-center space-x-4">
                                         {content.type === "video" && (
-                                          <span className="poppins-medium text-yellow text-sm hover:text-yellow-600">
+                                          <span className="poppins-medium text-primary text-sm hover:text-primary-600">
                                             10 min
                                           </span>
                                         )}
@@ -513,7 +513,7 @@ const CourseDetail = () => {
                                           <button
                                             type="button"
                                             onClick={() => handleDownloadContent(content)}
-                                            className="flex items-center poppins-medium text-yellow text-sm hover:text-yellow-600"
+                                            className="flex items-center poppins-medium text-primary text-sm hover:text-primary-600"
                                           >
                                             <FiDownload className="mr-1" />
                                             Download
@@ -534,10 +534,10 @@ const CourseDetail = () => {
                     {quizQuestions.length > 0 && (
                       <div className={`mt-8 rounded-lg p-6 border ${quizCompleted ? 'border-green-200 bg-green-50' :
                         attemptsExhausted ? 'border-red-200 bg-red-50' :
-                          'border-blue-200 bg-gray-50'
+                          'border-blue-200 bg-background-50'
                         } ${!sectionUnlocked ? 'opacity-60' : ''}`}>
                         <div className="flex items-center mb-4">
-                          <div className="w-3 h-8 bg-yellow rounded mr-3"></div>
+                          <div className="w-3 h-8 bg-primary rounded mr-3"></div>
                           <h3 className="poppins-bold text-xl text-black">
                             Module {sectionIndex + 1} Quiz
                             {!sectionUnlocked && " (Locked)"}
@@ -551,7 +551,7 @@ const CourseDetail = () => {
                             <div className="poppins-bold text-red-600 text-lg mb-2">
                               You&apos;ve used all {maxAttempts} attempts for today.
                             </div>
-                            <div className="poppins-light text-gray-700">
+                            <div className="poppins-light text-muted-foreground-700">
                               {childPlan === 'basic' ?
                                 "You can try again tomorrow with fresh attempts." :
                                 "You can continue attempting this quiz as you have unlimited attempts."}
@@ -561,14 +561,14 @@ const CourseDetail = () => {
                           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                             {/* Quiz Header */}
                             <div
-                              className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+                              className="p-4 flex justify-between items-center cursor-pointer hover:bg-background-50 transition-colors duration-200"
                               onClick={() => sectionUnlocked && toggleModule(`quiz-${sectionIndex}`)}
                             >
                               <div className="flex items-center">
                                 {!sectionUnlocked ? (
                                   <LockKeyholeIcon
                                     aria-hidden="true"
-                                    className={`${statusIconClassName} text-yellow-500`}
+                                    className={`${statusIconClassName} text-primary-500`}
                                   />
                                 ) : quizCompleted ? (
                                   <CheckIcon
@@ -583,10 +583,10 @@ const CourseDetail = () => {
                                 ) : (
                                   <ClipboardListIcon
                                     aria-hidden="true"
-                                    className={`${statusIconClassName} text-yellow-500`}
+                                    className={`${statusIconClassName} text-primary-500`}
                                   />
                                 )}
-                                <h4 className="poppins-medium text-gray-800">
+                                <h4 className="poppins-medium text-muted-foreground-800">
                                   Test your knowledge from this module
                                   {quizCompleted && " (Completed)"}
                                   {quizAttempted && !quizCompleted && (
@@ -602,11 +602,11 @@ const CourseDetail = () => {
                                 </h4>
                               </div>
                               <div className="flex items-center space-x-4">
-                                <span className="poppins-light text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                                <span className="poppins-light text-sm text-muted-foreground-500 bg-background-100 px-3 py-1 rounded-full">
                                   {quizQuestions.length} questions
                                 </span>
                                 {sectionUnlocked && (
-                                  <span className="poppins-bold text-yellow">
+                                  <span className="poppins-bold text-primary">
                                     {expandedModules[`quiz-${sectionIndex}`] ? (
                                       <ChevronDownIcon aria-hidden="true" className="size-5" />
                                     ) : (
@@ -619,7 +619,7 @@ const CourseDetail = () => {
 
                             {/* Quiz Content */}
                             {expandedModules[`quiz-${sectionIndex}`] && sectionUnlocked && (
-                              <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                              <div className="px-6 py-4 bg-background-50 border-t border-border-200">
                                 {showQuizResults ? (
                                   <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
                                     <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-green-600' : 'text-red-600'}`}>
@@ -638,7 +638,7 @@ const CourseDetail = () => {
                                             <div className="poppins-medium mb-1">
                                               {qIndex + 1}. {question.questionText}
                                             </div>
-                                            <div className="poppins-light text-sm text-gray-600 mb-1">
+                                            <div className="poppins-light text-sm text-muted-foreground-600 mb-1">
                                               Your answer: {userAnswer}
                                             </div>
                                             <div className={`flex items-center gap-1 poppins-medium text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
@@ -664,7 +664,7 @@ const CourseDetail = () => {
                                         childSection.quiz.lastAttemptDate &&
                                         isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) &&
                                         childSection.quiz.attempts >= maxAttempts ? (
-                                        <div className="mt-4 poppins-medium text-gray-600">
+                                        <div className="mt-4 poppins-medium text-muted-foreground-600">
                                           You&apos;ve used all {maxAttempts} attempts for today. Try again tomorrow.
                                         </div>
                                       ) : (
@@ -703,7 +703,7 @@ const CourseDetail = () => {
                                 ) : (
                                   <div className="space-y-4">
                                     {childPlan === 'basic' && (
-                                      <div className="poppins-medium text-sm text-gray-600 mb-2">
+                                      <div className="poppins-medium text-sm text-muted-foreground-600 mb-2">
                                         Attempt {childSection.quiz.attempts + 1} of {maxAttempts} today
                                       </div>
                                     )}
@@ -736,7 +736,7 @@ const CourseDetail = () => {
                                     >
                                       {updateChildCourseProgressMutation.isPending ? "Submitting..." : "Submit Quiz"}
                                     </button>
-                                    <div className="poppins-light text-sm text-gray-600 mt-2">
+                                    <div className="poppins-light text-sm text-muted-foreground-600 mt-2">
                                       Note: You need to score at least 60% to unlock the next module.
                                     </div>
                                   </div>

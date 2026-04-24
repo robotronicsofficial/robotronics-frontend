@@ -40,7 +40,7 @@ const CareerJobDetail = ({ job }) => {
           ))}
         </ul>
       ) : (
-        <p className="mb-4 poppins-light text-brown/80">Responsibilities will be shared during the hiring process.</p>
+        <p className="mb-4 poppins-light text-foreground/80">Responsibilities will be shared during the hiring process.</p>
       )}
 
       <h2 className="text-xl poppins-bold mb-2" data-aos="fade-up">
@@ -55,15 +55,15 @@ const CareerJobDetail = ({ job }) => {
           ))}
         </ul>
       ) : (
-        <p className="mb-4 poppins-light text-brown/80">Skills requirements will be shared during the hiring process.</p>
+        <p className="mb-4 poppins-light text-foreground/80">Skills requirements will be shared during the hiring process.</p>
       )}
 
       <div className="lg:pb-20 pb-10" data-aos="fade-up">
         <div className="lg:py-20 py-10">
-          <p className="text-wrap text-brown poppins-medium lg:text-2xl text-xl mb-10">
+          <p className="text-wrap text-foreground poppins-medium lg:text-2xl text-xl mb-10">
             Jumpstart your journey with Robotronics by sending your CV and details using the form below.
           </p>
-          <p className="text-wrap text-brown poppins-medium lg:text-2xl text-xl">
+          <p className="text-wrap text-foreground poppins-medium lg:text-2xl text-xl">
             We value people who bring unique perspectives and want to grow with us. We encourage applicants of all genders and backgrounds to apply.
           </p>
         </div>
@@ -72,12 +72,12 @@ const CareerJobDetail = ({ job }) => {
           <JobApplicationForm job={job} />
         </div>
 
-        <div className="flex flex-row justify-between border border-smallText lg:p-10 p-5 rounded-xl">
-          <p className="text-wrap text-brown poppins-medium lg:text-2xl self-center">
+        <div className="flex flex-row justify-between border border-muted-foreground lg:p-10 p-5 rounded-xl">
+          <p className="text-wrap text-foreground poppins-medium lg:text-2xl self-center">
             Interested in this position?
           </p>
           <a
-            className="bg-brown text-white poppins-medium hover:text-brown hover:bg-yellow lg:text-xl text-sm p-3 rounded-xl self-center inline-flex items-center gap-2"
+            className="bg-foreground text-white poppins-medium hover:text-foreground hover:bg-primary lg:text-xl text-sm p-3 rounded-xl self-center inline-flex items-center gap-2"
             href="#application-form"
           >
             Apply Now

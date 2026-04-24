@@ -115,24 +115,24 @@ const GiftCourseBody = () => {
   };
 
   return (
-    <div className="bg-gray px-4 md:px-0">
+    <div className="bg-background px-4 md:px-0">
       <div className="lg:flex">
         <div className="flex flex-col md:w-4/5">
           <div className="w-full">
             <div className="space-y-5 py-8">
-              <h2 className="poppins-bold px-6 text-2xl text-brown md:px-20 md:text-4xl">
+              <h2 className="poppins-bold px-6 text-2xl text-foreground md:px-20 md:text-4xl">
                 Gift Request Details
               </h2>
             </div>
 
             {!courseItems.length ? (
-              <div className="mx-auto mb-6 max-w-4xl rounded-md bg-white p-5 text-brown">
+              <div className="mx-auto mb-6 max-w-4xl rounded-md bg-white p-5 text-foreground">
                 <p className="poppins-medium">
                   Choose at least one course before sending a gift request.
                 </p>
                 <button
                   type="button"
-                  className="mt-4 rounded-lg bg-brown px-5 py-3 text-sm font-semibold text-gold"
+                  className="mt-4 rounded-lg bg-foreground px-5 py-3 text-sm font-semibold text-primary"
                   onClick={() => navigate(COURSE_PATH)}
                 >
                   Browse Courses
@@ -142,11 +142,11 @@ const GiftCourseBody = () => {
 
             <form
               onSubmit={handleSubmit}
-              className="mx-auto flex max-w-4xl flex-col gap-6 rounded-md bg-gray-50 p-6"
+              className="mx-auto flex max-w-4xl flex-col gap-6 rounded-md bg-background-50 p-6"
             >
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
-                  <label htmlFor="senderName" className="poppins-regular block text-xl text-brown">
+                  <label htmlFor="senderName" className="poppins-regular block text-xl text-foreground">
                     Your Name
                   </label>
                   <input
@@ -155,14 +155,14 @@ const GiftCourseBody = () => {
                     id="senderName"
                     value={form.senderName}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     placeholder="Your name"
                     required
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="senderEmail" className="poppins-regular block text-xl text-brown">
+                  <label htmlFor="senderEmail" className="poppins-regular block text-xl text-foreground">
                     Your Email
                   </label>
                   <input
@@ -171,7 +171,7 @@ const GiftCourseBody = () => {
                     id="senderEmail"
                     value={form.senderEmail}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     placeholder="you@example.com"
                     required
                   />
@@ -179,7 +179,7 @@ const GiftCourseBody = () => {
               </div>
 
               <div>
-                <label htmlFor="senderPhone" className="poppins-regular block text-xl text-brown">
+                <label htmlFor="senderPhone" className="poppins-regular block text-xl text-foreground">
                   Your Phone
                 </label>
                 <input
@@ -188,14 +188,14 @@ const GiftCourseBody = () => {
                   id="senderPhone"
                   value={form.senderPhone}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   placeholder="0300 1234567"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="recipientName" className="poppins-regular block text-xl text-brown">
+                <label htmlFor="recipientName" className="poppins-regular block text-xl text-foreground">
                   Recipient Name
                 </label>
                 <input
@@ -204,14 +204,14 @@ const GiftCourseBody = () => {
                   id="recipientName"
                   value={form.recipientName}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   placeholder="Recipient name"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="recipientEmail" className="poppins-regular block text-xl text-brown">
+                <label htmlFor="recipientEmail" className="poppins-regular block text-xl text-foreground">
                   Recipient Email
                 </label>
                 <input
@@ -220,14 +220,14 @@ const GiftCourseBody = () => {
                   id="recipientEmail"
                   value={form.recipientEmail}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   placeholder="recipient@example.com"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="date" className="poppins-regular block text-xl text-brown">
+                <label htmlFor="date" className="poppins-regular block text-xl text-foreground">
                   Send Date
                 </label>
                 <input
@@ -236,13 +236,13 @@ const GiftCourseBody = () => {
                   id="date"
                   value={form.date}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="poppins-regular block text-xl text-brown">
+                <label htmlFor="message" className="poppins-regular block text-xl text-foreground">
                   Your Message
                 </label>
                 <textarea
@@ -250,7 +250,7 @@ const GiftCourseBody = () => {
                   id="message"
                   value={form.message}
                   onChange={handleChange}
-                  className="mt-1 block h-40 w-full rounded-md border-gray-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block h-40 w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   placeholder="Add your message"
                 />
               </div>
@@ -270,7 +270,7 @@ const GiftCourseBody = () => {
               <div className="flex flex-wrap gap-3">
                 <button
                   type="button"
-                  className="poppins-bold rounded-lg bg-white px-5 py-2 text-sm text-[#807D7E] lg:px-12 lg:text-xl"
+                  className="poppins-bold rounded-lg bg-white px-5 py-2 text-sm text-muted-foreground lg:px-12 lg:text-xl"
                   onClick={() => navigate(COURSE_PATH)}
                   disabled={isSubmitting}
                 >
@@ -278,7 +278,7 @@ const GiftCourseBody = () => {
                 </button>
                 <button
                   type="submit"
-                  className="poppins-bold rounded-lg bg-brown px-5 py-2 text-sm text-white disabled:opacity-60 lg:px-12 lg:text-xl"
+                  className="poppins-bold rounded-lg bg-foreground px-5 py-2 text-sm text-white disabled:opacity-60 lg:px-12 lg:text-xl"
                   disabled={isSubmitting || !courseItems.length}
                 >
                   {isSubmitting ? "Sending..." : "Send Gift"}
@@ -289,7 +289,7 @@ const GiftCourseBody = () => {
         </div>
 
         <div className="px-1">
-          <div className="h-full w-0 border border-brown" />
+          <div className="h-full w-0 border border-foreground" />
         </div>
         <CustomerOrder
           itemsOverride={courseItems}

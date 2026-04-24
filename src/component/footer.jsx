@@ -65,13 +65,13 @@ const Footer = () => {
             >
               {/* Quick Links */}
               <div className="w-1/2 text-wrap text-left">
-                <h2 className="title-font font-medium poppins-semibold text-gold lg:text-xl tracking-widest">
+                <h2 className="title-font font-medium poppins-semibold text-primary lg:text-xl tracking-widest">
                   Quick Links
                 </h2>
                 <nav className="list-none space-y-2">
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/aboutUs"
                     >
                       About Us
@@ -79,7 +79,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/CareerJob"
                     >
                       Careers
@@ -87,7 +87,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/shop"
                     >
                       Shop
@@ -95,7 +95,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/Blog"
                     >
                       Blog
@@ -103,7 +103,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/Course"
                     >
                       Courses
@@ -111,7 +111,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/International/videoGallery"
                     >
                       Gallery
@@ -119,7 +119,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/International/home"
                     >
                       Robotronics International
@@ -128,7 +128,7 @@ const Footer = () => {
 
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/TermsConditions"
                     >
                       Terms & Conditions
@@ -137,7 +137,7 @@ const Footer = () => {
 
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/PrivacyPolicy"
                     >
                       Privacy Policy
@@ -146,7 +146,7 @@ const Footer = () => {
 
                   <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/RefundPolicy"
                     >
                       Refund Policy
@@ -155,7 +155,7 @@ const Footer = () => {
 
                    <li>
                     <Link
-                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-gold"
+                      className="text-white poppins-medium cursor-pointer lg:text-xl hover:text-primary"
                       to="/faqs"
                     >
                       FAQs
@@ -169,7 +169,7 @@ const Footer = () => {
 
               {/* Contact Us */}
               <div className="w-1/2 text-wrap text-left">
-                <h2 className="title-font font-medium poppins-semibold text-gold lg:text-xl tracking-widest">
+                <h2 className="title-font font-medium poppins-semibold text-primary lg:text-xl tracking-widest">
                   Contact Us
                 </h2>
                 <nav className="list-none space-y-4">
@@ -231,7 +231,7 @@ const Footer = () => {
                     className="w-full placeholder-opacity-25 bg-transparent border border-white rounded py-2 px-4 text-white focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-colors duration-200 ease-in-out"
                   />
                 </div>
-                <button className="w-full lg:w-auto flex items-center justify-center text-white bg-gold px-6 py-3 rounded hover:bg-gold-dark focus:outline-none transition-colors duration-200">
+                <button className="w-full lg:w-auto flex items-center justify-center text-white bg-primary px-6 py-3 rounded hover:bg-primary-dark focus:outline-none transition-colors duration-200">
                   <AppImage src={img} alt="Subscribe Button Icon" />
                 </button>
               </div>
@@ -265,19 +265,19 @@ const Footer = () => {
                     data-aos="fade-up"
                   >
                     <div className="text-center">
-                      <p className="text-gold poppins-regular text-sm">WEEKS</p>
+                      <p className="text-primary poppins-regular text-sm">WEEKS</p>
                       <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
                         22 :
                       </p>
                     </div>
                     <div className="text-center">
-                      <p className="text-gold text-sm poppins-regular ">DAYS</p>
+                      <p className="text-primary text-sm poppins-regular ">DAYS</p>
                       <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
                         12 :
                       </p>
                     </div>
                     <div className="text-center">
-                      <p className="text-gold text-sm poppins-regular ">
+                      <p className="text-primary text-sm poppins-regular ">
                         HOURS
                       </p>
                       <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
@@ -285,7 +285,7 @@ const Footer = () => {
                       </p>
                     </div>
                     <div className="text-center">
-                      <p className="text-gold text-sm poppins-regular ">
+                      <p className="text-primary text-sm poppins-regular ">
                         MINUTES
                       </p>
                       <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
@@ -297,7 +297,7 @@ const Footer = () => {
                   {/* App Store Buttons */}
                   <div className="flex flex-col gap-y-6 my-10">
                     <button
-                      className="mb-4 border border-white p-4 rounded-xl flex items-center gap-12 hover:bg-gray-800 transition-colors duration-200"
+                      className="mb-4 border border-white p-4 rounded-xl flex items-center gap-12 hover:bg-background-800 transition-colors duration-200"
                       data-aos="fade-up"
 
 
@@ -311,7 +311,7 @@ const Footer = () => {
                       </div>
                     </button>
                     <button
-                      className="border border-white p-4 rounded-xl flex items-center gap-12 hover:bg-gray-800 transition-colors duration-200"
+                      className="border border-white p-4 rounded-xl flex items-center gap-12 hover:bg-background-800 transition-colors duration-200"
                       data-aos="fade-up"
 
 
@@ -373,7 +373,7 @@ const Footer = () => {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="lg:p-3 p-1 border border-brown bg-white rounded-xl hover:bg-brown hover:text-white text-black"
+                  className="lg:p-3 p-1 border border-foreground bg-white rounded-xl hover:bg-foreground hover:text-white text-black"
                 >
                   {icon}
                 </a>

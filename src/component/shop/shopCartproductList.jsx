@@ -17,11 +17,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
 const summaryRowClassName =
-  "pb-2 font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-[#7E7F7C]";
+  "pb-2 font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-muted-foreground";
 const summaryValueBaseClassName =
   "bg-transparent text-right text-[20px] font-extrabold leading-[28px] tracking-[0]";
-const summaryValueClassName = `${summaryValueBaseClassName} text-[#362D2C]`;
-const totalSummaryValueClassName = `${summaryValueBaseClassName} text-yellow`;
+const summaryValueClassName = `${summaryValueBaseClassName} text-foreground`;
+const totalSummaryValueClassName = `${summaryValueBaseClassName} text-primary`;
 
 const ShopCartproductList = ({ onNext }) => {
   const cart = useCartStore(selectCart);
@@ -105,12 +105,12 @@ const ShopCartproductList = ({ onNext }) => {
                 </div>
 
                 <div className="w-full sm:w-2/3">
-                  <h1 className="mb-2 text-wrap font-Poppins text-[20px] font-bold leading-[28px] tracking-normal text-[#362D2C]">
+                  <h1 className="mb-2 text-wrap font-Poppins text-[20px] font-bold leading-[28px] tracking-normal text-foreground">
                     {product.name}
                   </h1>
-                  <div className="my-6 flex text-2xl text-yellow-500">
+                  <div className="my-6 flex text-2xl text-primary-500">
                     {Array.from({ length: 5 }, (_, i) => (
-                      <span className="text-yellow" key={i}>★</span>
+                      <span className="text-primary" key={i}>★</span>
                     ))}
                   </div>
                   <div className="mb-4 flex justify-end gap-4">
@@ -118,7 +118,7 @@ const ShopCartproductList = ({ onNext }) => {
                       <button
                         type="button"
                         onClick={() => handleRemoveFromCart(product)}
-                        className="rounded-md bg-gray-200 px-3 py-1 text-gray-700 hover:bg-gray-300 focus:outline-none"
+                        className="rounded-md bg-background-200 px-3 py-1 text-muted-foreground-700 hover:bg-background-300 focus:outline-none"
                       >
                         -
                       </button>
@@ -131,13 +131,13 @@ const ShopCartproductList = ({ onNext }) => {
                       <button
                         type="button"
                         onClick={() => handleAddToCart(product)}
-                        className="rounded-md bg-gray-200 px-1 text-gray-700 hover:bg-gray-300 focus:outline-none lg:px-3 lg:py-1"
+                        className="rounded-md bg-background-200 px-1 text-muted-foreground-700 hover:bg-background-300 focus:outline-none lg:px-3 lg:py-1"
                       >
                         +
                       </button>
                     </div>
                   </div>
-                  <div className="pt-10 text-right text-2xl font-bold text-[#362D2C]">
+                  <div className="pt-10 text-right text-2xl font-bold text-foreground">
                     PKR {Number(product.price || 0).toLocaleString()}
                   </div>
                 </div>
@@ -145,17 +145,17 @@ const ShopCartproductList = ({ onNext }) => {
             </div>
           ))
         ) : (
-          <p className="p-5 text-center text-gray-500">Your cart is empty.</p>
+          <p className="p-5 text-center text-muted-foreground-500">Your cart is empty.</p>
         )}
       </div>
       <div className="flex flex-col p-2">
-        <div className="h-full w-0 border border-[#D4D4D4]"></div>
+        <div className="h-full w-0 border border-border"></div>
       </div>
-      <div className="flex flex-col rounded-lg bg-gray px-6 py-6 lg:px-10">
-        <h2 className="mb-4 font-poppins text-[32px] font-semibold leading-[40px] tracking-[0] text-[#362D2C]">
+      <div className="flex flex-col rounded-lg bg-background px-6 py-6 lg:px-10">
+        <h2 className="mb-4 font-poppins text-[32px] font-semibold leading-[40px] tracking-[0] text-foreground">
           ORDER SUMMARY
         </h2>
-        <p className="my-6 font-poppins text-[16px] font-medium leading-[20px] tracking-[0] text-[#7E7F7C]">
+        <p className="my-6 font-poppins text-[16px] font-medium leading-[20px] tracking-[0] text-muted-foreground">
           Apply your monthly voucher to get more discount!
         </p>
         <div className="my-6 flex flex-col gap-3">
@@ -188,18 +188,18 @@ const ShopCartproductList = ({ onNext }) => {
           <input
             id="voucher"
             type="text"
-            className="mt-2 w-full border-b bg-gray p-2 font-poppins text-[16px] font-medium leading-[20px] tracking-[0] text-[#7E7F7C]"
+            className="mt-2 w-full border-b bg-background p-2 font-poppins text-[16px] font-medium leading-[20px] tracking-[0] text-muted-foreground"
             placeholder="Your voucher code"
           />
         </div>
 
         <div className="mt-20">
-          <span className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-[#362D2C]">
+          <span className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-foreground">
             Write your special notes here...
           </span>
 
           <textarea
-            className="mt-1 block h-[139px] w-[401px] border border-[#BCBABA] bg-[#EBE5E2] p-7 font-poppins font-light shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            className="mt-1 block h-[139px] w-[401px] border border-border bg-background p-7 font-poppins font-light shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             value={notes}
             onChange={(e) => {
               setNotes(e.target.value);
@@ -213,7 +213,7 @@ const ShopCartproductList = ({ onNext }) => {
             type="button"
             onClick={handleNext}
             aria-label="Proceed to Checkout"
-            className="flex h-11 w-[408px] items-center justify-center gap-2.5 bg-[#362D2C] p-3 font-semibold text-white transition"
+            className="flex h-11 w-[408px] items-center justify-center gap-2.5 bg-foreground p-3 font-semibold text-white transition"
           >
             PROCEED TO CHECKOUT
           </button>

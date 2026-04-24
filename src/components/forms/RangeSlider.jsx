@@ -50,7 +50,7 @@ const RangeSlider = ({
       <div className="relative h-6">
         <div className="absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-border" />
         <div
-          className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-brown"
+          className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-foreground"
           style={{
             left: `${isRange ? lowPercent : 0}%`,
             right: `${100 - highPercent}%`,

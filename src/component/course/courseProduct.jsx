@@ -52,14 +52,14 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
             {!isSaved ? (
               <div className="flex justify-between">
                 <CiStar className="w-6 h-6 self-center" />
-                <p className="lg:text-xl text-gold font-bold">
+                <p className="lg:text-xl text-primary font-bold">
                   {price != null ? `PKR ${price}` : "Included"}
                 </p>
               </div>
             ) : (
               <div className="flex justify-between">
                 <FaStar className="w-6 h-6 self-center" />
-                <p className="lg:text-xl text-gold font-bold">
+                <p className="lg:text-xl text-primary font-bold">
                   {price != null ? `PKR ${price}` : "Included"}
                 </p>
               </div>
@@ -89,8 +89,8 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
       {/* button */}
       <div className="py-2">
         <NavLink to={`/CoursesProduct/${id}`}>
-          <div className="text-center bg-yellow p-2">
-            <button className="bg-yellow text-xl p-3 font-bold rounded">
+          <div className="text-center bg-primary p-2">
+            <button className="bg-primary text-xl p-3 font-bold rounded">
               View Course
             </button>
           </div>

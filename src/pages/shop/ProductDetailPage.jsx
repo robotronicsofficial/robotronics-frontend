@@ -3,7 +3,7 @@ import MoreProduct from '../../component/shop/productDetail/moreProduct';
 
 const ProductDetailPage = () => {
   return (
-    <div className="pt-[9rem] bg-lightgray">
+    <div className="pt-[9rem] bg-muted">
         <Intro/>
         <MoreProduct/>
     </div>

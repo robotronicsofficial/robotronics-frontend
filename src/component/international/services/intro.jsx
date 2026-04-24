@@ -39,7 +39,7 @@ const Intro = () => {
 
 
             >
-              <p className="lg:text-8xl text-4xl poppins-bold text-yellow">
+              <p className="lg:text-8xl text-4xl poppins-bold text-primary">
                 OUR&nbsp;
               </p>
               <p className="lg:text-8xl text-4xl poppins-bold text-white">
@@ -95,7 +95,7 @@ const Intro = () => {
                 rel="noopener noreferrer"
                 data-aos="fade-up"
                 data-aos-delay={getAosStaggerDelay(index)}
-                className="lg:p-3 p-2 border border-brown bg-white rounded-xl hover:bg-brown hover:text-white"
+                className="lg:p-3 p-2 border border-foreground bg-white rounded-xl hover:bg-foreground hover:text-white"
               >
                 {icon}
               </a>

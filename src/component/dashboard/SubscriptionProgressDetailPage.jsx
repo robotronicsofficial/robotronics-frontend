@@ -64,20 +64,20 @@ const SubscriptionProgressDetailPage = () => {
   };
 
   if (loading) return (
-    <CenteredState className="bg-gray-100 min-h-screen" contentClassName="text-center">
-      <Spinner className="mx-auto size-12 text-yellow-600" />
-      <p className="mt-4 text-gray-700">Loading progress data...</p>
+    <CenteredState className="bg-background-100 min-h-screen" contentClassName="text-center">
+      <Spinner className="mx-auto size-12 text-primary-600" />
+      <p className="mt-4 text-muted-foreground-700">Loading progress data...</p>
     </CenteredState>
   );
   
   if (progressErrorMessage) return (
-    <CenteredState className="bg-gray-100 min-h-screen">
+    <CenteredState className="bg-background-100 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
         <h2 className="text-xl font-bold text-red-600 mb-4">Error</h2>
-        <p className="text-gray-700 mb-4">{progressErrorMessage}</p>
+        <p className="text-muted-foreground-700 mb-4">{progressErrorMessage}</p>
         <button 
           onClick={() => refetch()}
-          className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded"
+          className="bg-primary-500 hover:bg-primary-600 text-white py-2 px-4 rounded"
         >
           Try Again
         </button>
@@ -86,9 +86,9 @@ const SubscriptionProgressDetailPage = () => {
   );
   
   if (!progressData) return (
-    <CenteredState className="bg-gray-100 min-h-screen">
+    <CenteredState className="bg-background-100 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <p className="text-gray-700">No progress data found for this student.</p>
+        <p className="text-muted-foreground-700">No progress data found for this student.</p>
       </div>
     </CenteredState>
   );
@@ -106,19 +106,19 @@ const SubscriptionProgressDetailPage = () => {
         <div className="flex gap-4 mb-6">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-full ${filter === 'all' ? 'bg-[#ffc224] text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 rounded-full ${filter === 'all' ? 'bg-primary text-white' : 'bg-background-200'}`}
           >
             All
           </button>
           <button
             onClick={() => setFilter('active')}
-            className={`px-4 py-2 rounded-full ${filter === 'active' ? 'bg-[#ffc224] text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 rounded-full ${filter === 'active' ? 'bg-primary text-white' : 'bg-background-200'}`}
           >
             Active
           </button>
           <button
             onClick={() => setFilter('completed')}
-            className={`px-4 py-2 rounded-full ${filter === 'completed' ? 'bg-[#ffc224] text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 rounded-full ${filter === 'completed' ? 'bg-primary text-white' : 'bg-background-200'}`}
           >
             Completed
           </button>
@@ -129,7 +129,7 @@ const SubscriptionProgressDetailPage = () => {
           <h2 className="text-xl font-semibold mb-3">Course Progress</h2>
           <table className="w-full min-w-[600px] border-collapse">
             <thead>
-              <tr className="text-left text-gray-700 font-semibold">
+              <tr className="text-left text-muted-foreground-700 font-semibold">
                 <th className="p-3">Course</th>
                 <th className="p-3">Modules Completed</th>
                 <th className="p-3">Certificate</th>
@@ -143,7 +143,7 @@ const SubscriptionProgressDetailPage = () => {
                 const courseError = downloadErrors[courseId];
                 
                 return (
-                  <tr key={index} className="text-gray-900 border-t">
+                  <tr key={index} className="text-muted-foreground-900 border-t">
                     <td className="p-3">{course.name || course.courseName || "Course"}</td>
                     <td className="p-3">{course.completed}</td>
                     <td className="p-3">
@@ -152,7 +152,7 @@ const SubscriptionProgressDetailPage = () => {
                           {course.certificateAvailable ? (
                             <>
                               <button 
-                                className={`hover:text-yellow-600 ${isDownloading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer text-blue-600'}`}
+                                className={`hover:text-primary-600 ${isDownloading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer text-blue-600'}`}
                                 onClick={() => !isDownloading && handleDownloadCertificate(courseId, course.name || course.courseName || "Course")}
                                 disabled={isDownloading}
                               >
@@ -165,9 +165,9 @@ const SubscriptionProgressDetailPage = () => {
                               className="group relative cursor-not-allowed"
                               title="Complete the course to download certificate"
                             >
-                              <span className="text-gray-400">Download</span>
-                              <FaFilePdf className="text-gray-400 inline ml-2" />
-                              <span className="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-2 whitespace-nowrap left-1/2 transform -translate-x-1/2">
+                              <span className="text-muted-foreground-400">Download</span>
+                              <FaFilePdf className="text-muted-foreground-400 inline ml-2" />
+                              <span className="absolute hidden group-hover:block bg-background-700 text-white text-xs rounded py-1 px-2 bottom-full mb-2 whitespace-nowrap left-1/2 transform -translate-x-1/2">
                                 Complete the course to download
                               </span>
                             </div>
@@ -178,7 +178,7 @@ const SubscriptionProgressDetailPage = () => {
                             {courseError}
                             <button 
                               onClick={() => setDownloadErrors(prev => ({ ...prev, [courseId]: null }))}
-                              className="ml-2 text-gray-500 hover:text-gray-700"
+                              className="ml-2 text-muted-foreground-500 hover:text-muted-foreground-700"
                             >
                               Dismiss
                             </button>
@@ -190,7 +190,7 @@ const SubscriptionProgressDetailPage = () => {
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         (course.status || 'active').toLowerCase() === 'completed' 
                           ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
+                          : 'bg-primary-100 text-primary-800'
                       }`}>
                         {course.status}
                       </span>

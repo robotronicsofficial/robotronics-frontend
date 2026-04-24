@@ -23,17 +23,6 @@
   --overlay: rgb(0 0 0 / 0.5);
   --radius-md: 0.5rem;
 
-  --brand-gold: #f5ab34;
-  --brand-brown: #362d2c;
-  --brand-yellow: #f99f0e;
-  --brand-light-yellow: #fccf86;
-  --brand-dark-gold: #c86400;
-  --surface-page: #ebe5e2;
-  --surface-light: #e5ddd9;
-  --surface-contact: #181515;
-  --text-slate: #334155;
-  --text-quote: #a9a9a9;
-
   --z-base: 0;
   --z-raised: 10;
   --z-header: 50;
@@ -92,22 +81,6 @@
   --color-ring: var(--ring);
   --color-overlay: var(--overlay);
 
-  --color-gold: var(--brand-gold);
-  --color-lightgray: var(--surface-light);
-  --color-brown: var(--brand-brown);
-  --color-yellow: var(--brand-yellow);
-  --color-lightyellow: var(--brand-light-yellow);
-  --color-gray: var(--surface-page);
-  --color-signin: var(--accent);
-  --color-darkgold: var(--brand-dark-gold);
-  --color-fder: var(--brand-brown);
-  --color-lightblack: var(--text-slate);
-  --color-line: var(--muted-foreground);
-  --color-lin: var(--border);
-  --color-smallText: var(--foreground);
-  --color-quote: var(--text-quote);
-  --color-contactbg: var(--surface-contact);
-  --color-dropbox: var(--input);
   --font-title: "Poppins", sans-serif;
   --font-lato: "Lato", sans-serif;
   --motion-loop-scroll-duration: 18s;
@@ -167,8 +140,8 @@
   width: 1rem;
   appearance: none;
   border-radius: 9999px;
-  border: 2px solid var(--brand-brown);
-  background: var(--brand-brown);
+  border: 2px solid var(--foreground);
+  background: var(--foreground);
 }
 
 .range-slider-input::-moz-range-thumb {
@@ -176,8 +149,8 @@
   height: 1rem;
   width: 1rem;
   border-radius: 9999px;
-  border: 2px solid var(--brand-brown);
-  background: var(--brand-brown);
+  border: 2px solid var(--foreground);
+  background: var(--foreground);
 }
 
 .hero {
@@ -253,7 +226,7 @@
 }
 
 .shopCarthero {
-  background-color: #ebe5e2;
+  background-color: var(--background);
   background-repeat: no-repeat;
   background-size: cover;
   max-width: 100%;
@@ -272,11 +245,7 @@
   height: 100vh !important;
 }
 .bg-map {
-  background-color: #2b2b2b; /* Dark background color */
-}
-
-.text-gold {
-  color: #ffd700; /* Gold color */
+  background-color: var(--foreground);
 }
 .videoG {
   background: url(./assets/images/InterntionalVideoGallery.webp) top center

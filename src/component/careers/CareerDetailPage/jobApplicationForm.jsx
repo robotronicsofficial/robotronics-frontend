@@ -90,8 +90,8 @@ const JobApplicationForm = ({ job = null }) => {
   return (
     <>
     <div className="mx-10 my-8 flex flex-col gap-5 lg:px-24">
-          <h1 className="text-4xl poppins-bold text-brown"data-aos="fade-up"  >Job Application</h1>
-          <h2 className="text-xl poppins-light text-brown"data-aos="fade-up"  >
+          <h1 className="text-4xl poppins-bold text-foreground"data-aos="fade-up"  >Job Application</h1>
+          <h2 className="text-xl poppins-light text-foreground"data-aos="fade-up"  >
             Submit your details and CV for {jobTitle || "the selected role"}
           </h2>
         </div>
@@ -107,7 +107,7 @@ const JobApplicationForm = ({ job = null }) => {
       {/* First Name and Last Name */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="firstName" className="block text-sm text-gray-700">
+          <label htmlFor="firstName" className="block text-sm text-muted-foreground-700">
             First Name
           </label>
           <input
@@ -116,13 +116,13 @@ const JobApplicationForm = ({ job = null }) => {
             id="firstName"
             value={form.firstName}
             onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 px-5 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="First Name"
             required
           />
         </div>
         <div>
-          <label htmlFor="lastName" className="block text-sm text-gray-700">
+          <label htmlFor="lastName" className="block text-sm text-muted-foreground-700">
             Last Name
           </label>
           <input
@@ -131,7 +131,7 @@ const JobApplicationForm = ({ job = null }) => {
             id="lastName"
             value={form.lastName}
             onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 px-5 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="Last Name"
             required
           />
@@ -141,7 +141,7 @@ const JobApplicationForm = ({ job = null }) => {
       {/* Email */}
       <div className="grid grid-cols-1">
         <div>
-          <label htmlFor="email" className="block text-sm text-gray-700">
+          <label htmlFor="email" className="block text-sm text-muted-foreground-700">
             Email
           </label>
           <input
@@ -150,7 +150,7 @@ const JobApplicationForm = ({ job = null }) => {
             id="email"
             value={form.email}
             onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 px-5 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="Email Address"
             required
           />
@@ -160,7 +160,7 @@ const JobApplicationForm = ({ job = null }) => {
       {/* Phone */}
       <div className="grid grid-cols-1">
         <div>
-          <label htmlFor="phone" className="block text-sm text-gray-700">
+          <label htmlFor="phone" className="block text-sm text-muted-foreground-700">
             Phone
           </label>
           <input
@@ -169,7 +169,7 @@ const JobApplicationForm = ({ job = null }) => {
             id="phone"
             value={form.phone}
             onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 px-5 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="Phone Number"
             required
           />
@@ -179,7 +179,7 @@ const JobApplicationForm = ({ job = null }) => {
       {/* Address */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="streetAddress" className="block text-sm text-gray-700">
+          <label htmlFor="streetAddress" className="block text-sm text-muted-foreground-700">
             Street Address
           </label>
           <input
@@ -188,13 +188,13 @@ const JobApplicationForm = ({ job = null }) => {
             id="streetAddress"
             value={form.streetAddress}
             onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 px-5 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="Street Address"
             required
           />
         </div>
         <div>
-          <label htmlFor="city" className="block text-sm text-gray-700">
+          <label htmlFor="city" className="block text-sm text-muted-foreground-700">
             City
           </label>
           <input
@@ -203,13 +203,13 @@ const JobApplicationForm = ({ job = null }) => {
             id="city"
             value={form.city}
             onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 px-5 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="City"
             required
           />
         </div>
         <div>
-          <label htmlFor="state" className="block text-sm text-gray-700">
+          <label htmlFor="state" className="block text-sm text-muted-foreground-700">
             State
           </label>
           <input
@@ -218,13 +218,13 @@ const JobApplicationForm = ({ job = null }) => {
             id="state"
             value={form.state}
             onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 px-5 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="State"
             required
           />
         </div>
         <div>
-          <label htmlFor="postalCode" className="block text-sm text-gray-700">
+          <label htmlFor="postalCode" className="block text-sm text-muted-foreground-700">
             Postal Code
           </label>
           <input
@@ -233,7 +233,7 @@ const JobApplicationForm = ({ job = null }) => {
             id="postalCode"
             value={form.postalCode}
             onChange={handleChange}
-            className="p-3 px-5 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 px-5 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="Postal Code"
             required
           />
@@ -243,7 +243,7 @@ const JobApplicationForm = ({ job = null }) => {
       {/* Experience */}
       <div className="grid grid-cols-1">
         <div>
-          <label htmlFor="workExperience" className="block text-sm text-gray-700">
+          <label htmlFor="workExperience" className="block text-sm text-muted-foreground-700">
             Work Experience
           </label>
           <textarea
@@ -251,7 +251,7 @@ const JobApplicationForm = ({ job = null }) => {
             id="workExperience"
             value={form.workExperience}
             onChange={handleChange}
-            className="p-3 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="Describe your work experience"
             required
           ></textarea>
@@ -261,7 +261,7 @@ const JobApplicationForm = ({ job = null }) => {
       {/* Education */}
       <div className="grid grid-cols-1">
         <div>
-          <label htmlFor="education" className="block text-sm text-gray-700">
+          <label htmlFor="education" className="block text-sm text-muted-foreground-700">
             Education
           </label>
           <textarea
@@ -269,7 +269,7 @@ const JobApplicationForm = ({ job = null }) => {
             id="education"
             value={form.education}
             onChange={handleChange}
-            className="p-3 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="Describe your educational background"
             required
           ></textarea>
@@ -279,7 +279,7 @@ const JobApplicationForm = ({ job = null }) => {
       {/* Skills */}
       <div className="grid grid-cols-1">
         <div>
-          <label htmlFor="skills" className="block text-sm text-gray-700">
+          <label htmlFor="skills" className="block text-sm text-muted-foreground-700">
             Skills
           </label>
           <textarea
@@ -287,7 +287,7 @@ const JobApplicationForm = ({ job = null }) => {
             id="skills"
             value={form.skills}
             onChange={handleChange}
-            className="p-3 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="List your skills"
             required
           ></textarea>
@@ -297,7 +297,7 @@ const JobApplicationForm = ({ job = null }) => {
       {/* CV Upload */}
       <div className="grid grid-cols-1">
         <div>
-          <label htmlFor="cvFile" className="block text-sm text-gray-700">
+          <label htmlFor="cvFile" className="block text-sm text-muted-foreground-700">
             Upload CV
           </label>
           <input
@@ -306,7 +306,7 @@ const JobApplicationForm = ({ job = null }) => {
             id="cvFile"
             ref={fileInputRef}
             onChange={handleFileUpload}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="mt-1 block w-full border-border-300 rounded-md shadow-sm"
             accept=".pdf,.doc,.docx"
             required
           />
@@ -315,7 +315,7 @@ const JobApplicationForm = ({ job = null }) => {
 
       <div className="grid grid-cols-1">
         <div>
-          <label htmlFor="coverLetter" className="block text-sm text-gray-700">
+          <label htmlFor="coverLetter" className="block text-sm text-muted-foreground-700">
             Cover Letter
           </label>
           <textarea
@@ -323,7 +323,7 @@ const JobApplicationForm = ({ job = null }) => {
             id="coverLetter"
             value={form.coverLetter}
             onChange={handleChange}
-            className="p-3 mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            className="p-3 mt-1 block w-full border-border-300 rounded-md shadow-sm"
             placeholder="Optional cover letter"
           ></textarea>
         </div>
@@ -345,7 +345,7 @@ const JobApplicationForm = ({ job = null }) => {
       <div className="mt-6 space-y-4">
         <button
           type="submit"
-          className="bg-brown text-white py-2 px-4 rounded-md shadow-sm hover:bg-brown-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown disabled:opacity-60"
+          className="bg-foreground text-white py-2 px-4 rounded-md shadow-sm hover:bg-foreground-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-foreground disabled:opacity-60"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Submitting..." : "Submit Application"}

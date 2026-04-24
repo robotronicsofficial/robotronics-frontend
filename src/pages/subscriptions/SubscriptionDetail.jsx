@@ -96,7 +96,7 @@ const SubscriptionDetail = () => {
       >
         <div className="py-5">
           <h1 className="font-bold text-xl mb-4 poppins-bold">Who this course is for?</h1>
-          <p className="text-wrap text-lightblack poppins-light">
+          <p className="text-wrap text-foreground poppins-light">
           The subscription is for parents who want to prepare their kids for the future by exposing them to modern skills.
           <br />
            This is for students of age 6 and onwards belonging to any socio-economic background can benefit from this program across the Globe. All the courses are recorded in simple English language with generally acceptable accent.
@@ -110,7 +110,7 @@ const SubscriptionDetail = () => {
                 <span className="font-medium text-2xl poppins-bold">Requirements</span>
               </li>
             </div>
-            <p className="text-wrap text-lightblack poppins-light">
+            <p className="text-wrap text-foreground poppins-light">
             Students only need a normal internet connection. The learning platform is responsive across laptop, tablet, and mobile screens.
           </p>
 
@@ -121,31 +121,31 @@ const SubscriptionDetail = () => {
 
             <div className="space-y-3 poppins-light">
               <li className="flex items-center space-x-9 ">
-                <span className="text-yellow">
+                <span className="text-primary">
                   <GoDotFill />
                 </span>
                 <span>Recorded Video Lectures</span>
               </li>
               <li className="flex items-center space-x-9">
-                <span className="text-yellow">
+                <span className="text-primary">
                   <GoDotFill />
                 </span>
                 <span>Code Files for each Lecture(Where ever applicable)</span>
               </li>
               <li className="flex items-center space-x-9">
-                <span className="text-yellow">
+                <span className="text-primary">
                   <GoDotFill />
                 </span>
                 <span>Practice Assignments</span>
               </li>
               <li className="flex items-center space-x-9">
-                <span className="text-yellow">
+                <span className="text-primary">
                   <GoDotFill />
                 </span>
                 <span>Module based Assessments</span>
               </li>
               <li className="flex items-center space-x-9">
-                <span className="text-yellow">
+                <span className="text-primary">
                   <GoDotFill />
                 </span>
                 <span>E-Certificates for Active Learners</span>
@@ -161,18 +161,18 @@ const SubscriptionDetail = () => {
             {courses.slice(0, visibleCourses).map((course) => (
               <div
                 key={course.id}
-                className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-2 bg-[#ffffff] p-6"
+                className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-2 bg-card p-6"
               >
-                <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-[#ffffff]">
+                <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col bg-card">
                   <img className="w-full" src={course.image} alt="Course" />
                   <div className="lg:px-6 py-4 flex-grow">
                     <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                      <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base">
+                      <p className="text-muted-foreground-700 text-wrap text-center px-4 py-1 rounded-full bg-muted text-base">
                         {course.category}
                       </p>
                       <div className="flex items-center">
-                        <FaStar className="text-yellow-500" />
-                        <p className="text-gray-700 poppins-light text-base ml-2">
+                        <FaStar className="text-primary-500" />
+                        <p className="text-muted-foreground-700 poppins-light text-base ml-2">
                           ({course.reviews} Reviews)
                         </p>
                       </div>
@@ -182,14 +182,14 @@ const SubscriptionDetail = () => {
                       {course.title}
                     </div>
 
-                    <p className="text-gray-700 space-x-2 text-left text-base">
-                      <span className="text-line px-2">by</span>
+                    <p className="text-muted-foreground-700 space-x-2 text-left text-base">
+                      <span className="text-muted-foreground px-2">by</span>
                       {course.author}
                     </p>
                   </div>
                   <div className="p-4 px-8">
                     <a href="/Dashboard/courseDetail">
-                      <button className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
+                      <button className="bg-primary text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
                         <span>{course.buttonText}</span>
                         <FaArrowDown className="text-xs -rotate-90" />
                       </button>
@@ -205,7 +205,7 @@ const SubscriptionDetail = () => {
             <div className="w-full flex justify-end pr-4">
               <button
                 onClick={handleViewMore}
-                className="bg-[#ffc224] text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2"
+                className="bg-primary text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2"
               >
                 <span>View More</span>
                 <FaArrowDown className="text-xs transform -rotate-120" />

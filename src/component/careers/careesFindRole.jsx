@@ -24,7 +24,7 @@ const CareesFindRole = () => {
       {/* Left Section: Text and Buttons */}
       <div className="flex flex-col items-center lg:items-start text-center lg:text-left py-10">
         <p
-          className="text-wrap font-light text-brown text-5xl lg:text-7xl mb-10"
+          className="text-wrap font-light text-foreground text-5xl lg:text-7xl mb-10"
           data-aos="fade-up"
 
         >
@@ -38,11 +38,11 @@ const CareesFindRole = () => {
         >
           <button
             onClick={handleSendResume}
-            className="bg-brown text-white lg:text-2xl font-light px-6 py-3 rounded-full shadow-md hover:bg-opacity-90 transition"
+            className="bg-foreground text-white lg:text-2xl font-light px-6 py-3 rounded-full shadow-md hover:bg-opacity-90 transition"
           >
             Send Your Resume
           </button>
-          <button className="bg-white text-brown border border-brown px-4 py-3 rounded-full shadow-md hover:bg-brown hover:text-white transition">
+          <button className="bg-white text-foreground border border-foreground px-4 py-3 rounded-full shadow-md hover:bg-foreground hover:text-white transition">
             <FiArrowUpRight size={24} />
           </button>
         </div>
@@ -66,7 +66,7 @@ const CareesFindRole = () => {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-3 border border-brown rounded-xl hover:bg-brown hover:text-white transition transform hover:scale-105"
+            className="p-3 border border-foreground rounded-xl hover:bg-foreground hover:text-white transition transform hover:scale-105"
             data-aos="fade-up"
             data-aos-delay={getAosStaggerDelay(index)}
           >

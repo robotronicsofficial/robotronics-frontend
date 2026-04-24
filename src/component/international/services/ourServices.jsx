@@ -21,7 +21,7 @@ const OurServices = () => {
   return (
     <div className="OurServices p-20">
       <div className="container mx-auto">
-        <h2 className="lg:text-6xl md:text-5xl text-4xl text-brown poppins-bold mb-16">
+        <h2 className="lg:text-6xl md:text-5xl text-4xl text-foreground poppins-bold mb-16">
           Our Services
         </h2>
         {error && <p className="text-red-500">We couldn&apos;t load services right now.</p>}
@@ -64,7 +64,7 @@ const OurServices = () => {
         {services.length > 6 && (
           <div className="text-center mt-8">
             <button
-              className="bg-brown text-white px-6 py-2 rounded-lg text-lg hover:bg-opacity-80 transition"
+              className="bg-foreground text-white px-6 py-2 rounded-lg text-lg hover:bg-opacity-80 transition"
               onClick={() => setShowAll(!showAll)}
             >
               {showAll ? "Show Less" : "Show More"}

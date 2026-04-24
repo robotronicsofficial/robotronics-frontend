@@ -6,7 +6,7 @@ const AuthSocialButton = ({ icon, label, onClick, className }) => (
   <button
     type="button"
     className={cn(
-      "flex rounded-3xl border border-line bg-gray py-3 text-black font-bold poppins-regular",
+      "flex rounded-3xl border border-border bg-background py-3 text-black font-bold poppins-regular",
       className,
     )}
     onClick={onClick}

@@ -115,34 +115,34 @@ const ShopPaymentMethod = ({ onNext }) => {
   };
 
   return (
-    <div className="bg-gray p-5 lg:flex lg:gap-6">
+    <div className="bg-background p-5 lg:flex lg:gap-6">
       <div
         className="flex flex-col gap-10 lg:w-2/3"
         data-aos="fade-up"
       >
-        <div className="flex flex-col gap-4 border border-lightgray bg-white p-6">
+        <div className="flex flex-col gap-4 border border-muted bg-white p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-2">
-              <p className="text-3xl text-brown poppins-bold">SHIPPING & PAYMENT</p>
-              <p className="text-sm text-brown poppins-light">
+              <p className="text-3xl text-foreground poppins-bold">SHIPPING & PAYMENT</p>
+              <p className="text-sm text-foreground poppins-light">
                 Save the payment details for this checkout draft. Shipping is only required when your cart has physical products.
               </p>
             </div>
             <button
               type="button"
-              className="text-sm text-gold bg-brown px-4 py-2"
+              className="text-sm text-primary bg-foreground px-4 py-2"
               onClick={() => navigate("/CustomerInfo")}
             >
               Edit address
             </button>
           </div>
 
-          <div className="rounded-[20px] border border-[#E6D7B8] bg-[#FFF8E8] p-4 text-sm text-brown">
+          <div className="rounded-[20px] border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
             This storefront flow only stores billing details locally in your browser. It does not create a backend payment record or invoice yet.
           </div>
 
           {customerReady ? (
-            <div className="grid gap-2 text-sm text-brown sm:grid-cols-2">
+            <div className="grid gap-2 text-sm text-foreground sm:grid-cols-2">
               <p className="font-semibold">
                 {savedCustomer.firstName} {savedCustomer.lastName}
               </p>
@@ -154,11 +154,11 @@ const ShopPaymentMethod = ({ onNext }) => {
                   {`, ${savedAddress.city}, ${savedAddress.state}, ${savedAddress.country}`}
                 </p>
               ) : (
-                <p className="sm:col-span-2 text-brown/70">Digital order. No delivery address is required.</p>
+                <p className="sm:col-span-2 text-foreground/70">Digital order. No delivery address is required.</p>
               )}
             </div>
           ) : (
-            <div className="border border-dashed border-[#BCBABA] bg-[#F7F3F1] p-4 text-sm text-brown">
+            <div className="border border-dashed border-border bg-muted p-4 text-sm text-foreground">
               Add your customer details before choosing payment information.
             </div>
           )}
@@ -167,8 +167,8 @@ const ShopPaymentMethod = ({ onNext }) => {
         {requiresShipping ? (
           <section className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
-              <p className="text-3xl text-brown poppins-bold">SHIPPING SERVICE</p>
-              <p className="text-sm text-brown poppins-light">
+              <p className="text-3xl text-foreground poppins-bold">SHIPPING SERVICE</p>
+              <p className="text-sm text-foreground poppins-light">
                 Choose the delivery partner you want stored with this checkout draft.
               </p>
             </div>
@@ -182,7 +182,7 @@ const ShopPaymentMethod = ({ onNext }) => {
                     key={service.value}
                     type="button"
                     className={`w-full border p-5 text-left transition ${
-                      isSelected ? "bg-brown text-white border-brown" : "bg-white text-brown border-lightgray"
+                      isSelected ? "bg-foreground text-white border-foreground" : "bg-white text-foreground border-muted"
                     }`}
                     onClick={() => setSelectedService(service.value)}
                   >
@@ -208,15 +208,15 @@ const ShopPaymentMethod = ({ onNext }) => {
             </div>
           </section>
         ) : (
-          <section className="rounded-[20px] border border-[#E6D7B8] bg-[#FFF8E8] p-4 text-sm text-brown">
+          <section className="rounded-[20px] border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
             This checkout only contains digital items, so no shipping service needs to be selected.
           </section>
         )}
 
         <section className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <p className="text-3xl text-brown poppins-bold">PAYMENT METHOD</p>
-            <p className="text-sm text-brown poppins-light">
+            <p className="text-3xl text-foreground poppins-bold">PAYMENT METHOD</p>
+            <p className="text-sm text-foreground poppins-light">
               Save the billing method you want attached to this checkout draft.
             </p>
           </div>
@@ -230,7 +230,7 @@ const ShopPaymentMethod = ({ onNext }) => {
                   key={method.value}
                   type="button"
                   className={`border p-5 text-left transition ${
-                    isSelected ? "bg-brown text-white border-brown" : "bg-white text-brown border-lightgray"
+                    isSelected ? "bg-foreground text-white border-foreground" : "bg-white text-foreground border-muted"
                   }`}
                   onClick={() => setSelectedMethod(method.value)}
                 >
@@ -258,8 +258,8 @@ const ShopPaymentMethod = ({ onNext }) => {
 
         <section className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <p className="text-3xl text-brown poppins-bold">BILLING DETAILS</p>
-            <p className="text-sm text-brown poppins-light">
+            <p className="text-3xl text-foreground poppins-bold">BILLING DETAILS</p>
+            <p className="text-sm text-foreground poppins-light">
               These details are used for the order summary and kept locally in this browser until you submit the checkout request.
             </p>
           </div>
@@ -305,7 +305,7 @@ const ShopPaymentMethod = ({ onNext }) => {
                 />
               </div>
             ) : (
-              <div className="border border-dashed border-[#BCBABA] bg-white p-4 text-sm text-brown">
+              <div className="border border-dashed border-border bg-white p-4 text-sm text-foreground">
                 The last four digits of your account number will be stored with the order summary.
               </div>
             )}
@@ -317,7 +317,7 @@ const ShopPaymentMethod = ({ onNext }) => {
         className="px-1"
         data-aos="fade-up"
       >
-        <div className="h-full w-0 border border-lightgray"></div>
+        <div className="h-full w-0 border border-muted"></div>
       </div>
 
       <div
@@ -332,14 +332,14 @@ const ShopPaymentMethod = ({ onNext }) => {
 
 const Field = ({ id, label, value, onChange, placeholder, type = "text" }) => (
   <label className="flex flex-col gap-2">
-    <span className="block text-sm text-brown poppins-light">{label}</span>
+    <span className="block text-sm text-foreground poppins-light">{label}</span>
     <input
       id={id}
       type={type}
       value={value}
       onChange={(event) => onChange(event.target.value)}
       placeholder={placeholder}
-      className="block w-full border-b-2 border-line bg-transparent py-2.5 text-sm text-brown focus:border-brown focus:outline-none"
+      className="block w-full border-b-2 border-border bg-transparent py-2.5 text-sm text-foreground focus:border-foreground focus:outline-none"
     />
   </label>
 );

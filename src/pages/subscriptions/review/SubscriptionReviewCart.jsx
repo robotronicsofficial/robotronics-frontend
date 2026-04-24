@@ -6,10 +6,10 @@ const SubscriptionReviewCart = () => {
       <div className="shopCarthero" id="shopCarthero">
         <div className="flex flex-col">
           <div className="items-center" data-aos="fade-down">
-          <p className="text-brown font-bold text-wrap lg:text-4xl text-2xl poppins-bold text-center self-center mt-44">
+          <p className="text-foreground font-bold text-wrap lg:text-4xl text-2xl poppins-bold text-center self-center mt-44">
             Review Order
           </p>
-          <p className="text-brown text-sm text-wrap text-center poppins-semibold self-center mt-4 text-light opacity-85 ">
+          <p className="text-foreground text-sm text-wrap text-center poppins-semibold self-center mt-4 text-light opacity-85 ">
             THIS IS YOUR CART BASED ON WHAT YOU WANTED
           </p>
         </div>

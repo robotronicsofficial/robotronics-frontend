@@ -45,7 +45,7 @@ const AboutVision = () => {
         <div className="p-2 pt-8 md:pt-2  flex flex-col   items-center" >
 
           <AppImage className="" data-aos="fade-down" src={founder2} alt="Curriculum head portrait" />
-          <p className="lg:text-2xl text-xl text-gold poppins-light"data-aos="fade-up" >Engr Saba Farhan</p>
+          <p className="lg:text-2xl text-xl text-primary poppins-light"data-aos="fade-up" >Engr Saba Farhan</p>
           <p className="text-white  poppins-light"data-aos="fade-up" >Curriculum Head</p>
         </div>
       </div>

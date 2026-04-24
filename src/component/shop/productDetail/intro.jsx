@@ -68,7 +68,7 @@ const Intro = () => {
 
   if (isLoading) {
     return (
-      <CenteredState className="bg-lightgray p-10 text-center text-lg">
+      <CenteredState className="bg-muted p-10 text-center text-lg">
         Loading product...
       </CenteredState>
     );
@@ -76,7 +76,7 @@ const Intro = () => {
 
   if (productError) {
     return (
-      <CenteredState className="bg-lightgray p-10 text-center text-lg text-red-500">
+      <CenteredState className="bg-muted p-10 text-center text-lg text-red-500">
         {productError.message || "We couldn't load this product right now."}
       </CenteredState>
     );
@@ -84,17 +84,17 @@ const Intro = () => {
 
   if (!product) {
     return (
-      <CenteredState className="bg-lightgray p-10 text-center text-lg">
+      <CenteredState className="bg-muted p-10 text-center text-lg">
         Product not found.
       </CenteredState>
     );
   }
 
   return (
-    <div className="bg-lightgray">
+    <div className="bg-muted">
       <div className="flex lg:px-14 lg:py-5">
         <div className="hidden justify-center lg:flex" data-aos="fade-up">
-          <div className="h-94 w-94 rounded-full bg-gray p-14">
+          <div className="h-94 w-94 rounded-full bg-background p-14">
             <AppImage src={selectedImage} alt="Selected" loading="eager" />
           </div>
           <div className="flex gap-3 py-10">
@@ -127,9 +127,9 @@ const Intro = () => {
                   const hasHalfStar = ratings % 1 >= 0.5;
 
                   if (i < fullStars) {
-                    return <span key={i} className="text-yellow">★</span>;
+                    return <span key={i} className="text-primary">★</span>;
                   } else if (i === fullStars && hasHalfStar) {
-                    return <span key={i} className="text-yellow">☆</span>;
+                    return <span key={i} className="text-primary">☆</span>;
                   } else {
                     return <span key={i} className="text-white">★</span>;
                   }
@@ -142,10 +142,10 @@ const Intro = () => {
               )}
             </div>
             <div className="flex gap-2">
-              <p className="text-sm poppins-medium text-line">
+              <p className="text-sm poppins-medium text-muted-foreground">
                 {product.productSold ?? 0} products sold,
               </p>
-              <p className="text-sm poppins-medium text-line">
+              <p className="text-sm poppins-medium text-muted-foreground">
                 {product.productWatched ?? 0} products watched
               </p>
             </div>
@@ -158,7 +158,7 @@ const Intro = () => {
             <div className="flex items-center bg-white">
               <button
                 type="button"
-                className="rounded-md bg-gray-200 px-1 lg:px-3 lg:py-1"
+                className="rounded-md bg-background-200 px-1 lg:px-3 lg:py-1"
                 onClick={handleDecrease}
               >
                 -
@@ -166,7 +166,7 @@ const Intro = () => {
               <input type="number" className="w-10 text-center lg:w-24" value={quantity} readOnly />
               <button
                 type="button"
-                className="rounded-md bg-gray-200 px-3 py-1"
+                className="rounded-md bg-background-200 px-3 py-1"
                 onClick={handleIncrease}
               >
                 +
@@ -175,13 +175,13 @@ const Intro = () => {
           </div>
 
           <div className="items-center justify-between lg:flex lg:gap-10">
-            <div className="text-yellow text-2xl poppins-medium">
+            <div className="text-primary text-2xl poppins-medium">
               PKR {Number(product.price || 0).toLocaleString()}
             </div>
             <div className="flex gap-5">
               <button
                 type="button"
-                className="rounded-lg bg-yellow p-2 text-white poppins-medium lg:px-7"
+                className="rounded-lg bg-primary p-2 text-white poppins-medium lg:px-7"
                 onClick={() => {
                   const cartItem = createProductCommerceItem({
                     ...product,
@@ -198,7 +198,7 @@ const Intro = () => {
             </div>
             <button
               type="button"
-              className="rounded-lg bg-gray p-2 px-3 poppins-medium"
+              className="rounded-lg bg-background p-2 px-3 poppins-medium"
               onClick={handleToggleSavedItem}
               aria-label={isSaved ? "Remove from saved items" : "Save item"}
             >
@@ -208,13 +208,13 @@ const Intro = () => {
         </div>
       </div>
 
-      <div className="bg-gray p-2 lg:p-14">
+      <div className="bg-background p-2 lg:p-14">
         <div className="flex gap-4 px-2 lg:justify-center lg:gap-10" data-aos="fade-down">
-          <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-brown">
+          <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
             PRODUCT DETAIL
           </p>
           <p className="h-8 w-0 border border-black"></p>
-          <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-brown">
+          <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
             DELIVERY AND RETURN
           </p>
         </div>
@@ -222,22 +222,22 @@ const Intro = () => {
         <div className="flex justify-between p-5">
           <div className="flex w-1/2 flex-col gap-2 p-2">
             <p
-              className="lg:text-2xl text-xl poppins-semibold text-brown"
+              className="lg:text-2xl text-xl poppins-semibold text-foreground"
               data-aos="fade-up"
             >
               DESCRIPTION
             </p>
-            <p className="text-wrap text-xs poppins-medium text-line" data-aos="fade-up">
+            <p className="text-wrap text-xs poppins-medium text-muted-foreground" data-aos="fade-up">
               {product?.description || "No description available."}
             </p>
           </div>
 
           <div className="w-1/2 p-2">
             <div
-              className="flex flex-col gap-2 px-4 text-wrap text-line lg:px-20"
+              className="flex flex-col gap-2 px-4 text-wrap text-muted-foreground lg:px-20"
               data-aos="fade-up"
             >
-              <p className="lg:text-2xl text-xl poppins-semibold text-brown">
+              <p className="lg:text-2xl text-xl poppins-semibold text-foreground">
                 FITS AND FEATURES
               </p>
               {Array.isArray(product?.features) && product.features.length > 0 ? (
@@ -257,7 +257,7 @@ const Intro = () => {
           <div className="flex-1 py-8 lg:py-20">
             <div className="flex flex-col justify-content">
               <p
-                className="flex text-gold lg:text-4xl text-2xl font-bold"
+                className="flex text-primary lg:text-4xl text-2xl font-bold"
                 data-aos="fade-right"
               >
                 Keep exploring
@@ -279,7 +279,7 @@ const Intro = () => {
               <button
                 type="button"
                 onClick={() => navigate("/shop")}
-                className="rounded-lg bg-gold px-5 py-3 font-semibold text-brown transition hover:opacity-90"
+                className="rounded-lg bg-primary px-5 py-3 font-semibold text-foreground transition hover:opacity-90"
               >
                 Browse all products
               </button>

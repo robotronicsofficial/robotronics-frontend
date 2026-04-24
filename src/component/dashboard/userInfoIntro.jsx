@@ -21,9 +21,9 @@ const formatAccountDate = (dateString) => {
 
 const AccountDetailRow = ({ label, value }) => (
   <div>
-    <p className="text-lightblack poppins-bold">{label}</p>
-    <p className="text-lightblack poppins-regular">{value}</p>
-    <div className="mt-4 w-full border border-lin"></div>
+    <p className="text-foreground poppins-bold">{label}</p>
+    <p className="text-foreground poppins-regular">{value}</p>
+    <div className="mt-4 w-full border border-border"></div>
   </div>
 );
 
@@ -33,7 +33,7 @@ AccountDetailRow.propTypes = {
 };
 
 const AccountSummaryLine = ({ label, value }) => (
-  <p className="text-lightblack poppins-bold">
+  <p className="text-foreground poppins-bold">
     <span className="font-semibold">{label}:</span> {value}
   </p>
 );
@@ -65,7 +65,7 @@ const UserInfoIntro = () => {
             <p className="text-base lg:text-xl poppins-light">Account Details</p>
           </div>
 
-          <div className="mt-6 flex flex-col gap-6 text-gray-600">
+          <div className="mt-6 flex flex-col gap-6 text-muted-foreground-600">
             <AccountDetailRow label="Name" value={displayName} />
             <AccountDetailRow label="Email" value={displayEmail} />
             {currentUser?.phone && (
@@ -76,7 +76,7 @@ const UserInfoIntro = () => {
           </div>
 
           <div className="mt-8 flex items-center justify-between">
-            <p className="text-base lg:text-xl poppins-bold text-brown">Account Summary</p>
+            <p className="text-base lg:text-xl poppins-bold text-foreground">Account Summary</p>
           </div>
 
           <div className="flex flex-wrap p-2 lg:p-5">

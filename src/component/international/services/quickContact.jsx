@@ -61,7 +61,7 @@ const QuickContact = () => {
 
         >
           <div>
-            <h1 className="text-4xl text-left poppins-bold text-brown">
+            <h1 className="text-4xl text-left poppins-bold text-foreground">
               Quick Contact
             </h1>
             <p className="text-xl text-wrap poppins-regular text-left">
@@ -76,7 +76,7 @@ const QuickContact = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Name"
-                className="border-2 border-gray p-3 w-full focus:outline-none"
+                className="border-2 border-border p-3 w-full focus:outline-none"
                 required
               />
               <input
@@ -85,7 +85,7 @@ const QuickContact = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email"
-                className="border-2 border-gray p-3 w-full focus:outline-none"
+                className="border-2 border-border p-3 w-full focus:outline-none"
                 required
               />
             </div>
@@ -95,7 +95,7 @@ const QuickContact = () => {
               value={formData.course}
               onChange={handleChange}
               placeholder="Course"
-              className="border-2 border-gray p-3 w-full focus:outline-none mt-4"
+              className="border-2 border-border p-3 w-full focus:outline-none mt-4"
             />
             <input
               type="text"
@@ -103,7 +103,7 @@ const QuickContact = () => {
               value={formData.phone}
               onChange={handleChange}
               placeholder="Phone"
-              className="border-2 border-gray p-3 w-full focus:outline-none mt-4"
+              className="border-2 border-border p-3 w-full focus:outline-none mt-4"
               required
             />
             <textarea
@@ -111,13 +111,13 @@ const QuickContact = () => {
               value={formData.message}
               onChange={handleChange}
               placeholder="Your Message"
-              className="border-2 border-gray p-3 w-full focus:outline-none mt-4"
+              className="border-2 border-border p-3 w-full focus:outline-none mt-4"
               required
             />
             <button
               type="submit"
               disabled={quickContactRequestMutation.isPending}
-              className="w-full text-white poppins-bold bg-gold font-bold py-3 mt-4"
+              className="w-full text-white poppins-bold bg-primary font-bold py-3 mt-4"
             >
               {quickContactRequestMutation.isPending ? "Sending..." : "Send Message"}
             </button>

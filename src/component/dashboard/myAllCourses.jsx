@@ -61,7 +61,7 @@ const MyAllCourses = () => {
   if (loading) {
     return (
       <CenteredState className="h-screen">
-        <Spinner className="size-12 text-yellow-500" />
+        <Spinner className="size-12 text-primary-500" />
       </CenteredState>
     );
   }
@@ -82,7 +82,7 @@ const MyAllCourses = () => {
     >
       {/* Course Listing */}
       <div>
-        <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
+        <h1 className="text-foreground lg:text-2xl text-base poppins-bold mb-6">
           Your Active Courses
         </h1>
 
@@ -92,7 +92,7 @@ const MyAllCourses = () => {
             currentCourses.map((course) => (
               <div
                 key={course._id}
-                className="relative w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-[#fffff] p-6"
+                className="relative w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-card p-6"
               >
                 <div className="rounded-xl overflow-hidden shadow-lg h-full flex flex-col">
                   <img
@@ -107,12 +107,12 @@ const MyAllCourses = () => {
                   />
                   <div className="px-6 md:px-2 py-2 flex-grow flex flex-col gap-2">
                     <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                      <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base mb-4 md:mb-0">
+                      <p className="text-muted-foreground-700 text-wrap text-center px-4 py-1 rounded-full bg-muted text-base mb-4 md:mb-0">
                         {course.category}
                       </p>
                       <div className="flex items-center">
-                        <FaStar className="text-yellow-500" />
-                        <p className="text-gray-700 poppins-light text-base ml-2">
+                        <FaStar className="text-primary-500" />
+                        <p className="text-muted-foreground-700 poppins-light text-base ml-2">
                           ({course.reviews || 0} Rating)
                         </p>
                       </div>
@@ -126,7 +126,7 @@ const MyAllCourses = () => {
                   <div className="pb-3 px-4">
                     <button
                       onClick={() => handleCourseClick(course)}
-                      className="mt-2 bg-[#ffc224] w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-[#ffb700] transition-colors"
+                      className="mt-2 bg-primary w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-accent transition-colors"
                     >
                       <span>View Course</span>
                     </button>
@@ -136,7 +136,7 @@ const MyAllCourses = () => {
             ))
           ) : (
             <div className="w-full text-center py-10">
-              <p className="text-gray-600 text-lg">
+              <p className="text-muted-foreground-600 text-lg">
                 You don't have any active courses yet.
               </p>
             </div>
@@ -152,8 +152,8 @@ const MyAllCourses = () => {
                 disabled={currentPage === 1}
                 className={`py-2 px-4 rounded-full ${
                   currentPage === 1
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-gray-300 hover:bg-gray-400 text-black"
+                    ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
+                    : "bg-background-300 hover:bg-background-400 text-black"
                 }`}
               >
                 Previous
@@ -165,8 +165,8 @@ const MyAllCourses = () => {
                   onClick={() => paginate(number)}
                   className={`py-2 px-4 rounded-full ${
                     currentPage === number
-                      ? "bg-[#ffc224] text-black font-bold"
-                      : "bg-gray-200 hover:bg-gray-300 text-black"
+                      ? "bg-primary text-black font-bold"
+                      : "bg-background-200 hover:bg-background-300 text-black"
                   }`}
                 >
                   {number}
@@ -178,8 +178,8 @@ const MyAllCourses = () => {
                 disabled={currentPage === totalPages}
                 className={`py-2 px-4 rounded-full ${
                   currentPage === totalPages
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-gray-300 hover:bg-gray-400 text-black"
+                    ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
+                    : "bg-background-300 hover:bg-background-400 text-black"
                 }`}
               >
                 Next

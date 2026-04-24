@@ -27,10 +27,10 @@ const ShopCoursesIntro = () => {
       : courses.filter((course) => course.category === selectedFilter);
 
   return (
-    <div className="flex-col bg-lightgray px-2 lg:flex lg:px-20">
+    <div className="flex-col bg-muted px-2 lg:flex lg:px-20">
       <div className="flex-1">
         <div className="pt-8 lg:pt-16">
-          <div className="h-0 w-full border border-lin" data-aos="fade-up"></div>
+          <div className="h-0 w-full border border-border" data-aos="fade-up"></div>
         </div>
 
         <div className="items-center justify-between px-2 pt-5 lg:flex lg:px-24 lg:pt-10 md:flex">
@@ -53,7 +53,7 @@ const ShopCoursesIntro = () => {
                   </p>
                 </div>
               </a>
-              <FaArrowRight className="text-lin" />
+              <FaArrowRight className="text-muted-foreground" />
             </div>
 
             <div className="flex w-full justify-between">
@@ -63,13 +63,13 @@ const ShopCoursesIntro = () => {
                   2 Products - $1000
                 </p>
               </div>
-              <FaArrowRight className="text-lin" />
+              <FaArrowRight className="text-muted-foreground" />
             </div>
           </div>
         </div>
 
         <div className="pt-5 lg:pt-10" data-aos="fade-up">
-          <div className="h-0 w-full border border-lin"></div>
+          <div className="h-0 w-full border border-border"></div>
         </div>
 
         <div className="py-4 lg:flex lg:py-10" data-aos="fade-down">
@@ -80,23 +80,23 @@ const ShopCoursesIntro = () => {
             <p className="text-xl poppins-bold lg:text-2xl">Catalog</p>
             <div className="flex lg:gap-3">
               <div className="flex flex-1">
-                <button type="button" className="border border-gray bg-white p-2">
+                <button type="button" className="border border-border bg-white p-2">
                   <img src={icon} alt="search" />
                 </button>
                 <input
                   type="text"
-                  className="w-full border border-gray"
+                  className="w-full border border-border"
                   placeholder="Search for courses"
                 />
               </div>
 
               <div className="flex">
-                <button type="button" className="border border-gray bg-white">
+                <button type="button" className="border border-border bg-white">
                   <img src={arow} alt="arrow" />
                 </button>
                 <input
                   type="text"
-                  className="border border-gray lg:h-10 lg:w-64"
+                  className="border border-border lg:h-10 lg:w-64"
                   placeholder="Popular"
                 />
               </div>
@@ -115,7 +115,7 @@ const ShopCoursesIntro = () => {
                 onClick={() => setSelectedFilter(filter.value)}
                 className={cn(
                   "block pt-2 text-left text-sm poppins-light hover:text-black lg:pt-5 lg:text-base",
-                  selectedFilter === filter.value ? "text-black" : "text-lightblack",
+                  selectedFilter === filter.value ? "text-black" : "text-foreground",
                 )}
               >
                 {filter.label}
@@ -152,7 +152,7 @@ const ShopCoursesIntro = () => {
               <button
                 type="button"
                 key={page}
-                className="bg-white p-1 px-3 text-sm hover:bg-gold lg:text-base"
+                className="bg-white p-1 px-3 text-sm hover:bg-primary lg:text-base"
                 data-aos="fade-up"
               >
                 {page}

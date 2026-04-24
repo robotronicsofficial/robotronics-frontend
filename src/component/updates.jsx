@@ -20,7 +20,7 @@ const Updates = () => {
 
           >
             Latest Updates What&apos;s <br />
-            <span className="block text-[#f5ab34] text-2xl lg:text-5xl poppins-extrabold mt-4">
+            <span className="block text-primary text-2xl lg:text-5xl poppins-extrabold mt-4">
               Cooking
             </span>
           </p>

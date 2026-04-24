@@ -9,7 +9,7 @@ const TermsBody = () => {
           <div className="lg:w-full px-10">
             <div className="space-y-12">
               <h1
-                className="text-5xl poppins-bold text-brown"
+                className="text-5xl poppins-bold text-foreground"
                 data-aos="fade-up"
 
 

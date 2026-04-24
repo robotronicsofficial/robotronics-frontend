@@ -37,7 +37,7 @@ const BlogCard = ({ cardData }) => {
           {mappedData.tags.map((tag, index) => (
             <span
               key={index}
-              className="bg-gray-800 text-white text-sm poppins-light px-2 py-1 rounded"
+              className="bg-background-800 text-white text-sm poppins-light px-2 py-1 rounded"
             >
               {tag}
             </span>
@@ -53,7 +53,7 @@ const BlogCard = ({ cardData }) => {
         <div className="font-bold text-wrap poppins-bold text-xl mb-2">
           {mappedData.title}
         </div>
-        <p className="text-gray-700 text-wrap poppins-light text-base">
+        <p className="text-muted-foreground-700 text-wrap poppins-light text-base">
           {mappedData.description}
         </p>
       </div>
@@ -65,7 +65,7 @@ const BlogCard = ({ cardData }) => {
               src={mappedData.author.avatar}
               alt={mappedData.author.name}
             />
-            <p className="text-gray-900 leading-none poppins-light ">
+            <p className="text-muted-foreground-900 leading-none poppins-light ">
               {mappedData.author.name}
             </p>
           </div>
@@ -75,13 +75,13 @@ const BlogCard = ({ cardData }) => {
         </div>
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex gap-3">
-            <p className="text-gray-600 hidden lg:block sm:block">-----</p>
-            <p className="text-gray-600 poppins-light">{mappedData.date}</p>
-            <span className="text-gray-600">•</span>
+            <p className="text-muted-foreground-600 hidden lg:block sm:block">-----</p>
+            <p className="text-muted-foreground-600 poppins-light">{mappedData.date}</p>
+            <span className="text-muted-foreground-600">•</span>
           </div>
           <div className="flex items-center gap-1">
             <FaShareAlt />
-            <span className="text-gray-600 poppins-light">
+            <span className="text-muted-foreground-600 poppins-light">
               {mappedData.shares} shares
             </span>
           </div>
@@ -158,7 +158,7 @@ const BlogPost = () => {
           <BlogCard key={blog._id} cardData={blog} />
         ))}
       </div>
-      <div className="p-10 w-full bg-gray-100">
+      <div className="p-10 w-full bg-background-100">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

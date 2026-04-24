@@ -20,20 +20,20 @@ const PayHistory = () => {
   return (
     <DashboardLayout>
         <h1 className="text-3xl font-bold mb-8">My Payment History</h1>
-        <p className="mb-6 max-w-3xl text-sm text-gray-600">
+        <p className="mb-6 max-w-3xl text-sm text-muted-foreground-600">
           Only backend payment records appear here. Checkout details saved in the public storefront stay in your browser and do not create an invoice until the backend records a payment.
         </p>
 
         {loading ? (
-          <p className="text-gray-600">Loading payment history...</p>
+          <p className="text-muted-foreground-600">Loading payment history...</p>
         ) : errorMessage ? (
           <p className="text-red-500">{errorMessage}</p>
         ) : invoices.length === 0 ? (
-          <p className="text-gray-600">No backend payment records were found for this account.</p>
+          <p className="text-muted-foreground-600">No backend payment records were found for this account.</p>
         ) : (
           invoices.map((invoice, index) => (
-            <div key={index} className="bg-white p-4 sm:p-6 rounded-lg shadow mb-4 sm:mb-6 border border-gray-200">
-              <h3 className="font-semibold text-base sm:text-lg md:text-xl text-gray-800 mb-3 sm:mb-4">
+            <div key={index} className="bg-white p-4 sm:p-6 rounded-lg shadow mb-4 sm:mb-6 border border-border-200">
+              <h3 className="font-semibold text-base sm:text-lg md:text-xl text-muted-foreground-800 mb-3 sm:mb-4">
                 {[currentUser?.firstName, currentUser?.lastName].filter(Boolean).join(" ") || "User"}
               </h3>
 
@@ -69,7 +69,7 @@ const PayHistory = () => {
                     className={`px-4 sm:px-6 py-1 sm:py-2 text-xs sm:text-sm md:text-base font-medium rounded-lg transition-colors whitespace-nowrap ${
                       resolveInvoiceUrl(invoice)
                         ? "bg-orange-500 text-white hover:bg-orange-600"
-                        : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                        : "bg-background-200 text-muted-foreground-500 cursor-not-allowed"
                     }`}
                     disabled={!resolveInvoiceUrl(invoice)}
                     onClick={() => {

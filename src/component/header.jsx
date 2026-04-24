@@ -47,7 +47,7 @@ const navLinkClass = ({ isActive }) =>
     "cursor-pointer whitespace-nowrap poppins-light text-sm lg:text-base transition duration-200",
     "border-b-2",
     isActive
-      ? "text-black border-signin"
+      ? "text-black border-accent"
       : "text-black border-transparent hover:border-black",
   ].join(" ");
 
@@ -102,13 +102,13 @@ function NavDropdown({ label, items }) {
           "cursor-pointer whitespace-nowrap poppins-light text-sm lg:text-base transition duration-200",
           "border-b-2 inline-flex items-center gap-1",
           hasActive
-            ? "text-black border-signin"
+            ? "text-black border-accent"
             : "text-black border-transparent hover:border-black",
         ].join(" ")}
       >
         <span>{label}</span>
         <IoChevronDown
-          className={`text-sm text-gray-500 transition-transform duration-200 ${
+          className={`text-sm text-muted-foreground-500 transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         />
@@ -127,13 +127,13 @@ function NavDropdown({ label, items }) {
               className={({ isActive }) =>
                 [
                   "flex flex-col px-4 py-2 transition duration-150",
-                  isActive ? "bg-gray-50 text-signin" : "text-black hover:bg-gray-50",
+                  isActive ? "bg-background-50 text-accent" : "text-black hover:bg-background-50",
                 ].join(" ")
               }
             >
               <span className="poppins-light text-sm">{item.label}</span>
               {item.description && (
-                <span className="text-xs text-gray-500 mt-0.5">{item.description}</span>
+                <span className="text-xs text-muted-foreground-500 mt-0.5">{item.description}</span>
               )}
             </NavLink>
           ))}
@@ -155,14 +155,14 @@ function UserMenu({ label, onProfile, onLogout }) {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`Account menu for ${label}`}
-        className="flex items-center gap-2 whitespace-nowrap rounded-full border border-gray-200 px-2 py-1 hover:bg-gray-50 transition duration-200"
+        className="flex items-center gap-2 whitespace-nowrap rounded-full border border-border-200 px-2 py-1 hover:bg-background-50 transition duration-200"
       >
-        <FaUserCircle className="text-xl text-brown" />
+        <FaUserCircle className="text-xl text-foreground" />
         <span className="poppins-light text-sm capitalize hidden xl:inline max-w-[8rem] truncate">
           {label}
         </span>
         <IoChevronDown
-          className={`text-sm text-gray-500 transition-transform duration-200 ${
+          className={`text-sm text-muted-foreground-500 transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         />
@@ -173,8 +173,8 @@ function UserMenu({ label, onProfile, onLogout }) {
           role="menu"
           className="absolute right-0 mt-2 min-w-[14rem] rounded-lg bg-white shadow-lg ring-1 ring-black/10 z-dropdown py-1"
         >
-          <div className="px-4 py-2 border-b border-gray-100">
-            <div className="text-xs text-gray-500">Signed in as</div>
+          <div className="px-4 py-2 border-b border-border-100">
+            <div className="text-xs text-muted-foreground-500">Signed in as</div>
             <div className="poppins-light text-sm capitalize truncate">{label}</div>
           </div>
           <button
@@ -184,11 +184,11 @@ function UserMenu({ label, onProfile, onLogout }) {
               setOpen(false);
               onProfile();
             }}
-            className="block w-full text-left px-4 py-2 text-sm poppins-light text-black hover:bg-gray-50 transition duration-150"
+            className="block w-full text-left px-4 py-2 text-sm poppins-light text-black hover:bg-background-50 transition duration-150"
           >
             Dashboard
           </button>
-          <div className="border-t border-gray-100 my-1" aria-hidden="true" />
+          <div className="border-t border-border-100 my-1" aria-hidden="true" />
           <button
             type="button"
             role="menuitem"
@@ -196,7 +196,7 @@ function UserMenu({ label, onProfile, onLogout }) {
               setOpen(false);
               onLogout();
             }}
-            className="block w-full text-left px-4 py-2 text-sm poppins-light text-signin hover:bg-gray-50 transition duration-150"
+            className="block w-full text-left px-4 py-2 text-sm poppins-light text-accent hover:bg-background-50 transition duration-150"
           >
             Logout
           </button>
@@ -216,7 +216,7 @@ function CartButton({ totalQuantity, onClick, className = "" }) {
     >
       <img src={basket} alt="" className="w-6 h-6" />
       {totalQuantity > 0 && (
-        <span className="absolute -top-2 -right-2 bg-signin text-white rounded-full text-xs font-bold px-1.5 py-0.5 min-w-[1.25rem] text-center">
+        <span className="absolute -top-2 -right-2 bg-accent text-white rounded-full text-xs font-bold px-1.5 py-0.5 min-w-[1.25rem] text-center">
           {totalQuantity}
         </span>
       )}
@@ -232,7 +232,7 @@ function SubscribeCTA({ onClick }) {
       className={({ isActive }) =>
         [
           "poppins-bold whitespace-nowrap text-sm lg:text-base rounded-lg px-4 py-2 inline-flex items-center gap-1.5 transition duration-200 shrink-0",
-          "bg-yellow text-black hover:bg-darkgold hover:text-white",
+          "bg-primary text-black hover:bg-accent hover:text-white",
           isActive ? "ring-2 ring-signin ring-offset-2" : "",
         ].join(" ")
       }
@@ -259,7 +259,7 @@ function MobileGroup({ group, onNavigate }) {
         onClick={onNavigate}
         className={({ isActive }) =>
           `block py-3 border-b cursor-pointer px-2 poppins-light transition duration-150 ${
-            isActive ? "bg-gray-100 text-signin" : "hover:bg-gray-50"
+            isActive ? "bg-background-100 text-accent" : "hover:bg-background-50"
           }`
         }
       >
@@ -274,11 +274,11 @@ function MobileGroup({ group, onNavigate }) {
         type="button"
         onClick={() => setOpen((prev) => !prev)}
         aria-expanded={open}
-        className="w-full flex items-center justify-between py-3 px-2 poppins-light text-left hover:bg-gray-50 transition duration-150"
+        className="w-full flex items-center justify-between py-3 px-2 poppins-light text-left hover:bg-background-50 transition duration-150"
       >
         <span>{group.label}</span>
         <IoChevronDown
-          className={`text-sm text-gray-500 transition-transform duration-200 ${
+          className={`text-sm text-muted-foreground-500 transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         />
@@ -293,7 +293,7 @@ function MobileGroup({ group, onNavigate }) {
                 onClick={onNavigate}
                 className={({ isActive }) =>
                   `block py-2 px-2 rounded poppins-light text-sm transition duration-150 ${
-                    isActive ? "bg-gray-100 text-signin" : "hover:bg-gray-50"
+                    isActive ? "bg-background-100 text-accent" : "hover:bg-background-50"
                   }`
                 }
               >
@@ -332,7 +332,7 @@ export default function Header() {
             <img src={logo} alt="Robotronics Pakistan" className="w-12 h-12 sm:w-20 sm:h-20" />
             <div className="flex flex-col leading-tight">
               <span className="text-[10px] sm:text-xs poppins-bold">ROBOTRONICS</span>
-              <span className="text-[10px] sm:text-xs poppins-bold text-gold tracking-widest">
+              <span className="text-[10px] sm:text-xs poppins-bold text-primary tracking-widest">
                 PAKISTAN
               </span>
             </div>
@@ -379,13 +379,13 @@ export default function Header() {
               <div className="flex border rounded-lg">
                 <NavLink
                   to="/Signup"
-                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-signin hover:text-white"
+                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-accent hover:text-white"
                 >
                   Sign Up
                 </NavLink>
                 <NavLink
                   to="/Login"
-                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-signin hover:text-white"
+                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-accent hover:text-white"
                 >
                   Login
                 </NavLink>
@@ -426,7 +426,7 @@ export default function Header() {
                 type="button"
                 onClick={closeMenu}
                 aria-label="Close menu"
-                className="text-gray-500 hover:text-black p-1"
+                className="text-muted-foreground-500 hover:text-black p-1"
               >
                 <IoClose className="text-2xl" />
               </button>
@@ -442,7 +442,7 @@ export default function Header() {
                 onClick={closeMenu}
                 className={({ isActive }) =>
                   `flex items-center gap-2 py-3 mt-4 rounded-lg cursor-pointer px-4 poppins-bold transition duration-150 ${
-                    isActive ? "bg-darkgold text-white" : "bg-yellow text-black hover:bg-darkgold hover:text-white"
+                    isActive ? "bg-accent text-white" : "bg-primary text-black hover:bg-accent hover:text-white"
                   }`
                 }
               >
@@ -457,13 +457,13 @@ export default function Header() {
               <div className="flex flex-col gap-2">
                 <button
                   type="button"
-                  className="flex items-center gap-2 py-3 px-2 text-left capitalize poppins-light hover:bg-gray-50 transition duration-150 rounded"
+                  className="flex items-center gap-2 py-3 px-2 text-left capitalize poppins-light hover:bg-background-50 transition duration-150 rounded"
                   onClick={() => {
                     closeMenu();
                     goToDashboard();
                   }}
                 >
-                  <FaUserCircle className="text-xl text-brown" />
+                  <FaUserCircle className="text-xl text-foreground" />
                   <span className="truncate">{currentUserLabel}</span>
                 </button>
                 <button
@@ -472,7 +472,7 @@ export default function Header() {
                     logout();
                     closeMenu();
                   }}
-                  className="py-2 px-4 rounded border border-signin text-signin hover:bg-signin hover:text-white transition duration-200 w-full"
+                  className="py-2 px-4 rounded border border-accent text-accent hover:bg-accent hover:text-white transition duration-200 w-full"
                 >
                   Logout
                 </button>
@@ -481,14 +481,14 @@ export default function Header() {
               <div className="flex flex-col gap-2">
                 <NavLink
                   to="/Signup"
-                  className="py-2 px-4 rounded cursor-pointer bg-signin text-white text-center transition duration-200"
+                  className="py-2 px-4 rounded cursor-pointer bg-accent text-white text-center transition duration-200"
                   onClick={closeMenu}
                 >
                   Sign Up
                 </NavLink>
                 <NavLink
                   to="/Login"
-                  className="py-2 px-4 rounded cursor-pointer border border-signin text-signin text-center transition duration-200"
+                  className="py-2 px-4 rounded cursor-pointer border border-accent text-accent text-center transition duration-200"
                   onClick={closeMenu}
                 >
                   Login

@@ -17,13 +17,13 @@ const ShopItems = () => {
                 />
                 {/* name price AI */}
                 <div className="flex flex-row">
-                  <h3 className="tracking-widest text-gray-900 text-lg font-bold title-font  py-5">
+                  <h3 className="tracking-widest text-muted-foreground-900 text-lg font-bold title-font  py-5">
                     Artificial Intelligence <br />
                     and Machine Learning{" "}
                   </h3>
                   <div className="flex flex-col p-5 px-16 ">
                   <img  className="flex p-2 " src={img7}/>
-                  <p className="flex text-gold font-bold">PKR 50,000</p>
+                  <p className="flex text-primary font-bold">PKR 50,000</p>
                   </div>
                 </div>
                 {/*doted line */}
@@ -44,7 +44,7 @@ const ShopItems = () => {
                 </div>
               </div>
             </div>
-            <button className="bg-yellow text-xl px-40 font-bold mt-4 p-4 rounded flex justify-center items-center" data-aos="fade-up" >
+            <button className="bg-primary text-xl px-40 font-bold mt-4 p-4 rounded flex justify-center items-center" data-aos="fade-up" >
               Join Course
             </button>
           </div> 

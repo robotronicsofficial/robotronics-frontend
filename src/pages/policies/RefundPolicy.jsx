@@ -7,7 +7,7 @@ const RefundPolicy = () => {
                 <br></br><br></br>
                 <br></br>
 
-        <h1 className="text-4xl poppins-bold text-brown mb-3">Refund &amp; Return Policy</h1>
+        <h1 className="text-4xl poppins-bold text-foreground mb-3">Refund &amp; Return Policy</h1>
 
         <section className="text-lg poppins-light space-y-4">
           <h2 className="text-2xl poppins-semibold">1. Courses &amp; Subscriptions</h2>

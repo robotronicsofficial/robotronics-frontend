@@ -5,8 +5,8 @@ const SubscriptionPaymentCustomerCart = () => {
   return (
     <div>
       <div className="px-4 pb-6 pt-20 text-center md:px-10">
-        <p className="text-4xl font-bold text-brown">Payment Process</p>
-        <p className="mt-4 text-sm text-brown/80">
+        <p className="text-4xl font-bold text-foreground">Payment Process</p>
+        <p className="mt-4 text-sm text-foreground/80">
           Save the subscription billing details in this browser before the final review.
         </p>
       </div>

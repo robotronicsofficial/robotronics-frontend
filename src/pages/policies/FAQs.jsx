@@ -52,7 +52,7 @@ const FAQs = () => {
     <div className="lg:p-20 p-8 bg-background">
       <div className="lg:w-full px-6">
         <br></br><br></br><br></br><br></br>
-        <h1 className="text-4xl poppins-bold text-brown mb-6">Frequently Asked Questions (FAQs)</h1>
+        <h1 className="text-4xl poppins-bold text-foreground mb-6">Frequently Asked Questions (FAQs)</h1>
         <div className="space-y-6">
           {faqs.map((f, idx) => (
             <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm">

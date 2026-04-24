@@ -89,7 +89,7 @@ const MyCourses = () => {
   if (loading) {
     return (
       <CenteredState className="h-screen">
-        <Spinner className="size-12 text-yellow-500" />
+        <Spinner className="size-12 text-primary-500" />
       </CenteredState>
     );
   }
@@ -111,7 +111,7 @@ const MyCourses = () => {
     >
       {/* Course Listing */}
       <div data-aos="fade-up">
-        <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
+        <h1 className="text-foreground lg:text-2xl text-base poppins-bold mb-6">
           {hasFixedCourseLimit ? `Select ${maxCourses} Courses` : "Select Courses"}
         </h1>
 
@@ -129,8 +129,8 @@ const MyCourses = () => {
           <button
             onClick={saveSelectedCourses}
             className={`py-2 px-6 rounded-full shadow-xl ${!canSaveCourses
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#ffc224] hover:bg-[#ffb700]"
+                ? "bg-background-400 cursor-not-allowed"
+                : "bg-primary hover:bg-accent"
               } transition-colors`}
             disabled={!canSaveCourses || saveChildCoursesMutation.isPending}
           >
@@ -155,10 +155,10 @@ const MyCourses = () => {
           {currentCourses.map((course) => (
             <div
               key={course._id}
-              className="relative w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-[#fffff] p-6"
+              className="relative w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-card p-6"
             >
               <div className={`rounded-xl overflow-hidden shadow-lg h-full flex flex-col transition-all ${selectedCourses.includes(course._id)
-                ? "border-4 border-yellow-400 transform scale-[1.02]"
+                ? "border-4 border-primary-400 transform scale-[1.02]"
                 : "border hover:shadow-md"
                 }`}>
                 <img
@@ -171,12 +171,12 @@ const MyCourses = () => {
                 />
                 <div className="px-6 md:px-2 py-2 flex-grow flex flex-col gap-2">
                   <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                    <p className="text-gray-700 text-wrap text-center px-4 py-1 rounded-full bg-[#efeff2] text-base mb-4 md:mb-0">
+                    <p className="text-muted-foreground-700 text-wrap text-center px-4 py-1 rounded-full bg-muted text-base mb-4 md:mb-0">
                       {course.category}
                     </p>
                     <div className="flex items-center">
-                      <FaStar className="text-yellow-500" />
-                      <p className="text-gray-700 poppins-light text-base ml-2">
+                      <FaStar className="text-primary-500" />
+                      <p className="text-muted-foreground-700 poppins-light text-base ml-2">
                         ({course.reviews || 0} Rating)
                       </p>
                     </div>
@@ -205,7 +205,7 @@ const MyCourses = () => {
                 <div className="pb-3 px-4">
                   <button
                     onClick={() => navigate(`/Dashboard/courseDetail/${course._id}`)}
-                    className="mt-2 bg-[#ffc224] w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-[#ffb700] transition-colors"
+                    className="mt-2 bg-primary w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-accent transition-colors"
                   >
                     <span>View Detail</span>
                     <FaArrowDown className="text-xs" />
@@ -222,8 +222,8 @@ const MyCourses = () => {
               onClick={prevPage}
               disabled={currentPage === 1}
               className={`py-2 px-4 rounded-full ${currentPage === 1
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-gray-300 hover:bg-gray-400 text-black"
+                ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
+                : "bg-background-300 hover:bg-background-400 text-black"
                 }`}
             >
               Previous
@@ -234,8 +234,8 @@ const MyCourses = () => {
                 key={number}
                 onClick={() => paginate(number)}
                 className={`py-2 px-4 rounded-full ${currentPage === number
-                  ? "bg-[#ffc224] text-black font-bold"
-                  : "bg-gray-200 hover:bg-gray-300 text-black"
+                  ? "bg-primary text-black font-bold"
+                  : "bg-background-200 hover:bg-background-300 text-black"
                   }`}
               >
                 {number}
@@ -246,8 +246,8 @@ const MyCourses = () => {
               onClick={nextPage}
               disabled={currentPage === totalPages}
               className={`py-2 px-4 rounded-full ${currentPage === totalPages
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-gray-300 hover:bg-gray-400 text-black"
+                ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
+                : "bg-background-300 hover:bg-background-400 text-black"
                 }`}
             >
               Next
@@ -271,7 +271,7 @@ const MyCourses = () => {
             </p>
             <Button
               type="button"
-              className="mx-auto min-w-32 rounded-full bg-yellow text-black hover:bg-darkgold hover:text-white"
+              className="mx-auto min-w-32 rounded-full bg-primary text-black hover:bg-accent hover:text-white"
               onClick={() => setShowModal(false)}
             >
               Close

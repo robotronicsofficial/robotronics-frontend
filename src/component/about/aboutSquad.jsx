@@ -28,7 +28,7 @@ const AboutSquad = () => {
   ];
 
   return (
-    <div className="flex flex-col bg-gray">
+    <div className="flex flex-col bg-background">
       {/* block 1 */}
       <div className="lg:flex lg:p-14 p-7">
         <p
@@ -100,7 +100,7 @@ const AboutSquad = () => {
 
             >
               <div className="h-0 lg:w-16 w-8 border border-black"></div>
-              <div className="h-0 lg:w-48 w-20 border border-line"></div>
+              <div className="h-0 lg:w-48 w-20 border border-border"></div>
             </div>
             {/* text */}
             <p
@@ -122,7 +122,7 @@ const AboutSquad = () => {
           >
             From ambitious startups to Countrywide Schools, we partner with
             Great{" "}
-            <b className="text-[#f5ab34]">Educational industry leaders.</b>{" "}
+            <b className="text-primary">Educational industry leaders.</b>{" "}
           </p>
         </div>
       </div>

@@ -23,21 +23,21 @@ const STATES = [
   { value: "ICT", label: "Islamabad Capital Territory" },
   { value: "SIN", label: "Sindh" },
 ];
-const summaryLabelClassName = "font-lato text-base text-[#7E7F7C]";
+const summaryLabelClassName = "font-lato text-base text-muted-foreground";
 const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
-const summaryValueClassName = `${summaryValueBaseClassName} text-[#362D2C]`;
-const summaryTotalValueClassName = `${summaryValueBaseClassName} text-yellow`;
+const summaryValueClassName = `${summaryValueBaseClassName} text-foreground`;
+const summaryTotalValueClassName = `${summaryValueBaseClassName} text-primary`;
 
 const InputField = ({ label, name, value, onChange, placeholder, required = false, type = "text" }) => (
   <div>
-    <label htmlFor={name} className="block text-sm poppins-light text-gray-700">{label}</label>
+    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground-700">{label}</label>
     <input
       type={type}
       name={name}
       id={name}
       value={value}
       onChange={onChange}
-      className="p-3 px-5 mt-1 block w-full border-gray-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+      className="p-3 px-5 mt-1 block w-full border-border-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
       placeholder={placeholder}
       required={required}
     />
@@ -46,14 +46,14 @@ const InputField = ({ label, name, value, onChange, placeholder, required = fals
 
 const SelectField = ({ label, name, value, onChange, options, required = false }) => (
   <div>
-    <label htmlFor={name} className="block text-sm poppins-light text-gray-700">{label}</label>
+    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground-700">{label}</label>
     <select
       name={name}
       id={name}
       value={value}
       onChange={onChange}
       required={required}
-      className="p-3 mt-1 block w-full border-gray-300 poppins-light rounded-md shadow-sm focus:border-yellow focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+      className="p-3 mt-1 block w-full border-border-300 poppins-light rounded-md shadow-sm focus:border-primary focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
     >
       <option value="">Select {label.toLowerCase()}</option>
       {options.map((opt) => (
@@ -146,7 +146,7 @@ const CustomerInfomation = ({ onNext }) => {
   const summary = calculateCartSummary(cart);
 
   return (
-    <div className="bg-gray lg:flex">
+    <div className="bg-background lg:flex">
       <div className="flex flex-col lg:w-4/5">
         <form onSubmit={handleSubmit} className="mx-auto flex max-w-4xl flex-col gap-6 bg-background p-6">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -175,19 +175,19 @@ const CustomerInfomation = ({ onNext }) => {
               </div>
 
               <div>
-                <label htmlFor="deliveryInstruction" className="block text-sm poppins-light text-gray-700">Delivery Instruction</label>
+                <label htmlFor="deliveryInstruction" className="block text-sm poppins-light text-muted-foreground-700">Delivery Instruction</label>
                 <textarea
                   name="deliveryInstruction"
                   id="deliveryInstruction"
                   value={form.deliveryInstruction}
                   onChange={handleChange}
-                  className="p-7 mt-1 block w-full border-gray-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="p-7 mt-1 block w-full border-border-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   placeholder="Delivery Instruction"
                 />
               </div>
             </>
           ) : (
-            <div className="rounded-[20px] border border-[#E6D7B8] bg-[#FFF8E8] p-4 text-sm text-brown">
+            <div className="rounded-[20px] border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
               This order only contains digital items, so we only need your contact details here.
             </div>
           )}
@@ -196,14 +196,14 @@ const CustomerInfomation = ({ onNext }) => {
 
       {/* Divider Line */}
       <div className="px-1">
-        <div className="ml-8 h-full w-0 border border-[#D4D4D4]"></div>
+        <div className="ml-8 h-full w-0 border border-border"></div>
       </div>
 
       {/* Right - Cart Summary */}
       <div className="flex flex-col gap-8 p-4 px-5 lg:gap-20 lg:p-8 lg:px-14">
         <div className="flex flex-col gap-4 lg:gap-8">
-          <p className="lg:text-4xl poppins-bold text-brown">YOUR ORDER</p>
-          <p className="font-lato font-medium text-base leading-5 text-[#7E7F7C]">
+          <p className="lg:text-4xl poppins-bold text-foreground">YOUR ORDER</p>
+          <p className="font-lato font-medium text-base leading-5 text-muted-foreground">
             Review all the products you want to buy
           </p>
         </div>
@@ -221,11 +221,11 @@ const CustomerInfomation = ({ onNext }) => {
               />
             ))
           ) : (
-            <p className="p-5 text-center text-gray-500">Your cart is empty.</p>
+            <p className="p-5 text-center text-muted-foreground-500">Your cart is empty.</p>
           )}
         </div>
 
-        <div className="h-0 border border-[#D4D4D4]"></div>
+        <div className="h-0 border border-border"></div>
 
         <div className="flex flex-col gap-2">
           <OrderSummaryLine
@@ -254,12 +254,12 @@ const CustomerInfomation = ({ onNext }) => {
           />
         </div>
 
-        <div className="h-0 border border-[#D4D4D4]"></div>
+        <div className="h-0 border border-border"></div>
 
         <div className="flex justify-center">
           <button
             type="submit"
-            className="text-center lg:text-xl text-sm poppins-bold text-[#F5AB34] bg-[#362D2C] py-2 lg:px-20 px-5"
+            className="text-center lg:text-xl text-sm poppins-bold text-primary bg-foreground py-2 lg:px-20 px-5"
             onClick={handleSubmit}
             disabled={saveCheckoutAddressMutation.isPending}
           >

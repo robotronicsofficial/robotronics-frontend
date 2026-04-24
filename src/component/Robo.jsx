@@ -16,7 +16,7 @@ const Robo = () => {
       </div>
       <button
           onClick={() => navigate("/subscriptions")}
-          className="absolute bottom-[8vh] left-[14vw] items-center justify-center py-8 px-10 md:text-3xl text-sm text-yellow  bg-white poppins-bold  shadow-xl rounded-[6vw] border-black border-4"
+          className="absolute bottom-[8vh] left-[14vw] items-center justify-center py-8 px-10 md:text-3xl text-sm text-primary  bg-white poppins-bold  shadow-xl rounded-[6vw] border-black border-4"
         >
           Subscribe Now
         </button>

@@ -9,7 +9,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex size-10 items-center justify-center bg-brown p-2 text-gold disabled:opacity-50"
+        className="flex size-10 items-center justify-center bg-foreground p-2 text-primary disabled:opacity-50"
       >
         <FiChevronLeft className="text-white" />
       </button>
@@ -19,7 +19,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           key={page}
           onClick={() => onPageChange(page)}
           className={`flex size-10 items-center justify-center p-2 ${
-            currentPage === page ? "bg-gold text-white" : "bg-white text-gold"
+            currentPage === page ? "bg-primary text-white" : "bg-white text-primary"
           }`}
         >
           {page}
@@ -29,7 +29,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex size-10 items-center justify-center bg-brown p-2 text-gold disabled:opacity-50"
+        className="flex size-10 items-center justify-center bg-foreground p-2 text-primary disabled:opacity-50"
       >
         <FiChevronRight className="text-white" />
       </button>

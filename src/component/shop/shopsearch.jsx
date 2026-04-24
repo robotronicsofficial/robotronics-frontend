@@ -24,12 +24,12 @@ import { useSavedItems, useToggleSavedItemMutation } from "../../hooks/useSavedI
 const HeaderSummaryItem = ({ icon, label }) => (
   <div className="flex w-full items-center justify-between gap-4">
     <div className="flex items-center">
-      <div className="rounded-full bg-[#352E2C] p-2">
+      <div className="rounded-full bg-foreground p-2">
         {icon}
       </div>
       <p className="px-3 text-center text-sm poppins-bold lg:text-base">{label}</p>
     </div>
-    <FaArrowRight className="shrink-0 text-[#838383]" />
+    <FaArrowRight className="shrink-0 text-muted-foreground" />
   </div>
 );
 
@@ -105,10 +105,10 @@ const Shopsearch = () => {
   };
 
   return (
-    <div className="flex flex-col bg-lightgray lg:px-20 px-2">
+    <div className="flex flex-col bg-muted lg:px-20 px-2">
       <div className="justify-around mb-8">
         <div className="lg:pt-16 pt-8" data-aos="fade-up">
-          <div className="h-0 w-full border border-[#838383]"></div>
+          <div className="h-0 w-full border border-muted-foreground"></div>
         </div>
         <div className="items-center justify-between lg:flex lg:px-2 lg:pt-5 md:flex">
           <div className="flex justify-between">
@@ -130,18 +130,18 @@ const Shopsearch = () => {
           </div>
         </div>
         <div className="lg:pt-5 pt-5" data-aos="fade-up">
-          <div className="h-0 w-full border border-[#838383]"></div>
+          <div className="h-0 w-full border border-muted-foreground"></div>
         </div>
       </div>
 
       <div className="items-center gap-x-6 lg:flex">
         <div className="lg:text-2xl poppins-regular lg:w-1/5 self-center">
           CATEGORY
-          <div className="h-1.5 w-14 border bg-brown border-brown mt-4"></div>
+          <div className="h-1.5 w-14 border bg-foreground border-foreground mt-4"></div>
         </div>
 
-        <div className="flex items-center border border-gray bg-white px-2 rounded-md h-12 w-[55vw]">
-          <IoIosSearch className="text-gray-500 text-xl" />
+        <div className="flex items-center border border-border bg-white px-2 rounded-md h-12 w-[55vw]">
+          <IoIosSearch className="text-muted-foreground-500 text-xl" />
           <input
             type="text"
             className="w-full px-2 py-2 outline-none bg-transparent"
@@ -203,7 +203,7 @@ const Shopsearch = () => {
             <button
               type="button"
               key={i}
-              className={cn("p-2 px-4", currentPage === i + 1 ? "bg-gold" : "bg-white")}
+              className={cn("p-2 px-4", currentPage === i + 1 ? "bg-primary" : "bg-white")}
               onClick={() => setCurrentPage(i + 1)}
             >
               {i + 1}

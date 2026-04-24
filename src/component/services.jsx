@@ -24,7 +24,7 @@ const Services = () => {
         <div className="flex justify-start lg:p-10 p-2">
           <div className="p-5 pt-10">
             <h2 className="text-white lg:text-6xl font-bold poppins-black text-2xl">
-              Our Top <span className="text-[#f5ab34]">Services-</span> <br />{"Let's"} Browse Through
+              Our Top <span className="text-primary">Services-</span> <br />{"Let's"} Browse Through
             </h2>
           </div>
           {/* Right image */}
@@ -78,10 +78,10 @@ const Services = () => {
               className="flex items-center gap-2 cursor-pointer group"
               onClick={() => handleServiceNavigate(service)}
             >
-              <div className="text-white text-sm sm:text-base underline poppins-light group-hover:text-yellow transition-colors">
+              <div className="text-white text-sm sm:text-base underline poppins-light group-hover:text-primary transition-colors">
                 View Detail
               </div>
-              <MdArrowOutward className="text-lg sm:text-xl text-yellow group-hover:translate-x-1 transition-transform" />
+              <MdArrowOutward className="text-lg sm:text-xl text-primary group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
         </div>

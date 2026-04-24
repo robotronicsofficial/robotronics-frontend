@@ -23,14 +23,14 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         <div className="flex gap-6">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <FiBarChart2 size={20} className="text-smallText self-center" />
+              <FiBarChart2 size={20} className="text-muted-foreground self-center" />
               <div>
                 <p className="text-sm poppins-extralight text-center">views</p>
                 <p className="text-sm poppins-extralight text-center">{Number(blog?.views || 0).toLocaleString()}</p>
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <FiShare2 size={20} className="text-smallText self-center" />
+              <FiShare2 size={20} className="text-muted-foreground self-center" />
               <div>
                 <p className="text-sm poppins-extralight text-center">shares</p>
                 <p className="text-sm poppins-extralight text-center">{Number(blog?.shares || 0).toLocaleString()}</p>
@@ -52,7 +52,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
                 alt={blog?.authorName || "Author"}
               />
               <div>
-                <p className="text-brown poppins-semibold text-lg">{blog?.authorName || "Robotronics"}</p>
+                <p className="text-foreground poppins-semibold text-lg">{blog?.authorName || "Robotronics"}</p>
                 <p className="text-sm poppins-light">{blog?.date ? new Date(blog.date).toLocaleDateString() : "Unknown date"}</p>
               </div>
             </div>
@@ -66,7 +66,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         </div>
 
         <div className="flex flex-col">
-          <h1 className="text-brown text-5xl py-3 leading-8 poppins-semibold">Categories</h1>
+          <h1 className="text-foreground text-5xl py-3 leading-8 poppins-semibold">Categories</h1>
           <ul>
             {(categories.length > 0 ? categories : tags).map((category, index) => (
               <li key={`${category}-${index}`} className="text-2xl p-2 underline poppins-light leading-8">
@@ -80,27 +80,27 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
       <div className="flex flex-col gap-8" data-aos="fade-up">
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="lg:w-2/3">
-            <FaQuoteLeft size={24} className="text-quote" />
-            <p className="text-balance text-brown poppins-regular lg:text-6xl text-2xl">
+            <FaQuoteLeft size={24} className="text-muted-foreground" />
+            <p className="text-balance text-foreground poppins-regular lg:text-6xl text-2xl">
               {leadQuote}
             </p>
-            <FaQuoteRight size={24} className="text-quote" />
+            <FaQuoteRight size={24} className="text-muted-foreground" />
           </div>
 
           <div>
             <p className="text-3xl regular">Follow Us</p>
             <div className="flex gap-5">
               <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
-                <FaFacebook size={28} className="text-smallText" />
+                <FaFacebook size={28} className="text-muted-foreground" />
               </a>
               <a href="https://twitter.com" target="_blank" rel="noreferrer">
-                <FaTwitter size={28} className="text-smallText" />
+                <FaTwitter size={28} className="text-muted-foreground" />
               </a>
               <a href="https://www.instagram.com" target="_blank" rel="noreferrer">
-                <FaInstagram size={28} className="text-smallText" />
+                <FaInstagram size={28} className="text-muted-foreground" />
               </a>
               <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">
-                <FaLinkedin size={28} className="text-smallText" />
+                <FaLinkedin size={28} className="text-muted-foreground" />
               </a>
             </div>
           </div>
@@ -109,7 +109,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-3">
             {tags.map((tag, index) => (
-              <span key={`${tag}-${index}`} className="bg-white border border-lin px-4 py-2 rounded-full text-sm poppins-light">
+              <span key={`${tag}-${index}`} className="bg-white border border-border px-4 py-2 rounded-full text-sm poppins-light">
                 {tag}
               </span>
             ))}
@@ -119,7 +119,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         <div className="flex gap-10">
           <p className="text-center self-center poppins-light">{Number(blog?.shares || 0).toLocaleString()} Shares</p>
           <div className="flex gap-3">
-            <FaFacebook className="text-cente self-center" style={{ color: "#1877F2", fontSize: "24px" }} />
+            <FaFacebook className="text-cente self-center text-primary text-2xl" />
             <p className="text-center self-center text-blue-500 poppins-light">Share</p>
           </div>
           <div className="flex gap-3">
@@ -131,23 +131,23 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         <div className="flex w-5/6 justify-center gap-2">
           {previousBlog ? (
             <Link to={`/BlogDetail/${previousBlog._id}`}>
-              <button className="bg-brown text-white poppins-light hover:bg-gold py-2 px-8 rounded-md">
+              <button className="bg-foreground text-white poppins-light hover:bg-primary py-2 px-8 rounded-md">
                 Previous
               </button>
             </Link>
           ) : (
-            <button className="bg-gray-300 text-white poppins-light py-2 px-8 rounded-md cursor-not-allowed" disabled>
+            <button className="bg-background-300 text-white poppins-light py-2 px-8 rounded-md cursor-not-allowed" disabled>
               Previous
             </button>
           )}
           {nextBlog ? (
             <Link to={`/BlogDetail/${nextBlog._id}`}>
-              <button className="bg-brown text-white hover:bg-gold poppins-light py-2 px-12 rounded-md">
+              <button className="bg-foreground text-white hover:bg-primary poppins-light py-2 px-12 rounded-md">
                 Next
               </button>
             </Link>
           ) : (
-            <button className="bg-gray-300 text-white poppins-light py-2 px-12 rounded-md cursor-not-allowed" disabled>
+            <button className="bg-background-300 text-white poppins-light py-2 px-12 rounded-md cursor-not-allowed" disabled>
               Next
             </button>
           )}

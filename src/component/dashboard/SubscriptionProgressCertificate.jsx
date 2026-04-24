@@ -36,13 +36,13 @@ const SubscriptionProgressCertificate = () => {
                 >
                   <div className="flex flex-col space-y-3 bg-white rounded-xl p-5 shadow-lg w-full min-w-[280px] md:w-[27vw] max-w-[450px]">
                     <div className="flex items-center gap-4 mb-3">
-                      <FaUserCircle className="text-4xl text-gray-600" />
-                      <p className="text-xl font-semibold text-gray-800">
+                      <FaUserCircle className="text-4xl text-muted-foreground-600" />
+                      <p className="text-xl font-semibold text-muted-foreground-800">
                         {child.firstName} {child.lastName}
                       </p>
                     </div>
 
-                    <div className="text-sm text-gray-700 space-y-1">
+                    <div className="text-sm text-muted-foreground-700 space-y-1">
                       <p><strong>Email:</strong> {child.email}</p>
                       <p><strong>Phone:</strong> {child.phone}</p>
                       <p><strong>DOB:</strong> {formatDisplayDate(child.dateOfBirth)}</p>
@@ -54,7 +54,7 @@ const SubscriptionProgressCertificate = () => {
                     </div>
 
                     <button
-                      className="mt-3 w-full text-sm poppins-light border border-lin rounded-lg px-3 py-2 bg-yellow text-white hover:bg-yellow-600 transition-colors"
+                      className="mt-3 w-full text-sm poppins-light border border-border rounded-lg px-3 py-2 bg-primary text-white hover:bg-primary-600 transition-colors"
                       onClick={() => {
                         if (!isUnlockedChild || !childRouteId) {
                           navigate("/Dashboard/ChildProfile");

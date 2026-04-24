@@ -10,7 +10,7 @@ const MaterialMarker = ({ position, name, address }) => {
     const markerDiv = L.divIcon({
       className: '',
       html: `
-        <div class="group relative flex size-[50px] items-center justify-center rounded-full border-2 border-brown bg-card shadow-md">
+        <div class="group relative flex size-[50px] items-center justify-center rounded-full border-2 border-foreground bg-card shadow-md">
           <span class="sr-only">${name}</span>
           <span class="size-4 rounded-full bg-primary"></span>
           <div class="pointer-events-none absolute bottom-14 left-1/2 hidden w-56 -translate-x-1/2 rounded-lg bg-popover p-3 text-center text-sm text-popover-foreground shadow-lg group-hover:block">
@@ -75,7 +75,7 @@ const ContactMap = () => {
         </MapContainer>
         <div className="absolute bottom-8 right-8 rounded-lg bg-overlay p-4 text-white shadow-lg">
           <h1 className="text-xl font-bold mb-2">Our Footprint</h1>
-          <h2 className="text-3xl font-bold text-gold">In Lahore</h2>
+          <h2 className="text-3xl font-bold text-primary">In Lahore</h2>
         </div>
       </div>
     </div>

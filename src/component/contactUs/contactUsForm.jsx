@@ -73,7 +73,7 @@ const SOCIAL_LINKS = [
 const ContactMethod = ({ Icon, label }) => (
   <div className="flex gap-2">
     <div className="rounded-full p-2">
-      <Icon className="text-brown" />
+      <Icon className="text-foreground" />
     </div>
     <p className="self-center text-wrap text-2xl poppins-light">{label}</p>
   </div>
@@ -89,7 +89,7 @@ const SocialLink = ({ Icon, className, href }) => (
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className={`rounded-xl bg-brown p-1 shadow-md transition-colors duration-300 ease-out hover:shadow-lg lg:p-3 ${className}`}
+    className={`rounded-xl bg-foreground p-1 shadow-md transition-colors duration-300 ease-out hover:shadow-lg lg:p-3 ${className}`}
   >
     <Icon className="text-white" />
   </a>
@@ -164,7 +164,7 @@ const ContactUsForm = () => {
   return (
     <div className="flex flex-col gap-10 bg-background p-8 lg:p-20">
       <div className="flex flex-col gap-10">
-        <div className="w-full border border-lin " data-aos="fade-up"></div>
+        <div className="w-full border border-border " data-aos="fade-up"></div>
         <button
           type="button"
           className="border border-lightbrown poppins-light p-2 rounded-full px-5"
@@ -177,7 +177,7 @@ const ContactUsForm = () => {
       <div className="justify-between lg:flex">
         <div className="lg:w-2/3">
           <div className="flex flex-col gap-10">
-            <h1 className="text-5xl poppins-bold text-brown" data-aos="fade-up">Contact Us</h1>
+            <h1 className="text-5xl poppins-bold text-foreground" data-aos="fade-up">Contact Us</h1>
             <p className="text-xl poppins-light text-wrap" data-aos="fade-up">
               Get in touch with us today to start your Robotics journey...
             </p>
@@ -197,7 +197,7 @@ const ContactUsForm = () => {
         </div>
 
         <div>
-          <div className="h-4/5 w-0 border border-lin" data-aos="fade-up"></div>
+          <div className="h-4/5 w-0 border border-border" data-aos="fade-up"></div>
         </div>
 
         <div className="lg:w-1/2 p-5">
@@ -278,7 +278,7 @@ const ContactUsForm = () => {
 
             {formData.userType && (
               <div className="mb-5">
-                <label className="block text-sm text-gray-500 dark:text-gray-400 mb-2">
+                <label className="block text-sm text-muted-foreground-500 dark:text-muted-foreground-400 mb-2">
                   Services I'm interested in:
                 </label>
                 <div className="flex flex-col gap-2">
@@ -324,7 +324,7 @@ const ContactUsForm = () => {
               <button
                 type="submit"
                 disabled={contactRequestMutation.isPending}
-                className="justify-between rounded-md bg-brown p-2 px-3 text-white poppins-light hover:bg-yellow hover:text-brown"
+                className="justify-between rounded-md bg-foreground p-2 px-3 text-white poppins-light hover:bg-primary hover:text-foreground"
               >
                 {contactRequestMutation.isPending ? "Sending..." : "Send Now"}
               </button>
@@ -334,7 +334,7 @@ const ContactUsForm = () => {
       </div>
 
       <div>
-        <div className="h-0 w-full border border-lin" data-aos="fade-up"></div>
+        <div className="h-0 w-full border border-border" data-aos="fade-up"></div>
       </div>
     </div>
   );

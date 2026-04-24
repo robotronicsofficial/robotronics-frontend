@@ -30,7 +30,7 @@ const ServiceCard = ({ service }) => {
             <h3 className="text-sm sm:text-base lg:text-lg font-bold poppins-extrabold pr-2 text-wrap">
               {service.title || "Unnamed Service"}
             </h3>
-            <div className="flex text-yellow">
+            <div className="flex text-primary">
               {[...Array(5)].map((_, i) => (
                 <IoStarSharp key={i} className="text-sm sm:text-base" />
               ))}
@@ -43,13 +43,13 @@ const ServiceCard = ({ service }) => {
           {/* Details */}
           <div className="flex justify-between items-center mt-auto ">
             <div className="flex items-center gap-2">
-              <LuClock className="text-yellow text-lg sm:text-xl" />
+              <LuClock className="text-primary text-lg sm:text-xl" />
               <span className="text-xs sm:text-sm font-bold poppins-extrabold text-wrap">
                 {service.month || "N/A"} Months
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <IoVideocamOutline className="text-yellow text-lg sm:text-xl" />
+              <IoVideocamOutline className="text-primary text-lg sm:text-xl" />
               <span className="text-xs sm:text-sm font-bold poppins-extrabold text-wrap">
                 {service.numLessons || "N/A"} Lectures
               </span>
@@ -102,7 +102,7 @@ const Shop = () => {
     return <div className="text-center py-20 text-red-500">We couldn&apos;t load courses right now.</div>;
 
   return (
-    <section className="bg-gray py-8 md:py-12">
+    <section className="bg-background py-8 md:py-12">
       <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="flex flex-col items-center md:flex-row md:justify-between mb-4 gap-6">
@@ -117,10 +117,10 @@ const Shop = () => {
 
             {/* Text Content */}
             <div className="text-center md:text-left">
-              <h2 className="text-brown text-2xl sm:text-3xl md:text-4xl lg:text-5xl poppins-extrabold leading-tight">
-                Courses in <span className="text-[#f5ab34]">Subscription Plans</span>
+              <h2 className="text-foreground text-2xl sm:text-3xl md:text-4xl lg:text-5xl poppins-extrabold leading-tight">
+                Courses in <span className="text-primary">Subscription Plans</span>
               </h2>
-              <p className="text-brown text-xl sm:text-2xl md:text-3xl poppins-extrabold mt-1 sm:mt-2">
+              <p className="text-foreground text-xl sm:text-2xl md:text-3xl poppins-extrabold mt-1 sm:mt-2">
                 Gear up for some Fun!
               </p>
             </div>
@@ -131,14 +131,14 @@ const Shop = () => {
             <button
               onClick={handlePrevious}
               disabled={currentIndex === 0}
-              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-black hover:bg-gray-100 transition-colors disabled:opacity-50"
+              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-black hover:bg-background-100 transition-colors disabled:opacity-50"
             >
               <img src={leftArrow} alt="Previous" className="w-6 h-6" />
             </button>
             <button
               onClick={handleNext}
               disabled={currentIndex + servicesPerPage >= services.length}
-              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-black hover:bg-gray-100 transition-colors disabled:opacity-50"
+              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-black hover:bg-background-100 transition-colors disabled:opacity-50"
             >
               <img src={rightArrow} alt="Next" className="w-6 h-6" />
             </button>
@@ -158,7 +158,7 @@ const Shop = () => {
         <div className="flex justify-center">
           <button
             onClick={() => navigate("/subscriptions")}
-            className="bg-yellow hover:bg-yellow-600 text-brown text-lg sm:text-xl font-bold poppins-bold px-8 py-3 rounded-full transition-colors shadow-md hover:shadow-lg"
+            className="bg-primary hover:bg-primary-600 text-foreground text-lg sm:text-xl font-bold poppins-bold px-8 py-3 rounded-full transition-colors shadow-md hover:shadow-lg"
           >
             Get Enrolled
           </button>

@@ -15,7 +15,7 @@ const AboutScience = () => {
           >
             Turning science <br /> Fiction into <br />{" "}
             <p
-              className=" text-yellow poppins-bold pb-2"
+              className=" text-primary poppins-bold pb-2"
               data-aos="fade-up"
 
 
@@ -23,7 +23,7 @@ const AboutScience = () => {
               Reality
             </p>
             <p
-              className="flex border border-gold h-0 w-32 "
+              className="flex border border-primary h-0 w-32 "
               data-aos="fade-up"
 
 
@@ -33,7 +33,7 @@ const AboutScience = () => {
         {/* div 2 */}
         <div className="bg-black text-white p-6 relative max-w-md">
           <div
-            className="bg-yellow w-32 h-32 rounded-full absolute top-0 left-0"
+            className="bg-primary w-32 h-32 rounded-full absolute top-0 left-0"
             data-aos="fade-up"
 
 
@@ -55,13 +55,13 @@ const AboutScience = () => {
         <div className="flex lg:pl-20 flex-col bg-ye">
           <div className="flex flex-row justify-between">
             <div
-              className="border-t border-yellow pt-4"
+              className="border-t border-primary pt-4"
               data-aos="fade-up"
 
 
             >
               <h2
-                className="text-yellow pb-2 text-xl md:text-3xl "
+                className="text-primary pb-2 text-xl md:text-3xl "
                 data-aos="fade-up"
 
 
@@ -76,7 +76,7 @@ const AboutScience = () => {
 
                 >
                   <h2
-                    className="text-yellow text-xl md:text-3xl font-semibold"
+                    className="text-primary text-xl md:text-3xl font-semibold"
                     data-aos="fade-up"
 
 

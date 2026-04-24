@@ -37,14 +37,14 @@ const SubscriptionPlans = () => {
   const annualSavings = Number(membership.monthlyPrice || 0) * 12 - Number(membership.yearlyPrice || 0);
 
   return (
-    <div className="bg-[#ebe5e2] py-8 px-4 sm:px-8 md:px-16 lg:px-24">
+    <div className="bg-background py-8 px-4 sm:px-8 md:px-16 lg:px-24">
       <div className="flex flex-col items-center justify-center">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold mb-6 sm:mb-8 text-center poppins-bold">
           Course Membership
         </h2>
 
-        <div className="flex justify-center bg-gray-200 py-10 px-4 w-full mt-6">
-          <div className="w-full max-w-xl min-h-[560px] bg-[#D9D9D9] rounded-2xl p-6 flex flex-col shadow-lg items-center">
+        <div className="flex justify-center bg-background-200 py-10 px-4 w-full mt-6">
+          <div className="w-full max-w-xl min-h-[560px] bg-muted rounded-2xl p-6 flex flex-col shadow-lg items-center">
             <h3 className="text-2xl font-bold mb-4 text-center">
               {membership.planName || "Course Membership"}
             </h3>
@@ -70,7 +70,7 @@ const SubscriptionPlans = () => {
               PKR {Number(displayPrice || 0).toLocaleString()}/Child
             </h4>
 
-            <p className="text-center mb-4 text-wrap text-[#362D2C] poppins-light">
+            <p className="text-center mb-4 text-wrap text-foreground poppins-light">
               {membership.description}
             </p>
             {isAnnual && annualSavings > 0 ? (

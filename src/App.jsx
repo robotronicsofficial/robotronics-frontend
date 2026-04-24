@@ -60,7 +60,7 @@ const SubscriptionProgressPage = lazy(() => import("./component/dashboard/Subscr
 const MyAllCourses = lazy(() => import("./component/dashboard/myAllCourses"));
 
 const RouteFallback = () => (
-  <div className={getHeaderOffsetClass("dashboardWide", "bg-background px-4 pb-16 text-center text-brown")}>
+  <div className={getHeaderOffsetClass("dashboardWide", "bg-background px-4 pb-16 text-center text-foreground")}>
     Loading page...
   </div>
 );

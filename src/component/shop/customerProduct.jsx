@@ -26,7 +26,7 @@ const CustomerProduct = ({
         <p className="font-bold">{title}</p>
         <div className="flex gap-2">
           <span>Quantity:</span>
-          <p className="text-line">{item}</p>
+          <p className="text-muted-foreground">{item}</p>
         </div>
 
         <div className="flex items-center gap-3">

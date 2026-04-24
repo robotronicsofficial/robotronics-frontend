@@ -99,9 +99,9 @@ const Login = () => {
 
   if (forgotPasswordMode) {
     return (
-      <div className="bg-gray" id="forgot-password">
+      <div className="bg-background" id="forgot-password">
         <div className={getHeaderOffsetClass("page", "flex flex-col items-center justify-center pb-20")}>
-          <p className="text-4xl poppins-bold text-brown">Forgot Password</p>
+          <p className="text-4xl poppins-bold text-foreground">Forgot Password</p>
           <form
             onSubmit={handleForgotPassword}
             className="flex flex-col items-center gap-4"
@@ -109,7 +109,7 @@ const Login = () => {
             <div>
               <p className="text-sm poppins-regular">Email address</p>
               <input
-                className="border border-line rounded-xl py-3 lg:px-32 px-14 bg-gray"
+                className="border border-border rounded-xl py-3 lg:px-32 px-14 bg-background"
                 type="email"
                 value={forgotEmail}
                 onChange={(e) => setForgotEmail(e.target.value)}
@@ -118,14 +118,14 @@ const Login = () => {
             </div>
             <button
               type="submit"
-              className="bg-brown border border-line text-white poppins-regular rounded-3xl py-3 lg:px-32 px-14"
+              className="bg-foreground border border-border text-white poppins-regular rounded-3xl py-3 lg:px-32 px-14"
             >
               Send Reset Instructions
             </button>
             <button
               type="button"
               onClick={() => setForgotPasswordMode(false)}
-              className="text-brown underline mt-2"
+              className="text-foreground underline mt-2"
             >
               Back to Login
             </button>
@@ -137,13 +137,13 @@ const Login = () => {
   }
 
   return (
-    <div className="bg-gray" id="signin">
+    <div className="bg-background" id="signin">
       <div>
         <div
           className={getHeaderOffsetClass("auth", "flex flex-col items-center justify-center gap-1 py-5 lg:gap-4")}
           data-aos="fade-up"
         >
-          <p className="text-center text-wrap justify-center lg:py-10 py-5 md:text-3xl text-2xl poppins-bold text-brown">
+          <p className="text-center text-wrap justify-center lg:py-10 py-5 md:text-3xl text-2xl poppins-bold text-foreground">
             Log in to your account
           </p>
           <AuthSocialButton
@@ -163,9 +163,9 @@ const Login = () => {
           className="flex items-center justify-center"
           data-aos="fade-up"
         >
-          <div className="h-0 lg:w-52 w-44 border border-line"></div>
+          <div className="h-0 lg:w-52 w-44 border border-border"></div>
           <p className="text-xl font-bold p-2">OR</p>
-          <div className="h-0 lg:w-52 w-44 border border-line"></div>
+          <div className="h-0 lg:w-52 w-44 border border-border"></div>
         </div>
         <form
           onSubmit={handleLogin}
@@ -175,7 +175,7 @@ const Login = () => {
           <div className="lg:py-8 py-4">
             <p className="text-sm poppins-regular ">Email address</p>
             <input
-              className="border border-line rounded-xl py-3 lg:px-32 px-14 bg-gray"
+              className="border border-border rounded-xl py-3 lg:px-32 px-14 bg-background"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -194,7 +194,7 @@ const Login = () => {
               />
             </div>
             <input
-              className="border border-line rounded-xl py-3 lg:px-32 px-14 bg-gray"
+              className="border border-border rounded-xl py-3 lg:px-32 px-14 bg-background"
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -212,33 +212,33 @@ const Login = () => {
             <input
               id="keep-signed-in"
               type="checkbox"
-              className="w-4 h-4 text-brown bg-gray-100 border-gray-300 rounded focus:ring-2 focus:ring-brown"
+              className="w-4 h-4 text-foreground bg-background-100 border-border-300 rounded focus:ring-2 focus:ring-foreground"
             />
             <label
               htmlFor="keep-signed-in"
-              className="ms-2 text-sm poppins-regular text-gray-900"
+              className="ms-2 text-sm poppins-regular text-muted-foreground-900"
             >
               Keep me signed in until I sign out
             </label>
           </div>
           <button
             type="submit"
-            className="rounded-3xl border border-line bg-brown px-14 py-3 text-white poppins-regular lg:px-32"
+            className="rounded-3xl border border-border bg-foreground px-14 py-3 text-white poppins-regular lg:px-32"
           >
             Log in
           </button>
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
           <div className="flex items-center justify-center">
-            <div className="h-0 lg:w-56 w-44 border border-line"></div>
-            <div className="h-0 lg:w-60 w-48 border border-line"></div>
+            <div className="h-0 lg:w-56 w-44 border border-border"></div>
+            <div className="h-0 lg:w-60 w-48 border border-border"></div>
           </div>
-          <p className="text-center poppins-regular justify-center lg:py-10 py-5 lg:text-3xl text-xl text-brown">
+          <p className="text-center poppins-regular justify-center lg:py-10 py-5 lg:text-3xl text-xl text-foreground">
             Don&apos;t have an account?
           </p>
           <div className="lg:pb-10 pb-4">
             <button
               type="button"
-              className="items-center justify-center rounded-3xl border border-line bg-gray px-14 py-3 text-brown poppins-regular lg:px-32"
+              className="items-center justify-center rounded-3xl border border-border bg-background px-14 py-3 text-foreground poppins-regular lg:px-32"
               onClick={() => navigate('/Signup')}
             >
               Sign up

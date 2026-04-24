@@ -81,9 +81,9 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="bg-gray" id="reset-password">
+    <div className="bg-background" id="reset-password">
       <div className={getHeaderOffsetClass("page", "flex flex-col items-center justify-center pb-20")}>
-        <p className="text-4xl poppins-bold text-brown">Reset Password</p>
+        <p className="text-4xl poppins-bold text-foreground">Reset Password</p>
         <form
           onSubmit={handleSubmit}
           className="flex w-full max-w-md flex-col items-center gap-4"
@@ -143,7 +143,7 @@ const ResetPassword = () => {
 
           <button
             type="submit"
-            className="bg-brown border border-line text-white poppins-regular rounded-3xl py-3 lg:px-32 px-14 w-full"
+            className="bg-foreground border border-border text-white poppins-regular rounded-3xl py-3 lg:px-32 px-14 w-full"
             disabled={!hasMinLength || !hasNumber || !hasSymbol || !passwordsMatch}
           >
             Reset Password
@@ -152,7 +152,7 @@ const ResetPassword = () => {
           <button
             type="button"
             onClick={() => navigate('/Login')}
-            className="text-brown underline mt-2 poppins-regular"
+            className="text-foreground underline mt-2 poppins-regular"
           >
             Back to Login
           </button>

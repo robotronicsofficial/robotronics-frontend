@@ -48,7 +48,7 @@ const Iaboutntro = () => {
                     rel="noopener noreferrer"
                     data-aos="fade-up"
                     data-aos-delay={getAosStaggerDelay(index)}
-                    className="lg:p-3 p-1 border border-brown bg-white rounded-xl hover:bg-brown hover:text-white"
+                    className="lg:p-3 p-1 border border-foreground bg-white rounded-xl hover:bg-foreground hover:text-white"
                   >
                     {icon}
                   </a>

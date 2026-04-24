@@ -5,14 +5,14 @@ import AppImage from "./AppImage";
 
 const Offers = () => {
   return (
-    <div className="flex flex-col lg:flex-row justify-between gap-5 lg:gap-8 bg-yellow lg:p-10 p-5" 
-    data-aos="fade-up" 
+    <div className="flex flex-col lg:flex-row justify-between gap-5 lg:gap-8 bg-primary lg:p-10 p-5"
+    data-aos="fade-up"
    >
- 
+
  {/* First Card */}
  <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 flex-1" data-aos="fade-up">
    <div className="flex justify-center sm:justify-start">
-     <div className="h-24 w-24 sm:h-32 sm:w-32 bg-lightyellow flex items-center justify-center rounded-3xl p-4 lg:p-5">
+     <div className="h-24 w-24 sm:h-32 sm:w-32 bg-secondary flex items-center justify-center rounded-3xl p-4 lg:p-5">
        <AppImage src={logoo1} alt="Innovations icon" className="w-full h-auto object-contain" />
      </div>
    </div>
@@ -29,7 +29,7 @@ const Offers = () => {
  {/* Second Card */}
  <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 flex-1" data-aos="fade-up">
    <div className="flex justify-center sm:justify-start">
-     <div className="h-24 w-24 sm:h-32 sm:w-32 bg-lightyellow flex items-center justify-center rounded-3xl p-4 lg:p-5">
+     <div className="h-24 w-24 sm:h-32 sm:w-32 bg-secondary flex items-center justify-center rounded-3xl p-4 lg:p-5">
        <AppImage src={logoo2} alt="Critical Thinking icon" className="w-full h-auto object-contain" />
      </div>
    </div>
@@ -46,7 +46,7 @@ const Offers = () => {
  {/* Third Card */}
  <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 flex-1" data-aos="fade-up">
    <div className="flex justify-center sm:justify-start">
-     <div className="h-24 w-24 sm:h-32 sm:w-32 bg-lightyellow flex items-center justify-center rounded-3xl p-4 lg:p-5">
+     <div className="h-24 w-24 sm:h-32 sm:w-32 bg-secondary flex items-center justify-center rounded-3xl p-4 lg:p-5">
        <AppImage src={logoo3} alt="Problem Solving icon" className="w-full h-auto object-contain" />
      </div>
    </div>

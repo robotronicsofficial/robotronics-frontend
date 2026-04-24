@@ -10,7 +10,7 @@ const SuccessModal = ({ isOpen, onClose }) => (
       <div className="flex size-12 items-center justify-center rounded-full bg-primary/15 text-primary">
         <CheckIcon aria-hidden="true" />
       </div>
-      <Button className="w-full bg-yellow text-white hover:bg-darkgold" onClick={onClose}>
+      <Button className="w-full bg-primary text-white hover:bg-accent" onClick={onClose}>
         CONTINUE
       </Button>
     </div>

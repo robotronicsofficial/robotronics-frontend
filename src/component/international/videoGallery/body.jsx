@@ -31,31 +31,31 @@ const Filters = ({
 }) => (
   <div className="flex flex-wrap md:flex-nowrap space-y-4 md:space-y-0 md:space-x-6 mb-6">
     <div className="w-full md:w-1/4">
-      <label className="block text-brown poppins-medium mb-2">Date</label>
+      <label className="block text-foreground poppins-medium mb-2">Date</label>
       <input
         type="date"
-        className="w-full p-2 border border-gray rounded"
+        className="w-full p-2 border border-border rounded"
         value={selectedDate}
         onChange={(e) => setSelectedDate(e.target.value)}
       />
     </div>
     <div className="w-full md:w-1/4">
-      <label className="block text-brown poppins-medium mb-2">
+      <label className="block text-foreground poppins-medium mb-2">
         School Name
       </label>
       <input
         type="text"
-        className="w-full p-2 border border-gray rounded"
+        className="w-full p-2 border border-border rounded"
         value={selectedSchool}
         onChange={(e) => setSelectedSchool(e.target.value)}
       />
     </div>
     <div className="w-full md:w-1/4">
-      <label className="block text-brown poppins-medium mb-2">
+      <label className="block text-foreground poppins-medium mb-2">
         Select City
       </label>
       <select
-        className="w-full p-2 border border-gray rounded"
+        className="w-full p-2 border border-border rounded"
         value={selectedCity}
         onChange={(e) => setSelectedCity(e.target.value)}
       >
@@ -86,9 +86,9 @@ const Filters = ({
       </select>
     </div>
     <div className="w-full md:w-1/4">
-      <label className="block text-brown poppins-medium mb-2">Sort by</label>
+      <label className="block text-foreground poppins-medium mb-2">Sort by</label>
       <select
-        className="w-full p-2 border border-gray rounded"
+        className="w-full p-2 border border-border rounded"
         value={sortBy}
         onChange={(e) => setSortBy(e.target.value)}
       >
@@ -174,11 +174,11 @@ const Intro = () => {
   if (error) return <div>Error: We couldn&apos;t load the video gallery right now.</div>;
 
   return (
-    <div className="bg-gray p-14">
+    <div className="bg-background p-14">
       <div className="flex flex-wrap md:flex-nowrap gap-8 md:space-x-6">
         <aside className="p-8 w-[22vw] overflow-hidden">
           <h2
-            className="font-bold text-3xl poppins-bold text-brown mb-4 cursor-pointer"
+            className="font-bold text-3xl poppins-bold text-foreground mb-4 cursor-pointer"
             onClick={() => {
               setSelectedCategory("");
               setSelectedDate("");
@@ -190,7 +190,7 @@ const Intro = () => {
           >
             Activities
           </h2>
-          <h2 className="border border-brown w-1/3 h-2 rounded-md bg-brown mb-4"></h2>
+          <h2 className="border border-foreground w-1/3 h-2 rounded-md bg-foreground mb-4"></h2>
 
           {/* this will show all the activities filter */}
           {/* <ul className="space-y-2">
@@ -199,8 +199,8 @@ const Intro = () => {
                 key={category}
                 className={`cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
                   selectedCategory === category.trim().toLowerCase()
-                    ? "font-semibold text-[#e06f21]"
-                    : "text-gray-600 hover:text-gray-400"
+                    ? "font-semibold text-accent"
+                    : "text-muted-foreground-600 hover:text-muted-foreground-400"
                 }`}
                 onClick={() => handleCategoryClick(category)}
               >
@@ -225,8 +225,8 @@ const Intro = () => {
                   key={category}
                   className={`cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
                     selectedCategory === category.trim().toLowerCase()
-                      ? "font-semibold text-[#e06f21]"
-                      : "text-gray-600 hover:text-gray-400"
+                      ? "font-semibold text-accent"
+                      : "text-muted-foreground-600 hover:text-muted-foreground-400"
                   }`}
                   onClick={() => handleCategoryClick(category)}
                 >

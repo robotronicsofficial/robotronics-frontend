@@ -47,9 +47,9 @@ const Signup = () => {
       if (inputElement) {
         // Apply your custom classes
         inputElement.classList.add(
-          'border', 'border-line', 'rounded-xl', 'p-2',
-          'bg-gray', 'w-full', 'focus:outline-none',
-          'focus:ring-0', 'focus:border-line'
+          'border', 'border-border', 'rounded-xl', 'p-2',
+          'bg-background', 'w-full', 'focus:outline-none',
+          'focus:ring-0', 'focus:border-border'
         );
 
         // Remove any unwanted classes
@@ -159,14 +159,14 @@ const Signup = () => {
             />
           </div>
           <div
-            className="w-full border border-line"
+            className="w-full border border-border"
             data-aos="fade-up"
 
 
           ></div>
         </div>
         <div
-          className="flex flex-col bg-gray rounded-lg lg:p-14 p-5 mt-32 md:mt-0"
+          className="flex flex-col bg-background rounded-lg lg:p-14 p-5 mt-32 md:mt-0"
           data-aos="fade-up"
 
 
@@ -179,7 +179,7 @@ const Signup = () => {
               <div className="flex flex-col">
                 <p className="text-sm poppins-light ">First name</p>
                 <input
-                  className="border border-line rounded-xl p-2 lg:px-8 bg-gray"
+                  className="border border-border rounded-xl p-2 lg:px-8 bg-background"
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
@@ -188,7 +188,7 @@ const Signup = () => {
               <div className="flex flex-col">
                 <p className="text-sm poppins-light ">Last name</p>
                 <input
-                  className="border border-line rounded-xl p-2 lg:px-8 bg-gray"
+                  className="border border-border rounded-xl p-2 lg:px-8 bg-background"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
@@ -198,7 +198,7 @@ const Signup = () => {
             <div className="flex flex-col">
               <p className="text-sm poppins-light ">Email address</p>
               <input
-                className="border border-line rounded-xl p-2 bg-gray"
+                className="border border-border rounded-xl p-2 bg-background"
                 type="email"
                 name="email"
                 value={formData.email}
@@ -216,13 +216,13 @@ const Signup = () => {
                   value={formData.phoneNumber}
                   onChange={handlePhoneChange}
                   inputProps={{
-                    className: "border border-line rounded-xl p-2 pl-14 bg-gray w-full focus:outline-none focus:ring-0 focus:border-line text-base",
+                    className: "border border-border rounded-xl p-2 pl-14 bg-background w-full focus:outline-none focus:ring-0 focus:border-border text-base",
                     autoComplete: "tel",
                     type: "tel"
                   }}
                   countrySelectProps={{
                     className: "absolute left-0 top-0 h-full flex items-center pl-2 touch-manipulation",
-                    dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-white shadow-lg border border-gray-200 rounded-md w-60 max-w-full mt-1",
+                    dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-white shadow-lg border border-border-200 rounded-md w-60 max-w-full mt-1",
                     buttonClass: "flex items-center justify-center h-full px-2 focus:outline-none"
                   }}
                   containerClass="relative w-full"
@@ -230,7 +230,7 @@ const Signup = () => {
                     '--PhoneInputCountryFlag-height': '1.25rem',
                     '--PhoneInputCountryFlag-width': 'auto',
                     '--PhoneInputCountryFlag-borderColor': 'transparent',
-                    '--PhoneInputCountrySelectArrow-color': '#555555',
+                    '--PhoneInputCountrySelectArrow-color': 'var(--muted-foreground)',
                     '--PhoneInputCountrySelectArrow-opacity': '1',
                     '--PhoneInputCountrySelectArrow-width': '0.5em',
                     '--PhoneInputCountrySelectArrow-marginLeft': '0.5em',
@@ -298,12 +298,12 @@ const Signup = () => {
                 <input
                   id="terms-checkbox"
                   type="checkbox"
-                  className="w-4 h-4 text-brown bg-gray-100 border-gray-300 rounded focus:ring-2"
+                  className="w-4 h-4 text-foreground bg-background-100 border-border-300 rounded focus:ring-2"
                   onChange={(e) => setIsCheckboxChecked(e.target.checked)}
                 />
                 <label
                   htmlFor="terms-checkbox"
-                  className="ms-2 text-sm font-medium text-gray-900 text-wrap"
+                  className="ms-2 text-sm font-medium text-muted-foreground-900 text-wrap"
                 >
                   By creating an account, I agree to our{" "}
                   <Link to="/TermsConditions" className="underline underline-offset-4">
@@ -316,7 +316,7 @@ const Signup = () => {
                 </label>
               </div>
               <button
-                className={`bg-brown text-gold rounded-3xl px-5 py-2 w-full flex items-center justify-center ${!isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""}`}
+                className={`bg-foreground text-primary rounded-3xl px-5 py-2 w-full flex items-center justify-center ${!isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""}`}
                 onClick={handleSignUp}
                 disabled={!isCheckboxChecked || registerMutation.isPending}
               >
@@ -345,9 +345,9 @@ const Signup = () => {
           </div>
           <div className="flex flex-col lg:py-10 py-5">
             <div className="flex items-center justify-center">
-              <div className="h-0 w-52 border border-line "></div>
+              <div className="h-0 w-52 border border-border "></div>
               <p className=" text-xl poppins-semibold p-2">OR</p>
-              <div className="h-0 w-52 border border-line"></div>
+              <div className="h-0 w-52 border border-border"></div>
             </div>
             <div className="flex flex-col items-center justify-center gap-2 py-10 lg:gap-4 lg:py-20">
               <AuthSocialButton

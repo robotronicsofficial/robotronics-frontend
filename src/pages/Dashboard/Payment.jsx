@@ -4,7 +4,7 @@ import Payhistory from '../../component/dashboard/Payhistory'
 const Payment = () => {
   return (
     <div>
-      <div className="px-4 md:px-20 bg-[#ebe5e2]">
+      <div className="px-4 md:px-20 bg-background">
       <Intro/>
       </div>
       <Payhistory/>

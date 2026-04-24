@@ -23,7 +23,7 @@ const CareerDetailPage = () => {
         <p className="text-red-500">{getJobsErrorMessage(error, { detail: true })}</p>
         <Link
           to="/CareerJob"
-          className="mt-6 inline-flex rounded-full bg-brown px-5 py-3 text-white transition hover:opacity-90"
+          className="mt-6 inline-flex rounded-full bg-foreground px-5 py-3 text-white transition hover:opacity-90"
         >
           Back to careers
         </Link>

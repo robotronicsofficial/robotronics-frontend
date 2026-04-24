@@ -33,12 +33,12 @@ const WorkshopCard = ({ workshop }) => {
           className="w-full h-full object-fill"
         />
       </div>
-      <div className="px-3 py-4 bg-[#362d2c] relative h-[18vw] flex flex-col">
+      <div className="px-3 py-4 bg-foreground relative h-[18vw] flex flex-col">
         <div className="h-[2vw] text-white">
           <p className="poppins-medium my-3">
             {workshop.activity}
           </p>
-          <div className="absolute right-2 -top-10 size-20 overflow-hidden rounded-full border-2 border-white bg-yellow">
+          <div className="absolute right-2 -top-10 size-20 overflow-hidden rounded-full border-2 border-white bg-primary">
             <img
               src={workshop.schoolLogo}
               alt={workshop.schoolName}

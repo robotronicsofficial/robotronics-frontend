@@ -27,7 +27,7 @@ const CustomerOrder = ({
     >
       <div className="flex flex-col gap-4 lg:gap-8">
         <p className="md:text-4xl text-2xl poppins-bold">YOUR ORDER</p>
-        <p className="text-sm text-line poppins-regular">
+        <p className="text-sm text-muted-foreground poppins-regular">
           Review all the products you want to buy
         </p>
       </div>
@@ -44,12 +44,12 @@ const CustomerOrder = ({
             />
           ))
         ) : (
-          <p className="text-sm text-[#7E7F7C]">Your cart is empty.</p>
+          <p className="text-sm text-muted-foreground">Your cart is empty.</p>
         )}
       </div>
 
       <div className="flex flex-col py-2 lg:py-5">
-        <div className="h-0 border border-lightgray"></div>
+        <div className="h-0 border border-muted"></div>
       </div>
 
       <div className="flex flex-col gap-2 lg:gap-5">
@@ -75,16 +75,16 @@ const CustomerOrder = ({
           label="Total Price"
           value={formatShopCurrency(summary.total)}
           labelClassName={summaryLabelClassName}
-          valueClassName="text-xl text-yellow poppins-bold"
+          valueClassName="text-xl text-primary poppins-bold"
         />
         <div className="flex flex-col gap-1 py-2 lg:gap-3 lg:py-4">
-          <div className="h-0 border border-lightgray"></div>
+          <div className="h-0 border border-muted"></div>
         </div>
         {showContinueButton ? (
           <div className="flex justify-center py-2 lg:py-4">
             <button
               type="button"
-              className="text-center lg:text-xl text-sm poppins-bold text-gold bg-brown py-2 lg:px-20 px-5"
+              className="text-center lg:text-xl text-sm poppins-bold text-primary bg-foreground py-2 lg:px-20 px-5"
               onClick={onNext}
               disabled={buttonDisabled || !items.length}
             >

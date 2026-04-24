@@ -29,7 +29,7 @@ ChartJS.register(
 
 // Subcomponents
 const Header = () => (
-  <div className="flex space-x-5 text-center bg-gray mt-8">
+  <div className="flex space-x-5 text-center bg-background mt-8">
     <div className="md:ml-20 p-5 hidden sm:block ">
       <AppImage
         className="w-40 h-60"
@@ -40,14 +40,14 @@ const Header = () => (
     </div>
     <div className="" data-aos="fade-up">
       <p
-        className="md:text-6xl text-xl text-wrap text-left poppins-bold text-brown px-8"
+        className="md:text-6xl text-xl text-wrap text-left poppins-bold text-foreground px-8"
         style={{ lineHeight: "1.3" }}
       >
         Through{" "}
-        <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-yellow mr-2">
+        <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-primary mr-2">
           Robotics & STEM, 
         </span>
-        <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-brown">
+        <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-foreground">
             we empower <br></br> young minds to think critically, solve problems
           and turn imagination into innovation.
         </span>
@@ -61,16 +61,16 @@ const InfoSection = () => (
     className=" md:mt-8 p-5  px-14 md:px-10  md:ml-20 w-full"
     data-aos="fade-up"
   >
-    <div className="md:text-3xl text-xl text-wrap text-left poppins-regular text-brown">
+    <div className="md:text-3xl text-xl text-wrap text-left poppins-regular text-foreground">
       By 2025,
-      <span className="md:text-5xl text-2xl text-wrap text-left poppins-semibold text-brown">
+      <span className="md:text-5xl text-2xl text-wrap text-left poppins-semibold text-foreground">
         {" "}
         ROBOTRONICS
       </span>
-      <div className="md:text-3xl text-xl text-wrap text-left poppins-regular text-brown">
+      <div className="md:text-3xl text-xl text-wrap text-left poppins-regular text-foreground">
         holds 70% of the market in Pakistan’s Robotics Education Sector.
       </div>
-      <div className="md:text-3xl text-xl text-wrap text-left poppins-regular text-brown"></div>
+      <div className="md:text-3xl text-xl text-wrap text-left poppins-regular text-foreground"></div>
     </div>
 
     <div className="relative flex  w-full">
@@ -164,9 +164,9 @@ const Graph = () => {
   };
 
   return (
-    <div className="bg-gray">
+    <div className="bg-background">
       <Header />
-      <div className="flex w-full justify-between bg-gray">
+      <div className="flex w-full justify-between bg-background">
         <InfoSection />
         <ChartSection data={data} options={options} />
       </div>

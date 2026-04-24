@@ -35,17 +35,17 @@ const Shopproduct = ({
           />
         </div>
         <div className="text-wrap w-full">
-          <p className="text-[#362D2C] hover:text-black text-xl poppins-bold my-2">
+          <p className="text-foreground hover:text-black text-xl poppins-bold my-2">
             {title}
           </p>
-          <p className="text-[#C86400] poppins-bold text-xl">PKR {Number(price || 0).toLocaleString()}</p>
+          <p className="text-accent poppins-bold text-xl">PKR {Number(price || 0).toLocaleString()}</p>
         </div>
       </div>
 
       {/* Add to Cart and Add to Wishlist buttons */}
       <div className="absolute flex flex-col w-[14vw] transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <button
-          className="bg-[#F2F1F1DE] bg-opacity-30 p-2 text-[362D2C] poppins-medium rounded-lg mb-2"
+          className="bg-muted bg-opacity-30 p-2 text-foreground poppins-medium rounded-lg mb-2"
           onClick={(e) => {
             e.stopPropagation(); // Prevent link navigation
             onAddToCart(); // Trigger add to cart
@@ -54,7 +54,7 @@ const Shopproduct = ({
           Add to Cart
         </button>
         <button
-          className="bg-[#C86400] p-2 text-[362D2C] poppins-medium rounded-lg flex items-center"
+          className="bg-accent p-2 text-foreground poppins-medium rounded-lg flex items-center"
           onClick={(e) => {
             e.stopPropagation(); // Prevent link navigation
             onAddToWishlist(); // Trigger add to wishlist

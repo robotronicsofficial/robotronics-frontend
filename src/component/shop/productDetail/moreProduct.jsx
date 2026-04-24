@@ -39,7 +39,7 @@ const RelatedItemsMessage = ({ children, tone = "default" }) => (
   <div
     className={cn(
       "rounded-2xl bg-white p-10 text-center shadow-sm",
-      tone === "error" ? "text-red-600" : "text-brown",
+      tone === "error" ? "text-red-600" : "text-foreground",
     )}
   >
     {children}
@@ -66,17 +66,17 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
   const topThree = useMemo(() => items.slice(0, 3), [items]);
 
   return (
-    <div className="bg-gray p-14">
+    <div className="bg-background p-14">
       <div className="flex flex-col gap-8">
         <p
-          className="lg:text-5xl text-2xl poppins-bold text-brown text-center"
+          className="lg:text-5xl text-2xl poppins-bold text-foreground text-center"
           data-aos="fade-up"
         >
           You May Also Like This
         </p>
 
         <p
-          className="text-line text-wrap poppins-light text-center"
+          className="text-muted-foreground text-wrap poppins-light text-center"
           data-aos="fade-up"
         >
           {config.subtitle}
@@ -93,7 +93,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
               <button
                 type="button"
                 onClick={() => navigate(config.browsePath)}
-                className="rounded-lg bg-brown px-5 py-3 font-semibold text-gold"
+                className="rounded-lg bg-foreground px-5 py-3 font-semibold text-primary"
               >
                 {config.browseLabel}
               </button>
@@ -118,15 +118,15 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                   loading="lazy"
                   decoding="async"
                 />
-                <div className="flex flex-col gap-3 p-5 text-brown">
+                <div className="flex flex-col gap-3 p-5 text-foreground">
                   <div className="flex items-start justify-between gap-3">
-                    <p className="rounded-full bg-[#F3F0EA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#9E7A3A]">
+                    <p className="rounded-full bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                       {item?.category || "General"}
                     </p>
                     <p className="text-sm font-semibold">PKR {Number(item?.price || 0).toLocaleString()}</p>
                   </div>
                   <h3 className="text-lg font-bold leading-snug">{item?.name || "Item"}</h3>
-                  <p className="line-clamp-2 text-sm text-[#7E7F7C]">
+                  <p className="line-clamp-2 text-sm text-muted-foreground">
                     {item?.description || "Live catalog listing from Robotronics."}
                   </p>
                 </div>

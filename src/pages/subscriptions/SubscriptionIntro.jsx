@@ -24,7 +24,7 @@ const SubscriptionIntro = () => {
 
   return (
     <div className="bg-background">
-      <div className="bg-gray-100 py-6">
+      <div className="bg-background-100 py-6">
         <div className="w-full h-full px-4 py-12 sm:py-2 sm:px-8 md:px-12 lg:px-24">
           <div className="flex flex-col lg:flex-row lg:space-x-6 mt-20 lg:mt-40">
             {/* Left Side */}
@@ -46,7 +46,7 @@ const SubscriptionIntro = () => {
               {/* Heading + Button */}
               <div>
                 <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-start sm:items-center w-full">
-                  <h1 className="text-3xl sm:text-3xl lg:text-5xl text-brown font-medium pt-6 lg:pt-0 poppins-bold">
+                  <h1 className="text-3xl sm:text-3xl lg:text-5xl text-foreground font-medium pt-6 lg:pt-0 poppins-bold">
                     Learning Subscription
                   </h1>
                   <button className="border bg-red-600 text-white text-sm md:text-base lg:text-lg px-4 md:px-6 py-2 md:py-3 w-full sm:w-auto rounded-lg pointer-events-none">
@@ -55,7 +55,7 @@ const SubscriptionIntro = () => {
                 </div>
 
                 {/* Info Bar */}
-                <div className="h-auto sm:h-[12vh] w-full bg-[#D9D9D9] flex flex-wrap sm:flex-nowrap items-center px-4 sm:px-8 justify-between mt-6 lg:mt-14 rounded-lg text-[#7D7D7D] text-sm sm:text-base gap-2 sm:gap-0 py-4 sm:py-0 poppins-light ">
+                <div className="h-auto sm:h-[12vh] w-full bg-muted flex flex-wrap sm:flex-nowrap items-center px-4 sm:px-8 justify-between mt-6 lg:mt-14 rounded-lg text-muted-foreground text-sm sm:text-base gap-2 sm:gap-0 py-4 sm:py-0 poppins-light ">
                   <div className="whitespace-nowrap">30+ Courses</div>
                   <div className="whitespace-nowrap">US-based Certificates</div>
                   <div className="whitespace-nowrap hidden sm:inline-block">
@@ -114,7 +114,7 @@ const SubscriptionIntro = () => {
 
             >
               {/* Video */}
-              <div className="bg-gray-300 w-full rounded-md flex justify-center items-center">
+              <div className="bg-background-300 w-full rounded-md flex justify-center items-center">
                 <AppImage
                   src={yt}
                   alt="Course"
@@ -127,7 +127,7 @@ const SubscriptionIntro = () => {
                 <h3 className="text-lg sm:text-xl mb-4 font-semibold poppins-bold">
                 Subscription features:
                 </h3>
-                <ul className="list-none space-y-3 text-gray-700">
+                <ul className="list-none space-y-3 text-muted-foreground-700">
                   {[
                     "30+ Courses in one Subscription",
                     "Robotics, STEM, AI, Coding all included",
@@ -142,7 +142,7 @@ const SubscriptionIntro = () => {
                       key={index}
                       className="flex items-center space-x-4 sm:space-x-6 "
                     >
-                      <span className="text-yellow text-lg sm:text-xl">
+                      <span className="text-primary text-lg sm:text-xl">
                         <MdCheckBox />
                       </span>
                       <span className="text-base sm:text-xl md:text-base  poppins-light ">{item}</span>
@@ -158,7 +158,7 @@ const SubscriptionIntro = () => {
             <h1 className="font-semibold text-2xl sm:text-3xl md:text-4xl mb-4 poppins-bold">
               What is the learning subscription?
             </h1>
-            <p className="text-lightblack leading-relaxed text-base sm:text-lg poppins-light">
+            <p className="text-foreground leading-relaxed text-base sm:text-lg poppins-light">
               The learning subscription is a course platform
               with all the skills under one roof. It is a one-stop solution
               for your Child to learn all the Modern Skills. From Robotics to AI

@@ -5,7 +5,7 @@ const SubscriptionCustomerInfoIntro = () => {
       {/* parent */}
       <div className="flex flex-col ">
         <div className=" items-center"data-aos="fade-down" >
-          <p className="text-[#362D2C] font-poppins font-bold text-wrap lg:text-4xl text-2xl text-center self-center mt-44 pb-6">
+          <p className="text-foreground font-poppins font-bold text-wrap lg:text-4xl text-2xl text-center self-center mt-44 pb-6">
             Subscription <br /> Registration Process
           </p>
         </div>

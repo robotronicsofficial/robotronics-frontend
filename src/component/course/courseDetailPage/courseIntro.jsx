@@ -31,13 +31,13 @@ const CourseIntro = ({ id, title, image, price, category }) => {
   };
 
   return (
-    <div className="bg-lightgray"data-aos="fade-right">
+    <div className="bg-muted"data-aos="fade-right">
       {/* parent */}
       <div className=" p-10 lg:flex flex-row ">
         {/* left */}
         <div className="lg:flex flex-row justify-center ">
           {/* img */}
-          <div className="rounded-full bg-gray max-w-full max-h-full flex items-center justify-center">
+          <div className="rounded-full bg-background max-w-full max-h-full flex items-center justify-center">
             <AppImage
               src={resolvedImage}
               className="rounded-full object-cover md:w-full md:h-full"
@@ -71,7 +71,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
         <div className="p-5 lg:px-24 lg:space-y-5 space-y-3 ">
           {/* title */}
           <div>
-            <p className="poppins-bold text-brown lg:text-6xl ">{title}</p>
+            <p className="poppins-bold text-foreground lg:text-6xl ">{title}</p>
           </div>
           {/* sale */}
           <div className="space-y-8">
@@ -88,15 +88,15 @@ const CourseIntro = ({ id, title, image, price, category }) => {
             </div>
             {/* text */}
             <div className="flex flex-row space-x-2 ">
-              <p className="text-sm text-line poppins-thin">
+              <p className="text-sm text-muted-foreground poppins-thin">
                 261 products sold .
               </p>
-              <p className="text-sm text-line poppins-thin">
+              <p className="text-sm text-muted-foreground poppins-thin">
                 3,1k products watched
               </p>
             </div>
           </div>
-          <div className="text-yellow text-2xl poppins-bold">
+          <div className="text-primary text-2xl poppins-bold">
             {price != null ? `Pkr ${price}` : "Included"}
           </div>
           {/* buy now */}
@@ -106,7 +106,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
                 <button
                   type="button"
                   onClick={handleViewPlans}
-                  className="bg-brown p-2 poppins-medium lg:px-6 text-white rounded-lg"
+                  className="bg-foreground p-2 poppins-medium lg:px-6 text-white rounded-lg"
                 >
                   VIEW SUBSCRIPTION PLANS
                 </button>
@@ -115,7 +115,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
                 <button
                   type="button"
                   onClick={handleGiftCourse}
-                  className="mt-3 rounded-lg border border-brown bg-white p-2 poppins-medium text-brown lg:mt-0 lg:px-6"
+                  className="mt-3 rounded-lg border border-foreground bg-white p-2 poppins-medium text-foreground lg:mt-0 lg:px-6"
                 >
                   GIFT THIS COURSE
                 </button>

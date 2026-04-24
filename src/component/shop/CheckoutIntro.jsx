@@ -41,10 +41,10 @@ const CheckoutIntro = ({ activeStep = 1 }) => {
     <div className="shopCarthero" id="shopCarthero">
       <div className="flex flex-col lg:py-20 py-10">
         <div className="items-center" data-aos="fade-up">
-          <p className="text-brown font-bold lg:text-5xl text-2xl text-center self-center">
+          <p className="text-foreground font-bold lg:text-5xl text-2xl text-center self-center">
             SHOPPING CART
           </p>
-          <p className="text-brown lg:text-l text-center text-wrap self-center">
+          <p className="text-foreground lg:text-l text-center text-wrap self-center">
             FOLLOW THE CHECKOUT STEPS TO COMPLETE YOUR ORDER
           </p>
         </div>
@@ -58,7 +58,7 @@ const CheckoutIntro = ({ activeStep = 1 }) => {
                     key={index}
                     className={cn(
                       "absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full",
-                      index <= activeIndex ? "bg-black" : "bg-gray",
+                      index <= activeIndex ? "bg-black" : "bg-background",
                       STEP_DOT_POSITIONS[index],
                     )}
                   />
@@ -74,13 +74,13 @@ const CheckoutIntro = ({ activeStep = 1 }) => {
               return (
                 <div key={step.title} className="justify-center text-center">
                   <img
-                    className={`mx-auto rounded-full p-3 ${isActive ? "bg-brown" : "bg-[#D4D4D4]"}`}
+                    className={`mx-auto rounded-full p-3 ${isActive ? "bg-foreground" : "bg-border"}`}
                     src={step.icon}
                     alt={step.title}
                   />
                   <div className="mt-3 flex flex-col gap-2">
-                    <p className="lg:text-xl text-sm font-semibold text-brown">{step.title}</p>
-                    <p className="text-sm text-wrap text-[#7E7F7C]">{step.description}</p>
+                    <p className="lg:text-xl text-sm font-semibold text-foreground">{step.title}</p>
+                    <p className="text-sm text-wrap text-muted-foreground">{step.description}</p>
                   </div>
                 </div>
               );

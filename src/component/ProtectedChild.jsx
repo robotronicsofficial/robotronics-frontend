@@ -108,7 +108,7 @@ const ProtectedChild = ({ children }) => {
   return (
     <ProtectedRoute>
       {sessionStatus === 'checking' ? (
-        <div className="bg-gray-100 min-h-screen flex justify-center items-center">
+        <div className="bg-background-100 min-h-screen flex justify-center items-center">
           Validating child access...
         </div>
       ) : sessionStatus === 'valid' ? (

@@ -69,7 +69,7 @@ const CareerTestimonials = () => {
             <div></div>
             <div>
               <p className="text-xl poppins-ligt text-white">Our Employees</p>
-              <p className="lg:text-6xl poppins-bold text-3xl text-gold font-bold">
+              <p className="lg:text-6xl poppins-bold text-3xl text-primary font-bold">
                 TESTIMONIALS
               </p>
             </div>
@@ -86,9 +86,9 @@ const CareerTestimonials = () => {
 
 
         >
-          <blockquote className="text-xl italic font-semibold text-gray-900 p-10 dark:text-white">
+          <blockquote className="text-xl italic font-semibold text-muted-foreground-900 p-10 dark:text-white">
             <svg
-              className="w-8 h-8 text-brown mb-4"
+              className="w-8 h-8 text-foreground mb-4"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -96,9 +96,9 @@ const CareerTestimonials = () => {
             >
               <path d="M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z" />
             </svg>
-            <p className="text-wrap poppins-extralight text-brown">{quote}</p>
+            <p className="text-wrap poppins-extralight text-foreground">{quote}</p>
             <svg
-              className="w-8 h-8 text-brown mb-4 float-right"
+              className="w-8 h-8 text-foreground mb-4 float-right"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -115,22 +115,22 @@ const CareerTestimonials = () => {
 
 
         >
-          <p className="text-gold poppins-extralight text-2xl">{name}</p>
+          <p className="text-primary poppins-extralight text-2xl">{name}</p>
           <p className="text-white poppins-extralight">{job}</p>
         </div>
         {/* Buttons */}
         <div className="space-x-2">
           <button
             onClick={previousTestimonial}
-            className="h-3 w-3 rounded-full bg-white hover:bg-gold"
+            className="h-3 w-3 rounded-full bg-white hover:bg-primary"
           ></button>
           <button
             onClick={nextTestimonial}
-            className="h-3 w-3 rounded-full bg-white hover:bg-gold"
+            className="h-3 w-3 rounded-full bg-white hover:bg-primary"
           ></button>
           <button
             onClick={previousTestimonial}
-            className="h-3 w-3 rounded-full bg-white hover:bg-gold"
+            className="h-3 w-3 rounded-full bg-white hover:bg-primary"
           ></button>
         </div>
       </div>
