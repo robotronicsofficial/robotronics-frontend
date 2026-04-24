@@ -6,7 +6,6 @@ import { formatDisplayDate } from "../../lib/subscription";
 import {
   getActiveChildId,
   matchesChildSessionIdentifier,
-  resolveChildSessionIdentifier,
 } from "../../utils/childSessionRequest";
 import { useParent } from "../../hooks/useAccount";
 import { Button } from "@/components/ui/button";
@@ -28,7 +27,6 @@ const SubscriptionProgressCertificate = () => {
           {children.length > 0 ? (
             children.map((child, index) => {
               const isUnlockedChild = matchesChildSessionIdentifier(child, activeChildId);
-              const childRouteId = resolveChildSessionIdentifier(child, activeChildId);
 
               return (
                 <div
@@ -58,14 +56,12 @@ const SubscriptionProgressCertificate = () => {
                       type="button"
                       className="mt-3 h-auto w-full rounded-lg border border-border bg-primary px-3 py-2 text-sm text-background hover:bg-primary"
                       onClick={() => {
-                        if (!isUnlockedChild || !childRouteId) {
+                        if (!isUnlockedChild) {
                           navigate("/Dashboard/ChildProfile");
                           return;
                         }
 
-                        navigate(
-                          `/Dashboard/ProgressCertificate/ProgressPage?childId=${childRouteId}`
-                        );
+                        navigate("/Dashboard/ProgressCertificate/ProgressPage");
                       }}
                     >
                       {isUnlockedChild ? "View Progress" : "Unlock in Child Accounts"}

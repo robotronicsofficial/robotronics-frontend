@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { Button } from '@/components/ui/button';
 import DialogShell from '@/components/ui/dialog-shell';
@@ -16,21 +16,13 @@ const ProtectedChild = ({ children }) => {
   const [showSessionPopup, setShowSessionPopup] = useState(false);
   const [sessionMessage, setSessionMessage] = useState('This child session is no longer valid. Re-enter the PIN to continue.');
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const activeChildSession = getActiveChildSession();
   const childId = activeChildSession?.childId || null;
-  const childIds = activeChildSession?.childIds || [];
   const sessionId = activeChildSession?.sessionId || null;
-
-  const expectedChildId = useMemo(() => {
-    const childIdFromQuery = searchParams.get('childId');
-    return childIdFromQuery ? String(childIdFromQuery) : null;
-  }, [searchParams]);
-  const expectedChildMatchesSession = !expectedChildId || childIds.includes(expectedChildId);
   const sessionQuery = useChildSessionVerification({
     childId,
     sessionId,
-    enabled: expectedChildMatchesSession,
+    enabled: Boolean(childId && sessionId),
   });
 
   useEffect(() => {
@@ -52,14 +44,6 @@ const ProtectedChild = ({ children }) => {
       return;
     }
 
-    if (!expectedChildMatchesSession) {
-      invalidateChildSession({
-        message: 'This page belongs to a different child account. Return to Child Accounts and open the correct child from there.',
-        clearSession: false,
-      });
-      return;
-    }
-
     if (sessionQuery.isLoading || sessionQuery.isFetching) {
       setSessionStatus((currentStatus) => (
         currentStatus === 'valid' ? currentStatus : 'checking'
@@ -78,7 +62,6 @@ const ProtectedChild = ({ children }) => {
     setShowSessionPopup(false);
   }, [
     activeChildSession,
-    expectedChildMatchesSession,
     sessionQuery.data,
     sessionQuery.isError,
     sessionQuery.isFetching,

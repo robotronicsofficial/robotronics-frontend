@@ -1,6 +1,6 @@
 import { MoveDown, Star } from "lucide-react";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { Button } from "../../components/ui/button";
@@ -19,8 +19,7 @@ const MyCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 9;
   const navigate = useNavigate();
-  const { id: routeChildId } = useParams();
-  const activeChildSession = getActiveChildSession(routeChildId);
+  const activeChildSession = getActiveChildSession();
   const childId = activeChildSession?.childId || null;
   const {
     data: selectableCourses = {},

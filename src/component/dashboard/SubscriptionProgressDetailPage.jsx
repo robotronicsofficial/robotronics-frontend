@@ -1,7 +1,6 @@
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { FileText } from "lucide-react";
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import CenteredState from "../../components/layout/CenteredState";
 import { Spinner } from "../../components/ui/spinner";
 import { getActiveChildSession } from "../../utils/childSessionRequest";
@@ -13,11 +12,9 @@ import { Button } from "@/components/ui/button";
 
 const SubscriptionProgressDetailPage = () => {
   const [filter, setFilter] = useState('all');
-  const [searchParams] = useSearchParams();
-  const childId = searchParams.get('childId');
   const [downloadingCourseId, setDownloadingCourseId] = useState(null);
   const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
-  const activeChildSession = getActiveChildSession(childId || undefined);
+  const activeChildSession = getActiveChildSession();
   const selectedChildId = activeChildSession?.childId || null;
   const {
     data: progressData,
