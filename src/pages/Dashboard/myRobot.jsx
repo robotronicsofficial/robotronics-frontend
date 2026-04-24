@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Intro from "../../component/dashboard/intro";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
+import { getSavedItems, removeSavedItem } from "../../lib/savedItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
-import { fetchSessionJson } from "../../lib/api";
 const MyRobot = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
@@ -17,8 +17,7 @@ const MyRobot = () => {
     const loadWishlist = async () => {
       try {
         setLoading(true);
-        const data = await fetchSessionJson("/wishlists/wishlist");
-        setItems(Array.isArray(data?.items) ? data.items : []);
+        setItems(await getSavedItems());
         setError("");
       } catch (fetchError) {
         setError(fetchError.message || "Failed to load saved items");
@@ -37,9 +36,7 @@ const MyRobot = () => {
 
   const handleRemove = async (item) => {
     try {
-      await fetchSessionJson(`/wishlists/wishlist/${item.itemType}/${item.itemId}`, {
-        method: "DELETE",
-      });
+      await removeSavedItem(item);
 
       setItems((currentItems) =>
         currentItems.filter(

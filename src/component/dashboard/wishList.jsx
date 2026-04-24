@@ -6,13 +6,8 @@ import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { addToCart } from "../../store/cart/cartSlice";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
-
-import { BACKEND_BASE_URL } from "../../lib/api";
-const resolveImageUrl = (image) => {
-  if (!image) return "https://via.placeholder.com/160";
-  if (image.startsWith("http")) return image;
-  return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
-};
+import { getSavedItems, removeSavedItem } from "../../lib/savedItems";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const WishListD = () => {
   const dispatch = useDispatch();
@@ -24,16 +19,7 @@ const WishListD = () => {
   const fetchWishlist = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${BACKEND_BASE_URL}/wishlists/wishlist`, {
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to load wishlist");
-      }
-
-      const data = await response.json();
-      setItems(Array.isArray(data?.items) ? data.items : []);
+      setItems(await getSavedItems());
       setError("");
     } catch (fetchError) {
       setError(fetchError.message);
@@ -48,17 +34,7 @@ const WishListD = () => {
 
   const handleRemove = async (item) => {
     try {
-      const response = await fetch(
-        `${BACKEND_BASE_URL}/wishlists/wishlist/${item.itemType}/${item.itemId}`,
-        {
-        method: "DELETE",
-        credentials: "include",
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to remove wishlist item");
-      }
+      await removeSavedItem(item);
 
       setItems((currentItems) =>
         currentItems.filter(
@@ -85,14 +61,14 @@ const WishListD = () => {
 
   return (
     <DashboardLayout
-      className="bg-background min-h-0 flex px-0"
+      className="min-h-0 bg-background px-0"
       contentClassName="w-full py-10 p-0"
       navClassName="w-1/3"
       navProps={{ "data-aos": "fade-up" }}
       withHeaderOffset={false}
     >
       <div data-aos="fade-up">
-        <h1 className="text-lightblack poppins-bold text-2xl ml-14">WishList</h1>
+        <h1 className="ml-14 text-2xl text-lightblack poppins-bold">WishList</h1>
         {items.length === 0 ? (
           <div className="px-14 py-12 text-gray-500">No saved items yet.</div>
         ) : (
@@ -106,7 +82,7 @@ const WishListD = () => {
                   <button
                     type="button"
                     onClick={() => handleRemove(item)}
-                    className="text-gray-600 cursor-pointer"
+                    className="text-gray-600 transition hover:text-red-600"
                     aria-label={`Remove ${item.name}`}
                   >
                     <FaTimes />
@@ -114,7 +90,7 @@ const WishListD = () => {
                 </div>
                 <button type="button" onClick={() => navigate(getCommerceItemRoute(item))}>
                   <img
-                    src={resolveImageUrl(item.image || item.images?.[0])}
+                    src={resolveBackendAssetUrl(item.image || item.images?.[0], "https://via.placeholder.com/160")}
                     className="size-20 object-cover"
                     alt={item.name || "Saved item"}
                   />
@@ -123,7 +99,7 @@ const WishListD = () => {
                   <button
                     type="button"
                     onClick={() => navigate(getCommerceItemRoute(item))}
-                    className="text-brown poppins-bold text-xl text-left"
+                    className="text-left text-xl text-brown poppins-bold"
                   >
                     {item.name || "Saved item"}
                   </button>
@@ -145,7 +121,7 @@ const WishListD = () => {
                   <button
                     type="button"
                     onClick={() => handleMoveToCart(item)}
-                    className="bg-orange-500 poppins-bold text-white px-4 py-2 rounded-lg"
+                    className="rounded-lg bg-orange-500 px-4 py-2 text-white poppins-bold"
                   >
                     Add to Cart
                   </button>
