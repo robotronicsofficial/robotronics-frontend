@@ -11,6 +11,9 @@ import { resolveBackendUrl, sendJson } from "../lib/api";
 import { getHeaderOffsetClass } from "../components/layout/headerOffset";
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
 
+const socialButtonClassName =
+  "flex rounded-3xl border border-line bg-gray py-3 text-black font-bold poppins-regular";
+
 const isSafeRedirectPath = (value) => (
   typeof value === "string" && value.startsWith("/") && !value.startsWith("//")
 );
@@ -41,7 +44,6 @@ const Login = () => {
         progress: undefined,
       });
 
-      // Clear the state
       window.history.replaceState({}, document.title);
     }
 
@@ -105,7 +107,7 @@ const Login = () => {
           <p className="text-4xl poppins-bold text-brown">Forgot Password</p>
           <form
             onSubmit={handleForgotPassword}
-            className="flex flex-col items-center space-y-4"
+            className="flex flex-col items-center gap-4"
           >
             <div>
               <p className="text-sm poppins-regular">Email address</p>
@@ -141,17 +143,15 @@ const Login = () => {
     <div className="bg-gray" id="signin">
       <div>
         <div
-          className={getHeaderOffsetClass("auth", "flex flex-col lg:space-y-4 space-y-1 items-center justify-center py-5")}
+          className={getHeaderOffsetClass("auth", "flex flex-col items-center justify-center gap-1 py-5 lg:gap-4")}
           data-aos="fade-up"
-
-
         >
           <p className="text-center text-wrap justify-center lg:py-10 py-5 md:text-3xl text-2xl poppins-bold text-brown">
             Log in to your account
           </p>
           <button
             type="button"
-            className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-28 px-12"
+            className={`${socialButtonClassName} px-12 lg:px-28`}
             onClick={() => handleSocialLogin('facebook')}
           >
             <img className="h-6 w-8" src={facebook} alt="Facebook" />
@@ -159,7 +159,7 @@ const Login = () => {
           </button>
           <button
             type="button"
-            className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14"
+            className={`${socialButtonClassName} px-14 lg:px-32`}
             onClick={() => handleSocialLogin('google')}
           >
             <img className="h-6 w-8" src={google} alt="Google" />
@@ -167,10 +167,8 @@ const Login = () => {
           </button>
         </div>
         <div
-          className="flex flex-row justify-center items-center"
+          className="flex items-center justify-center"
           data-aos="fade-up"
-
-
         >
           <div className="h-0 lg:w-52 w-44 border border-line"></div>
           <p className="text-xl font-bold p-2">OR</p>
@@ -178,10 +176,8 @@ const Login = () => {
         </div>
         <form
           onSubmit={handleLogin}
-          className="flex flex-col items-center space-y-3"
+          className="flex flex-col items-center gap-3"
           data-aos="fade-up"
-
-
         >
           <div className="lg:py-8 py-4">
             <p className="text-sm poppins-regular ">Email address</p>
@@ -194,9 +190,9 @@ const Login = () => {
             />
           </div>
           <div className="flex flex-col">
-            <div className="flex flex-row justify-between">
+            <div className="flex justify-between">
               <p className="text-sm poppins-regular ">Password</p>
-              <div className="flex flex-row">
+              <div className="flex">
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -216,7 +212,7 @@ const Login = () => {
             <button
               type="button"
               onClick={() => setForgotPasswordMode(true)}
-              className=" poppins-regular text-sm cursor-pointer font-bold underline underline-offset-4 text-right"
+              className="text-right text-sm font-bold underline underline-offset-4 poppins-regular"
             >
               Forget your password
             </button>
@@ -236,12 +232,12 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="bg-brown border border-line text-white poppins-regular rounded-3xl py-3 lg:px-32 px-14"
+            className="rounded-3xl border border-line bg-brown px-14 py-3 text-white poppins-regular lg:px-32"
           >
             Log in
           </button>
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-          <div className="flex flex-row justify-center items-center">
+          <div className="flex items-center justify-center">
             <div className="h-0 lg:w-56 w-44 border border-line"></div>
             <div className="h-0 lg:w-60 w-48 border border-line"></div>
           </div>
@@ -251,7 +247,7 @@ const Login = () => {
           <div className="lg:pb-10 pb-4">
             <button
               type="button"
-              className="bg-gray border border-line text-brown poppins-regular rounded-3xl items-center justify-center py-3 lg:px-32 px-14"
+              className="items-center justify-center rounded-3xl border border-line bg-gray px-14 py-3 text-brown poppins-regular lg:px-32"
               onClick={() => navigate('/Signup')}
             >
               Sign up
