@@ -1,29 +1,53 @@
+import PropTypes from "prop-types";
 import Intro from "../dashboard/intro";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useAuth } from "../../contexts/useAuth";
 
+const MASKED_PASSWORD = "••••••••";
+
+const formatAccountDate = (dateString) => {
+  if (!dateString) return "Unknown";
+
+  try {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  } catch {
+    return "Unknown";
+  }
+};
+
+const AccountDetailRow = ({ label, value }) => (
+  <div>
+    <p className="text-lightblack poppins-bold">{label}</p>
+    <p className="text-lightblack poppins-regular">{value}</p>
+    <div className="mt-4 w-full border border-lin"></div>
+  </div>
+);
+
+AccountDetailRow.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.node.isRequired,
+};
+
+const AccountSummaryLine = ({ label, value }) => (
+  <p className="text-lightblack poppins-bold">
+    <span className="font-semibold">{label}:</span> {value}
+  </p>
+);
+
+AccountSummaryLine.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.node.isRequired,
+};
+
 const UserInfoIntro = () => {
   const { currentUser } = useAuth();
-
-  // Format date for display
-  const formatDate = (dateString) => {
-    if (!dateString) return "Unknown";
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString("en-US", {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    } catch {
-      return "Unknown";
-    }
-  };
-
-  // Mask password for display
-  const maskPassword = () => {
-    return "••••••••";
-  };
+  const displayName = [currentUser?.firstName, currentUser?.lastName].filter(Boolean).join(" ") || "Not provided";
+  const displayEmail = currentUser?.email || "Not provided";
+  const memberSince = formatAccountDate(currentUser?.createdAt);
 
   return (
     <div className="bg-background min-h-screen px-4 md:px-20">
@@ -37,79 +61,33 @@ const UserInfoIntro = () => {
       >
         <div data-aos="fade-up">
           <div>
-            <p className="text-xl lg:text-2xl poppins-bold mb-2">My Info</p>
+            <p className="mb-2 text-xl poppins-bold lg:text-2xl">My Info</p>
             <p className="text-base lg:text-xl poppins-light">Account Details</p>
           </div>
 
-          <div className="mt-6 text-gray-600">
-            <div className="mb-6">
-              <p className="text-lightblack poppins-bold">Name</p>
-              <p className="text-lightblack poppins-regular">
-                {currentUser?.firstName || 'Not provided'} {currentUser?.lastName || ''}
-              </p>
-              <div className="w-full border border-lin mt-4"></div>
-            </div>
-
-            <div className="mb-6">
-              <p className="text-lightblack poppins-bold">Email</p>
-              <p className="text-lightblack poppins-regular">
-                {currentUser?.email || 'Not provided'} 
-                {/* {currentUser?.isVerified ? " (Verified)" : " (Not Verified)"} */}
-              </p>
-              <div className="w-full border border-lin mt-4"></div>
-            </div>
-
+          <div className="mt-6 flex flex-col gap-6 text-gray-600">
+            <AccountDetailRow label="Name" value={displayName} />
+            <AccountDetailRow label="Email" value={displayEmail} />
             {currentUser?.phone && (
-              <div className="mb-6">
-                <p className="text-lightblack poppins-bold">Phone Number</p>
-                <p className="text-lightblack poppins-regular">
-                  {currentUser.phone}
-                </p>
-                <div className="w-full border border-lin mt-4"></div>
-              </div>
+              <AccountDetailRow label="Phone Number" value={currentUser.phone} />
             )}
-
-            <div className="mb-6">
-              <p className="text-lightblack poppins-bold">Password</p>
-              <p className="text-lightblack poppins-regular">
-                {maskPassword()}
-              </p>
-              <div className="w-full border border-lin mt-4"></div>
-            </div>
-
-            <div className="mb-6">
-              <p className="text-lightblack poppins-bold">Account Created</p>
-              <p className="text-lightblack poppins-regular">
-                {formatDate(currentUser?.createdAt)}
-              </p>
-              <div className="w-full border border-lin mt-4"></div>
-            </div>
+            <AccountDetailRow label="Password" value={MASKED_PASSWORD} />
+            <AccountDetailRow label="Account Created" value={memberSince} />
           </div>
 
-          <div className="flex justify-between items-center mt-8">
+          <div className="mt-8 flex items-center justify-between">
             <p className="text-base lg:text-xl poppins-bold text-brown">Account Summary</p>
           </div>
 
           <div className="flex flex-wrap p-2 lg:p-5">
-            <div className="w-full p-3 ">
-              <div className="flex flex-col space-y-4 bg-white rounded-xl p-5 shadow-lg w-full">
-                <p className="text-lightblack poppins-bold">
-                  <span className="font-semibold">Name:</span> {currentUser?.firstName || 'Not provided'} {currentUser?.lastName || ''}
-                </p>
-                <p className="text-lightblack poppins-bold">
-                  <span className="font-semibold">Email:</span> {currentUser?.email || 'Not provided'}
-                </p>
+            <div className="w-full p-3">
+              <div className="flex w-full flex-col gap-4 rounded-xl bg-white p-5 shadow-lg">
+                <AccountSummaryLine label="Name" value={displayName} />
+                <AccountSummaryLine label="Email" value={displayEmail} />
                 {currentUser?.phone && (
-                  <p className="text-lightblack poppins-bold">
-                    <span className="font-semibold">Phone:</span> {currentUser.phone}
-                  </p>
+                  <AccountSummaryLine label="Phone" value={currentUser.phone} />
                 )}
-                {/* <p className="text-lightblack poppins-bold">
-                  <span className="font-semibold">Status:</span> {currentUser?.isVerified ? "Verified" : "Not Verified"}
-                </p> */}
-                <p className="text-lightblack poppins-bold">
-                  <span className="font-semibold">Member Since:</span> {formatDate(currentUser?.createdAt)}
-                </p>
+                <AccountSummaryLine label="Member Since" value={memberSince} />
               </div>
             </div>
           </div>
