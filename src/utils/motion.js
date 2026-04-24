@@ -1,7 +1,7 @@
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
-export const AOS_DURATION_MS = 650;
-export const AOS_STAGGER_MS = 120;
+export const AOS_DURATION_MS = 260;
+export const AOS_STAGGER_MS = 55;
 export const MARQUEE_DURATION_SECONDS = 18;
 
 const normalizeIndex = (value) => {
