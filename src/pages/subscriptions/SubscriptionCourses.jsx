@@ -3,8 +3,8 @@ import { FaStar, FaArrowDown } from "react-icons/fa";
 import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 
-import { BACKEND_BASE_URL } from "../../lib/api";
 import { fetchCourses } from "../../lib/courses";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 const SubscriptionCourses = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
@@ -85,7 +85,7 @@ const SubscriptionCourses = () => {
               <div className="bg-white p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
                 <img
                     className="rounded-xl w-full h-48 sm:h-56 object-cover"
-                    src={course.thumbnail ? `${BACKEND_BASE_URL}/${course.thumbnail.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x200"}
+                    src={resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")}
                     alt={course.title || "Course"}
                     loading="lazy"
                     decoding="async"

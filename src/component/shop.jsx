@@ -8,8 +8,9 @@ import { LuClock } from "react-icons/lu";
 import { IoVideocamOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
-import { BACKEND_BASE_URL, getContentLoadErrorMessage } from "../lib/api";
+import { getContentLoadErrorMessage } from "../lib/api";
 import { fetchCourses } from "../lib/courses";
+import { resolveBackendAssetUrl } from "../utils/mediaUrl";
 import AppImage from "./AppImage";
 
 const ServiceCard = ({ service }) => {
@@ -19,7 +20,7 @@ const ServiceCard = ({ service }) => {
         {/* Image */}
         <AppImage
           className="rounded-xl w-full h-48 sm:h-56 object-fit"
-          src={`${BACKEND_BASE_URL}/${service.thumbnail}`}
+          src={resolveBackendAssetUrl(service.thumbnail)}
           alt={service.title || "Course image"}
         />
 

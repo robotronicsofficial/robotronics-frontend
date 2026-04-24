@@ -14,7 +14,7 @@ import {
 } from "../../lib/shopCheckout";
 import { getCommerceItemKey, hasShippableCommerceItems } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
-import { BACKEND_BASE_URL } from "../../lib/api";
+import { sendSessionJson } from "../../lib/api";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -123,22 +123,13 @@ const CustomerInfomation = ({ onNext }) => {
         return;
       }
 
-      const response = await fetch(`${BACKEND_BASE_URL}/addresses`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const data = await sendSessionJson("/addresses", {
+        method: "POST",
+        body: {
           ...form,
           notes: note,
-        }),
+        },
       });
-
-      if (!response.ok) {
-        const { message } = await response.json();
-        throw new Error(message || 'Failed to save address');
-      }
-
-      const data = await response.json();
       saveShopCheckout({
         customer,
         address: data?.address || form,
