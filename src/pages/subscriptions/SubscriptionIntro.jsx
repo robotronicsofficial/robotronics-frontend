@@ -134,7 +134,7 @@ const SubscriptionIntro = () => {
                     "180+ hours of recorded Lectures",
                     "Freelancing Skills including E-Commerce",
                     "Easy to Understand Language",
-                    "24/7 LIVE Chat Support for Pro Users",
+                    "24/7 live support for active learners",
                     "Multiple Child Accounts under one Parent",
 
                   ].map((item, index) => (

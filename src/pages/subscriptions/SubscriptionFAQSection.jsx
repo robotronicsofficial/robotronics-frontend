@@ -10,7 +10,7 @@ const faqs = [
   {
     question: "Do we provide E-Certificates?",
     answer:
-      "Yes we do provide E-Certificates to PRO plan users which are certified from STEMSOL.org. It is a US based credentialling service provider with acceptance across the world.",
+      "Yes. Active learners can earn E-Certificates issued through STEMSOL.org, a US-based credentialing service provider with acceptance across the world.",
   },
   {
     question: "How will we pay every month? Do we need to visit your office?",
@@ -30,7 +30,7 @@ const faqs = [
   {
     question: "Can we pay in Installments?",
     answer:
-      "Parents or Schools willing to pay in Installments can opt for Monthly Plan as per their convenience.",
+      "Parents can use monthly billing when they prefer smaller recurring payments.",
   },
   {
     question: "Can we cancel the subscription?",
@@ -55,7 +55,7 @@ const faqs = [
   {
     question: "What is the fee structure?",
     answer:
-      "For Individual Parent, our plans will cost as low as PKR 800/month (USD 2.84/month) when paid Annually.",
+      "The membership supports monthly and annual billing. The current price is shown before registration.",
   },
 ];
 

@@ -148,7 +148,7 @@ const SubscriptionDetail = () => {
                 <span className="text-yellow">
                   <GoDotFill />
                 </span>
-                <span>E-Certificates for Pro Users</span>
+                <span>E-Certificates for Active Learners</span>
               </li>
             </div>
           </ul>

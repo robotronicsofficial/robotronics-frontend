@@ -28,7 +28,7 @@ const TermsAndConditions = () => {
           </li>
 
           <li>
-            <strong>Subscriptions &amp; Payments:</strong> We offer Monthly and Annual subscription plans.
+            <strong>Subscriptions &amp; Payments:</strong> The course membership supports monthly and annual billing.
             Payments are collected in advance through approved payment gateways (e.g., Bank Alfalah). Subscriptions
             renew automatically unless cancelled prior to renewal.
           </li>

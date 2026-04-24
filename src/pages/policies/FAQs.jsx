@@ -7,11 +7,11 @@ const faqs = [
   },
   {
     question: "Do we provide E-Certificates?",
-    answer: "Yes — E-Certificates are provided to PRO plan users. Certificates are issued through STEMSOL.org (a US-based credentialing partner)."
+    answer: "Yes. Active learners can earn E-Certificates issued through STEMSOL.org, a US-based credentialing partner."
   },
   {
     question: "How will we pay every month? Do we need to visit your office?",
-    answer: "All payments are processed online automatically through your bank cards as per your selected plan."
+    answer: "All payments are processed online through the selected billing method."
   },
   {
     question: "Which devices are required?",
@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     question: "Can we pay in Installments?",
-    answer: "Yes — Parents or schools can choose the Monthly Plan to pay in installments."
+    answer: "Yes. Parents can use monthly billing when they prefer smaller recurring payments."
   },
   {
     question: "Can we cancel the subscription?",
