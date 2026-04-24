@@ -4,13 +4,9 @@ import { useSelector } from "react-redux";
 import { calculateCartSummary, formatShopCurrency } from "../../lib/shopCheckout";
 import { getCommerceItemKey } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import OrderSummaryLine from "./OrderSummaryLine";
 
-const CustomerOrderSummaryLine = ({ label, value, valueClassName = "text-sm poppins-bold" }) => (
-  <div className="flex justify-between">
-    <p className="text-sm poppins-light">{label}</p>
-    <p className={valueClassName}>{value}</p>
-  </div>
-);
+const summaryLabelClassName = "text-sm poppins-light";
 
 const CustomerOrder = ({
   onNext,
@@ -57,20 +53,28 @@ const CustomerOrder = ({
       </div>
 
       <div className="flex flex-col gap-2 lg:gap-5">
-        <CustomerOrderSummaryLine
+        <OrderSummaryLine
           label="Shipping"
           value={formatShopCurrency(summary.shipping)}
+          labelClassName={summaryLabelClassName}
           valueClassName="text-sm poppins-bold lg:text-xl"
         />
-        <CustomerOrderSummaryLine label="Discount 10%" value={`- ${formatShopCurrency(summary.discount)}`} />
-        <CustomerOrderSummaryLine
+        <OrderSummaryLine
+          label="Discount 10%"
+          value={`- ${formatShopCurrency(summary.discount)}`}
+          labelClassName={summaryLabelClassName}
+          valueClassName="text-sm poppins-bold"
+        />
+        <OrderSummaryLine
           label="Price"
           value={formatShopCurrency(summary.subtotal)}
+          labelClassName={summaryLabelClassName}
           valueClassName="text-xl poppins-bold"
         />
-        <CustomerOrderSummaryLine
+        <OrderSummaryLine
           label="Total Price"
           value={formatShopCurrency(summary.total)}
+          labelClassName={summaryLabelClassName}
           valueClassName="text-xl text-yellow poppins-bold"
         />
         <div className="flex flex-col gap-1 py-2 lg:gap-3 lg:py-4">
@@ -91,12 +95,6 @@ const CustomerOrder = ({
       </div>
     </div>
   );
-};
-
-CustomerOrderSummaryLine.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.node.isRequired,
-  valueClassName: PropTypes.string,
 };
 
 CustomerOrder.propTypes = {
