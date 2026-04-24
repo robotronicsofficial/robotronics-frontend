@@ -21,7 +21,6 @@ import {
 } from "../utils/passwordPolicy";
 
 const Signup = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const registerMutation = useRegisterMutation();
   const [formData, setFormData] = useState({
     firstName: "",
@@ -104,7 +103,6 @@ const Signup = () => {
   const handleSignUp = async () => {
     if (!validateForm()) return;
 
-    setIsLoading(true); // Start loading
     try {
       await registerMutation.mutateAsync({
         firstName: formData.firstName,
@@ -117,8 +115,6 @@ const Signup = () => {
       toast.success("Email sent successfully! Please verify your email.");
     } catch (error) {
       toast.error(error.message);
-    } finally {
-      setIsLoading(false); // Stop loading regardless of success/error
     }
 
   };
@@ -322,9 +318,9 @@ const Signup = () => {
               <button
                 className={`bg-brown text-gold rounded-3xl px-5 py-2 w-full flex items-center justify-center ${!isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""}`}
                 onClick={handleSignUp}
-                disabled={!isCheckboxChecked || isLoading}
+                disabled={!isCheckboxChecked || registerMutation.isPending}
               >
-                {isLoading ? (
+                {registerMutation.isPending ? (
                   <>
                     <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

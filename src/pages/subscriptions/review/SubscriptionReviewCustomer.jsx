@@ -21,7 +21,6 @@ const ReviewRow = ({ label, value, highlight = false }) => (
 const SubscriptionReviewCustomer = () => {
   const navigate = useNavigate();
   const [checkout, setCheckout] = useState(() => loadSubscriptionCheckout());
-  const [activating, setActivating] = useState(false);
   const [activationError, setActivationError] = useState("");
   const activateSubscriptionMutation = useActivateSubscriptionMutation(checkout?.parent?.userId);
 
@@ -41,7 +40,6 @@ const SubscriptionReviewCustomer = () => {
 
   const handleConfirmOrder = async () => {
     try {
-      setActivating(true);
       setActivationError("");
 
       if (!checkout.plan?.planId || !checkout.plan?.billingCycle) {
@@ -66,8 +64,6 @@ const SubscriptionReviewCustomer = () => {
       setCheckout(confirmedCheckout);
     } catch (error) {
       setActivationError(error.message || "Failed to activate subscription");
-    } finally {
-      setActivating(false);
     }
   };
 
@@ -168,9 +164,9 @@ const SubscriptionReviewCustomer = () => {
               type="button"
               className="rounded-full bg-[#362D2C] px-6 py-3 text-sm font-semibold text-[#F5AB34]"
               onClick={handleConfirmOrder}
-              disabled={activating}
+              disabled={activateSubscriptionMutation.isPending}
             >
-              {activating ? "Activating..." : "Activate Subscription"}
+              {activateSubscriptionMutation.isPending ? "Activating..." : "Activate Subscription"}
             </button>
           </div>
         </div>

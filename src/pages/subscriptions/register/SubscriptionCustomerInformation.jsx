@@ -98,7 +98,6 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   const { data: loadedParent } = useParent(currentUser?._id);
   const saveParentMutation = useSaveParentMutation();
 
-  const [loading, setLoading] = useState(false);
   const [parentForm, setParentForm] = useState({
     firstName: "", lastName: "", email: "", country: "", companyName: "",
     streetAddress: "", aptSuite: "", city: "", state: "",
@@ -246,8 +245,6 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
       return;
     }
 
-    setLoading(true);
-
     try {
       const data = await saveParentMutation.mutateAsync({
         parent: {
@@ -298,8 +295,6 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
       }
 
       alert(`Registration failed: ${errorMessage}`);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -489,9 +484,9 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
             type="submit"
             className="text-center lg:text-xl text-sm poppins-bold text-[#F5AB34] bg-[#362D2C] py-2 lg:px-20 px-5"
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={saveParentMutation.isPending}
           >
-            {loading ? "Processing..." : "CONTINUE TO REGISTER"}
+            {saveParentMutation.isPending ? "Processing..." : "CONTINUE TO REGISTER"}
           </button>
         </div>
       </div>
