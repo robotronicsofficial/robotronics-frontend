@@ -12,7 +12,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useState } from "react";
 
 import FloatingField from "../../components/forms/FloatingField";
-import { sendJson } from "../../lib/api";
+import { useContactRequestMutation } from "../../hooks/useIntake";
 
 const CONTACT_SERVICES = {
   school: [
@@ -102,6 +102,7 @@ SocialLink.propTypes = {
 };
 
 const ContactUsForm = () => {
+  const contactRequestMutation = useContactRequestMutation();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -141,10 +142,7 @@ const ContactUsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await sendJson("/contact", {
-        method: "POST",
-        body: formData,
-      });
+      const result = await contactRequestMutation.mutateAsync(formData);
 
       setStatus(result?.message || "Message sent successfully!");
       setFormData({
@@ -325,9 +323,10 @@ const ContactUsForm = () => {
             <div className="text-end p-5" data-aos="fade-up">
               <button
                 type="submit"
+                disabled={contactRequestMutation.isPending}
                 className="justify-between rounded-md bg-brown p-2 px-3 text-white poppins-light hover:bg-yellow hover:text-brown"
               >
-                Send Now
+                {contactRequestMutation.isPending ? "Sending..." : "Send Now"}
               </button>
             </div>
           </form>

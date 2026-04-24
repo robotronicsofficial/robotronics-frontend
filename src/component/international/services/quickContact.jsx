@@ -1,7 +1,7 @@
 import { useState } from "react";
 import img from "../../../assets/images/IServicesQuickContact.svg";
 
-import { sendJson } from "../../../lib/api";
+import { useQuickContactRequestMutation } from "../../../hooks/useIntake";
 
 const initialQuickContactForm = {
   name: "",
@@ -12,6 +12,7 @@ const initialQuickContactForm = {
 };
 
 const QuickContact = () => {
+  const quickContactRequestMutation = useQuickContactRequestMutation();
   const [formData, setFormData] = useState(initialQuickContactForm);
 
   const [status, setStatus] = useState(null);
@@ -33,10 +34,7 @@ const QuickContact = () => {
     }
 
     try {
-      await sendJson("/quickContact", {
-        method: "POST",
-        body: formData,
-      });
+      await quickContactRequestMutation.mutateAsync(formData);
 
       setStatus("Message sent successfully!");
       setFormData(initialQuickContactForm);
@@ -118,9 +116,10 @@ const QuickContact = () => {
             />
             <button
               type="submit"
+              disabled={quickContactRequestMutation.isPending}
               className="w-full text-white poppins-bold bg-gold font-bold py-3 mt-4"
             >
-              Send Message
+              {quickContactRequestMutation.isPending ? "Sending..." : "Send Message"}
             </button>
           </form>
           {status && <p className="mt-4 text-red-500">{status}</p>}

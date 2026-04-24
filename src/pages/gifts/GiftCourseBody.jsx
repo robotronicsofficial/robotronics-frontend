@@ -1,6 +1,6 @@
 import CustomerOrder from "../../component/shop/customerOrder";
 import { useAuth } from "../../contexts/useAuth";
-import { sendJson } from "../../lib/api";
+import { useGiftCourseRequestMutation } from "../../hooks/useIntake";
 import { calculateCartSummary } from "../../lib/shopCheckout";
 import { COURSE_PATH } from "../../router/paths";
 import { useEffect, useMemo, useState } from "react";
@@ -57,8 +57,8 @@ const GiftCourseBody = () => {
   const { currentUser } = useAuth();
   const cart = useCartStore(selectCart);
   const [form, setForm] = useState(() => buildInitialForm(currentUser));
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
+  const giftCourseRequestMutation = useGiftCourseRequestMutation();
   const courseItems = useMemo(
     () => cart.filter((item) => item.itemType === "course"),
     [cart],
@@ -67,6 +67,7 @@ const GiftCourseBody = () => {
     () => calculateCartSummary(courseItems),
     [courseItems],
   );
+  const isSubmitting = giftCourseRequestMutation.isPending;
 
   useEffect(() => {
     if (!currentUser) {
@@ -88,7 +89,6 @@ const GiftCourseBody = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setIsSubmitting(true);
     setStatus({ type: "", message: "" });
 
     try {
@@ -97,10 +97,9 @@ const GiftCourseBody = () => {
         throw new Error("Add at least one course before sending a gift request.");
       }
 
-      const data = await sendJson("/gift-courses", {
-        method: "POST",
-        body: buildGiftCoursePayload(form, cartItems),
-      });
+      const data = await giftCourseRequestMutation.mutateAsync(
+        buildGiftCoursePayload(form, cartItems),
+      );
 
       setForm(buildInitialForm(currentUser));
       setStatus({
@@ -112,8 +111,6 @@ const GiftCourseBody = () => {
         type: "error",
         message: error.message || "Failed to submit gift course.",
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-import { sendFormData } from "../../../lib/api";
+import { useJobApplicationMutation } from "../../../hooks/useIntake";
 
 const initialApplicationForm = {
   firstName: "",
@@ -23,8 +23,9 @@ const JobApplicationForm = ({ job = null }) => {
   const jobId = job?._id || "";
   const jobTitle = job?.title || job?.position || "";
   const [form, setForm] = useState(initialApplicationForm);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
+  const jobApplicationMutation = useJobApplicationMutation();
+  const isSubmitting = jobApplicationMutation.isPending;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,7 +34,6 @@ const JobApplicationForm = ({ job = null }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setStatus({ type: "", message: "" });
 
     try {
@@ -61,10 +61,7 @@ const JobApplicationForm = ({ job = null }) => {
         formData.append("cvFile", form.cvFile);
       }
 
-      const data = await sendFormData("/cvForm", {
-        method: "POST",
-        body: formData,
-      });
+      const data = await jobApplicationMutation.mutateAsync(formData);
 
       setForm(initialApplicationForm);
       if (fileInputRef.current) {
@@ -79,8 +76,6 @@ const JobApplicationForm = ({ job = null }) => {
         type: "error",
         message: error.message || "Failed to submit application.",
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
