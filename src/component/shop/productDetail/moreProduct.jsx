@@ -11,6 +11,8 @@ import { COURSE_PATH } from "../../../router/paths";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 
 import { fetchBackendJson, getContentLoadErrorMessage } from "../../../lib/api";
+import { cn } from "../../../lib/utils";
+
 const RELATED_ITEM_CONFIG = {
   [COMMERCE_ITEM_TYPES.product]: {
     endpoint: "/getProducts",
@@ -35,6 +37,17 @@ const RELATED_ITEM_CONFIG = {
     createItem: createCourseCommerceItem,
   },
 };
+
+const RelatedItemsMessage = ({ children, tone = "default" }) => (
+  <div
+    className={cn(
+      "rounded-2xl bg-white p-10 text-center shadow-sm",
+      tone === "error" ? "text-red-600" : "text-brown",
+    )}
+  >
+    {children}
+  </div>
+);
 
 const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
   const navigate = useNavigate();
@@ -70,39 +83,28 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
   const topThree = useMemo(() => items.slice(0, 3), [items]);
 
   return (
-    <div className="bg-gray p-14 ">
-      <div className="space-y-8">
-        {/* Title */}
+    <div className="bg-gray p-14">
+      <div className="flex flex-col gap-8">
         <p
           className="lg:text-5xl text-2xl poppins-bold text-brown text-center"
           data-aos="fade-up"
-
-
         >
           You May Also Like This
         </p>
 
-        {/* Description */}
         <p
           className="text-line text-wrap poppins-light text-center"
           data-aos="fade-up"
-
-
         >
           {config.subtitle}
         </p>
 
-        {/* Product Cards */}
         {loading ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-brown shadow-sm">
-            {config.loadingLabel}
-          </div>
+          <RelatedItemsMessage>{config.loadingLabel}</RelatedItemsMessage>
         ) : error ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-red-600 shadow-sm">
-            {error}
-          </div>
+          <RelatedItemsMessage tone="error">{error}</RelatedItemsMessage>
         ) : topThree.length === 0 ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-brown shadow-sm">
+          <RelatedItemsMessage>
             {config.emptyLabel}
             <div className="mt-4">
               <button
@@ -113,13 +115,11 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                 {config.browseLabel}
               </button>
             </div>
-          </div>
+          </RelatedItemsMessage>
         ) : (
           <div
             className="grid gap-6 lg:grid-cols-3"
             data-aos="fade-up"
-
-
           >
             {topThree.map((item, index) => (
               <button
@@ -135,7 +135,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                   loading="lazy"
                   decoding="async"
                 />
-                <div className="space-y-3 p-5 text-brown">
+                <div className="flex flex-col gap-3 p-5 text-brown">
                   <div className="flex items-start justify-between gap-3">
                     <p className="rounded-full bg-[#F3F0EA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#9E7A3A]">
                       {item?.category || "General"}
