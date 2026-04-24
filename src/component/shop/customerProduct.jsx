@@ -1,29 +1,42 @@
 import PropTypes from "prop-types";
 import AppImage from "../AppImage";
 import img from "../../assets/images/customerProduct.webp";
-import { MdModeEdit,MdDelete  } from "react-icons/md";
+import { MdDelete, MdModeEdit } from "react-icons/md";
 
 const CustomerProduct = ({ title, item, price, image, onDelete, onEdit }) => {
   return (
-    <div className="flex flex-row space-x-3">
+    <div className="flex gap-3">
       <div>
         <AppImage
-          className="lg:h-20 lg:w-24 object-cover"
+          className="object-cover lg:h-20 lg:w-24"
           src={image || img}
           alt={title}
         />
       </div>
-      <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
+      <div className="flex flex-col gap-1 text-wrap text-sm lg:text-base">
         <p className="font-bold">{title}</p>
         <div className="flex gap-2">
-        <span>Quantity:</span>
-        <p className="text-line"> {item}</p>
+          <span>Quantity:</span>
+          <p className="text-line">{item}</p>
         </div>
 
         <div className="flex items-center gap-3">
-        <p className="font-bold">Pkr {price}</p>
-        {onEdit ? <MdModeEdit className="cursor-pointer" onClick={onEdit} /> : null}
-        {onDelete ? <MdDelete className="text-red-600 cursor-pointer" onClick={onDelete} /> : null}
+          <p className="font-bold">Pkr {price}</p>
+          {onEdit ? (
+            <button type="button" aria-label="Edit product" className="inline-flex" onClick={onEdit}>
+              <MdModeEdit />
+            </button>
+          ) : null}
+          {onDelete ? (
+            <button
+              type="button"
+              aria-label="Delete product"
+              className="inline-flex text-red-600"
+              onClick={onDelete}
+            >
+              <MdDelete />
+            </button>
+          ) : null}
         </div>
       </div>
     </div>
