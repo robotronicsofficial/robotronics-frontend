@@ -1,7 +1,9 @@
+import PropTypes from "prop-types";
 import step1 from "../../assets/images/stepAddShoppingBag.svg";
 import step2 from "../../assets/images/stepUserCircle.svg";
 import step3 from "../../assets/images/stepCreditCard.svg";
 import step4 from "../../assets/images/stepeye.svg";
+import { cn } from "../../lib/utils";
 
 const STEPS = [
   {
@@ -25,6 +27,12 @@ const STEPS = [
     description: "Confirm the saved checkout details before finishing.",
   },
 ];
+const STEP_DOT_POSITIONS = [
+  "left-0",
+  "left-[33.333333%] -translate-x-1/2",
+  "left-[66.666667%] -translate-x-1/2",
+  "right-0",
+];
 
 const CheckoutIntro = ({ activeStep = 1 }) => {
   const activeIndex = Math.min(Math.max(activeStep - 1, 0), STEPS.length - 1);
@@ -45,21 +53,14 @@ const CheckoutIntro = ({ activeStep = 1 }) => {
           <div className="p-2">
             <div className="relative h-0 border border-black">
               {STEPS.map((_, index) => {
-                const stepCount = STEPS.length - 1;
-                const position =
-                  index === 0 ? "left-0" : index === STEPS.length - 1 ? "right-0" : "";
-                const dynamicStyle =
-                  index > 0 && index < STEPS.length - 1
-                    ? { left: `${(index / stepCount) * 100}%`, transform: "translate(-50%, -50%)" }
-                    : undefined;
-
                 return (
                   <div
                     key={index}
-                    className={`absolute top-1/2 h-4 w-4 rounded-full ${
-                      index <= activeIndex ? "bg-black" : "bg-gray"
-                    } ${position}`}
-                    style={dynamicStyle}
+                    className={cn(
+                      "absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full",
+                      index <= activeIndex ? "bg-black" : "bg-gray",
+                      STEP_DOT_POSITIONS[index],
+                    )}
                   />
                 );
               })}
@@ -89,6 +90,10 @@ const CheckoutIntro = ({ activeStep = 1 }) => {
       </div>
     </div>
   );
+};
+
+CheckoutIntro.propTypes = {
+  activeStep: PropTypes.number,
 };
 
 export default CheckoutIntro;

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { Slider, alpha, styled } from "@mui/material";
 import ShopCartproductList from "../shopCartproductList";
@@ -8,6 +9,7 @@ import shopBag from "../../../assets/add shopping-bag.png";
 import userIcon from "../../../assets/user-circle.png";
 import cardIcon from "../../../assets/credit-card.png";
 import eyeIcon from "../../../assets/eye.png";
+import { cn } from "../../../lib/utils";
 
 // Styled Slider
 const SuccessSlider = styled(Slider)(() => ({
@@ -37,17 +39,24 @@ const SuccessSlider = styled(Slider)(() => ({
 
 const Step = ({ icon, title, description, isActive, onClick }) => (
   <button
+    type="button"
     onClick={onClick}
     disabled={!isActive}
-    className={`flex flex-col items-center space-y-2 cursor-pointer ${!isActive && "opacity-50 cursor-not-allowed"}`}
+    className={cn(
+      "flex cursor-pointer flex-col items-center gap-2",
+      !isActive && "cursor-not-allowed opacity-50",
+    )}
   >
     <div
-      className={`w-16 h-16 flex items-center justify-center rounded-full transition-colors shadow-md ${isActive ? "bg-[#362D2C]" : "bg-[#F6F6F6]"}`}
+      className={cn(
+        "flex size-16 items-center justify-center rounded-full shadow-md transition-colors",
+        isActive ? "bg-[#362D2C]" : "bg-[#F6F6F6]",
+      )}
     >
       <img
         src={icon}
-        className="w-7 h-7"
-        style={{ filter: isActive ? "invert(1)" : "none" }}
+        alt=""
+        className={cn("size-7", isActive && "invert")}
       />
     </div>
     <h3 className="font-bold text-[16px] text-[#362D2C] text-center sm:text-base">{title}</h3>
@@ -65,13 +74,13 @@ const CartsStep = () => {
       icon: shopBag,
       title: "CART",
       description: "Review all your product and edit the number.",
-      content: <ShopCartproductList onNext={() => setCurrentStep(1)} />, 
+      content: <ShopCartproductList onNext={() => setCurrentStep(1)} />,
     },
     {
       icon: userIcon,
       title: "CUSTOMER INFORMATION",
       description: "Add your name, phone number and address.",
-      content: <CustomerInfomation onNext={() => setCurrentStep(2)} />, 
+      content: <CustomerInfomation onNext={() => setCurrentStep(2)} />,
     },
     {
       icon: cardIcon,
@@ -98,11 +107,11 @@ const CartsStep = () => {
 
   return (
     <>
-      <div className="flex justify-center mt-10">
+      <div className="mt-10 flex justify-center">
         <SuccessSlider value={progressValue} min={0} max={100} disabled />
       </div>
 
-      <div className="flex lg:flex-row items-center justify-center gap-[10vw] mt-10 flex-col">
+      <div className="mt-10 flex flex-col items-center justify-center gap-[10vw] lg:flex-row">
         {steps.map((step, index) => (
           <Step
             key={index}
@@ -116,11 +125,19 @@ const CartsStep = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 md:py-16">
-        <h1 className="text-4xl poppins-bold text-brown text-wrap">{steps[currentStep].title}</h1>
+        <h1 className="text-wrap text-4xl poppins-bold text-brown">{steps[currentStep].title}</h1>
         <div>{steps[currentStep].content}</div>
       </div>
     </>
   );
+};
+
+Step.propTypes = {
+  icon: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default CartsStep;
