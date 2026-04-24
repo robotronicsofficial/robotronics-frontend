@@ -3,6 +3,8 @@ import { useState, useEffect, useRef, useCallback, memo } from "react";
 import { Link } from "react-router-dom";
 import chatLogo from "../assets/chatLogo.png";
 import { Maximize2, Mic, Minimize2, Paperclip, Send, XCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // Constants
 const BOT_RESPONSES = [
@@ -23,21 +25,27 @@ const ChatHeader = memo(function ChatHeader({ isMaximized, toggleMaximize, toggl
   <div className="bg-card text-foreground p-4 flex justify-between items-center border-b border-border">
     <h2 className="text-xl font-bold">Robotronics AI</h2>
     <div className="flex items-center gap-x-2">
-      <button
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
         onClick={toggleMaximize}
-        className="text-muted-foreground hover:text-muted-foreground text-xl p-1"
+        className="text-xl text-muted-foreground hover:bg-transparent hover:text-muted-foreground"
         aria-label={isMaximized ? "Minimize" : "Maximize"}
         aria-expanded={isMaximized}
       >
         {isMaximized ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
-      </button>
-      <button
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
         onClick={toggleChat}
-        className="text-muted-foreground hover:text-muted-foreground text-xl p-1"
+        className="text-xl text-muted-foreground hover:bg-transparent hover:text-muted-foreground"
         aria-label="Close chat"
       >
         <XCircle size={20} />
-      </button>
+      </Button>
     </div>
   </div>
   );
@@ -247,9 +255,11 @@ const ChatSupport = () => {
   return (
     <div className="fixed bottom-8 right-8 z-floating" ref={chatContainerRef}>
       {!isOpen ? (
-        <button
+        <Button
+          type="button"
+          variant="ghost"
           onClick={toggleChat}
-          className="focus:outline-none focus:ring-2 focus:ring-ring rounded-2xl"
+          className="h-auto rounded-2xl p-0 focus:ring-2 focus:ring-ring"
           aria-label="Open chat support"
         >
           <img
@@ -257,7 +267,7 @@ const ChatSupport = () => {
             alt="Chat Support"
             className="w-[186px] h-[70px] cursor-pointer hover:opacity-90 transition-opacity rounded-2xl"
           />
-        </button>
+        </Button>
       ) : (
         <div
           className={`
@@ -301,13 +311,14 @@ const ChatSupport = () => {
                 ))}
               </div>
               <div className="p-4 border-t border-border">
-                <button
-                  className="w-full py-2 bg-primary text-background rounded-lg hover:bg-accent transition-colors"
+                <Button
+                  type="button"
+                  className="h-auto w-full rounded-lg bg-primary py-2 text-background hover:bg-accent"
                   onClick={initializeChat}
                   aria-label="Start new chat"
                 >
                   New Chat
-                </button>
+                </Button>
               </div>
             </div>
           )}
@@ -353,39 +364,43 @@ const ChatSupport = () => {
                     <Paperclip className="mr-2 text-muted-foreground" />
                     <span className="text-sm truncate max-w-xs">{selectedFile.name}</span>
                   </div>
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => setSelectedFile(null)}
-                    className="text-muted-foreground hover:text-muted-foreground ml-2"
+                    className="ml-2 text-muted-foreground hover:bg-transparent hover:text-muted-foreground"
                     aria-label="Remove file"
                   >
                     ×
-                  </button>
+                  </Button>
                 </div>
               )}
               <div className="relative">
-                <input
+                <Input
                   type="text"
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type your message..."
-                  className="w-full border border-foreground rounded-3xl px-14 py-3 bg-transparent shadow-md focus:outline-none focus:ring-2 focus:ring-ring text-base"
+                  className="h-auto w-full rounded-3xl border-foreground bg-transparent px-14 py-3 text-base shadow-md"
                   aria-label="Type your message"
                   disabled={isSending}
                 />
 
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex gap-x-2">
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => fileInputRef.current.click()}
-                    className="text-muted-foreground hover:text-primary focus:text-primary focus:outline-none"
+                    className="text-muted-foreground hover:bg-transparent hover:text-primary focus:text-primary"
                     aria-label="Attach file"
                     disabled={isSending}
                   >
                     <Paperclip size={20} />
-                  </button>
-                  <input
+                  </Button>
+                  <Input
                     type="file"
                     ref={fileInputRef}
                     onChange={handleFileChange}
@@ -397,24 +412,28 @@ const ChatSupport = () => {
 
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex gap-x-2">
                   {isSpeechSupported && (
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon"
                       onClick={toggleVoiceInput}
-                      className={`${isListening ? 'text-destructive animate-pulse' : 'text-muted-foreground hover:text-primary'} focus:outline-none`}
+                      className={`${isListening ? 'text-destructive animate-pulse' : 'text-muted-foreground hover:text-primary'} hover:bg-transparent`}
                       aria-label={isListening ? "Stop listening" : "Start voice input"}
                       disabled={isSending}
                     >
                       <Mic size={20} />
-                    </button>
+                    </Button>
                   )}
-                  <button
+                  <Button
                     type="submit"
-                    className="text-primary hover:text-accent disabled:opacity-50 focus:outline-none"
+                    variant="ghost"
+                    size="icon"
+                    className="text-primary hover:bg-transparent hover:text-accent disabled:opacity-50"
                     disabled={isSending || (!inputMessage.trim() && !selectedFile)}
                     aria-label="Send message"
                   >
                     <Send size={35} />
-                  </button>
+                  </Button>
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2 text-center">
