@@ -44,7 +44,7 @@ const MOBILE_SECTIONS = [
 
 const navLinkClass = ({ isActive }) =>
   [
-    "cursor-pointer poppins-light text-sm lg:text-base transition duration-200",
+    "cursor-pointer whitespace-nowrap poppins-light text-sm lg:text-base transition duration-200",
     "border-b-2",
     isActive
       ? "text-black border-signin"
@@ -99,7 +99,7 @@ function NavDropdown({ label, items }) {
         aria-haspopup="menu"
         aria-expanded={open}
         className={[
-          "cursor-pointer poppins-light text-sm lg:text-base transition duration-200",
+          "cursor-pointer whitespace-nowrap poppins-light text-sm lg:text-base transition duration-200",
           "border-b-2 inline-flex items-center gap-1",
           hasActive
             ? "text-black border-signin"
@@ -155,7 +155,7 @@ function UserMenu({ label, onProfile, onLogout }) {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`Account menu for ${label}`}
-        className="flex items-center gap-2 rounded-full border border-gray-200 px-2 py-1 hover:bg-gray-50 transition duration-200"
+        className="flex items-center gap-2 whitespace-nowrap rounded-full border border-gray-200 px-2 py-1 hover:bg-gray-50 transition duration-200"
       >
         <FaUserCircle className="text-xl text-brown" />
         <span className="poppins-light text-sm capitalize hidden xl:inline max-w-[8rem] truncate">
@@ -231,7 +231,7 @@ function SubscribeCTA({ onClick }) {
       onClick={onClick}
       className={({ isActive }) =>
         [
-          "poppins-bold text-sm lg:text-base rounded-lg px-4 py-2 inline-flex items-center gap-1.5 transition duration-200 shrink-0",
+          "poppins-bold whitespace-nowrap text-sm lg:text-base rounded-lg px-4 py-2 inline-flex items-center gap-1.5 transition duration-200 shrink-0",
           "bg-yellow text-black hover:bg-darkgold hover:text-white",
           isActive ? "ring-2 ring-signin ring-offset-2" : "",
         ].join(" ")
@@ -326,7 +326,7 @@ export default function Header() {
           <NavLink
             to="/"
             end
-            className="flex items-center gap-2 shrink-0"
+            className="flex items-center gap-2 whitespace-nowrap shrink-0"
             data-aos="fade-right"
           >
             <img src={logo} alt="Robotronics Pakistan" className="w-12 h-12 sm:w-20 sm:h-20" />
@@ -379,13 +379,13 @@ export default function Header() {
               <div className="flex border rounded-lg">
                 <NavLink
                   to="/Signup"
-                  className="py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-signin hover:text-white"
+                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-signin hover:text-white"
                 >
                   Sign Up
                 </NavLink>
                 <NavLink
                   to="/Login"
-                  className="py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-signin hover:text-white"
+                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-signin hover:text-white"
                 >
                   Login
                 </NavLink>

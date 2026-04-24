@@ -261,7 +261,7 @@ const Footer = () => {
                     READY TO LAUNCH IN...
                   </p>
                   <div
-                    className="flex  justify-center lg:justify-start space-x-4 text-white"
+                    className="flex flex-wrap justify-center gap-4 text-white lg:justify-start"
                     data-aos="fade-up"
                   >
                     <div className="text-center">
@@ -297,7 +297,7 @@ const Footer = () => {
                   {/* App Store Buttons */}
                   <div className="flex flex-col gap-y-6 my-10">
                     <button
-                      className="mb-4 border border-white p-4 rounded-xl flex items-center space-x-12 hover:bg-gray-800 transition-colors duration-200"
+                      className="mb-4 border border-white p-4 rounded-xl flex items-center gap-12 hover:bg-gray-800 transition-colors duration-200"
                       data-aos="fade-up"
 
 
@@ -311,7 +311,7 @@ const Footer = () => {
                       </div>
                     </button>
                     <button
-                      className="border border-white p-4 rounded-xl flex items-center space-x-12 hover:bg-gray-800 transition-colors duration-200"
+                      className="border border-white p-4 rounded-xl flex items-center gap-12 hover:bg-gray-800 transition-colors duration-200"
                       data-aos="fade-up"
 
 

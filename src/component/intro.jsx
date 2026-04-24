@@ -31,7 +31,7 @@ const Intro = () => {
                     WORLD OF
                   </h1>
                 </div>
-                <div className="flex text-wrap">
+                <div className="flex flex-wrap">
                   
                   <p className="lg:text-8xl md:text-xl text-4xl font-bold text-white poppins-bold">
                     RO

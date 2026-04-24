@@ -73,13 +73,6 @@
   position: relative;
   max-width: 100%;
 }
-/* Intentional global side effect: flex containers in this codebase rely on
-   not wrapping text. Do not add `display: flex` here — Tailwind's own .flex
-   utility handles that, and redefining it here breaks `hidden` / `lg:hidden`
-   in the cascade. */
-.flex {
-  white-space: nowrap;
-}
 .services {
   background: url(./assets/images/services.webp) top center no-repeat;
   background-size: cover;
