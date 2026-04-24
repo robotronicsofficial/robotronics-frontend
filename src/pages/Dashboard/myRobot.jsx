@@ -9,6 +9,7 @@ import {
   useRemoveSavedItemMutation,
   useSavedItems,
 } from "../../hooks/useSavedItems";
+import { Button } from "@/components/ui/button";
 
 const MyRobot = () => {
   const navigate = useNavigate();
@@ -61,13 +62,13 @@ const MyRobot = () => {
         ) : items.length === 0 ? (
           <div className="flex flex-col items-start gap-4 px-8 py-12 text-foreground lg:px-14">
             <p>No saved items yet.</p>
-            <button
+            <Button
               type="button"
               onClick={() => navigate("/shop")}
-              className="rounded-lg bg-foreground px-5 py-3 font-semibold text-primary"
+              className="h-auto rounded-lg bg-foreground px-5 py-3 font-semibold text-primary"
             >
               Browse products
-            </button>
+            </Button>
           </div>
         ) : (
           <div className="flex flex-col gap-5 px-8 lg:px-14">
@@ -77,29 +78,32 @@ const MyRobot = () => {
                 className="flex flex-col gap-5 rounded-2xl bg-card p-5 shadow-sm lg:flex-row lg:items-center lg:justify-between"
               >
                 <div className="flex items-center gap-5">
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => handleRemove(item)}
-                    className="text-muted-foreground transition hover:text-destructive"
+                    className="text-muted-foreground hover:bg-transparent hover:text-destructive"
                     aria-label={`Remove ${item.name || "item"} from saved items`}
                   >
                     <X />
-                  </button>
-                  <button type="button" onClick={() => navigate(getCommerceItemRoute(item))}>
+                  </Button>
+                  <Button type="button" variant="ghost" className="h-auto p-0" onClick={() => navigate(getCommerceItemRoute(item))}>
                     <img
                       src={resolveBackendAssetUrl(item?.image || item?.images?.[0], "https://via.placeholder.com/160")}
                       className="h-20 w-20 rounded-xl object-cover"
                       alt={item?.name || "Item"}
                     />
-                  </button>
+                  </Button>
                   <div className="flex flex-col gap-2">
-                    <button
+                    <Button
                       type="button"
+                      variant="link"
                       onClick={() => navigate(getCommerceItemRoute(item))}
-                      className="text-left text-xl font-bold text-foreground"
+                      className="h-auto justify-start p-0 text-left text-xl font-bold text-foreground"
                     >
                       {item?.name || "Item"}
-                    </button>
+                    </Button>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
                       <span>Category: {item?.category || "General"}</span>
                       <span>Type: {item?.itemType || "item"}</span>
@@ -109,13 +113,13 @@ const MyRobot = () => {
 
                 <div className="flex flex-col items-start gap-3 lg:items-end">
                   <p className="text-xl font-bold text-foreground">PKR {Number(item?.price || 0).toLocaleString()}</p>
-                  <button
+                  <Button
                     type="button"
                     onClick={() => navigate(getCommerceItemRoute(item))}
-                    className="rounded-lg bg-warning px-4 py-2 font-semibold text-background"
+                    className="h-auto rounded-lg bg-warning px-4 py-2 font-semibold text-background"
                   >
                     {item?.itemType === "course" ? "View course" : "View product"}
-                  </button>
+                  </Button>
                 </div>
               </div>
             ))}

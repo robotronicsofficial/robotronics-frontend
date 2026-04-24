@@ -9,6 +9,7 @@ import {
   useRemoveSavedItemMutation,
   useSavedItems,
 } from "../../hooks/useSavedItems";
+import { Button } from "@/components/ui/button";
 
 const WishListD = () => {
   const addToCart = useCartStore((state) => state.addToCart);
@@ -60,30 +61,33 @@ const WishListD = () => {
             >
               <div className="flex items-center gap-5">
                 <div>
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => handleRemove(item)}
-                    className="text-muted-foreground transition hover:text-destructive"
+                    className="text-muted-foreground hover:bg-transparent hover:text-destructive"
                     aria-label={`Remove ${item.name}`}
                   >
                     <X />
-                  </button>
+                  </Button>
                 </div>
-                <button type="button" onClick={() => navigate(getCommerceItemRoute(item))}>
+                <Button type="button" variant="ghost" className="h-auto p-0" onClick={() => navigate(getCommerceItemRoute(item))}>
                   <img
                     src={resolveBackendAssetUrl(item.image || item.images?.[0], "https://via.placeholder.com/160")}
                     className="size-20 object-cover"
                     alt={item.name || "Saved item"}
                   />
-                </button>
+                </Button>
                 <div className="flex flex-col gap-2">
-                  <button
+                  <Button
                     type="button"
+                    variant="link"
                     onClick={() => navigate(getCommerceItemRoute(item))}
-                    className="text-left text-xl text-foreground poppins-bold"
+                    className="h-auto justify-start p-0 text-left text-xl text-foreground"
                   >
                     {item.name || "Saved item"}
-                  </button>
+                  </Button>
                   <div className="flex items-center gap-2">
                     <p className="text-foreground poppins-bold text-sm">Category:</p>
                     <p className="text-sm">{item.category || "General"}</p>
@@ -99,13 +103,13 @@ const WishListD = () => {
                   <p className="text-xl poppins-bold">PKR {Number(item.price || 0).toLocaleString()}</p>
                 </div>
                 <div>
-                  <button
+                  <Button
                     type="button"
                     onClick={() => handleMoveToCart(item)}
-                    className="rounded-lg bg-warning px-4 py-2 text-background poppins-bold"
+                    className="h-auto rounded-lg bg-warning px-4 py-2 font-bold text-background"
                   >
                     Add to Cart
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>

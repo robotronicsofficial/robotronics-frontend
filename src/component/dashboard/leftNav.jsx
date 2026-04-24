@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/useAuth";
 import { CONTACT_PATH } from "../../router/paths";
+import { Button } from "@/components/ui/button";
 
 const LeftNav = () => {
   const { currentUser, logout } = useAuth();
@@ -59,8 +60,9 @@ const LeftNav = () => {
           {menuItems.map((item, index) => (
             <li key={index}>
               {item.subMenu ? (
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
                   className={`flex w-full items-center justify-between rounded-lg px-4 py-2 text-foreground hover:bg-primary ${
                     activeIndex === index ? "bg-primary" : ""
                   }`}
@@ -73,7 +75,7 @@ const LeftNav = () => {
                     </span>
                   </div>
                   {item.dropdownIcon}
-                </button>
+                </Button>
               ) : (
                 <Link
                   to={item.href}
@@ -105,14 +107,15 @@ const LeftNav = () => {
             </li>
           ))}
           <li>
-            <button
+            <Button
               type="button"
-              className="flex w-full items-center gap-x-3 rounded-lg px-4 py-2 text-left text-foreground hover:bg-primary"
+              variant="ghost"
+              className="flex w-full justify-start gap-x-3 rounded-lg px-4 py-2 text-left text-foreground hover:bg-primary"
               onClick={logout}
             >
               <LogOut className="text-foreground" />
               <span className="text-base font-medium text-foreground lg:text-xl">Sign out</span>
-            </button>
+            </Button>
           </li>
         </ul>
       </nav>

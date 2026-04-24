@@ -3,6 +3,7 @@ import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useAuth } from "../../contexts/useAuth";
 import { openExternalUrl } from "../../utils/openExternalUrl";
 import { usePayments } from "../../hooks/useAccount";
+import { Button } from "@/components/ui/button";
 
 const resolveInvoiceUrl = (payment = {}) =>
   payment.invoiceUrl || payment.invoiceDownloadUrl || payment.downloadUrl || "";
@@ -64,7 +65,7 @@ const PayHistory = () => {
                 </div>
 
                 <div className="flex sm:items-center justify-end sm:justify-start mt-2 sm:mt-0 sm:pl-4">
-                  <button
+                  <Button
                     type="button"
                     className={`px-4 sm:px-6 py-1 sm:py-2 text-xs sm:text-sm md:text-base font-medium rounded-lg transition-colors whitespace-nowrap ${
                       resolveInvoiceUrl(invoice)
@@ -80,7 +81,7 @@ const PayHistory = () => {
                     }}
                   >
                     {resolveInvoiceUrl(invoice) ? "Open Invoice" : "Invoice Unavailable"}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>

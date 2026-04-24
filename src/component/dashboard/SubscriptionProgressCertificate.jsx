@@ -9,6 +9,7 @@ import {
   resolveChildSessionIdentifier,
 } from "../../utils/childSessionRequest";
 import { useParent } from "../../hooks/useAccount";
+import { Button } from "@/components/ui/button";
 
 const SubscriptionProgressCertificate = () => {
   const navigate = useNavigate();
@@ -53,8 +54,9 @@ const SubscriptionProgressCertificate = () => {
                       <p><strong>Postal Code:</strong> {child.postalCode}</p>
                     </div>
 
-                    <button
-                      className="mt-3 w-full text-sm poppins-light border border-border rounded-lg px-3 py-2 bg-primary text-background hover:bg-primary transition-colors"
+                    <Button
+                      type="button"
+                      className="mt-3 h-auto w-full rounded-lg border border-border bg-primary px-3 py-2 text-sm text-background hover:bg-primary"
                       onClick={() => {
                         if (!isUnlockedChild || !childRouteId) {
                           navigate("/Dashboard/ChildProfile");
@@ -67,7 +69,7 @@ const SubscriptionProgressCertificate = () => {
                       }}
                     >
                       {isUnlockedChild ? "View Progress" : "Unlock in Child Accounts"}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               );
