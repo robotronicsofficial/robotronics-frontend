@@ -322,7 +322,7 @@ export default function Header() {
   return (
     <header className="bg-transparent relative top-20 z-header w-full">
       <div className="w-full h-full flex items-center justify-center absolute">
-        <div className="bg-card flex items-center gap-4 lg:gap-6 p-3 sm:p-5 shadow w-[95vw] mt-6 mb-6 rounded-2xl">
+        <div className="bg-card flex items-center gap-4 lg:gap-6 p-3 sm:p-5 shadow w-site-shell mt-6 mb-6 rounded-2xl">
           <NavLink
             to="/"
             end

@@ -15,11 +15,11 @@ const CoursesProductDetail = () => {
   } = useCourse(id);
 
   if (loading) {
-    return <div className="pt-[9rem] bg-muted text-center p-10">Loading course...</div>;
+    return <div className="pt-header-auth-md bg-muted text-center p-10">Loading course...</div>;
   }
 
   if (!id || error) {
-    return <div className="pt-[9rem] bg-muted text-center p-10 text-destructive">We couldn&apos;t load this course right now.</div>;
+    return <div className="pt-header-auth-md bg-muted text-center p-10 text-destructive">We couldn&apos;t load this course right now.</div>;
   }
 
   return (

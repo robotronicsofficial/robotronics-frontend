@@ -99,6 +99,22 @@
   --color-ring: var(--ring);
   --color-overlay: var(--overlay);
 
+  --spacing-header-page: 11rem;
+  --spacing-header-auth: 8rem;
+  --spacing-header-auth-md: 9rem;
+  --spacing-header-compact: 9rem;
+  --spacing-header-dashboard-md: 0.5rem;
+  --spacing-header-dashboard-wide: 10rem;
+  --spacing-header-dashboard-wide-md: 1rem;
+  --spacing-header-about: 10rem;
+  --spacing-header-about-md: 12rem;
+  --spacing-header-blog: 6rem;
+  --spacing-header-blog-lg: 8rem;
+  --spacing-header-event: 5rem;
+  --spacing-header-event-md: 8rem;
+  --spacing-header-event-lg: 16rem;
+  --spacing-site-shell: min(95vw, 88rem);
+
   --font-title: "Poppins", sans-serif;
   --font-lato: "Lato", sans-serif;
   --motion-loop-scroll-duration: 18s;
