@@ -3,6 +3,7 @@ import { FaShareAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
+import CenteredState from "../../components/layout/CenteredState";
 
 import { fetchBackendJson, getContentLoadErrorMessage } from "../../lib/api";
 const BlogCard = ({ cardData }) => {
@@ -139,25 +140,25 @@ const BlogPost = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <CenteredState className="h-screen">
         <div className="text-xl">Loading blogs...</div>
-      </div>
+      </CenteredState>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <CenteredState className="h-screen">
         <div className="text-xl text-red-500">{error}</div>
-      </div>
+      </CenteredState>
     );
   }
 
   if (data.length === 0) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <CenteredState className="h-screen">
         <div className="text-xl">No blog posts available</div>
-      </div>
+      </CenteredState>
     );
   }
 
