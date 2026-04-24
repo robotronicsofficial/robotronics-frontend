@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
-import LeftNav from "./leftNav";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 import { addToCart } from "../../store/cart/cartSlice";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
 
@@ -83,77 +83,78 @@ const WishListD = () => {
   }
 
   return (
-    <div className="bg-background">
-      <div className="flex flex-row" data-aos="fade-up">
-        <div className="w-1/3">
-          <LeftNav />
-        </div>
-        <div className="w-full py-10">
-          <h1 className="text-lightblack poppins-bold text-2xl ml-14">WishList</h1>
-          {items.length === 0 ? (
-            <div className="px-14 py-12 text-gray-500">No saved items yet.</div>
-          ) : (
-            items.map((item) => (
-              <div
-                key={`${item.itemType}:${item.itemId}`}
-                className="flex flex-row justify-between items-center px-14 py-5 mb-5"
-              >
-                <div className="flex flex-row space-x-5 items-center">
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => handleRemove(item)}
-                      className="text-gray-600 cursor-pointer"
-                      aria-label={`Remove ${item.name}`}
-                    >
-                      <FaTimes />
-                    </button>
-                  </div>
-                  <button type="button" onClick={() => navigate(getCommerceItemRoute(item))}>
-                    <img
-                      src={resolveImageUrl(item.image || item.images?.[0])}
-                      className="w-20 h-20 object-cover"
-                      alt={item.name || "Saved item"}
-                    />
+    <DashboardLayout
+      className="bg-background min-h-0 flex flex-row md:flex-row px-0"
+      contentClassName="w-full py-10 p-0"
+      navClassName="w-1/3"
+      navProps={{ "data-aos": "fade-up" }}
+      withHeaderOffset={false}
+    >
+      <div data-aos="fade-up">
+        <h1 className="text-lightblack poppins-bold text-2xl ml-14">WishList</h1>
+        {items.length === 0 ? (
+          <div className="px-14 py-12 text-gray-500">No saved items yet.</div>
+        ) : (
+          items.map((item) => (
+            <div
+              key={`${item.itemType}:${item.itemId}`}
+              className="flex flex-row justify-between items-center px-14 py-5 mb-5"
+            >
+              <div className="flex flex-row space-x-5 items-center">
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemove(item)}
+                    className="text-gray-600 cursor-pointer"
+                    aria-label={`Remove ${item.name}`}
+                  >
+                    <FaTimes />
                   </button>
-                  <div className="flex flex-col space-y-2">
-                    <button
-                      type="button"
-                      onClick={() => navigate(getCommerceItemRoute(item))}
-                      className="text-brown poppins-bold text-xl text-left"
-                    >
-                      {item.name || "Saved item"}
-                    </button>
-                    <div className="flex flex-row items-center">
-                      <p className="text-brown poppins-bold text-sm mr-2">Category:</p>
-                      <p className="text-sm">{item.category || "General"}</p>
-                    </div>
-                    <div className="flex flex-row items-center">
-                      <p className="text-brown font-bold text-sm mr-2">Type:</p>
-                      <p className="text-sm poppins-bold">{item.itemType}</p>
-                    </div>
-                  </div>
                 </div>
-                <div className="flex flex-row items-end space-x-5">
-                  <div>
-                    <p className="text-xl poppins-bold">PKR {Number(item.price || 0).toLocaleString()}</p>
+                <button type="button" onClick={() => navigate(getCommerceItemRoute(item))}>
+                  <img
+                    src={resolveImageUrl(item.image || item.images?.[0])}
+                    className="w-20 h-20 object-cover"
+                    alt={item.name || "Saved item"}
+                  />
+                </button>
+                <div className="flex flex-col space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => navigate(getCommerceItemRoute(item))}
+                    className="text-brown poppins-bold text-xl text-left"
+                  >
+                    {item.name || "Saved item"}
+                  </button>
+                  <div className="flex flex-row items-center">
+                    <p className="text-brown poppins-bold text-sm mr-2">Category:</p>
+                    <p className="text-sm">{item.category || "General"}</p>
                   </div>
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => handleMoveToCart(item)}
-                      className="bg-orange-500 poppins-bold text-white px-4 py-2 rounded-lg"
-                    >
-                      Add to Cart
-                    </button>
+                  <div className="flex flex-row items-center">
+                    <p className="text-brown font-bold text-sm mr-2">Type:</p>
+                    <p className="text-sm poppins-bold">{item.itemType}</p>
                   </div>
                 </div>
               </div>
-            ))
-          )}
-        </div>
+              <div className="flex flex-row items-end space-x-5">
+                <div>
+                  <p className="text-xl poppins-bold">PKR {Number(item.price || 0).toLocaleString()}</p>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => handleMoveToCart(item)}
+                    className="bg-orange-500 poppins-bold text-white px-4 py-2 rounded-lg"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

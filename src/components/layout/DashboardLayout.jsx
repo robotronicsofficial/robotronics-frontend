@@ -6,6 +6,8 @@ const DashboardLayout = ({
   children,
   className,
   contentClassName,
+  navClassName,
+  navProps,
   withHeaderOffset = true,
 }) => (
   <div
@@ -15,7 +17,7 @@ const DashboardLayout = ({
       className,
     )}
   >
-    <div className="w-full md:w-1/4">
+    <div className={cn("w-full md:w-1/4", navClassName)} {...navProps}>
       <LeftNav />
     </div>
 
@@ -29,6 +31,8 @@ DashboardLayout.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   contentClassName: PropTypes.string,
+  navClassName: PropTypes.string,
+  navProps: PropTypes.object,
   withHeaderOffset: PropTypes.bool,
 };
 

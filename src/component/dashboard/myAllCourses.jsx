@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import LeftNav from "./leftNav";
 import { FaStar } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 import {
   buildChildSessionRequest,
   getActiveChildSession,
@@ -120,14 +120,13 @@ const MyAllCourses = () => {
   }
 
   return (
-    <div className="bg-background lg:flex flex-row px-4 md:px-20 pt-44 md:pt-2 relative">
-      {/* Left Navigation */}
-      <div className="lg:w-[30%] w-2/3 mt-40">
-        <LeftNav />
-      </div>
-
+    <DashboardLayout
+      className="bg-background block lg:flex flex-row relative"
+      contentClassName="w-full text-center py-5 mt-40 p-0"
+      navClassName="lg:w-[30%] w-2/3 mt-40"
+    >
       {/* Course Listing */}
-      <div className="w-full text-center py-5 mt-40">
+      <div>
         <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
           Your Active Courses
         </h1>
@@ -236,7 +235,7 @@ const MyAllCourses = () => {
           </div>
         )}
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

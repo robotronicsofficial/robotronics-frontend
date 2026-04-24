@@ -1,7 +1,7 @@
-import LeftNav from "./leftNav";
 import { FaStar, FaArrowDown } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 import {
   buildChildSessionRequest,
   getActiveChildSession,
@@ -176,15 +176,15 @@ const MyCourses = () => {
   }
 
   return (
-    <div className="bg-background lg:flex flex-row px-4 md:px-20 pt-44 md:pt-2 relative">
-      {/* Left Navigation */}
-      <div className="lg:w-[30%] w-2/3" data-aos="fade-up">
-        <LeftNav />
-      </div>
-
-        {/* Course Listing */}
-        <div className="w-full text-center py-5" data-aos="fade-up">
-          <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
+    <DashboardLayout
+      className="bg-background block lg:flex flex-row relative"
+      contentClassName="w-full text-center py-5 p-0"
+      navClassName="lg:w-[30%] w-2/3"
+      navProps={{ "data-aos": "fade-up" }}
+    >
+      {/* Course Listing */}
+      <div data-aos="fade-up">
+        <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
           {hasFixedCourseLimit ? `Select ${maxCourses} Courses` : "Select Courses"}
         </h1>
 
@@ -349,7 +349,7 @@ const MyCourses = () => {
           </div>
         )}
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

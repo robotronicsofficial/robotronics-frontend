@@ -1,5 +1,5 @@
-import LeftNav from "./leftNav";
 import Intro from "../dashboard/intro";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useAuth } from "../../contexts/useAuth";
 
 const UserInfoIntro = () => {
@@ -28,12 +28,14 @@ const UserInfoIntro = () => {
   return (
     <div className="bg-background min-h-screen px-4 md:px-20">
       <Intro />
-      <div className="flex flex-col lg:flex-row pt-40 md:pt-4" data-aos="fade-up">
-        <div className="w-full lg:w-1/3">
-          <LeftNav />
-        </div>
-
-        <div className="w-full px-6 py-6 md:px-10">
+      <DashboardLayout
+        className="bg-background min-h-0 flex flex-col md:flex-col lg:flex-row px-0 pt-40 md:pt-4"
+        contentClassName="w-full px-6 py-6 md:px-10 p-0"
+        navClassName="w-full lg:w-1/3"
+        navProps={{ "data-aos": "fade-up" }}
+        withHeaderOffset={false}
+      >
+        <div data-aos="fade-up">
           <div>
             <p className="text-xl lg:text-2xl poppins-bold mb-2">My Info</p>
             <p className="text-base lg:text-xl poppins-light">Account Details</p>
@@ -112,7 +114,7 @@ const UserInfoIntro = () => {
             </div>
           </div>
         </div>
-      </div>
+      </DashboardLayout>
     </div>
   );
 };
