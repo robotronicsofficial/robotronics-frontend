@@ -3,6 +3,7 @@ import { useLocation, useParams } from "react-router-dom";
 import ServiceInto from "./ServiceInto";
 import ServiceBody from "./ServiceBody";
 import QuickContact from "../../component/international/services/quickContact";
+import PageState from "../../components/layout/PageState";
 import { fetchServiceById, findCachedService } from "../../lib/services";
 
 const ServiceDetail = () => {
@@ -80,14 +81,14 @@ const ServiceDetail = () => {
   }, [id, routeService]);
 
   if (loading) {
-    return <div className="bg-background pt-44 pb-20 text-center">Loading service details...</div>;
+    return <PageState message="Loading service details..." />;
   }
 
   if (error || !service) {
     return (
-      <div className="bg-background pt-44 pb-20 text-center">
+      <PageState>
         <p className="text-lg text-red-500">{error || "Service not found"}</p>
-      </div>
+      </PageState>
     );
   }
 

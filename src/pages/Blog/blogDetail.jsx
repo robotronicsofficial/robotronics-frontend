@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Intro from "../../component/blog/intro";
 import BlogDetailBody from "../../component/blog/blogDetailBody";
+import PageState from "../../components/layout/PageState";
 
 import { fetchBackendJson, getContentLoadErrorMessage } from "../../lib/api";
 const BlogDetail = () => {
@@ -45,11 +46,11 @@ const BlogDetail = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="bg-background pt-44 pb-20 text-center">Loading blog post...</div>;
+    return <PageState message="Loading blog post..." />;
   }
 
   if (error || !blog) {
-    return <div className="bg-background pt-44 pb-20 text-center text-red-500">{error || "Blog not found"}</div>;
+    return <PageState className="text-red-500" message={error || "Blog not found"} />;
   }
 
   return (

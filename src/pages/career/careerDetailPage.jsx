@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Careerintro from "../../component/careers/CareerDetailPage/Careerintro";
 import CareerJobDetail from "../../component/careers/CareerDetailPage/careerJobDetail";
+import PageState from "../../components/layout/PageState";
 import { fetchJobById, getJobsErrorMessage } from "../../lib/jobs";
 
 const CareerDetailPage = () => {
@@ -46,12 +47,12 @@ const CareerDetailPage = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="bg-background pt-44 pb-20 text-center">Loading job details...</div>;
+    return <PageState message="Loading job details..." />;
   }
 
   if (error && !job) {
     return (
-      <div className="bg-background pt-44 pb-20 text-center">
+      <PageState>
         <p className="text-red-500">{error}</p>
         <Link
           to="/CareerJob"
@@ -59,12 +60,12 @@ const CareerDetailPage = () => {
         >
           Back to careers
         </Link>
-      </div>
+      </PageState>
     );
   }
 
   if (!job) {
-    return <div className="bg-background pt-44 pb-20 text-center">No job selected.</div>;
+    return <PageState message="No job selected." />;
   }
 
   return (
