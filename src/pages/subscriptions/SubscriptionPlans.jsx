@@ -1,36 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchPlans, setSubscriptionPlan } from "../../store/plans/planSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { usePlans } from "../../hooks/usePlans";
+import { useSelectedPlanStore } from "../../stores/selectedPlanStore";
 
 const SubscriptionPlans = () => {
   const [isAnnual, setIsAnnual] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const setSelectedPlan = useSelectedPlanStore((state) => state.setSelectedPlan);
 
-  const { totalPlans, loading, error } = useSelector((state) => state.plans);
+  const {
+    data: totalPlans = [],
+    isLoading: loading,
+    error,
+  } = usePlans();
   const membership = totalPlans[0] || null;
-
-  useEffect(() => {
-    dispatch(fetchPlans());
-  }, [dispatch]);
 
   const handleRegisterClick = (plan) => {
     const price = isAnnual ? plan.yearlyPrice : plan.monthlyPrice;
     const billingCycle = isAnnual ? "annual" : "monthly";
     
-    dispatch(setSubscriptionPlan({
+    setSelectedPlan({
       planId: plan._id,
       plan: plan.planName,
       price,
-      billingCycle
-    }));
+      billingCycle,
+    });
     
     navigate("/subscriptions/register");
   };
   
   if (loading) return <div>Loading membership...</div>;
-  if (error) return <div>Error loading membership: {error}</div>;
+  if (error) return <div>Error loading membership: {error.message}</div>;
   if (!membership) return <div>Membership is not available right now.</div>;
 
   const displayPrice = isAnnual ? membership.yearlyPrice : membership.monthlyPrice;

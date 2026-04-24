@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import CustomerOrder from "./customerOrder";
 import CustomerProduct from "./customerProduct";
 import OrderSummaryLine from "./OrderSummaryLine";
@@ -16,11 +15,11 @@ import {
   loadShopCheckout,
 } from "../../lib/shopCheckout";
 import { getCommerceItemKey, hasShippableCommerceItems } from "../../lib/commerceItems";
-import { clearCart } from "../../store/cart/cartSlice";
 import { useAuth } from "../../contexts/useAuth";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 import { sendSessionJson } from "../../lib/api";
+import { selectCart, useCartStore } from "../../stores/cartStore";
 
 const summaryLabelClassName = "font-lato text-base text-[#7E7F7C]";
 const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
@@ -29,9 +28,9 @@ const summaryTotalValueClassName = `${summaryValueBaseClassName} text-yellow`;
 
 const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { currentUser } = useAuth();
-  const { cart } = useSelector((state) => state.cart);
+  const cart = useCartStore(selectCart);
+  const clearCart = useCartStore((state) => state.clearCart);
   const checkout = useMemo(() => loadShopCheckout(), []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({ type: "", message: "" });
@@ -98,7 +97,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         message: data.message || "Checkout intent submitted successfully.",
       });
       clearShopCheckout();
-      dispatch(clearCart());
+      clearCart();
     } catch (error) {
       setSubmitStatus({
         type: "error",

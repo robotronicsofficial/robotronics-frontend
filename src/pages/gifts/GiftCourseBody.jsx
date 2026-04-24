@@ -4,8 +4,8 @@ import { sendJson } from "../../lib/api";
 import { calculateCartSummary } from "../../lib/shopCheckout";
 import { COURSE_PATH } from "../../router/paths";
 import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { selectCart, useCartStore } from "../../stores/cartStore";
 
 const buildCurrentUserName = (currentUser) => (
   [
@@ -55,7 +55,7 @@ const buildGiftCoursePayload = (form, cartItems) => ({
 const GiftCourseBody = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const { cart } = useSelector((state) => state.cart);
+  const cart = useCartStore(selectCart);
   const [form, setForm] = useState(() => buildInitialForm(currentUser));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });

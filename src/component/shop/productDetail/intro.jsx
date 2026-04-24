@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { addToCart } from "../../../store/cart/cartSlice";
 import { createProductCommerceItem } from "../../../lib/commerceItems";
 import { fetchSavedItems, toggleSavedItem } from "../../../lib/savedItems";
 
@@ -11,66 +9,28 @@ import robo from "../../../assets/images/shopRobot.webp";
 import star from "../../../assets/images/shopStar.svg";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-import { fetchBackendJson, getContentLoadErrorMessage } from "../../../lib/api";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
+import { useProduct, useProducts } from "../../../hooks/useProducts";
+import { useCartStore } from "../../../stores/cartStore";
 
 const resolveImageUrl = (image) => resolveBackendAssetUrl(image, robo);
 
 const Intro = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const products = useSelector((state) => state.cart.items);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const { data: products = [] } = useProducts();
+  const cachedProduct = products.find((item) => item._id === id);
+  const {
+    data: fetchedProduct,
+    isLoading,
+    error: productError,
+  } = useProduct(cachedProduct ? null : id);
 
-  const [product, setProduct] = useState(() => products.find((item) => item._id === id) || null);
-  const [loading, setLoading] = useState(!product);
-  const [error, setError] = useState("");
+  const product = cachedProduct || fetchedProduct || null;
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(robo);
   const [isSaved, setIsSaved] = useState(false);
-
-  useEffect(() => {
-    const cachedProduct = products.find((item) => item._id === id);
-    if (cachedProduct) {
-      setProduct(cachedProduct);
-      setError("");
-      setLoading(false);
-      return;
-    }
-
-    let cancelled = false;
-
-    const fetchProduct = async () => {
-      if (!id) {
-        setError("Product ID not found");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        const data = await fetchBackendJson(`/getProductById/${id}`);
-        if (!cancelled) {
-          setProduct(data);
-          setError("");
-        }
-      } catch (fetchError) {
-        if (!cancelled) {
-          setError(getContentLoadErrorMessage(fetchError, "We couldn't load this product right now."));
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchProduct();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [products, id]);
 
   useEffect(() => {
     if (product?.images?.[0]) {
@@ -133,7 +93,7 @@ const Intro = () => {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <CenteredState className="bg-lightgray p-10 text-center text-lg">
         Loading product...
@@ -141,10 +101,10 @@ const Intro = () => {
     );
   }
 
-  if (error) {
+  if (productError) {
     return (
       <CenteredState className="bg-lightgray p-10 text-center text-lg text-red-500">
-        {error}
+        {productError.message || "We couldn't load this product right now."}
       </CenteredState>
     );
   }
@@ -256,7 +216,7 @@ const Intro = () => {
                   });
 
                   if (cartItem) {
-                    dispatch(addToCart(cartItem));
+                    addToCart(cartItem);
                   }
                 }}
               >

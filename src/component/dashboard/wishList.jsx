@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
-import { addToCart } from "../../store/cart/cartSlice";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
 import { getSavedItems, removeSavedItem } from "../../lib/savedItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import { useCartStore } from "../../stores/cartStore";
 
 const WishListD = () => {
-  const dispatch = useDispatch();
+  const addToCart = useCartStore((state) => state.addToCart);
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -48,7 +47,7 @@ const WishListD = () => {
   };
 
   const handleMoveToCart = (item) => {
-    dispatch(addToCart(item));
+    addToCart(item);
   };
 
   if (loading) {

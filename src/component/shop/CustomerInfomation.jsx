@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/useAuth";
@@ -15,6 +14,7 @@ import {
 import { getCommerceItemKey, hasShippableCommerceItems } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { sendSessionJson } from "../../lib/api";
+import { selectCart, useCartStore } from "../../stores/cartStore";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -64,7 +64,7 @@ const SelectField = ({ label, name, value, onChange, options, required = false }
 );
 
 const CustomerInfomation = ({ onNext }) => {
-  const { cart } = useSelector((state) => state.cart);
+  const cart = useCartStore(selectCart);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const storedCheckout = loadShopCheckout();

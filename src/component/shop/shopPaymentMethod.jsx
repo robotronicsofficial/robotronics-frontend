@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import mastercard from "../../assets/images/mastercard.svg";
 import CustomerOrder from "./customerOrder";
 import {
@@ -11,6 +10,7 @@ import {
   saveShopCheckout,
 } from "../../lib/shopCheckout";
 import { hasShippableCommerceItems } from "../../lib/commerceItems";
+import { selectCart, useCartStore } from "../../stores/cartStore";
 
 const SHIPPING_SERVICES = [
   {
@@ -38,7 +38,7 @@ const PAYMENT_METHODS = [
 
 const ShopPaymentMethod = ({ onNext }) => {
   const navigate = useNavigate();
-  const { cart } = useSelector((state) => state.cart);
+  const cart = useCartStore(selectCart);
   const storedCheckout = useMemo(() => loadShopCheckout(), []);
   const requiresShipping = hasShippableCommerceItems(cart);
   const [selectedService, setSelectedService] = useState(

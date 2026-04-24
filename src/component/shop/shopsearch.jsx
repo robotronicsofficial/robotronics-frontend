@@ -1,10 +1,8 @@
 import PropTypes from "prop-types";
 import { useEffect, useState, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { FaArrowRight, FaRegHeart } from "react-icons/fa";
 import { BsHandbag } from "react-icons/bs";
 import { IoIosSearch } from "react-icons/io";
-import { fetchProducts, addToCart } from "../../store/cart/cartSlice";
 import {
   createProductCommerceItem,
   getCommerceItemKey,
@@ -16,6 +14,12 @@ import ShopPages from "../shop/shopPages";
 import shopHome from "../../assets/shopHome.png";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { cn } from "../../lib/utils";
+import { useProducts } from "../../hooks/useProducts";
+import {
+  selectCartTotalPrice,
+  selectCartQuantity,
+  useCartStore,
+} from "../../stores/cartStore";
 
 const HeaderSummaryItem = ({ icon, label }) => (
   <div className="flex w-full items-center justify-between gap-4">
@@ -35,11 +39,10 @@ HeaderSummaryItem.propTypes = {
 };
 
 const Shopsearch = () => {
-  const dispatch = useDispatch();
-
-  const products = useSelector((state) => state.cart.items);
-  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
-  const totalPrice = useSelector((state) => state.cart.totalPrice);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const totalQuantity = useCartStore(selectCartQuantity);
+  const totalPrice = useCartStore(selectCartTotalPrice);
+  const { data: products = [] } = useProducts();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,10 +53,6 @@ const Shopsearch = () => {
   const [sortOption, setSortOption] = useState("Popularity");
 
   const productsPerPage = 9;
-
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
 
   useEffect(() => {
     let cancelled = false;
@@ -217,7 +216,7 @@ const Shopsearch = () => {
                 onAddToWishlist={() => handleToggleSavedItem(product)}
                 onAddToCart={() => {
                   if (catalogItem) {
-                    dispatch(addToCart(catalogItem));
+                    addToCart(catalogItem);
                   }
                 }}
                 productId={product._id}

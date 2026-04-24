@@ -3,11 +3,11 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo/robotronicsCharacter.svg";
 import basket from "../assets/logo/basket.svg";
 import { useAuth } from "../contexts/useAuth";
-import { useSelector } from "react-redux";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { IoStarSharp, IoClose, IoChevronDown } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import { CART_PATH, CONTACT_PATH } from "../router/paths";
+import { selectCartQuantity, useCartStore } from "../stores/cartStore";
 
 const PRIMARY_ITEMS = [
   { to: "/Course", label: "Courses" },
@@ -308,7 +308,7 @@ function MobileGroup({ group, onNavigate }) {
 }
 
 export default function Header() {
-  const { totalQuantity } = useSelector((state) => state.cart);
+  const totalQuantity = useCartStore(selectCartQuantity);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();

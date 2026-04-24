@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/useAuth";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AppImage from "../../../component/AppImage";
 import robo from "../../../assets/child.webp";
@@ -9,6 +8,10 @@ import { FaTrash } from "react-icons/fa"; // Import delete icon
 import { fetchSessionJson, sendSessionJson } from "../../../lib/api";
 import { normalizeParentRecord } from "../../../lib/subscription";
 import { buildSubscriptionCheckout, saveSubscriptionCheckout } from "../../../lib/subscriptionCheckout";
+import {
+  selectSelectedPlan,
+  useSelectedPlanStore,
+} from "../../../stores/selectedPlanStore";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -91,7 +94,7 @@ SelectField.propTypes = {
 const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const { planId, plan, price, billingCycle } = useSelector((state) => state.plans);
+  const { planId, plan, price, billingCycle } = useSelectedPlanStore(selectSelectedPlan);
 
   const [loading, setLoading] = useState(false);
   const [parentForm, setParentForm] = useState({

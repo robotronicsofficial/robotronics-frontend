@@ -1,0 +1,78 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import {
+  getCommerceItemKey,
+  normalizeCommerceCartItem,
+} from "../lib/commerceItems";
+
+const calculateCartTotals = (cart) => ({
+  totalQuantity: cart.reduce(
+    (runningTotal, item) => runningTotal + (Number(item.quantity) || 0),
+    0,
+  ),
+  totalPrice: cart.reduce(
+    (runningTotal, item) => (
+      runningTotal + (Number(item.price) || 0) * (Number(item.quantity) || 0)
+    ),
+    0,
+  ),
+});
+
+export const useCartStore = create(
+  persist(
+    (set, get) => ({
+      cart: [],
+      addToCart: (payload) => {
+        const normalizedItem = normalizeCommerceCartItem(payload);
+        if (!normalizedItem?.itemId) {
+          return;
+        }
+
+        const itemKey = getCommerceItemKey(normalizedItem);
+        const quantityToAdd = Number(normalizedItem.quantity) || 1;
+        const existingItem = get().cart.find(
+          (item) => getCommerceItemKey(item) === itemKey,
+        );
+
+        set((state) => ({
+          cart: existingItem
+            ? state.cart.map((item) => (
+                getCommerceItemKey(item) === itemKey
+                  ? { ...item, quantity: (Number(item.quantity) || 0) + quantityToAdd }
+                  : item
+              ))
+            : [...state.cart, { ...normalizedItem, quantity: quantityToAdd }],
+        }));
+      },
+      removeFromCart: (payload) => {
+        const normalizedItem = normalizeCommerceCartItem(payload);
+        if (!normalizedItem?.itemId) {
+          return;
+        }
+
+        const itemKey = getCommerceItemKey(normalizedItem);
+
+        set((state) => ({
+          cart: state.cart.flatMap((item) => {
+            if (getCommerceItemKey(item) !== itemKey) {
+              return item;
+            }
+
+            const nextQuantity = (Number(item.quantity) || 0) - 1;
+            return nextQuantity > 0 ? [{ ...item, quantity: nextQuantity }] : [];
+          }),
+        }));
+      },
+      clearCart: () => set({ cart: [] }),
+    }),
+    {
+      name: "robotronics.cart",
+      partialize: (state) => ({ cart: state.cart }),
+    },
+  ),
+);
+
+export const selectCart = (state) => state.cart;
+export const selectCartTotals = (state) => calculateCartTotals(state.cart);
+export const selectCartQuantity = (state) => calculateCartTotals(state.cart).totalQuantity;
+export const selectCartTotalPrice = (state) => calculateCartTotals(state.cart).totalPrice;

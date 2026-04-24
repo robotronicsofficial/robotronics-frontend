@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { useCallback, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import OrderSummaryLine from "./OrderSummaryLine";
@@ -12,8 +11,8 @@ import {
   loadShopCheckout,
   saveShopCheckout,
 } from "../../lib/shopCheckout";
-import { addToCart, removeFromCart } from "../../store/cart/cartSlice";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import { selectCart, useCartStore } from "../../stores/cartStore";
 import "react-toastify/dist/ReactToastify.css";
 
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
@@ -25,8 +24,9 @@ const summaryValueClassName = `${summaryValueBaseClassName} text-[#362D2C]`;
 const totalSummaryValueClassName = `${summaryValueBaseClassName} text-yellow`;
 
 const ShopCartproductList = ({ onNext }) => {
-  const { cart } = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
+  const cart = useCartStore(selectCart);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
   const [notes, setNotes] = useState(() => loadShopCheckout().note || "");
   const { currentUser } = useAuth();
   const navigate = useNavigate();
@@ -46,9 +46,9 @@ const ShopCartproductList = ({ onNext }) => {
         ...prev,
         [productId]: (prev[productId] || 0) + 1,
       }));
-      dispatch(addToCart(product));
+      addToCart(product);
     },
-    [dispatch]
+    [addToCart]
   );
 
   const handleRemoveFromCart = useCallback(
@@ -58,9 +58,9 @@ const ShopCartproductList = ({ onNext }) => {
         ...prev,
         [productId]: prev[productId] > 1 ? prev[productId] - 1 : 1,
       }));
-      dispatch(removeFromCart(product));
+      removeFromCart(product);
     },
-    [dispatch]
+    [removeFromCart]
   );
 
   const handleNext = useCallback(() => {

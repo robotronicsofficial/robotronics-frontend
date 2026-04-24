@@ -3,15 +3,14 @@ import AppImage from "../../AppImage";
 import robo from "../../../assets/images/shopRobot.webp";
 import python from "../../../assets/images/python.webp";
 import star from "../../../assets/images/shopStar.svg";
-import { addToCart } from "../../../store/cart/cartSlice";
 import { createCourseCommerceItem } from "../../../lib/commerceItems";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
+import { useCartStore } from "../../../stores/cartStore";
 const CourseIntro = ({ id, title, image, price, category }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const addToCart = useCartStore((state) => state.addToCart);
   const resolvedImage = resolveBackendAssetUrl(image, python);
 
   const handleViewPlans = () => navigate("/subscriptions");
@@ -25,7 +24,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
     });
 
     if (courseItem) {
-      dispatch(addToCart(courseItem));
+      addToCart(courseItem);
     }
 
     navigate("/gift-courses");

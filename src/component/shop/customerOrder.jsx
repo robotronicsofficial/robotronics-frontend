@@ -1,10 +1,10 @@
 import CustomerProduct from "../../component/shop/customerProduct";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import { calculateCartSummary, formatShopCurrency } from "../../lib/shopCheckout";
 import { getCommerceItemKey } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import OrderSummaryLine from "./OrderSummaryLine";
+import { selectCart, useCartStore } from "../../stores/cartStore";
 
 const summaryLabelClassName = "text-sm poppins-light";
 
@@ -16,7 +16,7 @@ const CustomerOrder = ({
   summaryOverride = null,
   showContinueButton = true,
 }) => {
-  const { cart } = useSelector((state) => state.cart);
+  const cart = useCartStore(selectCart);
   const items = Array.isArray(itemsOverride) ? itemsOverride : cart;
   const summary = summaryOverride || calculateCartSummary(items);
 
