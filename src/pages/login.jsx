@@ -8,7 +8,8 @@ import AuthSocialButton from "../components/auth/AuthSocialButton";
 import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
 import { useAuth } from "../contexts/useAuth";
 
-import { resolveBackendUrl, sendJson } from "../lib/api";
+import { resolveBackendUrl } from "../lib/api";
+import { useRequestPasswordResetMutation } from "../hooks/useAuthMutations";
 import { getHeaderOffsetClass } from "../components/layout/headerOffset";
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
 
@@ -26,6 +27,7 @@ const Login = () => {
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const requestPasswordResetMutation = useRequestPasswordResetMutation();
   const redirectFromState = location.state?.from
     ? `${location.state.from.pathname || ""}${location.state.from.search || ""}${location.state.from.hash || ""}`
     : null;
@@ -80,10 +82,7 @@ const Login = () => {
     setError('');
 
     try {
-      const payload = await sendJson('/auth/forgot-password', {
-        method: 'POST',
-        body: { email: forgotEmail },
-      });
+      const payload = await requestPasswordResetMutation.mutateAsync(forgotEmail);
 
       toast.success(payload?.message || 'Password reset instructions sent to your email');
       setForgotPasswordMode(false);

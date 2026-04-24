@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
 import { getPasswordInputClassName } from "../components/auth/passwordInputClass";
-import { sendJson } from "../lib/api";
+import { useResetPasswordMutation } from "../hooks/useAuthMutations";
 import { getHeaderOffsetClass } from "../components/layout/headerOffset";
 import {
   getPasswordValidationState,
@@ -35,6 +35,7 @@ const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const navigate = useNavigate();
+  const resetPasswordMutation = useResetPasswordMutation();
 
   const passwordValidation = getPasswordValidationState(password, confirmPassword);
   const {
@@ -69,10 +70,7 @@ const ResetPassword = () => {
     }
 
     try {
-      await sendJson('/auth/reset-password', {
-        method: "POST",
-        body: { token, password },
-      });
+      await resetPasswordMutation.mutateAsync({ token, password });
 
       toast.success("Password reset successfully!");
       setTimeout(() => navigate("/Login"), 2000);
@@ -161,7 +159,6 @@ const ResetPassword = () => {
         </form>
         {error && <p className="text-red-500 text-sm mt-2 poppins-regular">{error}</p>}
       </div>
-      <ToastContainer />
     </div>
   );
 };

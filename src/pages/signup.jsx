@@ -12,7 +12,8 @@ import google from "../assets/images/Googlelogo.svg";
 import AuthSocialButton from "../components/auth/AuthSocialButton";
 import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
 import { getPasswordInputClassName } from "../components/auth/passwordInputClass";
-import { sendJson, resolveBackendUrl } from "../lib/api";
+import { resolveBackendUrl } from "../lib/api";
+import { useRegisterMutation } from "../hooks/useAuthMutations";
 import {
   getPasswordValidationState,
   hasValidPasswordRequirements,
@@ -21,6 +22,7 @@ import {
 
 const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const registerMutation = useRegisterMutation();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -104,15 +106,12 @@ const Signup = () => {
 
     setIsLoading(true); // Start loading
     try {
-      await sendJson('/auth/register', {
-        method: 'POST',
-        body: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phoneNumber,
-          password: formData.password
-        },
+      await registerMutation.mutateAsync({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phoneNumber,
+        password: formData.password
       });
 
       toast.success("Email sent successfully! Please verify your email.");
