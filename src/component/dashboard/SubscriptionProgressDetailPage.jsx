@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { resolveBackendUrl } from "../../lib/api";
 import { normalizeProgressPayload } from "../../lib/subscription";
+import { Spinner } from "../../components/ui/spinner";
 import {
   buildChildSessionRequest,
   getActiveChildSession,
@@ -150,7 +151,7 @@ const SubscriptionProgressDetailPage = () => {
   if (loading) return (
     <div className="bg-gray-100 min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto"></div>
+        <Spinner className="mx-auto size-12 text-yellow-600" />
         <p className="mt-4 text-gray-700">Loading progress data...</p>
       </div>
     </div>

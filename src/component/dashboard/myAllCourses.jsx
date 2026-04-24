@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import DashboardLayout from "../../components/layout/DashboardLayout";
+import { Spinner } from "../../components/ui/spinner";
 import {
   buildChildSessionRequest,
   getActiveChildSession,
@@ -106,7 +107,7 @@ const MyAllCourses = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500"></div>
+        <Spinner className="size-12 text-yellow-500" />
       </div>
     );
   }
