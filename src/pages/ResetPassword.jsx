@@ -13,6 +13,12 @@ import {
   PASSWORD_POLICY_MESSAGE,
 } from "../utils/passwordPolicy";
 
+const getPasswordInputClassName = (isDirty, isValid) => (
+  `w-full rounded-xl border bg-gray p-2 ${
+    isDirty ? (isValid ? "border-green-500" : "border-red-500") : "border-line"
+  }`
+);
+
 const RequirementCheck = ({ isValid, text }) => (
   <div className="flex items-center">
     <span className={`inline-block w-4 h-4 rounded-full mr-2 ${isValid ? 'bg-green-500' : 'bg-red-500'}`}></span>
@@ -23,6 +29,28 @@ const RequirementCheck = ({ isValid, text }) => (
 RequirementCheck.propTypes = {
   isValid: PropTypes.bool.isRequired,
   text: PropTypes.string.isRequired,
+};
+
+const PasswordVisibilityButton = ({ isVisible, onToggle }) => (
+  <button
+    className="flex w-20 items-center justify-center gap-2"
+    onClick={onToggle}
+    type="button"
+  >
+    {isVisible ? (
+      <>
+        <img className="h-5 w-5" src={hide} alt="Hide password" />
+        <p className="text-sm poppins-light">Hide</p>
+      </>
+    ) : (
+      <p className="text-sm poppins-light">Show</p>
+    )}
+  </button>
+);
+
+PasswordVisibilityButton.propTypes = {
+  isVisible: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
 };
 
 const ResetPassword = () => {
@@ -87,33 +115,18 @@ const ResetPassword = () => {
         <p className="text-4xl poppins-bold text-brown">Reset Password</p>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col items-center space-y-4 w-full max-w-md"
+          className="flex w-full max-w-md flex-col items-center gap-4"
         >
           <div className="w-full">
-            <div className="flex flex-row justify-between items-center">
+            <div className="flex items-center justify-between">
               <p className="text-sm poppins-light">New Password</p>
-              <button
-                className="flex items-center justify-center space-x-2 w-20"
-                onClick={togglePasswordVisibility}
-                type="button"
-              >
-                {showPassword ? (
-                  <>
-                    <img className="h-5 w-5" src={hide} alt="Hide password" />
-                    <p className="text-sm poppins-light">Hide</p>
-                  </>
-                ) : (
-                  <p className="text-sm poppins-light">Show</p>
-                )}
-              </button>
+              <PasswordVisibilityButton
+                isVisible={showPassword}
+                onToggle={togglePasswordVisibility}
+              />
             </div>
             <input
-              className={`border rounded-xl p-2 bg-gray w-full ${
-                password ? (hasMinLength && hasNumber && hasSymbol) 
-                  ? 'border-green-500' 
-                  : 'border-red-500' 
-                : 'border-line'
-              }`}
+              className={getPasswordInputClassName(password, hasMinLength && hasNumber && hasSymbol)}
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -136,31 +149,15 @@ const ResetPassword = () => {
           </div>
 
           <div className="w-full">
-            <div className="flex flex-row justify-between items-center">
+            <div className="flex items-center justify-between">
               <p className="text-sm poppins-light">Confirm Password</p>
-              <button
-                className="flex items-center justify-center space-x-2 w-20"
-                onClick={toggleConfirmPasswordVisibility}
-                type="button"
-              >
-                {showConfirmPassword ? (
-                  <>
-                    <img className="h-5 w-5" src={hide} alt="Hide password" />
-                    <p className="text-sm poppins-light">Hide</p>
-                  </>
-                ) : (
-                  <p className="text-sm poppins-light">Show</p>
-                )}
-              </button>
+              <PasswordVisibilityButton
+                isVisible={showConfirmPassword}
+                onToggle={toggleConfirmPasswordVisibility}
+              />
             </div>
             <input
-              className={`border rounded-xl p-2 bg-gray w-full ${
-                confirmPassword 
-                  ? passwordsMatch 
-                    ? 'border-green-500' 
-                    : 'border-red-500' 
-                  : 'border-line'
-              }`}
+              className={getPasswordInputClassName(confirmPassword, passwordsMatch)}
               type={showConfirmPassword ? "text" : "password"}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
