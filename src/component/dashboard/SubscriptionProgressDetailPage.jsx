@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { resolveBackendUrl } from "../../lib/api";
 import { normalizeProgressPayload } from "../../lib/subscription";
+import CenteredState from "../../components/layout/CenteredState";
 import { Spinner } from "../../components/ui/spinner";
 import {
   buildChildSessionRequest,
@@ -149,16 +150,14 @@ const SubscriptionProgressDetailPage = () => {
   };
 
   if (loading) return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <Spinner className="mx-auto size-12 text-yellow-600" />
-        <p className="mt-4 text-gray-700">Loading progress data...</p>
-      </div>
-    </div>
+    <CenteredState className="bg-gray-100 min-h-screen" contentClassName="text-center">
+      <Spinner className="mx-auto size-12 text-yellow-600" />
+      <p className="mt-4 text-gray-700">Loading progress data...</p>
+    </CenteredState>
   );
   
   if (error) return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+    <CenteredState className="bg-gray-100 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
         <h2 className="text-xl font-bold text-red-600 mb-4">Error</h2>
         <p className="text-gray-700 mb-4">{error}</p>
@@ -169,15 +168,15 @@ const SubscriptionProgressDetailPage = () => {
           Try Again
         </button>
       </div>
-    </div>
+    </CenteredState>
   );
   
   if (!progressData) return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+    <CenteredState className="bg-gray-100 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md">
         <p className="text-gray-700">No progress data found for this student.</p>
       </div>
-    </div>
+    </CenteredState>
   );
 
   const filteredCourses = progressData.courses.filter(course => {

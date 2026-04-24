@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { FaUserCircle } from "react-icons/fa";
 import SuccessModal from "./popUps/SuccessModal";
@@ -267,11 +268,11 @@ const SubscriptionChildProfile = () => {
   };
 
   if (loading) {
-    return <div className="bg-gray-100 min-h-screen flex justify-center items-center">Loading...</div>;
+    return <CenteredState className="bg-gray-100 min-h-screen">Loading...</CenteredState>;
   }
 
   if (error) {
-    return <div className="bg-gray-100 min-h-screen flex justify-center items-center">Error: {error}</div>;
+    return <CenteredState className="bg-gray-100 min-h-screen">Error: {error}</CenteredState>;
   }
 
   return (

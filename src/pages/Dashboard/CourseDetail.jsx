@@ -20,6 +20,7 @@ import {
 } from "../../lib/subscription";
 import { resolveBackendUrl } from "../../lib/api";
 import VideoPlayer from "../../component/VideoPlayer";
+import CenteredState from "../../components/layout/CenteredState";
 import { Spinner } from "../../components/ui/spinner";
 
 const MAX_ATTEMPTS = {
@@ -308,25 +309,25 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <CenteredState className="h-screen">
         <Spinner className="size-12 text-yellow-500" />
-      </div>
+      </CenteredState>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <CenteredState className="h-screen">
         <div className="text-red-500 poppins-medium">{error}</div>
-      </div>
+      </CenteredState>
     );
   }
 
   if (!courseData || !childCourseData) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <CenteredState className="h-screen">
         <div className="text-gray-500 poppins-medium">Course data not found</div>
-      </div>
+      </CenteredState>
     );
   }
 

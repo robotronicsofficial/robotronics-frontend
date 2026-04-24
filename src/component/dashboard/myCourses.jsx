@@ -1,6 +1,7 @@
 import { FaStar, FaArrowDown } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { Spinner } from "../../components/ui/spinner";
 import {
@@ -162,17 +163,17 @@ const MyCourses = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <CenteredState className="h-screen">
         <Spinner className="size-12 text-yellow-500" />
-      </div>
+      </CenteredState>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <CenteredState className="h-screen">
         <div className="text-red-500">Error: {error}</div>
-      </div>
+      </CenteredState>
     );
   }
 
