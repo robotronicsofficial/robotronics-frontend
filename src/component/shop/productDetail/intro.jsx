@@ -6,11 +6,16 @@ import { createProductCommerceItem } from "../../../lib/commerceItems";
 import { fetchSavedItems, toggleSavedItem } from "../../../lib/savedItems";
 
 import AppImage from "../../AppImage";
+import CenteredState from "../../../components/layout/CenteredState";
 import robo from "../../../assets/images/shopRobot.webp";
 import star from "../../../assets/images/shopStar.svg";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-import { BACKEND_BASE_URL, fetchBackendJson, getContentLoadErrorMessage } from "../../../lib/api";
+import { fetchBackendJson, getContentLoadErrorMessage } from "../../../lib/api";
+import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
+
+const resolveImageUrl = (image) => resolveBackendAssetUrl(image, robo);
+
 const Intro = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,12 +28,6 @@ const Intro = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(robo);
   const [isSaved, setIsSaved] = useState(false);
-
-  const resolveImageUrl = (image) => {
-    if (!image) return robo;
-    if (image.startsWith("http")) return image;
-    return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
-  };
 
   useEffect(() => {
     const cachedProduct = products.find((item) => item._id === id);
@@ -134,42 +133,61 @@ const Intro = () => {
     }
   };
 
-  if (loading) return <p className="p-10 text-center text-lg">Loading product...</p>;
-  if (error) return <p className="p-10 text-center text-lg text-red-500">{error}</p>;
-  if (!product) return <p className="p-10 text-center text-lg">Product not found.</p>;
+  if (loading) {
+    return (
+      <CenteredState className="bg-lightgray p-10 text-center text-lg">
+        Loading product...
+      </CenteredState>
+    );
+  }
+
+  if (error) {
+    return (
+      <CenteredState className="bg-lightgray p-10 text-center text-lg text-red-500">
+        {error}
+      </CenteredState>
+    );
+  }
+
+  if (!product) {
+    return (
+      <CenteredState className="bg-lightgray p-10 text-center text-lg">
+        Product not found.
+      </CenteredState>
+    );
+  }
 
   return (
     <div className="bg-lightgray">
-      <div className="lg:p-5 lg:px-14 flex flex-row">
-        {/* Left Section: Images */}
-        <div className="lg:flex flex-row justify-center hidden" data-aos="fade-up">
-          <div className="p-14 h-94 w-94 rounded-full bg-gray">
+      <div className="flex lg:px-14 lg:py-5">
+        <div className="hidden justify-center lg:flex" data-aos="fade-up">
+          <div className="h-94 w-94 rounded-full bg-gray p-14">
             <AppImage src={selectedImage} alt="Selected" loading="eager" />
           </div>
-          <div className="flex flex-row space-x-3 py-10">
+          <div className="flex gap-3 py-10">
             {(product.images || []).map((img, idx) => (
-              <div
-                key={idx}
-                className="h-10 w-10 bg-white shadow-lg cursor-pointer"
+              <button
+                key={`${img}-${idx}`}
+                type="button"
+                className="size-10 border-0 bg-white p-0 shadow-lg"
                 onClick={() => setSelectedImage(resolveImageUrl(img))}
               >
                 <AppImage
                   src={resolveImageUrl(img)}
                   alt={`thumb-${idx}`}
-                  className="h-10 w-10"
+                  className="size-10"
                 />
-              </div>
+              </button>
             ))}
           </div>
         </div>
 
-        {/* Right Section: Details */}
-        <div className="p-5 lg:px-24 lg:space-y-14 space-y-8" data-aos="fade-up">
+        <div className="flex flex-col gap-8 p-5 lg:gap-14 lg:px-24" data-aos="fade-up">
           <p className="poppins-bold lg:text-4xl text-wrap">{product.name}</p>
 
-          <div className="space-y-6">
-            <div className="flex flex-row items-center lg:space-x-14 space-x-8">
-              <div className="flex my-6 text-2xl">
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center gap-8 lg:gap-14">
+              <div className="my-6 flex text-2xl">
                 {Array.from({ length: 5 }, (_, i) => {
                   const ratings = Number(product.ratings || 0);
                   const fullStars = Math.floor(ratings);
@@ -190,7 +208,7 @@ const Intro = () => {
                 </div>
               )}
             </div>
-            <div className="flex flex-row space-x-2">
+            <div className="flex gap-2">
               <p className="text-sm poppins-medium text-line">
                 {product.productSold ?? 0} products sold,
               </p>
@@ -199,25 +217,38 @@ const Intro = () => {
               </p>
             </div>
           </div>
-          <div className="flex flex-row lg:justify-start space-x-2">
-            <div className="lg:px-5 bg-white">
+          <div className="flex gap-2 lg:justify-start">
+            <div className="bg-white lg:px-5">
               <p>{product.category}</p>
             </div>
 
-            <div className="bg-white flex items-center">
-              <button className="lg:px-3 px-1 lg:py-1 bg-gray-200 rounded-md" onClick={handleDecrease}>-</button>
-              <input type="number" className="lg:w-24 w-10 text-center" value={quantity} readOnly />
-              <button className="px-3 py-1 bg-gray-200 rounded-md" onClick={handleIncrease}>+</button>
+            <div className="flex items-center bg-white">
+              <button
+                type="button"
+                className="rounded-md bg-gray-200 px-1 lg:px-3 lg:py-1"
+                onClick={handleDecrease}
+              >
+                -
+              </button>
+              <input type="number" className="w-10 text-center lg:w-24" value={quantity} readOnly />
+              <button
+                type="button"
+                className="rounded-md bg-gray-200 px-3 py-1"
+                onClick={handleIncrease}
+              >
+                +
+              </button>
             </div>
           </div>
 
-          <div className="lg:flex flex-row items-center justify-between lg:space-x-10">
+          <div className="items-center justify-between lg:flex lg:gap-10">
             <div className="text-yellow text-2xl poppins-medium">
               PKR {Number(product.price || 0).toLocaleString()}
             </div>
-            <div className="flex flex-row space-x-5">
+            <div className="flex gap-5">
               <button
-                className="bg-yellow p-2 lg:px-7 text-white poppins-medium rounded-lg"
+                type="button"
+                className="rounded-lg bg-yellow p-2 text-white poppins-medium lg:px-7"
                 onClick={() => {
                   const cartItem = createProductCommerceItem({
                     ...product,
@@ -234,7 +265,7 @@ const Intro = () => {
             </div>
             <button
               type="button"
-              className="bg-gray p-2 px-3 poppins-medium rounded-lg"
+              className="rounded-lg bg-gray p-2 px-3 poppins-medium"
               onClick={handleToggleSavedItem}
               aria-label={isSaved ? "Remove from saved items" : "Save item"}
             >
@@ -244,19 +275,19 @@ const Intro = () => {
         </div>
       </div>
 
-      <div className="lg:p-14 p-2 bg-gray">
-        <div className="px-2 flex flex-row lg:justify-center lg:space-x-10 space-x-4 " data-aos="fade-down">
+      <div className="bg-gray p-2 lg:p-14">
+        <div className="flex gap-4 px-2 lg:justify-center lg:gap-10" data-aos="fade-down">
           <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-brown">
             PRODUCT DETAIL
           </p>
-          <p className="h-8 w-0 border border-black "></p>
+          <p className="h-8 w-0 border border-black"></p>
           <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-brown">
             DELIVERY AND RETURN
           </p>
         </div>
 
-        <div className="p-5 flex flex-row justify-between">
-          <div className="p-2 w-1/2 space-y-2">
+        <div className="flex justify-between p-5">
+          <div className="flex w-1/2 flex-col gap-2 p-2">
             <p
               className="lg:text-2xl text-xl poppins-semibold text-brown"
               data-aos="fade-up"
@@ -268,9 +299,9 @@ const Intro = () => {
             </p>
           </div>
 
-          <div className="p-2 w-1/2">
+          <div className="w-1/2 p-2">
             <div
-              className="text-wrap text-line space-y-2 lg:px-20 px-4"
+              className="flex flex-col gap-2 px-4 text-wrap text-line lg:px-20"
               data-aos="fade-up"
             >
               <p className="lg:text-2xl text-xl poppins-semibold text-brown">
@@ -289,30 +320,24 @@ const Intro = () => {
           </div>
         </div>
 
-        <section className="shopPages flex flex-row items-center gap-8 px-5 lg:px-14" id="shopPages">
+        <section className="shopPages flex items-center gap-8 px-5 lg:px-14" id="shopPages">
           <div className="flex-1 py-8 lg:py-20">
             <div className="flex flex-col justify-content">
               <p
                 className="flex text-gold lg:text-4xl text-2xl font-bold"
                 data-aos="fade-right"
-
-
               >
                 Keep exploring
               </p>
               <p
                 className="flex text-white lg:text-4xl text-2xl font-bold"
                 data-aos="fade-left"
-
-
               >
                 Live catalog
               </p>
               <p
                 className="mt-4 max-w-xl text-white/80 lg:text-lg text-sm"
                 data-aos="fade-up"
-
-
               >
                 Browse the live store inventory instead of a filler promo block.
               </p>
@@ -329,7 +354,7 @@ const Intro = () => {
             <img src={star} className="mt-6" data-aos="fade-up" alt="" />
           </div>
           <div className="flex-1" data-aos="fade-left">
-            <div className="flex justify-content w-full">
+            <div className="flex w-full justify-content">
               <AppImage src={robo} alt="Product spotlight illustration" />
             </div>
           </div>
