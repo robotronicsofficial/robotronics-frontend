@@ -157,6 +157,29 @@
   z-index: var(--z-toast);
 }
 
+.range-slider-input {
+  pointer-events: none;
+}
+
+.range-slider-input::-webkit-slider-thumb {
+  pointer-events: auto;
+  height: 1rem;
+  width: 1rem;
+  appearance: none;
+  border-radius: 9999px;
+  border: 2px solid var(--brand-brown);
+  background: var(--brand-brown);
+}
+
+.range-slider-input::-moz-range-thumb {
+  pointer-events: auto;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 9999px;
+  border: 2px solid var(--brand-brown);
+  background: var(--brand-brown);
+}
+
 .hero {
   background: url(./assets/images/intro.svg) top center no-repeat;
   background-size: cover;

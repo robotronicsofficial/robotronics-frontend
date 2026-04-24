@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css"; // Import the default styles for the slider
+import RangeSlider from "@/components/forms/RangeSlider";
 import { cn } from "../../lib/utils";
 
 const categories = [
@@ -12,16 +11,10 @@ const categories = [
   "Others",
 ];
 
-const sliderTrackStyle = { backgroundColor: "black" };
-const sliderHandleStyle = { borderColor: "black", backgroundColor: "black" };
-const sliderRailStyle = { backgroundColor: "#e5e7eb" };
-const shippingMarks = {
-  7: "7",
-  15: "15",
-  30: "30",
-  45: "45",
-  60: "60",
-};
+const shippingMarks = [7, 15, 30, 45, 60].map((value) => ({
+  value,
+  label: String(value),
+}));
 
 const Shopfilter = ({
   onPriceRangeChange,
@@ -74,8 +67,8 @@ const Shopfilter = ({
                 className={cn(
                   "flex pt-2 text-left text-sm transition-colors duration-200 lg:pt-5 lg:text-base",
                   selectedCategory === category
-                    ? "font-semibold text-[#e06f21]"
-                    : "text-gray-500 hover:text-black",
+                    ? "font-semibold text-accent"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
                 onClick={() => handleCategoryClick(category)}
               >
@@ -102,20 +95,17 @@ const Shopfilter = ({
         {isOpenShipping && (
           <div>
             <div className="mt-8">
-              <Slider
+              <RangeSlider
                 min={7}
                 max={60}
-                step={null}
+                step={1}
                 marks={shippingMarks}
-                defaultValue={15}
                 value={shippingDays}
                 onChange={handleShippingChange}
-                trackStyle={sliderTrackStyle}
-                handleStyle={sliderHandleStyle}
-                railStyle={sliderRailStyle}
+                snapValues={shippingMarks.map((mark) => mark.value)}
               />
             </div>
-            <div className="text-center mt-12 text-black p-2 bg-white rounded">
+            <div className="mt-8 rounded bg-card p-2 text-center text-foreground">
               {shippingDays} Days
             </div>
           </div>
@@ -137,20 +127,16 @@ const Shopfilter = ({
       {isOpenPrice && (
         <>
           <div className="mt-4">
-            <Slider
-              range
+            <RangeSlider
               min={0}
               max={600000}
-              defaultValue={[0, 600000]}
+              step={1000}
               value={priceRange}
               onChange={handleRangeChange}
-              trackStyle={sliderTrackStyle}
-              handleStyle={sliderHandleStyle}
-              railStyle={sliderRailStyle}
             />
           </div>
           <div className="mt-4 flex justify-center gap-2">
-            <p className="text-black p-2 bg-white rounded text-center">
+            <p className="rounded bg-card p-2 text-center text-foreground">
               PKR {priceRange[0].toLocaleString()} - PKR{" "}
               {priceRange[1].toLocaleString()}
             </p>
