@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FaArrowRight, FaRegHeart } from "react-icons/fa";
@@ -14,16 +15,32 @@ import Shopproduct from "../shop/shopproduct";
 import ShopPages from "../shop/shopPages";
 import shopHome from "../../assets/shopHome.png";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import { cn } from "../../lib/utils";
+
+const HeaderSummaryItem = ({ icon, label }) => (
+  <div className="flex w-full items-center justify-between gap-4">
+    <div className="flex items-center">
+      <div className="rounded-full bg-[#352E2C] p-2">
+        {icon}
+      </div>
+      <p className="px-3 text-center text-sm poppins-bold lg:text-base">{label}</p>
+    </div>
+    <FaArrowRight className="shrink-0 text-[#838383]" />
+  </div>
+);
+
+HeaderSummaryItem.propTypes = {
+  icon: PropTypes.node.isRequired,
+  label: PropTypes.string.isRequired,
+};
 
 const Shopsearch = () => {
   const dispatch = useDispatch();
 
-  // Get products and cart data from Redux store
   const products = useSelector((state) => state.cart.items);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
 
-  // Local state for filters & sorting
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [savedItemKeys, setSavedItemKeys] = useState(() => new Set());
@@ -121,43 +138,27 @@ const Shopsearch = () => {
 
   return (
     <div className="flex flex-col bg-lightgray lg:px-20 px-2">
-      {/* Header Section */}
       <div className="justify-around mb-8">
         <div className="lg:pt-16 pt-8" data-aos="fade-up">
           <div className="h-0 w-full border border-[#838383]"></div>
         </div>
-        <div className="lg:flex md:flex lg:px-2 lg:pt-5 justify-between items-center">
+        <div className="items-center justify-between lg:flex lg:px-2 lg:pt-5 md:flex">
           <div className="flex justify-between">
             <div className="flex items-center">
-              <img src={shopHome} className="w-[18px] h-[18px]" data-aos="fade-up" />
+              <img src={shopHome} className="size-[18px]" alt="" data-aos="fade-up" />
               <p className="px-5 font-bold" data-aos="fade-up">Shop Page</p>
             </div>
           </div>
 
-          <div className="w-[50%] flex justify-between space-x-5 gap-10 pr-10" data-aos="fade-up">
-            <div className="flex justify-between w-full items-center">
-              <div className="flex items-center">
-                <div className="rounded-full bg-[#352E2C] px-2 py-2">
-                  <FaRegHeart className="text-white" />
-                </div>
-                <p className="px-3 lg:text-base poppins-bold text-sm text-center">
-                  Wish List ({savedItemKeys.size})
-                </p>
-              </div>
-              <FaArrowRight className="text-[#838383]" />
-            </div>
-
-            <div className="flex w-full items-center justify-between">
-              <div className="flex items-center">
-                <div className="rounded-full bg-[#352E2C] px-2 py-2">
-                  <BsHandbag className="text-white" />
-                </div>
-                <p className="px-3 lg:text-base text-sm poppins-bold text-center">
-                  {totalQuantity} Products - PKR {Number(totalPrice || 0).toLocaleString()}
-                </p>
-              </div>
-              <FaArrowRight className="text-[#838383]" />
-            </div>
+          <div className="flex w-[50%] justify-between gap-10 pr-10" data-aos="fade-up">
+            <HeaderSummaryItem
+              icon={<FaRegHeart className="text-white" />}
+              label={`Wish List (${savedItemKeys.size})`}
+            />
+            <HeaderSummaryItem
+              icon={<BsHandbag className="text-white" />}
+              label={`${totalQuantity} Products - PKR ${Number(totalPrice || 0).toLocaleString()}`}
+            />
           </div>
         </div>
         <div className="lg:pt-5 pt-5" data-aos="fade-up">
@@ -165,14 +166,12 @@ const Shopsearch = () => {
         </div>
       </div>
 
-      {/* Category Section */}
-      <div className="lg:flex flex-row items-center gap-x-6">
+      <div className="items-center gap-x-6 lg:flex">
         <div className="lg:text-2xl poppins-regular lg:w-1/5 self-center">
           CATEGORY
           <div className="h-1.5 w-14 border bg-brown border-brown mt-4"></div>
         </div>
 
-        {/* Search Bar */}
         <div className="flex items-center border border-gray bg-white px-2 rounded-md h-12 w-[55vw]">
           <IoIosSearch className="text-gray-500 text-xl" />
           <input
@@ -184,7 +183,6 @@ const Shopsearch = () => {
           />
         </div>
 
-        {/* Sorting Dropdown */}
         <div className="relative h-12 w-64">
           <select
             className="border bg-white h-full w-full px-2 rounded-md outline-none"
@@ -198,7 +196,6 @@ const Shopsearch = () => {
         </div>
       </div>
 
-      {/* Product Display Section */}
       <div className="flex">
         <Shopfilter
           onPriceRangeChange={setPriceRange}
@@ -232,12 +229,13 @@ const Shopsearch = () => {
       </div>
 
       <ShopPages />
-      <div className="lg:flex flex-row justify-between lg:p-5">
+      <div className="justify-between lg:flex lg:p-5">
         <div className="flex">
           {Array.from({ length: totalPages }, (_, i) => (
             <button
+              type="button"
               key={i}
-              className={`p-2 px-4 ${currentPage === i + 1 ? "bg-gold" : "bg-white"}`}
+              className={cn("p-2 px-4", currentPage === i + 1 ? "bg-gold" : "bg-white")}
               onClick={() => setCurrentPage(i + 1)}
             >
               {i + 1}
