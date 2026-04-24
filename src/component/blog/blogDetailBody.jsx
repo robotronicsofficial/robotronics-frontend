@@ -24,35 +24,35 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
 
   return (
     <div className="bg-background md:p-20 p-10">
-      <div className="lg:flex flex-row" data-aos="fade-up">
-        <div className="flex flex-row space-x-6">
-          <div className="space-y-6">
-            <div className="flex flex-col space-y-2">
+      <div className="lg:flex" data-aos="fade-up">
+        <div className="flex gap-6">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
               <FiBarChart2 size={20} className="text-smallText self-center" />
               <div>
                 <p className="text-sm poppins-extralight text-center">views</p>
                 <p className="text-sm poppins-extralight text-center">{Number(blog?.views || 0).toLocaleString()}</p>
               </div>
             </div>
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col gap-2">
               <FiShare2 size={20} className="text-smallText self-center" />
               <div>
                 <p className="text-sm poppins-extralight text-center">shares</p>
                 <p className="text-sm poppins-extralight text-center">{Number(blog?.shares || 0).toLocaleString()}</p>
               </div>
             </div>
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col gap-2">
               <FaFacebook size={20} className="poppins-extralight self-center" />
             </div>
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col gap-2">
               <FaTwitter size={20} className="poppins-extralight self-center" />
             </div>
           </div>
 
-          <div className="md:p-5 md:px-10 justify-center space-y-5">
+          <div className="flex flex-col justify-center gap-5 md:p-5 md:px-10">
             <div className="flex items-center gap-4">
               <img
-                className="w-14 h-14 rounded-full object-cover"
+                className="size-14 rounded-full object-cover"
                 src={resolveImageUrl(blog?.authorImage)}
                 alt={blog?.authorName || "Author"}
               />
@@ -82,7 +82,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         </div>
       </div>
 
-      <div className="space-y-8" data-aos="fade-up">
+      <div className="flex flex-col gap-8" data-aos="fade-up">
         <div className="flex flex-row space-y-5">
           <div className="lg:w-2/3">
             <FaQuoteLeft size={24} className="text-quote" />
@@ -94,7 +94,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
 
           <div>
             <p className="text-3xl regular">Follow Us</p>
-            <div className="flex flex-row space-x-5">
+            <div className="flex gap-5">
               <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
                 <FaFacebook size={28} className="text-smallText" />
               </a>
@@ -121,19 +121,19 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
           </div>
         )}
 
-        <div className="flex flex-row space-x-10">
+        <div className="flex gap-10">
           <p className="text-center self-center poppins-light">{Number(blog?.shares || 0).toLocaleString()} Shares</p>
-          <div className="flex flex-row space-x-3">
+          <div className="flex gap-3">
             <FaFacebook className="text-cente self-center" style={{ color: "#1877F2", fontSize: "24px" }} />
             <p className="text-center self-center text-blue-500 poppins-light">Share</p>
           </div>
-          <div className="flex flex-row space-x-3">
+          <div className="flex gap-3">
             <FaTwitter className="text-center text-blue-500 self-center" />
             <p className="text-center self-center poppins-light">X</p>
           </div>
         </div>
 
-        <div className="w-5/6 flex justify-center space-x-2">
+        <div className="flex w-5/6 justify-center gap-2">
           {previousBlog ? (
             <Link to={`/BlogDetail/${previousBlog._id}`}>
               <button className="bg-brown text-white poppins-light hover:bg-gold py-2 px-8 rounded-md">
