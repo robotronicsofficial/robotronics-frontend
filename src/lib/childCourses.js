@@ -4,6 +4,7 @@ import {
   ensureArray,
   normalizeChildCourse,
   normalizeCourseDetail,
+  normalizeProgressPayload,
 } from "./subscription";
 import { buildChildSessionRequest } from "../utils/childSessionRequest";
 
@@ -113,5 +114,36 @@ export const updateChildCourseProgress = async ({ childId, courseId, sectionInde
 export const downloadChildCourseContent = ({ childId, courseId, contentId }) =>
   fetchBackendBlob(
     `/child/${childId}/courses/${courseId}/content/${contentId}/download`,
+    buildRequiredChildRequest({ method: "GET", childId }),
+  );
+
+export const fetchChildProgress = async (childId) => {
+  const payload = await fetchBackendJson(
+    `/${childId}/progress`,
+    buildRequiredChildRequest({ method: "GET", childId }),
+  );
+
+  return normalizeProgressPayload(payload);
+};
+
+export const generateChildCertificate = ({ childId, courseId }) =>
+  fetchBackendJson(
+    "/generate",
+    buildRequiredChildRequest({
+      method: "POST",
+      childId,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: {
+        childId,
+        courseId,
+      },
+    }),
+  );
+
+export const downloadChildCertificate = ({ childId, downloadUrl, certificateId }) =>
+  fetchBackendBlob(
+    downloadUrl || `/certificates/download/${certificateId}`,
     buildRequiredChildRequest({ method: "GET", childId }),
   );

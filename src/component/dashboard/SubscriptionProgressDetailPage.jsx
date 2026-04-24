@@ -1,20 +1,16 @@
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { FaFilePdf } from "react-icons/fa6";
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { resolveBackendUrl } from "../../lib/api";
-import { normalizeProgressPayload } from "../../lib/subscription";
 import CenteredState from "../../components/layout/CenteredState";
 import { Spinner } from "../../components/ui/spinner";
+import { getActiveChildSession } from "../../utils/childSessionRequest";
 import {
-  buildChildSessionRequest,
-  getActiveChildSession,
-} from "../../utils/childSessionRequest";
+  useChildProgress,
+  useDownloadChildCertificateMutation,
+} from "../../hooks/useChildCourses";
 
 const SubscriptionProgressDetailPage = () => {
-  const [progressData, setProgressData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
   const [searchParams] = useSearchParams();
   const childId = searchParams.get('childId');
@@ -22,49 +18,18 @@ const SubscriptionProgressDetailPage = () => {
   const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
   const activeChildSession = getActiveChildSession(childId || undefined);
   const selectedChildId = activeChildSession?.childId || null;
-
-  const fetchProgressPayload = useCallback(async (nextChildId) => {
-    const progressRequest = buildChildSessionRequest({
-      method: "GET",
-      childId: nextChildId,
-    });
-
-    if (!progressRequest) {
-      throw new Error('Child session not found. Please re-enter the PIN.');
-    }
-
-    const response = await fetch(
-      resolveBackendUrl(`/${nextChildId}/progress`),
-      progressRequest
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return normalizeProgressPayload(await response.json());
-  }, []);
-
-  const fetchProgressData = useCallback(async () => {
-    if (!selectedChildId) {
-      setError('Child session not found. Please re-enter the PIN from Child Accounts.');
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setError(null);
-      setProgressData(await fetchProgressPayload(selectedChildId));
-    } catch {
-      setError('Failed to load progress data. Please check your connection and try again.');
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchProgressPayload, selectedChildId]);
-
-  useEffect(() => {
-    fetchProgressData();
-  }, [fetchProgressData]);
+  const {
+    data: progressData,
+    isLoading: loading,
+    error,
+    refetch,
+  } = useChildProgress(selectedChildId);
+  const downloadCertificateMutation = useDownloadChildCertificateMutation();
+  const progressErrorMessage = !selectedChildId
+    ? 'Child session not found. Please re-enter the PIN from Child Accounts.'
+    : error
+      ? 'Failed to load progress data. Please check your connection and try again.'
+      : "";
 
   const handleDownloadCertificate = async (courseId, courseName) => {
     if (!selectedChildId || !courseId || downloadingCourseId) return;
@@ -74,52 +39,11 @@ const SubscriptionProgressDetailPage = () => {
     setDownloadErrors(prev => ({ ...prev, [courseId]: null }));
     
     try {
-      const generateRequest = buildChildSessionRequest({
-        method: 'POST',
+      const { blob } = await downloadCertificateMutation.mutateAsync({
         childId: selectedChildId,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
-          childId: selectedChildId,
-          courseId,
-        },
+        courseId,
       });
 
-      if (!generateRequest) {
-        throw new Error('Child session not found. Please re-enter the PIN.');
-      }
-
-      const response = await fetch(resolveBackendUrl("/generate"), generateRequest);
-
-      // Check if the response is OK (status 200-299)
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Server error: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      // Download the generated certificate
-      const downloadRequest = buildChildSessionRequest({
-        method: "GET",
-        childId: selectedChildId,
-      });
-
-      if (!downloadRequest) {
-        throw new Error('Child session not found. Please re-enter the PIN.');
-      }
-
-      const downloadResponse = await fetch(
-        resolveBackendUrl(result.downloadUrl || `/certificates/download/${result.certificateId}`),
-        downloadRequest
-      );
-
-      if (!downloadResponse.ok) {
-        throw new Error('Failed to download certificate file');
-      }
-
-      const blob = await downloadResponse.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -128,18 +52,8 @@ const SubscriptionProgressDetailPage = () => {
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-
-      // Refresh progress data
-      try {
-        setProgressData(await fetchProgressPayload(selectedChildId));
-      } catch (refreshError) {
-        console.error("Failed to refresh progress data:", refreshError);
-        // We don't throw this error as the download was successful
-      }
-
     } catch (err) {
       console.error("Download error:", err);
-      // Set error specific to this course without affecting the whole page
       setDownloadErrors(prev => ({ 
         ...prev, 
         [courseId]: err.message || 'Failed to download certificate. Please try again.' 
@@ -156,13 +70,13 @@ const SubscriptionProgressDetailPage = () => {
     </CenteredState>
   );
   
-  if (error) return (
+  if (progressErrorMessage) return (
     <CenteredState className="bg-gray-100 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
         <h2 className="text-xl font-bold text-red-600 mb-4">Error</h2>
-        <p className="text-gray-700 mb-4">{error}</p>
+        <p className="text-gray-700 mb-4">{progressErrorMessage}</p>
         <button 
-          onClick={fetchProgressData}
+          onClick={() => refetch()}
           className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded"
         >
           Try Again
