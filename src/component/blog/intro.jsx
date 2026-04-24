@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
 import { BACKEND_BASE_URL } from "../../lib/api";
 const resolveImageUrl = (image) => {
   if (!image) return undefined;
@@ -16,7 +17,7 @@ const Intro = ({ blog }) => {
       style={backgroundImage ? { backgroundImage: `url("${backgroundImage}")` } : undefined}
     >
       <div className="absolute inset-0 bg-black/40" />
-      <div className="relative lg:p-10 lg:pt-32 pt-24 lg:pl-28 pl-10 pr-10 space-y-4 text-white">
+      <div className={getHeaderOffsetClass("blogHero", "relative lg:p-10 lg:pl-28 pl-10 pr-10 space-y-4 text-white")}>
         <p className="text-sm uppercase tracking-[0.35em]" data-aos="fade-up">
           {blog?.categories?.[0] || "Blog"}
         </p>

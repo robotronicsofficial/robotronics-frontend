@@ -6,6 +6,7 @@ import {
   FaWhatsapp,
   FaYoutube,
 } from "react-icons/fa";
+import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
 import { getAosStaggerDelay } from "../../utils/motion";
 
 const Iaboutntro = () => {
@@ -15,7 +16,7 @@ const Iaboutntro = () => {
         <div className="overflow-hidden" >
         <div className="flex justify-between h-full w-full p-10   bg-black bg-opacity-70 md:bg-opacity-50">
             {/* text */}
-            <div className="space-y-5 pt-40 md:pt-48 lg:w-1/2 md:ml-10">
+            <div className={getHeaderOffsetClass("aboutHero", "space-y-5 lg:w-1/2 md:ml-10")}>
               {/* Text */}
               <div className="space-y-2"data-aos="fade-up">
                 <div className="flex flex-row space-x-2 ">
