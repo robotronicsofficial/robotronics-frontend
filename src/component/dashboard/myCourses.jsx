@@ -1,48 +1,33 @@
 import { FaStar, FaArrowDown } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { Spinner } from "../../components/ui/spinner";
 import { getActiveChildSession } from "../../utils/childSessionRequest";
-import { fetchSelectableChildCourses, saveChildCourses } from "../../lib/childCourses";
+import {
+  useSaveChildCoursesMutation,
+  useSelectableChildCourses,
+} from "../../hooks/useChildCourses";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const MyCourses = () => {
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [saveLoading, setSaveLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [maxCourses, setMaxCourses] = useState(Infinity);
   const coursesPerPage = 9;
   const navigate = useNavigate();
   const { id: routeChildId } = useParams();
   const activeChildSession = getActiveChildSession(routeChildId);
   const childId = activeChildSession?.childId || null;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!childId) {
-          throw new Error("Child ID not found in URL");
-        }
-
-        const childCourses = await fetchSelectableChildCourses(childId);
-        setMaxCourses(childCourses.maxCourses);
-        setCourses(childCourses.courses);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-        console.error("Error fetching data:", err);
-      }
-    };
-
-    fetchData();
-  }, [childId]);
+  const {
+    data: selectableCourses = {},
+    isLoading: loading,
+    error,
+  } = useSelectableChildCourses(childId);
+  const saveChildCoursesMutation = useSaveChildCoursesMutation();
+  const courses = selectableCourses.courses || [];
+  const maxCourses = selectableCourses.maxCourses ?? Infinity;
 
   const toggleCourseSelection = (courseId) => {
     if (selectedCourses.includes(courseId)) {
@@ -58,13 +43,11 @@ const MyCourses = () => {
 
   const saveSelectedCourses = async () => {
     try {
-      setSaveLoading(true);
-
       if (!childId) {
         throw new Error("Child ID not found");
       }
 
-      await saveChildCourses({ childId, courseIds: selectedCourses });
+      await saveChildCoursesMutation.mutateAsync({ childId, courseIds: selectedCourses });
 
       setTimeout(() => {
         navigate(`/Dashboard/myAllCourses/${childId}`);
@@ -72,8 +55,6 @@ const MyCourses = () => {
     } catch (err) {
       console.error("Error saving courses:", err);
       alert(`Error saving courses: ${err.message}`);
-    } finally {
-      setSaveLoading(false);
     }
   };
 
@@ -114,7 +95,7 @@ const MyCourses = () => {
   if (error) {
     return (
       <CenteredState className="h-screen">
-        <div className="text-red-500">Error: {error}</div>
+        <div className="text-red-500">Error: {error.message}</div>
       </CenteredState>
     );
   }
@@ -149,9 +130,9 @@ const MyCourses = () => {
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-[#ffc224] hover:bg-[#ffb700]"
               } transition-colors`}
-            disabled={!canSaveCourses || saveLoading}
+            disabled={!canSaveCourses || saveChildCoursesMutation.isPending}
           >
-            {saveLoading ? (
+            {saveChildCoursesMutation.isPending ? (
               <span className="flex items-center justify-center">
                 <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

@@ -1,44 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { Spinner } from "../../components/ui/spinner";
 import { getActiveChildSession } from "../../utils/childSessionRequest";
-import { fetchChildCourses } from "../../lib/childCourses";
+import { useChildCourses } from "../../hooks/useChildCourses";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const MyAllCourses = () => {
-  const [activeCourses, setActiveCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 9;
   const navigate = useNavigate();
   const { id: routeChildId } = useParams();
   const activeChildSession = getActiveChildSession(routeChildId);
   const childId = activeChildSession?.childId || null;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!childId) {
-          throw new Error("Child ID not found in URL");
-        }
-  
-        setLoading(true);
-
-        setActiveCourses(await fetchChildCourses(childId));
-        setLoading(false);
-      } catch (err) {
-        console.error("Error in fetchData:", err);
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-  
-    fetchData();
-  }, [childId]);
+  const {
+    data: activeCourses = [],
+    isLoading: loading,
+    error,
+  } = useChildCourses(childId);
 
   const displayedCourses = activeCourses;
   const totalPages = Math.ceil(displayedCourses.length / coursesPerPage);
@@ -88,7 +69,7 @@ const MyAllCourses = () => {
   if (error) {
     return (
       <CenteredState className="h-screen">
-        <div className="text-red-500">Error: {error}</div>
+        <div className="text-red-500">Error: {error.message}</div>
       </CenteredState>
     );
   }

@@ -1,6 +1,6 @@
 import { PiGraduationCapLight } from "react-icons/pi";
 import video from "../../assets/videos/video-preview.mp4";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FiDownload } from "react-icons/fi";
 import {
   CheckIcon,
@@ -21,10 +21,10 @@ import ChatSupport from "../../component/ChatSupport"
 import { getActiveChildSession } from "../../utils/childSessionRequest";
 import { openExternalUrl } from "../../utils/openExternalUrl";
 import {
-  downloadChildCourseContent,
-  fetchChildCourseDetail,
-  updateChildCourseProgress,
-} from "../../lib/childCourses";
+  useChildCourseDetail,
+  useDownloadChildCourseContentMutation,
+  useUpdateChildCourseProgressMutation,
+} from "../../hooks/useChildCourses";
 import VideoPlayer from "../../component/VideoPlayer";
 import CenteredState from "../../components/layout/CenteredState";
 import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
@@ -49,12 +49,7 @@ const CourseDetail = () => {
   const { id } = useParams();
   const activeChildSession = getActiveChildSession();
   const childId = activeChildSession?.childId || null;
-  const [courseData, setCourseData] = useState(null);
-  const [childCourseData, setChildCourseData] = useState(null);
-  const [plan, setPlan] = useState(null);
-
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [actionError, setActionError] = useState(null);
 
   // State for managing UI
   const [expandedModules, setExpandedModules] = useState({});
@@ -63,32 +58,19 @@ const CourseDetail = () => {
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizResults, setQuizResults] = useState({});
   const [quizRetakes, setQuizRetakes] = useState({});
+  const {
+    data: courseDetail,
+    isLoading: loading,
+    error,
+  } = useChildCourseDetail({ childId, courseId: id });
+  const updateChildCourseProgressMutation = useUpdateChildCourseProgressMutation();
+  const downloadChildCourseContentMutation = useDownloadChildCourseContentMutation();
+  const courseData = courseDetail?.courseDetails || null;
+  const childCourseData = courseDetail?.childCourse || null;
+  const plan = courseDetail?.plan || null;
   const courseSections = Array.isArray(courseData?.sections) ? courseData.sections : [];
   const childSections = Array.isArray(childCourseData?.Sections) ? childCourseData.Sections : [];
   const courseReviews = Number(courseData?.reviews) || 0;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!childId) {
-          throw new Error("Child session not found. Please re-enter the PIN.");
-        }
-
-        const courseDetail = await fetchChildCourseDetail({ childId, courseId: id });
-
-        setCourseData(courseDetail.courseDetails);
-        setChildCourseData(courseDetail.childCourse);
-        setPlan(courseDetail.plan);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [childId, id]);
 
   const isSectionUnlocked = (section, sectionIndex) => {
     if (!section?.startDate || !section?.endDate) return true;
@@ -131,19 +113,20 @@ const CourseDetail = () => {
     const contentId = content?.id || content?._id;
 
     if (!childId || !contentId) {
-      setError("Child session not found. Please re-enter the PIN.");
+      setActionError("Child session not found. Please re-enter the PIN.");
       return;
     }
 
     if (isExternalUrl(content.file) && !isProtectedCourseDownload(content.file)) {
       if (!openExternalUrl(content.file)) {
-        setError("Unable to open this download link.");
+        setActionError("Unable to open this download link.");
       }
       return;
     }
 
     try {
-      const blob = await downloadChildCourseContent({
+      setActionError(null);
+      const blob = await downloadChildCourseContentMutation.mutateAsync({
         childId,
         courseId: id,
         contentId,
@@ -157,7 +140,7 @@ const CourseDetail = () => {
       link.remove();
       URL.revokeObjectURL(objectUrl);
     } catch (downloadError) {
-      setError(downloadError.message || "Failed to download course content");
+      setActionError(downloadError.message || "Failed to download course content");
     }
   };
 
@@ -210,14 +193,14 @@ const CourseDetail = () => {
     }));
 
     try {
-      const responsePayload = await updateChildCourseProgress({
+      setActionError(null);
+      const responsePayload = await updateChildCourseProgressMutation.mutateAsync({
         childId,
         courseId: id,
         sectionIndex,
         answers,
       });
 
-      setChildCourseData(responsePayload?.data);
       setQuizResults(prev => ({
         ...prev,
         [sectionIndex]: {
@@ -234,6 +217,7 @@ const CourseDetail = () => {
 
     } catch (error) {
       console.error("Failed to update quiz results:", error);
+      setActionError(error.message || "Failed to update quiz results");
     }
   };
 
@@ -248,7 +232,7 @@ const CourseDetail = () => {
   if (error) {
     return (
       <CenteredState className="h-screen">
-        <div className="text-red-500 poppins-medium">{error}</div>
+        <div className="text-red-500 poppins-medium">{error.message}</div>
       </CenteredState>
     );
   }
@@ -351,6 +335,11 @@ const CourseDetail = () => {
 
 
           >
+            {actionError ? (
+              <div className="mb-4 rounded-lg bg-red-50 p-4 text-sm font-semibold text-red-700">
+                {actionError}
+              </div>
+            ) : null}
             {/* Course Description */}
             <div className="py-5">
               <h1 className="poppins-bold text-2xl mb-4">Course Description</h1>
@@ -741,9 +730,10 @@ const CourseDetail = () => {
                                     ))}
                                     <button
                                       onClick={() => submitQuiz(sectionIndex)}
+                                      disabled={updateChildCourseProgressMutation.isPending}
                                       className="poppins-medium bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
                                     >
-                                      Submit Quiz
+                                      {updateChildCourseProgressMutation.isPending ? "Submitting..." : "Submit Quiz"}
                                     </button>
                                     <div className="poppins-light text-sm text-gray-600 mt-2">
                                       Note: You need to score at least 60% to unlock the next module.
