@@ -53,12 +53,14 @@ jobs:
         env:
           PRODUCTION_SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
           PRODUCTION_SSH_HOST: ${{ secrets.PRODUCTION_SSH_HOST }}
+          PRODUCTION_SSH_PORT: ${{ secrets.PRODUCTION_SSH_PORT }}
         run: |
           set -euo pipefail
+          ssh_port="${PRODUCTION_SSH_PORT:-22}"
           install -d -m 700 ~/.ssh
           printf '%s\n' "${PRODUCTION_SSH_KEY}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "${PRODUCTION_SSH_HOST}" >> ~/.ssh/known_hosts
+          ssh-keyscan -p "${ssh_port}" -H "${PRODUCTION_SSH_HOST}" >> ~/.ssh/known_hosts
 
       - name: Upload frontend release
         env:
