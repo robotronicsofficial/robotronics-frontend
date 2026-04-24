@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 import robo from "../assets/logo/Robotrinic.svg";
 import leftArrow from "../assets/logo/arrow-up-left.svg";
 import rightArrow from "../assets/logo/arrow-up-right.svg";
-import { IoStarSharp } from "react-icons/io5";
-import { LuClock } from "react-icons/lu";
-import { IoVideocamOutline } from "react-icons/io5";
+import { Clock, Star, Video } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import { resolveBackendAssetUrl } from "../utils/mediaUrl";
@@ -32,7 +30,7 @@ const ServiceCard = ({ service }) => {
             </h3>
             <div className="flex text-primary">
               {[...Array(5)].map((_, i) => (
-                <IoStarSharp key={i} className="text-sm sm:text-base" />
+                <Star key={i} className="text-sm sm:text-base" />
               ))}
             </div>
           </div>
@@ -43,13 +41,13 @@ const ServiceCard = ({ service }) => {
           {/* Details */}
           <div className="flex justify-between items-center mt-auto ">
             <div className="flex items-center gap-2">
-              <LuClock className="text-primary text-lg sm:text-xl" />
+              <Clock className="text-primary text-lg sm:text-xl" />
               <span className="text-xs sm:text-sm font-bold poppins-extrabold text-wrap">
                 {service.month || "N/A"} Months
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <IoVideocamOutline className="text-primary text-lg sm:text-xl" />
+              <Video className="text-primary text-lg sm:text-xl" />
               <span className="text-xs sm:text-sm font-bold poppins-extrabold text-wrap">
                 {service.numLessons || "N/A"} Lectures
               </span>

@@ -1,4 +1,4 @@
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
@@ -45,7 +45,7 @@ const Shopproduct = ({
       {/* Add to Cart and Add to Wishlist buttons */}
       <div className="absolute left-1/2 top-1/2 flex w-11/12 -translate-x-1/2 -translate-y-1/2 transform flex-col opacity-0 transition-opacity duration-300 group-hover:opacity-100">
         <button
-          className="bg-muted bg-opacity-30 p-2 text-foreground poppins-medium rounded-lg mb-2"
+          className="bg-muted/30 p-2 text-foreground poppins-medium rounded-lg mb-2"
           onClick={(e) => {
             e.stopPropagation(); // Prevent link navigation
             onAddToCart(); // Trigger add to cart
@@ -60,7 +60,7 @@ const Shopproduct = ({
             onAddToWishlist(); // Trigger add to wishlist
           }}
         >
-          {isSaved ? <FaHeart className="mr-5 ml-3" /> : <FaRegHeart className="mr-5 ml-3" />}
+          {isSaved ? <Heart className="mr-5 ml-3"  fill="currentColor" /> : <Heart className="mr-5 ml-3"  />}
           {isSaved ? "Saved" : "Add to Wishlist"}
         </button>
       </div>

@@ -1,8 +1,6 @@
 import PropTypes from "prop-types";
 import { useState, useMemo } from "react";
-import { FaArrowRight, FaRegHeart } from "react-icons/fa";
-import { BsHandbag } from "react-icons/bs";
-import { IoIosSearch } from "react-icons/io";
+import { ArrowRight, Heart, Search, ShoppingBag } from "lucide-react";
 import {
   createProductCommerceItem,
   getCommerceItemKey,
@@ -29,7 +27,7 @@ const HeaderSummaryItem = ({ icon, label }) => (
       </div>
       <p className="px-3 text-center text-sm poppins-bold lg:text-base">{label}</p>
     </div>
-    <FaArrowRight className="shrink-0 text-muted-foreground" />
+    <ArrowRight className="shrink-0 text-muted-foreground" />
   </div>
 );
 
@@ -120,11 +118,11 @@ const Shopsearch = () => {
 
           <div className="flex w-[50%] justify-between gap-10 pr-10" data-aos="fade-up">
             <HeaderSummaryItem
-              icon={<FaRegHeart className="text-background" />}
+              icon={<Heart className="text-background" />}
               label={`Wish List (${savedItemKeys.size})`}
             />
             <HeaderSummaryItem
-              icon={<BsHandbag className="text-background" />}
+              icon={<ShoppingBag className="text-background" />}
               label={`${totalQuantity} Products - PKR ${Number(totalPrice || 0).toLocaleString()}`}
             />
           </div>
@@ -141,7 +139,7 @@ const Shopsearch = () => {
         </div>
 
         <div className="flex h-12 w-full flex-1 items-center rounded-md border border-border bg-card px-2">
-          <IoIosSearch className="text-muted-foreground text-xl" />
+          <Search className="text-muted-foreground text-xl" />
           <input
             type="text"
             className="w-full px-2 py-2 outline-none bg-transparent"

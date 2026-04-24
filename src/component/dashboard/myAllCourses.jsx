@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaStar } from "react-icons/fa";
+import { Star } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
@@ -111,7 +111,7 @@ const MyAllCourses = () => {
                         {course.category}
                       </p>
                       <div className="flex items-center">
-                        <FaStar className="text-primary" />
+                        <Star className="text-primary" />
                         <p className="text-muted-foreground poppins-light text-base ml-2">
                           ({course.reviews || 0} Rating)
                         </p>

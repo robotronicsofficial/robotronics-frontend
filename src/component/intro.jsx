@@ -1,14 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import {
-  FaFacebook,
-  FaInstagram,
-  FaLinkedin,
-  FaTwitter,
-  FaWhatsapp,
-  FaYoutube,
-} from "react-icons/fa";
 import Robort from "../assets/images/heroRobot.webp";
 import AppImage from "./AppImage";
+import { BrandIcon } from "../components/ui/brand-icons";
 import { getAosStaggerDelay } from "../utils/motion";
 
 const Intro = () => {
@@ -68,13 +61,13 @@ const Intro = () => {
               {/* Social Icons */}
               <div className="flex flex-row gap-x-2 lg:gap-x-5">
                 {[
-                  { href: "https://www.facebook.com/robotronicspakistan/", icon: <FaFacebook /> },
-                  { href: "https://twitter.com/robotronicspk", icon: <FaTwitter /> },
-                  { href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw", icon: <FaYoutube /> },
-                  { href: "https://www.instagram.com/robotronicspk/?hl=en", icon: <FaInstagram /> },
-                  { href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all", icon: <FaLinkedin /> },
-                  { href: "https://wa.me/message/TKZZPIE2A34UM1", icon: <FaWhatsapp /> },
-                ].map(({ href, icon }, index) => (
+                  { href: "https://www.facebook.com/robotronicspakistan/", brand: "facebook" },
+                  { href: "https://twitter.com/robotronicspk", brand: "twitter" },
+                  { href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw", brand: "youtube" },
+                  { href: "https://www.instagram.com/robotronicspk/?hl=en", brand: "instagram" },
+                  { href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all", brand: "linkedin" },
+                  { href: "https://wa.me/message/TKZZPIE2A34UM1", brand: "whatsapp" },
+                ].map(({ href, brand }, index) => (
                   <a
                     key={index}
                     href={href}
@@ -84,7 +77,7 @@ const Intro = () => {
                     data-aos-delay={getAosStaggerDelay(index)}
                     className="lg:p-3 p-1 border border-foreground bg-card rounded-xl hover:bg-foreground hover:text-background"
                   >
-                    {icon}
+                    <BrandIcon brand={brand} />
                   </a>
                 ))}
               </div>

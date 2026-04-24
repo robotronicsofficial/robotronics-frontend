@@ -1,8 +1,7 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdOutlineNotificationsActive } from "react-icons/md";
+import { BellRing, Star } from "lucide-react";
 import robo from "../../../assets/logo/Robotrinic.svg";
-import { FaStar } from "react-icons/fa";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 
 import { useCourses } from "../../../hooks/useCourses";
@@ -72,7 +71,7 @@ const Shop = () => {
                       {course?.category || "General"}
                     </p>
                     <div className="flex items-center">
-                      <FaStar className="text-primary" />
+                      <Star className="text-primary" />
                       <p className="ml-2 text-base text-muted-foreground">
                         {Number(course?.reviews || 0)} Reviews
                       </p>
@@ -89,7 +88,7 @@ const Shop = () => {
                 <div className="my-2 flex items-center justify-center">
                   <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 font-bold text-background">
                     <p className="poppins-medium text-base px-2">View Course</p>
-                    <MdOutlineNotificationsActive className="text-center text-lg" />
+                    <BellRing className="text-center text-lg" />
                   </span>
                 </div>
               </button>

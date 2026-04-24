@@ -6,7 +6,7 @@ import AppImage from "../../AppImage";
 import CenteredState from "../../../components/layout/CenteredState";
 import robo from "../../../assets/images/shopRobot.webp";
 import star from "../../../assets/images/shopStar.svg";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Heart } from "lucide-react";
 
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 import { useProduct, useProducts } from "../../../hooks/useProducts";
@@ -189,7 +189,7 @@ const Intro = () => {
               onClick={handleToggleSavedItem}
               aria-label={isSaved ? "Remove from saved items" : "Save item"}
             >
-              {isSaved ? <FaHeart /> : <FaRegHeart />}
+              {isSaved ? <Heart  fill="currentColor" /> : <Heart  />}
             </button>
           </div>
         </div>

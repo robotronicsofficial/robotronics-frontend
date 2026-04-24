@@ -1,6 +1,4 @@
-import { FaHeadphones, FaSignOutAlt, FaUser, FaBox } from "react-icons/fa";
-import { MdOutlinePayment } from "react-icons/md";
-import { RiArrowDropDownLine, RiRobot3Fill } from "react-icons/ri";
+import { Bot, Box, ChevronDown, CreditCard, Headphones, LogOut, User } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/useAuth";
@@ -19,11 +17,11 @@ const LeftNav = () => {
   };
 
   const menuItems = [
-    { name: "My info", href: "/Dashboard/userInfo", icon: <FaUser className="text-foreground" /> },
+    { name: "My info", href: "/Dashboard/userInfo", icon: <User className="text-foreground" /> },
     {
       name: "My orders",
-      icon: <FaBox className="text-foreground" />,
-      dropdownIcon: <RiArrowDropDownLine className="text-3xl text-foreground" />,
+      icon: <Box className="text-foreground" />,
+      dropdownIcon: <ChevronDown className="text-3xl text-foreground" />,
       subMenu: [
         { name: "• My Products", href: "/International/myRobot" },
         // { name: "• My Courses", href: "/Dashboard/MyCoursesPage" },
@@ -31,8 +29,8 @@ const LeftNav = () => {
     },
     {
       name: "Subscriptions",
-      icon: <RiRobot3Fill className="text-foreground" />,
-      dropdownIcon: <RiArrowDropDownLine className="text-3xl text-foreground" />,
+      icon: <Bot className="text-foreground" />,
+      dropdownIcon: <ChevronDown className="text-3xl text-foreground" />,
       subMenu: [
         { name: "• Child Profile", href: "/Dashboard/ChildProfile" },
         { name: "• Progress & Certificate", href: "/Dashboard/ProgressCertificate" },
@@ -40,13 +38,13 @@ const LeftNav = () => {
     },
     {
       name: "Payment",
-      icon: <MdOutlinePayment className="text-foreground" />,
-      dropdownIcon: <RiArrowDropDownLine className="text-3xl text-foreground" />,
+      icon: <CreditCard className="text-foreground" />,
+      dropdownIcon: <ChevronDown className="text-3xl text-foreground" />,
       subMenu: [
         { name: "• Payment History", href: "/Dashboard/PaymentHistory" },
       ],
     },
-    { name: "Support", href: CONTACT_PATH, icon: <FaHeadphones className="text-foreground" /> },
+    { name: "Support", href: CONTACT_PATH, icon: <Headphones className="text-foreground" /> },
   ];
 
   return (
@@ -112,7 +110,7 @@ const LeftNav = () => {
               className="flex w-full items-center gap-x-3 rounded-lg px-4 py-2 text-left text-foreground hover:bg-primary"
               onClick={logout}
             >
-              <FaSignOutAlt className="text-foreground" />
+              <LogOut className="text-foreground" />
               <span className="text-base font-medium text-foreground lg:text-xl">Sign out</span>
             </button>
           </li>

@@ -1,7 +1,4 @@
-// import { AiOutlineRight } from "react-icons/ai";
-// import { FiDownload } from "react-icons/fi";
-// import { FaStar, FaArrowDown } from "react-icons/fa";
-import { GoDotFill } from "react-icons/go";
+import { Circle } from "lucide-react";
 // import { useState } from "react";
 // import JS from "../../assets/images/JS-MyCouses.svg";
 
@@ -122,31 +119,31 @@ const SubscriptionDetail = () => {
             <div className="flex flex-col gap-y-3 poppins-light">
               <li className="flex items-center gap-x-9">
                 <span className="text-primary">
-                  <GoDotFill />
+                  <Circle />
                 </span>
                 <span>Recorded Video Lectures</span>
               </li>
               <li className="flex items-center gap-x-9">
                 <span className="text-primary">
-                  <GoDotFill />
+                  <Circle />
                 </span>
                 <span>Code Files for each Lecture(Where ever applicable)</span>
               </li>
               <li className="flex items-center gap-x-9">
                 <span className="text-primary">
-                  <GoDotFill />
+                  <Circle />
                 </span>
                 <span>Practice Assignments</span>
               </li>
               <li className="flex items-center gap-x-9">
                 <span className="text-primary">
-                  <GoDotFill />
+                  <Circle />
                 </span>
                 <span>Module based Assessments</span>
               </li>
               <li className="flex items-center gap-x-9">
                 <span className="text-primary">
-                  <GoDotFill />
+                  <Circle />
                 </span>
                 <span>E-Certificates for Active Learners</span>
               </li>
@@ -171,7 +168,7 @@ const SubscriptionDetail = () => {
                         {course.category}
                       </p>
                       <div className="flex items-center">
-                        <FaStar className="text-primary" />
+                        <Star className="text-primary" />
                         <p className="text-muted-foreground poppins-light text-base ml-2">
                           ({course.reviews} Reviews)
                         </p>
@@ -191,7 +188,7 @@ const SubscriptionDetail = () => {
                     <a href="/Dashboard/courseDetail">
                       <button className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2">
                         <span>{course.buttonText}</span>
-                        <FaArrowDown className="text-xs -rotate-90" />
+                        <MoveDown className="text-xs -rotate-90" />
                       </button>
                     </a>
                   </div>
@@ -208,7 +205,7 @@ const SubscriptionDetail = () => {
                 className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2"
               >
                 <span>View More</span>
-                <FaArrowDown className="text-xs transform -rotate-120" />
+                <MoveDown className="text-xs transform -rotate-120" />
               </button>
             </div>
           )} */}

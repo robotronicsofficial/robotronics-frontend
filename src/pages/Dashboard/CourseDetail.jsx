@@ -1,22 +1,20 @@
-import { PiGraduationCapLight } from "react-icons/pi";
 import video from "../../assets/videos/video-preview.mp4";
 import { useState } from "react";
-import { FiDownload } from "react-icons/fi";
 import {
   CheckIcon,
   ChevronDownIcon,
+  CirclePlayIcon,
   ChevronRightIcon,
   ClipboardListIcon,
+  DownloadIcon,
+  GraduationCapIcon,
+  LaptopIcon,
   LockKeyholeIcon,
   RotateCcwIcon,
   XIcon,
 } from "lucide-react";
 import ReviewsComponent from "../../pages/subscriptions/SubscriptionTestimonials";
 import { useParams } from "react-router-dom";
-import { FaCirclePlay } from "react-icons/fa6";
-import { FaLaptopCode } from "react-icons/fa";
-import { MdAssignment } from "react-icons/md";
-import { AiOutlineRight } from "react-icons/ai";
 import ChatSupport from "../../component/ChatSupport"
 import { getActiveChildSession } from "../../utils/childSessionRequest";
 import { openExternalUrl } from "../../utils/openExternalUrl";
@@ -284,7 +282,7 @@ const CourseDetail = () => {
                     </h1>
                   </div>
                   <div className="flex items-center gap-x-2 text-muted-foreground">
-                    <PiGraduationCapLight />
+                    <GraduationCapIcon />
                     <span className="text-muted-foreground my-2">{courseData.studentsDownloaded ?? 0} Students Enrolled</span>
                   </div>
 
@@ -346,7 +344,7 @@ const CourseDetail = () => {
                   {courseSections.map((item, index) => (
                     <li key={index} className="flex items-start">
                       <div className="bg-primary rounded-full h-4 w-4 flex items-center justify-center mt-1 mr-2 flex-shrink-0">
-                        <AiOutlineRight className="text-background text-xs" />
+                        <ChevronRightIcon className="text-background text-xs" />
                       </div>
                       <span className="poppins-light text-foreground">{item.name}</span>
                     </li>
@@ -420,7 +418,7 @@ const CourseDetail = () => {
                                 />
                               )}
                               <span className="poppins-bold mr-3 text-primary">
-                                <FaCirclePlay className="text-2xl" />
+                                <CirclePlayIcon className="text-2xl" />
                               </span>
                               <h3 className="poppins-bold text-muted-foreground">
                                 <span className="text-primary">Lecture {moduleIndex + 1}:</span> {module.name}
@@ -469,7 +467,7 @@ const CourseDetail = () => {
                                       <div className="flex items-center gap-2">
                                         {content.type === "video" && (
                                           <>
-                                            <FaCirclePlay className="text-primary text-lg" />
+                                            <CirclePlayIcon className="text-primary text-lg" />
                                             <button
                                               onClick={() => handlePlayVideo(fileUrl)}
                                               className="poppins-light"
@@ -481,9 +479,9 @@ const CourseDetail = () => {
                                         {(content.type === "assignment" || content.type === "book") && (
                                           <>
                                             {content.type === "assignment" ? (
-                                              <MdAssignment className="text-primary text-lg" />
+                                              <ClipboardListIcon className="text-primary text-lg" />
                                             ) : (
-                                              <FaLaptopCode className="text-primary text-lg" />
+                                              <LaptopIcon className="text-primary text-lg" />
                                             )}
                                             <span className="poppins-light">
                                               {content.name}
@@ -503,7 +501,7 @@ const CourseDetail = () => {
                                             onClick={() => handleDownloadContent(content)}
                                             className="flex items-center poppins-medium text-primary text-sm hover:text-primary"
                                           >
-                                            <FiDownload className="mr-1" />
+                                            <DownloadIcon className="mr-1" />
                                             Download
                                           </button>
                                         )}

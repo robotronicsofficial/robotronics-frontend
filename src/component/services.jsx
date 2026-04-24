@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FaRobot} from "react-icons/fa";
-import { MdArrowOutward } from "react-icons/md";
+import { ArrowUpRight, Bot } from "lucide-react";
 import robort from "../assets/images/right-face-robot.png";
 import AppImage from "./AppImage";
 import { useServices } from "../hooks/useServices";
@@ -55,7 +54,7 @@ const Services = () => {
         >
           {/* Icon with consistent size */}
           <div className="text-4xl sm:text-5xl md:text-6xl text-background mb-3 sm:mb-4">
-            <FaRobot />
+            <Bot />
           </div>
 
           {/* Title with fixed height */}
@@ -81,7 +80,7 @@ const Services = () => {
               <div className="text-background text-sm sm:text-base underline poppins-light group-hover:text-primary transition-colors">
                 View Detail
               </div>
-              <MdArrowOutward className="text-lg sm:text-xl text-primary group-hover:translate-x-1 transition-transform" />
+              <ArrowUpRight className="text-lg sm:text-xl text-primary group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
         </div>

@@ -1,13 +1,6 @@
-import { FiArrowUpRight } from "react-icons/fi";
+import { ArrowUpRight } from "lucide-react";
 // import { useNavigate } from "react-router-dom";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaYoutube,
-  FaInstagram,
-  FaLinkedin,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { BrandIcon } from "../../components/ui/brand-icons";
 import { useNavigate } from "react-router-dom"; // Assuming React Router is used
 import { getAosStaggerDelay } from "../../utils/motion";
 
@@ -38,12 +31,12 @@ const CareesFindRole = () => {
         >
           <button
             onClick={handleSendResume}
-            className="bg-foreground text-background lg:text-2xl font-light px-6 py-3 rounded-full shadow-md hover:bg-opacity-90 transition"
+            className="bg-foreground text-background lg:text-2xl font-light px-6 py-3 rounded-full shadow-md hover:bg-foreground/90 transition"
           >
             Send Your Resume
           </button>
           <button className="bg-card text-foreground border border-foreground px-4 py-3 rounded-full shadow-md hover:bg-foreground hover:text-background transition">
-            <FiArrowUpRight size={24} />
+            <ArrowUpRight size={24} />
           </button>
         </div>
       </div>
@@ -51,16 +44,16 @@ const CareesFindRole = () => {
       {/* Right Section: Social Icons */}
       <div className="flex flex-row lg:flex-col justify-center lg:justify-between items-center gap-x-5 lg:gap-x-0 lg:gap-y-5">
         {[
-          { href: "https://www.facebook.com", icon: <FaFacebook /> },
-          { href: "https://www.twitter.com", icon: <FaTwitter /> },
-          { href: "https://www.youtube.com", icon: <FaYoutube /> },
-          { href: "https://www.instagram.com", icon: <FaInstagram /> },
-          { href: "https://www.linkedin.com", icon: <FaLinkedin /> },
+          { href: "https://www.facebook.com", brand: "facebook" },
+          { href: "https://www.twitter.com", brand: "twitter" },
+          { href: "https://www.youtube.com", brand: "youtube" },
+          { href: "https://www.instagram.com", brand: "instagram" },
+          { href: "https://www.linkedin.com", brand: "linkedin" },
           {
             href: "https://api.whatsapp.com/send?phone=1234567890",
-            icon: <FaWhatsapp />,
+            brand: "whatsapp",
           },
-        ].map(({ href, icon }, index) => (
+        ].map(({ href, brand }, index) => (
           <a
             key={index}
             href={href}
@@ -70,7 +63,7 @@ const CareesFindRole = () => {
             data-aos="fade-up"
             data-aos-delay={getAosStaggerDelay(index)}
           >
-            {icon}
+            <BrandIcon brand={brand} />
           </a>
         ))}
       </div>

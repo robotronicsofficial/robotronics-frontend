@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FaTimes } from "react-icons/fa";
+import { X } from "lucide-react";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
@@ -66,7 +66,7 @@ const WishListD = () => {
                     className="text-muted-foreground transition hover:text-destructive"
                     aria-label={`Remove ${item.name}`}
                   >
-                    <FaTimes />
+                    <X />
                   </button>
                 </div>
                 <button type="button" onClick={() => navigate(getCommerceItemRoute(item))}>

@@ -64,7 +64,7 @@ const OurServices = () => {
         {services.length > 6 && (
           <div className="text-center mt-8">
             <button
-              className="bg-foreground text-background px-6 py-2 rounded-lg text-lg hover:bg-opacity-80 transition"
+              className="bg-foreground text-background px-6 py-2 rounded-lg text-lg hover:bg-foreground/80 transition"
               onClick={() => setShowAll(!showAll)}
             >
               {showAll ? "Show Less" : "Show More"}

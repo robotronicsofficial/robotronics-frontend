@@ -1,14 +1,7 @@
 import { Link } from "react-router-dom";
-import { FiBarChart2, FiShare2 } from "react-icons/fi";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaQuoteLeft,
-  FaQuoteRight,
-  FaInstagram,
-  FaLinkedin,
-} from "react-icons/fa";
+import { BarChart2, Quote, Share2 } from "lucide-react";
 
+import { BrandIcon } from "../../components/ui/brand-icons";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
@@ -23,24 +16,24 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         <div className="flex gap-6">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <FiBarChart2 size={20} className="text-muted-foreground self-center" />
+              <BarChart2 size={20} className="text-muted-foreground self-center" />
               <div>
                 <p className="text-sm poppins-extralight text-center">views</p>
                 <p className="text-sm poppins-extralight text-center">{Number(blog?.views || 0).toLocaleString()}</p>
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <FiShare2 size={20} className="text-muted-foreground self-center" />
+              <Share2 size={20} className="text-muted-foreground self-center" />
               <div>
                 <p className="text-sm poppins-extralight text-center">shares</p>
                 <p className="text-sm poppins-extralight text-center">{Number(blog?.shares || 0).toLocaleString()}</p>
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <FaFacebook size={20} className="poppins-extralight self-center" />
+              <BrandIcon brand="facebook" size={20} className="poppins-extralight self-center" />
             </div>
             <div className="flex flex-col gap-2">
-              <FaTwitter size={20} className="poppins-extralight self-center" />
+              <BrandIcon brand="twitter" size={20} className="poppins-extralight self-center" />
             </div>
           </div>
 
@@ -80,27 +73,27 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
       <div className="flex flex-col gap-8" data-aos="fade-up">
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="lg:w-2/3">
-            <FaQuoteLeft size={24} className="text-muted-foreground" />
+            <Quote size={24} className="text-muted-foreground" />
             <p className="text-balance text-foreground poppins-regular lg:text-6xl text-2xl">
               {leadQuote}
             </p>
-            <FaQuoteRight size={24} className="text-muted-foreground" />
+            <Quote size={24} className="text-muted-foreground" />
           </div>
 
           <div>
             <p className="text-3xl regular">Follow Us</p>
             <div className="flex gap-5">
               <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
-                <FaFacebook size={28} className="text-muted-foreground" />
+                <BrandIcon brand="facebook" size={28} className="text-muted-foreground" />
               </a>
               <a href="https://twitter.com" target="_blank" rel="noreferrer">
-                <FaTwitter size={28} className="text-muted-foreground" />
+                <BrandIcon brand="twitter" size={28} className="text-muted-foreground" />
               </a>
               <a href="https://www.instagram.com" target="_blank" rel="noreferrer">
-                <FaInstagram size={28} className="text-muted-foreground" />
+                <BrandIcon brand="instagram" size={28} className="text-muted-foreground" />
               </a>
               <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">
-                <FaLinkedin size={28} className="text-muted-foreground" />
+                <BrandIcon brand="linkedin" size={28} className="text-muted-foreground" />
               </a>
             </div>
           </div>
@@ -119,11 +112,11 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         <div className="flex gap-10">
           <p className="text-center self-center poppins-light">{Number(blog?.shares || 0).toLocaleString()} Shares</p>
           <div className="flex gap-3">
-            <FaFacebook className="text-cente self-center text-primary text-2xl" />
+            <BrandIcon brand="facebook" className="self-center text-primary text-2xl" />
             <p className="text-center self-center text-info poppins-light">Share</p>
           </div>
           <div className="flex gap-3">
-            <FaTwitter className="text-center text-info self-center" />
+            <BrandIcon brand="twitter" className="text-center text-info self-center" />
             <p className="text-center self-center poppins-light">X</p>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { useAuth } from "../../../contexts/useAuth";
 import { useNavigate } from "react-router-dom";
 import AppImage from "../../../component/AppImage";
 import robo from "../../../assets/child.webp";
-import { FaTrash } from "react-icons/fa"; // Import delete icon
+import { Trash2 } from "lucide-react";
 import { normalizeParentRecord } from "../../../lib/subscription";
 import { buildSubscriptionCheckout, saveSubscriptionCheckout } from "../../../lib/subscriptionCheckout";
 import {
@@ -395,7 +395,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                     onClick={() => removeChildForm(index)}
                     className="text-center lg:text-xl text-sm poppins-bold text-destructive bg-background py-2 lg:px-5 px-3 hover:bg-destructive flex items-center"
                   >
-                    <FaTrash className="mr-2" />
+                    <Trash2 className="mr-2" />
                   </button>
                 )}
               </div>

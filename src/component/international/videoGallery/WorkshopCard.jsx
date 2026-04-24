@@ -1,6 +1,5 @@
-import { RxClock } from "react-icons/rx";
+import { Clock, MapPin } from "lucide-react";
 import PropTypes from "prop-types";
-import { LuMapPin } from "react-icons/lu";
 import { openExternalUrl } from "../../../utils/openExternalUrl";
 
 const WorkshopCard = ({ workshop }) => {
@@ -58,11 +57,11 @@ const WorkshopCard = ({ workshop }) => {
 
         <div className="mt-4 flex items-center justify-between gap-1 px-2 text-background poppins-light">
           <p className="flex items-center gap-2 text-sm">
-            <RxClock />
+            <Clock />
             {workshop.timeFrom} To {workshop.timeTo}{" "}
           </p>
           <div className="flex items-center gap-1">
-            <LuMapPin />
+            <MapPin />
             {workshop.city}
           </div>
         </div>

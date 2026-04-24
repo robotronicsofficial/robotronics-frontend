@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
-import { FaUserCircle } from "react-icons/fa";
+import { UserCircle } from "lucide-react";
 import SuccessModal from "./popUps/SuccessModal";
 import PinModal from "./popUps/PinModal";
 import ChangePinModal from "./popUps/ChangePinModal";
@@ -251,7 +251,7 @@ const SubscriptionChildProfile = () => {
                   <div className="flex flex-col gap-y-5 bg-card rounded-xl p-5 shadow-lg w-full md:max-w-sm min-w-[280px]">
                     <div className="flex flex-col gap-y-6 md:gap-y-8">
                       <div className="flex items-center gap-4 md:gap-6">
-                        <FaUserCircle className="text-3xl md:text-4xl" />
+                        <UserCircle className="text-3xl md:text-4xl" />
                         <p className="text-foreground poppins-bold text-xl md:text-2xl">
                           {child.firstName} {child.lastName}
                         </p>

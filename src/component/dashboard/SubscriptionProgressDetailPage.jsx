@@ -1,5 +1,5 @@
 import DashboardLayout from "../../components/layout/DashboardLayout";
-import { FaFilePdf } from "react-icons/fa6";
+import { FileText } from "lucide-react";
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CenteredState from "../../components/layout/CenteredState";
@@ -158,7 +158,7 @@ const SubscriptionProgressDetailPage = () => {
                               >
                                 {isDownloading ? 'Generating...' : 'Download'}
                               </button>
-                              <FaFilePdf className="text-destructive" />
+                              <FileText className="text-destructive" />
                             </>
                           ) : (
                             <div
@@ -166,7 +166,7 @@ const SubscriptionProgressDetailPage = () => {
                               title="Complete the course to download certificate"
                             >
                               <span className="text-muted-foreground">Download</span>
-                              <FaFilePdf className="text-muted-foreground inline ml-2" />
+                              <FileText className="text-muted-foreground inline ml-2" />
                               <span className="absolute hidden group-hover:block bg-muted text-background text-xs rounded py-1 px-2 bottom-full mb-2 whitespace-nowrap left-1/2 transform -translate-x-1/2">
                                 Complete the course to download
                               </span>

@@ -1,4 +1,4 @@
-import { FaStar, FaArrowDown } from "react-icons/fa";
+import { MoveDown, Star } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
@@ -175,7 +175,7 @@ const MyCourses = () => {
                       {course.category}
                     </p>
                     <div className="flex items-center">
-                      <FaStar className="text-primary" />
+                      <Star className="text-primary" />
                       <p className="text-muted-foreground poppins-light text-base ml-2">
                         ({course.reviews || 0} Rating)
                       </p>
@@ -208,7 +208,7 @@ const MyCourses = () => {
                     className="mt-2 bg-primary w-full text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2 hover:bg-accent transition-colors"
                   >
                     <span>View Detail</span>
-                    <FaArrowDown className="text-xs" />
+                    <MoveDown className="text-xs" />
                   </button>
                 </div>
               </div>

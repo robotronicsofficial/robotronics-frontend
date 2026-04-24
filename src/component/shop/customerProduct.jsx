@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import AppImage from "../AppImage";
 import img from "../../assets/images/customerProduct.webp";
-import { MdDelete, MdModeEdit } from "react-icons/md";
+import { Pencil, Trash2 } from "lucide-react";
 
 const CustomerProduct = ({
   title,
@@ -33,7 +33,7 @@ const CustomerProduct = ({
           <p className="font-bold">{priceLabel ? `${priceLabel} ` : ""}{price}</p>
           {onEdit ? (
             <button type="button" aria-label="Edit product" className="inline-flex" onClick={onEdit}>
-              <MdModeEdit />
+              <Pencil />
             </button>
           ) : null}
           {onDelete ? (
@@ -43,7 +43,7 @@ const CustomerProduct = ({
               className="inline-flex text-destructive"
               onClick={onDelete}
             >
-              <MdDelete />
+              <Trash2 />
             </button>
           ) : null}
         </div>

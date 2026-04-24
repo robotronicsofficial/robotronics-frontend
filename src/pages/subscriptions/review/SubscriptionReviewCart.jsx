@@ -9,7 +9,7 @@ const SubscriptionReviewCart = () => {
           <p className="text-foreground font-bold text-wrap lg:text-4xl text-2xl poppins-bold text-center self-center mt-header-page">
             Review Order
           </p>
-          <p className="text-foreground text-sm text-wrap text-center poppins-semibold self-center mt-4 text-light opacity-85 ">
+          <p className="text-muted-foreground text-sm text-wrap text-center poppins-semibold self-center mt-4 opacity-85 ">
             THIS IS YOUR CART BASED ON WHAT YOU WANTED
           </p>
         </div>

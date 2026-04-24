@@ -3,9 +3,7 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo/robotronicsCharacter.svg";
 import basket from "../assets/logo/basket.svg";
 import { useAuth } from "../contexts/useAuth";
-import { HiOutlineMenuAlt3 } from "react-icons/hi";
-import { IoStarSharp, IoClose, IoChevronDown } from "react-icons/io5";
-import { FaUserCircle } from "react-icons/fa";
+import { ChevronDown, Menu, Star, UserCircle, X } from "lucide-react";
 import { CART_PATH, CONTACT_PATH } from "../router/paths";
 import { selectCartQuantity, useCartStore } from "../stores/cartStore";
 
@@ -107,7 +105,7 @@ function NavDropdown({ label, items }) {
         ].join(" ")}
       >
         <span>{label}</span>
-        <IoChevronDown
+        <ChevronDown
           className={`text-sm text-muted-foreground transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
@@ -157,11 +155,11 @@ function UserMenu({ label, onProfile, onLogout }) {
         aria-label={`Account menu for ${label}`}
         className="flex items-center gap-2 whitespace-nowrap rounded-full border border-border px-2 py-1 hover:bg-muted transition duration-200"
       >
-        <FaUserCircle className="text-xl text-foreground" />
+        <UserCircle className="text-xl text-foreground" />
         <span className="poppins-light text-sm capitalize hidden xl:inline max-w-[8rem] truncate">
           {label}
         </span>
-        <IoChevronDown
+        <ChevronDown
           className={`text-sm text-muted-foreground transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
@@ -237,7 +235,7 @@ function SubscribeCTA({ onClick }) {
         ].join(" ")
       }
     >
-      <IoStarSharp className="text-sm" />
+      <Star className="text-sm" />
       <span>{FEATURED_ITEM.label}</span>
     </NavLink>
   );
@@ -277,7 +275,7 @@ function MobileGroup({ group, onNavigate }) {
         className="w-full flex items-center justify-between py-3 px-2 poppins-light text-left hover:bg-muted transition duration-150"
       >
         <span>{group.label}</span>
-        <IoChevronDown
+        <ChevronDown
           className={`text-sm text-muted-foreground transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
@@ -404,7 +402,7 @@ export default function Header() {
               aria-label="Open menu"
               aria-expanded={menuOpen}
             >
-              <HiOutlineMenuAlt3 className="text-2xl" />
+              <Menu className="text-2xl" />
             </button>
           </div>
 
@@ -428,7 +426,7 @@ export default function Header() {
                 aria-label="Close menu"
                 className="text-muted-foreground hover:text-foreground p-1"
               >
-                <IoClose className="text-2xl" />
+                <X className="text-2xl" />
               </button>
             </div>
 
@@ -446,7 +444,7 @@ export default function Header() {
                   }`
                 }
               >
-                <IoStarSharp className="text-sm" />
+                <Star className="text-sm" />
                 <span>{FEATURED_ITEM.label}</span>
               </NavLink>
             </div>
@@ -463,7 +461,7 @@ export default function Header() {
                     goToDashboard();
                   }}
                 >
-                  <FaUserCircle className="text-xl text-foreground" />
+                  <UserCircle className="text-xl text-foreground" />
                   <span className="truncate">{currentUserLabel}</span>
                 </button>
                 <button

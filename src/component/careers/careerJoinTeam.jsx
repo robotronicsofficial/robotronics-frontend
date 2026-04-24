@@ -1,7 +1,7 @@
 import AppImage from "../AppImage";
 import { useState } from "react";
 import img3 from "../../assets/images/5.webp";
-import { FiArrowUpRight } from 'react-icons/fi';
+import { ArrowUpRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getJobsErrorMessage } from "../../lib/jobs";
 import { useJobs } from "../../hooks/useJobs";
@@ -75,7 +75,7 @@ const CareerJoinTeam = () => {
                   }}
                   aria-label={`View ${job.position || job.title}`}
                 >
-                  <FiArrowUpRight />
+                  <ArrowUpRight />
                 </button>
               )}
 

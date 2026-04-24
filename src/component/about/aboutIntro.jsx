@@ -1,11 +1,4 @@
-import {
-  FaFacebook,
-  FaInstagram,
-  FaLinkedin,
-  FaTwitter,
-  FaWhatsapp,
-  FaYoutube,
-} from "react-icons/fa";
+import { BrandIcon } from "../../components/ui/brand-icons";
 import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
 import { getAosStaggerDelay } from "../../utils/motion";
 
@@ -14,7 +7,7 @@ const Iaboutntro = () => {
     <>
       <div className="abouthero relative w-full" id="abouthero">
         <div className="overflow-hidden" >
-        <div className="flex justify-between h-full w-full p-10   bg-foreground bg-opacity-70 md:bg-opacity-50">
+        <div className="flex justify-between h-full w-full p-10 bg-foreground/70 md:bg-foreground/50">
             {/* text */}
             <div className={getHeaderOffsetClass("aboutHero", "flex flex-col gap-y-5 lg:w-1/2 md:ml-10")}>
               {/* Text */}
@@ -34,13 +27,13 @@ const Iaboutntro = () => {
               {/* Social Icons */}
               <div className="flex flex-row gap-x-2 lg:gap-x-5">
                 {[
-                  { href: "https://www.facebook.com/robotronicspakistan/", icon: <FaFacebook /> },
-                  { href: "https://twitter.com/robotronicspk", icon: <FaTwitter /> },
-                  { href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw", icon: <FaYoutube /> },
-                  { href: "https://www.instagram.com/robotronicspk/?hl=en", icon: <FaInstagram /> },
-                  { href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all", icon: <FaLinkedin /> },
-                  { href: "https://api.whatsapp.com/send?phone=1234567890", icon: <FaWhatsapp /> },
-                ].map(({ href, icon }, index) => (
+                  { href: "https://www.facebook.com/robotronicspakistan/", brand: "facebook" },
+                  { href: "https://twitter.com/robotronicspk", brand: "twitter" },
+                  { href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw", brand: "youtube" },
+                  { href: "https://www.instagram.com/robotronicspk/?hl=en", brand: "instagram" },
+                  { href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all", brand: "linkedin" },
+                  { href: "https://api.whatsapp.com/send?phone=1234567890", brand: "whatsapp" },
+                ].map(({ href, brand }, index) => (
                   <a
                     key={index}
                     href={href}
@@ -50,7 +43,7 @@ const Iaboutntro = () => {
                     data-aos-delay={getAosStaggerDelay(index)}
                     className="lg:p-3 p-1 border border-foreground bg-card rounded-xl hover:bg-foreground hover:text-background"
                   >
-                    {icon}
+                    <BrandIcon brand={brand} />
                   </a>
                 ))}
               </div>

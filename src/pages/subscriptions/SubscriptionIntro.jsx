@@ -2,9 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import AppImage from "../../component/AppImage";
 import bg from "../../assets/images/courses_details.svg";
 import yt from "../../assets/images/courseDetailsYoutube.webp";
-import { IoMdShare } from "react-icons/io";
-import { FaFacebookF, FaTwitter, FaWhatsapp } from "react-icons/fa";
-import { MdCheckBox } from "react-icons/md";
+import { CheckSquare, Share2 } from "lucide-react";
+import { BrandIcon } from "../../components/ui/brand-icons";
 
 const SubscriptionIntro = () => {
   const [showShare, setShowShare] = useState(false);
@@ -68,7 +67,7 @@ const SubscriptionIntro = () => {
                       onClick={() => setShowShare((prev) => !prev)}
                       className="flex items-center gap-1 whitespace-nowrap"
                     >
-                      <IoMdShare />
+                      <Share2 />
                       <span>Share</span>
                     </button>
 
@@ -81,7 +80,7 @@ const SubscriptionIntro = () => {
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 hover:text-info"
                         >
-                          <FaFacebookF /> Facebook
+                          <BrandIcon brand="facebookF" /> Facebook
                         </a>
                         <a
                           href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}
@@ -89,7 +88,7 @@ const SubscriptionIntro = () => {
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 hover:text-info"
                         >
-                          <FaTwitter /> Twitter
+                          <BrandIcon brand="twitter" /> Twitter
                         </a>
                         <a
                           href={`https://wa.me/?text=${encodeURIComponent(shareUrl)}`}
@@ -97,7 +96,7 @@ const SubscriptionIntro = () => {
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 hover:text-success"
                         >
-                          <FaWhatsapp /> WhatsApp
+                          <BrandIcon brand="whatsapp" /> WhatsApp
                         </a>
                       </div>
                     )}
@@ -143,7 +142,7 @@ const SubscriptionIntro = () => {
                       className="flex items-center gap-x-4 sm:gap-x-6"
                     >
                       <span className="text-primary text-lg sm:text-xl">
-                        <MdCheckBox />
+                        <CheckSquare />
                       </span>
                       <span className="text-base sm:text-xl md:text-base  poppins-light ">{item}</span>
                     </li>

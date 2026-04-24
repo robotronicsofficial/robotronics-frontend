@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaStar, FaArrowDown } from "react-icons/fa";
-import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
+import { ArrowLeftCircle, ArrowRightCircle, MoveDown, Star } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
@@ -56,7 +55,7 @@ const SubscriptionCourses = () => {
         onClick={prevCourse}
         className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 bg-card text-foreground p-3 rounded-full shadow-md hover:bg-muted transition mx-4 md:mx-12 lg:mx-24"
       >
-        <FaCircleArrowLeft />
+        <ArrowLeftCircle />
       </button>
 
       {/* Courses Container */}
@@ -83,7 +82,7 @@ const SubscriptionCourses = () => {
                       {course.category}
                     </p>
                     <div className="flex items-center">
-                      <FaStar className="text-primary" />
+                      <Star className="text-primary" />
                       <p className="text-muted-foreground poppins-light text-sm sm:text-base ml-2">
                         ({course.reviews || 0} Reviews)
                       </p>
@@ -99,7 +98,7 @@ const SubscriptionCourses = () => {
                     <button onClick={handleViewDetails}
                     className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2 text-sm sm:text-base">
                       <span>View Course</span>
-                      <FaArrowDown className="text-xs -rotate-90" />
+                      <MoveDown className="text-xs -rotate-90" />
                     </button>
                   </div>
 
@@ -120,7 +119,7 @@ const SubscriptionCourses = () => {
         onClick={nextCourse}
         className="hidden sm:block absolute right-0 top-1/2 transform -translate-y-1/2 bg-card text-foreground p-3 rounded-full shadow-md hover:bg-muted transition mx-4 md:mx-12 lg:mx-24"
       >
-        <FaCircleArrowRight />
+        <ArrowRightCircle />
       </button>
 
       {/* Mobile navigation buttons */}
@@ -129,13 +128,13 @@ const SubscriptionCourses = () => {
           onClick={prevCourse}
           className="bg-card text-foreground p-2 rounded-full shadow-md hover:bg-muted transition"
         >
-          <FaCircleArrowLeft />
+          <ArrowLeftCircle />
         </button>
         <button
           onClick={nextCourse}
           className="bg-card text-foreground p-2 rounded-full shadow-md hover:bg-muted transition"
         >
-          <FaCircleArrowRight />
+          <ArrowRightCircle />
         </button>
       </div>
     </div>

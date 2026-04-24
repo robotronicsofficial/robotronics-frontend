@@ -6,8 +6,7 @@ import time from "../../assets/logo/time-svgrepo-com 1.svg";
 import download from "../../assets/logo/download.svg";
 import sale from "../../assets/logo/sales.svg";
 import { NavLink } from "react-router-dom";
-import { FaStar } from "react-icons/fa";
-import { CiStar } from "react-icons/ci";
+import { Star } from "lucide-react";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import {
   useSavedItems,
@@ -51,14 +50,14 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
           <div onClick={toggleWishList} className="cursor-pointer">
             {!isSaved ? (
               <div className="flex justify-between">
-                <CiStar className="w-6 h-6 self-center" />
+                <Star className="w-6 h-6 self-center" />
                 <p className="lg:text-xl text-primary font-bold">
                   {price != null ? `PKR ${price}` : "Included"}
                 </p>
               </div>
             ) : (
               <div className="flex justify-between">
-                <FaStar className="w-6 h-6 self-center" />
+                <Star className="w-6 h-6 self-center" />
                 <p className="lg:text-xl text-primary font-bold">
                   {price != null ? `PKR ${price}` : "Included"}
                 </p>

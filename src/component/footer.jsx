@@ -6,14 +6,7 @@ import mobile from "../assets/images/mobile.png";
 import apple from "../assets/logo/apple.svg";
 import pstore from "../assets/logo/Playstor.svg";
 import { Link } from "react-router-dom";
-import {
-  FaFacebook,
-  FaInstagram,
-  FaLinkedin,
-  // FaTwitter,
-  FaWhatsapp,
-  FaYoutube,
-} from "react-icons/fa";
+import { BrandIcon } from "../components/ui/brand-icons";
 import AppImage from "./AppImage";
 
 const Footer = () => {
@@ -231,7 +224,7 @@ const Footer = () => {
                     className="w-full placeholder-opacity-25 bg-transparent border border-card rounded py-2 px-4 text-background focus:ring-2 focus:ring-ring/20 focus:border-ring outline-none transition-colors duration-200 ease-in-out"
                   />
                 </div>
-                <button className="w-full lg:w-auto flex items-center justify-center text-background bg-primary px-6 py-3 rounded hover:bg-primary-dark focus:outline-none transition-colors duration-200">
+                <button className="w-full lg:w-auto flex items-center justify-center text-background bg-primary px-6 py-3 rounded hover:bg-primary/80 focus:outline-none transition-colors duration-200">
                   <AppImage src={img} alt="Subscribe Button Icon" />
                 </button>
               </div>
@@ -256,7 +249,7 @@ const Footer = () => {
 </div>
 
 
-                <div className="lg:w-1/2 md:2/3 flex flex-col flex-wrap items-center text-wrap lg:items-start text-center lg:text-left">
+                <div className="flex flex-col flex-wrap items-center text-wrap text-center md:w-2/3 lg:w-1/2 lg:items-start lg:text-left">
                   <p className="text-2xl text-background poppins-bold mb-8 ">
                     READY TO LAUNCH IN...
                   </p>
@@ -345,29 +338,29 @@ const Footer = () => {
               {[
                 {
                   href: "https://www.facebook.com/robotronicspakistan/",
-                  icon: <FaFacebook />,
+                  brand: "facebook",
                 },
                 // {
                 //   href: "https://twitter.com/robotronicspk",
-                //   icon: <FaTwitter />,
+                //   brand: "twitter",
                 // },
                 {
                   href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
-                  icon: <FaYoutube />,
+                  brand: "youtube",
                 },
                 {
                   href: "https://www.instagram.com/robotronicspk/?hl=en",
-                  icon: <FaInstagram />,
+                  brand: "instagram",
                 },
                 {
                   href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
-                  icon: <FaLinkedin />,
+                  brand: "linkedin",
                 },
                 {
                   href: "https://wa.me/message/TKZZPIE2A34UM1",
-                  icon: <FaWhatsapp />,
+                  brand: "whatsapp",
                 },
-              ].map(({ href, icon }, index) => (
+              ].map(({ href, brand }, index) => (
                 <a
                   key={index}
                   href={href}
@@ -375,7 +368,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="lg:p-3 p-1 border border-foreground bg-card rounded-xl hover:bg-foreground hover:text-background text-foreground"
                 >
-                  {icon}
+                  <BrandIcon brand={brand} />
                 </a>
               ))}
             </div>

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/layout/DashboardLayout";
-import { FaUserCircle } from "react-icons/fa";
+import { UserCircle } from "lucide-react";
 import { useAuth } from "../../contexts/useAuth";
 import { formatDisplayDate } from "../../lib/subscription";
 import {
@@ -36,7 +36,7 @@ const SubscriptionProgressCertificate = () => {
                 >
                   <div className="flex flex-col gap-y-3 bg-card rounded-xl p-5 shadow-lg w-full min-w-[280px] md:max-w-md max-w-[450px]">
                     <div className="flex items-center gap-4 mb-3">
-                      <FaUserCircle className="text-4xl text-muted-foreground" />
+                      <UserCircle className="text-4xl text-muted-foreground" />
                       <p className="text-xl font-semibold text-muted-foreground">
                         {child.firstName} {child.lastName}
                       </p>

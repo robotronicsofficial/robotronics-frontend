@@ -1,16 +1,8 @@
-import {
-  FaPhoneAlt,
-  FaFacebook,
-  FaYoutube,
-  FaInstagram,
-  FaLinkedin,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { Mail, MapPin, Phone } from "lucide-react";
 import PropTypes from "prop-types";
-import { TfiEmail } from "react-icons/tfi";
-import { FaLocationDot } from "react-icons/fa6";
 import { useState } from "react";
 
+import { BrandIcon } from "../../components/ui/brand-icons";
 import FloatingField from "../../components/forms/FloatingField";
 import { useContactRequestMutation } from "../../hooks/useIntake";
 
@@ -34,10 +26,10 @@ const CONTACT_SERVICES = {
 };
 
 const CONTACT_METHODS = [
-  { Icon: FaPhoneAlt, label: "+92 309-422-4016" },
-  { Icon: TfiEmail, label: "info@robotronics.com" },
+  { Icon: Phone, label: "+92 309-422-4016" },
+  { Icon: Mail, label: "info@robotronics.com" },
   {
-    Icon: FaLocationDot,
+    Icon: MapPin,
     label: "Alexandru Ioan Cuza Street, Nr. 14, Gullberg 3, Lahore - Pakistan",
   },
 ];
@@ -45,27 +37,27 @@ const CONTACT_METHODS = [
 const SOCIAL_LINKS = [
   {
     href: "https://www.facebook.com/robotronicspakistan/",
-    Icon: FaFacebook,
+    brand: "facebook",
     className: "hover:bg-info",
   },
   {
     href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
-    Icon: FaYoutube,
+    brand: "youtube",
     className: "hover:bg-destructive",
   },
   {
     href: "https://www.instagram.com/robotronicspk/?hl=en",
-    Icon: FaInstagram,
+    brand: "instagram",
     className: "hover:bg-accent/80",
   },
   {
     href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
-    Icon: FaLinkedin,
+    brand: "linkedin",
     className: "hover:bg-info",
   },
   {
     href: "https://wa.me/message/TKZZPIE2A34UM1",
-    Icon: FaWhatsapp,
+    brand: "whatsapp",
     className: "hover:bg-success",
   },
 ];
@@ -84,19 +76,19 @@ ContactMethod.propTypes = {
   label: PropTypes.string.isRequired,
 };
 
-const SocialLink = ({ Icon, className, href }) => (
+const SocialLink = ({ brand, className, href }) => (
   <a
     href={href}
     target="_blank"
     rel="noopener noreferrer"
     className={`rounded-xl bg-foreground p-1 shadow-md transition-colors duration-300 ease-out hover:shadow-lg lg:p-3 ${className}`}
   >
-    <Icon className="text-background" />
+    <BrandIcon brand={brand} className="text-background" />
   </a>
 );
 
 SocialLink.propTypes = {
-  Icon: PropTypes.elementType.isRequired,
+  brand: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
   href: PropTypes.string.isRequired,
 };
@@ -167,7 +159,7 @@ const ContactUsForm = () => {
         <div className="w-full border border-border " data-aos="fade-up"></div>
         <button
           type="button"
-          className="border border-lightbrown poppins-light p-2 rounded-full px-5"
+          className="border border-border poppins-light p-2 rounded-full px-5"
           data-aos="fade-up"
         >
           Get In Touch
@@ -278,7 +270,7 @@ const ContactUsForm = () => {
 
             {formData.userType && (
               <div className="mb-5">
-                <label className="block text-sm text-muted-foreground dark:text-muted-foreground mb-2">
+                <label className="block text-sm text-muted-foreground mb-2">
                   Services I'm interested in:
                 </label>
                 <div className="flex flex-col gap-2">

@@ -1,17 +1,9 @@
 import logo from "../../../assets/logo/Robotrinic.svg";
-import { IoMdArrowBack } from "react-icons/io";
+import { ArrowLeft, Menu } from "lucide-react";
 import PropTypes from "prop-types";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaYoutube,
-  FaInstagram,
-  FaLinkedin,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { BrandIcon } from "../../../components/ui/brand-icons";
 import AppImage from "../../AppImage";
 import bar from "../../../assets/images/shopSurface.webp";
-import { BiMenuAltRight } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 
 const Careerintro = ({ job }) => {
@@ -44,7 +36,7 @@ const Careerintro = ({ job }) => {
           </Link>
           {/* button */}
           <button className="flex items-center justify-center w-12 h-12 bg-muted rounded-full border border-border" data-aos="fade-up">
-            <BiMenuAltRight className="text-muted-foreground" size={24} />
+            <Menu className="text-muted-foreground" size={24} />
           </button>
         </div>
         {/* lower */}
@@ -56,7 +48,7 @@ const Careerintro = ({ job }) => {
               onClick={() => navigate("/CareerJob")}
               className="flex items-center justify-center lg:w-12 w-8 lg:h-12 h-8 bg-muted rounded-full border border-border"
             >
-              <IoMdArrowBack className="text-muted-foreground" size={24} />
+              <ArrowLeft className="text-muted-foreground" size={24} />
             </button>
             <p className="lg:p-3 poppins-regular p-1">Back</p>
           </div>
@@ -69,7 +61,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaFacebook className="text-muted-foreground" />
+              <BrandIcon brand="facebook" className="text-muted-foreground" />
             </a>
             <a
               href="https://www.twitter.com"
@@ -77,7 +69,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaTwitter className="text-muted-foreground" />
+              <BrandIcon brand="twitter" className="text-muted-foreground" />
             </a>
             <a
               href="https://www.youtube.com"
@@ -85,7 +77,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaYoutube className="text-muted-foreground" />
+              <BrandIcon brand="youtube" className="text-muted-foreground" />
             </a>
             <a
               href="https://www.instagram.com"
@@ -93,7 +85,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaInstagram className="text-muted-foreground" />
+              <BrandIcon brand="instagram" className="text-muted-foreground" />
             </a>
             <a
               href="https://www.linkedin.com"
@@ -101,7 +93,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaLinkedin className="text-muted-foreground" />
+              <BrandIcon brand="linkedin" className="text-muted-foreground" />
             </a>
             <a
               href="https://api.whatsapp.com/send?phone=1234567890"
@@ -109,7 +101,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaWhatsapp className="text-muted-foreground" />
+              <BrandIcon brand="whatsapp" className="text-muted-foreground" />
             </a>
           </div>
         </div>

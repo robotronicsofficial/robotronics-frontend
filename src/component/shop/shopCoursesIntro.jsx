@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { FaArrowRight, FaHeart } from "react-icons/fa";
-import { BsHandbag } from "react-icons/bs";
-import { IoHomeOutline } from "react-icons/io5";
+import { ArrowRight, Heart, Home, ShoppingBag } from "lucide-react";
 import arow from "../../assets/logo/shopArowIcon.svg";
 import icon from "../../assets/logo/searchicon.svg";
 import { cn } from "../../lib/utils";
@@ -36,7 +34,7 @@ const ShopCoursesIntro = () => {
         <div className="items-center justify-between px-2 pt-5 lg:flex lg:px-24 lg:pt-10 md:flex">
           <div className="flex w-full justify-between">
             <div className="flex">
-              <IoHomeOutline className="h-5" data-aos="fade-up" />
+              <Home className="h-5" data-aos="fade-up" />
               <p className="px-3 text-sm poppins-bold lg:text-base" data-aos="fade-up">
                 Main Page
               </p>
@@ -47,23 +45,23 @@ const ShopCoursesIntro = () => {
             <div className="flex w-full justify-between">
               <a href="#">
                 <div className="flex">
-                  <FaHeart className="h-6" />
+                  <Heart className="h-6" />
                   <p className="px-3 text-sm poppins-bold lg:text-base">
                     Wish List (0)
                   </p>
                 </div>
               </a>
-              <FaArrowRight className="text-muted-foreground" />
+              <ArrowRight className="text-muted-foreground" />
             </div>
 
             <div className="flex w-full justify-between">
               <div className="flex">
-                <BsHandbag className="h-6" />
+                <ShoppingBag className="h-6" />
                 <p className="px-3 text-sm poppins-bold lg:text-base">
                   2 Products - $1000
                 </p>
               </div>
-              <FaArrowRight className="text-muted-foreground" />
+              <ArrowRight className="text-muted-foreground" />
             </div>
           </div>
         </div>

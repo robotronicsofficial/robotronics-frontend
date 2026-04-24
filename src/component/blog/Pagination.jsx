@@ -1,4 +1,4 @@
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -11,7 +11,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         disabled={currentPage === 1}
         className="flex size-10 items-center justify-center bg-foreground p-2 text-primary disabled:opacity-50"
       >
-        <FiChevronLeft className="text-background" />
+        <ChevronLeft className="text-background" />
       </button>
       {/* 1 - 5 */}
       {pages.map((page) => (
@@ -31,7 +31,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         disabled={currentPage === totalPages}
         className="flex size-10 items-center justify-center bg-foreground p-2 text-primary disabled:opacity-50"
       >
-        <FiChevronRight className="text-background" />
+        <ChevronRight className="text-background" />
       </button>
     </div>
   );

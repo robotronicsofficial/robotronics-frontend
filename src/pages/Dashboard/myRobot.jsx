@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { FaTimes } from "react-icons/fa";
+import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Intro from "../../component/dashboard/intro";
 import DashboardLayout from "../../components/layout/DashboardLayout";
@@ -83,7 +83,7 @@ const MyRobot = () => {
                     className="text-muted-foreground transition hover:text-destructive"
                     aria-label={`Remove ${item.name || "item"} from saved items`}
                   >
-                    <FaTimes />
+                    <X />
                   </button>
                   <button type="button" onClick={() => navigate(getCommerceItemRoute(item))}>
                     <img

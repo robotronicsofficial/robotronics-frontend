@@ -1,11 +1,4 @@
-import {
-  FaFacebook,
-  FaInstagram,
-  FaLinkedin,
-  FaTwitter,
-  FaWhatsapp,
-  FaYoutube,
-} from "react-icons/fa";
+import { BrandIcon } from "../../../components/ui/brand-icons";
 import { getAosStaggerDelay } from "../../../utils/motion";
 
 const Intro = () => {
@@ -65,29 +58,29 @@ const Intro = () => {
             {[
               {
                 href: "https://www.facebook.com/robotronicspakistan/",
-                icon: <FaFacebook />,
+                brand: "facebook",
               },
               {
                 href: "https://twitter.com/robotronicspk",
-                icon: <FaTwitter />,
+                brand: "twitter",
               },
               {
                 href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
-                icon: <FaYoutube />,
+                brand: "youtube",
               },
               {
                 href: "https://www.instagram.com/robotronicspk/?hl=en",
-                icon: <FaInstagram />,
+                brand: "instagram",
               },
               {
                 href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
-                icon: <FaLinkedin />,
+                brand: "linkedin",
               },
               {
                 href: "https://api.whatsapp.com/send?phone=1234567890",
-                icon: <FaWhatsapp />,
+                brand: "whatsapp",
               },
-            ].map(({ href, icon }, index) => (
+            ].map(({ href, brand }, index) => (
               <a
                 key={index}
                 href={href}
@@ -97,7 +90,7 @@ const Intro = () => {
                 data-aos-delay={getAosStaggerDelay(index)}
                 className="lg:p-3 p-2 border border-foreground bg-card rounded-xl hover:bg-foreground hover:text-background"
               >
-                {icon}
+                <BrandIcon brand={brand} />
               </a>
             ))}
           </div>

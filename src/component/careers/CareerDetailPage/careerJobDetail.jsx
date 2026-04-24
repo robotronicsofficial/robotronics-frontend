@@ -1,4 +1,4 @@
-import { FiArrowUpRight } from "react-icons/fi";
+import { ArrowUpRight } from "lucide-react";
 import JobApplicationForm from "./jobApplicationForm";
 
 const CareerJobDetail = ({ job }) => {
@@ -81,7 +81,7 @@ const CareerJobDetail = ({ job }) => {
             href="#application-form"
           >
             Apply Now
-            <FiArrowUpRight />
+            <ArrowUpRight />
           </a>
         </div>
       </div>

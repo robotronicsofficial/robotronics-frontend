@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { FaShareAlt } from "react-icons/fa";
+import { Share2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
@@ -45,7 +45,7 @@ const BlogCard = ({ cardData }) => {
         </div>
         <div className="absolute right-4 top-4">
           <button className="bg-card p-2 rounded-full shadow-md">
-            <FaShareAlt />
+            <Share2 />
           </button>
         </div>
       </div>
@@ -80,7 +80,7 @@ const BlogCard = ({ cardData }) => {
             <span className="text-muted-foreground">•</span>
           </div>
           <div className="flex items-center gap-1">
-            <FaShareAlt />
+            <Share2 />
             <span className="text-muted-foreground poppins-light">
               {mappedData.shares} shares
             </span>

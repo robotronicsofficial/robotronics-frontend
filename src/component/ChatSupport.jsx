@@ -2,10 +2,7 @@
 import { useState, useEffect, useRef, useCallback, memo } from "react";
 import { Link } from "react-router-dom";
 import chatLogo from "../assets/chatLogo.png";
-import { RxCrossCircled } from "react-icons/rx";
-import { TbWindowMaximize, TbWindowMinimize } from "react-icons/tb";
-import { IoArrowUpCircleSharp, IoMicOutline } from "react-icons/io5";
-import { ImAttachment } from "react-icons/im";
+import { Maximize2, Mic, Minimize2, Paperclip, Send, XCircle } from "lucide-react";
 
 // Constants
 const BOT_RESPONSES = [
@@ -32,14 +29,14 @@ const ChatHeader = memo(function ChatHeader({ isMaximized, toggleMaximize, toggl
         aria-label={isMaximized ? "Minimize" : "Maximize"}
         aria-expanded={isMaximized}
       >
-        {isMaximized ? <TbWindowMinimize size={20} /> : <TbWindowMaximize size={20} />}
+        {isMaximized ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
       </button>
       <button
         onClick={toggleChat}
         className="text-muted-foreground hover:text-muted-foreground text-xl p-1"
         aria-label="Close chat"
       >
-        <RxCrossCircled size={20} />
+        <XCircle size={20} />
       </button>
     </div>
   </div>
@@ -57,7 +54,7 @@ const Message = memo(function Message({ message }) {
   >
     {message.file && (
       <div className="mb-2 flex items-center">
-        <ImAttachment className="mr-2" />
+        <Paperclip className="mr-2" />
         <span className="text-sm">{message.file.name}</span>
       </div>
     )}
@@ -353,7 +350,7 @@ const ChatSupport = () => {
               {selectedFile && (
                 <div className="flex items-center justify-between mb-2 px-3 py-2 bg-muted rounded-lg">
                   <div className="flex items-center">
-                    <ImAttachment className="mr-2 text-muted-foreground" />
+                    <Paperclip className="mr-2 text-muted-foreground" />
                     <span className="text-sm truncate max-w-xs">{selectedFile.name}</span>
                   </div>
                   <button
@@ -386,7 +383,7 @@ const ChatSupport = () => {
                     aria-label="Attach file"
                     disabled={isSending}
                   >
-                    <ImAttachment size={20} />
+                    <Paperclip size={20} />
                   </button>
                   <input
                     type="file"
@@ -407,7 +404,7 @@ const ChatSupport = () => {
                       aria-label={isListening ? "Stop listening" : "Start voice input"}
                       disabled={isSending}
                     >
-                      <IoMicOutline size={20} />
+                      <Mic size={20} />
                     </button>
                   )}
                   <button
@@ -416,7 +413,7 @@ const ChatSupport = () => {
                     disabled={isSending || (!inputMessage.trim() && !selectedFile)}
                     aria-label="Send message"
                   >
-                    <IoArrowUpCircleSharp size={35} />
+                    <Send size={35} />
                   </button>
                 </div>
               </div>
