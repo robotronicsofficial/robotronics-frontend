@@ -25,7 +25,7 @@ const ChatHeader = memo(function ChatHeader({ isMaximized, toggleMaximize, toggl
   return (
   <div className="bg-card text-foreground p-4 flex justify-between items-center border-b border-border">
     <h2 className="text-xl font-bold">Robotronics AI</h2>
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center gap-x-2">
       <button
         onClick={toggleMaximize}
         className="text-muted-foreground hover:text-muted-foreground text-xl p-1"
@@ -338,7 +338,7 @@ const ChatSupport = () => {
               {isBotTyping && (
                 <div className="mb-4 flex justify-start">
                   <div className="max-w-[80%] p-4 rounded-lg bg-card text-muted-foreground rounded-bl-none border border-border">
-                    <div className="flex space-x-2">
+                    <div className="flex gap-x-2">
                       <div className="w-2 h-2 rounded-full bg-muted animate-bounce"></div>
                       <div className="w-2 h-2 rounded-full bg-muted animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       <div className="w-2 h-2 rounded-full bg-muted animate-bounce" style={{ animationDelay: '0.4s' }}></div>
@@ -378,7 +378,7 @@ const ChatSupport = () => {
                   disabled={isSending}
                 />
 
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex gap-x-2">
                   <button
                     type="button"
                     onClick={() => fileInputRef.current.click()}
@@ -398,7 +398,7 @@ const ChatSupport = () => {
                   />
                 </div>
 
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex gap-x-2">
                   {isSpeechSupported && (
                     <button
                       type="button"

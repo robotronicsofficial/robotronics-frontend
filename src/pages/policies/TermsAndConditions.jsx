@@ -2,13 +2,13 @@ import React from "react";
 
 const TermsAndConditions = () => {
   return (
-    <div className="lg:p-20 p-8 bg-background space-y-12">
+    <div className="flex flex-col lg:p-20 p-8 bg-background gap-y-12">
       <div className="lg:w-full px-6">
         <br></br>        <br></br>        <br></br>
 
 
         <h1 className="text-4xl poppins-bold text-foreground mb-6">Terms &amp; Conditions</h1>
-        <ol className="text-xl poppins-light space-y-4 list-decimal ml-6">
+        <ol className="flex flex-col text-xl poppins-light gap-y-4 list-decimal ml-6">
           <li>
             <strong>Acceptance of Terms:</strong> By accessing or using our website,
             mobile application, or related services (“Services”), you agree to comply with

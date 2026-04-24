@@ -47,7 +47,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
           </div>
 
           {/* pic's */}
-          <div className="flex flex-row space-x-3 py-10">
+          <div className="flex flex-row gap-x-3 py-10">
             {/* pic 1 */}
             <div className="h-10 w-10 bg-card shadow-lg">
               <AppImage src={robo} className="h-10 w-10" alt="" />
@@ -68,15 +68,15 @@ const CourseIntro = ({ id, title, image, price, category }) => {
         </div>
 
         {/* right */}
-        <div className="p-5 lg:px-24 lg:space-y-5 space-y-3 ">
+        <div className="flex flex-col p-5 lg:px-24 lg:gap-y-5 gap-y-3">
           {/* title */}
           <div>
             <p className="poppins-bold text-foreground lg:text-6xl ">{title}</p>
           </div>
           {/* sale */}
-          <div className="space-y-8">
+          <div className="flex flex-col gap-y-8">
             {/* stars */}
-            <div className="flex flex-row lg:space-x-14 space-x-8">
+            <div className="flex flex-row lg:gap-x-14 gap-x-8">
               {/* img */}
               <div>
                 <img src={star} alt="" />
@@ -87,7 +87,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
               </div>
             </div>
             {/* text */}
-            <div className="flex flex-row space-x-2 ">
+            <div className="flex flex-row gap-x-2">
               <p className="text-sm text-muted-foreground poppins-thin">
                 261 products sold .
               </p>
@@ -100,8 +100,8 @@ const CourseIntro = ({ id, title, image, price, category }) => {
             {price != null ? `Pkr ${price}` : "Included"}
           </div>
           {/* buy now */}
-          <div className="lg:flex flex-row lg:space-x-10 ">
-            <div className="flex flex-row space-x-5">
+          <div className="lg:flex flex-row lg:gap-x-10">
+            <div className="flex flex-row gap-x-5">
               <div>
                 <button
                   type="button"

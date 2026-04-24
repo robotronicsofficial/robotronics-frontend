@@ -7,7 +7,7 @@ const ServiceInto = ({ service }) => {
   return (
     <div className="hero" id="hero">
       <div
-        className="space-y-5 min-h-screen flex items-end justify-center p-6 bg-cover bg-center"
+        className="flex-col gap-y-5 min-h-screen flex items-end justify-center p-6 bg-cover bg-center"
         style={{
           backgroundImage: bannerImage ? `url("${bannerImage}")` : undefined,
         }}

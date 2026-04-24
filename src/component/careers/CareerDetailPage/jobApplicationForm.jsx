@@ -102,7 +102,7 @@ const JobApplicationForm = ({ job = null }) => {
     ) : null}
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 bg-background p-6 max-w-4xl mx-auto"
+      className="flex flex-col gap-y-6 bg-background p-6 max-w-4xl mx-auto"
     >
       {/* First Name and Last Name */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -342,7 +342,7 @@ const JobApplicationForm = ({ job = null }) => {
       ) : null}
 
       {/* Submit */}
-      <div className="mt-6 space-y-4">
+      <div className="flex flex-col mt-6 gap-y-4">
         <button
           type="submit"
           className="bg-foreground text-background py-2 px-4 rounded-md shadow-sm hover:bg-foreground-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-foreground disabled:opacity-60"

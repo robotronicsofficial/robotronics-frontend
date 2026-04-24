@@ -119,7 +119,7 @@ const CareerTestimonials = () => {
           <p className="text-background poppins-extralight">{job}</p>
         </div>
         {/* Buttons */}
-        <div className="space-x-2">
+        <div className="flex flex-col gap-x-2">
           <button
             onClick={previousTestimonial}
             className="h-3 w-3 rounded-full bg-card hover:bg-primary"

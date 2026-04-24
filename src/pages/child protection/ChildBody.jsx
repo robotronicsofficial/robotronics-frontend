@@ -3,11 +3,11 @@ import React from "react";
 const ChildBody = () => {
   return (
     <div>
-      <div className="lg:p-20 p-8 bg-background space-y-20">
+      <div className="flex flex-col lg:p-20 p-8 bg-background gap-y-20">
         <div className="">
           {/* Text */}
           <div className="lg:w-full px-10">
-            <div className="space-y-12">
+            <div className="flex flex-col gap-y-12">
               <h1
                 className="text-5xl poppins-bold text-foreground"
                 data-aos="fade-up"
@@ -16,7 +16,7 @@ const ChildBody = () => {
               >
                 Child Protection Policy
               </h1>
-              <ol className="text-xl poppins-light space-y-2" data-aos="fade-up">
+              <ol className="flex flex-col text-xl poppins-light gap-y-2" data-aos="fade-up">
                 <li><strong>1. Commitment:</strong> We are committed to ensuring the safety and well-being of all children participating in our courses. Our policies are designed to protect children from harm and ensure their positive development.</li>
 
                 <li><strong>2. Background Checks:</strong> All instructors undergo thorough background checks to ensure they are suitable to work with children. Periodic re-evaluations are conducted to maintain high standards of safety.</li>

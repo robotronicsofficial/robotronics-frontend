@@ -126,7 +126,7 @@ const MyAllCourses = () => {
                   <div className="pb-3 px-4">
                     <button
                       onClick={() => handleCourseClick(course)}
-                      className="mt-2 bg-primary w-full text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-accent transition-colors"
+                      className="mt-2 bg-primary w-full text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2 hover:bg-accent transition-colors"
                     >
                       <span>View Course</span>
                     </button>
@@ -146,7 +146,7 @@ const MyAllCourses = () => {
         {/* Pagination */}
         {displayedCourses.length > coursesPerPage && (
           <div className="flex flex-col items-center justify-center mt-10 gap-4">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-x-4">
               <button
                 onClick={prevPage}
                 disabled={currentPage === 1}

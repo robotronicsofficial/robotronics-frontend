@@ -51,7 +51,7 @@ SummaryRow.propTypes = {
 };
 
 const InputField = ({ label, name, value, onChange, placeholder, type = "text", maxLength }) => (
-  <label className="block space-y-2">
+  <label className="flex flex-col block gap-y-2">
     <span className="text-sm font-semibold text-foreground">{label}</span>
     <input
       type={type}
@@ -137,14 +137,14 @@ const SubscriptionPayment = ({ onNext }) => {
   return (
     <div className="lg:flex lg:flex-row lg:gap-8 bg-muted">
       <div className="lg:w-[38%] rounded-[24px] bg-muted p-6 md:p-10">
-        <div className="space-y-3">
+        <div className="flex flex-col gap-y-3">
           <p className="text-3xl font-bold text-foreground">Checkout Summary</p>
           <p className="text-sm text-muted-foreground">
             Confirm the registered children, membership details, and billing before you continue.
           </p>
         </div>
 
-        <div className="mt-8 space-y-4">
+        <div className="flex flex-col mt-8 gap-y-4">
           {checkout.children.map((child) => (
             <div
               key={child.childCode || `${child.firstName}-${child.lastName}`}
@@ -169,7 +169,7 @@ const SubscriptionPayment = ({ onNext }) => {
           ))}
         </div>
 
-        <div className="mt-8 space-y-4 rounded-[20px] bg-card p-5 shadow-sm">
+        <div className="flex flex-col mt-8 gap-y-4 rounded-[20px] bg-card p-5 shadow-sm">
           <SummaryRow label="Order code" value={checkout.orderCode} />
           <SummaryRow label="Registered on" value={formatDisplayDate(checkout.orderDate)} />
           <SummaryRow label="Children" value={checkout.totalChildren} />
@@ -182,7 +182,7 @@ const SubscriptionPayment = ({ onNext }) => {
       </div>
 
       <div className="mt-6 flex-1 rounded-[24px] bg-card p-6 md:mt-0 md:p-10 shadow-sm">
-        <div className="space-y-3">
+        <div className="flex flex-col gap-y-3">
           <p className="text-3xl font-bold text-foreground">Payment Details</p>
           <p className="text-sm text-muted-foreground">
             Save the billing details for this subscription checkout in this browser before the final review step.
@@ -215,8 +215,8 @@ const SubscriptionPayment = ({ onNext }) => {
           </div>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-3">
+        <form className="flex flex-col mt-8 gap-y-6" onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               Payment method
             </p>

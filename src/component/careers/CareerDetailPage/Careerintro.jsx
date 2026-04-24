@@ -48,7 +48,7 @@ const Careerintro = ({ job }) => {
           </button>
         </div>
         {/* lower */}
-        <div className="lg:flex flex-row justify-between lg:p-10 p-5 lg:space-y-0 space-y-10 items-center ">
+        <div className="lg:flex flex-row justify-between lg:p-10 p-5 lg:gap-y-0 gap-y-10 items-center">
           {/* button */}
           <div className="flex flex-row items-center" data-aos="fade-up">
             <button
@@ -61,7 +61,7 @@ const Careerintro = ({ job }) => {
             <p className="lg:p-3 poppins-regular p-1">Back</p>
           </div>
           {/* social icons */}
-          <div className="flex flex-row justify-between lg:space-x-5 space-x-2" data-aos="fade-up">
+          <div className="flex flex-row justify-between lg:gap-x-5 gap-x-2" data-aos="fade-up">
             <p className="text-center poppins-regular pt-2">Share</p>
             <a
               href="https://www.facebook.com"

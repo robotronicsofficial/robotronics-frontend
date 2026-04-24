@@ -29,7 +29,7 @@ ChartJS.register(
 
 // Subcomponents
 const Header = () => (
-  <div className="flex space-x-5 text-center bg-background mt-8">
+  <div className="flex gap-x-5 text-center bg-background mt-8">
     <div className="md:ml-20 p-5 hidden sm:block ">
       <AppImage
         className="w-40 h-60"

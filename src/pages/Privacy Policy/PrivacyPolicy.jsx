@@ -2,11 +2,11 @@ import React from "react";
 
 const PrivacyPolicy = () => {
   return (
-    <div className="lg:p-20 p-8 bg-background space-y-12">
+    <div className="flex flex-col lg:p-20 p-8 bg-background gap-y-12">
       <div className="lg:w-full px-6">
         <h1 className="text-4xl poppins-bold text-foreground mb-3">Privacy Policy</h1>
 
-        <div className="text-lg poppins-light space-y-4">
+        <div className="flex flex-col text-lg poppins-light gap-y-4">
           <p>
             We collect personal information (name, email, payment details) to provide and improve our Services.
             Additional details (age, educational background, preferences) may be collected to personalize learning.

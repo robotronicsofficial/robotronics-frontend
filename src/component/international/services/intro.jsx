@@ -17,11 +17,11 @@ const Intro = () => {
 
 
       >
-        <div className="space-y-10 lg:p-10 p-4 lg:px-24 lg:w-1/2 ">
+        <div className="flex flex-col gap-y-10 lg:p-10 p-4 lg:px-24 lg:w-1/2">
           {/* Text */}
-          <div className="space-y-2 ">
+          <div className="flex flex-col gap-y-2">
             <div
-              className="flex flex-row space-x-2"
+              className="flex flex-row gap-x-2"
               data-aos="fade-up"
 
 
@@ -61,7 +61,7 @@ const Intro = () => {
             </p>
           </div>
           {/* Social Icons */}
-          <div className="flex flex-row py-10 space-x-2 lg:space-x-5  ">
+          <div className="flex flex-row py-10 gap-x-2 lg:gap-x-5">
             {[
               {
                 href: "https://www.facebook.com/robotronicspakistan/",

@@ -68,7 +68,7 @@ const Footer = () => {
                 <h2 className="title-font font-medium poppins-semibold text-primary lg:text-xl tracking-widest">
                   Quick Links
                 </h2>
-                <nav className="list-none space-y-2">
+                <nav className="flex flex-col list-none gap-y-2">
                   <li>
                     <Link
                       className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
@@ -172,7 +172,7 @@ const Footer = () => {
                 <h2 className="title-font font-medium poppins-semibold text-primary lg:text-xl tracking-widest">
                   Contact Us
                 </h2>
-                <nav className="list-none space-y-4">
+                <nav className="flex flex-col list-none gap-y-4">
                   <li>
                     <span className="text-background font-bold poppins-medium lg:text-xl">
                       Email
@@ -222,7 +222,7 @@ const Footer = () => {
 
             >
               {/* Subscribe Section */}
-              <div className="flex flex-col lg:flex-row items-center lg:items-start mb-4 space-y-4 lg:space-y-0 lg:space-x-4">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start mb-4 gap-y-4 lg:gap-y-0 lg:gap-x-4">
                 <div className="relative w-full">
                   <input
                     type="text"
@@ -341,7 +341,7 @@ const Footer = () => {
             <p className="text-sm poppins-medium text-wrap  text-background">
               Copyright © 2025. All Rights Reserved. Powered by Robotronics.
             </p>
-            <div className="flex flex-row space-x-2 lg:space-x-5">
+            <div className="flex flex-row gap-x-2 lg:gap-x-5">
               {[
                 {
                   href: "https://www.facebook.com/robotronicspakistan/",

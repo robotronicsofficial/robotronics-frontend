@@ -104,9 +104,9 @@ const SubscriptionDetail = () => {
         </div>
 
         <div>
-          <ul className="space-y-4">
+          <ul className="flex flex-col gap-y-4">
             <div className="mb-6">
-              <li className="flex items-center space-x-6">
+              <li className="flex items-center gap-x-6">
                 <span className="font-medium text-2xl poppins-bold">Requirements</span>
               </li>
             </div>
@@ -119,32 +119,32 @@ const SubscriptionDetail = () => {
           </div>
 
 
-            <div className="space-y-3 poppins-light">
-              <li className="flex items-center space-x-9 ">
+            <div className="flex flex-col gap-y-3 poppins-light">
+              <li className="flex items-center gap-x-9">
                 <span className="text-primary">
                   <GoDotFill />
                 </span>
                 <span>Recorded Video Lectures</span>
               </li>
-              <li className="flex items-center space-x-9">
+              <li className="flex items-center gap-x-9">
                 <span className="text-primary">
                   <GoDotFill />
                 </span>
                 <span>Code Files for each Lecture(Where ever applicable)</span>
               </li>
-              <li className="flex items-center space-x-9">
+              <li className="flex items-center gap-x-9">
                 <span className="text-primary">
                   <GoDotFill />
                 </span>
                 <span>Practice Assignments</span>
               </li>
-              <li className="flex items-center space-x-9">
+              <li className="flex items-center gap-x-9">
                 <span className="text-primary">
                   <GoDotFill />
                 </span>
                 <span>Module based Assessments</span>
               </li>
-              <li className="flex items-center space-x-9">
+              <li className="flex items-center gap-x-9">
                 <span className="text-primary">
                   <GoDotFill />
                 </span>
@@ -182,14 +182,14 @@ const SubscriptionDetail = () => {
                       {course.title}
                     </div>
 
-                    <p className="text-muted-foreground space-x-2 text-left text-base">
+                    <p className="flex flex-col text-muted-foreground gap-x-2 text-left text-base">
                       <span className="text-muted-foreground px-2">by</span>
                       {course.author}
                     </p>
                   </div>
                   <div className="p-4 px-8">
                     <a href="/Dashboard/courseDetail">
-                      <button className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2">
+                      <button className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2">
                         <span>{course.buttonText}</span>
                         <FaArrowDown className="text-xs -rotate-90" />
                       </button>
@@ -205,7 +205,7 @@ const SubscriptionDetail = () => {
             <div className="w-full flex justify-end pr-4">
               <button
                 onClick={handleViewMore}
-                className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2"
+                className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2"
               >
                 <span>View More</span>
                 <FaArrowDown className="text-xs transform -rotate-120" />

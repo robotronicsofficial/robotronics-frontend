@@ -248,15 +248,15 @@ const SubscriptionChildProfile = () => {
               const hasPin = child.hasPin;
               return (
                 <div key={child._id} className="w-full p-2 md:w-1/2 md:p-3">
-                  <div className="flex flex-col space-y-5 bg-card rounded-xl p-5 shadow-lg w-full md:w-[25vw] min-w-[280px]">
-                    <div className="space-y-6 md:space-y-8">
+                  <div className="flex flex-col gap-y-5 bg-card rounded-xl p-5 shadow-lg w-full md:w-[25vw] min-w-[280px]">
+                    <div className="flex flex-col gap-y-6 md:gap-y-8">
                       <div className="flex items-center gap-4 md:gap-6">
                         <FaUserCircle className="text-3xl md:text-4xl" />
                         <p className="text-foreground poppins-bold text-xl md:text-2xl">
                           {child.firstName} {child.lastName}
                         </p>
                       </div>
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-y-2">
                         <p className="text-foreground poppins-bold text-sm md:text-base">
                           <span className="font-semibold">Email:</span> {child.email}
                         </p>
@@ -276,7 +276,7 @@ const SubscriptionChildProfile = () => {
                         </p>
                       </div>
 
-                      <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3 md:space-x-5">
+                      <div className="flex flex-col gap-y-3 sm:flex-row sm:gap-y-0 sm:gap-x-3 md:gap-x-5">
                         <button
                           onClick={() => handleViewCourses(child._id)}
                           className={`text-xs sm:text-sm poppins-light border border-border rounded-lg px-2 py-1 sm:px-3 sm:py-2 ${

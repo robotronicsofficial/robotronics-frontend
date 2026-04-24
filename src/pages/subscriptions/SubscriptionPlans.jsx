@@ -86,7 +86,7 @@ const SubscriptionPlans = () => {
               Start Membership
             </button>
 
-            <ul className="flex-1 space-y-2 text-sm mb-4">
+            <ul className="flex flex-col flex-1 gap-y-2 text-sm mb-4">
               {(membership.features || []).map((feature, index) => (
                 <li
                   key={index}

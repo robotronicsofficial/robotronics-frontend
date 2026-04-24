@@ -104,7 +104,7 @@ const Search = () => {
                   loading="lazy"
                   decoding="async"
                 />
-                <div className="space-y-3 p-5 text-foreground">
+                <div className="flex flex-col gap-y-3 p-5 text-foreground">
                   <div className="flex items-start justify-between gap-3">
                     <p className="rounded-full bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                       {product?.category || "General"}

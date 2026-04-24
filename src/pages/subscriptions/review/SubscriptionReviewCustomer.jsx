@@ -70,8 +70,8 @@ const SubscriptionReviewCustomer = () => {
   return (
     <div>
       <div className="grid gap-6 px-4 py-8 md:px-10 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="space-y-6 rounded-[24px] bg-card p-6 shadow-sm md:p-10">
-          <div className="space-y-3">
+        <div className="flex flex-col gap-y-6 rounded-[24px] bg-card p-6 shadow-sm md:p-10">
+          <div className="flex flex-col gap-y-3">
             <p className="text-4xl font-bold text-foreground">Review Your Subscription</p>
             <p className="text-sm text-muted-foreground">
               One last check before the subscription is finalized for these children.
@@ -80,7 +80,7 @@ const SubscriptionReviewCustomer = () => {
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="rounded-[20px] bg-foreground p-6 text-background">
               <p className="text-lg font-bold">Order Summary</p>
-              <div className="mt-4 space-y-4">
+              <div className="flex flex-col mt-4 gap-y-4">
                 <ReviewRow label="Order code" value={checkout.orderCode} />
                 <ReviewRow label="Created" value={formatDisplayDate(checkout.orderDate)} />
                 <ReviewRow label="Membership" value={checkout.plan.name || "Subscription"} />
@@ -101,7 +101,7 @@ const SubscriptionReviewCustomer = () => {
 
             <div className="rounded-[20px] bg-muted p-6">
               <p className="text-lg font-bold text-foreground">Parent Contact</p>
-              <div className="mt-4 space-y-4">
+              <div className="flex flex-col mt-4 gap-y-4">
                 <ReviewRow
                   label="Name"
                   value={[checkout.parent.firstName, checkout.parent.lastName].filter(Boolean).join(" ") || "N/A"}
@@ -124,7 +124,7 @@ const SubscriptionReviewCustomer = () => {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="flex flex-col gap-y-4">
             <p className="text-lg font-bold text-foreground">Registered Children</p>
             <div className="grid gap-4 md:grid-cols-2">
               {checkout.children.map((child) => (
@@ -138,7 +138,7 @@ const SubscriptionReviewCustomer = () => {
                   {child.childCode ? (
                     <p className="mt-1 text-xs uppercase tracking-[0.18em] text-accent">{child.childCode}</p>
                   ) : null}
-                  <div className="mt-4 space-y-2">
+                  <div className="flex flex-col mt-4 gap-y-2">
                     <ReviewRow label="Email" value={child.email || "N/A"} />
                     <ReviewRow label="School" value={child.schoolName || "N/A"} />
                     <ReviewRow label="Membership" value={child.plan?.name || checkout.plan.name || "N/A"} />
@@ -171,15 +171,15 @@ const SubscriptionReviewCustomer = () => {
           </div>
         </div>
 
-        <div className="space-y-6 rounded-[24px] bg-muted p-6 shadow-sm md:p-10">
+        <div className="flex flex-col gap-y-6 rounded-[24px] bg-muted p-6 shadow-sm md:p-10">
           <p className="text-2xl font-bold text-foreground">Subscription Status</p>
           {checkout.status === "active" ? (
-            <div className="space-y-4 rounded-[20px] bg-card p-6">
+            <div className="flex flex-col gap-y-4 rounded-[20px] bg-card p-6">
               <p className="text-xl font-bold text-foreground">Subscription active</p>
               <p className="text-sm text-muted-foreground">
                 The subscription is active and course access has been assigned to the registered children.
               </p>
-              <div className="space-y-3">
+              <div className="flex flex-col gap-y-3">
                 <ReviewRow label="Order code" value={checkout.orderCode} />
                 <ReviewRow label="Children" value={checkout.totalChildren} />
                 <ReviewRow
@@ -210,12 +210,12 @@ const SubscriptionReviewCustomer = () => {
               </div>
             </div>
           ) : (
-            <div className="space-y-4 rounded-[20px] bg-card p-6">
+            <div className="flex flex-col gap-y-4 rounded-[20px] bg-card p-6">
               <p className="text-lg font-bold text-foreground">Ready for confirmation</p>
               <p className="text-sm text-muted-foreground">
                 Review the child and billing details on the left, then activate the subscription once everything matches.
               </p>
-              <div className="space-y-3">
+              <div className="flex flex-col gap-y-3">
                 <ReviewRow
                   label="Payment method"
                   value={checkout.payment.label || "Not selected"}

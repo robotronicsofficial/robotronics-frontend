@@ -2,7 +2,7 @@ const YtVideos = () => {
   return (
     <div className="p-5 bg-background">
       {/* <p className="lg:text-6xl text-4xl text-foreground text-center font-bold">FQA</p> */}
-      <div className="lg:p-10 p-5 lg:flex flex-row lg:space-x-5 lg:space-y-0 space-y-8  justify-center">
+      <div className="lg:p-10 p-5 lg:flex flex-row lg:gap-x-5 lg:gap-y-0 gap-y-8 justify-center">
         {/* video 1 */}
         <div className=" bg-card  ">
           <iframe

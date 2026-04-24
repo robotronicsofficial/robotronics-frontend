@@ -72,7 +72,7 @@ const SubscriptionFAQSection = () => {
     <h2 className="text-2xl font-bold mb-6 text-center sm:text-left poppins-bold">
       Frequently Asked Questions
     </h2>
-    <div className="space-y-3">
+    <div className="flex flex-col gap-y-3">
       {faqs.map((faq, index) => (
         <div
           key={index}

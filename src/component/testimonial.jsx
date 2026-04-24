@@ -19,7 +19,7 @@ const Testimonial = () => {
       {/* layer 2 */}
       <div className="  flex w-full justify-between lg:gap-5 gap-2 p-2 lg:p-5 ">
         {/* block 1 */}
-        <div className="flex-1 lg:space-y-4 space-y-2 "data-aos="fade-up">
+        <div className="flex flex-col flex-1 lg:gap-y-4 gap-y-2"data-aos="fade-up">
         {/* div 1 */}
         <div className="flex  flex-col justify-center border border-border rounded-2xl content-center ">
          <AppImage className="flex " src={ceo1} alt="Client testimonial portrait" />
@@ -43,7 +43,7 @@ const Testimonial = () => {
         </div>
         </div>
         {/* block 2 */}
-        <div className="flex-1 flex flex-col justify-between lg:space-y-4"data-aos="fade-up">
+        <div className="flex-1 flex flex-col justify-between lg:gap-y-4"data-aos="fade-up">
           {/* div 1 */}
           <div className="lg:flex  border border-border rounded-2xl ">
               <AppImage className="flex w-full" src={ceo2} alt="Client testimonial portrait" />
@@ -90,7 +90,7 @@ const Testimonial = () => {
           </div>
         </div>
         {/* block 3 */}
-        <div className="flex-1 lg:space-y-4 " data-aos="fade-up">
+        <div className="flex flex-col flex-1 lg:gap-y-4" data-aos="fade-up">
         {/* div 1 */}
         <div className="flex p-5 border border-border rounded-2xl">
           {/* image */}

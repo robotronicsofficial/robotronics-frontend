@@ -20,7 +20,7 @@ const CareesFindRole = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row justify-between items-center lg:p-10 p-5 lg:px-20 space-y-10 lg:space-y-0">
+    <div className="flex flex-col lg:flex-row justify-between items-center lg:p-10 p-5 lg:px-20 gap-y-10 lg:gap-y-0">
       {/* Left Section: Text and Buttons */}
       <div className="flex flex-col items-center lg:items-start text-center lg:text-left py-10">
         <p
@@ -32,7 +32,7 @@ const CareesFindRole = () => {
           for you?
         </p>
         <div
-          className="flex space-x-5"
+          className="flex gap-x-5"
           data-aos="fade-up"
 
         >
@@ -49,7 +49,7 @@ const CareesFindRole = () => {
       </div>
 
       {/* Right Section: Social Icons */}
-      <div className="flex flex-row lg:flex-col justify-center lg:justify-between items-center space-x-5 lg:space-x-0 lg:space-y-5">
+      <div className="flex flex-row lg:flex-col justify-center lg:justify-between items-center gap-x-5 lg:gap-x-0 lg:gap-y-5">
         {[
           { href: "https://www.facebook.com", icon: <FaFacebook /> },
           { href: "https://www.twitter.com", icon: <FaTwitter /> },

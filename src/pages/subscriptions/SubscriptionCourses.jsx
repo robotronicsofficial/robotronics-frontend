@@ -97,7 +97,7 @@ const SubscriptionCourses = () => {
                 <div className="px-4 sm:px-8 mb-4 flex flex-col sm:flex-row gap-2 py-4">
                   <div className="w-full flex justify-center mb-4 py-4">
                     <button onClick={handleViewDetails}
-                    className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
+                    className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2 text-sm sm:text-base">
                       <span>View Course</span>
                       <FaArrowDown className="text-xs -rotate-90" />
                     </button>
@@ -106,7 +106,7 @@ const SubscriptionCourses = () => {
 
 
                   {/* 
-                  <button className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 text-sm sm:text-base">
+                  <button className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2 text-sm sm:text-base">
                     <span>Activate Course</span>
                   </button> */}
                 </div>

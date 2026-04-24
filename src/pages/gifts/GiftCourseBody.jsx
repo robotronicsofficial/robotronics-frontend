@@ -119,7 +119,7 @@ const GiftCourseBody = () => {
       <div className="lg:flex">
         <div className="flex flex-col md:w-4/5">
           <div className="w-full">
-            <div className="space-y-5 py-8">
+            <div className="flex flex-col gap-y-5 py-8">
               <h2 className="poppins-bold px-6 text-2xl text-foreground md:px-20 md:text-4xl">
                 Gift Request Details
               </h2>

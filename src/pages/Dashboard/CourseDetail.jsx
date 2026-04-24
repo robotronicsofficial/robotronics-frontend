@@ -252,10 +252,10 @@ const CourseDetail = () => {
       <div className={getHeaderOffsetClass("page", "bg-background")}>
         <div className="bg-muted p-6">
           <div className="max-w-7xl mx-auto">
-            <div className="lg:flex flex-wrap lg:flex-nowrap lg:space-x-6">
+            <div className="lg:flex flex-wrap lg:flex-nowrap lg:gap-x-6">
               {/* Left Side */}
               <div
-                className="w-full lg:w-2/3 space-y-4"
+                className="flex flex-col w-full lg:w-2/3 gap-y-4"
                 data-aos="fade-up"
 
 
@@ -283,7 +283,7 @@ const CourseDetail = () => {
                       {courseData.title}
                     </h1>
                   </div>
-                  <div className="flex items-center space-x-2 text-muted-foreground">
+                  <div className="flex items-center gap-x-2 text-muted-foreground">
                     <PiGraduationCapLight />
                     <span className="text-muted-foreground my-2">{courseData.studentsDownloaded ?? 0} Students Enrolled</span>
                   </div>
@@ -298,7 +298,7 @@ const CourseDetail = () => {
               </div>
 
               {/* Right Side with Video */}
-              <div className="w-full lg:w-1/3 mt-6 lg:mt-0 space-y-4 bg-accent h-[23.8vw] rounded-2xl">
+              <div className="flex flex-col w-full lg:w-1/3 mt-6 lg:mt-0 gap-y-4 bg-accent h-[23.8vw] rounded-2xl">
                 <div className="bg-muted w-full h-full rounded-2xl overflow-hidden">
                   <VideoPlayer
                     src={video}
@@ -338,11 +338,11 @@ const CourseDetail = () => {
             {/* What You'll Learn */}
             <div className="lg:flex flex-row flex-wrap justify-between gap-8">
               {/* left */}
-              <div className="space-y-4 flex-1">
+              <div className="flex flex-col gap-y-4 flex-1">
                 <h1 className="poppins-bold text-xl">
                   What you will learn in this course?
                 </h1>
-                <ul className="space-y-2">
+                <ul className="flex flex-col gap-y-2">
                   {courseSections.map((item, index) => (
                     <li key={index} className="flex items-start">
                       <div className="bg-primary rounded-full h-4 w-4 flex items-center justify-center mt-1 mr-2 flex-shrink-0">
@@ -426,7 +426,7 @@ const CourseDetail = () => {
                                 <span className="text-primary">Lecture {moduleIndex + 1}:</span> {module.name}
                               </h3>
                             </div>
-                            <div className="flex items-center space-x-6">
+                            <div className="flex items-center gap-x-6">
                               {sectionUnlocked && (
                                 <span className="poppins-bold text-primary text-sm bg-muted px-3 py-1 rounded-full">
                                   Preview
@@ -446,7 +446,7 @@ const CourseDetail = () => {
                                       What You&apos;ll Learn in this lecture
                                     </h4>
                                   </div>
-                                  <ul className="space-y-2">
+                                  <ul className="flex flex-col gap-y-2">
                                     {module.learningObjectives.map((obj, idx) => (
                                       <li key={idx} className="flex items-start">
                                         <span className="poppins-light text-muted-foreground">• {obj}</span>
@@ -457,7 +457,7 @@ const CourseDetail = () => {
                               )}
 
                               {/* Content Items */}
-                              <div className="space-y-3">
+                              <div className="flex flex-col gap-y-3">
                                 {(module.contents || []).map((content) => {
                                   const fileUrl = resolveBackendAssetUrl(content.file);
 
@@ -491,7 +491,7 @@ const CourseDetail = () => {
                                           </>
                                         )}
                                       </div>
-                                      <div className="flex items-center space-x-4">
+                                      <div className="flex items-center gap-x-4">
                                         {content.type === "video" && (
                                           <span className="poppins-medium text-primary text-sm hover:text-primary">
                                             10 min
@@ -589,7 +589,7 @@ const CourseDetail = () => {
                                     " (Complete previous modules to unlock)")}
                                 </h4>
                               </div>
-                              <div className="flex items-center space-x-4">
+                              <div className="flex items-center gap-x-4">
                                 <span className="poppins-light text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full">
                                   {quizQuestions.length} questions
                                 </span>
@@ -614,7 +614,7 @@ const CourseDetail = () => {
                                       Quiz Results: {childSection.quiz.obtainedScore}/{quizQuestions.length}
                                       {quizCompleted ? " (Passed)" : " (Failed - Score at least 60% to unlock next module)"}
                                     </div>
-                                    <div className="space-y-3">
+                                    <div className="flex flex-col gap-y-3">
                                       {quizQuestions.map((question, qIndex) => {
                                         const userAnswer = quizAnswers[`${sectionIndex}-${question._id}`] || question.childAnswer;
                                         const isCorrect = Boolean(
@@ -689,7 +689,7 @@ const CourseDetail = () => {
                                     )}
                                   </div>
                                 ) : (
-                                  <div className="space-y-4">
+                                  <div className="flex flex-col gap-y-4">
                                     {childPlan === 'basic' && (
                                       <div className="poppins-medium text-sm text-muted-foreground mb-2">
                                         Attempt {childSection.quiz.attempts + 1} of {maxAttempts} today
@@ -700,9 +700,9 @@ const CourseDetail = () => {
                                         <div className="poppins-medium mb-2">
                                           {qIndex + 1}. {question.questionText}
                                         </div>
-                                        <div className="space-y-2">
+                                        <div className="flex flex-col gap-y-2">
                                           {(question.options || []).map((option, oIndex) => (
-                                            <label key={oIndex} className="flex items-center space-x-2 poppins-light">
+                                            <label key={oIndex} className="flex items-center gap-x-2 poppins-light">
                                               <input
                                                 type="radio"
                                                 name={`quiz-${sectionIndex}-${question._id}`}

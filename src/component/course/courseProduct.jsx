@@ -71,7 +71,7 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
           <div className="w-full h-0.5 border border-dotted border-foreground"></div>
         </div>
         {/* details */}
-        <div className="flex flex-wrap justify-center lg:space-x-2 items-center">
+        <div className="flex flex-wrap justify-center lg:gap-x-2 items-center">
           <div className="flex ">
             <img className=" text-xs" src={time} />
             {duration}

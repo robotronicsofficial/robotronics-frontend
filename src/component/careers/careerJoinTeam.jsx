@@ -31,7 +31,7 @@ const CareerJoinTeam = () => {
         <p className="text-5xl text-foreground poppins-extrabold "data-aos="fade-up">join the A-Team!</p>
       </div>
       {/* img */}
-      <div className="lg:flex flex-row p-10 space-x-8">
+      <div className="lg:flex flex-row p-10 gap-x-8">
         <AppImage src={img3} alt="" data-aos="fade-up" />
         <p className="text-xl text-foreground poppins-regular text-wrap py-10"data-aos="fade-up">
           The average employment period in our company is currently 4,5 years.
@@ -80,16 +80,16 @@ const CareerJoinTeam = () => {
               )}
 
               <div className="grid gap-4 md:grid-cols-3" data-aos="fade-up">
-                <div className="space-y-1">
+                <div className="flex flex-col gap-y-1">
                   <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Position</p>
                   <p className="poppins-bold text-xl text-foreground">{job.position || job.title}</p>
                   <p className="text-sm text-muted-foreground">{job.title}</p>
                 </div>
-                <div className="space-y-1">
+                <div className="flex flex-col gap-y-1">
                   <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Experience</p>
                   <p className="poppins-regular text-foreground">{job.experience}</p>
                 </div>
-                <div className="space-y-1">
+                <div className="flex flex-col gap-y-1">
                   <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Location</p>
                   <p className="poppins-regular text-foreground">{job.location}</p>
                 </div>

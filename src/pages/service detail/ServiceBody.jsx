@@ -20,7 +20,7 @@ const ServiceBody = ({ service }) => {
             <h2 className="text-accent mb-3 capatalize font-bold text-[1.5vw] ">
               What we are good at:
             </h2>
-            <ul className="list-disc pl-5 space-y-3 text-muted-foreground text-[1.2vw] text-wrap pr-6">
+            <ul className="flex flex-col list-disc pl-5 gap-y-3 text-muted-foreground text-[1.2vw] text-wrap pr-6">
               {goodAtItems.length > 0 ? goodAtItems.map((item, idx) => (
                 <li key={idx}>{item}</li>
               )) : <li>No details available yet.</li>}

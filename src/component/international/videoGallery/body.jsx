@@ -29,7 +29,7 @@ const Filters = ({
   sortBy,
   setSortBy,
 }) => (
-  <div className="flex flex-wrap md:flex-nowrap space-y-4 md:space-y-0 md:space-x-6 mb-6">
+  <div className="flex flex-wrap md:flex-nowrap gap-y-4 md:gap-y-0 md:gap-x-6 mb-6">
     <div className="w-full md:w-1/4">
       <label className="block text-foreground poppins-medium mb-2">Date</label>
       <input
@@ -175,7 +175,7 @@ const Intro = () => {
 
   return (
     <div className="bg-background p-14">
-      <div className="flex flex-wrap md:flex-nowrap gap-8 md:space-x-6">
+      <div className="flex flex-wrap md:flex-nowrap gap-8 md:gap-x-6">
         <aside className="p-8 w-[22vw] overflow-hidden">
           <h2
             className="font-bold text-3xl poppins-bold text-foreground mb-4 cursor-pointer"
@@ -193,7 +193,7 @@ const Intro = () => {
           <h2 className="border border-foreground w-1/3 h-2 rounded-md bg-foreground mb-4"></h2>
 
           {/* this will show all the activities filter */}
-          {/* <ul className="space-y-2">
+          {/* <ul className="flex flex-col gap-y-2">
             {categories.map((category) => (
               <li
                 key={category}
@@ -210,7 +210,7 @@ const Intro = () => {
           </ul> */}
 
           {/* this filter will only show those activity filters who are having data in them */}
-          <ul className="space-y-2">
+          <ul className="flex flex-col gap-y-2">
             {categories
               .filter((category) =>
                 workshopsData.some(

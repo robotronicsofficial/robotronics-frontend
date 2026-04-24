@@ -53,7 +53,7 @@ const FAQs = () => {
       <div className="lg:w-full px-6">
         <br></br><br></br><br></br><br></br>
         <h1 className="text-4xl poppins-bold text-foreground mb-6">Frequently Asked Questions (FAQs)</h1>
-        <div className="space-y-6">
+        <div className="flex flex-col gap-y-6">
           {faqs.map((f, idx) => (
             <div key={idx} className="bg-card p-6 rounded-2xl shadow-sm">
               <h3 className="text-xl poppins-semibold">{f.question}</h3>

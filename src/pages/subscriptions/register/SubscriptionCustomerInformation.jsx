@@ -304,7 +304,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   return (
     <div className="lg:flex flex-row bg-background">
       <div className="flex flex-col lg:w-3/5">
-        <form onSubmit={handleSubmit} className="space-y-6 bg-background p-6 max-w-4xl ">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-y-6 bg-background p-6 max-w-4xl">
           {/* Parent Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField label="Parent First Name" name="firstName" value={parentForm.firstName} onChange={handleParentChange} placeholder="Parent First Name" required />
@@ -332,8 +332,8 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
 
           {/* Children Info */}
           {childrenForms.map((child, index) => (
-            <div key={index} className="w-full pt-6 space-y-6">
-              <div className="space-y-5 px-6 md:px-10 py-4 md:py-8">
+            <div key={index} className="flex flex-col w-full pt-6 gap-y-6">
+              <div className="flex flex-col gap-y-5 px-6 md:px-10 py-4 md:py-8">
                 <h1 className="text-2xl md:text-4xl poppins-bold text-foreground text-wrap">
                   {savedChildren.length === 0 ? "REGISTER YOUR CHILD" : `Child ${index + 1} Information`}
                 </h1>
@@ -374,7 +374,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                 <InputField label="Postal Code" name="postalCode" value={child.postalCode} onChange={(e) => handleChildChange(index, e)} placeholder="Postal Code" required />
               </div>
 
-              <div className="flex space-x-4 mt-4">
+              <div className="flex gap-x-4 mt-4">
                 {!child.saved && (
                   <button
                     type="button"
@@ -403,7 +403,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
           ))}
 
           {/* Cancel */}
-          <div className="flex flex-col md:flex-row justify-between mt-6 space-y-4 md:space-y-0 md:space-x-4">
+          <div className="flex flex-col md:flex-row justify-between mt-6 gap-y-4 md:gap-y-0 md:gap-x-4">
             <button type="button" onClick={() => navigate("/subscriptions")} className="poppins-bold text-muted-foreground bg-card py-2 px-6 border border-border hover:bg-muted w-full md:w-auto">
               CANCEL
             </button>
@@ -417,16 +417,16 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
       </div>
 
       {/* Right Side - Order Summary */}
-      <div className="lg:px-14 px-5 lg:p-8 p-4 lg:space-y-20 space-y-8">
-        <div className="lg:space-y-8 space-y-4">
+      <div className="flex flex-col lg:px-14 px-5 lg:p-8 p-4 lg:gap-y-20 gap-y-8">
+        <div className="flex flex-col lg:gap-y-8 gap-y-4">
           <p className="lg:text-4xl poppins-bold text-foreground">REVIEW YOUR REGISTRATION</p>
         </div>
 
         {/* Saved Children Cards */}
         {savedChildren.length > 0 ? (
           savedChildren.map((child, index) => (
-            <div key={index} className="lg:space-y-5 space-y-2 poppins-extralight">
-              <div className="flex flex-row space-x-3">
+            <div key={index} className="flex flex-col lg:gap-y-5 gap-y-2 poppins-extralight">
+              <div className="flex flex-row gap-x-3">
                 <AppImage className="lg:h-24 lg:w-24" src={robo} alt="" />
                 <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
                   <p className="text-wrap">
@@ -449,14 +449,14 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
             </div>
           ))
         ) : (
-          <div className="lg:space-y-5 space-y-2 poppins-extralight">
+          <div className="flex flex-col lg:gap-y-5 gap-y-2 poppins-extralight">
             <p className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-muted-foreground">No children registered yet</p>
           </div>
         )}
 
         <div className="h-0 border border-border"></div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-y-2">
           <div className="flex justify-between">
             <p className="text-muted-foreground font-lato text-base">Number of Children</p>
             <p className="font-lato text-[20px]">

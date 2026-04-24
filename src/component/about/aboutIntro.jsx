@@ -16,10 +16,10 @@ const Iaboutntro = () => {
         <div className="overflow-hidden" >
         <div className="flex justify-between h-full w-full p-10   bg-foreground bg-opacity-70 md:bg-opacity-50">
             {/* text */}
-            <div className={getHeaderOffsetClass("aboutHero", "space-y-5 lg:w-1/2 md:ml-10")}>
+            <div className={getHeaderOffsetClass("aboutHero", "flex flex-col gap-y-5 lg:w-1/2 md:ml-10")}>
               {/* Text */}
-              <div className="space-y-2"data-aos="fade-up">
-                <div className="flex flex-row space-x-2 ">
+              <div className="flex flex-col gap-y-2"data-aos="fade-up">
+                <div className="flex flex-row gap-x-2">
                   <h1 className="lg:text-3xl md:text-2xl text-background poppins-thin">WELCOME TO THE </h1>
                   <h1 className="lg:text-3xl md:text-2xl text-background poppins-extralight">WORLD OF</h1>
                 </div>
@@ -32,7 +32,7 @@ const Iaboutntro = () => {
               </div>
 
               {/* Social Icons */}
-              <div className="flex flex-row space-x-2 lg:space-x-5">
+              <div className="flex flex-row gap-x-2 lg:gap-x-5">
                 {[
                   { href: "https://www.facebook.com/robotronicspakistan/", icon: <FaFacebook /> },
                   { href: "https://twitter.com/robotronicspk", icon: <FaTwitter /> },

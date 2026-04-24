@@ -17,13 +17,13 @@ const Intro = () => {
   return (
     <>
       <div className="hero" id="hero">
-        <div className="space-y-5 -top-10">
+        <div className="flex flex-col gap-y-5 -top-10">
           <div className="flex justify-between w-full py-16 md:px-20 px-14 ">
             {/* text */}
-            <div className="flex flex-col justify-center space-y-5 mt-24 md:mt-32 md:w-1/2 w-full " data-aos="fade-up">
+            <div className="flex flex-col justify-center gap-y-5 mt-24 md:mt-32 md:w-1/2 w-full" data-aos="fade-up">
               {/* Text */}
-              <div className="space-y-2  flex flex-col gap-6 mt-8  w-full" data-aos="fade-up">
-                <div className="flex flex-row  space-x-2 ">
+              <div className="gap-y-2 flex flex-col gap-6 mt-8 w-full" data-aos="fade-up">
+                <div className="flex flex-row gap-x-2">
                   <h1 className="lg:text-3xl md:text-2xl text-background poppins-thin">
                WELCOME TO THE{" "}
                   </h1>
@@ -44,7 +44,7 @@ const Intro = () => {
                 Your gateway to the future of Robotics, Coding and STEM Education. We offer hands-on learning experiences, empowering students of all ages to explore, create and innovate in the exciting world of Robotics.
                 </p>
                 {/* Buttons */}
-              <div className="space-x-3 mt-10" data-aos="fade-up">
+              <div className="flex flex-col gap-x-3 mt-10" data-aos="fade-up">
                 <button
                   to="section2"
                   onClick={() => navigate("/subscriptions")}
@@ -66,7 +66,7 @@ const Intro = () => {
               
 
               {/* Social Icons */}
-              <div className="flex flex-row space-x-2 lg:space-x-5">
+              <div className="flex flex-row gap-x-2 lg:gap-x-5">
                 {[
                   { href: "https://www.facebook.com/robotronicspakistan/", icon: <FaFacebook /> },
                   { href: "https://twitter.com/robotronicspk", icon: <FaTwitter /> },

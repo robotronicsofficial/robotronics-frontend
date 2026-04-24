@@ -13,7 +13,7 @@ const Updates = () => {
       {/* layer 1 */}
       <div className="lg:flex lg:p-1 p-5 w-full">
         {/* div 1 */}
-        <div className="flex-1 text-background space-y-4 ">
+        <div className="flex flex-col flex-1 text-background gap-y-4">
           <p
             className="text-background px-4 lg:px-14 py-14 poppins-extrabold text-2xl lg:text-5xl "
             data-aos="fade-up"
@@ -54,7 +54,7 @@ const Updates = () => {
           </div>
           {/* text */}
           <div
-            className="space-y-2"
+            className="flex flex-col gap-y-2"
             data-aos="fade-up"
 
           >

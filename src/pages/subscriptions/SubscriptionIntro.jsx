@@ -26,7 +26,7 @@ const SubscriptionIntro = () => {
     <div className="bg-background">
       <div className="bg-muted py-6">
         <div className="w-full h-full px-4 py-12 sm:py-2 sm:px-8 md:px-12 lg:px-24">
-          <div className="flex flex-col lg:flex-row lg:space-x-6 mt-20 lg:mt-40">
+          <div className="flex flex-col lg:flex-row lg:gap-x-6 mt-20 lg:mt-40">
             {/* Left Side */}
             <div
               className="w-full lg:w-2/3 flex flex-col justify-between"
@@ -108,7 +108,7 @@ const SubscriptionIntro = () => {
 
             {/* Right Side */}
             <div
-              className="w-full lg:w-1/3 mt-10 lg:mt-0 space-y-6"
+              className="flex flex-col w-full lg:w-1/3 mt-10 lg:mt-0 gap-y-6"
               data-aos="fade-up"
 
 
@@ -127,7 +127,7 @@ const SubscriptionIntro = () => {
                 <h3 className="text-lg sm:text-xl mb-4 font-semibold poppins-bold">
                 Subscription features:
                 </h3>
-                <ul className="list-none space-y-3 text-muted-foreground">
+                <ul className="flex flex-col list-none gap-y-3 text-muted-foreground">
                   {[
                     "30+ Courses in one Subscription",
                     "Robotics, STEM, AI, Coding all included",
@@ -140,7 +140,7 @@ const SubscriptionIntro = () => {
                   ].map((item, index) => (
                     <li
                       key={index}
-                      className="flex items-center space-x-4 sm:space-x-6 "
+                      className="flex items-center gap-x-4 sm:gap-x-6"
                     >
                       <span className="text-primary text-lg sm:text-xl">
                         <MdCheckBox />
