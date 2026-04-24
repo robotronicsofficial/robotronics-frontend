@@ -27,45 +27,46 @@ const WorkshopCard = ({ workshop }) => {
       }
     >
       <div className="relative h-[16vw] cursor-pointer">
-      <img
-        src={workshop.thumbnail}
-        alt={workshop.workshopName}
-        className="w-full h-full object-fill"
-      />
-    </div>
+        <img
+          src={workshop.thumbnail}
+          alt={workshop.workshopName}
+          className="w-full h-full object-fill"
+        />
+      </div>
       <div className="px-3 py-4 bg-[#362d2c] relative h-[18vw] flex flex-col">
-      <div className=" text-white  h-[2vw] ">
-        <p className="text-gray-700 text-white poppins-medium my-3">
-          {workshop.activity}
-        </p>
-        <div className="w-20 h-20 rounded-full absolute right-2 -top-10 border-2 border-white overflow-hidden bg-yellow">
-          <img
-            src={workshop.schoolLogo}
-            alt={workshop.schoolName}
-            className="w-full h-full object-cover"
-          />
+        <div className="h-[2vw] text-white">
+          <p className="poppins-medium my-3">
+            {workshop.activity}
+          </p>
+          <div className="absolute right-2 -top-10 size-20 overflow-hidden rounded-full border-2 border-white bg-yellow">
+            <img
+              src={workshop.schoolLogo}
+              alt={workshop.schoolName}
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
-      </div>
-     <div className="h-[20vw] mt-2  flex flex-col ">
-     <h3 className="text-lg text-white poppins-bold text-wrap leading-none my-4">
-        {workshop.workshopName}
-      </h3>
-      <p className="text-gray-600 text-white text-wrap poppins-light md:text-xs">
-        {workshop.description}
-      </p>
-     </div>
-     <div className="flex items-center justify-between text-white poppins-light space-x-1 text-gray-600 mt-4 px-2">
-        <p className="flex items-center gap-2 text-sm">
-        <RxClock />
 
-          {workshop.timeFrom} To {workshop.timeTo}{" "}
-        </p>
-        <div className="flex items-center gap-1">
-        <LuMapPin />
-        {workshop.city}
+        <div className="mt-2 flex h-[20vw] flex-col">
+          <h3 className="text-lg text-white poppins-bold text-wrap leading-none my-4">
+            {workshop.workshopName}
+          </h3>
+          <p className="text-white text-wrap poppins-light md:text-xs">
+            {workshop.description}
+          </p>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between gap-1 px-2 text-white poppins-light">
+          <p className="flex items-center gap-2 text-sm">
+            <RxClock />
+            {workshop.timeFrom} To {workshop.timeTo}{" "}
+          </p>
+          <div className="flex items-center gap-1">
+            <LuMapPin />
+            {workshop.city}
+          </div>
         </div>
       </div>
-    </div>
     </button>
   );
 };
