@@ -35,8 +35,9 @@ function Marquee({ imagesurls, direction }) {
         initial={{ x: offsets.initial }}
         animate={{ x: animationTarget }}
         transition={transition}
-        className="flex py-6 gap-10 whitespace-nowrap overflow-hidden flex-shrink-0 bg-"
-        style={{ willChange: prefersReducedMotion ? "auto" : "transform" }}
+        className={`flex py-6 gap-10 whitespace-nowrap overflow-hidden flex-shrink-0 bg- ${
+          prefersReducedMotion ? "" : "will-change-transform"
+        }`}
       >
         {imagesurls.map((url, index) => (
           <img
@@ -51,8 +52,9 @@ function Marquee({ imagesurls, direction }) {
         initial={{ x: offsets.initial }}
         animate={{ x: animationTarget }}
         transition={transition}
-        className="flex py-6 gap-10 whitespace-nowrap overflow-hidden flex-shrink-0"
-        style={{ willChange: prefersReducedMotion ? "auto" : "transform" }}
+        className={`flex py-6 gap-10 whitespace-nowrap overflow-hidden flex-shrink-0 ${
+          prefersReducedMotion ? "" : "will-change-transform"
+        }`}
       >
         {imagesurls.map((url, index) => (
           <img

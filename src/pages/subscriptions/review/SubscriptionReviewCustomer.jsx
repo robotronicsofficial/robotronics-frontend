@@ -70,7 +70,7 @@ const SubscriptionReviewCustomer = () => {
   return (
     <div>
       <div className="grid gap-6 px-4 py-8 md:px-10 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="flex flex-col gap-y-6 rounded-[24px] bg-card p-6 shadow-sm md:p-10">
+        <div className="flex flex-col gap-y-6 rounded-3xl bg-card p-6 shadow-sm md:p-10">
           <div className="flex flex-col gap-y-3">
             <p className="text-4xl font-bold text-foreground">Review Your Subscription</p>
             <p className="text-sm text-muted-foreground">
@@ -78,7 +78,7 @@ const SubscriptionReviewCustomer = () => {
             </p>
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-[20px] bg-foreground p-6 text-background">
+            <div className="rounded-2xl bg-foreground p-6 text-background">
               <p className="text-lg font-bold">Order Summary</p>
               <div className="flex flex-col mt-4 gap-y-4">
                 <ReviewRow label="Order code" value={checkout.orderCode} />
@@ -99,7 +99,7 @@ const SubscriptionReviewCustomer = () => {
               </div>
             </div>
 
-            <div className="rounded-[20px] bg-muted p-6">
+            <div className="rounded-2xl bg-muted p-6">
               <p className="text-lg font-bold text-foreground">Parent Contact</p>
               <div className="flex flex-col mt-4 gap-y-4">
                 <ReviewRow
@@ -130,7 +130,7 @@ const SubscriptionReviewCustomer = () => {
               {checkout.children.map((child) => (
                 <div
                   key={child.childCode || `${child.firstName}-${child.lastName}`}
-                  className="rounded-[20px] border border-border bg-muted p-5"
+                  className="rounded-2xl border border-border bg-muted p-5"
                 >
                   <p className="font-bold text-foreground">
                     {[child.firstName, child.lastName].filter(Boolean).join(" ") || "Student"}
@@ -171,10 +171,10 @@ const SubscriptionReviewCustomer = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-y-6 rounded-[24px] bg-muted p-6 shadow-sm md:p-10">
+        <div className="flex flex-col gap-y-6 rounded-3xl bg-muted p-6 shadow-sm md:p-10">
           <p className="text-2xl font-bold text-foreground">Subscription Status</p>
           {checkout.status === "active" ? (
-            <div className="flex flex-col gap-y-4 rounded-[20px] bg-card p-6">
+            <div className="flex flex-col gap-y-4 rounded-2xl bg-card p-6">
               <p className="text-xl font-bold text-foreground">Subscription active</p>
               <p className="text-sm text-muted-foreground">
                 The subscription is active and course access has been assigned to the registered children.
@@ -210,7 +210,7 @@ const SubscriptionReviewCustomer = () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-y-4 rounded-[20px] bg-card p-6">
+            <div className="flex flex-col gap-y-4 rounded-2xl bg-card p-6">
               <p className="text-lg font-bold text-foreground">Ready for confirmation</p>
               <p className="text-sm text-muted-foreground">
                 Review the child and billing details on the left, then activate the subscription once everything matches.
@@ -234,7 +234,7 @@ const SubscriptionReviewCustomer = () => {
                 />
               </div>
               {activationError ? (
-                <p className="rounded-[16px] bg-destructive/10 p-3 text-sm font-semibold text-destructive">
+                <p className="rounded-2xl bg-destructive/10 p-3 text-sm font-semibold text-destructive">
                   {activationError}
                 </p>
               ) : null}

@@ -13,7 +13,7 @@ const getNearestValue = (value, snapValues) => {
 };
 
 const rangeInputClassName =
-  "range-slider-input absolute inset-0 h-2 w-full appearance-none bg-transparent accent-brown";
+  "range-slider-input absolute inset-0 h-2 w-full appearance-none bg-transparent accent-foreground";
 
 const RangeSlider = ({
   min,

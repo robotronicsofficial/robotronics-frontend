@@ -136,7 +136,7 @@ const SubscriptionPayment = ({ onNext }) => {
 
   return (
     <div className="lg:flex lg:flex-row lg:gap-8 bg-muted">
-      <div className="lg:w-[38%] rounded-[24px] bg-muted p-6 md:p-10">
+      <div className="lg:w-[38%] rounded-3xl bg-muted p-6 md:p-10">
         <div className="flex flex-col gap-y-3">
           <p className="text-3xl font-bold text-foreground">Checkout Summary</p>
           <p className="text-sm text-muted-foreground">
@@ -148,7 +148,7 @@ const SubscriptionPayment = ({ onNext }) => {
           {checkout.children.map((child) => (
             <div
               key={child.childCode || `${child.firstName}-${child.lastName}`}
-              className="flex items-center gap-4 rounded-[20px] bg-card p-4 shadow-sm"
+              className="flex items-center gap-4 rounded-2xl bg-card p-4 shadow-sm"
             >
               <AppImage className="h-16 w-16 rounded-2xl bg-muted p-2" src={robo} alt="" />
               <div className="min-w-0 flex-1">
@@ -169,7 +169,7 @@ const SubscriptionPayment = ({ onNext }) => {
           ))}
         </div>
 
-        <div className="flex flex-col mt-8 gap-y-4 rounded-[20px] bg-card p-5 shadow-sm">
+        <div className="flex flex-col mt-8 gap-y-4 rounded-2xl bg-card p-5 shadow-sm">
           <SummaryRow label="Order code" value={checkout.orderCode} />
           <SummaryRow label="Registered on" value={formatDisplayDate(checkout.orderDate)} />
           <SummaryRow label="Children" value={checkout.totalChildren} />
@@ -181,7 +181,7 @@ const SubscriptionPayment = ({ onNext }) => {
         </div>
       </div>
 
-      <div className="mt-6 flex-1 rounded-[24px] bg-card p-6 md:mt-0 md:p-10 shadow-sm">
+      <div className="mt-6 flex-1 rounded-3xl bg-card p-6 md:mt-0 md:p-10 shadow-sm">
         <div className="flex flex-col gap-y-3">
           <p className="text-3xl font-bold text-foreground">Payment Details</p>
           <p className="text-sm text-muted-foreground">
@@ -189,11 +189,11 @@ const SubscriptionPayment = ({ onNext }) => {
           </p>
         </div>
 
-        <div className="mt-6 rounded-[20px] border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
+        <div className="mt-6 rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
           This screen saves billing details locally for review. It does not create a backend payment record or invoice on its own.
         </div>
 
-        <div className="mt-8 rounded-[20px] bg-foreground p-5 text-background">
+        <div className="mt-8 rounded-2xl bg-foreground p-5 text-background">
           <p className="text-lg font-bold">
             {[checkout.parent.firstName, checkout.parent.lastName].filter(Boolean).join(" ") || "Parent account"}
           </p>
@@ -226,7 +226,7 @@ const SubscriptionPayment = ({ onNext }) => {
                 return (
                   <label
                     key={option.value}
-                    className={`cursor-pointer rounded-[20px] border p-4 transition ${
+                    className={`cursor-pointer rounded-2xl border p-4 transition ${
                       isSelected
                         ? "border-foreground bg-foreground text-background"
                         : "border-border bg-muted text-foreground"
@@ -287,7 +287,7 @@ const SubscriptionPayment = ({ onNext }) => {
                 maxLength={2}
               />
             ) : (
-              <div className="rounded-[20px] border border-dashed border-border bg-muted p-4 text-sm text-muted-foreground">
+              <div className="rounded-2xl border border-dashed border-border bg-muted p-4 text-sm text-muted-foreground">
                 EasyPaisa details will be saved against the account number above for review.
               </div>
             )}
@@ -301,7 +301,7 @@ const SubscriptionPayment = ({ onNext }) => {
                 maxLength={4}
               />
             ) : (
-              <div className="rounded-[20px] border border-dashed border-border bg-muted p-4 text-sm text-muted-foreground">
+              <div className="rounded-2xl border border-dashed border-border bg-muted p-4 text-sm text-muted-foreground">
                 The next step only confirms the saved review details. It does not charge the payment method yet.
               </div>
             )}

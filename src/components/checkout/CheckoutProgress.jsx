@@ -2,12 +2,17 @@ import PropTypes from "prop-types";
 
 import { cn } from "@/lib/utils";
 
+const getProgressWidthClass = (value) => {
+  if (value >= 100) return "w-full";
+  if (value >= 67) return "w-2/3";
+  if (value >= 50) return "w-1/2";
+  if (value >= 33) return "w-1/3";
+  return "w-0";
+};
+
 const CheckoutProgress = ({ value }) => (
   <div className="mx-auto h-0.5 w-full max-w-5xl bg-border" aria-hidden="true">
-    <div
-      className="h-full bg-foreground transition-[width]"
-      style={{ width: `${value}%` }}
-    />
+    <div className={cn("h-full bg-foreground transition-[width]", getProgressWidthClass(value))} />
   </div>
 );
 

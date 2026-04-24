@@ -225,16 +225,7 @@ const Signup = () => {
                     dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-card shadow-lg border border-border rounded-md w-60 max-w-full mt-1",
                     buttonClass: "flex items-center justify-center h-full px-2 focus:outline-none"
                   }}
-                  containerClass="relative w-full"
-                  style={{
-                    '--PhoneInputCountryFlag-height': '1.25rem',
-                    '--PhoneInputCountryFlag-width': 'auto',
-                    '--PhoneInputCountryFlag-borderColor': 'transparent',
-                    '--PhoneInputCountrySelectArrow-color': 'var(--muted-foreground)',
-                    '--PhoneInputCountrySelectArrow-opacity': '1',
-                    '--PhoneInputCountrySelectArrow-width': '0.5em',
-                    '--PhoneInputCountrySelectArrow-marginLeft': '0.5em',
-                  }}
+                  containerClass="phone-input relative w-full"
                 />
               </div>
             </div>

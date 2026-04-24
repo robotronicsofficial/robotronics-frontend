@@ -6,13 +6,16 @@ const ServiceInto = ({ service }) => {
 
   return (
     <div className="hero" id="hero">
-      <div
-        className="flex-col gap-y-5 min-h-screen flex items-end justify-center p-6 bg-cover bg-center"
-        style={{
-          backgroundImage: bannerImage ? `url("${bannerImage}")` : undefined,
-        }}
-      >
-        <div className="flex items-center justify-center">
+      <div className="relative flex min-h-screen flex-col items-end justify-center gap-y-5 overflow-hidden p-6">
+        {bannerImage && (
+          <img
+            src={bannerImage}
+            alt=""
+            className="absolute inset-0 size-full object-cover"
+            aria-hidden="true"
+          />
+        )}
+        <div className="relative flex items-center justify-center">
           <div className="bg-muted-foreground/20 backdrop-blur-2xl text-background p-8 w-full max-w-5xl rounded-3xl border border-card/30 shadow-lg leading-none mb-10">
             <div>
               <p className="text-[3vw] md:text-[2vw] font-semibold pb-6">

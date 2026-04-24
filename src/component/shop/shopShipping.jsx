@@ -114,7 +114,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           </p>
         </div>
 
-        <div className="rounded-[20px] border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
+        <div className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
           {submittedIntent
             ? "This checkout request has been submitted to Robotronics for follow-up and CRM handling."
             : "Review the saved checkout details, then submit the order request so Robotronics can process it in CRM."}
@@ -122,7 +122,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
         {submitStatus.message ? (
           <div
-            className={`rounded-[20px] border p-4 text-sm ${
+            className={`rounded-2xl border p-4 text-sm ${
               submitStatus.type === "success"
                 ? "border-success/20 bg-success/10 text-success"
                 : "border-destructive/20 bg-destructive/10 text-destructive"

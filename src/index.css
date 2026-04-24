@@ -189,6 +189,28 @@
   background: var(--foreground);
 }
 
+.phone-input {
+  --PhoneInputCountryFlag-height: 1.25rem;
+  --PhoneInputCountryFlag-width: auto;
+  --PhoneInputCountryFlag-borderColor: transparent;
+  --PhoneInputCountrySelectArrow-color: var(--muted-foreground);
+  --PhoneInputCountrySelectArrow-opacity: 1;
+  --PhoneInputCountrySelectArrow-width: 0.5em;
+  --PhoneInputCountrySelectArrow-marginLeft: 0.5em;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
 .hero {
   background: url(./assets/images/intro.svg) top center no-repeat;
   background-size: cover;

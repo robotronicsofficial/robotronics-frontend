@@ -339,9 +339,9 @@ const ChatSupport = () => {
                 <div className="mb-4 flex justify-start">
                   <div className="max-w-[80%] p-4 rounded-lg bg-card text-muted-foreground rounded-bl-none border border-border">
                     <div className="flex gap-x-2">
-                      <div className="w-2 h-2 rounded-full bg-muted animate-bounce"></div>
-                      <div className="w-2 h-2 rounded-full bg-muted animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-2 h-2 rounded-full bg-muted animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                      <div className="size-2 rounded-full bg-muted animate-bounce"></div>
+                      <div className="size-2 rounded-full bg-muted animate-bounce animation-delay-200"></div>
+                      <div className="size-2 rounded-full bg-muted animate-bounce animation-delay-400"></div>
                     </div>
                   </div>
                 </div>

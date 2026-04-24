@@ -187,7 +187,7 @@ const CustomerInfomation = ({ onNext }) => {
               </div>
             </>
           ) : (
-            <div className="rounded-[20px] border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
+            <div className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
               This order only contains digital items, so we only need your contact details here.
             </div>
           )}

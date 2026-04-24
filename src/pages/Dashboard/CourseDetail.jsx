@@ -755,8 +755,7 @@ const CourseDetail = () => {
               title="Course lesson video"
               autoPlay
               controls
-              className="h-full w-full"
-              style={{ minHeight: "70vh" }}
+              className="min-h-[70vh] w-full"
             />
           </div>
         </DialogShell>

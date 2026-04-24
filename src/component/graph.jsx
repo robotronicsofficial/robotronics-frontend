@@ -39,10 +39,7 @@ const Header = () => (
       />
     </div>
     <div className="" data-aos="fade-up">
-      <p
-        className="md:text-6xl text-xl text-wrap text-left poppins-bold text-foreground px-8"
-        style={{ lineHeight: "1.3" }}
-      >
+      <p className="md:text-6xl text-xl text-wrap text-left poppins-bold text-foreground px-8 leading-snug">
         Through{" "}
         <span className="md:text-6xl text-xl text-wrap text-left poppins-bold text-primary mr-2">
           Robotics & STEM, 

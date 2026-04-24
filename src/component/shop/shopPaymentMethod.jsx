@@ -137,7 +137,7 @@ const ShopPaymentMethod = ({ onNext }) => {
             </button>
           </div>
 
-          <div className="rounded-[20px] border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
+          <div className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
             This storefront flow only stores billing details locally in your browser. It does not create a backend payment record or invoice yet.
           </div>
 
@@ -208,7 +208,7 @@ const ShopPaymentMethod = ({ onNext }) => {
             </div>
           </section>
         ) : (
-          <section className="rounded-[20px] border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
+          <section className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
             This checkout only contains digital items, so no shipping service needs to be selected.
           </section>
         )}
