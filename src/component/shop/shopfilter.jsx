@@ -44,7 +44,7 @@ const Shopfilter = ({
   };
 
   return (
-    <div className="hidden lg:block min-w-[16vw]">
+    <div className="hidden lg:block min-w-64">
       {/* All Products */}
       <div className="lg:pt-6 pt-3 text-foreground">
         <div className="flex justify-between">

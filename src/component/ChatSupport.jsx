@@ -265,7 +265,7 @@ const ChatSupport = () => {
         <div
           className={`
             fixed ${isMaximized ?
-              'inset-0 m-auto w-[95vw] h-[95vh] rounded-3xl flex' :
+              'inset-0 m-auto w-chat-panel-width h-chat-panel-height rounded-3xl flex' :
               'bottom-0 right-0 w-[450px] h-[600px] rounded-3xl'
             } bg-card shadow-xl overflow-hidden border border-primary transition-all duration-300 relative
           `}

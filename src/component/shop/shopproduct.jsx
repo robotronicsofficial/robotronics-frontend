@@ -22,10 +22,10 @@ const Shopproduct = ({
 
 
   return (
-    <div className="relative w-[18vw] h-[20vw] group">
+    <div className="group relative w-full max-w-72">
        {/* Image and Title wrapped in a clickable div that triggers navigation */}
        <div onClick={handleProductClick} className="cursor-pointer">
-        <div className="w-[18vw] h-[17vw] rounded-2xl overflow-hidden">
+        <div className="aspect-square w-full overflow-hidden rounded-2xl">
           <img
             className="h-full w-full object-fit group-hover:opacity-50"
             src={resolveBackendAssetUrl(image, "https://via.placeholder.com/300x200")}
@@ -43,7 +43,7 @@ const Shopproduct = ({
       </div>
 
       {/* Add to Cart and Add to Wishlist buttons */}
-      <div className="absolute flex flex-col w-[14vw] transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div className="absolute left-1/2 top-1/2 flex w-11/12 -translate-x-1/2 -translate-y-1/2 transform flex-col opacity-0 transition-opacity duration-300 group-hover:opacity-100">
         <button
           className="bg-muted bg-opacity-30 p-2 text-foreground poppins-medium rounded-lg mb-2"
           onClick={(e) => {

@@ -140,7 +140,7 @@ const Shopsearch = () => {
           <div className="h-1.5 w-14 border bg-foreground border-foreground mt-4"></div>
         </div>
 
-        <div className="flex items-center border border-border bg-card px-2 rounded-md h-12 w-[55vw]">
+        <div className="flex h-12 w-full flex-1 items-center rounded-md border border-border bg-card px-2">
           <IoIosSearch className="text-muted-foreground text-xl" />
           <input
             type="text"
@@ -170,7 +170,7 @@ const Shopsearch = () => {
           onShippingChange={setShippingDays}
           onCategoryChange={setSelectedCategory}
         />
-        <div className="flex flex-wrap justify-between gap-x-20 gap-y-4 px-5 lg:px-10 lg:py-10 min-h-[85vw]">
+        <div className="grid min-h-screen flex-1 grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-x-20 gap-y-4 px-5 lg:px-10 lg:py-10">
           {currentProducts.map((product) => {
             const catalogItem = createProductCommerceItem(product);
             const itemKey = catalogItem ? getCommerceItemKey(catalogItem) : "";

@@ -42,7 +42,7 @@ function Marquee({ imagesurls, direction }) {
           <img
             key={index}
             src={url}
-            className=" select-none w-[10vw] h-[10vw] rounded-3xl"
+            className=" select-none size-24 md:size-28 rounded-3xl"
             alt={`Marquee image ${index + 1}`}
           />
         ))}
@@ -58,7 +58,7 @@ function Marquee({ imagesurls, direction }) {
           <img
             key={index}
             src={url}
-            className="select-none w-[10vw] h-[10vw]  rounded-3xl"
+            className="select-none size-24 md:size-28  rounded-3xl"
           />
         ))}
       </motion.div>

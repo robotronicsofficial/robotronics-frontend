@@ -248,7 +248,7 @@ const SubscriptionChildProfile = () => {
               const hasPin = child.hasPin;
               return (
                 <div key={child._id} className="w-full p-2 md:w-1/2 md:p-3">
-                  <div className="flex flex-col gap-y-5 bg-card rounded-xl p-5 shadow-lg w-full md:w-[25vw] min-w-[280px]">
+                  <div className="flex flex-col gap-y-5 bg-card rounded-xl p-5 shadow-lg w-full md:max-w-sm min-w-[280px]">
                     <div className="flex flex-col gap-y-6 md:gap-y-8">
                       <div className="flex items-center gap-4 md:gap-6">
                         <FaUserCircle className="text-3xl md:text-4xl" />

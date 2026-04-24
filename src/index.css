@@ -114,6 +114,8 @@
   --spacing-header-event-md: 8rem;
   --spacing-header-event-lg: 16rem;
   --spacing-site-shell: min(95vw, 88rem);
+  --spacing-chat-panel-width: min(95vw, 72rem);
+  --spacing-chat-panel-height: min(95vh, 48rem);
 
   --font-title: "Poppins", sans-serif;
   --font-lato: "Lato", sans-serif;

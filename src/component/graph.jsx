@@ -74,7 +74,7 @@ const InfoSection = () => (
     </div>
 
     <div className="relative flex  w-full">
-      <div className="hidden md:flex flex-col w-[14vw] h-[10vh] mt-36">
+      <div className="hidden md:flex flex-col w-56 mt-36">
         <div className="flex items-center">
           <AppImage
             src={circleg}
@@ -94,7 +94,7 @@ const InfoSection = () => (
           <span>No. of Schools</span>
         </div>
       </div>
-      <div className="w-[24vw] ">
+      <div className="w-80 ">
         <AppImage
           data-aos="fade-up"
           src={robot}

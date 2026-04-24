@@ -20,7 +20,7 @@ const Intro = () => {
         <div className="flex flex-col gap-y-5 -top-10">
           <div className="flex justify-between w-full py-16 md:px-20 px-14 ">
             {/* text */}
-            <div className="flex flex-col justify-center gap-y-5 mt-24 md:mt-32 md:w-1/2 w-full" data-aos="fade-up">
+            <div className="flex flex-col justify-center gap-y-5 mt-24 md:mt-header-auth md:w-1/2 w-full" data-aos="fade-up">
               {/* Text */}
               <div className="gap-y-2 flex flex-col gap-6 mt-8 w-full" data-aos="fade-up">
                 <div className="flex flex-row gap-x-2">

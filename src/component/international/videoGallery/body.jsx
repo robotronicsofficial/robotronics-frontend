@@ -176,7 +176,7 @@ const Intro = () => {
   return (
     <div className="bg-background p-14">
       <div className="flex flex-wrap md:flex-nowrap gap-8 md:gap-x-6">
-        <aside className="p-8 w-[22vw] overflow-hidden">
+        <aside className="w-full p-8 md:w-80 overflow-hidden">
           <h2
             className="font-bold text-3xl poppins-bold text-foreground mb-4 cursor-pointer"
             onClick={() => {

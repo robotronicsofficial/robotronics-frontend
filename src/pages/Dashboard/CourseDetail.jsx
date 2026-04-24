@@ -264,7 +264,7 @@ const CourseDetail = () => {
                   <img
                     src={resolveBackendAssetUrl(courseData.banner)}
                     alt="Course"
-                    className="w-full h-[50vw] sm:h-[40vw] md:h-[30vw] lg:h-[23.8vw] object-center rounded-2xl shadow-md"
+                    className="aspect-video w-full rounded-2xl object-cover object-center shadow-md"
                   />
                 </div>
                 <div className="flex items-center gap-8 pt-4">
@@ -278,7 +278,7 @@ const CourseDetail = () => {
                   </div>
                 </div>
                 <div>
-                  <div className="flex items-center w-[40vw]">
+                  <div className="flex w-full max-w-3xl items-center">
                     <h1 className="lg:text-5xl text-2xl text-foreground font-medium mb-4">
                       {courseData.title}
                     </h1>
@@ -288,7 +288,7 @@ const CourseDetail = () => {
                     <span className="text-muted-foreground my-2">{courseData.studentsDownloaded ?? 0} Students Enrolled</span>
                   </div>
 
-                  <div className="h-[12vh] w-[40vw] bg-muted flex items-center px-8 justify-between mt-6 rounded-lg text-muted-foreground">
+                  <div className="mt-6 flex min-h-20 w-full max-w-3xl items-center justify-between rounded-lg bg-muted px-8 text-muted-foreground">
                     <div className="inline-block">{courseData.month ?? 0} Months </div>
                     <div className="inline-block">{courseData.numLessons ?? 0} Lectures</div>
                     <div className="inline-block">{courseData.numModules ?? 0} Module</div>
@@ -298,8 +298,8 @@ const CourseDetail = () => {
               </div>
 
               {/* Right Side with Video */}
-              <div className="flex flex-col w-full lg:w-1/3 mt-6 lg:mt-0 gap-y-4 bg-accent h-[23.8vw] rounded-2xl">
-                <div className="bg-muted w-full h-full rounded-2xl overflow-hidden">
+              <div className="mt-6 flex w-full flex-col gap-y-4 rounded-2xl bg-accent lg:mt-0 lg:w-1/3">
+                <div className="aspect-video w-full overflow-hidden rounded-2xl bg-muted">
                   <VideoPlayer
                     src={video}
                     title="Course preview video"

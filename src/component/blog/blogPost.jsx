@@ -22,7 +22,7 @@ const BlogCard = ({ cardData }) => {
   };
 
   return (
-    <div className="lg:max-w-[25vw] max-w-sm rounded overflow-hidden shadow-lg bg-card">
+    <div className="w-full lg:max-w-sm max-w-sm rounded overflow-hidden shadow-lg bg-card">
       <div className="relative">
         <Link to={`/BlogDetail/${cardData._id}`}>
           <img

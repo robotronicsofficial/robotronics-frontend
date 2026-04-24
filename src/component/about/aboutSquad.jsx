@@ -113,7 +113,7 @@ const AboutSquad = () => {
             </p>
           </div>
         </div>
-        <div className="flex-1 w-[70vw] poppins-bold">
+        <div className="flex-1 w-full max-w-5xl poppins-bold">
           <p
             className="md:text-6xl text-2xl font-bold md:text-left text-wrap"
             data-aos="fade-up"

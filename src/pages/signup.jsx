@@ -166,7 +166,7 @@ const Signup = () => {
           ></div>
         </div>
         <div
-          className="flex flex-col bg-background rounded-lg lg:p-14 p-5 mt-32 md:mt-0"
+          className="flex flex-col bg-background rounded-lg lg:p-14 p-5 mt-header-auth md:mt-0"
           data-aos="fade-up"
 
 

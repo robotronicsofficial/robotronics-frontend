@@ -26,15 +26,15 @@ const WorkshopCard = ({ workshop }) => {
           : `${workshop.workshopName || "Workshop"} has no external link`
       }
     >
-      <div className="relative h-[16vw] cursor-pointer">
+      <div className="relative aspect-video cursor-pointer">
         <img
           src={workshop.thumbnail}
           alt={workshop.workshopName}
           className="w-full h-full object-fill"
         />
       </div>
-      <div className="px-3 py-4 bg-foreground relative h-[18vw] flex flex-col">
-        <div className="h-[2vw] text-background">
+      <div className="px-3 py-4 bg-foreground relative flex min-h-64 flex-col">
+        <div className="min-h-8 text-background">
           <p className="poppins-medium my-3">
             {workshop.activity}
           </p>
@@ -47,7 +47,7 @@ const WorkshopCard = ({ workshop }) => {
           </div>
         </div>
 
-        <div className="mt-2 flex h-[20vw] flex-col">
+        <div className="mt-2 flex flex-1 flex-col">
           <h3 className="text-lg text-background poppins-bold text-wrap leading-none my-4">
             {workshop.workshopName}
           </h3>

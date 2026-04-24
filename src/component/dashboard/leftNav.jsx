@@ -50,7 +50,7 @@ const LeftNav = () => {
   ];
 
   return (
-    <div className="flex flex-col w-full lg:w-[24vw] px-6 py-4  md:mt-2">
+    <div className="flex flex-col w-full lg:w-80 px-6 py-4  md:mt-2">
       <div className="flex flex-col mb-4 gap-y-2">
         <h1 className="text-xl lg:text-xl poppins-bold">Hello {currentUser?.firstName || "there"}</h1>
         <p className="text-foreground poppins-light">Welcome to your Account</p>
