@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { BrandIcon } from "../../components/ui/brand-icons";
 import { useNavigate } from "react-router-dom"; // Assuming React Router is used
 import { getAosStaggerDelay } from "../../utils/motion";
+import { Button } from "@/components/ui/button";
 
 const CareesFindRole = () => {
   const navigate = useNavigate();
@@ -29,15 +30,16 @@ const CareesFindRole = () => {
           data-aos="fade-up"
 
         >
-          <button
+          <Button
+            type="button"
             onClick={handleSendResume}
-            className="bg-foreground text-background lg:text-2xl font-light px-6 py-3 rounded-full shadow-md hover:bg-foreground/90 transition"
+            className="h-auto rounded-full bg-foreground px-6 py-3 font-light text-background shadow-md hover:bg-foreground/90 lg:text-2xl"
           >
             Send Your Resume
-          </button>
-          <button className="bg-card text-foreground border border-foreground px-4 py-3 rounded-full shadow-md hover:bg-foreground hover:text-background transition">
+          </Button>
+          <Button type="button" variant="outline" size="icon" className="h-auto rounded-full border-foreground bg-card px-4 py-3 text-foreground shadow-md hover:bg-foreground hover:text-background">
             <ArrowUpRight size={24} />
-          </button>
+          </Button>
         </div>
       </div>
 

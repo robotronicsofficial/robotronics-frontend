@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getJobsErrorMessage } from "../../lib/jobs";
 import { useJobs } from "../../hooks/useJobs";
+import { Button } from "@/components/ui/button";
 
 const CareerJoinTeam = () => {
   const navigate = useNavigate();
@@ -66,9 +67,11 @@ const CareerJoinTeam = () => {
               }}
             >
               {hoveredIndex === index && (
-                <button
+                <Button
                   type="button"
-                  className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 border border-foreground p-3 bg-card rounded-full hover:bg-foreground hover:text-background"
+                  variant="outline"
+                  size="icon"
+                  className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border-foreground bg-card p-3 hover:bg-foreground hover:text-background"
                   onClick={(event) => {
                     event.stopPropagation();
                     navigate(`/CareerDetailPage/${job._id}`);
@@ -76,7 +79,7 @@ const CareerJoinTeam = () => {
                   aria-label={`View ${job.position || job.title}`}
                 >
                   <ArrowUpRight />
-                </button>
+                </Button>
               )}
 
               <div className="grid gap-4 md:grid-cols-3" data-aos="fade-up">

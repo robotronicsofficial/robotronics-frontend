@@ -5,6 +5,7 @@ import { BrandIcon } from "../../../components/ui/brand-icons";
 import AppImage from "../../AppImage";
 import bar from "../../../assets/images/shopSurface.webp";
 import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Careerintro = ({ job }) => {
   const navigate = useNavigate();
@@ -35,21 +36,23 @@ const Careerintro = ({ job }) => {
             </h1>
           </Link>
           {/* button */}
-          <button className="flex items-center justify-center w-12 h-12 bg-muted rounded-full border border-border" data-aos="fade-up">
+          <Button type="button" variant="secondary" size="icon" className="size-12 rounded-full border border-border bg-muted" data-aos="fade-up">
             <Menu className="text-muted-foreground" size={24} />
-          </button>
+          </Button>
         </div>
         {/* lower */}
         <div className="lg:flex flex-row justify-between lg:p-10 p-5 lg:gap-y-0 gap-y-10 items-center">
           {/* button */}
           <div className="flex flex-row items-center" data-aos="fade-up">
-            <button
+            <Button
               type="button"
               onClick={() => navigate("/CareerJob")}
-              className="flex items-center justify-center lg:w-12 w-8 lg:h-12 h-8 bg-muted rounded-full border border-border"
+              variant="secondary"
+              size="icon"
+              className="h-8 w-8 rounded-full border border-border bg-muted lg:h-12 lg:w-12"
             >
               <ArrowLeft className="text-muted-foreground" size={24} />
-            </button>
+            </Button>
             <p className="lg:p-3 poppins-regular p-1">Back</p>
           </div>
           {/* social icons */}

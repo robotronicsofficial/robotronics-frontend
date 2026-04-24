@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AppImage from "../AppImage";
 import robot from "../../assets/images/careerTestimonial.webp";
+import { Button } from "@/components/ui/button";
 
 const CareerTestimonials = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -120,18 +121,30 @@ const CareerTestimonials = () => {
         </div>
         {/* Buttons */}
         <div className="flex flex-col gap-x-2">
-          <button
+          <Button
+            type="button"
+            variant="secondary"
+            size="icon"
             onClick={previousTestimonial}
-            className="h-3 w-3 rounded-full bg-card hover:bg-primary"
-          ></button>
-          <button
+            className="size-3 rounded-full bg-card p-0 hover:bg-primary"
+            aria-label="Previous testimonial"
+          />
+          <Button
+            type="button"
+            variant="secondary"
+            size="icon"
             onClick={nextTestimonial}
-            className="h-3 w-3 rounded-full bg-card hover:bg-primary"
-          ></button>
-          <button
+            className="size-3 rounded-full bg-card p-0 hover:bg-primary"
+            aria-label="Next testimonial"
+          />
+          <Button
+            type="button"
+            variant="secondary"
+            size="icon"
             onClick={previousTestimonial}
-            className="h-3 w-3 rounded-full bg-card hover:bg-primary"
-          ></button>
+            className="size-3 rounded-full bg-card p-0 hover:bg-primary"
+            aria-label="Previous testimonial"
+          />
         </div>
       </div>
     </div>
