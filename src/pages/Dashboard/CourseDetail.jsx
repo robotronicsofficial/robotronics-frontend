@@ -18,20 +18,18 @@ import { FaLaptopCode } from "react-icons/fa";
 import { MdAssignment } from "react-icons/md";
 import { AiOutlineRight } from "react-icons/ai";
 import ChatSupport from "../../component/ChatSupport"
-import {
-  buildChildSessionRequest,
-  getActiveChildSession,
-} from "../../utils/childSessionRequest";
+import { getActiveChildSession } from "../../utils/childSessionRequest";
 import { openExternalUrl } from "../../utils/openExternalUrl";
 import {
-  normalizeChildCourse,
-  normalizeCourseDetail,
-} from "../../lib/subscription";
-import { resolveBackendUrl } from "../../lib/api";
+  downloadChildCourseContent,
+  fetchChildCourseDetail,
+  updateChildCourseProgress,
+} from "../../lib/childCourses";
 import VideoPlayer from "../../component/VideoPlayer";
 import CenteredState from "../../components/layout/CenteredState";
 import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
 import { Spinner } from "../../components/ui/spinner";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const MAX_ATTEMPTS = {
   BASIC: 2,
@@ -39,12 +37,6 @@ const MAX_ATTEMPTS = {
 };
 
 const statusIconClassName = "mr-3 size-5 shrink-0";
-
-const toAssetUrl = (path) => {
-  if (!path) return "";
-  if (path.startsWith("http://") || path.startsWith("https://")) return path;
-  return resolveBackendUrl(path);
-};
 
 const isExternalUrl = (value) => /^https?:\/\//i.test(String(value || ""));
 const isProtectedCourseDownload = (value) =>
@@ -82,29 +74,11 @@ const CourseDetail = () => {
           throw new Error("Child session not found. Please re-enter the PIN.");
         }
 
-        const childCourseRequest = buildChildSessionRequest({
-          method: "GET",
-          childId,
-        });
+        const courseDetail = await fetchChildCourseDetail({ childId, courseId: id });
 
-        if (!childCourseRequest) {
-          throw new Error("Child session not found. Please re-enter the PIN.");
-        }
-
-        const childCourseRes = await fetch(
-          resolveBackendUrl(`/getChildById/${childId}/ByCourseId/${id}`),
-          childCourseRequest
-        );
-
-        if (!childCourseRes.ok) {
-          throw new Error('Failed to load course details');
-        }
-
-        const childCoursePayload = await childCourseRes.json();
-
-        setCourseData(normalizeCourseDetail(childCoursePayload?.courseDetails));
-        setChildCourseData(normalizeChildCourse(childCoursePayload?.course));
-        setPlan(childCoursePayload?.plan || null);
+        setCourseData(courseDetail.courseDetails);
+        setChildCourseData(courseDetail.childCourse);
+        setPlan(courseDetail.plan);
       } catch (err) {
         console.error(err);
         setError(err.message);
@@ -141,47 +115,6 @@ const CourseDetail = () => {
     return true;
   };
 
-const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) => {
-  try {
-    if (!childId) {
-      throw new Error("Child session not found. Please re-enter the PIN.");
-    }
-
-    const childSessionRequest = buildChildSessionRequest({
-      method: 'PUT',
-      childId,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: {
-        courseId,
-        sectionIndex,
-        answers,
-      },
-    });
-
-    if (!childSessionRequest) {
-      throw new Error("Child session not found. Please re-enter the PIN.");
-    }
-
-    const response = await fetch(
-      resolveBackendUrl(`/updateChildCourse/${childId}`),
-      childSessionRequest
-    );
-
-    if (!response.ok) {
-      const errorPayload = await response.json().catch(() => null);
-      throw new Error(errorPayload?.message || 'Failed to update child course progress');
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error updating child course:', error);
-    throw error;
-  }
-};
-
   const toggleModule = (moduleId) => {
     setExpandedModules((prev) => ({
       ...prev,
@@ -209,28 +142,12 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
       return;
     }
 
-    const childSessionRequest = buildChildSessionRequest({
-      method: "GET",
-      childId,
-    });
-
-    if (!childSessionRequest) {
-      setError("Child session not found. Please re-enter the PIN.");
-      return;
-    }
-
     try {
-      const response = await fetch(
-        resolveBackendUrl(`/child/${childId}/courses/${id}/content/${contentId}/download`),
-        childSessionRequest
-      );
-
-      if (!response.ok) {
-        const errorPayload = await response.json().catch(() => null);
-        throw new Error(errorPayload?.message || "Failed to download course content");
-      }
-
-      const blob = await response.blob();
+      const blob = await downloadChildCourseContent({
+        childId,
+        courseId: id,
+        contentId,
+      });
       const objectUrl = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = objectUrl;
@@ -294,12 +211,13 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
 
     try {
       const responsePayload = await updateChildCourseProgress({
+        childId,
         courseId: id,
         sectionIndex,
         answers,
       });
 
-      setChildCourseData(normalizeChildCourse(responsePayload?.data));
+      setChildCourseData(responsePayload?.data);
       setQuizResults(prev => ({
         ...prev,
         [sectionIndex]: {
@@ -358,7 +276,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
               >
                 <div className="">
                   <img
-                    src={toAssetUrl(courseData.banner)}
+                    src={resolveBackendAssetUrl(courseData.banner)}
                     alt="Course"
                     className="w-full h-[50vw] sm:h-[40vw] md:h-[30vw] lg:h-[23.8vw] object-center rounded-2xl shadow-md"
                   />
@@ -563,7 +481,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                               {/* Content Items */}
                               <div className="space-y-3">
                                 {(module.contents || []).map((content) => {
-                                  const fileUrl = toAssetUrl(content.file);
+                                  const fileUrl = resolveBackendAssetUrl(content.file);
 
                                   return (
                                     <div

@@ -163,3 +163,20 @@ export const sendFormData = (path, { body, headers, ...options } = {}) =>
     headers: buildJsonHeaders(headers),
     body,
   });
+
+export const fetchBackendBlob = async (path, options = {}) => {
+  const response = await fetch(resolveBackendUrl(path), options);
+
+  if (!response.ok) {
+    const contentType = response.headers.get("content-type") || "";
+    const payload = contentType.includes("application/json")
+      ? await response.json().catch(() => null)
+      : null;
+    const error = new Error(getApiErrorMessage(response, payload));
+    error.status = response.status;
+    error.payload = payload;
+    throw error;
+  }
+
+  return response.blob();
+};

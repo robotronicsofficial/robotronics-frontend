@@ -1,6 +1,10 @@
-import { fetchBackendJson } from "./api";
+import { fetchBackendBlob, fetchBackendJson } from "./api";
 import { fetchCourses } from "./courses";
-import { ensureArray } from "./subscription";
+import {
+  ensureArray,
+  normalizeChildCourse,
+  normalizeCourseDetail,
+} from "./subscription";
 import { buildChildSessionRequest } from "../utils/childSessionRequest";
 
 const buildRequiredChildRequest = ({ childId, ...request }) => {
@@ -69,3 +73,45 @@ export const fetchChildCourses = async (childId) => {
 
   return extractActiveCourses(payload);
 };
+
+export const fetchChildCourseDetail = async ({ childId, courseId }) => {
+  const payload = await fetchBackendJson(
+    `/getChildById/${childId}/ByCourseId/${courseId}`,
+    buildRequiredChildRequest({ method: "GET", childId }),
+  );
+
+  return {
+    courseDetails: normalizeCourseDetail(payload?.courseDetails),
+    childCourse: normalizeChildCourse(payload?.course),
+    plan: payload?.plan || null,
+  };
+};
+
+export const updateChildCourseProgress = async ({ childId, courseId, sectionIndex, answers }) => {
+  const payload = await fetchBackendJson(
+    `/updateChildCourse/${childId}`,
+    buildRequiredChildRequest({
+      method: "PUT",
+      childId,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: {
+        courseId,
+        sectionIndex,
+        answers,
+      },
+    }),
+  );
+
+  return {
+    ...payload,
+    data: normalizeChildCourse(payload?.data),
+  };
+};
+
+export const downloadChildCourseContent = ({ childId, courseId, contentId }) =>
+  fetchBackendBlob(
+    `/child/${childId}/courses/${courseId}/content/${contentId}/download`,
+    buildRequiredChildRequest({ method: "GET", childId }),
+  );
