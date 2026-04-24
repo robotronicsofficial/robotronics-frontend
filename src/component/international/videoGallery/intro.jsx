@@ -5,7 +5,7 @@ const Intro = () => {
   return (
     <div className="videoG">
       <div className={getHeaderOffsetClass("eventHero")}>
-        <h1 className="text-background text-3xl sm:text-4xl md:text-5xl text-center shopbgcolor poppins-semibold bg-background-800 bg-opacity-40"data-aos="fade-up">
+        <h1 className="text-background text-3xl sm:text-4xl md:text-5xl text-center shopbgcolor poppins-semibold bg-muted bg-opacity-40"data-aos="fade-up">
           EVENT
         </h1>
       </div>

@@ -99,7 +99,7 @@ const Shop = () => {
 
   if (loading) return <div className="text-center py-20">Loading...</div>;
   if (error)
-    return <div className="text-center py-20 text-red-500">We couldn&apos;t load courses right now.</div>;
+    return <div className="text-center py-20 text-destructive">We couldn&apos;t load courses right now.</div>;
 
   return (
     <section className="bg-background py-8 md:py-12">
@@ -131,14 +131,14 @@ const Shop = () => {
             <button
               onClick={handlePrevious}
               disabled={currentIndex === 0}
-              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-foreground hover:bg-background-100 transition-colors disabled:opacity-50"
+              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-foreground hover:bg-muted transition-colors disabled:opacity-50"
             >
               <img src={leftArrow} alt="Previous" className="w-6 h-6" />
             </button>
             <button
               onClick={handleNext}
               disabled={currentIndex + servicesPerPage >= services.length}
-              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-foreground hover:bg-background-100 transition-colors disabled:opacity-50"
+              className="flex w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 justify-center items-center rounded-full border-2 border-foreground hover:bg-muted transition-colors disabled:opacity-50"
             >
               <img src={rightArrow} alt="Next" className="w-6 h-6" />
             </button>
@@ -158,7 +158,7 @@ const Shop = () => {
         <div className="flex justify-center">
           <button
             onClick={() => navigate("/subscriptions")}
-            className="bg-primary hover:bg-primary-600 text-foreground text-lg sm:text-xl font-bold poppins-bold px-8 py-3 rounded-full transition-colors shadow-md hover:shadow-lg"
+            className="bg-primary hover:bg-primary text-foreground text-lg sm:text-xl font-bold poppins-bold px-8 py-3 rounded-full transition-colors shadow-md hover:shadow-lg"
           >
             Get Enrolled
           </button>

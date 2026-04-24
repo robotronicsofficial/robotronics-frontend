@@ -57,7 +57,7 @@ const MyRobot = () => {
         {loading ? (
           <div className="px-8 lg:px-14 py-12 text-foreground">Loading saved items...</div>
         ) : error ? (
-          <div className="px-8 lg:px-14 py-12 text-red-600">{error.message}</div>
+          <div className="px-8 lg:px-14 py-12 text-destructive">{error.message}</div>
         ) : items.length === 0 ? (
           <div className="flex flex-col items-start gap-4 px-8 py-12 text-foreground lg:px-14">
             <p>No saved items yet.</p>
@@ -80,7 +80,7 @@ const MyRobot = () => {
                   <button
                     type="button"
                     onClick={() => handleRemove(item)}
-                    className="text-muted-foreground-600 transition hover:text-red-600"
+                    className="text-muted-foreground transition hover:text-destructive"
                     aria-label={`Remove ${item.name || "item"} from saved items`}
                   >
                     <FaTimes />
@@ -112,7 +112,7 @@ const MyRobot = () => {
                   <button
                     type="button"
                     onClick={() => navigate(getCommerceItemRoute(item))}
-                    className="rounded-lg bg-orange-500 px-4 py-2 font-semibold text-background"
+                    className="rounded-lg bg-warning px-4 py-2 font-semibold text-background"
                   >
                     {item?.itemType === "course" ? "View course" : "View product"}
                   </button>

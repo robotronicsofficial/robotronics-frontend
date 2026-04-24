@@ -5,11 +5,11 @@ const Error = () => {
     <div className="bg-background">
       <div className="flex h-svh flex-col items-center justify-center gap-10" data-aos="fade-up">
         <div className="flex items-center justify-center gap-5">
-          <h1 className="text-6xl poppins-extrabold text-muted-foreground-600">404</h1>
-          <h2 className="text-6xl poppins-extrabold text-muted-foreground-600">Not Found</h2>
+          <h1 className="text-6xl poppins-extrabold text-muted-foreground">404</h1>
+          <h2 className="text-6xl poppins-extrabold text-muted-foreground">Not Found</h2>
         </div>
         <div className="text-center">
-          <p className="text-xl poppins-light text-muted-foreground-600">
+          <p className="text-xl poppins-light text-muted-foreground">
             Your visited page was not found. you may go home page.
             <br />
             <br />

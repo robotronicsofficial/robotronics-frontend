@@ -61,7 +61,7 @@ const MyAllCourses = () => {
   if (loading) {
     return (
       <CenteredState className="h-screen">
-        <Spinner className="size-12 text-primary-500" />
+        <Spinner className="size-12 text-primary" />
       </CenteredState>
     );
   }
@@ -69,7 +69,7 @@ const MyAllCourses = () => {
   if (error) {
     return (
       <CenteredState className="h-screen">
-        <div className="text-red-500">Error: {error.message}</div>
+        <div className="text-destructive">Error: {error.message}</div>
       </CenteredState>
     );
   }
@@ -107,12 +107,12 @@ const MyAllCourses = () => {
                   />
                   <div className="px-6 md:px-2 py-2 flex-grow flex flex-col gap-2">
                     <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                      <p className="text-muted-foreground-700 text-wrap text-center px-4 py-1 rounded-full bg-muted text-base mb-4 md:mb-0">
+                      <p className="text-muted-foreground text-wrap text-center px-4 py-1 rounded-full bg-muted text-base mb-4 md:mb-0">
                         {course.category}
                       </p>
                       <div className="flex items-center">
-                        <FaStar className="text-primary-500" />
-                        <p className="text-muted-foreground-700 poppins-light text-base ml-2">
+                        <FaStar className="text-primary" />
+                        <p className="text-muted-foreground poppins-light text-base ml-2">
                           ({course.reviews || 0} Rating)
                         </p>
                       </div>
@@ -136,7 +136,7 @@ const MyAllCourses = () => {
             ))
           ) : (
             <div className="w-full text-center py-10">
-              <p className="text-muted-foreground-600 text-lg">
+              <p className="text-muted-foreground text-lg">
                 You don't have any active courses yet.
               </p>
             </div>
@@ -152,8 +152,8 @@ const MyAllCourses = () => {
                 disabled={currentPage === 1}
                 className={`py-2 px-4 rounded-full ${
                   currentPage === 1
-                    ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
-                    : "bg-background-300 hover:bg-background-400 text-foreground"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-muted hover:bg-muted text-foreground"
                 }`}
               >
                 Previous
@@ -166,7 +166,7 @@ const MyAllCourses = () => {
                   className={`py-2 px-4 rounded-full ${
                     currentPage === number
                       ? "bg-primary text-foreground font-bold"
-                      : "bg-background-200 hover:bg-background-300 text-foreground"
+                      : "bg-muted hover:bg-muted text-foreground"
                   }`}
                 >
                   {number}
@@ -178,8 +178,8 @@ const MyAllCourses = () => {
                 disabled={currentPage === totalPages}
                 className={`py-2 px-4 rounded-full ${
                   currentPage === totalPages
-                    ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
-                    : "bg-background-300 hover:bg-background-400 text-foreground"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-muted hover:bg-muted text-foreground"
                 }`}
               >
                 Next

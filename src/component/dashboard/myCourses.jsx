@@ -89,7 +89,7 @@ const MyCourses = () => {
   if (loading) {
     return (
       <CenteredState className="h-screen">
-        <Spinner className="size-12 text-primary-500" />
+        <Spinner className="size-12 text-primary" />
       </CenteredState>
     );
   }
@@ -97,7 +97,7 @@ const MyCourses = () => {
   if (error) {
     return (
       <CenteredState className="h-screen">
-        <div className="text-red-500">Error: {error.message}</div>
+        <div className="text-destructive">Error: {error.message}</div>
       </CenteredState>
     );
   }
@@ -120,16 +120,16 @@ const MyCourses = () => {
         <div className="mb-6 flex flex-col items-center gap-2">
           <div className="text-lg font-semibold mb-2">
             {hasFixedCourseLimit ? (
-              <span className="text-blue-600">Your subscription includes {maxCourses} course selections</span>
+              <span className="text-info">Your subscription includes {maxCourses} course selections</span>
             ) : (
-              <span className="text-green-600">Your subscription includes the full available course catalog</span>
+              <span className="text-success">Your subscription includes the full available course catalog</span>
             )}
           </div>
 
           <button
             onClick={saveSelectedCourses}
             className={`py-2 px-6 rounded-full shadow-xl ${!canSaveCourses
-                ? "bg-background-400 cursor-not-allowed"
+                ? "bg-muted cursor-not-allowed"
                 : "bg-primary hover:bg-accent"
               } transition-colors`}
             disabled={!canSaveCourses || saveChildCoursesMutation.isPending}
@@ -158,7 +158,7 @@ const MyCourses = () => {
               className="relative w-full sm:w-1/2 lg:w-1/3 px-4 mb-6 bg-card p-6"
             >
               <div className={`rounded-xl overflow-hidden shadow-lg h-full flex flex-col transition-all ${selectedCourses.includes(course._id)
-                ? "border-4 border-primary-400 transform scale-[1.02]"
+                ? "border-4 border-primary transform scale-[1.02]"
                 : "border hover:shadow-md"
                 }`}>
                 <img
@@ -171,12 +171,12 @@ const MyCourses = () => {
                 />
                 <div className="px-6 md:px-2 py-2 flex-grow flex flex-col gap-2">
                   <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                    <p className="text-muted-foreground-700 text-wrap text-center px-4 py-1 rounded-full bg-muted text-base mb-4 md:mb-0">
+                    <p className="text-muted-foreground text-wrap text-center px-4 py-1 rounded-full bg-muted text-base mb-4 md:mb-0">
                       {course.category}
                     </p>
                     <div className="flex items-center">
-                      <FaStar className="text-primary-500" />
-                      <p className="text-muted-foreground-700 poppins-light text-base ml-2">
+                      <FaStar className="text-primary" />
+                      <p className="text-muted-foreground poppins-light text-base ml-2">
                         ({course.reviews || 0} Rating)
                       </p>
                     </div>
@@ -192,8 +192,8 @@ const MyCourses = () => {
                   <button
                     onClick={() => toggleCourseSelection(course._id)}
                     className={`py-2 px-6 rounded-full transition-colors ${selectedCourses.includes(course._id)
-                      ? "bg-red-500 hover:bg-red-600 text-background"
-                      : "bg-green-500 hover:bg-green-600 text-background"
+                      ? "bg-destructive hover:bg-destructive text-background"
+                      : "bg-success hover:bg-success text-background"
                       }`}
                   >
                     {selectedCourses.includes(course._id)
@@ -222,8 +222,8 @@ const MyCourses = () => {
               onClick={prevPage}
               disabled={currentPage === 1}
               className={`py-2 px-4 rounded-full ${currentPage === 1
-                ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
-                : "bg-background-300 hover:bg-background-400 text-foreground"
+                ? "bg-muted text-muted-foreground cursor-not-allowed"
+                : "bg-muted hover:bg-muted text-foreground"
                 }`}
             >
               Previous
@@ -235,7 +235,7 @@ const MyCourses = () => {
                 onClick={() => paginate(number)}
                 className={`py-2 px-4 rounded-full ${currentPage === number
                   ? "bg-primary text-foreground font-bold"
-                  : "bg-background-200 hover:bg-background-300 text-foreground"
+                  : "bg-muted hover:bg-muted text-foreground"
                   }`}
               >
                 {number}
@@ -246,8 +246,8 @@ const MyCourses = () => {
               onClick={nextPage}
               disabled={currentPage === totalPages}
               className={`py-2 px-4 rounded-full ${currentPage === totalPages
-                ? "bg-background-300 text-muted-foreground-500 cursor-not-allowed"
-                : "bg-background-300 hover:bg-background-400 text-foreground"
+                ? "bg-muted text-muted-foreground cursor-not-allowed"
+                : "bg-muted hover:bg-muted text-foreground"
                 }`}
             >
               Next

@@ -20,7 +20,7 @@ const CareerDetailPage = () => {
   if (error && !job) {
     return (
       <PageState>
-        <p className="text-red-500">{getJobsErrorMessage(error, { detail: true })}</p>
+        <p className="text-destructive">{getJobsErrorMessage(error, { detail: true })}</p>
         <Link
           to="/CareerJob"
           className="mt-6 inline-flex rounded-full bg-foreground px-5 py-3 text-background transition hover:opacity-90"

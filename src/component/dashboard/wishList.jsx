@@ -37,7 +37,7 @@ const WishListD = () => {
   }
 
   if (error) {
-    return <CenteredState className="bg-background min-h-screen text-red-500">{error.message}</CenteredState>;
+    return <CenteredState className="bg-background min-h-screen text-destructive">{error.message}</CenteredState>;
   }
 
   return (
@@ -51,7 +51,7 @@ const WishListD = () => {
       <div data-aos="fade-up">
         <h1 className="ml-14 text-2xl text-foreground poppins-bold">WishList</h1>
         {items.length === 0 ? (
-          <div className="px-14 py-12 text-muted-foreground-500">No saved items yet.</div>
+          <div className="px-14 py-12 text-muted-foreground">No saved items yet.</div>
         ) : (
           items.map((item) => (
             <div
@@ -63,7 +63,7 @@ const WishListD = () => {
                   <button
                     type="button"
                     onClick={() => handleRemove(item)}
-                    className="text-muted-foreground-600 transition hover:text-red-600"
+                    className="text-muted-foreground transition hover:text-destructive"
                     aria-label={`Remove ${item.name}`}
                   >
                     <FaTimes />
@@ -102,7 +102,7 @@ const WishListD = () => {
                   <button
                     type="button"
                     onClick={() => handleMoveToCart(item)}
-                    className="rounded-lg bg-orange-500 px-4 py-2 text-background poppins-bold"
+                    className="rounded-lg bg-warning px-4 py-2 text-background poppins-bold"
                   >
                     Add to Cart
                   </button>

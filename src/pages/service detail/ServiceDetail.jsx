@@ -22,7 +22,7 @@ const ServiceDetail = () => {
   if (error || !service) {
     return (
       <PageState>
-        <p className="text-lg text-red-500">{error?.message || "Service not found"}</p>
+        <p className="text-lg text-destructive">{error?.message || "Service not found"}</p>
       </PageState>
     );
   }

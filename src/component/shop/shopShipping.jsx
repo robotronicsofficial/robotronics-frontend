@@ -124,8 +124,8 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           <div
             className={`rounded-[20px] border p-4 text-sm ${
               submitStatus.type === "success"
-                ? "border-green-200 bg-green-50 text-green-700"
-                : "border-red-200 bg-red-50 text-red-700"
+                ? "border-success/20 bg-success/10 text-success"
+                : "border-destructive/20 bg-destructive/10 text-destructive"
             }`}
           >
             {submitStatus.message}

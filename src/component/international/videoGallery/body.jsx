@@ -200,7 +200,7 @@ const Intro = () => {
                 className={`cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
                   selectedCategory === category.trim().toLowerCase()
                     ? "font-semibold text-accent"
-                    : "text-muted-foreground-600 hover:text-muted-foreground-400"
+                    : "text-muted-foreground hover:text-muted-foreground"
                 }`}
                 onClick={() => handleCategoryClick(category)}
               >
@@ -226,7 +226,7 @@ const Intro = () => {
                   className={`cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
                     selectedCategory === category.trim().toLowerCase()
                       ? "font-semibold text-accent"
-                      : "text-muted-foreground-600 hover:text-muted-foreground-400"
+                      : "text-muted-foreground hover:text-muted-foreground"
                   }`}
                   onClick={() => handleCategoryClick(category)}
                 >

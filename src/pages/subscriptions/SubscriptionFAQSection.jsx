@@ -68,7 +68,7 @@ const SubscriptionFAQSection = () => {
 
   return (
     <div className="px-4 py-10 bg-background sm:px-24">
-  <div className="bg-background-100 p-6 sm:p-10 rounded-xl bg-muted py-12">
+  <div className="bg-muted p-6 sm:p-10 rounded-xl bg-muted py-12">
     <h2 className="text-2xl font-bold mb-6 text-center sm:text-left poppins-bold">
       Frequently Asked Questions
     </h2>
@@ -82,13 +82,13 @@ const SubscriptionFAQSection = () => {
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold poppins-bold">{faq.question}</h3>
             {openIndex === index ? (
-              <FaChevronDown className="text-muted-foreground-500" />
+              <FaChevronDown className="text-muted-foreground" />
             ) : (
-              <FaChevronRight className="text-muted-foreground-500" />
+              <FaChevronRight className="text-muted-foreground" />
             )}
           </div>
           {openIndex === index && (
-            <p className="mt-3 text-muted-foreground-600 poppins-light">{faq.answer}</p>
+            <p className="mt-3 text-muted-foreground poppins-light">{faq.answer}</p>
           )}
         </div>
       ))}

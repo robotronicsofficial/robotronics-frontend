@@ -43,7 +43,7 @@ const SubscriptionPlans = () => {
           Course Membership
         </h2>
 
-        <div className="flex justify-center bg-background-200 py-10 px-4 w-full mt-6">
+        <div className="flex justify-center bg-muted py-10 px-4 w-full mt-6">
           <div className="w-full max-w-xl min-h-[560px] bg-muted rounded-2xl p-6 flex flex-col shadow-lg items-center">
             <h3 className="text-2xl font-bold mb-4 text-center">
               {membership.planName || "Course Membership"}
@@ -60,7 +60,7 @@ const SubscriptionPlans = () => {
                 onClick={() => setIsAnnual((currentValue) => !currentValue)}
                 aria-label="Toggle billing cycle"
               >
-                <span className="block w-5 h-5 bg-orange-400 rounded-full" />
+                <span className="block w-5 h-5 bg-warning rounded-full" />
               </button>
 
               <span>Annual</span>
@@ -74,13 +74,13 @@ const SubscriptionPlans = () => {
               {membership.description}
             </p>
             {isAnnual && annualSavings > 0 ? (
-              <p className="text-center mb-4 text-wrap text-green-700 font-semibold poppins-bold">
+              <p className="text-center mb-4 text-wrap text-success font-semibold poppins-bold">
                 Save PKR {annualSavings.toLocaleString()} with annual billing.
               </p>
             ) : null}
 
             <button
-              className="bg-orange-400 text-background py-2 px-6 rounded-lg mb-4 w-fit poppins-light"
+              className="bg-warning text-background py-2 px-6 rounded-lg mb-4 w-fit poppins-light"
               onClick={() => handleRegisterClick(membership)}
             >
               Start Membership
@@ -92,7 +92,7 @@ const SubscriptionPlans = () => {
                   key={index}
                   className="flex items-center gap-2 poppins-light"
                 >
-                  <span className="font-bold text-orange-500">+</span>
+                  <span className="font-bold text-warning">+</span>
                   <span>{feature}</span>
                 </li>
               ))}

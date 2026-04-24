@@ -37,7 +37,7 @@ const Search = () => {
   }, [products, searchTerm, category]);
 
   return (
-    <div className="min-h-screen bg-background-50 text-background p-4">
+    <div className="min-h-screen bg-muted text-background p-4">
       {/* Search Bar and Filters */}
       <div className="rounded-2xl bg-card p-6 text-foreground shadow-sm">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -56,13 +56,13 @@ const Search = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search products..."
-            className="w-full rounded-xl border border-border-300 px-4 py-3 text-foreground outline-none focus:border-foreground"
+            className="w-full rounded-xl border border-border px-4 py-3 text-foreground outline-none focus:border-foreground"
             aria-label="Search products"
           />
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full rounded-xl border border-border-300 px-4 py-3 text-foreground outline-none focus:border-foreground"
+            className="w-full rounded-xl border border-border px-4 py-3 text-foreground outline-none focus:border-foreground"
             aria-label="Select a category"
           >
             {categories.map((cat) => (
@@ -81,7 +81,7 @@ const Search = () => {
             Loading live products...
           </div>
         ) : error ? (
-          <div className="rounded-2xl bg-card p-10 text-center text-red-600 shadow-sm">
+          <div className="rounded-2xl bg-card p-10 text-center text-destructive shadow-sm">
             We couldn&apos;t load products right now.
           </div>
         ) : filteredProducts.length === 0 ? (

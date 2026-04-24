@@ -225,7 +225,7 @@ const CourseDetail = () => {
   if (loading) {
     return (
       <CenteredState className="h-screen">
-        <Spinner className="size-12 text-primary-500" />
+        <Spinner className="size-12 text-primary" />
       </CenteredState>
     );
   }
@@ -233,7 +233,7 @@ const CourseDetail = () => {
   if (error) {
     return (
       <CenteredState className="h-screen">
-        <div className="text-red-500 poppins-medium">{error.message}</div>
+        <div className="text-destructive poppins-medium">{error.message}</div>
       </CenteredState>
     );
   }
@@ -241,7 +241,7 @@ const CourseDetail = () => {
   if (!courseData || !childCourseData) {
     return (
       <CenteredState className="h-screen">
-        <div className="text-muted-foreground-500 poppins-medium">Course data not found</div>
+        <div className="text-muted-foreground poppins-medium">Course data not found</div>
       </CenteredState>
     );
   }
@@ -249,7 +249,7 @@ const CourseDetail = () => {
   return (
     <div>
       <div className={getHeaderOffsetClass("page", "bg-background")}>
-        <div className="bg-background-100 p-6">
+        <div className="bg-muted p-6">
           <div className="max-w-7xl mx-auto">
             <div className="lg:flex flex-wrap lg:flex-nowrap lg:space-x-6">
               {/* Left Side */}
@@ -267,7 +267,7 @@ const CourseDetail = () => {
                   />
                 </div>
                 <div className="flex items-center gap-8 pt-4">
-                  <span className="bg-background-200 text-muted-foreground-800 text-sm font-medium px-3 py-1 bg-card rounded-full">
+                  <span className="bg-muted text-muted-foreground text-sm font-medium px-3 py-1 bg-card rounded-full">
                     {courseData.category}
                   </span>
                   <div className="flex items-center justify-center gap-2">
@@ -297,7 +297,7 @@ const CourseDetail = () => {
                   </div>
                   <div className="flex items-center space-x-2 text-muted-foreground">
                     <PiGraduationCapLight />
-                    <span className="text-muted-foreground-500 my-2">{courseData.studentsDownloaded ?? 0} Students Enrolled</span>
+                    <span className="text-muted-foreground my-2">{courseData.studentsDownloaded ?? 0} Students Enrolled</span>
                   </div>
 
                   <div className="h-[12vh] w-[40vw] bg-muted flex items-center px-8 justify-between mt-6 rounded-lg text-muted-foreground">
@@ -311,7 +311,7 @@ const CourseDetail = () => {
 
               {/* Right Side with Video */}
               <div className="w-full lg:w-1/3 mt-6 lg:mt-0 space-y-4 bg-accent h-[23.8vw] rounded-2xl">
-                <div className="bg-background-300 w-full h-full rounded-2xl overflow-hidden">
+                <div className="bg-muted w-full h-full rounded-2xl overflow-hidden">
                   <VideoPlayer
                     src={video}
                     title="Course preview video"
@@ -337,7 +337,7 @@ const CourseDetail = () => {
 
           >
             {actionError ? (
-              <div className="mb-4 rounded-lg bg-red-50 p-4 text-sm font-semibold text-red-700">
+              <div className="mb-4 rounded-lg bg-destructive/10 p-4 text-sm font-semibold text-destructive">
                 {actionError}
               </div>
             ) : null}
@@ -390,10 +390,10 @@ const CourseDetail = () => {
                     <div className="flex items-center mb-6">
                       <div className="w-3 h-8 bg-primary rounded mr-3"></div>
                       <div className="flex justify-between items-center w-full">
-                        <h2 className="poppins-bold text-xl text-muted-foreground-800">
+                        <h2 className="poppins-bold text-xl text-muted-foreground">
                           Module {sectionIndex + 1}: {section.name}
                           {!sectionUnlocked && (
-                            <span className="text-red-500 ml-2 text-sm">
+                            <span className="text-destructive ml-2 text-sm">
                               {sectionIndex > 0 && childSections[sectionIndex - 1]?.quiz?.result !== "pass" ?
                                 "(Locked - Complete previous module quiz to unlock)" :
                                 `(Locked - Available from ${sectionDates?.startDate ?
@@ -415,12 +415,12 @@ const CourseDetail = () => {
                       return (
                         <div
                           key={moduleKey}
-                          className={`mb-6 rounded-lg ${sectionUnlocked ? "bg-card" : "bg-background-100 opacity-80"
+                          className={`mb-6 rounded-lg ${sectionUnlocked ? "bg-card" : "bg-muted opacity-80"
                             } transition-colors duration-200`}
                         >
                           {/* Module Header */}
                           <div
-                            className={`p-5 flex justify-between items-center ${sectionUnlocked ? 'cursor-pointer hover:bg-background-50' : 'cursor-not-allowed'
+                            className={`p-5 flex justify-between items-center ${sectionUnlocked ? 'cursor-pointer hover:bg-muted' : 'cursor-not-allowed'
                               } transition-colors duration-200`}
                             onClick={() => sectionUnlocked && toggleModule(moduleKey)}
                           >
@@ -428,19 +428,19 @@ const CourseDetail = () => {
                               {!sectionUnlocked && (
                                 <LockKeyholeIcon
                                   aria-hidden="true"
-                                  className={`${statusIconClassName} text-primary-500`}
+                                  className={`${statusIconClassName} text-primary`}
                                 />
                               )}
                               <span className="poppins-bold mr-3 text-primary">
                                 <FaCirclePlay className="text-2xl" />
                               </span>
-                              <h3 className="poppins-bold text-muted-foreground-800">
-                                <span className="text-primary-500">Lecture {moduleIndex + 1}:</span> {module.name}
+                              <h3 className="poppins-bold text-muted-foreground">
+                                <span className="text-primary">Lecture {moduleIndex + 1}:</span> {module.name}
                               </h3>
                             </div>
                             <div className="flex items-center space-x-6">
                               {sectionUnlocked && (
-                                <span className="poppins-bold text-primary text-sm bg-background-100 px-3 py-1 rounded-full">
+                                <span className="poppins-bold text-primary text-sm bg-muted px-3 py-1 rounded-full">
                                   Preview
                                 </span>
                               )}
@@ -449,7 +449,7 @@ const CourseDetail = () => {
 
                           {/* Module Content (collapsible) */}
                           {expandedModules[moduleKey] && sectionUnlocked && (
-                            <div className="px-6 py-4 bg-background-50 border-t border-border-200">
+                            <div className="px-6 py-4 bg-muted border-t border-border">
                               {/* Learning Objectives */}
                               {module.learningObjectives && module.learningObjectives.length > 0 && (
                                 <div className="mb-6 p-4 bg-background rounded-lg border border-border">
@@ -461,7 +461,7 @@ const CourseDetail = () => {
                                   <ul className="space-y-2">
                                     {module.learningObjectives.map((obj, idx) => (
                                       <li key={idx} className="flex items-start">
-                                        <span className="poppins-light text-muted-foreground-700">• {obj}</span>
+                                        <span className="poppins-light text-muted-foreground">• {obj}</span>
                                       </li>
                                     ))}
                                   </ul>
@@ -505,7 +505,7 @@ const CourseDetail = () => {
                                       </div>
                                       <div className="flex items-center space-x-4">
                                         {content.type === "video" && (
-                                          <span className="poppins-medium text-primary text-sm hover:text-primary-600">
+                                          <span className="poppins-medium text-primary text-sm hover:text-primary">
                                             10 min
                                           </span>
                                         )}
@@ -513,7 +513,7 @@ const CourseDetail = () => {
                                           <button
                                             type="button"
                                             onClick={() => handleDownloadContent(content)}
-                                            className="flex items-center poppins-medium text-primary text-sm hover:text-primary-600"
+                                            className="flex items-center poppins-medium text-primary text-sm hover:text-primary"
                                           >
                                             <FiDownload className="mr-1" />
                                             Download
@@ -532,9 +532,9 @@ const CourseDetail = () => {
 
                     {/* Quiz Section for the Module */}
                     {quizQuestions.length > 0 && (
-                      <div className={`mt-8 rounded-lg p-6 border ${quizCompleted ? 'border-green-200 bg-green-50' :
-                        attemptsExhausted ? 'border-red-200 bg-red-50' :
-                          'border-blue-200 bg-background-50'
+                      <div className={`mt-8 rounded-lg p-6 border ${quizCompleted ? 'border-success/20 bg-success/10' :
+                        attemptsExhausted ? 'border-destructive/20 bg-destructive/10' :
+                          'border-info/20 bg-muted'
                         } ${!sectionUnlocked ? 'opacity-60' : ''}`}>
                         <div className="flex items-center mb-4">
                           <div className="w-3 h-8 bg-primary rounded mr-3"></div>
@@ -548,10 +548,10 @@ const CourseDetail = () => {
 
                         {attemptsExhausted ? (
                           <div className="p-4 bg-card rounded-lg shadow-sm">
-                            <div className="poppins-bold text-red-600 text-lg mb-2">
+                            <div className="poppins-bold text-destructive text-lg mb-2">
                               You&apos;ve used all {maxAttempts} attempts for today.
                             </div>
-                            <div className="poppins-light text-muted-foreground-700">
+                            <div className="poppins-light text-muted-foreground">
                               {childPlan === 'basic' ?
                                 "You can try again tomorrow with fresh attempts." :
                                 "You can continue attempting this quiz as you have unlimited attempts."}
@@ -561,32 +561,32 @@ const CourseDetail = () => {
                           <div className="bg-card rounded-lg shadow-sm overflow-hidden">
                             {/* Quiz Header */}
                             <div
-                              className="p-4 flex justify-between items-center cursor-pointer hover:bg-background-50 transition-colors duration-200"
+                              className="p-4 flex justify-between items-center cursor-pointer hover:bg-muted transition-colors duration-200"
                               onClick={() => sectionUnlocked && toggleModule(`quiz-${sectionIndex}`)}
                             >
                               <div className="flex items-center">
                                 {!sectionUnlocked ? (
                                   <LockKeyholeIcon
                                     aria-hidden="true"
-                                    className={`${statusIconClassName} text-primary-500`}
+                                    className={`${statusIconClassName} text-primary`}
                                   />
                                 ) : quizCompleted ? (
                                   <CheckIcon
                                     aria-hidden="true"
-                                    className={`${statusIconClassName} text-green-500`}
+                                    className={`${statusIconClassName} text-success`}
                                   />
                                 ) : quizAttempted ? (
                                   <RotateCcwIcon
                                     aria-hidden="true"
-                                    className={`${statusIconClassName} text-orange-500`}
+                                    className={`${statusIconClassName} text-warning`}
                                   />
                                 ) : (
                                   <ClipboardListIcon
                                     aria-hidden="true"
-                                    className={`${statusIconClassName} text-primary-500`}
+                                    className={`${statusIconClassName} text-primary`}
                                   />
                                 )}
-                                <h4 className="poppins-medium text-muted-foreground-800">
+                                <h4 className="poppins-medium text-muted-foreground">
                                   Test your knowledge from this module
                                   {quizCompleted && " (Completed)"}
                                   {quizAttempted && !quizCompleted && (
@@ -602,7 +602,7 @@ const CourseDetail = () => {
                                 </h4>
                               </div>
                               <div className="flex items-center space-x-4">
-                                <span className="poppins-light text-sm text-muted-foreground-500 bg-background-100 px-3 py-1 rounded-full">
+                                <span className="poppins-light text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full">
                                   {quizQuestions.length} questions
                                 </span>
                                 {sectionUnlocked && (
@@ -619,10 +619,10 @@ const CourseDetail = () => {
 
                             {/* Quiz Content */}
                             {expandedModules[`quiz-${sectionIndex}`] && sectionUnlocked && (
-                              <div className="px-6 py-4 bg-background-50 border-t border-border-200">
+                              <div className="px-6 py-4 bg-muted border-t border-border">
                                 {showQuizResults ? (
                                   <div className="bg-card p-4 rounded-lg shadow-sm mb-4">
-                                    <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-green-600' : 'text-red-600'}`}>
+                                    <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-success' : 'text-destructive'}`}>
                                       Quiz Results: {childSection.quiz.obtainedScore}/{quizQuestions.length}
                                       {quizCompleted ? " (Passed)" : " (Failed - Score at least 60% to unlock next module)"}
                                     </div>
@@ -638,10 +638,10 @@ const CourseDetail = () => {
                                             <div className="poppins-medium mb-1">
                                               {qIndex + 1}. {question.questionText}
                                             </div>
-                                            <div className="poppins-light text-sm text-muted-foreground-600 mb-1">
+                                            <div className="poppins-light text-sm text-muted-foreground mb-1">
                                               Your answer: {userAnswer}
                                             </div>
-                                            <div className={`flex items-center gap-1 poppins-medium text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                                            <div className={`flex items-center gap-1 poppins-medium text-sm ${isCorrect ? 'text-success' : 'text-destructive'}`}>
                                               {isCorrect ? (
                                                 <>
                                                   <CheckIcon aria-hidden="true" className="size-4" />
@@ -664,7 +664,7 @@ const CourseDetail = () => {
                                         childSection.quiz.lastAttemptDate &&
                                         isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) &&
                                         childSection.quiz.attempts >= maxAttempts ? (
-                                        <div className="mt-4 poppins-medium text-muted-foreground-600">
+                                        <div className="mt-4 poppins-medium text-muted-foreground">
                                           You&apos;ve used all {maxAttempts} attempts for today. Try again tomorrow.
                                         </div>
                                       ) : (
@@ -689,7 +689,7 @@ const CourseDetail = () => {
                                               [sectionIndex]: true
                                             }));
                                           }}
-                                          className="mt-4 poppins-medium text-blue-600 hover:text-blue-800"
+                                          className="mt-4 poppins-medium text-info hover:text-info"
                                         >
                                           {childPlan === 'basic' ?
                                             (isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) ?
@@ -703,7 +703,7 @@ const CourseDetail = () => {
                                 ) : (
                                   <div className="space-y-4">
                                     {childPlan === 'basic' && (
-                                      <div className="poppins-medium text-sm text-muted-foreground-600 mb-2">
+                                      <div className="poppins-medium text-sm text-muted-foreground mb-2">
                                         Attempt {childSection.quiz.attempts + 1} of {maxAttempts} today
                                       </div>
                                     )}
@@ -721,7 +721,7 @@ const CourseDetail = () => {
                                                 value={option}
                                                 checked={quizAnswers[`${sectionIndex}-${question._id}`] === option}
                                                 onChange={() => handleQuizAnswer(sectionIndex, question._id, option)}
-                                                className="text-blue-600 focus:ring-blue-500"
+                                                className="text-info focus:ring-info"
                                               />
                                               <span>{option}</span>
                                             </label>
@@ -732,11 +732,11 @@ const CourseDetail = () => {
                                     <button
                                       onClick={() => submitQuiz(sectionIndex)}
                                       disabled={updateChildCourseProgressMutation.isPending}
-                                      className="poppins-medium bg-blue-600 hover:bg-blue-700 text-background px-4 py-2 rounded-lg"
+                                      className="poppins-medium bg-info hover:bg-info text-background px-4 py-2 rounded-lg"
                                     >
                                       {updateChildCourseProgressMutation.isPending ? "Submitting..." : "Submit Quiz"}
                                     </button>
-                                    <div className="poppins-light text-sm text-muted-foreground-600 mt-2">
+                                    <div className="poppins-light text-sm text-muted-foreground mt-2">
                                       Note: You need to score at least 60% to unlock the next module.
                                     </div>
                                   </div>

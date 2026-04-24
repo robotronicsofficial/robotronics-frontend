@@ -228,7 +228,7 @@ const Footer = () => {
                     type="text"
                     id="footer-field"
                     placeholder="SUBSCRIBE NOW"
-                    className="w-full placeholder-opacity-25 bg-transparent border border-card rounded py-2 px-4 text-background focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-colors duration-200 ease-in-out"
+                    className="w-full placeholder-opacity-25 bg-transparent border border-card rounded py-2 px-4 text-background focus:ring-2 focus:ring-ring/20 focus:border-ring outline-none transition-colors duration-200 ease-in-out"
                   />
                 </div>
                 <button className="w-full lg:w-auto flex items-center justify-center text-background bg-primary px-6 py-3 rounded hover:bg-primary-dark focus:outline-none transition-colors duration-200">
@@ -297,7 +297,7 @@ const Footer = () => {
                   {/* App Store Buttons */}
                   <div className="flex flex-col gap-y-6 my-10">
                     <button
-                      className="mb-4 border border-card p-4 rounded-xl flex items-center gap-12 hover:bg-background-800 transition-colors duration-200"
+                      className="mb-4 border border-card p-4 rounded-xl flex items-center gap-12 hover:bg-muted transition-colors duration-200"
                       data-aos="fade-up"
 
 
@@ -311,7 +311,7 @@ const Footer = () => {
                       </div>
                     </button>
                     <button
-                      className="border border-card p-4 rounded-xl flex items-center gap-12 hover:bg-background-800 transition-colors duration-200"
+                      className="border border-card p-4 rounded-xl flex items-center gap-12 hover:bg-muted transition-colors duration-200"
                       data-aos="fade-up"
 
 

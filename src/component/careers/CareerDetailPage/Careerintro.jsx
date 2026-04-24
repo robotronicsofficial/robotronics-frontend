@@ -43,8 +43,8 @@ const Careerintro = ({ job }) => {
             </h1>
           </Link>
           {/* button */}
-          <button className="flex items-center justify-center w-12 h-12 bg-background-100 rounded-full border border-border-300" data-aos="fade-up">
-            <BiMenuAltRight className="text-muted-foreground-700" size={24} />
+          <button className="flex items-center justify-center w-12 h-12 bg-muted rounded-full border border-border" data-aos="fade-up">
+            <BiMenuAltRight className="text-muted-foreground" size={24} />
           </button>
         </div>
         {/* lower */}
@@ -54,9 +54,9 @@ const Careerintro = ({ job }) => {
             <button
               type="button"
               onClick={() => navigate("/CareerJob")}
-              className="flex items-center justify-center lg:w-12 w-8 lg:h-12 h-8 bg-background-100 rounded-full border border-border-300"
+              className="flex items-center justify-center lg:w-12 w-8 lg:h-12 h-8 bg-muted rounded-full border border-border"
             >
-              <IoMdArrowBack className="text-muted-foreground-700" size={24} />
+              <IoMdArrowBack className="text-muted-foreground" size={24} />
             </button>
             <p className="lg:p-3 poppins-regular p-1">Back</p>
           </div>
@@ -69,7 +69,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaFacebook className="text-muted-foreground-800" />
+              <FaFacebook className="text-muted-foreground" />
             </a>
             <a
               href="https://www.twitter.com"
@@ -77,7 +77,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaTwitter className="text-muted-foreground-800" />
+              <FaTwitter className="text-muted-foreground" />
             </a>
             <a
               href="https://www.youtube.com"
@@ -85,7 +85,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaYoutube className="text-muted-foreground-800" />
+              <FaYoutube className="text-muted-foreground" />
             </a>
             <a
               href="https://www.instagram.com"
@@ -93,7 +93,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaInstagram className="text-muted-foreground-800" />
+              <FaInstagram className="text-muted-foreground" />
             </a>
             <a
               href="https://www.linkedin.com"
@@ -101,7 +101,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaLinkedin className="text-muted-foreground-800" />
+              <FaLinkedin className="text-muted-foreground" />
             </a>
             <a
               href="https://api.whatsapp.com/send?phone=1234567890"
@@ -109,7 +109,7 @@ const Careerintro = ({ job }) => {
               rel="noopener noreferrer"
               className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
             >
-              <FaWhatsapp className="text-muted-foreground-800" />
+              <FaWhatsapp className="text-muted-foreground" />
             </a>
           </div>
         </div>
@@ -117,7 +117,7 @@ const Careerintro = ({ job }) => {
 
       {/* lower */}
       <div className="flex flex-col">
-        <div className="flex flex-col items-center bg-background-800 p-5 rounded-xl mx-5" data-aos="fade-up">
+        <div className="flex flex-col items-center bg-muted p-5 rounded-xl mx-5" data-aos="fade-up">
           <h2 className="lg:text-5xl poppins-bold text-3xl text-foreground mb-5 text-center">
             {displayPosition}
           </h2>

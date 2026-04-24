@@ -6,8 +6,8 @@ const Intro = () => {
       {/* intro */}
       <div>
         {/* Dynamics-URLS */}
-        {/* <nav className="flex w-1/2 bg-background-100 rounded-lg px-7 ">
-          <ol className="list-reset flex text-muted-foreground-600">
+        {/* <nav className="flex w-1/2 bg-muted rounded-lg px-7 ">
+          <ol className="list-reset flex text-muted-foreground">
             {breadcrumbs.map((breadcrumb, index) => (
               <li key={index} className="flex items-center">
                 <a
@@ -19,7 +19,7 @@ const Intro = () => {
                   {breadcrumb.name}
                 </a>
                 {index < breadcrumbs.length - 1 && (
-                  <FaChevronRight className="mx-2 text-muted-foreground-400" />
+                  <FaChevronRight className="mx-2 text-muted-foreground" />
                 )}
               </li>
             ))}

@@ -141,7 +141,7 @@ const Shopsearch = () => {
         </div>
 
         <div className="flex items-center border border-border bg-card px-2 rounded-md h-12 w-[55vw]">
-          <IoIosSearch className="text-muted-foreground-500 text-xl" />
+          <IoIosSearch className="text-muted-foreground text-xl" />
           <input
             type="text"
             className="w-full px-2 py-2 outline-none bg-transparent"

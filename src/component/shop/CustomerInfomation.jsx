@@ -30,14 +30,14 @@ const summaryTotalValueClassName = `${summaryValueBaseClassName} text-primary`;
 
 const InputField = ({ label, name, value, onChange, placeholder, required = false, type = "text" }) => (
   <div>
-    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground-700">{label}</label>
+    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground">{label}</label>
     <input
       type={type}
       name={name}
       id={name}
       value={value}
       onChange={onChange}
-      className="p-3 px-5 mt-1 block w-full border-border-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+      className="p-3 px-5 mt-1 block w-full border-border poppins-light rounded-md shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
       placeholder={placeholder}
       required={required}
     />
@@ -46,14 +46,14 @@ const InputField = ({ label, name, value, onChange, placeholder, required = fals
 
 const SelectField = ({ label, name, value, onChange, options, required = false }) => (
   <div>
-    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground-700">{label}</label>
+    <label htmlFor={name} className="block text-sm poppins-light text-muted-foreground">{label}</label>
     <select
       name={name}
       id={name}
       value={value}
       onChange={onChange}
       required={required}
-      className="p-3 mt-1 block w-full border-border-300 poppins-light rounded-md shadow-sm focus:border-primary focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+      className="p-3 mt-1 block w-full border-border poppins-light rounded-md shadow-sm focus:border-primary focus:ring focus:ring-ring/20 focus:ring-opacity-50"
     >
       <option value="">Select {label.toLowerCase()}</option>
       {options.map((opt) => (
@@ -175,13 +175,13 @@ const CustomerInfomation = ({ onNext }) => {
               </div>
 
               <div>
-                <label htmlFor="deliveryInstruction" className="block text-sm poppins-light text-muted-foreground-700">Delivery Instruction</label>
+                <label htmlFor="deliveryInstruction" className="block text-sm poppins-light text-muted-foreground">Delivery Instruction</label>
                 <textarea
                   name="deliveryInstruction"
                   id="deliveryInstruction"
                   value={form.deliveryInstruction}
                   onChange={handleChange}
-                  className="p-7 mt-1 block w-full border-border-300 poppins-light rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="p-7 mt-1 block w-full border-border poppins-light rounded-md shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
                   placeholder="Delivery Instruction"
                 />
               </div>
@@ -221,7 +221,7 @@ const CustomerInfomation = ({ onNext }) => {
               />
             ))
           ) : (
-            <p className="p-5 text-center text-muted-foreground-500">Your cart is empty.</p>
+            <p className="p-5 text-center text-muted-foreground">Your cart is empty.</p>
           )}
         </div>
 

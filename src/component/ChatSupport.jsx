@@ -28,7 +28,7 @@ const ChatHeader = memo(function ChatHeader({ isMaximized, toggleMaximize, toggl
     <div className="flex items-center space-x-2">
       <button
         onClick={toggleMaximize}
-        className="text-muted-foreground-600 hover:text-muted-foreground-800 text-xl p-1"
+        className="text-muted-foreground hover:text-muted-foreground text-xl p-1"
         aria-label={isMaximized ? "Minimize" : "Maximize"}
         aria-expanded={isMaximized}
       >
@@ -36,7 +36,7 @@ const ChatHeader = memo(function ChatHeader({ isMaximized, toggleMaximize, toggl
       </button>
       <button
         onClick={toggleChat}
-        className="text-muted-foreground-600 hover:text-muted-foreground-800 text-xl p-1"
+        className="text-muted-foreground hover:text-muted-foreground text-xl p-1"
         aria-label="Close chat"
       >
         <RxCrossCircled size={20} />
@@ -51,7 +51,7 @@ const Message = memo(function Message({ message }) {
   <div
     className={`max-w-[80%] p-4 rounded-lg ${message.sender === 'user'
       ? 'bg-primary text-background rounded-br-none'
-      : 'bg-card text-muted-foreground-800 rounded-bl-none border border-border'}`}
+      : 'bg-card text-muted-foreground rounded-bl-none border border-border'}`}
     role={message.sender === 'user' ? 'status' : 'article'}
     aria-live={message.sender === 'bot' ? 'polite' : 'off'}
   >
@@ -64,7 +64,7 @@ const Message = memo(function Message({ message }) {
     <div className="text-base break-words whitespace-pre-wrap">
       {message.text}
     </div>
-    <div className={`text-xs mt-2 ${message.sender === 'user' ? 'text-background' : 'text-muted-foreground-500'}`}>
+    <div className={`text-xs mt-2 ${message.sender === 'user' ? 'text-background' : 'text-muted-foreground'}`}>
       {message.time}
     </div>
   </div>
@@ -288,7 +288,7 @@ const ChatSupport = () => {
 
 
           {isMaximized && (
-            <div className="w-64 bg-blue-50 border-r border-border flex flex-col">
+            <div className="w-64 bg-info/10 border-r border-border flex flex-col">
               <div className="p-4 border-b border-border">
                 <h2 className="text-lg font-semibold">Chat History</h2>
               </div>
@@ -299,7 +299,7 @@ const ChatSupport = () => {
                     className="p-3 hover:bg-background rounded-lg cursor-pointer border-t border-border first:border-t-0"
                   >
                     <p className="text-sm font-medium truncate">Sample conversation {item}</p>
-                    <p className="text-xs text-muted-foreground-500">{item === 1 ? 'Yesterday' : `${item} days ago`}</p>
+                    <p className="text-xs text-muted-foreground">{item === 1 ? 'Yesterday' : `${item} days ago`}</p>
                   </div>
                 ))}
               </div>
@@ -337,11 +337,11 @@ const ChatSupport = () => {
               ))}
               {isBotTyping && (
                 <div className="mb-4 flex justify-start">
-                  <div className="max-w-[80%] p-4 rounded-lg bg-card text-muted-foreground-800 rounded-bl-none border border-border">
+                  <div className="max-w-[80%] p-4 rounded-lg bg-card text-muted-foreground rounded-bl-none border border-border">
                     <div className="flex space-x-2">
-                      <div className="w-2 h-2 rounded-full bg-background-400 animate-bounce"></div>
-                      <div className="w-2 h-2 rounded-full bg-background-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-2 h-2 rounded-full bg-background-400 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                      <div className="w-2 h-2 rounded-full bg-muted animate-bounce"></div>
+                      <div className="w-2 h-2 rounded-full bg-muted animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 rounded-full bg-muted animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                     </div>
                   </div>
                 </div>
@@ -351,15 +351,15 @@ const ChatSupport = () => {
 
             <form onSubmit={handleSendMessage} className="p-4  relative">
               {selectedFile && (
-                <div className="flex items-center justify-between mb-2 px-3 py-2 bg-background-100 rounded-lg">
+                <div className="flex items-center justify-between mb-2 px-3 py-2 bg-muted rounded-lg">
                   <div className="flex items-center">
-                    <ImAttachment className="mr-2 text-muted-foreground-600" />
+                    <ImAttachment className="mr-2 text-muted-foreground" />
                     <span className="text-sm truncate max-w-xs">{selectedFile.name}</span>
                   </div>
                   <button
                     type="button"
                     onClick={() => setSelectedFile(null)}
-                    className="text-muted-foreground-500 hover:text-muted-foreground-700 ml-2"
+                    className="text-muted-foreground hover:text-muted-foreground ml-2"
                     aria-label="Remove file"
                   >
                     ×
@@ -382,7 +382,7 @@ const ChatSupport = () => {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current.click()}
-                    className="text-muted-foreground-300 hover:text-primary focus:text-primary focus:outline-none"
+                    className="text-muted-foreground hover:text-primary focus:text-primary focus:outline-none"
                     aria-label="Attach file"
                     disabled={isSending}
                   >
@@ -403,7 +403,7 @@ const ChatSupport = () => {
                     <button
                       type="button"
                       onClick={toggleVoiceInput}
-                      className={`${isListening ? 'text-red-500 animate-pulse' : 'text-muted-foreground-300 hover:text-primary'} focus:outline-none`}
+                      className={`${isListening ? 'text-destructive animate-pulse' : 'text-muted-foreground hover:text-primary'} focus:outline-none`}
                       aria-label={isListening ? "Stop listening" : "Start voice input"}
                       disabled={isSending}
                     >
@@ -420,7 +420,7 @@ const ChatSupport = () => {
                   </button>
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground-500 mt-2 text-center">
+              <p className="text-xs text-muted-foreground mt-2 text-center">
                 Robotronics AI can make mistakes. Check our
                 <Link to="/TermsConditions" className="ml-1 text-primary hover:underline">Terms & Conditions</Link>.
               </p>

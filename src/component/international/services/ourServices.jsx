@@ -24,7 +24,7 @@ const OurServices = () => {
         <h2 className="lg:text-6xl md:text-5xl text-4xl text-foreground poppins-bold mb-16">
           Our Services
         </h2>
-        {error && <p className="text-red-500">We couldn&apos;t load services right now.</p>}
+        {error && <p className="text-destructive">We couldn&apos;t load services right now.</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {loading ? (
             <p className="text-center text-lg">Loading services...</p>

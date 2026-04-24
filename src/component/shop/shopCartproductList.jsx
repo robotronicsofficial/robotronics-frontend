@@ -108,7 +108,7 @@ const ShopCartproductList = ({ onNext }) => {
                   <h1 className="mb-2 text-wrap font-Poppins text-[20px] font-bold leading-[28px] tracking-normal text-foreground">
                     {product.name}
                   </h1>
-                  <div className="my-6 flex text-2xl text-primary-500">
+                  <div className="my-6 flex text-2xl text-primary">
                     {Array.from({ length: 5 }, (_, i) => (
                       <span className="text-primary" key={i}>★</span>
                     ))}
@@ -118,7 +118,7 @@ const ShopCartproductList = ({ onNext }) => {
                       <button
                         type="button"
                         onClick={() => handleRemoveFromCart(product)}
-                        className="rounded-md bg-background-200 px-3 py-1 text-muted-foreground-700 hover:bg-background-300 focus:outline-none"
+                        className="rounded-md bg-muted px-3 py-1 text-muted-foreground hover:bg-muted focus:outline-none"
                       >
                         -
                       </button>
@@ -131,7 +131,7 @@ const ShopCartproductList = ({ onNext }) => {
                       <button
                         type="button"
                         onClick={() => handleAddToCart(product)}
-                        className="rounded-md bg-background-200 px-1 text-muted-foreground-700 hover:bg-background-300 focus:outline-none lg:px-3 lg:py-1"
+                        className="rounded-md bg-muted px-1 text-muted-foreground hover:bg-muted focus:outline-none lg:px-3 lg:py-1"
                       >
                         +
                       </button>
@@ -145,7 +145,7 @@ const ShopCartproductList = ({ onNext }) => {
             </div>
           ))
         ) : (
-          <p className="p-5 text-center text-muted-foreground-500">Your cart is empty.</p>
+          <p className="p-5 text-center text-muted-foreground">Your cart is empty.</p>
         )}
       </div>
       <div className="flex flex-col p-2">
@@ -199,7 +199,7 @@ const ShopCartproductList = ({ onNext }) => {
           </span>
 
           <textarea
-            className="mt-1 block h-[139px] w-[401px] border border-border bg-background p-7 font-poppins font-light shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            className="mt-1 block h-[139px] w-[401px] border border-border bg-background p-7 font-poppins font-light shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
             value={notes}
             onChange={(e) => {
               setNotes(e.target.value);

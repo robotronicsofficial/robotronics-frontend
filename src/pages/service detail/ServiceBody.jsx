@@ -20,14 +20,14 @@ const ServiceBody = ({ service }) => {
             <h2 className="text-accent mb-3 capatalize font-bold text-[1.5vw] ">
               What we are good at:
             </h2>
-            <ul className="list-disc pl-5 space-y-3 text-muted-foreground-800 text-[1.2vw] text-wrap pr-6">
+            <ul className="list-disc pl-5 space-y-3 text-muted-foreground text-[1.2vw] text-wrap pr-6">
               {goodAtItems.length > 0 ? goodAtItems.map((item, idx) => (
                 <li key={idx}>{item}</li>
               )) : <li>No details available yet.</li>}
             </ul>
           </div>
         </div>
-        <div className="h-[65vw] w-[46vw] bg-green-500 rounded-xl overflow-hidden">
+        <div className="h-[65vw] w-[46vw] bg-success rounded-xl overflow-hidden">
           <img className="h-full w-full object-cover"
             src={sideImage}
             alt="Service Image"

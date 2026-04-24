@@ -122,7 +122,7 @@ const QuickContact = () => {
               {quickContactRequestMutation.isPending ? "Sending..." : "Send Message"}
             </button>
           </form>
-          {status && <p className="mt-4 text-red-500">{status}</p>}
+          {status && <p className="mt-4 text-destructive">{status}</p>}
         </div>
       </div>
 

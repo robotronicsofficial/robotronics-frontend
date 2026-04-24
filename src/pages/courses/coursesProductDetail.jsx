@@ -19,7 +19,7 @@ const CoursesProductDetail = () => {
   }
 
   if (!id || error) {
-    return <div className="pt-[9rem] bg-muted text-center p-10 text-red-500">We couldn&apos;t load this course right now.</div>;
+    return <div className="pt-[9rem] bg-muted text-center p-10 text-destructive">We couldn&apos;t load this course right now.</div>;
   }
 
   return (

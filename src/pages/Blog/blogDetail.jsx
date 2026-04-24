@@ -22,7 +22,7 @@ const BlogDetail = () => {
   }
 
   if (!id || error || !blog) {
-    return <PageState className="text-red-500" message={error?.message || "Blog not found"} />;
+    return <PageState className="text-destructive" message={error?.message || "Blog not found"} />;
   }
 
   return (

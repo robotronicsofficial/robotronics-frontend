@@ -39,7 +39,7 @@ const RelatedItemsMessage = ({ children, tone = "default" }) => (
   <div
     className={cn(
       "rounded-2xl bg-card p-10 text-center shadow-sm",
-      tone === "error" ? "text-red-600" : "text-foreground",
+      tone === "error" ? "text-destructive" : "text-foreground",
     )}
   >
     {children}

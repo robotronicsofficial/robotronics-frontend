@@ -54,7 +54,7 @@ const SubscriptionCourses = () => {
       {/* Left Button - Hidden on mobile */}
       <button
         onClick={prevCourse}
-        className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 bg-card text-foreground p-3 rounded-full shadow-md hover:bg-background-300 transition mx-4 md:mx-12 lg:mx-24"
+        className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 bg-card text-foreground p-3 rounded-full shadow-md hover:bg-muted transition mx-4 md:mx-12 lg:mx-24"
       >
         <FaCircleArrowLeft />
       </button>
@@ -79,12 +79,12 @@ const SubscriptionCourses = () => {
                 />
                 <div className="px-4 lg:px-6 py-2 flex-grow">
                   <div className="flex flex-row mb-2 flex-wrap justify-between my-3">
-                    <p className="text-muted-foreground-700 text-wrap text-center px-2 sm:px-4 py-1 rounded-full bg-muted text-sm sm:text-base">
+                    <p className="text-muted-foreground text-wrap text-center px-2 sm:px-4 py-1 rounded-full bg-muted text-sm sm:text-base">
                       {course.category}
                     </p>
                     <div className="flex items-center">
                       <FaStar className="text-primary" />
-                      <p className="text-muted-foreground-700 poppins-light text-sm sm:text-base ml-2">
+                      <p className="text-muted-foreground poppins-light text-sm sm:text-base ml-2">
                         ({course.reviews || 0} Reviews)
                       </p>
                     </div>
@@ -118,7 +118,7 @@ const SubscriptionCourses = () => {
       {/* Right Button - Hidden on mobile */}
       <button
         onClick={nextCourse}
-        className="hidden sm:block absolute right-0 top-1/2 transform -translate-y-1/2 bg-card text-foreground p-3 rounded-full shadow-md hover:bg-background-300 transition mx-4 md:mx-12 lg:mx-24"
+        className="hidden sm:block absolute right-0 top-1/2 transform -translate-y-1/2 bg-card text-foreground p-3 rounded-full shadow-md hover:bg-muted transition mx-4 md:mx-12 lg:mx-24"
       >
         <FaCircleArrowRight />
       </button>
@@ -127,13 +127,13 @@ const SubscriptionCourses = () => {
       <div className="sm:hidden flex justify-center gap-4 mt-4">
         <button
           onClick={prevCourse}
-          className="bg-card text-foreground p-2 rounded-full shadow-md hover:bg-background-300 transition"
+          className="bg-card text-foreground p-2 rounded-full shadow-md hover:bg-muted transition"
         >
           <FaCircleArrowLeft />
         </button>
         <button
           onClick={nextCourse}
-          className="bg-card text-foreground p-2 rounded-full shadow-md hover:bg-background-300 transition"
+          className="bg-card text-foreground p-2 rounded-full shadow-md hover:bg-muted transition"
         >
           <FaCircleArrowRight />
         </button>

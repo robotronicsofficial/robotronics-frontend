@@ -222,7 +222,7 @@ const Signup = () => {
                   }}
                   countrySelectProps={{
                     className: "absolute left-0 top-0 h-full flex items-center pl-2 touch-manipulation",
-                    dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-card shadow-lg border border-border-200 rounded-md w-60 max-w-full mt-1",
+                    dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-card shadow-lg border border-border rounded-md w-60 max-w-full mt-1",
                     buttonClass: "flex items-center justify-center h-full px-2 focus:outline-none"
                   }}
                   containerClass="relative w-full"
@@ -286,7 +286,7 @@ const Signup = () => {
                 onChange={handleChange}
               />
               {formData.confirmPassword && (
-                <p className={`text-xs mt-1 ${passwordErrors.match ? 'text-green-500' : 'text-red-500'
+                <p className={`text-xs mt-1 ${passwordErrors.match ? 'text-success' : 'text-destructive'
                   }`}>
                   {passwordErrors.match ? 'Passwords match!' : 'Passwords do not match'}
                 </p>
@@ -298,12 +298,12 @@ const Signup = () => {
                 <input
                   id="terms-checkbox"
                   type="checkbox"
-                  className="w-4 h-4 text-foreground bg-background-100 border-border-300 rounded focus:ring-2"
+                  className="w-4 h-4 text-foreground bg-muted border-border rounded focus:ring-2"
                   onChange={(e) => setIsCheckboxChecked(e.target.checked)}
                 />
                 <label
                   htmlFor="terms-checkbox"
-                  className="ms-2 text-sm font-medium text-muted-foreground-900 text-wrap"
+                  className="ms-2 text-sm font-medium text-muted-foreground text-wrap"
                 >
                   By creating an account, I agree to our{" "}
                   <Link to="/TermsConditions" className="underline underline-offset-4">
@@ -374,10 +374,10 @@ const RequirementCheck = ({ isValid, text }) => (
   <div className="flex items-center">
     <span
       className={`inline-block w-4 h-4 rounded-full mr-2 ${
-        isValid ? "bg-green-500" : "bg-red-500"
+        isValid ? "bg-success" : "bg-destructive"
       }`}
     ></span>
-    <span className={`text-xs ${isValid ? "text-green-500" : "text-red-500"}`}>
+    <span className={`text-xs ${isValid ? "text-success" : "text-destructive"}`}>
       {text}
     </span>
   </div>

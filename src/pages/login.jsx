@@ -130,7 +130,7 @@ const Login = () => {
               Back to Login
             </button>
           </form>
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="text-destructive text-sm mt-2">{error}</p>}
         </div>
       </div>
     );
@@ -212,11 +212,11 @@ const Login = () => {
             <input
               id="keep-signed-in"
               type="checkbox"
-              className="w-4 h-4 text-foreground bg-background-100 border-border-300 rounded focus:ring-2 focus:ring-foreground"
+              className="w-4 h-4 text-foreground bg-muted border-border rounded focus:ring-2 focus:ring-foreground"
             />
             <label
               htmlFor="keep-signed-in"
-              className="ms-2 text-sm poppins-regular text-muted-foreground-900"
+              className="ms-2 text-sm poppins-regular text-muted-foreground"
             >
               Keep me signed in until I sign out
             </label>
@@ -227,7 +227,7 @@ const Login = () => {
           >
             Log in
           </button>
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="text-destructive text-sm mt-2">{error}</p>}
           <div className="flex items-center justify-center">
             <div className="h-0 lg:w-56 w-44 border border-border"></div>
             <div className="h-0 lg:w-60 w-48 border border-border"></div>

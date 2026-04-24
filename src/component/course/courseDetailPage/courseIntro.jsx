@@ -82,7 +82,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
                 <img src={star} alt="" />
               </div>
               {/* button */}
-              <div className="bg-red-600 p-1 px-2">
+              <div className="bg-destructive p-1 px-2">
                 <button className="text-background poppins-bold">ON SALE</button>
               </div>
             </div>

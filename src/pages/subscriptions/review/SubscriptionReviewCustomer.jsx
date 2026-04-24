@@ -234,7 +234,7 @@ const SubscriptionReviewCustomer = () => {
                 />
               </div>
               {activationError ? (
-                <p className="rounded-[16px] bg-red-50 p-3 text-sm font-semibold text-red-700">
+                <p className="rounded-[16px] bg-destructive/10 p-3 text-sm font-semibold text-destructive">
                   {activationError}
                 </p>
               ) : null}

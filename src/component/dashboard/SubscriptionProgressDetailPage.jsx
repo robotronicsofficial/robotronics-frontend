@@ -37,7 +37,7 @@ const SubscriptionProgressDetailPage = () => {
     setDownloadingCourseId(courseId);
     // Clear any previous error for this course
     setDownloadErrors(prev => ({ ...prev, [courseId]: null }));
-    
+
     try {
       const { blob } = await downloadCertificateMutation.mutateAsync({
         childId: selectedChildId,
@@ -54,9 +54,9 @@ const SubscriptionProgressDetailPage = () => {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Download error:", err);
-      setDownloadErrors(prev => ({ 
-        ...prev, 
-        [courseId]: err.message || 'Failed to download certificate. Please try again.' 
+      setDownloadErrors(prev => ({
+        ...prev,
+        [courseId]: err.message || 'Failed to download certificate. Please try again.'
       }));
     } finally {
       setDownloadingCourseId(null);
@@ -64,31 +64,31 @@ const SubscriptionProgressDetailPage = () => {
   };
 
   if (loading) return (
-    <CenteredState className="bg-background-100 min-h-screen" contentClassName="text-center">
-      <Spinner className="mx-auto size-12 text-primary-600" />
-      <p className="mt-4 text-muted-foreground-700">Loading progress data...</p>
+    <CenteredState className="bg-muted min-h-screen" contentClassName="text-center">
+      <Spinner className="mx-auto size-12 text-primary" />
+      <p className="mt-4 text-muted-foreground">Loading progress data...</p>
     </CenteredState>
   );
-  
+
   if (progressErrorMessage) return (
-    <CenteredState className="bg-background-100 min-h-screen">
+    <CenteredState className="bg-muted min-h-screen">
       <div className="bg-card p-6 rounded-lg shadow-md max-w-md w-full">
-        <h2 className="text-xl font-bold text-red-600 mb-4">Error</h2>
-        <p className="text-muted-foreground-700 mb-4">{progressErrorMessage}</p>
-        <button 
+        <h2 className="text-xl font-bold text-destructive mb-4">Error</h2>
+        <p className="text-muted-foreground mb-4">{progressErrorMessage}</p>
+        <button
           onClick={() => refetch()}
-          className="bg-primary-500 hover:bg-primary-600 text-background py-2 px-4 rounded"
+          className="bg-primary hover:bg-primary text-background py-2 px-4 rounded"
         >
           Try Again
         </button>
       </div>
     </CenteredState>
   );
-  
+
   if (!progressData) return (
-    <CenteredState className="bg-background-100 min-h-screen">
+    <CenteredState className="bg-muted min-h-screen">
       <div className="bg-card p-6 rounded-lg shadow-md">
-        <p className="text-muted-foreground-700">No progress data found for this student.</p>
+        <p className="text-muted-foreground">No progress data found for this student.</p>
       </div>
     </CenteredState>
   );
@@ -106,19 +106,19 @@ const SubscriptionProgressDetailPage = () => {
         <div className="flex gap-4 mb-6">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-full ${filter === 'all' ? 'bg-primary text-background' : 'bg-background-200'}`}
+            className={`px-4 py-2 rounded-full ${filter === 'all' ? 'bg-primary text-background' : 'bg-muted'}`}
           >
             All
           </button>
           <button
             onClick={() => setFilter('active')}
-            className={`px-4 py-2 rounded-full ${filter === 'active' ? 'bg-primary text-background' : 'bg-background-200'}`}
+            className={`px-4 py-2 rounded-full ${filter === 'active' ? 'bg-primary text-background' : 'bg-muted'}`}
           >
             Active
           </button>
           <button
             onClick={() => setFilter('completed')}
-            className={`px-4 py-2 rounded-full ${filter === 'completed' ? 'bg-primary text-background' : 'bg-background-200'}`}
+            className={`px-4 py-2 rounded-full ${filter === 'completed' ? 'bg-primary text-background' : 'bg-muted'}`}
           >
             Completed
           </button>
@@ -129,7 +129,7 @@ const SubscriptionProgressDetailPage = () => {
           <h2 className="text-xl font-semibold mb-3">Course Progress</h2>
           <table className="w-full min-w-[600px] border-collapse">
             <thead>
-              <tr className="text-left text-muted-foreground-700 font-semibold">
+              <tr className="text-left text-muted-foreground font-semibold">
                 <th className="p-3">Course</th>
                 <th className="p-3">Modules Completed</th>
                 <th className="p-3">Certificate</th>
@@ -141,9 +141,9 @@ const SubscriptionProgressDetailPage = () => {
                 const courseId = course.courseId || course.id || course._id;
                 const isDownloading = downloadingCourseId === courseId;
                 const courseError = downloadErrors[courseId];
-                
+
                 return (
-                  <tr key={index} className="text-muted-foreground-900 border-t">
+                  <tr key={index} className="text-muted-foreground border-t">
                     <td className="p-3">{course.name || course.courseName || "Course"}</td>
                     <td className="p-3">{course.completed}</td>
                     <td className="p-3">
@@ -151,34 +151,34 @@ const SubscriptionProgressDetailPage = () => {
                         <div className="flex items-center gap-2">
                           {course.certificateAvailable ? (
                             <>
-                              <button 
-                                className={`hover:text-primary-600 ${isDownloading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer text-blue-600'}`}
+                              <button
+                                className={`hover:text-primary ${isDownloading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer text-info'}`}
                                 onClick={() => !isDownloading && handleDownloadCertificate(courseId, course.name || course.courseName || "Course")}
                                 disabled={isDownloading}
                               >
                                 {isDownloading ? 'Generating...' : 'Download'}
                               </button>
-                              <FaFilePdf className="text-red-600" />
+                              <FaFilePdf className="text-destructive" />
                             </>
                           ) : (
-                            <div 
+                            <div
                               className="group relative cursor-not-allowed"
                               title="Complete the course to download certificate"
                             >
-                              <span className="text-muted-foreground-400">Download</span>
-                              <FaFilePdf className="text-muted-foreground-400 inline ml-2" />
-                              <span className="absolute hidden group-hover:block bg-background-700 text-background text-xs rounded py-1 px-2 bottom-full mb-2 whitespace-nowrap left-1/2 transform -translate-x-1/2">
+                              <span className="text-muted-foreground">Download</span>
+                              <FaFilePdf className="text-muted-foreground inline ml-2" />
+                              <span className="absolute hidden group-hover:block bg-muted text-background text-xs rounded py-1 px-2 bottom-full mb-2 whitespace-nowrap left-1/2 transform -translate-x-1/2">
                                 Complete the course to download
                               </span>
                             </div>
                           )}
                         </div>
                         {courseError && (
-                          <div className="text-red-500 text-xs mt-1 max-w-xs">
+                          <div className="text-destructive text-xs mt-1 max-w-xs">
                             {courseError}
-                            <button 
+                            <button
                               onClick={() => setDownloadErrors(prev => ({ ...prev, [courseId]: null }))}
-                              className="ml-2 text-muted-foreground-500 hover:text-muted-foreground-700"
+                              className="ml-2 text-muted-foreground hover:text-muted-foreground"
                             >
                               Dismiss
                             </button>
@@ -188,9 +188,9 @@ const SubscriptionProgressDetailPage = () => {
                     </td>
                     <td className="p-3">
                       <span className={`px-2 py-1 rounded-full text-xs ${
-                        (course.status || 'active').toLowerCase() === 'completed' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-primary-100 text-primary-800'
+                        (course.status || 'active').toLowerCase() === 'completed'
+                          ? 'bg-success/10 text-success'
+                          : 'bg-primary/10 text-primary'
                       }`}>
                         {course.status}
                       </span>

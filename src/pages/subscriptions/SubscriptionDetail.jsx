@@ -167,12 +167,12 @@ const SubscriptionDetail = () => {
                   <img className="w-full" src={course.image} alt="Course" />
                   <div className="lg:px-6 py-4 flex-grow">
                     <div className="lg:flex flex-row mb-2 flex-wrap justify-between">
-                      <p className="text-muted-foreground-700 text-wrap text-center px-4 py-1 rounded-full bg-muted text-base">
+                      <p className="text-muted-foreground text-wrap text-center px-4 py-1 rounded-full bg-muted text-base">
                         {course.category}
                       </p>
                       <div className="flex items-center">
-                        <FaStar className="text-primary-500" />
-                        <p className="text-muted-foreground-700 poppins-light text-base ml-2">
+                        <FaStar className="text-primary" />
+                        <p className="text-muted-foreground poppins-light text-base ml-2">
                           ({course.reviews} Reviews)
                         </p>
                       </div>
@@ -182,7 +182,7 @@ const SubscriptionDetail = () => {
                       {course.title}
                     </div>
 
-                    <p className="text-muted-foreground-700 space-x-2 text-left text-base">
+                    <p className="text-muted-foreground space-x-2 text-left text-base">
                       <span className="text-muted-foreground px-2">by</span>
                       {course.author}
                     </p>

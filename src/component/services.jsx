@@ -41,7 +41,7 @@ const Services = () => {
 
       {/* Services Grid */}
       <div className="px-4 sm:px-6 py-6 sm:py-8">
-  {error && <p className="text-red-500 text-sm sm:text-base mb-4">We couldn&apos;t load services right now.</p>}
+  {error && <p className="text-destructive text-sm sm:text-base mb-4">We couldn&apos;t load services right now.</p>}
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
     {loading ? (
       <div className="col-span-full py-10">

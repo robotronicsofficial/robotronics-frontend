@@ -16,8 +16,8 @@ import {
 
 const RequirementCheck = ({ isValid, text }) => (
   <div className="flex items-center">
-    <span className={`inline-block w-4 h-4 rounded-full mr-2 ${isValid ? 'bg-green-500' : 'bg-red-500'}`}></span>
-    <span className={`text-xs ${isValid ? 'text-green-500' : 'text-red-500'}`}>{text}</span>
+    <span className={`inline-block w-4 h-4 rounded-full mr-2 ${isValid ? 'bg-success' : 'bg-destructive'}`}></span>
+    <span className={`text-xs ${isValid ? 'text-success' : 'text-destructive'}`}>{text}</span>
   </div>
 );
 
@@ -135,7 +135,7 @@ const ResetPassword = () => {
               required
             />
             {confirmPassword && (
-              <p className={`text-xs mt-1 ${passwordsMatch ? 'text-green-500' : 'text-red-500'}`}>
+              <p className={`text-xs mt-1 ${passwordsMatch ? 'text-success' : 'text-destructive'}`}>
                 {passwordsMatch ? 'Passwords match!' : 'Passwords do not match'}
               </p>
             )}
@@ -157,7 +157,7 @@ const ResetPassword = () => {
             Back to Login
           </button>
         </form>
-        {error && <p className="text-red-500 text-sm mt-2 poppins-regular">{error}</p>}
+        {error && <p className="text-destructive text-sm mt-2 poppins-regular">{error}</p>}
       </div>
     </div>
   );

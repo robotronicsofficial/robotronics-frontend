@@ -120,10 +120,10 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
           <p className="text-center self-center poppins-light">{Number(blog?.shares || 0).toLocaleString()} Shares</p>
           <div className="flex gap-3">
             <FaFacebook className="text-cente self-center text-primary text-2xl" />
-            <p className="text-center self-center text-blue-500 poppins-light">Share</p>
+            <p className="text-center self-center text-info poppins-light">Share</p>
           </div>
           <div className="flex gap-3">
-            <FaTwitter className="text-center text-blue-500 self-center" />
+            <FaTwitter className="text-center text-info self-center" />
             <p className="text-center self-center poppins-light">X</p>
           </div>
         </div>
@@ -136,7 +136,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
               </button>
             </Link>
           ) : (
-            <button className="bg-background-300 text-background poppins-light py-2 px-8 rounded-md cursor-not-allowed" disabled>
+            <button className="bg-muted text-background poppins-light py-2 px-8 rounded-md cursor-not-allowed" disabled>
               Previous
             </button>
           )}
@@ -147,7 +147,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
               </button>
             </Link>
           ) : (
-            <button className="bg-background-300 text-background poppins-light py-2 px-12 rounded-md cursor-not-allowed" disabled>
+            <button className="bg-muted text-background poppins-light py-2 px-12 rounded-md cursor-not-allowed" disabled>
               Next
             </button>
           )}

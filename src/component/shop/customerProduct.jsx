@@ -40,7 +40,7 @@ const CustomerProduct = ({
             <button
               type="button"
               aria-label="Delete product"
-              className="inline-flex text-red-600"
+              className="inline-flex text-destructive"
               onClick={onDelete}
             >
               <MdDelete />

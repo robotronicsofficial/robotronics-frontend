@@ -24,7 +24,7 @@ const SubscriptionIntro = () => {
 
   return (
     <div className="bg-background">
-      <div className="bg-background-100 py-6">
+      <div className="bg-muted py-6">
         <div className="w-full h-full px-4 py-12 sm:py-2 sm:px-8 md:px-12 lg:px-24">
           <div className="flex flex-col lg:flex-row lg:space-x-6 mt-20 lg:mt-40">
             {/* Left Side */}
@@ -49,7 +49,7 @@ const SubscriptionIntro = () => {
                   <h1 className="text-3xl sm:text-3xl lg:text-5xl text-foreground font-medium pt-6 lg:pt-0 poppins-bold">
                     Learning Subscription
                   </h1>
-                  <button className="border bg-red-600 text-background text-sm md:text-base lg:text-lg px-4 md:px-6 py-2 md:py-3 w-full sm:w-auto rounded-lg pointer-events-none">
+                  <button className="border bg-destructive text-background text-sm md:text-base lg:text-lg px-4 md:px-6 py-2 md:py-3 w-full sm:w-auto rounded-lg pointer-events-none">
                     ON SALE
                   </button>
                 </div>
@@ -79,7 +79,7 @@ const SubscriptionIntro = () => {
                           href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 hover:text-blue-600"
+                          className="flex items-center gap-2 hover:text-info"
                         >
                           <FaFacebookF /> Facebook
                         </a>
@@ -87,7 +87,7 @@ const SubscriptionIntro = () => {
                           href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 hover:text-blue-400"
+                          className="flex items-center gap-2 hover:text-info"
                         >
                           <FaTwitter /> Twitter
                         </a>
@@ -95,7 +95,7 @@ const SubscriptionIntro = () => {
                           href={`https://wa.me/?text=${encodeURIComponent(shareUrl)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 hover:text-green-600"
+                          className="flex items-center gap-2 hover:text-success"
                         >
                           <FaWhatsapp /> WhatsApp
                         </a>
@@ -114,7 +114,7 @@ const SubscriptionIntro = () => {
 
             >
               {/* Video */}
-              <div className="bg-background-300 w-full rounded-md flex justify-center items-center">
+              <div className="bg-muted w-full rounded-md flex justify-center items-center">
                 <AppImage
                   src={yt}
                   alt="Course"
@@ -127,7 +127,7 @@ const SubscriptionIntro = () => {
                 <h3 className="text-lg sm:text-xl mb-4 font-semibold poppins-bold">
                 Subscription features:
                 </h3>
-                <ul className="list-none space-y-3 text-muted-foreground-700">
+                <ul className="list-none space-y-3 text-muted-foreground">
                   {[
                     "30+ Courses in one Subscription",
                     "Robotics, STEM, AI, Coding all included",

@@ -65,7 +65,7 @@ const UserInfoIntro = () => {
             <p className="text-base lg:text-xl poppins-light">Account Details</p>
           </div>
 
-          <div className="mt-6 flex flex-col gap-6 text-muted-foreground-600">
+          <div className="mt-6 flex flex-col gap-6 text-muted-foreground">
             <AccountDetailRow label="Name" value={displayName} />
             <AccountDetailRow label="Email" value={displayEmail} />
             {currentUser?.phone && (

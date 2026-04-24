@@ -45,7 +45,7 @@ const CareerJoinTeam = () => {
         {loading ? (
           <p className="poppins-regular text-foreground px-4 py-6">Loading open roles...</p>
         ) : error ? (
-          <p className="poppins-regular text-red-600 px-4 py-6">{getJobsErrorMessage(error)}</p>
+          <p className="poppins-regular text-destructive px-4 py-6">{getJobsErrorMessage(error)}</p>
         ) : jobs.length === 0 ? (
           <p className="poppins-regular text-foreground px-4 py-6">No open roles are available right now.</p>
         ) : (

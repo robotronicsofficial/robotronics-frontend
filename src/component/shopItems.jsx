@@ -17,7 +17,7 @@ const ShopItems = () => {
                 />
                 {/* name price AI */}
                 <div className="flex flex-row">
-                  <h3 className="tracking-widest text-muted-foreground-900 text-lg font-bold title-font  py-5">
+                  <h3 className="tracking-widest text-muted-foreground text-lg font-bold title-font  py-5">
                     Artificial Intelligence <br />
                     and Machine Learning{" "}
                   </h3>

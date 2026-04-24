@@ -76,7 +76,7 @@ const Intro = () => {
 
   if (productError) {
     return (
-      <CenteredState className="bg-muted p-10 text-center text-lg text-red-500">
+      <CenteredState className="bg-muted p-10 text-center text-lg text-destructive">
         {productError.message || "We couldn't load this product right now."}
       </CenteredState>
     );
@@ -136,7 +136,7 @@ const Intro = () => {
                 })}
               </div>
               {product.onSale && (
-                <div className="bg-red-600 p-1 px-2">
+                <div className="bg-destructive p-1 px-2">
                   <span className="text-background">ON SALE</span>
                 </div>
               )}
@@ -158,7 +158,7 @@ const Intro = () => {
             <div className="flex items-center bg-card">
               <button
                 type="button"
-                className="rounded-md bg-background-200 px-1 lg:px-3 lg:py-1"
+                className="rounded-md bg-muted px-1 lg:px-3 lg:py-1"
                 onClick={handleDecrease}
               >
                 -
@@ -166,7 +166,7 @@ const Intro = () => {
               <input type="number" className="w-10 text-center lg:w-24" value={quantity} readOnly />
               <button
                 type="button"
-                className="rounded-md bg-background-200 px-3 py-1"
+                className="rounded-md bg-muted px-3 py-1"
                 onClick={handleIncrease}
               >
                 +

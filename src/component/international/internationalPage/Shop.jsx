@@ -43,7 +43,7 @@ const Shop = () => {
             Loading live courses...
           </div>
         ) : error ? (
-          <div className="rounded-2xl bg-card p-10 text-center text-red-600 shadow-sm">
+          <div className="rounded-2xl bg-card p-10 text-center text-destructive shadow-sm">
             We couldn&apos;t load courses right now.
           </div>
         ) : featuredCourses.length === 0 ? (
@@ -68,12 +68,12 @@ const Shop = () => {
                 />
                 <div className="px-4 py-4">
                   <div className="flex items-start justify-between gap-3">
-                    <p className="rounded-lg bg-muted px-2 py-1 text-base font-bold text-muted-foreground-700">
+                    <p className="rounded-lg bg-muted px-2 py-1 text-base font-bold text-muted-foreground">
                       {course?.category || "General"}
                     </p>
                     <div className="flex items-center">
                       <FaStar className="text-primary" />
-                      <p className="ml-2 text-base text-muted-foreground-700">
+                      <p className="ml-2 text-base text-muted-foreground">
                         {Number(course?.reviews || 0)} Reviews
                       </p>
                     </div>

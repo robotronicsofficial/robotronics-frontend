@@ -53,7 +53,7 @@ const ReviewsComponent = () => {
         {reviews.map((review, index) => (
           <div
             key={index}
-            className="p-4 sm:p-5 lg:p-6 border border-border-200 rounded-2xl hover:shadow-sm transition-shadow"
+            className="p-4 sm:p-5 lg:p-6 border border-border rounded-2xl hover:shadow-sm transition-shadow"
           >
             <div className="flex gap-3 sm:gap-4 lg:gap-6">
               <img

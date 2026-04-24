@@ -27,7 +27,7 @@ const BoToBtn = () => {
 export default BoToBtn;
 
 {
-  /* <div class="bg-card bg-opacity-50 border border-border-300 p-4 w-64 mx-auto mt-8 rounded-lg text-center text-muted-foreground-800">
+  /* <div class="bg-card bg-opacity-50 border border-border p-4 w-64 mx-auto mt-8 rounded-lg text-center text-muted-foreground">
         This is a transparent div with a transparent background using Tailwind CSS.
     </div> */
 }

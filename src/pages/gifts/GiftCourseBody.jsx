@@ -142,7 +142,7 @@ const GiftCourseBody = () => {
 
             <form
               onSubmit={handleSubmit}
-              className="mx-auto flex max-w-4xl flex-col gap-6 rounded-md bg-background-50 p-6"
+              className="mx-auto flex max-w-4xl flex-col gap-6 rounded-md bg-muted p-6"
             >
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
@@ -155,7 +155,7 @@ const GiftCourseBody = () => {
                     id="senderName"
                     value={form.senderName}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
                     placeholder="Your name"
                     required
                   />
@@ -171,7 +171,7 @@ const GiftCourseBody = () => {
                     id="senderEmail"
                     value={form.senderEmail}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
                     placeholder="you@example.com"
                     required
                   />
@@ -188,7 +188,7 @@ const GiftCourseBody = () => {
                   id="senderPhone"
                   value={form.senderPhone}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
                   placeholder="0300 1234567"
                   required
                 />
@@ -204,7 +204,7 @@ const GiftCourseBody = () => {
                   id="recipientName"
                   value={form.recipientName}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
                   placeholder="Recipient name"
                   required
                 />
@@ -220,7 +220,7 @@ const GiftCourseBody = () => {
                   id="recipientEmail"
                   value={form.recipientEmail}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
                   placeholder="recipient@example.com"
                   required
                 />
@@ -236,7 +236,7 @@ const GiftCourseBody = () => {
                   id="date"
                   value={form.date}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
                   required
                 />
               </div>
@@ -250,7 +250,7 @@ const GiftCourseBody = () => {
                   id="message"
                   value={form.message}
                   onChange={handleChange}
-                  className="mt-1 block h-40 w-full rounded-md border-border-300 p-3 px-5 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block h-40 w-full rounded-md border-border p-3 px-5 shadow-sm focus:border-ring focus:ring focus:ring-ring/20 focus:ring-opacity-50"
                   placeholder="Add your message"
                 />
               </div>
@@ -259,8 +259,8 @@ const GiftCourseBody = () => {
                 <p
                   className={`rounded-md px-4 py-3 text-sm ${
                     status.type === "success"
-                      ? "bg-green-50 text-green-700"
-                      : "bg-red-50 text-red-700"
+                      ? "bg-success/10 text-success"
+                      : "bg-destructive/10 text-destructive"
                   }`}
                 >
                   {status.message}

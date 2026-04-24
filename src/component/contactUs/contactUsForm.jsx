@@ -46,27 +46,27 @@ const SOCIAL_LINKS = [
   {
     href: "https://www.facebook.com/robotronicspakistan/",
     Icon: FaFacebook,
-    className: "hover:bg-blue-800",
+    className: "hover:bg-info",
   },
   {
     href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
     Icon: FaYoutube,
-    className: "hover:bg-red-600",
+    className: "hover:bg-destructive",
   },
   {
     href: "https://www.instagram.com/robotronicspk/?hl=en",
     Icon: FaInstagram,
-    className: "hover:bg-pink-600",
+    className: "hover:bg-accent/80",
   },
   {
     href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
     Icon: FaLinkedin,
-    className: "hover:bg-blue-600",
+    className: "hover:bg-info",
   },
   {
     href: "https://wa.me/message/TKZZPIE2A34UM1",
     Icon: FaWhatsapp,
-    className: "hover:bg-green-500",
+    className: "hover:bg-success",
   },
 ];
 
@@ -278,7 +278,7 @@ const ContactUsForm = () => {
 
             {formData.userType && (
               <div className="mb-5">
-                <label className="block text-sm text-muted-foreground-500 dark:text-muted-foreground-400 mb-2">
+                <label className="block text-sm text-muted-foreground dark:text-muted-foreground mb-2">
                   Services I'm interested in:
                 </label>
                 <div className="flex flex-col gap-2">
@@ -313,7 +313,7 @@ const ContactUsForm = () => {
             {status && (
               <div
                 className={`mb-5 rounded p-3 ${
-                  status.includes("Error") ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"
+                  status.includes("Error") ? "bg-destructive/10 text-destructive" : "bg-success/10 text-success"
                 }`}
               >
                 {status}

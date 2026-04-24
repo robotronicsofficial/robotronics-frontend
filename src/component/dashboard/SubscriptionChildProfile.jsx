@@ -231,11 +231,11 @@ const SubscriptionChildProfile = () => {
   };
 
   if (loading) {
-    return <CenteredState className="bg-background-100 min-h-screen">Loading...</CenteredState>;
+    return <CenteredState className="bg-muted min-h-screen">Loading...</CenteredState>;
   }
 
   if (error) {
-    return <CenteredState className="bg-background-100 min-h-screen">Error: {error}</CenteredState>;
+    return <CenteredState className="bg-muted min-h-screen">Error: {error}</CenteredState>;
   }
 
   return (
@@ -280,7 +280,7 @@ const SubscriptionChildProfile = () => {
                         <button
                           onClick={() => handleViewCourses(child._id)}
                           className={`text-xs sm:text-sm poppins-light border border-border rounded-lg px-2 py-1 sm:px-3 sm:py-2 ${
-                            hasPin ? 'bg-primary text-background cursor-pointer' : 'bg-background-300 text-muted-foreground-500 cursor-not-allowed'
+                            hasPin ? 'bg-primary text-background cursor-pointer' : 'bg-muted text-muted-foreground cursor-not-allowed'
                           } md:text-base`}
                           disabled={!hasPin}
                         >

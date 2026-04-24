@@ -86,7 +86,7 @@ const CareerTestimonials = () => {
 
 
         >
-          <blockquote className="text-xl italic font-semibold text-muted-foreground-900 p-10 dark:text-background">
+          <blockquote className="text-xl italic font-semibold text-muted-foreground p-10 dark:text-background">
             <svg
               className="w-8 h-8 text-foreground mb-4"
               aria-hidden="true"
