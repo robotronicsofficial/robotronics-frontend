@@ -9,12 +9,7 @@ import {
   FaLinkedin,
 } from "react-icons/fa";
 
-import { BACKEND_BASE_URL } from "../../lib/api";
-const resolveImageUrl = (image) => {
-  if (!image) return "https://via.placeholder.com/160";
-  if (image.startsWith("http")) return image;
-  return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
-};
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
   const paragraphs = Array.isArray(blog?.paragraphs) ? blog.paragraphs.filter(Boolean) : [];
@@ -53,7 +48,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
             <div className="flex items-center gap-4">
               <img
                 className="size-14 rounded-full object-cover"
-                src={resolveImageUrl(blog?.authorImage)}
+                src={resolveBackendAssetUrl(blog?.authorImage, "https://via.placeholder.com/160")}
                 alt={blog?.authorName || "Author"}
               />
               <div>
@@ -83,7 +78,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
       </div>
 
       <div className="flex flex-col gap-8" data-aos="fade-up">
-        <div className="flex flex-row space-y-5">
+        <div className="flex flex-col gap-5 lg:flex-row">
           <div className="lg:w-2/3">
             <FaQuoteLeft size={24} className="text-quote" />
             <p className="text-balance text-brown poppins-regular lg:text-6xl text-2xl">

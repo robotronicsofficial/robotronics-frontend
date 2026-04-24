@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import OrderSummaryLine from "./OrderSummaryLine";
 import { useAuth } from "../../contexts/useAuth";
-import { BACKEND_BASE_URL } from "../../lib/api";
 import { getCommerceItemKey } from "../../lib/commerceItems";
 import {
   calculateCartSummary,
@@ -14,6 +13,7 @@ import {
   saveShopCheckout,
 } from "../../lib/shopCheckout";
 import { addToCart, removeFromCart } from "../../store/cart/cartSlice";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import "react-toastify/dist/ReactToastify.css";
 
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
@@ -31,12 +31,6 @@ const ShopCartproductList = ({ onNext }) => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const summary = useMemo(() => calculateCartSummary(cart), [cart]);
-
-  const resolveImageUrl = (image) => {
-    if (!image) return "https://via.placeholder.com/300x200";
-    if (image.startsWith("http")) return image;
-    return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
-  };
 
   const [itemQuantity, setItemQuantity] = useState(
     cart.reduce((acc, product) => {
@@ -102,7 +96,7 @@ const ShopCartproductList = ({ onNext }) => {
               <div className="flex flex-col gap-6 sm:flex-row">
                 <div className="size-[15vw] overflow-hidden">
                   <img
-                    src={resolveImageUrl(product.image || product.images?.[0])}
+                    src={resolveBackendAssetUrl(product.image || product.images?.[0], "https://via.placeholder.com/300x200")}
                     alt={product.name}
                     width={200}
                     height={200}

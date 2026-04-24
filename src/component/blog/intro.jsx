@@ -1,15 +1,10 @@
 import { Link } from "react-router-dom";
 
 import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
-import { BACKEND_BASE_URL } from "../../lib/api";
-const resolveImageUrl = (image) => {
-  if (!image) return undefined;
-  if (image.startsWith("http")) return image;
-  return `${BACKEND_BASE_URL}/${image.replace(/\\/g, "/")}`;
-};
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const Intro = ({ blog }) => {
-  const backgroundImage = resolveImageUrl(blog?.bannerImage || blog?.thumbnailImage);
+  const backgroundImage = resolveBackendAssetUrl(blog?.bannerImage || blog?.thumbnailImage);
 
   return (
     <div
@@ -17,7 +12,7 @@ const Intro = ({ blog }) => {
       style={backgroundImage ? { backgroundImage: `url("${backgroundImage}")` } : undefined}
     >
       <div className="absolute inset-0 bg-black/40" />
-      <div className={getHeaderOffsetClass("blogHero", "relative lg:p-10 lg:pl-28 pl-10 pr-10 space-y-4 text-white")}>
+      <div className={getHeaderOffsetClass("blogHero", "relative flex flex-col gap-4 pl-10 pr-10 text-white lg:p-10 lg:pl-28")}>
         <p className="text-sm uppercase tracking-[0.35em]" data-aos="fade-up">
           {blog?.categories?.[0] || "Blog"}
         </p>
@@ -33,15 +28,12 @@ const Intro = ({ blog }) => {
           <span>{blog?.date ? new Date(blog.date).toLocaleDateString() : "Unknown date"}</span>
           <span>{Number(blog?.views || 0).toLocaleString()} views</span>
         </div>
-        <Link to="/Blog">
-          <button
-            className="text-brown lg:text-2xl poppins-light text-sm bg-white p-5 rounded-xl"
-            data-aos="fade-up"
-
-
-          >
-            Back to Blog
-          </button>
+        <Link
+          to="/Blog"
+          className="w-fit rounded-xl bg-white p-5 text-sm text-brown poppins-light lg:text-2xl"
+          data-aos="fade-up"
+        >
+          Back to Blog
         </Link>
       </div>
     </div>
