@@ -20,7 +20,7 @@ import { clearCart } from "../../store/cart/cartSlice";
 import { useAuth } from "../../contexts/useAuth";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
-import { BACKEND_BASE_URL } from "../../lib/api";
+import { sendSessionJson } from "../../lib/api";
 
 const summaryLabelClassName = "font-lato text-base text-[#7E7F7C]";
 const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
@@ -84,27 +84,13 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
     setSubmitStatus({ type: "", message: "" });
 
     try {
-      const response = await fetch(
-        `${BACKEND_BASE_URL}/shop-checkout-intents`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(
-            buildShopCheckoutIntentRequest({
-              checkout,
-              cart,
-            }),
-          ),
-        },
-      );
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to submit checkout intent");
-      }
+      const data = await sendSessionJson("/shop-checkout-intents", {
+        method: "POST",
+        body: buildShopCheckoutIntentRequest({
+          checkout,
+          cart,
+        }),
+      });
 
       setSubmittedIntent(data.checkoutIntent || null);
       setSubmitStatus({
