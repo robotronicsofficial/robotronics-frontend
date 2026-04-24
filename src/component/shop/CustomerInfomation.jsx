@@ -13,8 +13,8 @@ import {
 } from "../../lib/shopCheckout";
 import { getCommerceItemKey, hasShippableCommerceItems } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
-import { sendSessionJson } from "../../lib/api";
 import { selectCart, useCartStore } from "../../stores/cartStore";
+import { useSaveCheckoutAddressMutation } from "../../hooks/useShopOrders";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -69,8 +69,8 @@ const CustomerInfomation = ({ onNext }) => {
   const navigate = useNavigate();
   const storedCheckout = loadShopCheckout();
   const requiresShipping = hasShippableCommerceItems(cart);
+  const saveCheckoutAddressMutation = useSaveCheckoutAddressMutation();
 
-  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     firstName: storedCheckout.customer?.firstName || "",
     lastName: storedCheckout.customer?.lastName || "",
@@ -93,7 +93,6 @@ const CustomerInfomation = ({ onNext }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!currentUser) return alert("Please log in to continue.");
-    setLoading(true);
 
     try {
       const customer = {
@@ -123,12 +122,9 @@ const CustomerInfomation = ({ onNext }) => {
         return;
       }
 
-      const data = await sendSessionJson("/addresses", {
-        method: "POST",
-        body: {
-          ...form,
-          notes: note,
-        },
+      const data = await saveCheckoutAddressMutation.mutateAsync({
+        ...form,
+        notes: note,
       });
       saveShopCheckout({
         customer,
@@ -143,8 +139,6 @@ const CustomerInfomation = ({ onNext }) => {
       navigate("/ShippingService");
     } catch (err) {
       alert(err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -267,9 +261,9 @@ const CustomerInfomation = ({ onNext }) => {
             type="submit"
             className="text-center lg:text-xl text-sm poppins-bold text-[#F5AB34] bg-[#362D2C] py-2 lg:px-20 px-5"
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={saveCheckoutAddressMutation.isPending}
           >
-            {loading ? "Processing..." : requiresShipping ? "CONTINUE TO SHIPPING" : "CONTINUE TO PAYMENT"}
+            {saveCheckoutAddressMutation.isPending ? "Processing..." : requiresShipping ? "CONTINUE TO SHIPPING" : "CONTINUE TO PAYMENT"}
           </button>
         </div>
       </div>

@@ -18,8 +18,8 @@ import { getCommerceItemKey, hasShippableCommerceItems } from "../../lib/commerc
 import { useAuth } from "../../contexts/useAuth";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
-import { sendSessionJson } from "../../lib/api";
 import { selectCart, useCartStore } from "../../stores/cartStore";
+import { useSubmitShopCheckoutIntentMutation } from "../../hooks/useShopOrders";
 
 const summaryLabelClassName = "font-lato text-base text-[#7E7F7C]";
 const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
@@ -32,9 +32,9 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const cart = useCartStore(selectCart);
   const clearCart = useCartStore((state) => state.clearCart);
   const checkout = useMemo(() => loadShopCheckout(), []);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({ type: "", message: "" });
   const [submittedIntent, setSubmittedIntent] = useState(null);
+  const submitShopCheckoutIntentMutation = useSubmitShopCheckoutIntentMutation();
   const summary = calculateCartSummary(cart);
   const requiresShipping = submittedIntent
     ? hasShippableCommerceItems(submittedIntent.items)
@@ -79,13 +79,11 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       return;
     }
 
-    setIsSubmitting(true);
     setSubmitStatus({ type: "", message: "" });
 
     try {
-      const data = await sendSessionJson("/shop-checkout-intents", {
-        method: "POST",
-        body: buildShopCheckoutIntentRequest({
+      const data = await submitShopCheckoutIntentMutation.mutateAsync({
+        ...buildShopCheckoutIntentRequest({
           checkout,
           cart,
         }),
@@ -103,8 +101,6 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         type: "error",
         message: error.message || "Failed to submit checkout intent.",
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -317,11 +313,11 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       <div className="lg:w-1/3">
         <CustomerOrder
           onNext={handleSubmitCheckoutIntent}
-          buttonDisabled={isSubmitting || Boolean(submittedIntent)}
+          buttonDisabled={submitShopCheckoutIntentMutation.isPending || Boolean(submittedIntent)}
           buttonLabel={
             submittedIntent
               ? "ORDER REQUEST SUBMITTED"
-              : isSubmitting
+              : submitShopCheckoutIntentMutation.isPending
                 ? "SUBMITTING ORDER REQUEST..."
                 : paymentReady
                   ? "SUBMIT ORDER REQUEST"
