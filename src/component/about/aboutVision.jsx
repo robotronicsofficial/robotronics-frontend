@@ -1,6 +1,6 @@
+import AppImage from "../AppImage";
 import mission from "../../assets/images/aboutMission.svg";
 import vision from "../../assets/images/aboutVision.svg";
-import quote from "../../assets/images/aboutquote.svg"
 import founder2 from "../../assets/imagesContent/team/mfarhan.jpg";
 
 const AboutVision = () => {
@@ -9,8 +9,8 @@ const AboutVision = () => {
       {/* block 1 */}
       <div className="lg:flex flex-row lg:p-10 p-4 lg:justify-between items-center ">
         {/* div 1 */}
-        <div className="flex-1 flex flex-row p-2 "data-aos="fade-up-right" data-aos-duration="2000" data-aos-delay="4000">
-          <img className="lg:h-20 lg:w-20 h-10 w-10 px-2 "data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" src={mission} />
+        <div className="flex-1 flex flex-row p-2 "data-aos="fade-up-right">
+          <img className="lg:h-20 lg:w-20 h-10 w-10 px-2 "data-aos="fade-up" src={mission} />
           <div>
             <p className="text-white lg:pb-4 pb-2 text-bold poppins-semibold lg:text-4xl text-2xl">MISSION</p>
             <p className="text-wrap poppins-light text-white text-sm">
@@ -19,8 +19,8 @@ const AboutVision = () => {
             </p>
           </div>
         </div>
-        <div className="flex-1 flex flex-row p-2"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
-          <img className="lg:h-20 lg:w-20 h-10 w-10 px-2"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" src={vision} />
+        <div className="flex-1 flex flex-row p-2"data-aos="fade-up">
+          <img className="lg:h-20 lg:w-20 h-10 w-10 px-2"data-aos="fade-up" src={vision} />
           <div>
             <p className="text-white lg:pb-4 pb-2 text-bold poppins-semibold lg:text-4xl text-2xl">VISION</p>
             <p className="text-wrap text-white poppins-light text-sm">
@@ -36,17 +36,17 @@ const AboutVision = () => {
           <blockquote>
 
 
-            <p className="lg:text-2xl text-sm md:px-6 italic poppins-light text-wrap font-medium text-white dark:text-white"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
-            Robotics is not just about building machines; it's about creating opportunities to rethink how we solve problems, improve lives and explore new frontiers. It blends the ingenuity of human creativity with the precision of technology to shape a future where innovation knows no bounds. Robotics empowers us to transform imagination into reality, forming a formidable connection between what is and what could be, as we build a smarter, more sustainable world together.
+            <p className="lg:text-2xl text-sm md:px-6 italic poppins-light text-wrap font-medium text-white dark:text-white"data-aos="fade-up">
+            Robotics is not just about building machines; it&apos;s about creating opportunities to rethink how we solve problems, improve lives and explore new frontiers. It blends the ingenuity of human creativity with the precision of technology to shape a future where innovation knows no bounds. Robotics empowers us to transform imagination into reality, forming a formidable connection between what is and what could be, as we build a smarter, more sustainable world together.
             </p>
           </blockquote>
         </div>
 
         <div className="p-2 pt-8 md:pt-2  flex flex-col   items-center" >
 
-          <img className=""data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000" src={founder2} />
-          <p className="lg:text-2xl text-xl text-gold poppins-light"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" >Engr Saba Farhan</p>
-          <p className="text-white  poppins-light"data-aos="fade-up" data-aos-duration="3000" data-aos-delay="6000" >Curriculum Head</p>
+          <AppImage className="" data-aos="fade-down" src={founder2} alt="Curriculum head portrait" />
+          <p className="lg:text-2xl text-xl text-gold poppins-light"data-aos="fade-up" >Engr Saba Farhan</p>
+          <p className="text-white  poppins-light"data-aos="fade-up" >Curriculum Head</p>
         </div>
       </div>
     </div>

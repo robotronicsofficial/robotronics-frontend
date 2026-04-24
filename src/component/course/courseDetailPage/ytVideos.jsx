@@ -5,14 +5,13 @@ const YtVideos = () => {
       <div className="lg:p-10 p-5 lg:flex flex-row lg:space-x-5 lg:space-y-0 space-y-8  justify-center">
         {/* video 1 */}
         <div className=" bg-white  ">
-          {/* eslint-disable-next-line react/no-unknown-property */}
           <iframe
             width="100%"
             height="315"
             src="https://www.youtube.com/embed/rfscVS0vtbw?autoplay=1"
             title="YouTube video player"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
+            allowFullScreen
           ></iframe>
           <div className="p-6">
             <p className="text-base poppins-light text-gold">23 Feb, 2022</p>
@@ -33,7 +32,7 @@ const YtVideos = () => {
             src="https://www.youtube.com/embed/_uQrJ0TkZlc?autoplay=1"
             title="YouTube video player"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
+            allowFullScreen
           ></iframe>
           <div className="p-6">
             <p className="text-base poppins-lights text-gold">23 Feb, 2022</p>
@@ -54,7 +53,7 @@ const YtVideos = () => {
             src="https://www.youtube.com/embed/XnSasPR2KJI?autoplay=1"
             title="YouTube video player"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
+            allowFullScreen
           ></iframe>
           <div className="p-6">
             <p className="text-base poppins-light text-gold">23 Feb, 2022</p>

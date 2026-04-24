@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LeftNav from "./leftNav";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/useAuth";
 import { fetchSessionJson } from "../../lib/api";
 import { openExternalUrl } from "../../utils/openExternalUrl";
 

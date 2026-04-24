@@ -17,17 +17,17 @@ const Intro = ({ blog }) => {
     >
       <div className="absolute inset-0 bg-black/40" />
       <div className="relative lg:p-10 lg:pt-32 pt-24 lg:pl-28 pl-10 pr-10 space-y-4 text-white">
-        <p className="text-sm uppercase tracking-[0.35em]" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <p className="text-sm uppercase tracking-[0.35em]" data-aos="fade-up">
           {blog?.categories?.[0] || "Blog"}
         </p>
-        <p className="lg:text-6xl text-4xl poppins-extrabold mt-10" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <p className="lg:text-6xl text-4xl poppins-extrabold mt-10" data-aos="fade-up">
           {blog?.title || "Blog Post"}
         </p>
-        <p className="max-w-3xl text-base lg:text-lg poppins-light" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <p className="max-w-3xl text-base lg:text-lg poppins-light" data-aos="fade-up">
           {(blog?.paragraphs?.[0] || "Read the latest update from Robotronics.").slice(0, 180)}
           {(blog?.paragraphs?.[0] || "").length > 180 ? "..." : ""}
         </p>
-        <div className="flex flex-wrap gap-4 text-sm poppins-light" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <div className="flex flex-wrap gap-4 text-sm poppins-light" data-aos="fade-up">
           <span>{blog?.authorName || "Robotronics"}</span>
           <span>{blog?.date ? new Date(blog.date).toLocaleDateString() : "Unknown date"}</span>
           <span>{Number(blog?.views || 0).toLocaleString()} views</span>
@@ -36,8 +36,8 @@ const Intro = ({ blog }) => {
           <button
             className="text-brown lg:text-2xl poppins-light text-sm bg-white p-5 rounded-xl"
             data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
+
+
           >
             Back to Blog
           </button>

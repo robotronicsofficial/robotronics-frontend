@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Avatar, Tooltip } from '@mui/material';
 
 // Custom MUI Marker Component
@@ -26,24 +26,30 @@ const MaterialMarker = ({ position, name, address }) => {
 
   useEffect(() => {
     const markerElement = document.getElementById(`mui-marker-${position[0]}-${position[1]}`);
-    if (markerElement) {
-      ReactDOM.render(
-        <Tooltip title={<div><strong>{name}</strong><br />{address}</div>} arrow>
-          <Avatar
-            sx={{
-              width: 50,
-              height: 50,
-              backgroundColor: '#fff',
-              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
-              border: '2px solid #000',
-            }}
-            alt={name}
-            src="/path/to/your/custom-marker-icon.png"
-          />
-        </Tooltip>,
-        markerElement
-      );
+    if (!markerElement) {
+      return undefined;
     }
+
+    const root = createRoot(markerElement);
+    root.render(
+      <Tooltip title={<div><strong>{name}</strong><br />{address}</div>} arrow>
+        <Avatar
+          sx={{
+            width: 50,
+            height: 50,
+            backgroundColor: '#fff',
+            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
+            border: '2px solid #000',
+          }}
+          alt={name}
+          src="/path/to/your/custom-marker-icon.png"
+        />
+      </Tooltip>,
+    );
+
+    return () => {
+      root.unmount();
+    };
   }, [position, name, address]);
 
   return null;
@@ -70,8 +76,8 @@ const ContactMap = () => {
     <div
       className="flex bg-background"
       data-aos="fade-up"
-      data-aos-duration="2000"
-      data-aos-delay="400"
+
+
     >
       <div className="lg:p-32 py-32 relative h-screen w-screen">
         <MapContainer

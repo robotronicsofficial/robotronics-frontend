@@ -173,7 +173,6 @@ import { useState, useEffect } from "react";
 import CourseProduct from "../course/courseProduct";
 import icon from "../../assets/logo/searchicon.svg";
 import arow from "../../assets/logo/shopArowIcon.svg";
-import Shopfilter from "../shop/shopfilter";
 import ShopPages from "../shop/shopPages";
 import { IoHomeOutline } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
@@ -223,20 +222,20 @@ const ShopCoursesIntro = () => {
       <div className="flex-1">
         {/* Line and Navigation */}
         <div className="lg:pt-16 pt-8">
-          <div className="h-0 w-full border border-lin"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"></div>
+          <div className="h-0 w-full border border-lin"data-aos="fade-up"></div>
         </div>
 
         <div className="lg:flex md:flex lg:px-24 px-2 lg:pt-10 pt-5 justify-between items-center">
           <div className="flex justify-between w-full">
             <div className="flex">
-              <IoHomeOutline className="h-5" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"/>
-              <p className="px-3 lg:text-base poppins-bold text-sm"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+              <IoHomeOutline className="h-5" data-aos="fade-up"/>
+              <p className="px-3 lg:text-base poppins-bold text-sm"data-aos="fade-up">
                 Main Page
               </p>
             </div>
           </div>
 
-          <div className="w-2/3 flex justify-between space-x-5"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+          <div className="w-2/3 flex justify-between space-x-5"data-aos="fade-up">
             <div className="flex justify-between w-full">
               <a href="#">
                 <div className="flex">
@@ -262,12 +261,12 @@ const ShopCoursesIntro = () => {
         </div>
 
         {/* Line 2 */}
-        <div className="lg:pt-10 pt-5"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <div className="lg:pt-10 pt-5"data-aos="fade-up">
           <div className="h-0 w-full border border-lin"></div>
         </div>
 
         {/* Search Bars */}
-        <div className="lg:flex flex-row lg:py-10 py-4"data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000">
+        <div className="lg:flex flex-row lg:py-10 py-4"data-aos="fade-down">
           <div className="lg:w-1/5 self-center lg:text-xl poppins-light">
             Category
           </div>
@@ -303,7 +302,7 @@ const ShopCoursesIntro = () => {
       </div>
 
       {/* Block 2 - Course Items */}
-      <div className="flex-1"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <div className="flex-1"data-aos="fade-up">
         <div className="flex">
           {/* Sidebar Filter */}
           <div className="lg:w-1/5">
@@ -365,7 +364,7 @@ const ShopCoursesIntro = () => {
             {[1, 2, 3, 4].map((page) => (
               <button
                 key={page}
-                className="p-1 px-3 bg-white lg:text-base text-sm hover:bg-gold"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"
+                className="p-1 px-3 bg-white lg:text-base text-sm hover:bg-gold"data-aos="fade-up"
               >
                 {page}
               </button>
@@ -373,7 +372,7 @@ const ShopCoursesIntro = () => {
           </div>
 
           {/* Footer Text */}
-          <div className="flex"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+          <div className="flex"data-aos="fade-up">
             <p className="lg:text-base poppins-regular text-sm">
               SHOWED 1 - 9 OF 30 PRODUCTS
             </p>

@@ -70,7 +70,7 @@ const Shopfilter = ({
           // </div>
 
           <div>
-            {categories.map((category, index) => (
+            {categories.map((category) => (
               <a
                 key={category}
                 className={`flex cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-200 

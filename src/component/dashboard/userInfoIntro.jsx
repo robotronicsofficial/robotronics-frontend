@@ -1,7 +1,6 @@
-import { useEffect } from "react";
 import LeftNav from "./leftNav";
 import Intro from "../dashboard/intro";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/useAuth";
 
 const UserInfoIntro = () => {
   const { currentUser } = useAuth();
@@ -16,7 +15,7 @@ const UserInfoIntro = () => {
         month: 'long',
         day: 'numeric'
       });
-    } catch (e) {
+    } catch {
       return "Unknown";
     }
   };
@@ -29,7 +28,7 @@ const UserInfoIntro = () => {
   return (
     <div className="bg-background min-h-screen px-4 md:px-20">
       <Intro />
-      <div className="flex flex-col lg:flex-row pt-40 md:pt-4" data-aos="fade-up" data-aos-duration="2000">
+      <div className="flex flex-col lg:flex-row pt-40 md:pt-4" data-aos="fade-up">
         <div className="w-full lg:w-1/3">
           <LeftNav />
         </div>

@@ -1,6 +1,5 @@
 import { PiGraduationCapLight } from "react-icons/pi";
-import ReactPlayer from "react-player";
-import video from "../../assets/videos/video.mp4";
+import video from "../../assets/videos/video-preview.mp4";
 import { useState, useEffect } from "react";
 import { FiDownload } from "react-icons/fi";
 import ReviewsComponent from "../../pages/RoboGenius/Robogeniusreview";
@@ -20,6 +19,7 @@ import {
   normalizeCourseDetail,
 } from "../../lib/robogenius";
 import { resolveBackendUrl } from "../../lib/api";
+import VideoPlayer from "../../component/VideoPlayer";
 
 const MAX_ATTEMPTS = {
   BASIC: 2,
@@ -339,8 +339,8 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
               <div
                 className="w-full lg:w-2/3 space-y-4"
                 data-aos="fade-up"
-                data-aos-duration="2000"
-                data-aos-delay="4000"
+
+
               >
                 <div className="">
                   <img
@@ -395,15 +395,14 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
               {/* Right Side with Video */}
               <div className="w-full lg:w-1/3 mt-6 lg:mt-0 space-y-4 bg-[#0f1586] h-[23.8vw] rounded-2xl">
                 <div className="bg-gray-300 w-full h-full rounded-2xl overflow-hidden">
-                  <ReactPlayer
-                    url={video}
-                    playing
+                  <VideoPlayer
+                    src={video}
+                    title="Course preview video"
+                    autoPlay
                     muted
                     loop
                     controls
-                    width="100%"
-                    height="100%"
-                    className="rounded-lg"
+                    className="h-full w-full rounded-lg object-cover"
                   />
                 </div>
               </div>
@@ -417,8 +416,8 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
           <div
             className="bg-white p-8 py-10 shadow-xl rounded-md"
             data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
+
+
           >
             {/* Course Description */}
             <div className="py-5">
@@ -815,21 +814,13 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
               </button>
               <div className="p-4 flex-1 flex items-center justify-center">
                 <div className="w-full h-full">
-                  <ReactPlayer
-                    url={currentVideo}
-                    width="100%"
-                    height="100%"
-                    controls={true}
-                    style={{ minHeight: '70vh' }}
-                    config={{
-                      youtube: {
-                        playerVars: {
-                          modestbranding: 1,
-                          rel: 0,
-                          showinfo: 0
-                        }
-                      }
-                    }}
+                  <VideoPlayer
+                    src={currentVideo}
+                    title="Course lesson video"
+                    autoPlay
+                    controls
+                    className="h-full w-full"
+                    style={{ minHeight: "70vh" }}
                   />
                 </div>
               </div>

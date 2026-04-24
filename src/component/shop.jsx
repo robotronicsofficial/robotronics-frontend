@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Aos from "aos";
+import PropTypes from "prop-types";
 import robo from "../assets/logo/Robotrinic.svg";
 import leftArrow from "../assets/logo/arrow-up-left.svg";
 import rightArrow from "../assets/logo/arrow-up-right.svg";
@@ -9,16 +9,16 @@ import { IoVideocamOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 import { BACKEND_BASE_URL } from "../lib/api";
+import AppImage from "./AppImage";
+
 const ServiceCard = ({ service }) => {
   return (
     <div className="p-3 sm:p-4 lg:p-5" data-aos="fade-up">
       <div className="bg-white p-4 sm:p-5 rounded-xl shadow-md hover:shadow-lg transition-all h-full flex flex-col">
         {/* Image */}
-        <img
+        <AppImage
           className="rounded-xl w-full h-48 sm:h-56 object-fit"
-
           src={`${BACKEND_BASE_URL}/${service.thumbnail}`}
-
           alt={service.title || "Course image"}
         />
 
@@ -60,6 +60,15 @@ const ServiceCard = ({ service }) => {
   );
 };
 
+ServiceCard.propTypes = {
+  service: PropTypes.shape({
+    thumbnail: PropTypes.string,
+    title: PropTypes.string,
+    month: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    numLessons: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }).isRequired,
+};
+
 const Shop = () => {
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
@@ -69,12 +78,9 @@ const Shop = () => {
   const servicesPerPage = 3;
 
   useEffect(() => {
-    Aos.init({ duration: 1000 });
     const fetchServices = async () => {
       try {
-
         const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
-
         if (!response.ok) throw new Error("Failed to fetch services");
         const data = await response.json();
         setServices(data.courses || []);
@@ -116,7 +122,7 @@ const Shop = () => {
           {/* Title with Robot Image - Stacked on mobile */}
           <div className="flex flex-col items-center md:flex-row md:items-center gap-4 sm:gap-6 md:gap-8 w-full md:w-auto">
             {/* Image - Always on top */}
-            <img
+            <AppImage
               src={robo}
               alt="Robotics Course"
               className="h-20 md:h-24 lg:h-44 order-first"

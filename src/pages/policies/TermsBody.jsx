@@ -11,16 +11,16 @@ const TermsBody = () => {
               <h1
                 className="text-5xl poppins-bold text-brown"
                 data-aos="fade-up"
-                data-aos-duration="2000"
-                data-aos-delay="4000"
+
+
               >
                 Terms and Conditions
               </h1>
               <ol
                 className="text-xl poppins-light space-y-2"
                 data-aos="fade-up"
-                data-aos-duration="2000"
-                data-aos-delay="4000"
+
+
               >
                 <li>
                   <strong>1. Acceptance of Terms:</strong> By accessing and

@@ -20,8 +20,8 @@ const CustomerOrder = ({
     <div
       className="lg:px-14 px-5 lg:p-8 p-4 lg:space-y-20 space-y-8 "
       data-aos="fade-top"
-      data-aos-duration="2000"
-      data-aos-delay="4000"
+
+
     >
       {/* text */}
       <div className="lg:space-y-8 space-y-4">

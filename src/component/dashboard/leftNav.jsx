@@ -3,7 +3,7 @@ import { MdOutlinePayment } from "react-icons/md";
 import { RiArrowDropDownLine, RiRobot3Fill } from "react-icons/ri";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/useAuth";
 import { CONTACT_PATH } from "../../router/paths";
 
 const LeftNav = () => {

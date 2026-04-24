@@ -1,12 +1,10 @@
 import img from "../assets/logo/arrowN-E.svg";
-import robot from "../assets/images/bosten.svg";
+import robot from "../assets/images/bosten.png";
 import circle from "../assets/logo/twocircle.svg";
 import up from "../assets/logo/uparrow.svg";
-import mobile from "../assets/images/mobile.svg";
+import mobile from "../assets/images/mobile.png";
 import apple from "../assets/logo/apple.svg";
 import pstore from "../assets/logo/Playstor.svg";
-import Aos from "aos";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   FaFacebook,
@@ -16,14 +14,9 @@ import {
   FaWhatsapp,
   FaYoutube,
 } from "react-icons/fa";
+import AppImage from "./AppImage";
 
 const Footer = () => {
-  useEffect(() => {
-    Aos.init({
-      duration: 1000,
-    });
-  }, []);
-
   const goToTop = () => {
     window.scrollTo({
       top: 0,
@@ -40,12 +33,13 @@ const Footer = () => {
           <button
             className="flex lg:w-12 lg:h-12 md:h-8 md:w-8 h-6 w-6 top-btn border border-white rounded-full"
             data-aos="fade-up"
-            data-aos-duration="2000"
+
             onClick={goToTop}
           >
-            <img
+            <AppImage
               className="flex lg:h-6 lg:w-14 md:h-4 md:w-10 h-3 w-7 lg:mt-2 mt-1 items-center justify-center "
               src={up}
+              alt="Scroll to top"
             />
           </button>
         </div>
@@ -54,7 +48,7 @@ const Footer = () => {
           <p
             className="text-black text-wrap font-black lg:text-8xl md:text-6xl text-4xl custom-outline"
             data-aos="fade-down"
-            data-aos-duration="2000"
+
           >
             ROBOTRONICS
           </p>
@@ -67,7 +61,7 @@ const Footer = () => {
             <div
               className="lg:w-1/2 flex p-10"
               data-aos="fade-up"
-              data-aos-duration="2000"
+
             >
               {/* Quick Links */}
               <div className="w-1/2 text-wrap text-left">
@@ -170,7 +164,7 @@ const Footer = () => {
 
 
                 </nav>
-                <img className="h-7 w-7 mt-4" data-aos="fade-up" src={circle} />
+                <AppImage className="h-7 w-7 mt-4" data-aos="fade-up" src={circle} alt="" />
               </div>
 
               {/* Contact Us */}
@@ -224,8 +218,8 @@ const Footer = () => {
             {/* Search & App Buttons */}
             <div
               className="flex flex-col justify-center w-full lg:w-1/2 px-4"
-              data-aos=""
-              data-aos-duration="2000"
+
+
             >
               {/* Subscribe Section */}
               <div className="flex flex-col lg:flex-row items-center lg:items-start mb-4 space-y-4 lg:space-y-0 lg:space-x-4">
@@ -238,7 +232,7 @@ const Footer = () => {
                   />
                 </div>
                 <button className="w-full lg:w-auto flex items-center justify-center text-white bg-gold px-6 py-3 rounded hover:bg-gold-dark focus:outline-none transition-colors duration-200">
-                  <img src={img} alt="Subscribe Button Icon" />
+                  <AppImage src={img} alt="Subscribe Button Icon" />
                 </button>
               </div>
 
@@ -247,14 +241,14 @@ const Footer = () => {
                 {/* img */}
                 <div className="relative w-full max-w-sm mx-auto h-72">
   {/* Back phone */}
-  <img
+  <AppImage
     src={mobile}
     alt="Mobile 1"
     className="absolute left-10 top-5 w-32 sm:w-36 md:w-40 z-0"
   />
 
   {/* Front phone */}
-  <img
+  <AppImage
     src={mobile}
     alt="Mobile 2"
     className="absolute left-0 top-20 w-32 sm:w-36 md:w-40 z-10"
@@ -305,10 +299,10 @@ const Footer = () => {
                     <button
                       className="mb-4 border border-white p-4 rounded-xl flex items-center space-x-12 hover:bg-gray-800 transition-colors duration-200"
                       data-aos="fade-up"
-                      data-aos-duration="2000"
-                      data-aos-delay="4000"
+
+
                     >
-                      <img className="h-11 w-14" src={apple} alt="apple" />
+                      <AppImage className="h-11 w-14" src={apple} alt="apple" />
                       <div className="text-white">
                         <p className="text-sm text-wrap">Download on the</p>
                         <p className="text-2xl text-wrap font-bold">
@@ -319,10 +313,10 @@ const Footer = () => {
                     <button
                       className="border border-white p-4 rounded-xl flex items-center space-x-12 hover:bg-gray-800 transition-colors duration-200"
                       data-aos="fade-up"
-                      data-aos-duration="2000"
-                      data-aos-delay="4000"
+
+
                     >
-                      <img
+                      <AppImage
                         className="h-11 w-14"
                         src={pstore}
                         alt="play-store"
@@ -379,8 +373,6 @@ const Footer = () => {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  data-aos-duration="1000"
-                  data-aos-delay={index * 200}
                   className="lg:p-3 p-1 border border-brown bg-white rounded-xl hover:bg-brown hover:text-white text-black"
                 >
                   {icon}

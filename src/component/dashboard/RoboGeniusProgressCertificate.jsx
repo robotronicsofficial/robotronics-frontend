@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LeftNav from "./leftNav";
 import { FaUserCircle } from "react-icons/fa";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/useAuth";
 import { fetchSessionJson } from "../../lib/api";
 import { formatDisplayDate, normalizeParentRecord } from "../../lib/robogenius";
 import {

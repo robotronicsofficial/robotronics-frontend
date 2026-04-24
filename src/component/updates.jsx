@@ -1,24 +1,12 @@
-import "aos/dist/aos.css"; // Import CSS for AOS
-// import img1 from "../assets/images/5.svg";
-// import img2 from "../assets/images/4.svg";
-// import img3 from "../assets/images/1.svg";
-// import img4 from "../assets/images/2.svg";
-import img6 from "../assets/images/Rectangle 27.svg";
-import img7 from "../assets/images/Rectangle 31.svg";
-// import p1 from "../assets/imagesContent/latestupdate/p1.jpg"
-import p2 from "../assets/imagesContent/latestupdate/p2.jpg"
-import p3 from "../assets/imagesContent/latestupdate/p3.jpg"
-import p4 from "../assets/imagesContent/latestupdate/p4.jpg"
-// import p5 from "../assets/imagesContent/latestupdate/p5.jpg"
-import p6 from "../assets/imagesContent/latestupdate/p6.jpg"
-import { useEffect } from "react";
-import Aos from "aos";
+import img6 from "../assets/images/Rectangle27.webp";
+import img7 from "../assets/images/Rectangle31.webp";
+import p2 from "../assets/imagesContent/latestupdate/p2-optimized.webp"
+import p3 from "../assets/imagesContent/latestupdate/p3-optimized.webp"
+import p4 from "../assets/imagesContent/latestupdate/p4-optimized.webp"
+import p6 from "../assets/imagesContent/latestupdate/p6-optimized.webp"
+import AppImage from "./AppImage";
 
 const Updates = () => {
-  useEffect(() => {
-    Aos.init(); // Initialize AOS library
-  }, []);
-
   return (
     // image
     <div className="flex flex-col image " id="image">
@@ -29,7 +17,7 @@ const Updates = () => {
           <p
             className="text-white px-4 lg:px-14 py-14 poppins-extrabold text-2xl lg:text-5xl "
             data-aos="fade-up"
-            data-aos-duration="2000"
+
           >
             Latest Updates What&apos;s <br />
             <span className="block text-[#f5ab34] text-2xl lg:text-5xl poppins-extrabold mt-4">
@@ -40,15 +28,15 @@ const Updates = () => {
           <h1
             className="text-white text-wrap px-4 poppins-regular lg:px-14 text-sm lg:text-lg "
             data-aos="fade-up"
-            data-aos-duration="2000"
-          >Be informed about the latest updates in the world of Robotics.	
+
+          >Be informed about the latest updates in the world of Robotics.
 
           </h1>
 
-          <img
+          <AppImage
             className="w-full px-4 lg:px-14 py-4 object-cover"
             data-aos="fade-up"
-            data-aos-duration="2000"
+
             src={p6}
             alt="Cooking Image"
           />
@@ -59,16 +47,16 @@ const Updates = () => {
           <div
             className="flex space-between justify-center"
             data-aos="fade-down"
-            data-aos-duration="2000"
+
           >
-            <img className="lg:h-40 lg:w-28 h-22 w-14" src={img6} />
-            <img className="lg:h-40 lg:w-28 h-22 w-14 " src={img7} />
+            <AppImage className="lg:h-40 lg:w-28 h-22 w-14" src={img6} alt="Update accent card" />
+            <AppImage className="lg:h-40 lg:w-28 h-22 w-14 " src={img7} alt="Update accent card" />
           </div>
           {/* text */}
           <div
             className="space-y-2"
             data-aos="fade-up"
-            data-aos-duration="2000"
+
           >
             <div className="text-wrap mt-4">
               <p className="text-white lg:text-2xl lg:p-3 text-xl font-bold text-wrap">
@@ -107,31 +95,31 @@ const Updates = () => {
       </div>
       {/* layer 2 */}
       <div className="flex flex-wrap justify-center md:justify-between px-4 sm:px-6 md:px-10 pb-5">
-        <img
+        <AppImage
           className="w-1/2 sm:w-1/3 md:w-1/4 p-2 sm:p-4 md:p-5 object-contain"
           data-aos="fade-down"
-          data-aos-duration="2000"
+
           src={p3}
           alt="Image 1"
         />
-        <img
+        <AppImage
           className="w-1/2 sm:w-1/3 md:w-1/4 p-2 sm:p-4 md:p-5 object-contain"
           data-aos="fade-up"
-          data-aos-duration="2000"
+
           src={p2}
           alt="Image 2"
         />
-        <img
+        <AppImage
           className="w-1/2 sm:w-1/3 md:w-1/4 p-2 sm:p-4 md:p-5 object-contain"
           data-aos="fade-down"
-          data-aos-duration="2000"
+
           src={p4}
           alt="Image 3"
         />
-        <img
+        <AppImage
           className="w-1/2 sm:w-1/3 md:w-1/4 p-2 sm:p-4 md:p-5 object-contain"
           data-aos="fade-up"
-          data-aos-duration="2000"
+
           src={p3}
           alt="Image 2"
         />

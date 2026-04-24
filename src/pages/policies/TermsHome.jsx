@@ -1,4 +1,3 @@
-import Intro from '../../component/contactUs/intro'
 // import TermsBody from './TermsBody'
 import TermsAndConditions from './TermsAndConditions'
 const TermsHome = () => {

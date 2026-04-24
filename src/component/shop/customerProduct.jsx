@@ -1,10 +1,17 @@
-import img from "../../assets/images/customerProduct.svg";
+import PropTypes from "prop-types";
+import AppImage from "../AppImage";
+import img from "../../assets/images/customerProduct.webp";
 import { MdModeEdit,MdDelete  } from "react-icons/md";
+
 const CustomerProduct = ({ title, item, price, image, onDelete, onEdit }) => {
   return (
     <div className="flex flex-row space-x-3">
       <div>
-        <img className="lg:h-20 lg:w-24 object-cover" src={image || img} alt={title} />
+        <AppImage
+          className="lg:h-20 lg:w-24 object-cover"
+          src={image || img}
+          alt={title}
+        />
       </div>
       <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
         <p className="font-bold">{title}</p>
@@ -21,6 +28,15 @@ const CustomerProduct = ({ title, item, price, image, onDelete, onEdit }) => {
       </div>
     </div>
   );
+};
+
+CustomerProduct.propTypes = {
+  title: PropTypes.string,
+  item: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  image: PropTypes.string,
+  onDelete: PropTypes.func,
+  onEdit: PropTypes.func,
 };
 
 export default CustomerProduct;

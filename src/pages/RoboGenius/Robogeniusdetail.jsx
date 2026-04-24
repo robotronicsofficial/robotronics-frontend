@@ -92,8 +92,8 @@ const Robogeniusdetail = () => {
       <div
         className="bg-white p-8 py-6 rounded-xl"
         data-aos="fade-up"
-        data-aos-duration="2000"
-        data-aos-delay="4000"
+
+
       >
         <div className="py-5">
           <h1 className="font-bold text-xl mb-4 poppins-bold">Who this course is for?</h1>

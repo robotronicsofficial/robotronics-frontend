@@ -1,13 +1,4 @@
-import { FaChevronRight } from "react-icons/fa";
-
 const Intro = () => {
-  const breadcrumbs = [
-    { name: "Home", href: "/Dashboard/userInfo" },
-    { name: "profile", href: "/Dashboard/userInfo" },
-    { name: "Product", href: "/International/myRobot" },
-    { name: "Wishlist", href: "/Dashboard/WishList" },
-  ];
-
   return (
     <div className="bg-background pt-44 hidden md:block">
       {/* intro */}

@@ -6,6 +6,7 @@ import {
   FaWhatsapp,
   FaYoutube,
 } from "react-icons/fa";
+import { getAosStaggerDelay } from "../../../utils/motion";
 
 const Intro = () => {
   return (
@@ -13,8 +14,8 @@ const Intro = () => {
       <div
         className="w-full pt-60"
         data-aos="fade-up"
-        data-aos-duration="2000"
-        data-aos-delay="4000"
+
+
       >
         <div className="space-y-10 lg:p-10 p-4 lg:px-24 lg:w-1/2 ">
           {/* Text */}
@@ -22,8 +23,8 @@ const Intro = () => {
             <div
               className="flex flex-row space-x-2"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               {/* <h1 className=" md:text-3xl text-xl poppins-extralight text-white">
                 ROBOTRONICS
@@ -35,8 +36,8 @@ const Intro = () => {
             <div
               className="flex flex-wrap"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               <p className="lg:text-8xl text-4xl poppins-bold text-yellow">
                 OUR&nbsp;
@@ -48,8 +49,8 @@ const Intro = () => {
             <p
               className="text-wrap text-sm poppins-extralight text-white  p-1 backdrop-blur-sm"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               Robotronics has successfully taught 15,000+ International Student
               across the globe. International Students are invited to explore
@@ -93,8 +94,7 @@ const Intro = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-aos="fade-up"
-                data-aos-duration="2000"
-                data-aos-delay={index * 300}
+                data-aos-delay={getAosStaggerDelay(index)}
                 className="lg:p-3 p-2 border border-brown bg-white rounded-xl hover:bg-brown hover:text-white"
               >
                 {icon}

@@ -174,12 +174,12 @@ const MyCourses = () => {
   return (
     <div className="bg-background lg:flex flex-row px-4 md:px-20 pt-44 md:pt-2 relative">
       {/* Left Navigation */}
-      <div className="lg:w-[30%] w-2/3" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <div className="lg:w-[30%] w-2/3" data-aos="fade-up">
         <LeftNav />
       </div>
 
       {/* Course Listing */}
-      <div className="w-full text-center py-5" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <div className="w-full text-center py-5" data-aos="fade-up">
         <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
           Select any {maxCourses} Courses
         </h1>

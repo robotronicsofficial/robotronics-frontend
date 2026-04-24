@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Error = () => {
   return (
     <div className="bg-background">
-      <div className="flex flex-col h-svh items-center justify-center space-y-10"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+      <div className="flex flex-col h-svh items-center justify-center space-y-10"data-aos="fade-up">
         <div className="flex flex-row justify-center space-x-5 items-center  ">
           <h1 className=" text-6xl poppins-extrabold text-gray-600">404</h1>
           <h2 className=" text-6xl poppins-extrabold text-gray-600"> Not Found</h2>

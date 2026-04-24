@@ -53,7 +53,7 @@ const QuickContact = () => {
         const error = await response.json();
         setStatus(`Error: ${error.message}`);
       }
-    } catch (error) {
+    } catch {
       setStatus("An error occurred. Please try again later.");
     }
   };
@@ -64,16 +64,16 @@ const QuickContact = () => {
         <div
           className="flex-1 hidden md:block"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           <img src={img} className="" alt="Contact Us Illustration" />
         </div>
         <div
           className="lg:px-32 flex-1"
-          data-aos=""
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
+
         >
           {/* text */}
           <div>
@@ -141,7 +141,7 @@ const QuickContact = () => {
           {status && <p className="mt-4 text-red-500">{status}</p>}
         </div>
       </div>
-      
+
     </div>
   );
 };

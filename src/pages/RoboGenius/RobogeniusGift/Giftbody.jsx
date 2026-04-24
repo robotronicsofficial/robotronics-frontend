@@ -1,5 +1,5 @@
 import CustomerOrder from "../../../component/shop/customerOrder";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/useAuth";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -305,8 +305,8 @@ const Giftbody = ({ onNext }) => {
         <div
           className="px-1"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           <div className="h-full w-0 border border-brown"></div>
         </div>

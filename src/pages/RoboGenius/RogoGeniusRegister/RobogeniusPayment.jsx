@@ -1,6 +1,8 @@
+import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import robo from "../../../assets/child.png";
+import AppImage from "../../../component/AppImage";
+import robo from "../../../assets/child.webp";
 import { formatDisplayDate } from "../../../lib/robogenius";
 import {
   formatCheckoutCurrency,
@@ -42,6 +44,12 @@ const SummaryRow = ({ label, value, highlight = false }) => (
   </div>
 );
 
+SummaryRow.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  highlight: PropTypes.bool,
+};
+
 const InputField = ({ label, name, value, onChange, placeholder, type = "text", maxLength }) => (
   <label className="block space-y-2">
     <span className="text-sm font-semibold text-[#362D2C]">{label}</span>
@@ -57,6 +65,16 @@ const InputField = ({ label, name, value, onChange, placeholder, type = "text", 
     />
   </label>
 );
+
+InputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  type: PropTypes.string,
+  maxLength: PropTypes.number,
+};
 
 const RobogeniusPayment = ({ onNext }) => {
   const navigate = useNavigate();
@@ -132,7 +150,7 @@ const RobogeniusPayment = ({ onNext }) => {
               key={child.roboChildId || `${child.firstName}-${child.lastName}`}
               className="flex items-center gap-4 rounded-[20px] bg-white p-4 shadow-sm"
             >
-              <img className="h-16 w-16 rounded-2xl bg-[#F5F3F1] p-2" src={robo} alt={child.firstName || "Child"} />
+              <AppImage className="h-16 w-16 rounded-2xl bg-[#F5F3F1] p-2" src={robo} alt="" />
               <div className="min-w-0 flex-1">
                 <p className="font-bold text-[#362D2C]">
                   {[child.firstName, child.lastName].filter(Boolean).join(" ") || "Student"}
@@ -308,6 +326,10 @@ const RobogeniusPayment = ({ onNext }) => {
       </div>
     </div>
   );
+};
+
+RobogeniusPayment.propTypes = {
+  onNext: PropTypes.func,
 };
 
 export default RobogeniusPayment;

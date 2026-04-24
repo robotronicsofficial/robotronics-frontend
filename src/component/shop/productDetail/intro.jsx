@@ -5,7 +5,8 @@ import { addToCart } from "../../../store/cart/cartSlice";
 import { createProductCommerceItem } from "../../../lib/commerceItems";
 import { fetchSavedItems, toggleSavedItem } from "../../../lib/savedItems";
 
-import robo from "../../../assets/images/shopRobot.svg";
+import AppImage from "../../AppImage";
+import robo from "../../../assets/images/shopRobot.webp";
 import star from "../../../assets/images/shopStar.svg";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
@@ -147,7 +148,7 @@ const Intro = () => {
         {/* Left Section: Images */}
         <div className="lg:flex flex-row justify-center hidden" data-aos="fade-up">
           <div className="p-14 h-94 w-94 rounded-full bg-gray">
-            <img src={selectedImage} alt="Selected" />
+            <AppImage src={selectedImage} alt="Selected" loading="eager" />
           </div>
           <div className="flex flex-row space-x-3 py-10">
             {(product.images || []).map((img, idx) => (
@@ -156,7 +157,11 @@ const Intro = () => {
                 className="h-10 w-10 bg-white shadow-lg cursor-pointer"
                 onClick={() => setSelectedImage(resolveImageUrl(img))}
               >
-                <img src={resolveImageUrl(img)} alt={`thumb-${idx}`} className="h-10 w-10" />
+                <AppImage
+                  src={resolveImageUrl(img)}
+                  alt={`thumb-${idx}`}
+                  className="h-10 w-10"
+                />
               </div>
             ))}
           </div>
@@ -244,7 +249,7 @@ const Intro = () => {
       </div>
 
       <div className="lg:p-14 p-2 bg-gray">
-        <div className="px-2 flex flex-row lg:justify-center lg:space-x-10 space-x-4 " data-aos="fade-down" data-aos-duration="2000" data-aos-delay="4000">
+        <div className="px-2 flex flex-row lg:justify-center lg:space-x-10 space-x-4 " data-aos="fade-down">
           <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-brown">
             PRODUCT DETAIL
           </p>
@@ -294,24 +299,24 @@ const Intro = () => {
               <p
                 className="flex text-gold lg:text-4xl text-2xl font-bold"
                 data-aos="fade-right"
-                data-aos-duration="2000"
-                data-aos-delay="4000"
+
+
               >
                 Keep exploring
               </p>
               <p
                 className="flex text-white lg:text-4xl text-2xl font-bold"
                 data-aos="fade-left"
-                data-aos-duration="2000"
-                data-aos-delay="4000"
+
+
               >
                 Live catalog
               </p>
               <p
                 className="mt-4 max-w-xl text-white/80 lg:text-lg text-sm"
                 data-aos="fade-up"
-                data-aos-duration="2000"
-                data-aos-delay="4000"
+
+
               >
                 Browse the live store inventory instead of a filler promo block.
               </p>
@@ -325,11 +330,11 @@ const Intro = () => {
                 Browse all products
               </button>
             </div>
-            <img src={star} className="mt-6" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000" alt="" />
+            <img src={star} className="mt-6" data-aos="fade-up" alt="" />
           </div>
-          <div className="flex-1" data-aos="fade-left" data-aos-duration="2000" data-aos-delay="4000">
+          <div className="flex-1" data-aos="fade-left">
             <div className="flex justify-content w-full">
-              <img src={robo} alt="Product spotlight illustration" />
+              <AppImage src={robo} alt="Product spotlight illustration" />
             </div>
           </div>
         </section>

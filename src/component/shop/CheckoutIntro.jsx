@@ -32,7 +32,7 @@ const CheckoutIntro = ({ activeStep = 1 }) => {
   return (
     <div className="shopCarthero" id="shopCarthero">
       <div className="flex flex-col lg:py-20 py-10">
-        <div className="items-center" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000">
+        <div className="items-center" data-aos="fade-up">
           <p className="text-brown font-bold lg:text-5xl text-2xl text-center self-center">
             SHOPPING CART
           </p>

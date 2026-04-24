@@ -10,7 +10,6 @@ const Robogeniuscards = () => {
   const dispatch = useDispatch();
 
   const { totalPlans, loading, error } = useSelector((state) => state.plans);
-  const discountMessage = "Save 60% with annual billing!";
 
   useEffect(() => {
     dispatch(fetchPlans());

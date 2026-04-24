@@ -2,7 +2,7 @@ import { useMemo, useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "../../store/cart/cartSlice";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/useAuth";
 import { toast } from "react-toastify";
 import {
   calculateCartSummary,

@@ -1,16 +1,9 @@
-import { useEffect } from "react";
-// import { Link } from "react-scroll";
-import "aos/dist/aos.css"; // Import CSS for AOS
-import Aos from "aos";
 const CareerIntro = () => {
-  useEffect(() => {
-    Aos.init(); // Initialize AOS library
-  }, []);
   return (
     <>
       <div className="Careerhero relative w-full h-screen" id="abouthero">
         <div
-          className="absolute bottom-24 flex flex-col justify-end p-5 overflow-hidden w-full"data-aos="fade-up" data-aos-duration="2000" data-aos-delay="4000"
+          className="absolute bottom-24 flex flex-col justify-end p-5 overflow-hidden w-full"data-aos="fade-up"
           
         >
           {/* text */}

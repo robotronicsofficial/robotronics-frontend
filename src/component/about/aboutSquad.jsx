@@ -1,7 +1,8 @@
+import AppImage from "../AppImage";
 import founder1 from "../../assets/imagesContent/team/farhan.jpg";
 import founder2 from "../../assets/imagesContent/team/mfarhan.jpg";
 import founder3 from "../../assets/imagesContent/team/salman.jpg";
-import founder4 from "../../assets/imagesContent/team/rehan.jpg";
+import founder4 from "../../assets/imagesContent/team/rehan.webp";
 
 const AboutSquad = () => {
   const founders = [
@@ -33,16 +34,16 @@ const AboutSquad = () => {
         <p
           className="flex-1 lg:text-6xl poppins-semibold text-3xl font-bold"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           OUR SQUAD
         </p>
         <p
           className="flex-1 text-wrap poppins-regular lg:text-4xl text-2xl pt-4 md:pt-0"
           data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-delay="4000"
+
+
         >
           Our team is a tight-knit family of engineers, developers, educators
           and visionaries, all bound by the same innovative approach and
@@ -61,10 +62,10 @@ const AboutSquad = () => {
               className="w-full h-80 sm:h-96 md:h-[28rem] overflow-hidden rounded-tl-md rounded-tr-md shadow-2xl"
 
               data-aos="fade-down"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
-              <img
+              <AppImage
                 src={founder.imgSrc}
                 alt={founder.title}
                 className="w-full h-full object-cover "
@@ -73,8 +74,8 @@ const AboutSquad = () => {
             <div
               className="bg-black flex flex-col items-center justify-center py-4 w-full"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               <p className="text-white poppins-regular text-lg sm:text-xl">
                 {founder.name}
@@ -95,8 +96,8 @@ const AboutSquad = () => {
             <div
               className="flex"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               <div className="h-0 lg:w-16 w-8 border border-black"></div>
               <div className="h-0 lg:w-48 w-20 border border-line"></div>
@@ -105,8 +106,8 @@ const AboutSquad = () => {
             <p
               className="flex lg:text-xl text-sm text-wrap text-center poppins-regular"
               data-aos="fade-up"
-              data-aos-duration="2000"
-              data-aos-delay="4000"
+
+
             >
               Are you our next squad member?
             </p>
@@ -116,8 +117,8 @@ const AboutSquad = () => {
           <p
             className="md:text-6xl text-2xl font-bold md:text-left text-wrap"
             data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay="4000"
+
+
           >
             From ambitious startups to Countrywide Schools, we partner with
             Great{" "}

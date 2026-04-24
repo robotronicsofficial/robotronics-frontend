@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   fetchSessionJson,
@@ -7,20 +7,12 @@ import {
   sendSessionJson,
 } from '../lib/api';
 import { clearActiveChildSession } from '../utils/childSessionRequest';
+import { AuthContext } from './authContext';
 
-const AuthContext = createContext();
 const AUTH_USER_PATH = '/auth/user';
 const AUTH_LOGIN_PATH = '/auth/login';
 const AUTH_REGISTER_PATH = '/auth/register';
 const AUTH_LOGOUT_PATH = '/auth/logout';
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);

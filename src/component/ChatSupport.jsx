@@ -21,7 +21,8 @@ const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'application/pdf'];
 const BOT_RESPONSE_DELAY = 1000;
 
 // Memoized sub-components
-const ChatHeader = memo(({ isMaximized, toggleMaximize, toggleChat }) => (
+const ChatHeader = memo(function ChatHeader({ isMaximized, toggleMaximize, toggleChat }) {
+  return (
   <div className="bg-white text-black p-4 flex justify-between items-center border-b border-gray">
     <h2 className="text-xl font-bold">Robotronics AI</h2>
     <div className="flex items-center space-x-2">
@@ -42,9 +43,11 @@ const ChatHeader = memo(({ isMaximized, toggleMaximize, toggleChat }) => (
       </button>
     </div>
   </div>
-));
+  );
+});
 
-const Message = memo(({ message }) => (
+const Message = memo(function Message({ message }) {
+  return (
   <div
     className={`max-w-[80%] p-4 rounded-lg ${message.sender === 'user'
       ? 'bg-[#FFAC1F] text-white rounded-br-none'
@@ -65,7 +68,8 @@ const Message = memo(({ message }) => (
       {message.time}
     </div>
   </div>
-));
+  );
+});
 
 const ChatSupport = () => {
   const [isOpen, setIsOpen] = useState(false);
