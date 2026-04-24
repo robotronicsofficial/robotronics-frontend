@@ -74,7 +74,7 @@ const OurServices = () => {
                 >
                   <div className="flex justify-center relative">
                     <div className="absolute inset-0 bg-black opacity-40 hover:bg-black hover:opacity-20 transition-all duration-100 ease-in-out"></div>
-                    <div className="absolute mt-10 z-10">
+                    <div className="absolute mt-10 z-raised">
                       <h3 className="text-3xl text-white poppins-bold mb-2 text-wrap text-center">
                         {service.name}
                       </h3>

@@ -74,7 +74,7 @@ const SubscriptionIntro = () => {
 
                     {/* Share Options */}
                     {showShare && (
-                      <div className="absolute top-8 right-0 z-10 bg-white rounded shadow-md p-2 flex flex-col gap-2 min-w-[140px]">
+                      <div className="absolute top-8 right-0 z-dropdown bg-white rounded shadow-md p-2 flex flex-col gap-2 min-w-[140px]">
                         <a
                           href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
                           target="_blank"

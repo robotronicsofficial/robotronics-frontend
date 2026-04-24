@@ -244,14 +244,14 @@ const Footer = () => {
   <AppImage
     src={mobile}
     alt="Mobile 1"
-    className="absolute left-10 top-5 w-32 sm:w-36 md:w-40 z-0"
+    className="absolute left-10 top-5 w-32 sm:w-36 md:w-40 z-base"
   />
 
   {/* Front phone */}
   <AppImage
     src={mobile}
     alt="Mobile 2"
-    className="absolute left-0 top-20 w-32 sm:w-36 md:w-40 z-10"
+    className="absolute left-0 top-20 w-32 sm:w-36 md:w-40 z-raised"
   />
 </div>
 

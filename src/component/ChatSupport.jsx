@@ -278,7 +278,7 @@ const ChatSupport = () => {
     absolute bottom-0 left-1/2 transform -translate-x-1/2
     ${isMaximized ? 'w-[900px] h-[400px] left-[calc(50%+130px)]' : 'w-[600px] h-[300px]'}
     bg-gradient-to-br from-[#FFAC1F] to-[#FF8C00]
-    opacity-35 blur-xl z-0
+    opacity-35 blur-xl z-base
     rounded-t-full
     pointer-events-none
   `}

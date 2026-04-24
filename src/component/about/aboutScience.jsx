@@ -39,7 +39,7 @@ const AboutScience = () => {
 
           ></div>
           <p
-            className="relative z-10 text-sm text-wrap poppins-light leading-relaxed pt-4 pl-4"
+            className="relative z-raised text-sm text-wrap poppins-light leading-relaxed pt-4 pl-4"
             data-aos="fade-up"
 
 
