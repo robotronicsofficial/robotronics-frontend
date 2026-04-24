@@ -2,7 +2,7 @@ import { PiGraduationCapLight } from "react-icons/pi";
 import video from "../../assets/videos/video-preview.mp4";
 import { useState, useEffect } from "react";
 import { FiDownload } from "react-icons/fi";
-import ReviewsComponent from "../../pages/RoboGenius/Robogeniusreview";
+import ReviewsComponent from "../../pages/subscriptions/SubscriptionTestimonials";
 import { useParams } from "react-router-dom";
 import { FaCirclePlay } from "react-icons/fa6";
 import { FaLaptopCode } from "react-icons/fa";
@@ -17,7 +17,7 @@ import { openExternalUrl } from "../../utils/openExternalUrl";
 import {
   normalizeChildCourse,
   normalizeCourseDetail,
-} from "../../lib/robogenius";
+} from "../../lib/subscription";
 import { resolveBackendUrl } from "../../lib/api";
 import VideoPlayer from "../../component/VideoPlayer";
 

@@ -87,7 +87,7 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
         <NavLink to={`/CoursesProduct/${id}`}>
           <div className="text-center bg-yellow p-2">
             <button className="bg-yellow text-xl p-3 font-bold rounded">
-              Buy Course
+              View Course
             </button>
           </div>
         </NavLink>

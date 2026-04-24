@@ -29,7 +29,7 @@ const ContactUsForm = () => {
   // Define services for each user type
   const services = {
     school: [
-      "Robogenious Plan",
+      "Subscription Plan",
       "Robotics Curriculum Integration",
       "Teacher Training Program",
       "After-School Robotics Club",
@@ -37,7 +37,7 @@ const ContactUsForm = () => {
       "Competition Preparation",
     ],
     parent: [
-      "Robogenious Plan",
+      "Subscription Plan",
       "Weekend Robotics Classes",
       "Holiday Robotics Camps",
       "One-on-One Tutoring",

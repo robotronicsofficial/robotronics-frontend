@@ -8,7 +8,7 @@ export const fetchPlans = createAsyncThunk(
       const response = await fetch(`${BACKEND_BASE_URL}/api/getAllPlans`);
       if (!response.ok) throw new Error("Failed to fetch plans");
       const data = await response.json();
-      return data.plans || data; // Handle both formats (data.plans or direct array)
+      return data.plans;
     } catch (error) {
       console.error("Error fetching plans:", error);
       return rejectWithValue(error.message);
@@ -18,6 +18,7 @@ export const fetchPlans = createAsyncThunk(
 
 const initialState = {
   totalPlans: [],
+  planId: null,
   plan: null,
   price: 0,
   billingCycle: '',
@@ -30,13 +31,15 @@ const planSlice = createSlice({
   initialState,
   reducers: {
     setSubscriptionPlan: (state, action) => {
-      const { plan, price, billingCycle } = action.payload;
+      const { planId, plan, price, billingCycle } = action.payload;
+      state.planId = planId;
       state.plan = plan;
       state.price = price;
       state.billingCycle = ['monthly', 'annual'].includes(billingCycle) ? billingCycle : '';
     },
     resetSubscription: (state) => {
       state.plan = null;
+      state.planId = null;
       state.price = 0;
       state.billingCycle = '';
     },

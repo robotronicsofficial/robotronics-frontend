@@ -22,7 +22,7 @@ const NAV_ITEMS = [
   { to: CONTACT_PATH, label: "Contact" },
 ];
 
-const FEATURED_ITEM = { to: "/Robogeniushome", label: "RoboGenius" };
+const FEATURED_ITEM = { to: "/subscriptions", label: "Subscriptions" };
 
 const navLinkClass = ({ isActive }) =>
   [

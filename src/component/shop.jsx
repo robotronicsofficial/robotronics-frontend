@@ -131,7 +131,7 @@ const Shop = () => {
             {/* Text Content */}
             <div className="text-center md:text-left">
               <h2 className="text-brown text-2xl sm:text-3xl md:text-4xl lg:text-5xl poppins-extrabold leading-tight">
-                Courses in <span className="text-[#f5ab34]">RoboGenius Program</span>
+                Courses in <span className="text-[#f5ab34]">Subscription Plans</span>
               </h2>
               <p className="text-brown text-xl sm:text-2xl md:text-3xl poppins-extrabold mt-1 sm:mt-2">
                 Gear up for some Fun!
@@ -170,7 +170,7 @@ const Shop = () => {
         {/* Enrollment Button */}
         <div className="flex justify-center">
           <button
-            onClick={() => navigate("/Robogeniushome")}
+            onClick={() => navigate("/subscriptions")}
             className="bg-yellow hover:bg-yellow-600 text-brown text-lg sm:text-xl font-bold poppins-bold px-8 py-3 rounded-full transition-colors shadow-md hover:shadow-lg"
           >
             Get Enrolled

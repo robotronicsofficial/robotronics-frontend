@@ -2,7 +2,7 @@ import React from "react";
 
 const faqs = [
   {
-    question: "Who can register in RoboGenius Program?",
+    question: "Who can register for a learning subscription?",
     answer: "Students aged 7 and above from any background can benefit from this program across the globe."
   },
   {
@@ -15,7 +15,7 @@ const faqs = [
   },
   {
     question: "Which devices are required?",
-    answer: "RoboGenius Platform is responsive and accessible on laptops, tablets, and phones. Basic system configuration is sufficient."
+    answer: "The learning platform is responsive and accessible on laptops, tablets, and phones. Basic system configuration is sufficient."
   },
   {
     question: "How many students can use this Program under one subscription?",
@@ -26,7 +26,7 @@ const faqs = [
     answer: "Yes — Parents or schools can choose the Monthly Plan to pay in installments."
   },
   {
-    question: "Can we cancel the RoboGenius Subscription?",
+    question: "Can we cancel the subscription?",
     answer: "Subscriptions once paid are non-refundable. You may opt out before the next billing cycle by emailing support@robotronicsofficial.com."
   },
   {
@@ -38,7 +38,7 @@ const faqs = [
     answer: "Courses are split into modules. After each module, the child must pass a quiz with at least 60% to unlock the next module."
   },
   {
-    question: "Students or Schools from which country can benefit from RoboGenius Program?",
+    question: "Students or schools from which country can benefit from the subscription?",
     answer: "The platform is SaaS-based and accessible globally to schools and students in any country."
   },
   {

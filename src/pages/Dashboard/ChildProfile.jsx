@@ -1,6 +1,6 @@
 import Intro from "../../component/dashboard/intro";
 // import PayHistory from "../../component/dashboard/Payhistory";
-import RoboGeniusChildProfile from "../../component/dashboard/RoboGeniusChildProfile";
+import SubscriptionChildProfile from "../../component/dashboard/SubscriptionChildProfile";
 // import React from 'react'
 
 const ChildProfile = () => {
@@ -10,7 +10,7 @@ const ChildProfile = () => {
       <Intro/>
 
       </div>
-      <RoboGeniusChildProfile/>
+      <SubscriptionChildProfile/>
     </div>
   )
 }

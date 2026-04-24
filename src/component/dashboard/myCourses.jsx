@@ -7,7 +7,7 @@ import {
   getActiveChildSession,
 } from "../../utils/childSessionRequest";
 import { resolveBackendUrl } from "../../lib/api";
-import { ensureArray } from "../../lib/robogenius";
+import { ensureArray } from "../../lib/subscription";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -17,7 +17,7 @@ const MyCourses = () => {
   const [showModal, setShowModal] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [maxCourses, setMaxCourses] = useState(2); // Default to Basic plan limit
+  const [maxCourses, setMaxCourses] = useState(Infinity);
   const coursesPerPage = 9;
   const navigate = useNavigate();
   const { id: routeChildId } = useParams();
@@ -50,10 +50,12 @@ const MyCourses = () => {
         }
         const childData = await childResponse.json();
 
-        // Set max courses based on plan
-        const planName = childData?.plan?.name || "Basic";
-        const courseLimit = planName.toLowerCase() === "pro" ? 4 : 2;
-        setMaxCourses(courseLimit);
+        const includedCourseIds = ensureArray(childData?.plan?.includedCourseIds);
+        setMaxCourses(
+          childData?.plan?.courseAccess === "specific"
+            ? includedCourseIds.length
+            : Infinity
+        );
 
         // Then fetch courses
         const coursesResponse = await fetch(resolveBackendUrl("/get-courses"));
@@ -100,9 +102,8 @@ const MyCourses = () => {
           "Content-Type": "application/json",
         },
         body: {
-          courses: selectedCourses.map((courseId, index) => ({
+          courses: selectedCourses.map((courseId) => ({
             courseId,
-            status: index === 0 ? "active" : "pending"
           }))
         },
       });
@@ -154,6 +155,9 @@ const MyCourses = () => {
     (currentPage - 1) * coursesPerPage,
     currentPage * coursesPerPage
   );
+  const hasFixedCourseLimit = Number.isFinite(maxCourses);
+  const canSaveCourses = selectedCourses.length > 0
+    && (!hasFixedCourseLimit || selectedCourses.length === maxCourses);
 
   if (loading) {
     return (
@@ -178,30 +182,30 @@ const MyCourses = () => {
         <LeftNav />
       </div>
 
-      {/* Course Listing */}
-      <div className="w-full text-center py-5" data-aos="fade-up">
-        <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
-          Select any {maxCourses} Courses
+        {/* Course Listing */}
+        <div className="w-full text-center py-5" data-aos="fade-up">
+          <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
+          {hasFixedCourseLimit ? `Select ${maxCourses} Courses` : "Select Courses"}
         </h1>
 
         {/* Save Button and Status */}
         {/* Save Button and Status */}
         <div className="mb-6 flex flex-col items-center gap-2">
           <div className="text-lg font-semibold mb-2">
-            {maxCourses === 4 ? (
-              <span className="text-green-600">You have a Pro plan (can select up to 4 courses)</span>
+            {hasFixedCourseLimit ? (
+              <span className="text-blue-600">Your subscription includes {maxCourses} course selections</span>
             ) : (
-              <span className="text-blue-600">You have a Basic plan (must select exactly 2 courses)</span>
+              <span className="text-green-600">Your subscription includes the full available course catalog</span>
             )}
           </div>
 
           <button
             onClick={saveSelectedCourses}
-            className={`py-2 px-6 rounded-full shadow-xl ${selectedCourses.length !== maxCourses
+            className={`py-2 px-6 rounded-full shadow-xl ${!canSaveCourses
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-[#ffc224] hover:bg-[#ffb700]"
               } transition-colors`}
-            disabled={selectedCourses.length !== maxCourses || saveLoading}
+            disabled={!canSaveCourses || saveLoading}
           >
             {saveLoading ? (
               <span className="flex items-center justify-center">
@@ -212,7 +216,7 @@ const MyCourses = () => {
                 Saving...
               </span>
             ) : (
-              `Save ${maxCourses} Courses`
+              hasFixedCourseLimit ? `Save ${maxCourses} Courses` : "Save Courses"
             )}
           </button>
 
@@ -330,9 +334,7 @@ const MyCourses = () => {
             <div className="bg-white p-8 rounded-lg shadow-lg text-center w-96">
               <h2 className="text-2xl font-bold mb-4 text-red-500">Plan Limit</h2>
               <p className="text-gray-700 mb-4">
-                {maxCourses === 4
-                  ? "You must select exactly 4 courses with your Pro plan."
-                  : "You must select exactly 2 courses with your Basic plan."}
+                Your subscription includes {maxCourses} course selections.
               </p>
               <p className="text-gray-600 mb-6">
                 Currently selected: {selectedCourses.length} courses

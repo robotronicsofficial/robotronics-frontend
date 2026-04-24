@@ -3,35 +3,32 @@ import AppImage from "../../AppImage";
 import robo from "../../../assets/images/shopRobot.webp";
 import python from "../../../assets/images/python.webp";
 import star from "../../../assets/images/shopStar.svg";
+import { addToCart } from "../../../store/cart/cartSlice";
+import { createCourseCommerceItem } from "../../../lib/commerceItems";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { addToCart } from "../../../store/cart/cartSlice";
-import { createCourseCommerceItem } from "../../../lib/commerceItems";
-import { CART_PATH } from "../../../router/paths";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
-const CourseIntro = ({ title, id, image, price, category }) => {
-  const dispatch = useDispatch();
+const CourseIntro = ({ id, title, image, price, category }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const resolvedImage = resolveBackendAssetUrl(image, python);
 
-  const handleAddToCart = () => {
-    const cartItem = createCourseCommerceItem({
+  const handleViewPlans = () => navigate("/subscriptions");
+  const handleGiftCourse = () => {
+    const courseItem = createCourseCommerceItem({
       _id: id,
       title,
-      price,
       thumbnail: image,
+      price,
       category,
     });
 
-    if (cartItem) {
-      dispatch(addToCart(cartItem));
+    if (courseItem) {
+      dispatch(addToCart(courseItem));
     }
-  };
 
-  const handleBuyNow = () => {
-    handleAddToCart();
-    navigate(CART_PATH);
+    navigate("/gift-courses");
   };
 
   return (
@@ -106,23 +103,22 @@ const CourseIntro = ({ title, id, image, price, category }) => {
           {/* buy now */}
           <div className="lg:flex flex-row lg:space-x-10 ">
             <div className="flex flex-row space-x-5">
-              {/* buy now button */}
               <div>
                 <button
                   type="button"
-                  onClick={handleBuyNow}
+                  onClick={handleViewPlans}
                   className="bg-brown p-2 poppins-medium lg:px-6 text-white rounded-lg"
                 >
-                  BUY NOW
+                  VIEW SUBSCRIPTION PLANS
                 </button>
               </div>
-              {/* Add to card button */}
               <div>
                 <button
-                  onClick={handleAddToCart}
-                  className="bg-yellow p-2 poppins-medium  lg:px-7 text-white rounded-lg"
+                  type="button"
+                  onClick={handleGiftCourse}
+                  className="mt-3 rounded-lg border border-brown bg-white p-2 poppins-medium text-brown lg:mt-0 lg:px-6"
                 >
-                  ADD TO CART
+                  GIFT THIS COURSE
                 </button>
               </div>
             </div>
@@ -134,8 +130,8 @@ const CourseIntro = ({ title, id, image, price, category }) => {
 };
 
 CourseIntro.propTypes = {
-  title: PropTypes.string,
   id: PropTypes.string,
+  title: PropTypes.string,
   image: PropTypes.string,
   price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   category: PropTypes.string,

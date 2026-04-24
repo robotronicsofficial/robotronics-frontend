@@ -30,7 +30,7 @@ const LeftNav = () => {
       ],
     },
     {
-      name: "RoboGenius",
+      name: "Subscriptions",
       icon: <RiRobot3Fill className="text-brown" />,
       dropdownIcon: <RiArrowDropDownLine className="text-3xl text-brown" />,
       subMenu: [

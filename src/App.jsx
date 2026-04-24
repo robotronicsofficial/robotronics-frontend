@@ -23,11 +23,12 @@ const CustomerInfo = lazy(() => import("./pages/shop/customerInfo"));
 const Course = lazy(() => import("./pages/courses"));
 const ProductDetailPage = lazy(() => import("./pages/shop/ProductDetailPage"));
 const CoursesProductDetail = lazy(() => import("./pages/courses/coursesProductDetail"));
+const GiftCourse = lazy(() => import("./pages/gifts/GiftCourse"));
 const ShippingService = lazy(() => import("./pages/shop/shippingService"));
 const CareerJob = lazy(() => import("./pages/career/careerJob"));
 const CareerDetailPage = lazy(() => import("./pages/career/careerDetailPage"));
-const Robogeniushome = lazy(() => import("./pages/RoboGenius/Robogeniushome"));
-const Robogeniusregister = lazy(() => import("./pages/RoboGenius/RogoGeniusRegister/Robogeniusregister"));
+const SubscriptionHome = lazy(() => import("./pages/subscriptions/SubscriptionHome"));
+const SubscriptionRegister = lazy(() => import("./pages/subscriptions/register/SubscriptionRegister"));
 const Blog = lazy(() => import("./pages/Blog/blog"));
 const BlogDetail = lazy(() => import("./pages/Blog/blogDetail"));
 const ContactUs = lazy(() => import("./pages/contactUs/contactUs"));
@@ -44,9 +45,8 @@ const Screen = lazy(() => import("./pages/SplashScreen/screen"));
 const Search = lazy(() => import("./component/search"));
 const MyRobort = lazy(() => import("./pages/Dashboard/myRobot"));
 const JobApplicationForm = lazy(() => import("./component/careers/CareerDetailPage/jobApplicationForm"));
-const Robogeniuspaymenthome = lazy(() => import("./pages/RoboGenius/RoboGeniusPayment/Robogeniuspaymenthome"));
-const Robogeniusrevieworderhome = lazy(() => import("./pages/RoboGenius/RoboGeniusReview/Robogeniusrevieworderhome"));
-const GiftCourse = lazy(() => import("./pages/RoboGenius/RobogeniusGift/GiftCourse"));
+const SubscriptionPaymentHome = lazy(() => import("./pages/subscriptions/payment/SubscriptionPaymentHome"));
+const SubscriptionReviewOrderHome = lazy(() => import("./pages/subscriptions/review/SubscriptionReviewOrderHome"));
 const ChildHome = lazy(() => import("./pages/child protection/ChildHome"));
 const TermsHome = lazy(() => import("./pages/policies/TermsHome"));
 const PrivacyHome = lazy(() => import("./pages/Privacy Policy/PrivacyHome"));
@@ -55,7 +55,7 @@ const RefundPolicy = lazy(() => import("./pages/policies/RefundPolicy"));
 const ServiceDetail = lazy(() => import("./pages/service detail/ServiceDetail"));
 const ChildProfile = lazy(() => import("./pages/Dashboard/ChildProfile"));
 const ProgressCertificate = lazy(() => import("./pages/Dashboard/ProgressCertificate"));
-const RoboGeniusProgressPage = lazy(() => import("./component/dashboard/RoboGeniusProgressPage"));
+const SubscriptionProgressPage = lazy(() => import("./component/dashboard/SubscriptionProgressPage"));
 const MyAllCourses = lazy(() => import("./component/dashboard/myAllCourses"));
 
 const RouteFallback = () => (
@@ -87,6 +87,7 @@ function App() {
           <Route path="/Signup" element={<Signup />} />
           <Route path="/CoursesProduct" element={<Navigate to="/Course" replace />} />
           <Route path="/CoursesProduct/:id" element={<CoursesProductDetail />} />
+          <Route path="/gift-courses" element={<GiftCourse />} />
           <Route path="/CareerJob" element={<CareerJob />} />
           <Route path="/CareerDetailPage" element={<Navigate to="/CareerJob" replace />} />
           <Route path="/CareerDetailPage/:id" element={<CareerDetailPage />} />
@@ -108,15 +109,14 @@ function App() {
           <Route path="/Dashboard/userInfoForm" element={<Navigate to="/Dashboard/userInfo" replace />} />
           <Route path="/Dashboard/courseDetail/:id" element={<ProtectedChild><CourseDetail /></ProtectedChild>} />
           <Route path="/Dashboard/ProgressCertificate" element={<ProtectedRoute><ProgressCertificate /></ProtectedRoute>} />
-          <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<ProtectedChild><RoboGeniusProgressPage /></ProtectedChild>} />
+          <Route path="/Dashboard/ProgressCertificate/ProgressPage" element={<ProtectedChild><SubscriptionProgressPage /></ProtectedChild>} />
           <Route path="/404" element={<Error />} />
 
           <Route path="/International/myRobot" element={<MyRobort />} />
-          <Route path="/Robogeniushome" element={<Robogeniushome />} />
-          <Route path="/Robogeniushome/GiftCourse" element={<GiftCourse />} />
-          <Route path="/Robogeniushome/Register" element={<Robogeniusregister />} />
-          <Route path="/Robogeniushome/Payment" element={<Robogeniuspaymenthome />} />
-          <Route path="/Robogeniushome/Review" element={<Robogeniusrevieworderhome />} />
+          <Route path="/subscriptions" element={<SubscriptionHome />} />
+          <Route path="/subscriptions/register" element={<SubscriptionRegister />} />
+          <Route path="/subscriptions/payment" element={<SubscriptionPaymentHome />} />
+          <Route path="/subscriptions/review" element={<SubscriptionReviewOrderHome />} />
           <Route path="/International/videoGallery" element={<VideoGallery />} />
           <Route path="/International/Iservices" element={<IServices />} />
           <Route path="/International/home" element={<IHome />} />

@@ -47,7 +47,7 @@ const Intro = () => {
               <div className="space-x-3 mt-10" data-aos="fade-up">
                 <button
                   to="section2"
-                  onClick={() => navigate("/Robogeniushome")}
+                  onClick={() => navigate("/subscriptions")}
                   offset={-70}
                   className="items-center justify-center p-3 px-4 lg:text-lg text-sm text-black hover:text-white bg-gold poppins-bold hover:bg-lin shadow-xl rounded-md"
                 >

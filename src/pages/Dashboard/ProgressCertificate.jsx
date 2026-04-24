@@ -1,6 +1,6 @@
 // import React from 'react'
 import Intro from '../../component/dashboard/intro'
-import RoboGeniusProgressCertificate from '../../component/dashboard/RoboGeniusProgressCertificate'
+import SubscriptionProgressCertificate from '../../component/dashboard/SubscriptionProgressCertificate'
 
 const ProgressCertificate = () => {
   return (
@@ -9,7 +9,7 @@ const ProgressCertificate = () => {
 
       <Intro/>
       </div>
-      <RoboGeniusProgressCertificate/>
+      <SubscriptionProgressCertificate/>
     </div>
   )
 }

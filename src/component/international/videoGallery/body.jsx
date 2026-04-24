@@ -5,7 +5,7 @@ import Pagination from "../../blog/Pagination";
 
 import { BACKEND_BASE_URL } from "../../../lib/api";
 const categories = [
-  "RoboGenius Program",
+  "Subscription Courses",
   "Robotics Workshops",
   "Skill Development Workshops",
   "IVY Club",

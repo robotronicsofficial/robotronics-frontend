@@ -16,11 +16,9 @@ const extractActiveCourses = (payload) => {
 };
 
 const MyAllCourses = () => {
-  const [allCourses, setAllCourses] = useState([]);
   const [activeCourses, setActiveCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [viewMode, setViewMode] = useState("active"); // 'active' or 'all'
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 9;
   const navigate = useNavigate();
@@ -46,15 +44,6 @@ const MyAllCourses = () => {
           throw new Error("Child session not found. Please re-enter the PIN.");
         }
 
-        // Fetch all courses
-        const allCoursesResponse = await fetch(resolveBackendUrl("/get-courses"));
-        if (!allCoursesResponse.ok) {
-          throw new Error("Failed to fetch all courses");
-        }
-        const allCoursesData = await allCoursesResponse.json();
-        setAllCourses(Array.isArray(allCoursesData.courses) ? allCoursesData.courses : []);
-  
-        // Fetch child's data
         const childResponse = await fetch(
           resolveBackendUrl(`/api/child/${childId}/courses`),
           childSessionRequest
@@ -77,8 +66,7 @@ const MyAllCourses = () => {
     fetchData();
   }, [childId]);
 
-  // Get current courses based on view mode and pagination
-  const displayedCourses = viewMode === "active" ? activeCourses : allCourses;
+  const displayedCourses = activeCourses;
   const totalPages = Math.ceil(displayedCourses.length / coursesPerPage);
   
   // Pagination functions
@@ -103,19 +91,7 @@ const MyAllCourses = () => {
     currentPage * coursesPerPage
   );
 
-  // Reset to page 1 when view mode changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [viewMode]);
-
-  const activeCourseIds = new Set(
-    activeCourses
-      .map((course) => String(course?.courseId || course?._id || ""))
-      .filter(Boolean)
-  );
-
   const resolveCourseId = (course) => String(course?.courseId || course?._id || "");
-  const isActiveCourse = (course) => activeCourseIds.has(resolveCourseId(course));
 
   const handleCourseClick = (course) => {
     const courseId = resolveCourseId(course);
@@ -124,12 +100,7 @@ const MyAllCourses = () => {
       return;
     }
 
-    if (isActiveCourse(course)) {
-      navigate(`/Dashboard/courseDetail/${courseId}`);
-      return;
-    }
-
-    navigate(`/CoursesProduct/${courseId}`);
+    navigate(`/Dashboard/courseDetail/${courseId}`);
   };
 
   if (loading) {
@@ -157,29 +128,8 @@ const MyAllCourses = () => {
 
       {/* Course Listing */}
       <div className="w-full text-center py-5 mt-40">
-        <div className="flex justify-center mb-6">
-          <div className="bg-gray-200 rounded-full p-1 inline-flex">
-            <button
-              onClick={() => setViewMode("active")}
-              className={`py-2 px-6 rounded-full ${
-                viewMode === "active" ? "bg-[#ffc224] text-black font-bold" : "bg-transparent"
-              }`}
-            >
-              Active
-            </button>
-            <button
-              onClick={() => setViewMode("all")}
-              className={`py-2 px-6 rounded-full ${
-                viewMode === "all" ? "bg-[#ffc224] text-black font-bold" : "bg-transparent"
-              }`}
-            >
-              All Courses
-            </button>
-          </div>
-        </div>
-
         <h1 className="text-lightblack lg:text-2xl text-base poppins-bold mb-6">
-          {viewMode === "active" ? "Your Active Courses" : "All Available Courses"}
+          Your Active Courses
         </h1>
 
         {/* Courses */}
@@ -226,7 +176,7 @@ const MyAllCourses = () => {
                       onClick={() => handleCourseClick(course)}
                       className="mt-2 bg-[#ffc224] w-full text-black shadow-xl py-2 px-4 rounded-full flex items-center justify-center space-x-2 hover:bg-[#ffb700] transition-colors"
                     >
-                      <span>{isActiveCourse(course) ? "View Course" : "View Details"}</span>
+                      <span>View Course</span>
                     </button>
                   </div>
                 </div>
@@ -235,9 +185,7 @@ const MyAllCourses = () => {
           ) : (
             <div className="w-full text-center py-10">
               <p className="text-gray-600 text-lg">
-                {viewMode === "active"
-                  ? "You don't have any active courses yet."
-                  : "No courses available."}
+                You don't have any active courses yet.
               </p>
             </div>
           )}

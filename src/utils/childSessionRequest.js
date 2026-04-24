@@ -17,7 +17,7 @@ export const getChildSessionIdentifiers = (child = {}) => {
   const identifiers = [
     child.accessChildId,
     child.childId,
-    child.roboChildId,
+    child.childCode,
     child._id,
     child.id,
   ]
