@@ -4,12 +4,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className="flex w-full items-center justify-center space-x-1">
+    <div className="flex w-full items-center justify-center gap-1">
       {/* Previous button */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 w-10 h-10 flex items-center justify-center bg-brown text-gold disabled:opacity-50"
+        className="flex size-10 items-center justify-center bg-brown p-2 text-gold disabled:opacity-50"
       >
         <FiChevronLeft className="text-white" />
       </button>
@@ -18,7 +18,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`p-2 w-10 h-10 flex items-center justify-center ${
+          className={`flex size-10 items-center justify-center p-2 ${
             currentPage === page ? "bg-gold text-white" : "bg-white text-gold"
           }`}
         >
@@ -29,7 +29,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 w-10 h-10 flex items-center justify-center bg-brown text-gold disabled:opacity-50"
+        className="flex size-10 items-center justify-center bg-brown p-2 text-gold disabled:opacity-50"
       >
         <FiChevronRight className="text-white" />
       </button>

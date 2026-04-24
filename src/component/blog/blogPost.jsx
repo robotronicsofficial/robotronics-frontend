@@ -33,7 +33,7 @@ const BlogCard = ({ cardData }) => {
             decoding="async"
           />
         </Link>
-        <div className="absolute top-0 left-0 mt-4 ml-4 space-x-2">
+        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
           {mappedData.tags.map((tag, index) => (
             <span
               key={index}
@@ -43,7 +43,7 @@ const BlogCard = ({ cardData }) => {
             </span>
           ))}
         </div>
-        <div className="absolute top-0 right-0 pt-4 pr-4">
+        <div className="absolute right-4 top-4">
           <button className="bg-white p-2 rounded-full shadow-md">
             <FaShareAlt />
           </button>
@@ -59,9 +59,9 @@ const BlogCard = ({ cardData }) => {
       </div>
       <div className="px-6 pt-4 pb-2 flex flex-col justify-between">
         <div className="flex flex-wrap items-center justify-between">
-          <div className="flex flex-row items-center ">
+          <div className="flex items-center gap-4">
             <img
-              className="w-10 h-10 rounded-full mr-4"
+              className="size-10 rounded-full"
               src={mappedData.author.avatar}
               alt={mappedData.author.name}
             />
@@ -69,19 +69,19 @@ const BlogCard = ({ cardData }) => {
               {mappedData.author.name}
             </p>
           </div>
-          <div className="text-sm flex flex-row">
+          <div className="text-sm flex">
             <Link to={`/BlogDetail/${cardData._id}`} className="text-xl poppins-light">VIEW POST</Link>
           </div>
         </div>
         <div className="flex flex-wrap items-center justify-between">
-          <div className="flex flex-row space-x-3">
+          <div className="flex gap-3">
             <p className="text-gray-600 hidden lg:block sm:block">-----</p>
             <p className="text-gray-600 poppins-light">{mappedData.date}</p>
             <span className="text-gray-600">•</span>
           </div>
-          <div className="flex flex-row items-center">
+          <div className="flex items-center gap-1">
             <FaShareAlt />
-            <span className="text-gray-600 poppins-light px-1">
+            <span className="text-gray-600 poppins-light">
               {mappedData.shares} shares
             </span>
           </div>
