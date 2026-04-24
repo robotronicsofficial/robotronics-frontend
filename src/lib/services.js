@@ -69,12 +69,12 @@ export const findCachedService = (serviceId) =>
   readCachedServices().find((service) => String(service?._id) === String(serviceId)) || null;
 
 export const fetchServices = async () => {
-  const payload = await fetchBackendJson("/api/getAllService");
+  const payload = await fetchBackendJson("/getAllService");
   return writeServicesCache(normalizeServicesPayload(payload));
 };
 
 export const fetchServiceById = async (serviceId) => {
-  const payload = await fetchBackendJson(`/api/services/${serviceId}`);
+  const payload = await fetchBackendJson(`/services/${serviceId}`);
   const service = normalizeSingleServicePayload(payload);
 
   if (!service) {

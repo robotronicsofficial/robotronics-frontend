@@ -1,12 +1,22 @@
 const trimTrailingSlash = (value) => String(value || "").trim().replace(/\/+$/, "");
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost"]);
+const BACKEND_API_PREFIX = "/api";
 
 const normalizeBackendPath = (value) => {
   if (typeof value !== "string") {
     return "";
   }
 
-  return value.trim().replace(/\\/g, "/");
+  const normalizedPath = value.trim().replace(/\\/g, "/");
+
+  if (
+    normalizedPath === BACKEND_API_PREFIX ||
+    normalizedPath.startsWith(`${BACKEND_API_PREFIX}/`)
+  ) {
+    return normalizedPath.slice(BACKEND_API_PREFIX.length) || "/";
+  }
+
+  return normalizedPath;
 };
 
 const resolveLoopbackBackendUrl = (value) => {
@@ -32,7 +42,9 @@ const resolveLoopbackBackendUrl = (value) => {
   }
 };
 
-export const BACKEND_BASE_URL = resolveLoopbackBackendUrl(import.meta.env.VITE_BACKEND_URL);
+export const BACKEND_BASE_URL = resolveLoopbackBackendUrl(
+  import.meta.env.VITE_BACKEND_URL || BACKEND_API_PREFIX,
+);
 
 export const resolveBackendUrl = (path = "") => {
   const normalizedPath = normalizeBackendPath(path);

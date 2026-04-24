@@ -115,7 +115,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
 
     try {
       const parentData = normalizeParentRecord(
-        await fetchSessionJson(`/api/parents/${currentUser._id}`)
+        await fetchSessionJson(`/parents/${currentUser._id}`)
       );
       setParentForm({
         firstName: parentData.firstName || "",
@@ -258,7 +258,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
     setLoading(true);
 
     try {
-      const data = await sendSessionJson("/api/parents", {
+      const data = await sendSessionJson("/parents", {
         method: 'POST',
         body: {
           parent: {

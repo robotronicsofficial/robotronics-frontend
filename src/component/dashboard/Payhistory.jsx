@@ -24,7 +24,7 @@ const PayHistory = () => {
 
         setLoading(true);
         setError("");
-        const result = await fetchSessionJson("/api/getPayments");
+        const result = await fetchSessionJson("/getPayments");
         setInvoices(Array.isArray(result) ? result : []);
       } catch (requestError) {
         console.error("Error fetching payments:", requestError);

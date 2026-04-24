@@ -5,7 +5,7 @@ export const fetchPlans = createAsyncThunk(
   "plans/fetchPlans",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${BACKEND_BASE_URL}/api/getAllPlans`);
+      const response = await fetch(`${BACKEND_BASE_URL}/getAllPlans`);
       if (!response.ok) throw new Error("Failed to fetch plans");
       const data = await response.json();
       return data.plans;

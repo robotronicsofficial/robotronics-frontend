@@ -7,7 +7,7 @@ This repo should ship a built `build/` artifact to the VPS instead of rebuilding
 - `/srv/robotronics/frontend/releases/<git-sha>/build`
 - `/srv/robotronics/frontend/current`
 
-`nginx` should point `robotronics.ai` at `/srv/robotronics/frontend/current` and continue proxying the backend routes to `127.0.0.1:8080`.
+`nginx` should point `robotronics.ai` at `/srv/robotronics/frontend/current` and proxy `/api/` to `127.0.0.1:8080`.
 
 ## Required GitHub environment secrets
 
@@ -22,12 +22,12 @@ Use the `production` environment instead of repo-wide secrets.
 
 1. Create `/srv/robotronics/frontend/releases`.
 2. Update the nginx server block so its root is `/srv/robotronics/frontend/current`.
-3. Keep production same-origin by leaving `VITE_BACKEND_URL` empty in `.env.production`.
+3. Keep production same-origin with `VITE_BACKEND_URL=/api`, or leave it unset to use the built-in `/api` default.
 4. Use a frontend-only deploy user that can reload nginx without interactive sudo.
 
 ## Post-cutover checks
 
 - `nginx -t`
 - open `https://robotronics.ai`
-- confirm API requests stay on the same origin rather than going to a stale Vercel backend
+- confirm API requests hit same-origin `/api/...`, not a stale Vercel backend
 - `readlink -f /srv/robotronics/frontend/current` should point at the newest deployed release

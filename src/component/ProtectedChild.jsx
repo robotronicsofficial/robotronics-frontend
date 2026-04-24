@@ -95,7 +95,7 @@ const ProtectedChild = ({ children }) => {
         }
 
         const response = await fetch(
-          resolveBackendUrl("/api/verifyChildSession"),
+          resolveBackendUrl("/verifyChildSession"),
           childSessionRequest
         );
 

@@ -40,8 +40,8 @@ const mergeChildrenWithAccess = (parentChildren, childAccessList) =>
 
 const loadChildDashboardData = async (userId) => {
   const [parentData, childCoursesData] = await Promise.all([
-    fetchSessionJson(`/api/parents/${userId}`),
-    fetchSessionJson("/api/getAllChild"),
+    fetchSessionJson(`/parents/${userId}`),
+    fetchSessionJson("/getAllChild"),
   ]);
 
   return {
@@ -116,7 +116,7 @@ const SubscriptionChildProfile = () => {
 
       const childAccessId = selectedChild?.accessChildId || selectedChildId;
 
-      await sendSessionJson(`/api/children/${childAccessId}/pin`, {
+      await sendSessionJson(`/children/${childAccessId}/pin`, {
         method: 'PATCH',
         body: {
           oldPin: pinData.oldPin,
@@ -155,7 +155,7 @@ const SubscriptionChildProfile = () => {
         throw new Error("Child subscription plan is missing. Refresh the page and try again.");
       }
 
-      await sendSessionJson("/api/AddChildData", {
+      await sendSessionJson("/AddChildData", {
         method: 'POST',
         body: {
           _id: childData._id,
@@ -200,7 +200,7 @@ const SubscriptionChildProfile = () => {
 
       const childAccessId = selectedChild?.accessChildId || selectedChildId;
       
-      const data = await sendSessionJson("/api/verifyChildPin", {
+      const data = await sendSessionJson("/verifyChildPin", {
         method: 'POST',
         body: {
           childId: childAccessId,
@@ -230,7 +230,7 @@ const SubscriptionChildProfile = () => {
       }
 
       // Fetch child's courses data
-      const coursesData = await fetchSessionJson(`/api/getChild/${childAccessId}`);
+      const coursesData = await fetchSessionJson(`/getChild/${childAccessId}`);
       const selectedCourses = ensureArray(coursesData?.courses);
       
       // Navigate based on whether courses exist

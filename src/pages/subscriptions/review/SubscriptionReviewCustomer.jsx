@@ -47,7 +47,7 @@ const SubscriptionReviewCustomer = () => {
         throw new Error("Subscription membership is missing. Start the membership checkout again.");
       }
 
-      const result = await sendSessionJson("/api/subscriptions/activate", {
+      const result = await sendSessionJson("/subscriptions/activate", {
         method: "POST",
         body: {
           planId: checkout.plan.planId,

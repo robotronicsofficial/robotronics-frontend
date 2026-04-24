@@ -72,7 +72,7 @@ const ContactUsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${BACKEND_BASE_URL}/api/contact`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

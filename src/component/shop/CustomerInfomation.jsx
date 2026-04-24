@@ -116,7 +116,7 @@ const CustomerInfomation = ({ onNext }) => {
         return;
       }
 
-      const response = await fetch(`${BACKEND_BASE_URL}/api/addresses`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/addresses`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

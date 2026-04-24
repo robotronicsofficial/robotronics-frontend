@@ -77,7 +77,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
     try {
       const response = await fetch(
-        `${BACKEND_BASE_URL}/api/shop-checkout-intents`,
+        `${BACKEND_BASE_URL}/shop-checkout-intents`,
         {
           method: "POST",
           credentials: "include",

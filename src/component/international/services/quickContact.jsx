@@ -32,7 +32,7 @@ const QuickContact = () => {
 
     // Simulate form submission
     try {
-      const response = await fetch(`${BACKEND_BASE_URL}/api/quickContact`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/quickContact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

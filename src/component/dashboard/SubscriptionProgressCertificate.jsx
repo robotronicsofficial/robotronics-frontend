@@ -27,7 +27,7 @@ const SubscriptionProgressCertificate = () => {
 
       try {
         const data = normalizeParentRecord(
-          await fetchSessionJson(`/api/parents/${userId}`)
+          await fetchSessionJson(`/parents/${userId}`)
         );
         setChildren(data.children);
       } catch (error) {

@@ -45,7 +45,7 @@ const MyAllCourses = () => {
         }
 
         const childResponse = await fetch(
-          resolveBackendUrl(`/api/child/${childId}/courses`),
+          resolveBackendUrl(`/child/${childId}/courses`),
           childSessionRequest
         );
         if (!childResponse.ok) {

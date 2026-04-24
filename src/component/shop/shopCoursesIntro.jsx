@@ -15,7 +15,7 @@ import { BACKEND_BASE_URL } from "../../lib/api";
 
 //   useEffect(() => {
 //     // Fetch courses from the API
-//     fetch("/api/courses")
+//     fetch("/courses")
 //       .then((response) => response.json())
 //       .then((data) => {
 //         setCourses(data);

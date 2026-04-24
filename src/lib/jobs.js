@@ -1,6 +1,6 @@
 import { fetchBackendJson } from "./api";
 
-const JOBS_PATH = "/api/jobs";
+const JOBS_PATH = "/jobs";
 
 const isMissingSpecificJob = (error) => {
   const message = String(error?.payload?.message || error?.message || "");

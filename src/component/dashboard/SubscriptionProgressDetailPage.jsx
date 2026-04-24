@@ -32,7 +32,7 @@ const SubscriptionProgressDetailPage = () => {
     }
 
     const response = await fetch(
-      resolveBackendUrl(`/api/${nextChildId}/progress`),
+      resolveBackendUrl(`/${nextChildId}/progress`),
       progressRequest
     );
 
@@ -88,7 +88,7 @@ const SubscriptionProgressDetailPage = () => {
         throw new Error('Child session not found. Please re-enter the PIN.');
       }
 
-      const response = await fetch(resolveBackendUrl("/api/generate"), generateRequest);
+      const response = await fetch(resolveBackendUrl("/generate"), generateRequest);
 
       // Check if the response is OK (status 200-299)
       if (!response.ok) {
@@ -109,7 +109,7 @@ const SubscriptionProgressDetailPage = () => {
       }
 
       const downloadResponse = await fetch(
-        resolveBackendUrl(result.downloadUrl || `/api/certificates/download/${result.certificateId}`),
+        resolveBackendUrl(result.downloadUrl || `/certificates/download/${result.certificateId}`),
         downloadRequest
       );
 

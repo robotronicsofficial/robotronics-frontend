@@ -78,7 +78,7 @@ const CourseDetail = () => {
         }
 
         const childCourseRes = await fetch(
-          resolveBackendUrl(`/api/getChildById/${childId}/ByCourseId/${id}`),
+          resolveBackendUrl(`/getChildById/${childId}/ByCourseId/${id}`),
           childCourseRequest
         );
 
@@ -151,7 +151,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
     }
 
     const response = await fetch(
-      resolveBackendUrl(`/api/updateChildCourse/${childId}`),
+      resolveBackendUrl(`/updateChildCourse/${childId}`),
       childSessionRequest
     );
 
@@ -207,7 +207,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
 
     try {
       const response = await fetch(
-        resolveBackendUrl(`/api/child/${childId}/courses/${id}/content/${contentId}/download`),
+        resolveBackendUrl(`/child/${childId}/courses/${id}/content/${contentId}/download`),
         childSessionRequest
       );
 

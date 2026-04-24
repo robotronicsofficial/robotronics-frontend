@@ -86,7 +86,7 @@ const GiftCourseBody = () => {
         throw new Error("Add at least one course before sending a gift request.");
       }
 
-      const response = await fetch(`${BACKEND_BASE_URL}/api/gift-courses`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/gift-courses`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

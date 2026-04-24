@@ -42,7 +42,7 @@ const MyCourses = () => {
 
         // First fetch child data to get the plan
         const childResponse = await fetch(
-          resolveBackendUrl(`/api/getChildPlan/${childId}`),
+          resolveBackendUrl(`/getChildPlan/${childId}`),
           childSessionRequest
         );
         if (!childResponse.ok) {
@@ -113,7 +113,7 @@ const MyCourses = () => {
       }
 
       const response = await fetch(
-        resolveBackendUrl(`/api/${childId}/courses`),
+        resolveBackendUrl(`/${childId}/courses`),
         childSessionRequest
       );
 
