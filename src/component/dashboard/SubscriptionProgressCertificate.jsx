@@ -1,43 +1,23 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../contexts/useAuth";
-import { fetchSessionJson } from "../../lib/api";
-import { formatDisplayDate, normalizeParentRecord } from "../../lib/subscription";
+import { formatDisplayDate } from "../../lib/subscription";
 import {
   getActiveChildId,
   matchesChildSessionIdentifier,
   resolveChildSessionIdentifier,
 } from "../../utils/childSessionRequest";
+import { useParent } from "../../hooks/useAccount";
 
 const SubscriptionProgressCertificate = () => {
   const navigate = useNavigate();
-  const [children, setChildren] = useState([]);
 
   const { currentUser } = useAuth();
   const userId = currentUser?._id;
   const activeChildId = getActiveChildId();
-
-  useEffect(() => {
-    const fetchParentData = async () => {
-      if (!userId) {
-        return;
-      }
-
-      try {
-        const data = normalizeParentRecord(
-          await fetchSessionJson(`/parents/${userId}`)
-        );
-        setChildren(data.children);
-      } catch (error) {
-        console.error("Error fetching parent data:", error);
-        setChildren([]);
-      }
-    };
-
-    fetchParentData();
-  }, [userId]);
+  const { data: parent } = useParent(userId);
+  const children = parent?.children || [];
 
   return (
     <DashboardLayout>

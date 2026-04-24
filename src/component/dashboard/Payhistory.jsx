@@ -1,42 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useAuth } from "../../contexts/useAuth";
-import { fetchSessionJson } from "../../lib/api";
 import { openExternalUrl } from "../../utils/openExternalUrl";
+import { usePayments } from "../../hooks/useAccount";
 
 const resolveInvoiceUrl = (payment = {}) =>
   payment.invoiceUrl || payment.invoiceDownloadUrl || payment.downloadUrl || "";
 
 const PayHistory = () => {
   const { currentUser } = useAuth();
-  const [invoices, setInvoices] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchPayHistory = async () => {
-      try {
-        if (!currentUser?._id) {
-          setInvoices([]);
-          setLoading(false);
-          return;
-        }
-
-        setLoading(true);
-        setError("");
-        const result = await fetchSessionJson("/getPayments");
-        setInvoices(Array.isArray(result) ? result : []);
-      } catch (requestError) {
-        console.error("Error fetching payments:", requestError);
-        setInvoices([]);
-        setError(requestError.message || "Failed to fetch payment history");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPayHistory();
-  }, [currentUser]);
+  const {
+    data: invoices = [],
+    isLoading: loading,
+    error: paymentsError,
+  } = usePayments(Boolean(currentUser?._id));
+  const errorMessage = error || paymentsError?.message || "";
 
   return (
     <DashboardLayout>
@@ -47,8 +26,8 @@ const PayHistory = () => {
 
         {loading ? (
           <p className="text-gray-600">Loading payment history...</p>
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
+        ) : errorMessage ? (
+          <p className="text-red-500">{errorMessage}</p>
         ) : invoices.length === 0 ? (
           <p className="text-gray-600">No backend payment records were found for this account.</p>
         ) : (

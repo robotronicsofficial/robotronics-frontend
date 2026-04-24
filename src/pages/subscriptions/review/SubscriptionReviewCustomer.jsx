@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import YtVideos from "../../../component/course/courseDetailPage/ytVideos";
-import { sendSessionJson } from "../../../lib/api";
+import { useActivateSubscriptionMutation } from "../../../hooks/useAccount";
 import { formatDisplayDate } from "../../../lib/subscription";
 import {
   formatCheckoutCurrency,
@@ -23,6 +23,7 @@ const SubscriptionReviewCustomer = () => {
   const [checkout, setCheckout] = useState(() => loadSubscriptionCheckout());
   const [activating, setActivating] = useState(false);
   const [activationError, setActivationError] = useState("");
+  const activateSubscriptionMutation = useActivateSubscriptionMutation(checkout?.parent?.userId);
 
   useEffect(() => {
     const savedCheckout = loadSubscriptionCheckout();
@@ -47,17 +48,14 @@ const SubscriptionReviewCustomer = () => {
         throw new Error("Subscription membership is missing. Start the membership checkout again.");
       }
 
-      const result = await sendSessionJson("/subscriptions/activate", {
-        method: "POST",
-        body: {
-          planId: checkout.plan.planId,
-          billingCycle: checkout.plan.billingCycle,
-          childIds: checkout.children
-            .map((child) => child.childCode || child._id)
-            .filter(Boolean),
-          payment: checkout.payment,
-          checkoutReference: checkout.orderCode,
-        },
+      const result = await activateSubscriptionMutation.mutateAsync({
+        planId: checkout.plan.planId,
+        billingCycle: checkout.plan.billingCycle,
+        childIds: checkout.children
+          .map((child) => child.childCode || child._id)
+          .filter(Boolean),
+        payment: checkout.payment,
+        checkoutReference: checkout.orderCode,
       });
 
       const confirmedCheckout = updateSubscriptionCheckout({

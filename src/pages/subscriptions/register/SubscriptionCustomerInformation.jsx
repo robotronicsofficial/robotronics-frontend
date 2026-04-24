@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 import AppImage from "../../../component/AppImage";
 import robo from "../../../assets/child.webp";
 import { FaTrash } from "react-icons/fa"; // Import delete icon
-import { fetchSessionJson, sendSessionJson } from "../../../lib/api";
 import { normalizeParentRecord } from "../../../lib/subscription";
 import { buildSubscriptionCheckout, saveSubscriptionCheckout } from "../../../lib/subscriptionCheckout";
 import {
   selectSelectedPlan,
   useSelectedPlanStore,
 } from "../../../stores/selectedPlanStore";
+import { useParent, useSaveParentMutation } from "../../../hooks/useAccount";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -95,6 +95,8 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { planId, plan, price, billingCycle } = useSelectedPlanStore(selectSelectedPlan);
+  const { data: loadedParent } = useParent(currentUser?._id);
+  const saveParentMutation = useSaveParentMutation();
 
   const [loading, setLoading] = useState(false);
   const [parentForm, setParentForm] = useState({
@@ -113,37 +115,23 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   ]);
 
   useEffect(() => {
-  const fetchParentData = async () => {
-    if (!currentUser?._id) return;
+    if (!loadedParent) return;
 
-    try {
-      const parentData = normalizeParentRecord(
-        await fetchSessionJson(`/parents/${currentUser._id}`)
-      );
-      setParentForm({
-        firstName: parentData.firstName || "",
-        lastName: parentData.lastName || "",
-        email: parentData.email || "",
-        country: parentData.country || "",
-        companyName: parentData.companyName || "",
-        streetAddress: parentData.streetAddress || "",
-        aptSuite: parentData.aptSuite || "",
-        city: parentData.city || "",
-        state: parentData.state || "",
-        phone: parentData.phone || "",
-        postalCode: parentData.postalCode || "",
-        deliveryInstruction: parentData.deliveryInstruction || ""
-      });
-    } catch (error) {
-      if (error.status === 404) {
-        return;
-      }
-      console.error("Error fetching parent info:", error);
-    }
-  };
-
-  fetchParentData();
-}, [currentUser]);
+    setParentForm({
+      firstName: loadedParent.firstName || "",
+      lastName: loadedParent.lastName || "",
+      email: loadedParent.email || "",
+      country: loadedParent.country || "",
+      companyName: loadedParent.companyName || "",
+      streetAddress: loadedParent.streetAddress || "",
+      aptSuite: loadedParent.aptSuite || "",
+      city: loadedParent.city || "",
+      state: loadedParent.state || "",
+      phone: loadedParent.phone || "",
+      postalCode: loadedParent.postalCode || "",
+      deliveryInstruction: loadedParent.deliveryInstruction || ""
+    });
+  }, [loadedParent]);
 
   const [savedChildren, setSavedChildren] = useState([]);
 
@@ -261,18 +249,15 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
     setLoading(true);
 
     try {
-      const data = await sendSessionJson("/parents", {
-        method: 'POST',
-        body: {
-          parent: {
-            ...parentForm,
-            userId: currentUser._id,
-          },
-          children: childrenForms.map(withoutSavedFlag),
-          plan: {
-            planId,
-            billingCycle,
-          }
+      const data = await saveParentMutation.mutateAsync({
+        parent: {
+          ...parentForm,
+          userId: currentUser._id,
+        },
+        children: childrenForms.map(withoutSavedFlag),
+        plan: {
+          planId,
+          billingCycle,
         },
       });
 

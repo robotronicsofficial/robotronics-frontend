@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
@@ -9,18 +10,21 @@ import PinModal from "./popUps/PinModal";
 import ChangePinModal from "./popUps/ChangePinModal";
 import ErrorModal from "./popUps/ErrorModal";
 import { useAuth } from "../../contexts/useAuth";
-import { fetchSessionJson, sendSessionJson } from "../../lib/api";
 import {
   clearActiveChildSession,
   getChildSessionIdentifiers,
   setActiveChildSession,
 } from "../../utils/childSessionRequest";
+import { ensureArray, formatDisplayDate } from "../../lib/subscription";
+import { fetchChildEnrollment } from "../../lib/account";
 import {
-  ensureArray,
-  formatDisplayDate,
-  normalizeChildAccessRecord,
-  normalizeParentRecord,
-} from "../../lib/subscription";
+  useChangeChildPinMutation,
+  useChildAccessList,
+  useCreateChildPinMutation,
+  useParent,
+  useVerifyChildPinMutation,
+} from "../../hooks/useAccount";
+import { queryKeys } from "../../lib/queryKeys";
 
 const resolveChildAccess = (child, childAccessList) => (
   childAccessList.find((access) => (
@@ -39,65 +43,34 @@ const mergeChildrenWithAccess = (parentChildren, childAccessList) =>
     };
   });
 
-const loadChildDashboardData = async (userId) => {
-  const [parentData, childCoursesData] = await Promise.all([
-    fetchSessionJson(`/parents/${userId}`),
-    fetchSessionJson("/getAllChild"),
-  ]);
-
-  return {
-    parentChildren: normalizeParentRecord(parentData).children,
-    childAccessList: ensureArray(childCoursesData?.childCourse).map(normalizeChildAccessRecord),
-  };
-};
-
 const SubscriptionChildProfile = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
   const [isVerifyPinModalOpen, setIsVerifyPinModalOpen] = useState(false);
   const [isChangePinModalOpen, setIsChangePinModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-  const [children, setChildren] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [pinError, setPinError] = useState(null);
   const [selectedChildId, setSelectedChildId] = useState(null);
   const { currentUser } = useAuth();
-
-  useEffect(() => {
-    if (currentUser?._id) {
-      const fetchData = async () => {
-        try {
-          setLoading(true);
-          const { parentChildren, childAccessList } = await loadChildDashboardData(currentUser._id);
-          setChildren(mergeChildrenWithAccess(parentChildren, childAccessList));
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchData();
-    } else {
-      setLoading(false);
-    }
-  }, [currentUser]);
-
-  const refreshChildData = async () => {
-    try {
-      if (!currentUser?._id) {
-        throw new Error("Parent account not found");
-      }
-
-      const { parentChildren, childAccessList } = await loadChildDashboardData(currentUser._id);
-      setChildren(mergeChildrenWithAccess(parentChildren, childAccessList));
-    } catch (err) {
-      console.error('Error refreshing child data:', err);
-      setError(err.message);
-    }
-  };
+  const userId = currentUser?._id;
+  const {
+    data: parentData,
+    isLoading: parentLoading,
+    error: parentError,
+  } = useParent(userId);
+  const {
+    data: childAccessList = [],
+    isLoading: accessLoading,
+    error: accessError,
+  } = useChildAccessList(Boolean(userId));
+  const changeChildPinMutation = useChangeChildPinMutation(userId);
+  const createChildPinMutation = useCreateChildPinMutation(userId);
+  const verifyChildPinMutation = useVerifyChildPinMutation();
+  const children = mergeChildrenWithAccess(parentData?.children || [], childAccessList);
+  const loading = Boolean(userId) && (parentLoading || accessLoading);
+  const error = parentError?.message || accessError?.message || "";
 
   const handlePinSubmit = async (pinData) => {
     try {
@@ -117,16 +90,12 @@ const SubscriptionChildProfile = () => {
 
       const childAccessId = selectedChild?.accessChildId || selectedChildId;
 
-      await sendSessionJson(`/children/${childAccessId}/pin`, {
-        method: 'PATCH',
-        body: {
-          oldPin: pinData.oldPin,
-          newPin: pinData.newPin,
-        },
+      await changeChildPinMutation.mutateAsync({
+        childId: childAccessId,
+        oldPin: pinData.oldPin,
+        newPin: pinData.newPin,
       });
-      
-      await refreshChildData();
-      
+
       setIsChangePinModalOpen(false);
       setIsSuccessModalOpen(true);
     } catch (err) {
@@ -156,32 +125,27 @@ const SubscriptionChildProfile = () => {
         throw new Error("Child subscription plan is missing. Refresh the page and try again.");
       }
 
-      await sendSessionJson("/AddChildData", {
-        method: 'POST',
-        body: {
-          _id: childData._id,
-          firstName: childData.firstName,
-          lastName: childData.lastName,
-          email: childData.email,
-          phone: childData.phone,
-          dateOfBirth: childData.dateOfBirth,
-          country: childData.country,
-          schoolName: childData.schoolName,
-          streetAddress: childData.streetAddress,
-          city: childData.city,
-          postalCode: childData.postalCode,
-          gender: childData.gender,
-          plan: {
-            planId: childPlanId,
-            billingCycle: childData.plan.billingCycle,
-          },
-          pin: pinData,
-          userId: currentUser._id,
+      await createChildPinMutation.mutateAsync({
+        _id: childData._id,
+        firstName: childData.firstName,
+        lastName: childData.lastName,
+        email: childData.email,
+        phone: childData.phone,
+        dateOfBirth: childData.dateOfBirth,
+        country: childData.country,
+        schoolName: childData.schoolName,
+        streetAddress: childData.streetAddress,
+        city: childData.city,
+        postalCode: childData.postalCode,
+        gender: childData.gender,
+        plan: {
+          planId: childPlanId,
+          billingCycle: childData.plan.billingCycle,
         },
+        pin: pinData,
+        userId: currentUser._id,
       });
-      
-      await refreshChildData();
-      
+
       setIsPinModalOpen(false);
       setIsSuccessModalOpen(true);
     } catch (err) {
@@ -201,12 +165,9 @@ const SubscriptionChildProfile = () => {
 
       const childAccessId = selectedChild?.accessChildId || selectedChildId;
       
-      const data = await sendSessionJson("/verifyChildPin", {
-        method: 'POST',
-        body: {
-          childId: childAccessId,
-          pin: pinData,
-        },
+      const data = await verifyChildPinMutation.mutateAsync({
+        childId: childAccessId,
+        pin: pinData,
       });
 
       if (
@@ -231,7 +192,10 @@ const SubscriptionChildProfile = () => {
       }
 
       // Fetch child's courses data
-      const coursesData = await fetchSessionJson(`/getChild/${childAccessId}`);
+      const coursesData = await queryClient.fetchQuery({
+        queryKey: queryKeys.childCourses.active(childAccessId),
+        queryFn: () => fetchChildEnrollment(childAccessId),
+      });
       const selectedCourses = ensureArray(coursesData?.courses);
       
       // Navigate based on whether courses exist
