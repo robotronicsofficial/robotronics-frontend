@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LeftNav from "./leftNav";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../contexts/useAuth";
 import { fetchSessionJson } from "../../lib/api";
@@ -40,12 +40,7 @@ const SubscriptionProgressCertificate = () => {
   }, [userId]);
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col md:flex-row bg-[#ebe5e2] px-4 md:px-20 pt-44 md:pt-2">
-      <div className="w-full md:w-1/4">
-        <LeftNav />
-      </div>
-
-      <div className="w-full p-4 md:w-3/4">
+    <DashboardLayout>
         <h1 className="text-2xl md:text-3xl font-bold mb-4">Child Accounts</h1>
 
         <div className="flex flex-wrap p-1 sm:p-3 lg:p-5">
@@ -101,8 +96,7 @@ const SubscriptionProgressCertificate = () => {
             <p>No children found.</p>
           )}
         </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

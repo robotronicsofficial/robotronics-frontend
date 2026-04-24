@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import LeftNav from "./leftNav";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useAuth } from "../../contexts/useAuth";
 import { fetchSessionJson } from "../../lib/api";
 import { openExternalUrl } from "../../utils/openExternalUrl";
@@ -39,14 +39,7 @@ const PayHistory = () => {
   }, [currentUser]);
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col md:flex-row bg-[#ebe5e2] px-4 md:px-20 pt-44 md:pt-2">
-      {/* Sidebar */}
-      <div className="w-full md:w-1/4">
-        <LeftNav />
-      </div>
-
-      {/* Invoice Section */}
-      <div className="w-full md:w-3/4 p-4">
+    <DashboardLayout>
         <h1 className="text-3xl font-bold mb-8">My Payment History</h1>
         <p className="mb-6 max-w-3xl text-sm text-gray-600">
           Only backend payment records appear here. Checkout details saved in the public storefront stay in your browser and do not create an invoice until the backend records a payment.
@@ -114,8 +107,7 @@ const PayHistory = () => {
             </div>
           ))
         )}
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

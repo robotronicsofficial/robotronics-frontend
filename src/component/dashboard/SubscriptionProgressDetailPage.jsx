@@ -1,4 +1,4 @@
-import LeftNav from "./leftNav";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 import { FaFilePdf } from "react-icons/fa6";
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -185,14 +185,7 @@ const SubscriptionProgressDetailPage = () => {
   });
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col md:flex-row bg-[#ebe5e2] px-4 md:px-20 ">
-      {/* Sidebar */}
-      <div className="w-full md:w-1/4 ">
-        <LeftNav />
-      </div>
-
-      {/* Main Section */}
-      <div className="w-full md:w-3/4 p-4">
+    <DashboardLayout withHeaderOffset={false}>
         <h1 className="text-3xl font-bold mb-4">{progressData.childName}</h1>
 
         {/* Filter Buttons */}
@@ -294,8 +287,7 @@ const SubscriptionProgressDetailPage = () => {
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

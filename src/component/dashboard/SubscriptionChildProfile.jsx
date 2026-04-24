@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import LeftNav from "./leftNav";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 import { FaUserCircle } from "react-icons/fa";
 import SuccessModal from "./popUps/SuccessModal";
 import Modal from "react-modal";
@@ -275,14 +275,7 @@ const SubscriptionChildProfile = () => {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col md:flex-row bg-[#ebe5e2] px-4 md:px-20 pt-44 md:pt-2">
-      {/* Sidebar */}
-      <div className="w-full md:w-1/4">
-        <LeftNav />
-      </div>
-
-      {/* Child Accounts Section */}
-      <div className="w-full p-4 md:w-3/4 px-6">
+    <DashboardLayout contentClassName="px-6">
         <h1 className="text-2xl font-bold mb-4 md:text-3xl pl-4">Child Accounts</h1>
 
         <div className="flex flex-wrap p-2 lg:p-5">
@@ -347,7 +340,6 @@ const SubscriptionChildProfile = () => {
             </div>
           )}
         </div>
-      </div>
 
       {/* Success Modal */}
       <Modal
@@ -393,7 +385,7 @@ const SubscriptionChildProfile = () => {
         onClose={() => setIsErrorModalOpen(false)}
         errorMessage={pinError}
       />
-    </div>
+    </DashboardLayout>
   );
 };
 
