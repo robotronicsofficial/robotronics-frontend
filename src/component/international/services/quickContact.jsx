@@ -1,15 +1,18 @@
 import { useState } from "react";
 import img from "../../../assets/images/IServicesQuickContact.svg";
 
-import { BACKEND_BASE_URL } from "../../../lib/api";
+import { sendJson } from "../../../lib/api";
+
+const initialQuickContactForm = {
+  name: "",
+  email: "",
+  course: "",
+  phone: "",
+  message: "",
+};
+
 const QuickContact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    course: "",
-    phone: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState(initialQuickContactForm);
 
   const [status, setStatus] = useState(null);
 
@@ -24,37 +27,21 @@ const QuickContact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic Validation
     if (!formData.name || !formData.email || !formData.phone || !formData.message) {
       setStatus("Please fill in all required fields.");
       return;
     }
 
-    // Simulate form submission
     try {
-      const response = await fetch(`${BACKEND_BASE_URL}/quickContact`, {
+      await sendJson("/quickContact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: formData,
       });
 
-      if (response.ok) {
-        setStatus("Message sent successfully!");
-        setFormData({
-          name: "",
-          email: "",
-          course: "",
-          phone: "",
-          message: "",
-        });
-      } else {
-        const error = await response.json();
-        setStatus(`Error: ${error.message}`);
-      }
-    } catch {
-      setStatus("An error occurred. Please try again later.");
+      setStatus("Message sent successfully!");
+      setFormData(initialQuickContactForm);
+    } catch (error) {
+      setStatus(error.message || "An error occurred. Please try again later.");
     }
   };
 
@@ -75,7 +62,6 @@ const QuickContact = () => {
 
 
         >
-          {/* text */}
           <div>
             <h1 className="text-4xl text-left poppins-bold text-brown">
               Quick Contact
@@ -84,9 +70,8 @@ const QuickContact = () => {
               Feel free to contact us through Twitter or Facebook if you prefer!
             </p>
           </div>
-          {/* Inputs */}
           <form className="flex flex-col py-5" onSubmit={handleSubmit}>
-            <div className="flex space-x-2 justify-between">
+            <div className="flex justify-between gap-2">
               <input
                 type="text"
                 name="name"
