@@ -35,7 +35,7 @@ const WorkshopCard = ({ workshop }) => {
     </div>
       <div className="px-3 py-4 bg-[#362d2c] relative h-[18vw] flex flex-col">
       <div className=" text-white  h-[2vw] ">
-        <p className="text-gray-700 text-white poppins-medium z-50 my-3">
+        <p className="text-gray-700 text-white poppins-medium my-3">
           {workshop.activity}
         </p>
         <div className="w-20 h-20 rounded-full absolute right-2 -top-10 border-2 border-white overflow-hidden bg-yellow">

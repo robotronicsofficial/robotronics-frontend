@@ -330,7 +330,7 @@ const MyCourses = () => {
         <div className="mb-20"></div>
 
         {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-modal">
             <div className="bg-white p-8 rounded-lg shadow-lg text-center w-96">
               <h2 className="text-2xl font-bold mb-4 text-red-500">Plan Limit</h2>
               <p className="text-gray-700 mb-4">

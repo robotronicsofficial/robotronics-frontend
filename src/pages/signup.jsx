@@ -223,7 +223,7 @@ const Signup = () => {
     }}
     countrySelectProps={{
       className: "absolute left-0 top-0 h-full flex items-center pl-2 touch-manipulation",
-      dropdownClass: "absolute z-50 max-h-60 overflow-y-auto bg-white shadow-lg border border-gray-200 rounded-md w-60 max-w-full mt-1",
+      dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-white shadow-lg border border-gray-200 rounded-md w-60 max-w-full mt-1",
       buttonClass: "flex items-center justify-center h-full px-2 focus:outline-none"
     }}
     containerClass="relative w-full"

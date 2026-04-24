@@ -248,7 +248,7 @@ const ChatSupport = () => {
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-50" ref={chatContainerRef}>
+    <div className="fixed bottom-8 right-8 z-floating" ref={chatContainerRef}>
       {!isOpen ? (
         <button
           onClick={toggleChat}

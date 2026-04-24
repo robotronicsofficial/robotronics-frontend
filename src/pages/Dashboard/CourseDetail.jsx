@@ -804,7 +804,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
 
         {/* Video Modal */}
         {showVideoModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-modal p-4">
             <div className="bg-white rounded-lg w-full max-w-5xl h-[90vh] relative flex flex-col">
               <button
                 onClick={() => setShowVideoModal(false)}

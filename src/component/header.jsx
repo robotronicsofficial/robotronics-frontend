@@ -117,7 +117,7 @@ function NavDropdown({ label, items }) {
       {open && (
         <div
           role="menu"
-          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] rounded-xl bg-white shadow-xl ring-1 ring-black/10 z-[100] py-2"
+          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] rounded-xl bg-white shadow-xl ring-1 ring-black/10 z-dropdown py-2"
         >
           {items.map((item) => (
             <NavLink
@@ -171,7 +171,7 @@ function UserMenu({ label, onProfile, onLogout }) {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 mt-2 min-w-[14rem] rounded-lg bg-white shadow-lg ring-1 ring-black/10 z-[100] py-1"
+          className="absolute right-0 mt-2 min-w-[14rem] rounded-lg bg-white shadow-lg ring-1 ring-black/10 z-dropdown py-1"
         >
           <div className="px-4 py-2 border-b border-gray-100">
             <div className="text-xs text-gray-500">Signed in as</div>
@@ -320,7 +320,7 @@ export default function Header() {
   const goToCart = () => navigate(CART_PATH);
 
   return (
-    <header className="bg-transparent relative top-20 z-50 w-full">
+    <header className="bg-transparent relative top-20 z-header w-full">
       <div className="w-full h-full flex items-center justify-center absolute">
         <div className="bg-white flex items-center gap-4 lg:gap-6 p-3 sm:p-5 shadow w-[95vw] mt-6 mb-6 rounded-2xl">
           <NavLink
@@ -409,7 +409,7 @@ export default function Header() {
           </div>
 
           <div
-            className={`${menuOpen ? "fixed" : "hidden"} inset-0 bg-black/50 z-50 lg:hidden`}
+            className={`${menuOpen ? "fixed" : "hidden"} inset-0 bg-black/50 z-overlay lg:hidden`}
             onClick={closeMenu}
             aria-hidden="true"
           />
@@ -417,7 +417,7 @@ export default function Header() {
           <nav
             className={`${
               menuOpen ? "fixed" : "hidden"
-            } lg:hidden top-0 right-0 h-full w-3/4 bg-white shadow-lg z-50 p-4 overflow-y-auto transition-all duration-300 ease-in-out`}
+            } lg:hidden top-0 right-0 h-full w-3/4 bg-white shadow-lg z-modal p-4 overflow-y-auto transition-all duration-300 ease-in-out`}
             aria-label="Mobile navigation"
           >
             <div className="flex justify-between items-center mb-6">
