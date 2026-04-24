@@ -7,10 +7,7 @@ import robo from "../../../assets/child.webp";
 import { Trash2 } from "lucide-react";
 import { normalizeParentRecord } from "../../../lib/subscription";
 import { buildSubscriptionCheckout, saveSubscriptionCheckout } from "../../../lib/subscriptionCheckout";
-import {
-  selectSelectedPlan,
-  useSelectedPlanStore,
-} from "../../../stores/selectedPlanStore";
+import { useSelectedPlanStore } from "../../../stores/selectedPlanStore";
 import { useParent, useSaveParentMutation } from "../../../hooks/useAccount";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -70,7 +67,10 @@ SelectField.propTypes = {
 const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const { planId, plan, price, billingCycle } = useSelectedPlanStore(selectSelectedPlan);
+  const planId = useSelectedPlanStore((state) => state.planId);
+  const plan = useSelectedPlanStore((state) => state.plan);
+  const price = useSelectedPlanStore((state) => state.price);
+  const billingCycle = useSelectedPlanStore((state) => state.billingCycle);
   const { data: loadedParent } = useParent(currentUser?._id);
   const saveParentMutation = useSaveParentMutation();
 

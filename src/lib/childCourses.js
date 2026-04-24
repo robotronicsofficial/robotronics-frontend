@@ -26,6 +26,8 @@ const buildRequiredChildRequest = ({ childId, ...request }) => {
 };
 
 export const extractActiveCourses = (payload) => {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.data)) return payload.data;
   if (Array.isArray(payload?.data?.activeCourses)) return payload.data.activeCourses;
   if (Array.isArray(payload?.activeCourses)) return payload.activeCourses;
   if (Array.isArray(payload?.courses)) return payload.courses;

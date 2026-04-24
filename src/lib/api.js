@@ -1,3 +1,4 @@
+const trimSlash = (value) => String(value || "").trim().replace(/^\/+|\/+$/g, "");
 const trimTrailingSlash = (value) => String(value || "").trim().replace(/\/+$/, "");
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost"]);
 const BACKEND_API_PREFIX = "/api";
@@ -9,14 +10,44 @@ const normalizeBackendPath = (value) => {
 
   const normalizedPath = value.trim().replace(/\\/g, "/");
 
-  if (
-    normalizedPath === BACKEND_API_PREFIX ||
-    normalizedPath.startsWith(`${BACKEND_API_PREFIX}/`)
-  ) {
-    return normalizedPath.slice(BACKEND_API_PREFIX.length) || "/";
+  return normalizedPath.startsWith("/")
+    ? normalizedPath
+    : `/${normalizedPath}`;
+};
+
+const resolveBackendApiBaseUrl = (value) => {
+  const normalizedValue = trimTrailingSlash(value || BACKEND_API_PREFIX);
+
+  if (!normalizedValue || normalizedValue === BACKEND_API_PREFIX) {
+    return BACKEND_API_PREFIX;
   }
 
-  return normalizedPath;
+  if (normalizedValue.startsWith("/")) {
+    return normalizedValue.endsWith(BACKEND_API_PREFIX)
+      ? normalizedValue
+      : `/${trimSlash(normalizedValue)}${BACKEND_API_PREFIX}`;
+  }
+
+  if (!/^https?:\/\//i.test(normalizedValue)) {
+    return `/${trimSlash(normalizedValue)}${BACKEND_API_PREFIX}`;
+  }
+
+  try {
+    const backendUrl = new URL(normalizedValue);
+
+    if (!backendUrl.pathname || backendUrl.pathname === "/") {
+      backendUrl.pathname = BACKEND_API_PREFIX;
+      return trimTrailingSlash(backendUrl.href);
+    }
+
+    if (!backendUrl.pathname.endsWith(BACKEND_API_PREFIX)) {
+      backendUrl.pathname = `/${trimSlash(backendUrl.pathname)}${BACKEND_API_PREFIX}`;
+    }
+
+    return trimTrailingSlash(backendUrl.href);
+  } catch {
+    return normalizedValue;
+  }
 };
 
 const resolveLoopbackBackendUrl = (value) => {
@@ -42,8 +73,8 @@ const resolveLoopbackBackendUrl = (value) => {
   }
 };
 
-export const BACKEND_BASE_URL = resolveLoopbackBackendUrl(
-  import.meta.env.VITE_BACKEND_URL || BACKEND_API_PREFIX,
+export const BACKEND_BASE_URL = resolveBackendApiBaseUrl(
+  resolveLoopbackBackendUrl(import.meta.env.VITE_BACKEND_URL || BACKEND_API_PREFIX),
 );
 
 export const resolveBackendUrl = (path = "") => {

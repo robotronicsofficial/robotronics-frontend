@@ -33,10 +33,3 @@ export const useSelectedPlanStore = create(
     },
   ),
 );
-
-export const selectSelectedPlan = ({ planId, plan, price, billingCycle }) => ({
-  planId,
-  plan,
-  price,
-  billingCycle,
-});
