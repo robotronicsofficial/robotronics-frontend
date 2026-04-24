@@ -13,6 +13,9 @@ export const queryKeys = {
     detail: (childId, courseId) => ["child-courses", childId, courseId],
     progress: (childId) => ["child-courses", childId, "progress"],
   },
+  childSession: {
+    verify: (childId, sessionId) => ["child-session", childId, sessionId, "verify"],
+  },
   courses: {
     all: ["courses"],
     detail: (courseId) => ["courses", courseId],

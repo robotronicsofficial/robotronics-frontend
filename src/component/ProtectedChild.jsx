@@ -3,13 +3,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
-import { resolveBackendUrl } from '../lib/api';
 import { DASHBOARD_CHILD_PROFILE_PATH } from '../router/paths';
 import {
-  buildChildSessionRequest,
   clearActiveChildSession,
   getActiveChildSession,
 } from '../utils/childSessionRequest';
+import { useChildSessionVerification } from '../hooks/useChildSessionQuery';
 
 const CHILD_PARAM_ROUTE_PREFIXES = [
   '/Dashboard/MyCoursesPage/',
@@ -24,6 +23,10 @@ const ProtectedChild = ({ children }) => {
   const location = useLocation();
   const params = useParams();
   const [searchParams] = useSearchParams();
+  const activeChildSession = getActiveChildSession();
+  const childId = activeChildSession?.childId || null;
+  const childIds = activeChildSession?.childIds || [];
+  const sessionId = activeChildSession?.sessionId || null;
 
   const expectedChildId = useMemo(() => {
     const childIdFromQuery = searchParams.get('childId');
@@ -37,10 +40,14 @@ const ProtectedChild = ({ children }) => {
 
     return usesChildIdInPath && params.id ? String(params.id) : null;
   }, [location.pathname, params.id, searchParams]);
+  const expectedChildMatchesSession = !expectedChildId || childIds.includes(expectedChildId);
+  const sessionQuery = useChildSessionVerification({
+    childId,
+    sessionId,
+    enabled: expectedChildMatchesSession,
+  });
 
   useEffect(() => {
-    let isMounted = true;
-
     const invalidateChildSession = ({
       message = 'This child session is no longer valid. Re-enter the PIN to continue.',
       clearSession = true,
@@ -49,86 +56,48 @@ const ProtectedChild = ({ children }) => {
         clearActiveChildSession();
       }
 
-      if (!isMounted) {
-        return;
-      }
-
       setSessionMessage(message);
       setSessionStatus('invalid');
       setShowSessionPopup(true);
     };
 
-    const checkSession = async () => {
-      const activeChildSession = getActiveChildSession();
+    if (!activeChildSession) {
+      invalidateChildSession();
+      return;
+    }
 
-      if (!activeChildSession) {
-        invalidateChildSession();
-        return;
-      }
+    if (!expectedChildMatchesSession) {
+      invalidateChildSession({
+        message: 'This page belongs to a different child account. Return to Child Accounts and open the correct child from there.',
+        clearSession: false,
+      });
+      return;
+    }
 
-      const { childId, childIds = [], sessionId } = activeChildSession;
+    if (sessionQuery.isLoading || sessionQuery.isFetching) {
+      setSessionStatus((currentStatus) => (
+        currentStatus === 'valid' ? currentStatus : 'checking'
+      ));
+      setShowSessionPopup(false);
+      return;
+    }
 
-      if (expectedChildId && !childIds.includes(expectedChildId)) {
-        invalidateChildSession({
-          message: 'This page belongs to a different child account. Return to Child Accounts and open the correct child from there.',
-          clearSession: false,
-        });
-        return;
-      }
+    if (sessionQuery.isError || sessionQuery.data !== true) {
+      invalidateChildSession();
+      return;
+    }
 
-      try {
-        const childSessionRequest = buildChildSessionRequest({
-          method: 'POST',
-          childId,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: {
-            childId,
-            sessionId,
-          },
-        });
-
-        if (!childSessionRequest) {
-          invalidateChildSession();
-          return;
-        }
-
-        const response = await fetch(
-          resolveBackendUrl("/verifyChildSession"),
-          childSessionRequest
-        );
-
-        const data = await response.json();
-        
-        if (!response.ok || !data.isValid) {
-          invalidateChildSession();
-          return;
-        }
-
-        if (!isMounted) {
-          return;
-        }
-
-        setSessionMessage('This child session is no longer valid. Re-enter the PIN to continue.');
-        setSessionStatus('valid');
-        setShowSessionPopup(false);
-      } catch (error) {
-        console.error('Session check failed:', error);
-        invalidateChildSession();
-      }
-    };
-
-    setSessionStatus('checking');
+    setSessionMessage('This child session is no longer valid. Re-enter the PIN to continue.');
+    setSessionStatus('valid');
     setShowSessionPopup(false);
-    checkSession();
-
-    const interval = setInterval(checkSession, 30000);
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, [expectedChildId]);
+  }, [
+    activeChildSession,
+    expectedChildMatchesSession,
+    sessionQuery.data,
+    sessionQuery.isError,
+    sessionQuery.isFetching,
+    sessionQuery.isLoading,
+  ]);
 
   const handlePopupClose = () => {
     setShowSessionPopup(false);

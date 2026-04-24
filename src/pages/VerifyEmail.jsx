@@ -1,18 +1,20 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Container, Box, Typography, CircularProgress, Button } from '@mui/material';
+import { useVerifyEmailMutation } from '../hooks/useAuthMutations';
 
-import { resolveBackendUrl } from "../lib/api";
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState('verifying');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const verificationStarted = useRef(false);
+  const verifyEmailMutation = useVerifyEmailMutation();
 
   useEffect(() => {
+    let redirectTimer = null;
+
     const verifyEmail = async () => {
-      // Skip if already started
       if (verificationStarted.current) return;
       verificationStarted.current = true;
       
@@ -24,30 +26,27 @@ const VerifyEmail = () => {
       }
 
       try {
-        const response = await fetch(
-          resolveBackendUrl(`/auth/verify-email?token=${encodeURIComponent(token)}`),
-        );
-        const data = await response.json();
+        const data = await verifyEmailMutation.mutateAsync(token);
 
-        if (response.ok) {
-          setStatus('success');
-          setMessage(data.message);
-          // Redirect to login after 3 seconds with success state
-          setTimeout(() => {
-            navigate('/Login', { state: { emailVerified: true } });
-          }, 3000);
-        } else {
-          setStatus('error');
-          setMessage(data.message);
-        }
-      } catch {
+        setStatus('success');
+        setMessage(data.message);
+        redirectTimer = setTimeout(() => {
+          navigate('/Login', { state: { emailVerified: true } });
+        }, 3000);
+      } catch (error) {
         setStatus('error');
-        setMessage('An error occurred during verification');
+        setMessage(error.message || 'An error occurred during verification');
       }
     };
 
     verifyEmail();
-  }, [searchParams, navigate]);
+
+    return () => {
+      if (redirectTimer) {
+        clearTimeout(redirectTimer);
+      }
+    };
+  }, [searchParams, navigate, verifyEmailMutation]);
 
   return (
     <Container maxWidth="sm">
