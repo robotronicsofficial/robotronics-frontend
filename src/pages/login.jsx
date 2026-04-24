@@ -8,6 +8,7 @@ import google from "../assets/images/Googlelogo.svg";
 import { useAuth } from "../contexts/useAuth";
 
 import { resolveBackendUrl, sendJson } from "../lib/api";
+import { getHeaderOffsetClass } from "../components/layout/headerOffset";
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
 
 const isSafeRedirectPath = (value) => (
@@ -100,7 +101,7 @@ const Login = () => {
   if (forgotPasswordMode) {
     return (
       <div className="bg-gray" id="forgot-password">
-        <div className="flex flex-col items-center justify-center pt-44 pb-20">
+        <div className={getHeaderOffsetClass("page", "flex flex-col items-center justify-center pb-20")}>
           <p className="text-4xl poppins-bold text-brown">Forgot Password</p>
           <form
             onSubmit={handleForgotPassword}
@@ -140,7 +141,7 @@ const Login = () => {
     <div className="bg-gray" id="signin">
       <div>
         <div
-          className="flex flex-col lg:space-y-4 space-y-1 items-center justify-center md:pt-36 py-5 pt-32"
+          className={getHeaderOffsetClass("auth", "flex flex-col lg:space-y-4 space-y-1 items-center justify-center py-5")}
           data-aos="fade-up"
 
 

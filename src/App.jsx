@@ -3,6 +3,7 @@ import { Navigate, Routes, Route } from "react-router-dom";
 import Layout from "./component/Layout";
 import 'react-toastify/dist/ReactToastify.css';
 import { CART_PATH, CONTACT_PATH, SCREEN_PATH } from "./router/paths";
+import { getHeaderOffsetClass } from "./components/layout/headerOffset";
 
 const ProtectedChild = lazy(() => import("./component/ProtectedChild"));
 const ProtectedRoute = lazy(() => import("./component/ProtectedRoute"));
@@ -59,7 +60,7 @@ const SubscriptionProgressPage = lazy(() => import("./component/dashboard/Subscr
 const MyAllCourses = lazy(() => import("./component/dashboard/myAllCourses"));
 
 const RouteFallback = () => (
-  <div className="bg-background px-4 pb-16 pt-40 text-center text-brown">
+  <div className={getHeaderOffsetClass("dashboardWide", "bg-background px-4 pb-16 text-center text-brown")}>
     Loading page...
   </div>
 );

@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import hide from "../assets/images/hide.svg";
 
 import { sendJson } from "../lib/api";
+import { getHeaderOffsetClass } from "../components/layout/headerOffset";
 import {
   getPasswordValidationState,
   hasValidPasswordRequirements,
@@ -82,7 +83,7 @@ const ResetPassword = () => {
 
   return (
     <div className="bg-gray" id="reset-password">
-      <div className="flex flex-col items-center justify-center pt-44 pb-20">
+      <div className={getHeaderOffsetClass("page", "flex flex-col items-center justify-center pb-20")}>
         <p className="text-4xl poppins-bold text-brown">Reset Password</p>
         <form
           onSubmit={handleSubmit}

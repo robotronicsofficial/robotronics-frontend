@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import LeftNav from "../../component/dashboard/leftNav";
 import { cn } from "../../lib/utils";
+import { getHeaderOffsetClass } from "./headerOffset";
 
 const DashboardLayout = ({
   children,
@@ -13,7 +14,7 @@ const DashboardLayout = ({
   <div
     className={cn(
       "bg-gray-100 min-h-screen flex flex-col md:flex-row bg-[#ebe5e2] px-4 md:px-20",
-      withHeaderOffset && "pt-44 md:pt-2",
+      withHeaderOffset && getHeaderOffsetClass("dashboard"),
       className,
     )}
   >
