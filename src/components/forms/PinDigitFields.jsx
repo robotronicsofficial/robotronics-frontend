@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import { useRef } from "react";
 
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const digitClassName =
   "size-12 rounded-lg border border-input bg-background text-center text-lg text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/30";
@@ -32,12 +34,12 @@ const PinDigitFields = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <label className={cn("block text-sm text-muted-foreground", hideLabel && "sr-only")}>
+      <Label className={cn("block text-sm text-muted-foreground", hideLabel && "sr-only")}>
         {label}
-      </label>
+      </Label>
       <div className="flex justify-center gap-3 sm:gap-4">
         {value.map((digit, index) => (
-          <input
+          <Input
             key={`${idPrefix}-${index}`}
             ref={(input) => {
               inputRefs.current[index] = input;
