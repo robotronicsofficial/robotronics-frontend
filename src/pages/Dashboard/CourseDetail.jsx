@@ -30,6 +30,7 @@ import {
 import { resolveBackendUrl } from "../../lib/api";
 import VideoPlayer from "../../component/VideoPlayer";
 import CenteredState from "../../components/layout/CenteredState";
+import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
 import { Spinner } from "../../components/ui/spinner";
 
 const MAX_ATTEMPTS = {
@@ -344,7 +345,7 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
 
   return (
     <div>
-      <div className="bg-background pt-44">
+      <div className={getHeaderOffsetClass("page", "bg-background")}>
         <div className="bg-gray-100 p-6">
           <div className="max-w-7xl mx-auto">
             <div className="lg:flex flex-wrap lg:flex-nowrap lg:space-x-6">

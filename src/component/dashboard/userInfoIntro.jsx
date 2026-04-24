@@ -29,11 +29,11 @@ const UserInfoIntro = () => {
     <div className="bg-background min-h-screen px-4 md:px-20">
       <Intro />
       <DashboardLayout
-        className="bg-background min-h-0 flex flex-col md:flex-col lg:flex-row px-0 pt-40 md:pt-4"
+        className="bg-background min-h-0 flex flex-col md:flex-col lg:flex-row px-0"
         contentClassName="w-full px-6 py-6 md:px-10 p-0"
+        headerOffsetVariant="dashboardWide"
         navClassName="w-full lg:w-1/3"
         navProps={{ "data-aos": "fade-up" }}
-        withHeaderOffset={false}
       >
         <div data-aos="fade-up">
           <div>

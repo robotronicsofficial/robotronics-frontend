@@ -75,10 +75,10 @@ const MyRobot = () => {
       </div>
 
       <DashboardLayout
-        className="bg-background min-h-0 block lg:flex flex-row pt-40 md:pt-4"
+        className="bg-background min-h-0 block lg:flex flex-row"
         contentClassName="w-full py-10 p-0"
+        headerOffsetVariant="dashboardWide"
         navClassName="lg:w-1/3 w-2/3"
-        withHeaderOffset={false}
       >
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4 px-8 lg:px-14">
           <div>

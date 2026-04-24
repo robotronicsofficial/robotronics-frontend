@@ -1,6 +1,8 @@
+import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
+
 const Intro = () => {
   return (
-    <div className="bg-background pt-44 hidden md:block">
+    <div className={getHeaderOffsetClass("page", "bg-background hidden md:block")}>
       {/* intro */}
       <div>
         {/* Dynamics-URLS */}
