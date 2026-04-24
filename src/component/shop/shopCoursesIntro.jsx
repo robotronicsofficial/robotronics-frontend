@@ -1,21 +1,25 @@
-import { fetchCourses } from "../../lib/courses";
-import { useState, useEffect } from "react";
-import CourseProduct from "../course/courseProduct";
-import icon from "../../assets/logo/searchicon.svg";
-import arow from "../../assets/logo/shopArowIcon.svg";
-import ShopPages from "../shop/shopPages";
-import { IoHomeOutline } from "react-icons/io5";
-import { FaHeart } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaArrowRight, FaHeart } from "react-icons/fa";
 import { BsHandbag } from "react-icons/bs";
-import { FaArrowRight } from "react-icons/fa";
+import { IoHomeOutline } from "react-icons/io5";
+import arow from "../../assets/logo/shopArowIcon.svg";
+import icon from "../../assets/logo/searchicon.svg";
+import { fetchCourses } from "../../lib/courses";
+import { cn } from "../../lib/utils";
+import CourseProduct from "../course/courseProduct";
+import ShopPages from "../shop/shopPages";
+
+const COURSE_FILTERS = [
+  { label: "All", value: "" },
+  { label: "Lego WeDo 2.0", value: "Lego WeDo 2.0" },
+  { label: "Lego Mindstorms EV3", value: "Lego Mindstorms EV3" },
+  { label: "Arduino based Robots", value: "Arduino based Robots" },
+];
+const paginationPages = [1, 2, 3, 4];
 
 const ShopCoursesIntro = () => {
   const [courses, setCourses] = useState([]);
-
-  const [selectedFilter, setSelectedFilter] = useState(""); // Filter state
-
-
-  // console.log("courses", courses);
+  const [selectedFilter, setSelectedFilter] = useState("");
 
   useEffect(() => {
     const loadCourses = async () => {
@@ -27,42 +31,36 @@ const ShopCoursesIntro = () => {
     };
 
     loadCourses();
-  }, []); 
-  // Filter courses based on selected filter
+  }, []);
+
   const filteredCourses =
     selectedFilter === ""
       ? courses
       : courses.filter((course) => course.category === selectedFilter);
 
-
-
-
-
   return (
-    <div className="lg:flex flex-col bg-lightgray lg:px-20 px-2">
-      {/* Block 1 */}
+    <div className="flex-col bg-lightgray px-2 lg:flex lg:px-20">
       <div className="flex-1">
-        {/* Line and Navigation */}
-        <div className="lg:pt-16 pt-8">
-          <div className="h-0 w-full border border-lin"data-aos="fade-up"></div>
+        <div className="pt-8 lg:pt-16">
+          <div className="h-0 w-full border border-lin" data-aos="fade-up"></div>
         </div>
 
-        <div className="lg:flex md:flex lg:px-24 px-2 lg:pt-10 pt-5 justify-between items-center">
-          <div className="flex justify-between w-full">
+        <div className="items-center justify-between px-2 pt-5 lg:flex lg:px-24 lg:pt-10 md:flex">
+          <div className="flex w-full justify-between">
             <div className="flex">
-              <IoHomeOutline className="h-5" data-aos="fade-up"/>
-              <p className="px-3 lg:text-base poppins-bold text-sm"data-aos="fade-up">
+              <IoHomeOutline className="h-5" data-aos="fade-up" />
+              <p className="px-3 text-sm poppins-bold lg:text-base" data-aos="fade-up">
                 Main Page
               </p>
             </div>
           </div>
 
-          <div className="w-2/3 flex justify-between space-x-5"data-aos="fade-up">
-            <div className="flex justify-between w-full">
+          <div className="flex w-2/3 justify-between gap-5" data-aos="fade-up">
+            <div className="flex w-full justify-between">
               <a href="#">
                 <div className="flex">
                   <FaHeart className="h-6" />
-                  <p className="px-3 lg:text-base poppins-bold text-sm">
+                  <p className="px-3 text-sm poppins-bold lg:text-base">
                     Wish List (0)
                   </p>
                 </div>
@@ -70,10 +68,10 @@ const ShopCoursesIntro = () => {
               <FaArrowRight className="text-lin" />
             </div>
 
-            <div className="flex justify-between w-full">
+            <div className="flex w-full justify-between">
               <div className="flex">
                 <BsHandbag className="h-6" />
-                <p className="px-3 lg:text-base text-sm poppins-bold">
+                <p className="px-3 text-sm poppins-bold lg:text-base">
                   2 Products - $1000
                 </p>
               </div>
@@ -82,34 +80,30 @@ const ShopCoursesIntro = () => {
           </div>
         </div>
 
-        {/* Line 2 */}
-        <div className="lg:pt-10 pt-5"data-aos="fade-up">
+        <div className="pt-5 lg:pt-10" data-aos="fade-up">
           <div className="h-0 w-full border border-lin"></div>
         </div>
 
-        {/* Search Bars */}
-        <div className="lg:flex flex-row lg:py-10 py-4"data-aos="fade-down">
-          <div className="lg:w-1/5 self-center lg:text-xl poppins-light">
+        <div className="py-4 lg:flex lg:py-10" data-aos="fade-down">
+          <div className="self-center lg:w-1/5 lg:text-xl poppins-light">
             Category
           </div>
           <div className="lg:w-4/5">
-            <p className="lg:text-2xl text-xl poppins-bold">Catalog</p>
-            <div className="flex lg:space-x-3">
-              {/* Search Input */}
+            <p className="text-xl poppins-bold lg:text-2xl">Catalog</p>
+            <div className="flex lg:gap-3">
               <div className="flex flex-1">
-                <button className="border border-gray bg-white p-2">
+                <button type="button" className="border border-gray bg-white p-2">
                   <img src={icon} alt="search" />
                 </button>
                 <input
                   type="text"
-                  className="border border-gray w-full"
+                  className="w-full border border-gray"
                   placeholder="Search for courses"
                 />
               </div>
 
-              {/* Category Filter */}
               <div className="flex">
-                <button className="border border-gray bg-white">
+                <button type="button" className="border border-gray bg-white">
                   <img src={arow} alt="arrow" />
                 </button>
                 <input
@@ -123,40 +117,25 @@ const ShopCoursesIntro = () => {
         </div>
       </div>
 
-      {/* Block 2 - Course Items */}
-      <div className="flex-1"data-aos="fade-up">
+      <div className="flex-1" data-aos="fade-up">
         <div className="flex">
-          {/* Sidebar Filter */}
           <div className="lg:w-1/5">
-            <p
-              onClick={() => setSelectedFilter("")}
-              className="cursor-pointer hover:text-black poppins-light lg:text-base text-sm text-lightblack lg:pt-5 pt-2"
-            >
-              All
-            </p>
-            <p
-              onClick={() => setSelectedFilter("Lego WeDo 2.0")}
-              className="cursor-pointer hover:text-black poppins-light lg:text-base text-sm text-lightblack lg:pt-5 pt-2"
-            >
-              Lego WeDo 2.0
-            </p>
-            <p
-              onClick={() => setSelectedFilter("Lego Mindstorms EV3")}
-              className="cursor-pointer hover:text-black poppins-light lg:text-base text-sm text-lightblack lg:pt-5 pt-2"
-            >
-              Lego Mindstorms EV3
-            </p>
-            <p
-              onClick={() => setSelectedFilter("Arduino based Robots")}
-              className="cursor-pointer hover:text-black poppins-light lg:text-base text-sm text-lightblack lg:pt-5 pt-2"
-            >
-              Arduino based Robots
-            </p>
+            {COURSE_FILTERS.map((filter) => (
+              <button
+                key={filter.value || "all"}
+                type="button"
+                onClick={() => setSelectedFilter(filter.value)}
+                className={cn(
+                  "block pt-2 text-left text-sm poppins-light hover:text-black lg:pt-5 lg:text-base",
+                  selectedFilter === filter.value ? "text-black" : "text-lightblack",
+                )}
+              >
+                {filter.label}
+              </button>
+            ))}
           </div>
 
-          {/* Courses Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:px-10">
-            {/* Check if courses is an array before mapping */}
+          <div className="grid grid-cols-1 gap-5 lg:px-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
             {courses.length > 0 ? (
               filteredCourses.map((course) => (
                 <CourseProduct
@@ -171,31 +150,30 @@ const ShopCoursesIntro = () => {
                 />
               ))
             ) : (
-              <p>No courses available.</p> // Fallback if no courses or it's not an array
+              <p>No courses available.</p>
             )}
           </div>
         </div>
       </div>
 
-      {/* Block 3 - Pagination and Footer */}
       <div className="flex-1">
         <ShopPages />
-        <div className="lg:flex flex-row justify-between lg:p-5">
-          {/* Pagination */}
+        <div className="justify-between lg:flex lg:p-5">
           <div className="flex">
-            {[1, 2, 3, 4].map((page) => (
+            {paginationPages.map((page) => (
               <button
+                type="button"
                 key={page}
-                className="p-1 px-3 bg-white lg:text-base text-sm hover:bg-gold"data-aos="fade-up"
+                className="bg-white p-1 px-3 text-sm hover:bg-gold lg:text-base"
+                data-aos="fade-up"
               >
                 {page}
               </button>
             ))}
           </div>
 
-          {/* Footer Text */}
-          <div className="flex"data-aos="fade-up">
-            <p className="lg:text-base poppins-regular text-sm">
+          <div className="flex" data-aos="fade-up">
+            <p className="text-sm poppins-regular lg:text-base">
               SHOWED 1 - 9 OF 30 PRODUCTS
             </p>
           </div>
