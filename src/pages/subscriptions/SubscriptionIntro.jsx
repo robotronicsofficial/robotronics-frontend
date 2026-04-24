@@ -4,6 +4,8 @@ import bg from "../../assets/images/courses_details.svg";
 import yt from "../../assets/images/courseDetailsYoutube.webp";
 import { CheckSquare, Share2 } from "lucide-react";
 import { BrandIcon } from "../../components/ui/brand-icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const SubscriptionIntro = () => {
   const [showShare, setShowShare] = useState(false);
@@ -48,9 +50,9 @@ const SubscriptionIntro = () => {
                   <h1 className="text-3xl sm:text-3xl lg:text-5xl text-foreground font-medium pt-6 lg:pt-0 poppins-bold">
                     Learning Subscription
                   </h1>
-                  <button className="border bg-destructive text-background text-sm md:text-base lg:text-lg px-4 md:px-6 py-2 md:py-3 w-full sm:w-auto rounded-lg pointer-events-none">
+                  <Badge className="w-full rounded-lg border bg-destructive px-4 py-2 text-sm text-background sm:w-auto md:px-6 md:py-3 md:text-base lg:text-lg">
                     ON SALE
-                  </button>
+                  </Badge>
                 </div>
 
                 {/* Info Bar */}
@@ -63,13 +65,15 @@ const SubscriptionIntro = () => {
 
                   {/* Share Button */}
                   <div className="relative" ref={shareRef}>
-                    <button
+                    <Button
+                      type="button"
+                      variant="ghost"
                       onClick={() => setShowShare((prev) => !prev)}
-                      className="flex items-center gap-1 whitespace-nowrap"
+                      className="h-auto gap-1 whitespace-nowrap p-0 hover:bg-transparent"
                     >
                       <Share2 />
                       <span>Share</span>
-                    </button>
+                    </Button>
 
                     {/* Share Options */}
                     {showShare && (

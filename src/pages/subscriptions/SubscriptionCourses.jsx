@@ -107,13 +107,6 @@ const SubscriptionCourses = () => {
                       <MoveDown className="text-xs -rotate-90" />
                     </Button>
                   </div>
-
-
-
-                  {/* 
-                  <button className="bg-primary text-foreground shadow-xl py-2 px-4 rounded-full flex items-center justify-center gap-x-2 text-sm sm:text-base">
-                    <span>Activate Course</span>
-                  </button> */}
                 </div>
                 </CardContent>
               </Card>

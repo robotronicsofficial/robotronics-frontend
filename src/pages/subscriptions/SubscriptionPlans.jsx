@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlans } from "../../hooks/usePlans";
 import { useSelectedPlanStore } from "../../stores/selectedPlanStore";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 
 const SubscriptionPlans = () => {
   const [isAnnual, setIsAnnual] = useState(false);
@@ -52,16 +54,11 @@ const SubscriptionPlans = () => {
             <div className="flex items-center justify-center gap-4 mb-4 poppins-light">
               <span>Monthly</span>
 
-              <button
-                type="button"
-                className={`w-14 h-7 bg-card rounded-full flex items-center p-1 ${
-                  isAnnual ? "justify-end" : "justify-start"
-                }`}
-                onClick={() => setIsAnnual((currentValue) => !currentValue)}
+              <Switch
+                checked={isAnnual}
+                onCheckedChange={setIsAnnual}
                 aria-label="Toggle billing cycle"
-              >
-                <span className="block w-5 h-5 bg-warning rounded-full" />
-              </button>
+              />
 
               <span>Annual</span>
             </div>
@@ -79,12 +76,13 @@ const SubscriptionPlans = () => {
               </p>
             ) : null}
 
-            <button
-              className="bg-warning text-background py-2 px-6 rounded-lg mb-4 w-fit poppins-light"
+            <Button
+              type="button"
+              className="mb-4 h-auto w-fit rounded-lg bg-warning px-6 py-2 text-background"
               onClick={() => handleRegisterClick(membership)}
             >
               Start Membership
-            </button>
+            </Button>
 
             <ul className="flex flex-col flex-1 gap-y-2 text-sm mb-4">
               {(membership.features || []).map((feature, index) => (

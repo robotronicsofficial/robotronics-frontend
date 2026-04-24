@@ -8,6 +8,7 @@ import {
   loadSubscriptionCheckout,
   updateSubscriptionCheckout,
 } from "../../../lib/subscriptionCheckout";
+import { Button } from "@/components/ui/button";
 
 const ReviewRow = ({ label, value, highlight = false }) => (
   <div className="flex items-start justify-between gap-4">
@@ -153,21 +154,22 @@ const SubscriptionReviewCustomer = () => {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <button
+            <Button
               type="button"
-              className="rounded-full border border-foreground px-6 py-3 text-sm font-semibold text-foreground"
+              variant="outline"
+              className="h-auto rounded-full border-foreground px-6 py-3 text-sm font-semibold text-foreground"
               onClick={() => navigate("/subscriptions/payment")}
             >
               Back to Payment
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              className="rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-primary"
+              className="h-auto rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-primary"
               onClick={handleConfirmOrder}
               disabled={activateSubscriptionMutation.isPending}
             >
               {activateSubscriptionMutation.isPending ? "Activating..." : "Activate Subscription"}
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -193,20 +195,21 @@ const SubscriptionReviewCustomer = () => {
                 />
               </div>
               <div className="flex flex-wrap gap-3 pt-2">
-                <button
+                <Button
                   type="button"
-                  className="rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-primary"
+                  className="h-auto rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-primary"
                   onClick={() => navigate("/Dashboard/ChildProfile")}
                 >
                   Open Child Dashboard
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
-                  className="rounded-full border border-foreground px-5 py-3 text-sm font-semibold text-foreground"
+                  variant="outline"
+                  className="h-auto rounded-full border-foreground px-5 py-3 text-sm font-semibold text-foreground"
                   onClick={() => navigate("/")}
                 >
                   Back to Home
-                </button>
+                </Button>
               </div>
             </div>
           ) : (
