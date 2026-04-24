@@ -2,6 +2,15 @@ import { PiGraduationCapLight } from "react-icons/pi";
 import video from "../../assets/videos/video-preview.mp4";
 import { useState, useEffect } from "react";
 import { FiDownload } from "react-icons/fi";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  ClipboardListIcon,
+  LockKeyholeIcon,
+  RotateCcwIcon,
+  XIcon,
+} from "lucide-react";
 import ReviewsComponent from "../../pages/subscriptions/SubscriptionTestimonials";
 import { useParams } from "react-router-dom";
 import { FaCirclePlay } from "react-icons/fa6";
@@ -27,6 +36,8 @@ const MAX_ATTEMPTS = {
   BASIC: 2,
   PRO: Infinity
 };
+
+const statusIconClassName = "mr-3 size-5 shrink-0";
 
 const toAssetUrl = (path) => {
   if (!path) return "";
@@ -506,7 +517,10 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                           >
                             <div className="flex items-center">
                               {!sectionUnlocked && (
-                                <span className="poppins-bold text-yellow-500 mr-3">🔒</span>
+                                <LockKeyholeIcon
+                                  aria-hidden="true"
+                                  className={`${statusIconClassName} text-yellow-500`}
+                                />
                               )}
                               <span className="poppins-bold mr-3 text-yellow">
                                 <FaCirclePlay className="text-2xl" />
@@ -643,13 +657,25 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                             >
                               <div className="flex items-center">
                                 {!sectionUnlocked ? (
-                                  <span className="poppins-bold text-yellow-500 mr-3">🔒</span>
+                                  <LockKeyholeIcon
+                                    aria-hidden="true"
+                                    className={`${statusIconClassName} text-yellow-500`}
+                                  />
                                 ) : quizCompleted ? (
-                                  <span className="poppins-bold text-green-500 mr-3">✓</span>
+                                  <CheckIcon
+                                    aria-hidden="true"
+                                    className={`${statusIconClassName} text-green-500`}
+                                  />
                                 ) : quizAttempted ? (
-                                  <span className="poppins-bold text-orange-500 mr-3">↻</span>
+                                  <RotateCcwIcon
+                                    aria-hidden="true"
+                                    className={`${statusIconClassName} text-orange-500`}
+                                  />
                                 ) : (
-                                  <span className="poppins-bold text-yellow-500 mr-3">📝</span>
+                                  <ClipboardListIcon
+                                    aria-hidden="true"
+                                    className={`${statusIconClassName} text-yellow-500`}
+                                  />
                                 )}
                                 <h4 className="poppins-medium text-gray-800">
                                   Test your knowledge from this module
@@ -672,7 +698,11 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                                 </span>
                                 {sectionUnlocked && (
                                   <span className="poppins-bold text-yellow">
-                                    {expandedModules[`quiz-${sectionIndex}`] ? "⮟" : "➤"}
+                                    {expandedModules[`quiz-${sectionIndex}`] ? (
+                                      <ChevronDownIcon aria-hidden="true" className="size-5" />
+                                    ) : (
+                                      <ChevronRightIcon aria-hidden="true" className="size-5" />
+                                    )}
                                   </span>
                                 )}
                               </div>
@@ -702,8 +732,18 @@ const updateChildCourseProgress = async ({ courseId, sectionIndex, answers }) =>
                                             <div className="poppins-light text-sm text-gray-600 mb-1">
                                               Your answer: {userAnswer}
                                             </div>
-                                            <div className={`poppins-medium text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                                              {isCorrect ? '✓ Correct' : '✗ Incorrect'}
+                                            <div className={`flex items-center gap-1 poppins-medium text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                                              {isCorrect ? (
+                                                <>
+                                                  <CheckIcon aria-hidden="true" className="size-4" />
+                                                  Correct
+                                                </>
+                                              ) : (
+                                                <>
+                                                  <XIcon aria-hidden="true" className="size-4" />
+                                                  Incorrect
+                                                </>
+                                              )}
                                             </div>
 
                                           </div>
