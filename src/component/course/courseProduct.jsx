@@ -8,23 +8,27 @@ import sale from "../../assets/logo/sales.svg";
 import { NavLink } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
-import { useState } from "react";
-import { toggleSavedItem } from "../../lib/savedItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import {
+  useSavedItems,
+  useToggleSavedItemMutation,
+} from "../../hooks/useSavedItems";
 
 const CourseProduct = ({ title, id, image, price, duration }) => {
-  const [isSaved, setIsSaved] = useState(false);
   const resolvedImage = resolveBackendAssetUrl(image, python);
+  const { data: savedItems = [] } = useSavedItems();
+  const toggleSavedItemMutation = useToggleSavedItemMutation();
+  const isSaved = savedItems.some(
+    (item) => item.itemType === "course" && item.itemId === id,
+  );
 
   const toggleWishList = async () => {
     try {
-      const nextIsSaved = await toggleSavedItem({
+      await toggleSavedItemMutation.mutateAsync({
         itemType: "course",
         itemId: id,
         isSaved,
       });
-
-      setIsSaved(nextIsSaved);
     } catch (error) {
       console.error("Failed to update saved items:", error);
     }

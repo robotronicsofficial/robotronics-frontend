@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { createProductCommerceItem } from "../../../lib/commerceItems";
-import { fetchSavedItems, toggleSavedItem } from "../../../lib/savedItems";
 
 import AppImage from "../../AppImage";
 import CenteredState from "../../../components/layout/CenteredState";
@@ -12,6 +11,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 import { useProduct, useProducts } from "../../../hooks/useProducts";
 import { useCartStore } from "../../../stores/cartStore";
+import { useSavedItems, useToggleSavedItemMutation } from "../../../hooks/useSavedItems";
 
 const resolveImageUrl = (image) => resolveBackendAssetUrl(image, robo);
 
@@ -26,11 +26,16 @@ const Intro = () => {
     isLoading,
     error: productError,
   } = useProduct(cachedProduct ? null : id);
+  const { data: savedItems = [] } = useSavedItems();
+  const toggleSavedItemMutation = useToggleSavedItemMutation();
 
   const product = cachedProduct || fetchedProduct || null;
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(robo);
-  const [isSaved, setIsSaved] = useState(false);
+  const isSaved = useMemo(
+    () => savedItems.some((item) => item.itemType === "product" && item.itemId === id),
+    [id, savedItems],
+  );
 
   useEffect(() => {
     if (product?.images?.[0]) {
@@ -39,36 +44,6 @@ const Intro = () => {
       setSelectedImage(robo);
     }
   }, [product]);
-
-  useEffect(() => {
-    if (!id) {
-      setIsSaved(false);
-      return;
-    }
-
-    let cancelled = false;
-
-    const loadSavedState = async () => {
-      try {
-        const savedItems = await fetchSavedItems();
-        if (!cancelled) {
-          setIsSaved(
-            savedItems.some((item) => item.itemType === "product" && item.itemId === id),
-          );
-        }
-      } catch (savedItemsError) {
-        if (!cancelled) {
-          console.error("Failed to load saved items:", savedItemsError);
-        }
-      }
-    };
-
-    loadSavedState();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [id]);
 
   const handleIncrease = () => setQuantity((prev) => prev + 1);
   const handleDecrease = () => {
@@ -81,13 +56,11 @@ const Intro = () => {
     }
 
     try {
-      const nextIsSaved = await toggleSavedItem({
+      await toggleSavedItemMutation.mutateAsync({
         itemType: "product",
         itemId: product._id,
         isSaved,
       });
-
-      setIsSaved(nextIsSaved);
     } catch (savedItemsError) {
       console.error("Failed to update saved items:", savedItemsError);
     }

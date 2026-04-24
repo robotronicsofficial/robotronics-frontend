@@ -1,48 +1,30 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
-import { getSavedItems, removeSavedItem } from "../../lib/savedItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { useCartStore } from "../../stores/cartStore";
+import {
+  useRemoveSavedItemMutation,
+  useSavedItems,
+} from "../../hooks/useSavedItems";
 
 const WishListD = () => {
   const addToCart = useCartStore((state) => state.addToCart);
   const navigate = useNavigate();
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  const fetchWishlist = async () => {
-    try {
-      setLoading(true);
-      setItems(await getSavedItems());
-      setError("");
-    } catch (fetchError) {
-      setError(fetchError.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchWishlist();
-  }, []);
+  const {
+    data: items = [],
+    isLoading: loading,
+    error,
+  } = useSavedItems();
+  const removeSavedItemMutation = useRemoveSavedItemMutation();
 
   const handleRemove = async (item) => {
     try {
-      await removeSavedItem(item);
-
-      setItems((currentItems) =>
-        currentItems.filter(
-          (currentItem) =>
-            currentItem.itemType !== item.itemType || currentItem.itemId !== item.itemId,
-        ),
-      );
+      await removeSavedItemMutation.mutateAsync(item);
     } catch (removeError) {
-      setError(removeError.message);
+      console.error("Failed to remove saved item:", removeError);
     }
   };
 
@@ -55,7 +37,7 @@ const WishListD = () => {
   }
 
   if (error) {
-    return <CenteredState className="bg-background min-h-screen text-red-500">{error}</CenteredState>;
+    return <CenteredState className="bg-background min-h-screen text-red-500">{error.message}</CenteredState>;
   }
 
   return (

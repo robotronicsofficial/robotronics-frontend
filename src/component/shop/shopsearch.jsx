@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { FaArrowRight, FaRegHeart } from "react-icons/fa";
 import { BsHandbag } from "react-icons/bs";
 import { IoIosSearch } from "react-icons/io";
@@ -7,7 +7,6 @@ import {
   createProductCommerceItem,
   getCommerceItemKey,
 } from "../../lib/commerceItems";
-import { fetchSavedItems, toggleSavedItem } from "../../lib/savedItems";
 import Shopfilter from "../shop/shopfilter";
 import Shopproduct from "../shop/shopproduct";
 import ShopPages from "../shop/shopPages";
@@ -20,6 +19,7 @@ import {
   selectCartQuantity,
   useCartStore,
 } from "../../stores/cartStore";
+import { useSavedItems, useToggleSavedItemMutation } from "../../hooks/useSavedItems";
 
 const HeaderSummaryItem = ({ icon, label }) => (
   <div className="flex w-full items-center justify-between gap-4">
@@ -43,10 +43,11 @@ const Shopsearch = () => {
   const totalQuantity = useCartStore(selectCartQuantity);
   const totalPrice = useCartStore(selectCartTotalPrice);
   const { data: products = [] } = useProducts();
+  const { data: savedItems = [] } = useSavedItems();
+  const toggleSavedItemMutation = useToggleSavedItemMutation();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [savedItemKeys, setSavedItemKeys] = useState(() => new Set());
   const [priceRange, setPriceRange] = useState([0, 600000]);
   const [shippingDays, setShippingDays] = useState(15);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -54,30 +55,10 @@ const Shopsearch = () => {
 
   const productsPerPage = 9;
 
-  useEffect(() => {
-    let cancelled = false;
-
-    const loadSavedItems = async () => {
-      try {
-        const savedItems = await fetchSavedItems();
-        if (cancelled) {
-          return;
-        }
-
-        setSavedItemKeys(new Set(savedItems.map(getCommerceItemKey)));
-      } catch (error) {
-        if (!cancelled) {
-          console.error("Failed to load saved items:", error);
-        }
-      }
-    };
-
-    loadSavedItems();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const savedItemKeys = useMemo(
+    () => new Set(savedItems.map(getCommerceItemKey)),
+    [savedItems],
+  );
 
   const filteredProducts = useMemo(() => {
     return products
@@ -113,22 +94,10 @@ const Shopsearch = () => {
     const isSaved = savedItemKeys.has(itemKey);
 
     try {
-      const nextIsSaved = await toggleSavedItem({
+      await toggleSavedItemMutation.mutateAsync({
         itemType: catalogItem.itemType,
         itemId: catalogItem.itemId,
         isSaved,
-      });
-
-      setSavedItemKeys((currentKeys) => {
-        const nextKeys = new Set(currentKeys);
-
-        if (nextIsSaved) {
-          nextKeys.add(itemKey);
-        } else {
-          nextKeys.delete(itemKey);
-        }
-
-        return nextKeys;
       });
     } catch (error) {
       console.error("Failed to update saved items:", error);

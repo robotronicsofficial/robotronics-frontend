@@ -1,33 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Intro from "../../component/dashboard/intro";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
-import { getSavedItems, removeSavedItem } from "../../lib/savedItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import {
+  useRemoveSavedItemMutation,
+  useSavedItems,
+} from "../../hooks/useSavedItems";
 
 const MyRobot = () => {
   const navigate = useNavigate();
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const loadWishlist = async () => {
-      try {
-        setLoading(true);
-        setItems(await getSavedItems());
-        setError("");
-      } catch (fetchError) {
-        setError(fetchError.message || "Failed to load saved items");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadWishlist();
-  }, []);
+  const {
+    data: items = [],
+    isLoading: loading,
+    error,
+  } = useSavedItems();
+  const removeSavedItemMutation = useRemoveSavedItemMutation();
 
   const totalValue = useMemo(
     () => items.reduce((sum, item) => sum + Number(item?.price || 0), 0),
@@ -36,16 +26,9 @@ const MyRobot = () => {
 
   const handleRemove = async (item) => {
     try {
-      await removeSavedItem(item);
-
-      setItems((currentItems) =>
-        currentItems.filter(
-          (currentItem) =>
-            currentItem.itemType !== item.itemType || currentItem.itemId !== item.itemId,
-        ),
-      );
+      await removeSavedItemMutation.mutateAsync(item);
     } catch (removeError) {
-      setError(removeError.message || "Failed to remove saved item");
+      console.error("Failed to remove saved item:", removeError);
     }
   };
 
@@ -74,7 +57,7 @@ const MyRobot = () => {
         {loading ? (
           <div className="px-8 lg:px-14 py-12 text-brown">Loading saved items...</div>
         ) : error ? (
-          <div className="px-8 lg:px-14 py-12 text-red-600">{error}</div>
+          <div className="px-8 lg:px-14 py-12 text-red-600">{error.message}</div>
         ) : items.length === 0 ? (
           <div className="flex flex-col items-start gap-4 px-8 py-12 text-brown lg:px-14">
             <p>No saved items yet.</p>
