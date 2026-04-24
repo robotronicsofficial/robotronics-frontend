@@ -6,6 +6,7 @@ import {
   FaLinkedin,
   FaWhatsapp,
 } from "react-icons/fa";
+import PropTypes from "prop-types";
 import { TfiEmail } from "react-icons/tfi";
 import { FaLocationDot } from "react-icons/fa6";
 import { useState } from "react";
@@ -30,6 +31,74 @@ const CONTACT_SERVICES = {
     "Robotics Kit Purchase Guidance",
     "Competition Registration Assistance",
   ],
+};
+
+const CONTACT_METHODS = [
+  { Icon: FaPhoneAlt, label: "+92 309-422-4016" },
+  { Icon: TfiEmail, label: "info@robotronics.com" },
+  {
+    Icon: FaLocationDot,
+    label: "Alexandru Ioan Cuza Street, Nr. 14, Gullberg 3, Lahore - Pakistan",
+  },
+];
+
+const SOCIAL_LINKS = [
+  {
+    href: "https://www.facebook.com/robotronicspakistan/",
+    Icon: FaFacebook,
+    className: "hover:bg-blue-800",
+  },
+  {
+    href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
+    Icon: FaYoutube,
+    className: "hover:bg-red-600",
+  },
+  {
+    href: "https://www.instagram.com/robotronicspk/?hl=en",
+    Icon: FaInstagram,
+    className: "hover:bg-pink-600",
+  },
+  {
+    href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
+    Icon: FaLinkedin,
+    className: "hover:bg-blue-600",
+  },
+  {
+    href: "https://wa.me/message/TKZZPIE2A34UM1",
+    Icon: FaWhatsapp,
+    className: "hover:bg-green-500",
+  },
+];
+
+const ContactMethod = ({ Icon, label }) => (
+  <div className="flex gap-2">
+    <div className="rounded-full p-2">
+      <Icon className="text-brown" />
+    </div>
+    <p className="self-center text-wrap text-2xl poppins-light">{label}</p>
+  </div>
+);
+
+ContactMethod.propTypes = {
+  Icon: PropTypes.elementType.isRequired,
+  label: PropTypes.string.isRequired,
+};
+
+const SocialLink = ({ Icon, className, href }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className={`rounded-xl bg-brown p-1 shadow-md transition-colors duration-300 ease-out hover:shadow-lg lg:p-3 ${className}`}
+  >
+    <Icon className="text-white" />
+  </a>
+);
+
+SocialLink.propTypes = {
+  Icon: PropTypes.elementType.isRequired,
+  className: PropTypes.string.isRequired,
+  href: PropTypes.string.isRequired,
 };
 
 const ContactUsForm = () => {
@@ -95,82 +164,45 @@ const ContactUsForm = () => {
   };
 
   return (
-    <div className="lg:p-20 p-8 bg-background space-y-10">
-      {/* line */}
-      <div className="space-y-10">
+    <div className="flex flex-col gap-10 bg-background p-8 lg:p-20">
+      <div className="flex flex-col gap-10">
         <div className="w-full border border-lin " data-aos="fade-up"></div>
-        <button className="border border-lightbrown poppins-light p-2 rounded-full px-5" data-aos="fade-up">
+        <button
+          type="button"
+          className="border border-lightbrown poppins-light p-2 rounded-full px-5"
+          data-aos="fade-up"
+        >
           Get In Touch
         </button>
       </div>
 
-      <div className="lg:flex flex-row justify-between ">
-        {/* Text */}
+      <div className="justify-between lg:flex">
         <div className="lg:w-2/3">
-          <div className="space-y-10">
+          <div className="flex flex-col gap-10">
             <h1 className="text-5xl poppins-bold text-brown" data-aos="fade-up">Contact Us</h1>
             <p className="text-xl poppins-light text-wrap" data-aos="fade-up">
               Get in touch with us today to start your Robotics journey...
             </p>
           </div>
-          {/* contact icons & Text */}
-          <div className="py-5 space-y-2" data-aos="fade-up">
-            {/* phone */}
-            <div className="flex flex-row space-x-2">
-              <div className="rounded-full p-2">
-                <FaPhoneAlt className="text-brown" />
-              </div>
-              <p className="self-center poppins-light text-2xl">
-                +92 309-422-4016
-              </p>
-            </div>
-            {/* email */}
-            <div className="flex flex-row space-x-2">
-              <div className=" justify-center rounded-full p-2">
-                <TfiEmail className="text-brown" />
-              </div>
-              <p className="self-center poppins-light text-2xl ">
-                info@robotronics.com
-              </p>
-            </div>
-            {/* location */}
-            <div className="flex flex-row space-x-2">
-              <div className="justify-center rounded-full p-2">
-                <FaLocationDot className="text-brown" />
-              </div>
-              <div className="self-center poppins-light text-wrap text-2xl">
-                Alexandru Ioan Cuza Street, Nr. 14, Gullberg 3, Lahore - Pakistan
-              </div>
-            </div>
+
+          <div className="flex flex-col gap-2 py-5" data-aos="fade-up">
+            {CONTACT_METHODS.map((method) => (
+              <ContactMethod key={method.label} {...method} />
+            ))}
           </div>
-          {/* Social icons */}
-          <div className="flex flex-row lg:py-20 py-8 p-5 space-x-2 lg:space-x-5">
-            <a href="https://www.facebook.com/robotronicspakistan/" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-blue-800 shadow-md hover:shadow-lg">
-              <FaFacebook className="text-white" />
-            </a>
-            <a href="https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-red-600 shadow-md hover:shadow-lg">
-              <FaYoutube className="text-white" />
-            </a>
-            <a href="https://www.instagram.com/robotronicspk/?hl=en" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-pink-600 shadow-md hover:shadow-lg">
-              <FaInstagram className="text-white" />
-            </a>
-            <a href="https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-blue-600 shadow-md hover:shadow-lg">
-              <FaLinkedin className="text-white" />
-            </a>
-            <a href="https://wa.me/message/TKZZPIE2A34UM1" target="_blank" rel="noopener noreferrer" className="lg:p-3 p-1 rounded-xl bg-brown transition-colors duration-300 ease-out hover:bg-green-500 shadow-md hover:shadow-lg">
-              <FaWhatsapp className="text-white" />
-            </a>
+
+          <div className="flex gap-2 p-5 py-8 lg:gap-5 lg:py-20">
+            {SOCIAL_LINKS.map((link) => (
+              <SocialLink key={link.href} {...link} />
+            ))}
           </div>
         </div>
 
-        {/* Line */}
         <div>
           <div className="h-4/5 w-0 border border-lin" data-aos="fade-up"></div>
         </div>
 
-        {/* Form */}
         <div className="lg:w-1/2 p-5">
-          {/* Form starts here */}
           <form onSubmit={handleSubmit} className="w-full">
             <FloatingField
               type="text"
@@ -224,7 +256,6 @@ const ContactUsForm = () => {
               <option value="parent">Parent</option>
             </FloatingField>
 
-            {/* School Name (only shown when userType is school) */}
             {formData.userType === "school" && (
               <FloatingField
                 type="text"
@@ -247,13 +278,12 @@ const ContactUsForm = () => {
               required
             />
 
-            {/* Services Section (only shown when userType is selected) */}
             {formData.userType && (
               <div className="mb-5">
                 <label className="block text-sm text-gray-500 dark:text-gray-400 mb-2">
                   Services I'm interested in:
                 </label>
-                <div className="space-y-2">
+                <div className="flex flex-col gap-2">
                   {CONTACT_SERVICES[formData.userType].map((service) => (
                     <div key={service} className="flex items-center">
                       <input
@@ -282,16 +312,21 @@ const ContactUsForm = () => {
               required
             />
 
-            {/* Status message */}
             {status && (
-              <div className={`mb-5 p-3 rounded ${status.includes("Error") ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
+              <div
+                className={`mb-5 rounded p-3 ${
+                  status.includes("Error") ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"
+                }`}
+              >
                 {status}
               </div>
             )}
 
-            {/* Submit button */}
             <div className="text-end p-5" data-aos="fade-up">
-              <button type="submit" className="justify-between poppins-light hover:bg-yellow hover:text-brown bg-brown p-2 px-3 rounded-md text-white">
+              <button
+                type="submit"
+                className="justify-between rounded-md bg-brown p-2 px-3 text-white poppins-light hover:bg-yellow hover:text-brown"
+              >
                 Send Now
               </button>
             </div>
@@ -299,7 +334,6 @@ const ContactUsForm = () => {
         </div>
       </div>
 
-      {/* Line */}
       <div>
         <div className="h-0 w-full border border-lin" data-aos="fade-up"></div>
       </div>
