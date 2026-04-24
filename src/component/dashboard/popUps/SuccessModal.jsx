@@ -1,24 +1,24 @@
 import PropTypes from 'prop-types';
+import { CheckIcon } from "lucide-react";
 
-const SuccessModal = ({ onClose }) => (
-  <div className="fixed inset-0 z-modal flex items-center justify-center bg-gray-800 bg-opacity-50">
-    <div className="bg-white p-6 rounded-md shadow-md w-full max-w-sm text-center">
-      <div className="flex justify-center mb-4">
-        <svg className="w-12 h-12 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+import { Button } from "@/components/ui/button";
+import DialogShell from "@/components/ui/dialog-shell";
+
+const SuccessModal = ({ isOpen, onClose }) => (
+  <DialogShell isOpen={isOpen} onClose={onClose} title="Successful">
+    <div className="flex flex-col items-center gap-4 text-center">
+      <div className="flex size-12 items-center justify-center rounded-full bg-primary/15 text-primary">
+        <CheckIcon aria-hidden="true" />
       </div>
-      <h2 className="text-2xl font-bold mb-2">Successful</h2>
-      {/* <p className="mb-4">You passed the verification successfully.</p> */}
-      <button
-        className="bg-yellow-500 mt-4 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 transition bg-green-700"
-        onClick={onClose} // This triggers the onClose function
-      >
+      <Button className="w-full bg-yellow text-white hover:bg-darkgold" onClick={onClose}>
         CONTINUE
-      </button>
+      </Button>
     </div>
-  </div>
+  </DialogShell>
 );
 
 SuccessModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

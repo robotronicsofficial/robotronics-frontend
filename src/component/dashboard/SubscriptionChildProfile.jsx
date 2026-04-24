@@ -5,7 +5,6 @@ import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { FaUserCircle } from "react-icons/fa";
 import SuccessModal from "./popUps/SuccessModal";
-import Modal from "react-modal";
 import PinModal from "./popUps/PinModal";
 import ChangePinModal from "./popUps/ChangePinModal";
 import ErrorModal from "./popUps/ErrorModal";
@@ -306,18 +305,11 @@ const SubscriptionChildProfile = () => {
           )}
         </div>
 
-      {/* Success Modal */}
-      <Modal
+      <SuccessModal
         isOpen={isSuccessModalOpen}
-        onRequestClose={() => setIsSuccessModalOpen(false)}
-        contentLabel="Success Modal"
-        className="bg-white rounded-lg p-8 max-w-lg mx-auto my-20 relative"
-        overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-50"
-      >
-        <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />
-      </Modal>
+        onClose={() => setIsSuccessModalOpen(false)}
+      />
 
-      {/* Pin Modal (for create) */}
       <PinModal
         isOpen={isPinModalOpen}
         onClose={() => setIsPinModalOpen(false)}
@@ -325,7 +317,6 @@ const SubscriptionChildProfile = () => {
         mode="create"
       />
 
-      {/* Pin Modal (for verify) */}
       <PinModal
         isOpen={isVerifyPinModalOpen}
         onClose={() => setIsVerifyPinModalOpen(false)}
@@ -335,7 +326,6 @@ const SubscriptionChildProfile = () => {
         description="Please enter your 4-digit PIN to view courses"
       />
 
-      {/* Change Pin Modal */}
       <ChangePinModal
         isOpen={isChangePinModalOpen}
         onClose={() => setIsChangePinModalOpen(false)}
@@ -344,7 +334,6 @@ const SubscriptionChildProfile = () => {
         onClearError={() => setPinError(null)}
       />
 
-      {/* Error Modal */}
       <ErrorModal
         isOpen={isErrorModalOpen}
         onClose={() => setIsErrorModalOpen(false)}

@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
+import { Button } from "../../components/ui/button";
+import DialogShell from "../../components/ui/dialog-shell";
 import { Spinner } from "../../components/ui/spinner";
 import { getActiveChildSession } from "../../utils/childSessionRequest";
 import {
@@ -254,25 +256,28 @@ const MyCourses = () => {
         </div>
         <div className="mb-20"></div>
 
-        {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-modal">
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center w-96">
-              <h2 className="text-2xl font-bold mb-4 text-red-500">Plan Limit</h2>
-              <p className="text-gray-700 mb-4">
-                Your subscription includes {maxCourses} course selections.
-              </p>
-              <p className="text-gray-600 mb-6">
-                Currently selected: {selectedCourses.length} courses
-              </p>
-              <button
-                onClick={() => setShowModal(false)}
-                className="bg-[#ffc224] text-black py-2 px-6 rounded-full hover:bg-[#ffb700] transition-colors"
-              >
-                Close
-              </button>
-            </div>
+        <DialogShell
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          title="Plan Limit"
+          titleClassName="text-destructive"
+        >
+          <div className="flex flex-col gap-4 text-center">
+            <p className="text-foreground">
+              Your subscription includes {maxCourses} course selections.
+            </p>
+            <p className="text-muted-foreground">
+              Currently selected: {selectedCourses.length} courses
+            </p>
+            <Button
+              type="button"
+              className="mx-auto min-w-32 rounded-full bg-yellow text-black hover:bg-darkgold hover:text-white"
+              onClick={() => setShowModal(false)}
+            >
+              Close
+            </Button>
           </div>
-        )}
+        </DialogShell>
       </div>
     </DashboardLayout>
   );

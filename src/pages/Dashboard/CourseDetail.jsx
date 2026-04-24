@@ -28,6 +28,7 @@ import {
 import VideoPlayer from "../../component/VideoPlayer";
 import CenteredState from "../../components/layout/CenteredState";
 import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
+import DialogShell from "../../components/ui/dialog-shell";
 import { Spinner } from "../../components/ui/spinner";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
@@ -753,31 +754,24 @@ const CourseDetail = () => {
           </div>
         </div>
 
-        {/* Video Modal */}
-        {showVideoModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-modal p-4">
-            <div className="bg-white rounded-lg w-full max-w-5xl h-[90vh] relative flex flex-col">
-              <button
-                onClick={() => setShowVideoModal(false)}
-                className="poppins-bold absolute -top-10 right-0 text-white text-2xl hover:text-gray-300"
-              >
-                &times;
-              </button>
-              <div className="p-4 flex-1 flex items-center justify-center">
-                <div className="w-full h-full">
-                  <VideoPlayer
-                    src={currentVideo}
-                    title="Course lesson video"
-                    autoPlay
-                    controls
-                    className="h-full w-full"
-                    style={{ minHeight: "70vh" }}
-                  />
-                </div>
-              </div>
-            </div>
+        <DialogShell
+          isOpen={showVideoModal}
+          onClose={() => setShowVideoModal(false)}
+          title="Course lesson video"
+          titleClassName="sr-only"
+          className="h-[90vh] max-w-5xl p-4 sm:max-w-5xl"
+        >
+          <div className="flex min-h-0 flex-1 items-center justify-center">
+            <VideoPlayer
+              src={currentVideo}
+              title="Course lesson video"
+              autoPlay
+              controls
+              className="h-full w-full"
+              style={{ minHeight: "70vh" }}
+            />
           </div>
-        )}
+        </DialogShell>
 
         <ReviewsComponent />
       </>

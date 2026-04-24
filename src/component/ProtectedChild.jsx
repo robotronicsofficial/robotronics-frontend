@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import { Button } from '@/components/ui/button';
+import DialogShell from '@/components/ui/dialog-shell';
 import { DASHBOARD_CHILD_PROFILE_PATH } from '../router/paths';
 import {
   clearActiveChildSession,
@@ -114,24 +115,16 @@ const ProtectedChild = ({ children }) => {
         children
       ) : (
         <>
-          <Dialog
-            open={showSessionPopup}
+          <DialogShell
+            isOpen={showSessionPopup}
             onClose={handlePopupClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+            title="Child Access Required"
+            description={sessionMessage}
           >
-            <DialogTitle id="alert-dialog-title">Child Access Required</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                {sessionMessage}
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handlePopupClose} color="primary" autoFocus>
-                OK
-              </Button>
-            </DialogActions>
-          </Dialog>
+            <Button type="button" className="w-full" onClick={handlePopupClose} autoFocus>
+              OK
+            </Button>
+          </DialogShell>
           <div>{sessionMessage}</div>
         </>
       )}

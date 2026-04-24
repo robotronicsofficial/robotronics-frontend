@@ -20,6 +20,8 @@
   --border: #c9c3c1;
   --input: #b9bab8;
   --ring: #ed800d;
+  --overlay: rgb(0 0 0 / 0.5);
+  --radius-md: 0.5rem;
 
   --brand-gold: #f5ab34;
   --brand-brown: #362d2c;
@@ -63,6 +65,7 @@
   --border: #4a403e;
   --input: #4a403e;
   --ring: #f5ab34;
+  --overlay: rgb(0 0 0 / 0.65);
 
   color-scheme: dark;
 }
@@ -87,6 +90,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-overlay: var(--overlay);
 
   --color-gold: var(--brand-gold);
   --color-lightgray: var(--surface-light);
