@@ -233,7 +233,7 @@ function SubscribeCTA({ onClick }) {
         [
           "poppins-bold whitespace-nowrap text-sm lg:text-base rounded-lg px-4 py-2 inline-flex items-center gap-1.5 transition duration-200 shrink-0",
           "bg-primary text-foreground hover:bg-accent hover:text-background",
-          isActive ? "ring-2 ring-signin ring-offset-2" : "",
+          isActive ? "ring-2 ring-ring ring-offset-2" : "",
         ].join(" ")
       }
     >

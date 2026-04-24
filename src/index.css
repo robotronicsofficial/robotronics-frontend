@@ -179,7 +179,7 @@
 
 .footer {
   background: var(--foreground);
-  /* height: 130vh !important; */
+  /* height: 130vh; */
 }
 
 .abouthero {
@@ -197,7 +197,7 @@
   height: 618px;
 }
 .signin {
-  background-color: var(--foreground) !important;
+  background-color: var(--foreground);
 }
 .image {
   background: url(./assets/images/updates.webp) top center no-repeat;
@@ -254,13 +254,13 @@
   background: url(./assets/images/Careerbg.webp) top center no-repeat;
   background-size: cover;
   background-repeat: no-repeat;
-  height: 100vh !important;
+  height: 100vh;
 }
 .blog {
   background: url(./assets/images/blogBG.webp) top center no-repeat;
   background-size: cover;
   background-repeat: no-repeat;
-  height: 100vh !important;
+  height: 100vh;
 }
 .bg-map {
   background-color: var(--foreground);
@@ -270,7 +270,7 @@
     no-repeat;
   background-size: cover;
   background-repeat: no-repeat;
-  height: 80vh !important;
+  height: 80vh;
 }
 .internationalServices {
   background: url(./assets/imagesContent/bannercode/b4-optimized.webp) top center

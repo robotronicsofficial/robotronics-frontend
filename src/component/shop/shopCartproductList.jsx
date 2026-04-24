@@ -13,6 +13,7 @@ import {
 } from "../../lib/shopCheckout";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { selectCart, useCartStore } from "../../stores/cartStore";
+import StarRating from "../../components/rating/StarRating";
 import "react-toastify/dist/ReactToastify.css";
 
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
@@ -108,11 +109,7 @@ const ShopCartproductList = ({ onNext }) => {
                   <h1 className="mb-2 text-wrap font-Poppins text-[20px] font-bold leading-[28px] tracking-normal text-foreground">
                     {product.name}
                   </h1>
-                  <div className="my-6 flex text-2xl text-primary">
-                    {Array.from({ length: 5 }, (_, i) => (
-                      <span className="text-primary" key={i}>★</span>
-                    ))}
-                  </div>
+                  <StarRating value={5} className="my-6 text-2xl" label="5 out of 5" />
                   <div className="mb-4 flex justify-end gap-4">
                     <div className="flex items-center justify-center bg-card">
                       <button

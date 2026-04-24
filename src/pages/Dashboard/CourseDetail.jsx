@@ -31,6 +31,7 @@ import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
 import DialogShell from "../../components/ui/dialog-shell";
 import { Spinner } from "../../components/ui/spinner";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import StarRating from "../../components/rating/StarRating";
 
 const MAX_ATTEMPTS = {
   BASIC: 2,
@@ -271,20 +272,7 @@ const CourseDetail = () => {
                     {courseData.category}
                   </span>
                   <div className="flex items-center justify-center gap-2">
-                    <div>
-                      {Array.from({ length: 5 }, (_, i) => {
-                        const fullStars = Math.floor(courseReviews);
-                        const hasHalfStar = courseReviews % 1 >= 0.5;
-
-                        if (i < fullStars) {
-                          return <span key={i} className="text-primary text-2xl">★</span>;
-                        } else if (i === fullStars && hasHalfStar) {
-                          return <span key={i} className="text-primary text-2xl">☆</span>;
-                        } else {
-                          return <span key={i} className="text-background text-2xl">★</span>;
-                        }
-                      })}
-                    </div>
+                    <StarRating value={courseReviews} className="text-2xl" />
 
                     <span className="text-foreground text-sm">({courseReviews} Reviews)</span>
                   </div>

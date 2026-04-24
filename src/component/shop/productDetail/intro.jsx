@@ -12,6 +12,7 @@ import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 import { useProduct, useProducts } from "../../../hooks/useProducts";
 import { useCartStore } from "../../../stores/cartStore";
 import { useSavedItems, useToggleSavedItemMutation } from "../../../hooks/useSavedItems";
+import StarRating from "../../../components/rating/StarRating";
 
 const resolveImageUrl = (image) => resolveBackendAssetUrl(image, robo);
 
@@ -120,21 +121,7 @@ const Intro = () => {
 
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-8 lg:gap-14">
-              <div className="my-6 flex text-2xl">
-                {Array.from({ length: 5 }, (_, i) => {
-                  const ratings = Number(product.ratings || 0);
-                  const fullStars = Math.floor(ratings);
-                  const hasHalfStar = ratings % 1 >= 0.5;
-
-                  if (i < fullStars) {
-                    return <span key={i} className="text-primary">★</span>;
-                  } else if (i === fullStars && hasHalfStar) {
-                    return <span key={i} className="text-primary">☆</span>;
-                  } else {
-                    return <span key={i} className="text-background">★</span>;
-                  }
-                })}
-              </div>
+              <StarRating value={Number(product.ratings || 0)} className="my-6 text-2xl" />
               {product.onSale && (
                 <div className="bg-destructive p-1 px-2">
                   <span className="text-background">ON SALE</span>
