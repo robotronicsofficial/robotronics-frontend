@@ -1,8 +1,10 @@
+import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CustomerOrder from "./customerOrder";
+import CustomerProduct from "./customerProduct";
+import OrderSummaryLine from "./OrderSummaryLine";
 import {
   buildShopCheckoutIntentRequest,
   calculateCartSummary,
@@ -13,12 +15,18 @@ import {
   hasCheckoutPayment,
   loadShopCheckout,
 } from "../../lib/shopCheckout";
-import { hasShippableCommerceItems } from "../../lib/commerceItems";
+import { getCommerceItemKey, hasShippableCommerceItems } from "../../lib/commerceItems";
 import { clearCart } from "../../store/cart/cartSlice";
 import { useAuth } from "../../contexts/useAuth";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 import { BACKEND_BASE_URL } from "../../lib/api";
+
+const summaryLabelClassName = "font-lato text-base text-[#7E7F7C]";
+const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
+const summaryValueClassName = `${summaryValueBaseClassName} text-[#362D2C]`;
+const summaryTotalValueClassName = `${summaryValueBaseClassName} text-yellow`;
+
 const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -116,9 +124,9 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   };
 
   return (
-    <div className="lg:flex flex-row bg-gray gap-6">
-      <div className="lg:pt-8 pt-4 lg:space-y-12 space-y-8 lg:w-2/3">
-        <div className="lg:space-y-6 space-y-4">
+    <div className="bg-gray lg:flex lg:gap-6">
+      <div className="flex flex-col gap-8 pt-4 lg:w-2/3 lg:gap-12 lg:pt-8">
+        <div className="flex flex-col gap-4 lg:gap-6">
           <p className="lg:text-4xl text-2xl poppins-bold text-brown">CHECKOUT SUMMARY</p>
           <p className="font-lato font-medium text-base leading-5 text-[#7E7F7C]">
             Review the saved customer details, fulfillment requirements, locally saved payment reference, and items for this checkout draft.
@@ -144,7 +152,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         ) : null}
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <section className="bg-brown p-5 space-y-4 text-white">
+          <section className="flex flex-col gap-4 bg-brown p-5 text-white">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-lg poppins-extrabold">
@@ -166,7 +174,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
             </div>
 
             {customerReady || submittedIntent ? (
-              <div className="space-y-2 text-sm poppins-light">
+              <div className="flex flex-col gap-2 text-sm poppins-light">
                 <p className="text-base poppins-extrabold">
                   {submittedIntent?.customer?.name || `${checkout.customer?.firstName || ""} ${checkout.customer?.lastName || ""}`.trim()}
                 </p>
@@ -201,7 +209,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
             )}
           </section>
 
-          <section className="bg-white p-5 space-y-4 border border-lightgray text-brown">
+          <section className="flex flex-col gap-4 border border-lightgray bg-white p-5 text-brown">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-lg poppins-extrabold">PAYMENT DETAILS</p>
@@ -217,7 +225,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
             </div>
 
             {paymentReady || submittedIntent ? (
-              <div className="space-y-2 text-sm poppins-light">
+              <div className="flex flex-col gap-2 text-sm poppins-light">
                 {requiresShipping ? (
                   <p>
                     <span className="font-semibold">Shipping service:</span>{" "}
@@ -253,7 +261,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           </section>
         </div>
 
-        <section className="space-y-5">
+        <section className="flex flex-col gap-5">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-2xl text-brown poppins-bold">ORDER ITEMS</p>
@@ -263,26 +271,21 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="flex flex-col gap-4">
             {displayItems.length > 0 ? (
               displayItems.map((product) => (
-                <div
-                  className="flex flex-row space-x-3 border border-lightgray bg-white p-4"
-                  key={`${product.itemType}:${product.itemId}`}
-                >
-                  <img
-                    className="lg:h-24 lg:w-28 object-cover"
-                    src={resolveBackendAssetUrl(
+                <div className="border border-lightgray bg-white p-4" key={getCommerceItemKey(product)}>
+                  <CustomerProduct
+                    title={product.name}
+                    item={product.quantity}
+                    price={formatShopCurrency(product.price ?? product.unitPrice)}
+                    priceLabel=""
+                    imageClassName="object-cover lg:h-24 lg:w-28"
+                    image={resolveBackendAssetUrl(
                       product?.image || product?.images?.[0],
                       "https://via.placeholder.com/300x200"
                     )}
-                    alt={product.name}
                   />
-                  <div className="flex flex-col gap-1 text-sm text-brown">
-                    <p className="font-bold">{product.name}</p>
-                    <p>Quantity: {product.quantity}</p>
-                    <p>{formatShopCurrency(product.price ?? product.unitPrice)}</p>
-                  </div>
                 </div>
               ))
             ) : (
@@ -293,12 +296,32 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           </div>
         </section>
 
-        <section className="border border-lightgray bg-white p-5 space-y-4 text-brown">
+        <section className="flex flex-col gap-4 border border-lightgray bg-white p-5 text-brown">
           <p className="text-xl poppins-bold">TOTALS</p>
-          <SummaryRow label="Shipping" value={formatShopCurrency(displaySummary.shipping)} />
-          <SummaryRow label="Discount 10%" value={`- ${formatShopCurrency(displaySummary.discount)}`} />
-          <SummaryRow label="Price" value={formatShopCurrency(displaySummary.subtotal)} />
-          <SummaryRow label="Total Price" value={formatShopCurrency(displaySummary.total)} highlight />
+          <OrderSummaryLine
+            label="Shipping"
+            value={formatShopCurrency(displaySummary.shipping)}
+            labelClassName={summaryLabelClassName}
+            valueClassName={summaryValueClassName}
+          />
+          <OrderSummaryLine
+            label="Discount 10%"
+            value={`- ${formatShopCurrency(displaySummary.discount)}`}
+            labelClassName={summaryLabelClassName}
+            valueClassName={summaryValueClassName}
+          />
+          <OrderSummaryLine
+            label="Price"
+            value={formatShopCurrency(displaySummary.subtotal)}
+            labelClassName={summaryLabelClassName}
+            valueClassName={summaryValueClassName}
+          />
+          <OrderSummaryLine
+            label="Total Price"
+            value={formatShopCurrency(displaySummary.total)}
+            labelClassName={summaryLabelClassName}
+            valueClassName={summaryTotalValueClassName}
+          />
         </section>
       </div>
 
@@ -327,17 +350,9 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   );
 };
 
-const SummaryRow = ({ label, value, highlight = false }) => (
-  <div className="flex justify-between">
-    <p className="text-[#7E7F7C] font-lato text-base">{label}</p>
-    <p
-      className={`font-lato text-[20px] font-extrabold ${
-        highlight ? "text-yellow" : "text-[#362D2C]"
-      }`}
-    >
-      {value}
-    </p>
-  </div>
-);
+ShopShipping.propTypes = {
+  onEditCustomer: PropTypes.func,
+  onEditPayment: PropTypes.func,
+};
 
 export default ShopShipping;
