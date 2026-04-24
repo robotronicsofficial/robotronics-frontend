@@ -3,19 +3,22 @@ import { Link } from "react-router-dom";
 const Error = () => {
   return (
     <div className="bg-background">
-      <div className="flex flex-col h-svh items-center justify-center space-y-10"data-aos="fade-up">
-        <div className="flex flex-row justify-center space-x-5 items-center  ">
-          <h1 className=" text-6xl poppins-extrabold text-gray-600">404</h1>
-          <h2 className=" text-6xl poppins-extrabold text-gray-600"> Not Found</h2>
+      <div className="flex h-svh flex-col items-center justify-center gap-10" data-aos="fade-up">
+        <div className="flex items-center justify-center gap-5">
+          <h1 className="text-6xl poppins-extrabold text-gray-600">404</h1>
+          <h2 className="text-6xl poppins-extrabold text-gray-600">Not Found</h2>
         </div>
-        <div className="text-center space-y-10" >
+        <div className="text-center">
           <p className="text-xl poppins-light text-gray-600">
             Your visited page was not found. you may go home page.
             <br />
             <br />
-            <Link to="/" className="inline-flex bg-yellow poppins-light rounded-md p-2 text-brown px-10 py-2">
+            <Link
+              to="/"
+              className="inline-flex rounded-md bg-yellow px-10 py-2 text-brown poppins-light"
+            >
               Back to Home page
-            </Link>{" "}
+            </Link>
           </p>
         </div>
       </div>
