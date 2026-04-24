@@ -234,8 +234,8 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
     }
 
     if (!planId || !billingCycle) {
-      alert("Please select a plan before continuing");
-      return navigate("/subscriptions"); // Redirect to plans page
+      alert("Please start the membership checkout before continuing");
+      return navigate("/subscriptions");
     }
 
     // Check for unsaved children
@@ -447,14 +447,14 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                 <AppImage className="lg:h-24 lg:w-24" src={robo} alt="" />
                 <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
                   <p className="text-wrap">
-                    <span className="font-bold">Plan:</span> <span className="font-normal">{plan}</span>
+                    <span className="font-bold">Membership:</span> <span className="font-normal">{plan}</span>
                   </p>
                   <p className="text-wrap">
                     <span className="font-bold">Name:</span>{" "}
                     <span className="font-normal">{child.firstName} {child.lastName}</span>
                   </p>
                   <p className="text-wrap">
-                    <span className="font-bold">Payment Plan:</span>{" "}
+                    <span className="font-bold">Billing:</span>{" "}
                     <span className="font-normal">{billingCycle}</span>
                   </p>
                 </div>

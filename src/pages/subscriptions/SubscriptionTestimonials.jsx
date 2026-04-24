@@ -21,7 +21,7 @@ const ReviewsComponent = () => {
       role: "Age 12, Lahore",
       image: reviewImg2,
       review:
-        "I joined the Pro Plan and it was totally worth it. I can attend webinars, access so many courses, and get help through live chat whenever I'm stuck. Plus, the PRO badge makes me feel like a real tech genius!",
+        "I joined the membership and it was totally worth it. I can access so many courses, collect certificates, and get help through live chat whenever I'm stuck.",
     },
     {
       name: "Nasser Al Shammari",

@@ -44,7 +44,7 @@ const SubscriptionReviewCustomer = () => {
       setActivationError("");
 
       if (!checkout.plan?.planId || !checkout.plan?.billingCycle) {
-        throw new Error("Subscription plan is missing. Select a plan again.");
+        throw new Error("Subscription membership is missing. Start the membership checkout again.");
       }
 
       const result = await sendSessionJson("/api/subscriptions/activate", {
@@ -89,7 +89,7 @@ const SubscriptionReviewCustomer = () => {
               <div className="mt-4 space-y-4">
                 <ReviewRow label="Order code" value={checkout.orderCode} />
                 <ReviewRow label="Created" value={formatDisplayDate(checkout.orderDate)} />
-                <ReviewRow label="Plan" value={checkout.plan.name || "Subscription"} />
+                <ReviewRow label="Membership" value={checkout.plan.name || "Subscription"} />
                 <ReviewRow label="Billing cycle" value={checkout.plan.billingCycle || "N/A"} />
                 <ReviewRow
                   label="Payment method"
@@ -147,7 +147,7 @@ const SubscriptionReviewCustomer = () => {
                   <div className="mt-4 space-y-2">
                     <ReviewRow label="Email" value={child.email || "N/A"} />
                     <ReviewRow label="School" value={child.schoolName || "N/A"} />
-                    <ReviewRow label="Plan" value={child.plan?.name || checkout.plan.name || "N/A"} />
+                    <ReviewRow label="Membership" value={child.plan?.name || checkout.plan.name || "N/A"} />
                     <ReviewRow
                       label="Charge"
                       value={formatCheckoutCurrency(child.plan?.price || checkout.plan.price)}

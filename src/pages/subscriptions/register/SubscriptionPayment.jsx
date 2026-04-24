@@ -140,7 +140,7 @@ const SubscriptionPayment = ({ onNext }) => {
         <div className="space-y-3">
           <p className="text-3xl font-bold text-[#362D2C]">Checkout Summary</p>
           <p className="text-sm text-[#7E7F7C]">
-            Confirm the registered children, plan details, and billing before you continue.
+            Confirm the registered children, membership details, and billing before you continue.
           </p>
         </div>
 
@@ -173,7 +173,7 @@ const SubscriptionPayment = ({ onNext }) => {
           <SummaryRow label="Order code" value={checkout.orderCode} />
           <SummaryRow label="Registered on" value={formatDisplayDate(checkout.orderDate)} />
           <SummaryRow label="Children" value={checkout.totalChildren} />
-          <SummaryRow label="Plan" value={checkout.plan.name || "Subscription"} />
+          <SummaryRow label="Membership" value={checkout.plan.name || "Subscription"} />
           <SummaryRow label="Billing cycle" value={checkout.plan.billingCycle || "N/A"} />
           <div className="border-t border-[#E6E0DA] pt-4">
             <SummaryRow label="Total" value={formatCheckoutCurrency(checkout.totalPrice)} highlight />
