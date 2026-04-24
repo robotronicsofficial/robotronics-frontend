@@ -1,35 +1,39 @@
-import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { useState } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css"; // Import the default styles for the slider
+import { cn } from "../../lib/utils";
+
+const categories = [
+  "Lego Robots",
+  "Curriculum Books",
+  "Arduino Robots",
+  "Educational Toys",
+  "Others",
+];
+
+const sliderTrackStyle = { backgroundColor: "black" };
+const sliderHandleStyle = { borderColor: "black", backgroundColor: "black" };
+const sliderRailStyle = { backgroundColor: "#e5e7eb" };
+const shippingMarks = {
+  7: "7",
+  15: "15",
+  30: "30",
+  45: "45",
+  60: "60",
+};
 
 const Shopfilter = ({
   onPriceRangeChange,
   onShippingChange,
   onCategoryChange,
 }) => {
-  const categories = [
-    "Lego Robots",
-    "Curriculum Books",
-    "Arduino Robots",
-    "Educational Toys",
-    "Others",
-  ];
   const [isOpenProducts, setIsOpenProducts] = useState(true);
   const [isOpenShipping, setIsOpenShipping] = useState(true);
   const [isOpenPrice, setIsOpenPrice] = useState(true);
   const [priceRange, setPriceRange] = useState([0, 600000]);
   const [shippingDays, setShippingDays] = useState(15);
   const [selectedCategory, setSelectedCategory] = useState("");
-
-  
-
-  const shippingMarks = {
-    7: "7",
-    15: "15",
-    30: "30",
-    45: "45",
-    60: "60",
-  };
 
   const handleRangeChange = (value) => {
     setPriceRange(value);
@@ -53,6 +57,7 @@ const Shopfilter = ({
         <div className="flex justify-between">
           <p className="poppins-semibold lg:text-2xl text-xl">All PRODUCTS</p>
           <button
+            type="button"
             className="lg:text-xl text-sm"
             onClick={() => setIsOpenProducts(!isOpenProducts)}
           >
@@ -61,32 +66,21 @@ const Shopfilter = ({
         </div>
         <div className="h-0 lg:w-full border border-brown"></div>
         {isOpenProducts && (
-          // <div>
-          //   <a className="flex cursor-pointer hover:text-black poppins-light lg:text-base text-sm text-lightblack lg:pt-5 pt-2" href="#">Lego Robots</a>
-          //   <a className="flex cursor-pointer hover:text-black poppins-light lg:text-base text-sm text-lightblack lg:pt-5 pt-2" href="#">Curriculum Books</a>
-          //   <a className="flex cursor-pointer hover:text-black poppins-light lg:text-base text-sm text-lightblack lg:pt-8 pt-4" href="#">Arduino Robots</a>
-          //   <a className="flex cursor-pointer hover:text-black poppins-light lg:text-base text-sm text-lightblack lg:pt-8 pt-4" href="#">Educational Toys</a>
-          //   <a className="flex cursor-pointer hover:text-black poppins-light lg:text-base text-sm text-lightblack lg:pt-8 pt-4" href="#">Others</a>
-          // </div>
-
-          <div>
+          <div className="flex flex-col">
             {categories.map((category) => (
-              <a
+              <button
+                type="button"
                 key={category}
-                className={`flex cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-200 
-                ${
+                className={cn(
+                  "flex pt-2 text-left text-sm transition-colors duration-200 lg:pt-5 lg:text-base",
                   selectedCategory === category
-                    ? "font-semibold"
-                    : "text-gray-500 hover:text-black"
-                }
-              `}
-                style={
-                  selectedCategory === category ? { color: "#e06f21" } : {}
-                }
+                    ? "font-semibold text-[#e06f21]"
+                    : "text-gray-500 hover:text-black",
+                )}
                 onClick={() => handleCategoryClick(category)}
               >
                 {category}
-              </a>
+              </button>
             ))}
           </div>
         )}
@@ -97,6 +91,7 @@ const Shopfilter = ({
         <div className="flex justify-between">
           <p className="text-bold font-bold lg:text-2xl text-xl">SHIPPING</p>
           <button
+            type="button"
             className="lg:text-xl text-sm"
             onClick={() => setIsOpenShipping(!isOpenShipping)}
           >
@@ -115,9 +110,9 @@ const Shopfilter = ({
                 defaultValue={15}
                 value={shippingDays}
                 onChange={handleShippingChange}
-                trackStyle={{ backgroundColor: "black" }}
-                handleStyle={{ borderColor: "black", backgroundColor: "black" }}
-                railStyle={{ backgroundColor: "#e5e7eb" }}
+                trackStyle={sliderTrackStyle}
+                handleStyle={sliderHandleStyle}
+                railStyle={sliderRailStyle}
               />
             </div>
             <div className="text-center mt-12 text-black p-2 bg-white rounded">
@@ -131,6 +126,7 @@ const Shopfilter = ({
       <div className="flex justify-between mt-6">
         <p className="text-bold font-bold lg:text-2xl text-xl">PRICE</p>
         <button
+          type="button"
           className="lg:text-xl text-sm"
           onClick={() => setIsOpenPrice(!isOpenPrice)}
         >
@@ -148,12 +144,12 @@ const Shopfilter = ({
               defaultValue={[0, 600000]}
               value={priceRange}
               onChange={handleRangeChange}
-              trackStyle={{ backgroundColor: "black" }}
-              handleStyle={{ borderColor: "black", backgroundColor: "black" }}
-              railStyle={{ backgroundColor: "#e5e7eb" }}
+              trackStyle={sliderTrackStyle}
+              handleStyle={sliderHandleStyle}
+              railStyle={sliderRailStyle}
             />
           </div>
-          <div className="flex space-x-2 justify-center mt-4">
+          <div className="mt-4 flex justify-center gap-2">
             <p className="text-black p-2 bg-white rounded text-center">
               PKR {priceRange[0].toLocaleString()} - PKR{" "}
               {priceRange[1].toLocaleString()}
@@ -163,6 +159,12 @@ const Shopfilter = ({
       )}
     </div>
   );
+};
+
+Shopfilter.propTypes = {
+  onPriceRangeChange: PropTypes.func.isRequired,
+  onShippingChange: PropTypes.func.isRequired,
+  onCategoryChange: PropTypes.func.isRequired,
 };
 
 export default Shopfilter;
