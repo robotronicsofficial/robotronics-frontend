@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 
-import { BACKEND_BASE_URL } from "../../lib/api";
+import { fetchBackendJson, getContentLoadErrorMessage } from "../../lib/api";
 const BlogCard = ({ cardData }) => {
   // Map backend data structure to match your cardData props
   const mappedData = {
@@ -117,16 +117,12 @@ const BlogPost = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${BACKEND_BASE_URL}/getAllBlogs`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch blogs');
-        }
-        const result = await response.json();
+        const result = await fetchBackendJson("/getAllBlogs");
         const blogs = Array.isArray(result) ? result : [];
         setData(blogs);
         setTotalPages(Math.ceil(blogs.length / itemsPerPage));
       } catch (err) {
-        setError(err.message);
+        setError(getContentLoadErrorMessage(err, "We couldn't load blog posts right now."));
       } finally {
         setLoading(false);
       }
@@ -152,7 +148,7 @@ const BlogPost = () => {
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="text-xl text-red-500">Error: {error}</div>
+        <div className="text-xl text-red-500">{error}</div>
       </div>
     );
   }

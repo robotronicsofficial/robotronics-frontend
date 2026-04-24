@@ -8,7 +8,8 @@ import { LuClock } from "react-icons/lu";
 import { IoVideocamOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
-import { BACKEND_BASE_URL } from "../lib/api";
+import { BACKEND_BASE_URL, getContentLoadErrorMessage } from "../lib/api";
+import { fetchCourses } from "../lib/courses";
 import AppImage from "./AppImage";
 
 const ServiceCard = ({ service }) => {
@@ -78,19 +79,37 @@ const Shop = () => {
   const servicesPerPage = 3;
 
   useEffect(() => {
-    const fetchServices = async () => {
+    let active = true;
+
+    const loadCourses = async () => {
       try {
-        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
-        if (!response.ok) throw new Error("Failed to fetch services");
-        const data = await response.json();
-        setServices(data.courses || []);
+        setLoading(true);
+        const nextCourses = await fetchCourses();
+
+        if (!active) {
+          return;
+        }
+
+        setServices(nextCourses);
+        setError(null);
       } catch (err) {
-        setError(err.message);
+        if (!active) {
+          return;
+        }
+
+        setError(getContentLoadErrorMessage(err, "We couldn't load courses right now."));
       } finally {
-        setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     };
-    fetchServices();
+
+    loadCourses();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const handleNext = () => {
@@ -112,7 +131,7 @@ const Shop = () => {
 
   if (loading) return <div className="text-center py-20">Loading...</div>;
   if (error)
-    return <div className="text-center py-20 text-red-500">Error: {error}</div>;
+    return <div className="text-center py-20 text-red-500">{error}</div>;
 
   return (
     <section className="bg-gray py-8 md:py-12">

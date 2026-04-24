@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import WorkshopCard from "./WorkshopCard";
 import Pagination from "../../blog/Pagination";
 
-import { BACKEND_BASE_URL } from "../../../lib/api";
+import { fetchBackendJson, getContentLoadErrorMessage } from "../../../lib/api";
 const categories = [
   "Subscription Courses",
   "Robotics Workshops",
@@ -115,15 +115,11 @@ const Intro = () => {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const response = await fetch(`${BACKEND_BASE_URL}/allVideoGallery`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch services data");
-        }
-        const data = await response.json();
-        setWorkshopsData(data.data || []);
+        const data = await fetchBackendJson("/allVideoGallery");
+        setWorkshopsData(Array.isArray(data?.data) ? data.data : []);
         setLoading(false);
       } catch (err) {
-        setError(err.message);
+        setError(getContentLoadErrorMessage(err, "We couldn't load the video gallery right now."));
         setLoading(false);
       }
     };

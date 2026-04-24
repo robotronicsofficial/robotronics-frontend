@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Intro from "../../component/blog/intro";
 import BlogDetailBody from "../../component/blog/blogDetailBody";
 
-import { BACKEND_BASE_URL } from "../../lib/api";
+import { fetchBackendJson, getContentLoadErrorMessage } from "../../lib/api";
 const BlogDetail = () => {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
@@ -22,22 +22,9 @@ const BlogDetail = () => {
 
       try {
         setLoading(true);
-        const [blogResponse, allBlogsResponse] = await Promise.all([
-          fetch(`${BACKEND_BASE_URL}/getBlogById/${id}`),
-          fetch(`${BACKEND_BASE_URL}/getAllBlogs`),
-        ]);
-
-        if (!blogResponse.ok) {
-          throw new Error("Failed to fetch blog post");
-        }
-
-        if (!allBlogsResponse.ok) {
-          throw new Error("Failed to load blog navigation");
-        }
-
         const [blogData, allBlogs] = await Promise.all([
-          blogResponse.json(),
-          allBlogsResponse.json(),
+          fetchBackendJson(`/getBlogById/${id}`),
+          fetchBackendJson("/getAllBlogs"),
         ]);
 
         const orderedBlogs = Array.isArray(allBlogs) ? allBlogs : [];
@@ -48,7 +35,7 @@ const BlogDetail = () => {
         setNextBlog(currentIndex > 0 ? orderedBlogs[currentIndex - 1] : null);
         setError("");
       } catch (fetchError) {
-        setError(fetchError.message);
+        setError(getContentLoadErrorMessage(fetchError, "We couldn't load this blog post right now."));
       } finally {
         setLoading(false);
       }

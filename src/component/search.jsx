@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { resolveBackendAssetUrl } from "../utils/mediaUrl";
 
-import { BACKEND_BASE_URL } from "../lib/api";
+import { fetchBackendJson, getContentLoadErrorMessage } from "../lib/api";
 const Search = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
@@ -15,16 +15,11 @@ const Search = () => {
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${BACKEND_BASE_URL}/getProducts`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch products: ${response.status}`);
-        }
-
-        const payload = await response.json();
+        const payload = await fetchBackendJson("/getProducts");
         setProducts(Array.isArray(payload?.products) ? payload.products : []);
         setError("");
       } catch (fetchError) {
-        setError(fetchError.message || "Failed to load products");
+        setError(getContentLoadErrorMessage(fetchError, "We couldn't load products right now."));
       } finally {
         setLoading(false);
       }

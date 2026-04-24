@@ -6,7 +6,7 @@ import { COMMERCE_ITEM_TYPES } from "../../lib/commerceItems";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { BACKEND_BASE_URL } from "../../lib/api";
+import { fetchBackendJson, getContentLoadErrorMessage } from "../../lib/api";
 const CoursesProductDetail = () => {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
@@ -17,14 +17,10 @@ const CoursesProductDetail = () => {
     const fetchCourse = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${BACKEND_BASE_URL}/coursesById/${id}`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch course: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await fetchBackendJson(`/coursesById/${id}`);
         setCourse(data);
       } catch (fetchError) {
-        setError(fetchError.message);
+        setError(getContentLoadErrorMessage(fetchError, "We couldn't load this course right now."));
       } finally {
         setLoading(false);
       }

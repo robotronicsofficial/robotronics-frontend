@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import AppImage from "../../AppImage";
 import robot from "../../../assets/images/IServicesS4.webp";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
+import { getContentLoadErrorMessage } from "../../../lib/api";
 import { fetchServices } from "../../../lib/services";
 
 const OurServices = () => {
   const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
@@ -16,6 +18,7 @@ const OurServices = () => {
 
     const loadServices = async () => {
       try {
+        setLoading(true);
         const nextServices = await fetchServices();
 
         if (!active) {
@@ -30,7 +33,11 @@ const OurServices = () => {
         }
 
         console.error("Error fetching services:", nextError);
-        setError(nextError.message || "Failed to load services");
+        setError(getContentLoadErrorMessage(nextError, "We couldn't load services right now."));
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
       }
     };
 
@@ -51,9 +58,11 @@ const OurServices = () => {
         <h2 className="lg:text-6xl md:text-5xl text-4xl text-brown poppins-bold mb-16">
           Our Services
         </h2>
-        {error && <p className="text-red-500">Error: {error}</p>}
+        {error && <p className="text-red-500">{error}</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.length > 0 ? (
+          {loading ? (
+            <p className="text-center text-lg">Loading services...</p>
+          ) : services.length > 0 ? (
             (showAll ? services : services.slice(0, 6)).map((service) => {
               const imageUrl = resolveBackendAssetUrl(service.thumbnailImage, robot);
 
@@ -79,8 +88,10 @@ const OurServices = () => {
                 </div>
               );
             })
+          ) : !error ? (
+            <p className="text-center text-lg">No services available right now.</p>
           ) : (
-            <p className="text-center text-lg">Loading services...</p>
+            null
           )}
         </div>
 

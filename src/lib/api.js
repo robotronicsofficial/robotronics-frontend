@@ -68,15 +68,35 @@ export const resolveBackendUrl = (path = "") => {
 
 const parseResponseBody = async (response) => {
   const contentType = response.headers.get("content-type") || "";
+  const canHaveBody = response.status !== 204 && response.status !== 205;
+
+  if (!canHaveBody) {
+    return null;
+  }
 
   if (!contentType.includes("application/json")) {
-    return null;
+    const body = await response.text().catch(() => "");
+
+    if (!body.trim()) {
+      return null;
+    }
+
+    const error = new Error("Backend returned a non-JSON response");
+    error.code = "invalid-api-response";
+    error.status = response.status;
+    error.contentType = contentType || "unknown";
+    throw error;
   }
 
   try {
     return await response.json();
-  } catch {
-    return null;
+  } catch (cause) {
+    const error = new Error("Backend returned invalid JSON");
+    error.code = "invalid-api-response";
+    error.status = response.status;
+    error.contentType = contentType;
+    error.cause = cause;
+    throw error;
   }
 };
 
@@ -84,6 +104,14 @@ export const getApiErrorMessage = (response, payload) =>
   payload?.message ||
   payload?.error ||
   `Request failed with status ${response.status}`;
+
+export const getContentLoadErrorMessage = (
+  error,
+  fallback = "We couldn't load this content right now.",
+) =>
+  error?.code === "invalid-api-response" || typeof error?.status === "number"
+    ? fallback
+    : error?.message || fallback;
 
 const buildJsonHeaders = (headers = {}, includeContentType = false) => ({
   Accept: "application/json",

@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { FaRobot} from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import robort from "../assets/images/right-face-robot.png";
+import { getContentLoadErrorMessage } from "../lib/api";
 import { fetchServices } from "../lib/services";
 import AppImage from "./AppImage";
 
 const Services = () => {
   const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -16,6 +18,7 @@ const Services = () => {
 
     const loadServices = async () => {
       try {
+        setLoading(true);
         const nextServices = await fetchServices();
 
         if (!active) {
@@ -30,7 +33,11 @@ const Services = () => {
         }
 
         console.error("Error fetching services:", nextError);
-        setError(nextError.message || "Failed to load services");
+        setError(getContentLoadErrorMessage(nextError, "We couldn't load services right now."));
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
       }
     };
 
@@ -69,9 +76,13 @@ const Services = () => {
 
       {/* Services Grid */}
       <div className="px-4 sm:px-6 py-6 sm:py-8">
-  {error && <p className="text-red-500 text-sm sm:text-base mb-4">Error: {error}</p>}
+  {error && <p className="text-red-500 text-sm sm:text-base mb-4">{error}</p>}
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-    {services.length > 0 ? (
+    {loading ? (
+      <div className="col-span-full py-10">
+        <p className="text-center text-white text-lg sm:text-xl">Loading services...</p>
+      </div>
+    ) : services.length > 0 ? (
       services.slice(0,6).map((service) => (
         <div
           key={service._id}
@@ -110,11 +121,11 @@ const Services = () => {
           </div>
         </div>
       ))
-    ) : (
+    ) : !error ? (
       <div className="col-span-full py-10">
-        <p className="text-center text-white text-lg sm:text-xl">Loading services...</p>
+        <p className="text-center text-white text-lg sm:text-xl">No services available right now.</p>
       </div>
-    )}
+    ) : null}
   </div>
 </div>
     </div>

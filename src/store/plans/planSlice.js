@@ -1,17 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { BACKEND_BASE_URL } from "../../lib/api";
+import { fetchBackendJson, getContentLoadErrorMessage } from "../../lib/api";
 export const fetchPlans = createAsyncThunk(
   "plans/fetchPlans",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${BACKEND_BASE_URL}/getAllPlans`);
-      if (!response.ok) throw new Error("Failed to fetch plans");
-      const data = await response.json();
-      return data.plans;
+      const data = await fetchBackendJson("/getAllPlans");
+      return Array.isArray(data?.plans) ? data.plans : [];
     } catch (error) {
       console.error("Error fetching plans:", error);
-      return rejectWithValue(error.message);
+      return rejectWithValue(getContentLoadErrorMessage(error, "Failed to load plans"));
     }
   }
 );

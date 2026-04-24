@@ -5,7 +5,8 @@ import robo from "../../../assets/logo/Robotrinic.svg";
 import { FaStar } from "react-icons/fa";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 
-import { BACKEND_BASE_URL } from "../../../lib/api";
+import { getContentLoadErrorMessage } from "../../../lib/api";
+import { fetchCourses } from "../../../lib/courses";
 const Shop = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
@@ -16,16 +17,11 @@ const Shop = () => {
     const loadCourses = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch courses: ${response.status}`);
-        }
-
-        const payload = await response.json();
-        setCourses(Array.isArray(payload?.courses) ? payload.courses : []);
+        const nextCourses = await fetchCourses();
+        setCourses(nextCourses);
         setError("");
       } catch (fetchError) {
-        setError(fetchError.message || "Failed to load courses");
+        setError(getContentLoadErrorMessage(fetchError, "We couldn't load courses right now."));
       } finally {
         setLoading(false);
       }

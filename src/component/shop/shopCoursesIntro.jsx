@@ -1,4 +1,4 @@
-import { BACKEND_BASE_URL } from "../../lib/api";
+import { fetchCourses } from "../../lib/courses";
 // import CourseProduct from "../course/courseProduct";
 // import icon from "../../assets/logo/searchicon.svg";
 // import arow from "../../assets/logo/shopArowIcon.svg";
@@ -188,23 +188,15 @@ const ShopCoursesIntro = () => {
   // console.log("courses", courses);
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const loadCourses = async () => {
       try {
-        // Fetch data from the backend
-        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch courses: ${response.status}`);
-        }
-        const data = await response.json();
-
-        // Update state with the fetched data
-        setCourses(Array.isArray(data.courses) ? data.courses : []);
+        setCourses(await fetchCourses());
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
 
-    fetchCourses();
+    loadCourses();
   }, []); 
   // Filter courses based on selected filter
   const filteredCourses =

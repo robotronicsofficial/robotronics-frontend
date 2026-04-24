@@ -4,6 +4,7 @@ import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 
 import { BACKEND_BASE_URL } from "../../lib/api";
+import { fetchCourses } from "../../lib/courses";
 const SubscriptionCourses = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
@@ -13,19 +14,15 @@ const SubscriptionCourses = () => {
   );
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const loadCourses = async () => {
       try {
-        const response = await fetch(`${BACKEND_BASE_URL}/get-courses`);
-        const data = await response.json();
-        if (data?.courses) {
-          setCourses(data.courses);
-        }
+        setCourses(await fetchCourses());
       } catch (error) {
         console.error("Failed to fetch courses:", error);
       }
     };
 
-    fetchCourses();
+    loadCourses();
   }, []);
 
 

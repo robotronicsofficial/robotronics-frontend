@@ -10,7 +10,7 @@ import robo from "../../../assets/images/shopRobot.webp";
 import star from "../../../assets/images/shopStar.svg";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-import { BACKEND_BASE_URL } from "../../../lib/api";
+import { BACKEND_BASE_URL, fetchBackendJson, getContentLoadErrorMessage } from "../../../lib/api";
 const Intro = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -50,18 +50,14 @@ const Intro = () => {
 
       try {
         setLoading(true);
-        const response = await fetch(`${BACKEND_BASE_URL}/getProductById/${id}`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch product: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await fetchBackendJson(`/getProductById/${id}`);
         if (!cancelled) {
           setProduct(data);
           setError("");
         }
       } catch (fetchError) {
         if (!cancelled) {
-          setError(fetchError.message);
+          setError(getContentLoadErrorMessage(fetchError, "We couldn't load this product right now."));
         }
       } finally {
         if (!cancelled) {

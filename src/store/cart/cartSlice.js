@@ -4,19 +4,17 @@ import {
   normalizeCommerceCartItem,
 } from "../../lib/commerceItems";
 
-import { BACKEND_BASE_URL } from "../../lib/api";
+import { fetchBackendJson, getContentLoadErrorMessage } from "../../lib/api";
 // Async thunk for fetching products
 export const fetchProducts = createAsyncThunk(
   "cart/fetchProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${BACKEND_BASE_URL}/getProducts`);
-      if (!response.ok) throw new Error("Failed to fetch products");
-      const data = await response.json();
-      return data.products;
+      const data = await fetchBackendJson("/getProducts");
+      return Array.isArray(data?.products) ? data.products : [];
     } catch (error) {
       console.error("Error fetching products:", error);
-      return rejectWithValue(error.message);
+      return rejectWithValue(getContentLoadErrorMessage(error, "Failed to load products"));
     }
   }
 );
