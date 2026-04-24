@@ -117,7 +117,7 @@ function NavDropdown({ label, items }) {
       {open && (
         <div
           role="menu"
-          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] rounded-xl bg-card shadow-xl ring-1 ring-black/10 z-dropdown py-2"
+          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] rounded-xl bg-card shadow-xl ring-1 ring-foreground/10 z-dropdown py-2"
         >
           {items.map((item) => (
             <NavLink
@@ -171,7 +171,7 @@ function UserMenu({ label, onProfile, onLogout }) {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 mt-2 min-w-[14rem] rounded-lg bg-card shadow-lg ring-1 ring-black/10 z-dropdown py-1"
+          className="absolute right-0 mt-2 min-w-[14rem] rounded-lg bg-card shadow-lg ring-1 ring-foreground/10 z-dropdown py-1"
         >
           <div className="px-4 py-2 border-b border-border">
             <div className="text-xs text-muted-foreground">Signed in as</div>

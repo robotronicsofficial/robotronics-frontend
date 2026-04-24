@@ -178,7 +178,7 @@
 }
 
 .footer {
-  background: black;
+  background: var(--foreground);
   /* height: 130vh !important; */
 }
 
@@ -197,7 +197,7 @@
   height: 618px;
 }
 .signin {
-  background-color: black !important;
+  background-color: var(--foreground) !important;
 }
 .image {
   background: url(./assets/images/updates.webp) top center no-repeat;
@@ -215,7 +215,7 @@
 }
 .custom-outline {
   -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: rgb(255, 255, 255);
+  -webkit-text-stroke-color: var(--background);
 }
 @keyframes scroll {
   0% {
@@ -280,7 +280,7 @@
   /* height: 100vh; */
 }
 .OurServices {
-  background-color: white;
+  background-color: var(--card);
   height: auto;
 }
 

@@ -117,8 +117,35 @@ ChartSection.propTypes = {
   options: PropTypes.object.isRequired,
 };
 
+const getThemeColor = (name) => {
+  if (typeof window === "undefined") {
+    return `var(${name})`;
+  }
+
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim() || `var(${name})`;
+};
+
+const withAlpha = (hex, alpha) => {
+  const value = hex.replace("#", "");
+
+  if (value.length !== 6) {
+    return hex;
+  }
+
+  const red = parseInt(value.slice(0, 2), 16);
+  const green = parseInt(value.slice(2, 4), 16);
+  const blue = parseInt(value.slice(4, 6), 16);
+
+  return `rgb(${red} ${green} ${blue} / ${alpha})`;
+};
+
 // Main Component
 const Graph = () => {
+  const secondary = getThemeColor("--secondary");
+  const foreground = getThemeColor("--foreground");
+
   // Chart data
   const data = {
     labels: ["2000", "2010", "2020", "2023", "2024"], // X-axis labels
@@ -126,15 +153,15 @@ const Graph = () => {
       {
         label: "",
         data: [60, 40, 70, 80, 100], // Adjusted data points for Line 1
-        borderColor: "rgb(249 159 14)", // Line 1 color
-        backgroundColor: "rgba(249, 159, 14, 0.2)", // Line 1 fill color
+        borderColor: secondary,
+        backgroundColor: withAlpha(secondary, 0.2),
         tension: 0.4, // Smoothness of the line
       },
       {
         label: "",
         data: [30, 50, 60, 90, 110], // Adjusted data points for Line 2
-        borderColor: "black", // Line 2 color
-        backgroundColor: "black", // Line 2 fill color
+        borderColor: foreground,
+        backgroundColor: foreground,
         tension: 0.4, // Smoothness of the line
       },
     ],
