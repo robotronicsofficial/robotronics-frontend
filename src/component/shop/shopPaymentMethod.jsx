@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -114,16 +115,14 @@ const ShopPaymentMethod = ({ onNext }) => {
   };
 
   return (
-    <div className="lg:flex flex-row p-5 bg-gray gap-6">
+    <div className="bg-gray p-5 lg:flex lg:gap-6">
       <div
-        className="lg:w-2/3 space-y-10"
+        className="flex flex-col gap-10 lg:w-2/3"
         data-aos="fade-up"
-
-
       >
-        <div className="bg-white border border-lightgray p-6 space-y-4">
+        <div className="flex flex-col gap-4 border border-lightgray bg-white p-6">
           <div className="flex items-start justify-between gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <p className="text-3xl text-brown poppins-bold">SHIPPING & PAYMENT</p>
               <p className="text-sm text-brown poppins-light">
                 Save the payment details for this checkout draft. Shipping is only required when your cart has physical products.
@@ -166,15 +165,15 @@ const ShopPaymentMethod = ({ onNext }) => {
         </div>
 
         {requiresShipping ? (
-          <section className="space-y-5">
-            <div className="space-y-2">
+          <section className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
               <p className="text-3xl text-brown poppins-bold">SHIPPING SERVICE</p>
               <p className="text-sm text-brown poppins-light">
                 Choose the delivery partner you want stored with this checkout draft.
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="flex flex-col gap-4">
               {SHIPPING_SERVICES.map((service) => {
                 const isSelected = selectedService === service.value;
 
@@ -195,7 +194,7 @@ const ShopPaymentMethod = ({ onNext }) => {
                         checked={isSelected}
                         onChange={() => setSelectedService(service.value)}
                       />
-                      <div className="w-full space-y-2">
+                      <div className="flex w-full flex-col gap-2">
                         <div className="flex justify-between gap-4">
                           <p className="poppins-bold">{service.value}</p>
                           <p className="text-sm">{service.note}</p>
@@ -214,8 +213,8 @@ const ShopPaymentMethod = ({ onNext }) => {
           </section>
         )}
 
-        <section className="space-y-5">
-          <div className="space-y-2">
+        <section className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
             <p className="text-3xl text-brown poppins-bold">PAYMENT METHOD</p>
             <p className="text-sm text-brown poppins-light">
               Save the billing method you want attached to this checkout draft.
@@ -243,7 +242,7 @@ const ShopPaymentMethod = ({ onNext }) => {
                       checked={isSelected}
                       onChange={() => setSelectedMethod(method.value)}
                     />
-                    <div className="w-full space-y-2">
+                    <div className="flex w-full flex-col gap-2">
                       <div className="flex items-center justify-between gap-4">
                         <p className="poppins-bold">{method.value}</p>
                         <img src={mastercard} className="h-6 w-6" alt="payment method icon" />
@@ -257,8 +256,8 @@ const ShopPaymentMethod = ({ onNext }) => {
           </div>
         </section>
 
-        <section className="space-y-5">
-          <div className="space-y-2">
+        <section className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
             <p className="text-3xl text-brown poppins-bold">BILLING DETAILS</p>
             <p className="text-sm text-brown poppins-light">
               These details are used for the order summary and kept locally in this browser until you submit the checkout request.
@@ -317,8 +316,6 @@ const ShopPaymentMethod = ({ onNext }) => {
       <div
         className="px-1"
         data-aos="fade-up"
-
-
       >
         <div className="h-full w-0 border border-lightgray"></div>
       </div>
@@ -326,8 +323,6 @@ const ShopPaymentMethod = ({ onNext }) => {
       <div
         className="lg:w-1/2"
         data-aos="fade-up"
-
-
       >
         <CustomerOrder onNext={handleContinue} buttonLabel="REVIEW ORDER" />
       </div>
@@ -336,7 +331,7 @@ const ShopPaymentMethod = ({ onNext }) => {
 };
 
 const Field = ({ id, label, value, onChange, placeholder, type = "text" }) => (
-  <label className="space-y-2">
+  <label className="flex flex-col gap-2">
     <span className="block text-sm text-brown poppins-light">{label}</span>
     <input
       id={id}
@@ -348,5 +343,18 @@ const Field = ({ id, label, value, onChange, placeholder, type = "text" }) => (
     />
   </label>
 );
+
+ShopPaymentMethod.propTypes = {
+  onNext: PropTypes.func,
+};
+
+Field.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  type: PropTypes.string,
+};
 
 export default ShopPaymentMethod;
