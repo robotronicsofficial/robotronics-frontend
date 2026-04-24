@@ -4,12 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { Spinner } from "../../components/ui/spinner";
-import {
-  buildChildSessionRequest,
-  getActiveChildSession,
-} from "../../utils/childSessionRequest";
-import { resolveBackendUrl } from "../../lib/api";
-import { ensureArray } from "../../lib/subscription";
+import { getActiveChildSession } from "../../utils/childSessionRequest";
+import { fetchSelectableChildCourses, saveChildCourses } from "../../lib/childCourses";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const MyCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -33,39 +30,9 @@ const MyCourses = () => {
           throw new Error("Child ID not found in URL");
         }
 
-        const childSessionRequest = buildChildSessionRequest({
-          method: "GET",
-          childId,
-        });
-
-        if (!childSessionRequest) {
-          throw new Error("Child session not found. Please re-enter the PIN.");
-        }
-
-        // First fetch child data to get the plan
-        const childResponse = await fetch(
-          resolveBackendUrl(`/getChildPlan/${childId}`),
-          childSessionRequest
-        );
-        if (!childResponse.ok) {
-          throw new Error(`HTTP error! status: ${childResponse.status}`);
-        }
-        const childData = await childResponse.json();
-
-        const includedCourseIds = ensureArray(childData?.plan?.includedCourseIds);
-        setMaxCourses(
-          childData?.plan?.courseAccess === "specific"
-            ? includedCourseIds.length
-            : Infinity
-        );
-
-        // Then fetch courses
-        const coursesResponse = await fetch(resolveBackendUrl("/get-courses"));
-        if (!coursesResponse.ok) {
-          throw new Error(`HTTP error! status: ${coursesResponse.status}`);
-        }
-        const coursesData = await coursesResponse.json();
-        setCourses(ensureArray(coursesData?.courses));
+        const childCourses = await fetchSelectableChildCourses(childId);
+        setMaxCourses(childCourses.maxCourses);
+        setCourses(childCourses.courses);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -97,32 +64,7 @@ const MyCourses = () => {
         throw new Error("Child ID not found");
       }
 
-      const childSessionRequest = buildChildSessionRequest({
-        method: "PUT",
-        childId,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          courses: selectedCourses.map((courseId) => ({
-            courseId,
-          }))
-        },
-      });
-
-      if (!childSessionRequest) {
-        throw new Error("Child session not found. Please re-enter the PIN.");
-      }
-
-      const response = await fetch(
-        resolveBackendUrl(`/${childId}/courses`),
-        childSessionRequest
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to save courses");
-      }
+      await saveChildCourses({ childId, courseIds: selectedCourses });
 
       setTimeout(() => {
         navigate(`/Dashboard/myAllCourses/${childId}`);
@@ -238,7 +180,7 @@ const MyCourses = () => {
                 }`}>
                 <img
                   className="w-full h-48 object-cover"
-                  src={course.thumbnail ? resolveBackendUrl(course.thumbnail) : "https://via.placeholder.com/300x200"}
+                  src={resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")}
                   alt={course.title}
                   onError={(e) => {
                     e.target.src = "https://via.placeholder.com/300x200";

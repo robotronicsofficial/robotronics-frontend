@@ -4,18 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { Spinner } from "../../components/ui/spinner";
-import {
-  buildChildSessionRequest,
-  getActiveChildSession,
-} from "../../utils/childSessionRequest";
-import { resolveBackendUrl } from "../../lib/api";
-
-const extractActiveCourses = (payload) => {
-  if (Array.isArray(payload?.data?.activeCourses)) return payload.data.activeCourses;
-  if (Array.isArray(payload?.activeCourses)) return payload.activeCourses;
-  if (Array.isArray(payload?.courses)) return payload.courses;
-  return [];
-};
+import { getActiveChildSession } from "../../utils/childSessionRequest";
+import { fetchChildCourses } from "../../lib/childCourses";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 
 const MyAllCourses = () => {
   const [activeCourses, setActiveCourses] = useState([]);
@@ -37,26 +28,7 @@ const MyAllCourses = () => {
   
         setLoading(true);
 
-        const childSessionRequest = buildChildSessionRequest({
-          method: "GET",
-          childId,
-        });
-
-        if (!childSessionRequest) {
-          throw new Error("Child session not found. Please re-enter the PIN.");
-        }
-
-        const childResponse = await fetch(
-          resolveBackendUrl(`/child/${childId}/courses`),
-          childSessionRequest
-        );
-        if (!childResponse.ok) {
-          throw new Error(`Failed to fetch child data. Status: ${childResponse.status}`);
-        }
-        const childData = await childResponse.json();
-        const childCourses = extractActiveCourses(childData);
-        
-        setActiveCourses(childCourses);
+        setActiveCourses(await fetchChildCourses(childId));
         setLoading(false);
       } catch (err) {
         console.error("Error in fetchData:", err);
@@ -145,9 +117,7 @@ const MyAllCourses = () => {
                   <img
                     className="w-full h-48 object-cover"
                     src={
-                      course.thumbnail
-                        ? resolveBackendUrl(course.thumbnail)
-                        : "https://via.placeholder.com/300x200"
+                      resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")
                     }
                     alt={course.title}
                     onError={(e) => {
