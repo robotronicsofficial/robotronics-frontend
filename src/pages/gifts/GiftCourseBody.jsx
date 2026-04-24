@@ -1,6 +1,6 @@
 import CustomerOrder from "../../component/shop/customerOrder";
 import { useAuth } from "../../contexts/useAuth";
-import { BACKEND_BASE_URL } from "../../lib/api";
+import { sendJson } from "../../lib/api";
 import { calculateCartSummary } from "../../lib/shopCheckout";
 import { COURSE_PATH } from "../../router/paths";
 import { useEffect, useMemo, useState } from "react";
@@ -40,6 +40,17 @@ const buildGiftCartItems = (items) => (
     }))
     .filter((item) => item.itemType && item.itemId && item.quantity > 0)
 );
+
+const buildGiftCoursePayload = (form, cartItems) => ({
+  senderName: form.senderName.trim(),
+  senderEmail: form.senderEmail.trim(),
+  senderPhone: form.senderPhone.trim(),
+  recipientName: form.recipientName.trim(),
+  recipientEmail: form.recipientEmail.trim(),
+  date: form.date,
+  message: form.message.trim(),
+  cartItems,
+});
 
 const GiftCourseBody = () => {
   const navigate = useNavigate();
@@ -86,27 +97,10 @@ const GiftCourseBody = () => {
         throw new Error("Add at least one course before sending a gift request.");
       }
 
-      const response = await fetch(`${BACKEND_BASE_URL}/gift-courses`, {
+      const data = await sendJson("/gift-courses", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          senderName: form.senderName.trim(),
-          senderEmail: form.senderEmail.trim(),
-          senderPhone: form.senderPhone.trim(),
-          recipientName: form.recipientName.trim(),
-          recipientEmail: form.recipientEmail.trim(),
-          date: form.date,
-          message: form.message.trim(),
-          cartItems,
-        }),
+        body: buildGiftCoursePayload(form, cartItems),
       });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || data.message || "Failed to submit gift course");
-      }
 
       setForm(buildInitialForm(currentUser));
       setStatus({
@@ -151,7 +145,7 @@ const GiftCourseBody = () => {
 
             <form
               onSubmit={handleSubmit}
-              className="mx-auto max-w-4xl space-y-6 rounded-md bg-gray-50 p-6"
+              className="mx-auto flex max-w-4xl flex-col gap-6 rounded-md bg-gray-50 p-6"
             >
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
