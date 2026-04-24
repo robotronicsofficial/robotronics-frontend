@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   COMMERCE_ITEM_TYPES,
@@ -10,13 +10,12 @@ import {
 import { COURSE_PATH } from "../../../router/paths";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 
-import { fetchBackendJson, getContentLoadErrorMessage } from "../../../lib/api";
 import { cn } from "../../../lib/utils";
+import { useCourses } from "../../../hooks/useCourses";
+import { useProducts } from "../../../hooks/useProducts";
 
 const RELATED_ITEM_CONFIG = {
   [COMMERCE_ITEM_TYPES.product]: {
-    endpoint: "/getProducts",
-    payloadKey: "products",
     browsePath: "/shop",
     browseLabel: "Browse the store",
     emptyLabel: "No other products are available right now.",
@@ -26,8 +25,6 @@ const RELATED_ITEM_CONFIG = {
     createItem: createProductCommerceItem,
   },
   [COMMERCE_ITEM_TYPES.course]: {
-    endpoint: "/get-courses",
-    payloadKey: "courses",
     browsePath: COURSE_PATH,
     browseLabel: "Browse courses",
     emptyLabel: "No other courses are available right now.",
@@ -53,32 +50,18 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const config = RELATED_ITEM_CONFIG[itemType] || RELATED_ITEM_CONFIG.product;
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const loadItems = async () => {
-      try {
-        setLoading(true);
-        const payload = await fetchBackendJson(config.endpoint);
-        const liveItems = Array.isArray(payload?.[config.payloadKey]) ? payload[config.payloadKey] : [];
-        const normalizedItems = liveItems
-          .map((entry) => config.createItem(entry))
-          .filter(Boolean)
-          .filter((entry) => entry.itemId !== id);
-
-        setItems(normalizedItems);
-        setError("");
-      } catch (fetchError) {
-        setError(getContentLoadErrorMessage(fetchError, config.errorLabel));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadItems();
-  }, [config, id]);
+  const productQuery = useProducts();
+  const courseQuery = useCourses();
+  const query = itemType === COMMERCE_ITEM_TYPES.course ? courseQuery : productQuery;
+  const loading = query.isLoading;
+  const error = query.error;
+  const items = useMemo(
+    () => (query.data || [])
+      .map((entry) => config.createItem(entry))
+      .filter(Boolean)
+      .filter((entry) => entry.itemId !== id),
+    [config, id, query.data],
+  );
 
   const topThree = useMemo(() => items.slice(0, 3), [items]);
 
@@ -102,7 +85,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
         {loading ? (
           <RelatedItemsMessage>{config.loadingLabel}</RelatedItemsMessage>
         ) : error ? (
-          <RelatedItemsMessage tone="error">{error}</RelatedItemsMessage>
+          <RelatedItemsMessage tone="error">{config.errorLabel}</RelatedItemsMessage>
         ) : topThree.length === 0 ? (
           <RelatedItemsMessage>
             {config.emptyLabel}

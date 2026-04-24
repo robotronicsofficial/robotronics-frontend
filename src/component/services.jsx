@@ -1,52 +1,17 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRobot} from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import robort from "../assets/images/right-face-robot.png";
-import { getContentLoadErrorMessage } from "../lib/api";
-import { fetchServices } from "../lib/services";
 import AppImage from "./AppImage";
+import { useServices } from "../hooks/useServices";
 
 const Services = () => {
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data: services = [],
+    isLoading: loading,
+    error,
+  } = useServices();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    let active = true;
-
-    const loadServices = async () => {
-      try {
-        setLoading(true);
-        const nextServices = await fetchServices();
-
-        if (!active) {
-          return;
-        }
-
-        setServices(nextServices);
-        setError(null);
-      } catch (nextError) {
-        if (!active) {
-          return;
-        }
-
-        console.error("Error fetching services:", nextError);
-        setError(getContentLoadErrorMessage(nextError, "We couldn't load services right now."));
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    };
-
-    loadServices();
-
-    return () => {
-      active = false;
-    };
-  }, []);
 
   const handleServiceNavigate = (service) => {
     navigate(`/ServiceDetail/${service._id}`, { state: { service } });
@@ -76,7 +41,7 @@ const Services = () => {
 
       {/* Services Grid */}
       <div className="px-4 sm:px-6 py-6 sm:py-8">
-  {error && <p className="text-red-500 text-sm sm:text-base mb-4">{error}</p>}
+  {error && <p className="text-red-500 text-sm sm:text-base mb-4">We couldn&apos;t load services right now.</p>}
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
     {loading ? (
       <div className="col-span-full py-10">

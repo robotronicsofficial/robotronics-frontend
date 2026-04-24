@@ -3,28 +3,15 @@ import { FaStar, FaArrowDown } from "react-icons/fa";
 import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 
-import { fetchCourses } from "../../lib/courses";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import { useCourses } from "../../hooks/useCourses";
 const SubscriptionCourses = () => {
   const navigate = useNavigate();
-  const [courses, setCourses] = useState([]);
+  const { data: courses = [] } = useCourses();
   const [startIndex, setStartIndex] = useState(0);
   const [visibleCourses, setVisibleCourses] = useState(
     window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3
   );
-
-  useEffect(() => {
-    const loadCourses = async () => {
-      try {
-        setCourses(await fetchCourses());
-      } catch (error) {
-        console.error("Failed to fetch courses:", error);
-      }
-    };
-
-    loadCourses();
-  }, []);
-
 
   useEffect(() => {
     const handleResize = () => {

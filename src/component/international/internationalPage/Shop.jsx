@@ -1,34 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineNotificationsActive } from "react-icons/md";
 import robo from "../../../assets/logo/Robotrinic.svg";
 import { FaStar } from "react-icons/fa";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 
-import { getContentLoadErrorMessage } from "../../../lib/api";
-import { fetchCourses } from "../../../lib/courses";
+import { useCourses } from "../../../hooks/useCourses";
 const Shop = () => {
   const navigate = useNavigate();
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const loadCourses = async () => {
-      try {
-        setLoading(true);
-        const nextCourses = await fetchCourses();
-        setCourses(nextCourses);
-        setError("");
-      } catch (fetchError) {
-        setError(getContentLoadErrorMessage(fetchError, "We couldn't load courses right now."));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadCourses();
-  }, []);
+  const {
+    data: courses = [],
+    isLoading: loading,
+    error,
+  } = useCourses();
 
   const featuredCourses = useMemo(() => courses.slice(0, 6), [courses]);
 
@@ -60,7 +44,7 @@ const Shop = () => {
           </div>
         ) : error ? (
           <div className="rounded-2xl bg-white p-10 text-center text-red-600 shadow-sm">
-            {error}
+            We couldn&apos;t load courses right now.
           </div>
         ) : featuredCourses.length === 0 ? (
           <div className="rounded-2xl bg-white p-10 text-center text-brown shadow-sm">

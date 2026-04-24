@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaArrowRight, FaHeart } from "react-icons/fa";
 import { BsHandbag } from "react-icons/bs";
 import { IoHomeOutline } from "react-icons/io5";
 import arow from "../../assets/logo/shopArowIcon.svg";
 import icon from "../../assets/logo/searchicon.svg";
-import { fetchCourses } from "../../lib/courses";
 import { cn } from "../../lib/utils";
 import CourseProduct from "../course/courseProduct";
 import ShopPages from "../shop/shopPages";
+import { useCourses } from "../../hooks/useCourses";
 
 const COURSE_FILTERS = [
   { label: "All", value: "" },
@@ -18,20 +18,8 @@ const COURSE_FILTERS = [
 const paginationPages = [1, 2, 3, 4];
 
 const ShopCoursesIntro = () => {
-  const [courses, setCourses] = useState([]);
+  const { data: courses = [] } = useCourses();
   const [selectedFilter, setSelectedFilter] = useState("");
-
-  useEffect(() => {
-    const loadCourses = async () => {
-      try {
-        setCourses(await fetchCourses());
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
-
-    loadCourses();
-  }, []);
 
   const filteredCourses =
     selectedFilter === ""

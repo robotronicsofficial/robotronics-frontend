@@ -1,47 +1,20 @@
 import AppImage from "../AppImage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import img3 from "../../assets/images/5.webp";
 import { FiArrowUpRight } from 'react-icons/fi';
 import { useNavigate } from "react-router-dom";
-import { fetchJobs, getJobsErrorMessage } from "../../lib/jobs";
+import { getJobsErrorMessage } from "../../lib/jobs";
+import { useJobs } from "../../hooks/useJobs";
 
 const CareerJoinTeam = () => {
   const navigate = useNavigate();
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    let active = true;
-
-    const loadJobs = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchJobs();
-
-        if (active) {
-          setJobs(Array.isArray(data) ? data : []);
-          setError("");
-        }
-      } catch (fetchError) {
-        if (active) {
-          setJobs([]);
-          setError(getJobsErrorMessage(fetchError));
-        }
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    };
-
-    loadJobs();
-
-    return () => {
-      active = false;
-    };
-  }, []);
+  const {
+    data: jobsPayload = [],
+    isLoading: loading,
+    error,
+  } = useJobs();
+  const jobs = Array.isArray(jobsPayload) ? jobsPayload : [];
 
   const jobSummary = (job) =>
     job.description?.trim()
@@ -72,7 +45,7 @@ const CareerJoinTeam = () => {
         {loading ? (
           <p className="poppins-regular text-brown px-4 py-6">Loading open roles...</p>
         ) : error ? (
-          <p className="poppins-regular text-red-600 px-4 py-6">{error}</p>
+          <p className="poppins-regular text-red-600 px-4 py-6">{getJobsErrorMessage(error)}</p>
         ) : jobs.length === 0 ? (
           <p className="poppins-regular text-brown px-4 py-6">No open roles are available right now.</p>
         ) : (

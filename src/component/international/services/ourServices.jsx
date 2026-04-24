@@ -1,52 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppImage from "../../AppImage";
 import robot from "../../../assets/images/IServicesS4.webp";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
-import { getContentLoadErrorMessage } from "../../../lib/api";
-import { fetchServices } from "../../../lib/services";
+import { useServices } from "../../../hooks/useServices";
 
 const OurServices = () => {
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data: services = [],
+    isLoading: loading,
+    error,
+  } = useServices();
   const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    let active = true;
-
-    const loadServices = async () => {
-      try {
-        setLoading(true);
-        const nextServices = await fetchServices();
-
-        if (!active) {
-          return;
-        }
-
-        setServices(nextServices);
-        setError(null);
-      } catch (nextError) {
-        if (!active) {
-          return;
-        }
-
-        console.error("Error fetching services:", nextError);
-        setError(getContentLoadErrorMessage(nextError, "We couldn't load services right now."));
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    };
-
-    loadServices();
-
-    return () => {
-      active = false;
-    };
-  }, []);
 
   const handleNavigate = (service) => {
     navigate(`/ServiceDetail/${service._id}`, { state: { service } });
@@ -58,7 +24,7 @@ const OurServices = () => {
         <h2 className="lg:text-6xl md:text-5xl text-4xl text-brown poppins-bold mb-16">
           Our Services
         </h2>
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500">We couldn&apos;t load services right now.</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {loading ? (
             <p className="text-center text-lg">Loading services...</p>

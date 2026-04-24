@@ -1,32 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { resolveBackendAssetUrl } from "../utils/mediaUrl";
 
-import { fetchBackendJson, getContentLoadErrorMessage } from "../lib/api";
+import { useProducts } from "../hooks/useProducts";
 const Search = () => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const {
+    data: products = [],
+    isLoading: loading,
+    error,
+  } = useProducts();
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("");
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const payload = await fetchBackendJson("/getProducts");
-        setProducts(Array.isArray(payload?.products) ? payload.products : []);
-        setError("");
-      } catch (fetchError) {
-        setError(getContentLoadErrorMessage(fetchError, "We couldn't load products right now."));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProducts();
-  }, []);
 
   const categories = useMemo(() => {
     const values = products
@@ -97,7 +82,7 @@ const Search = () => {
           </div>
         ) : error ? (
           <div className="rounded-2xl bg-white p-10 text-center text-red-600 shadow-sm">
-            {error}
+            We couldn&apos;t load products right now.
           </div>
         ) : filteredProducts.length === 0 ? (
           <div className="rounded-2xl bg-white p-10 text-center text-brown shadow-sm">

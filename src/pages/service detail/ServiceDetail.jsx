@@ -1,93 +1,28 @@
-import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import ServiceInto from "./ServiceInto";
 import ServiceBody from "./ServiceBody";
 import QuickContact from "../../component/international/services/quickContact";
 import PageState from "../../components/layout/PageState";
-import { fetchServiceById, findCachedService } from "../../lib/services";
+import { useService } from "../../hooks/useServices";
 
 const ServiceDetail = () => {
   const { id } = useParams();
   const location = useLocation();
   const routeService = location.state?.service;
-  const [service, setService] = useState(() => {
-    if (routeService?._id === id) {
-      return routeService;
-    }
+  const {
+    data: service,
+    isLoading: loading,
+    error,
+  } = useService(id, routeService);
 
-    return id ? findCachedService(id) : null;
-  });
-  const [loading, setLoading] = useState(Boolean(id) && !service);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    let active = true;
-
-    const fetchService = async () => {
-      if (!id) {
-        if (!active) {
-          return;
-        }
-
-        setLoading(false);
-        if (!routeService) {
-          setError("Service details are unavailable.");
-        }
-        return;
-      }
-
-      const nextService =
-        routeService?._id === id ? routeService : findCachedService(id);
-
-      if (nextService) {
-        if (!active) {
-          return;
-        }
-
-        setService(nextService);
-        setError("");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        const matchedService = await fetchServiceById(id);
-
-        if (!active) {
-          return;
-        }
-
-        setService(matchedService);
-        setError("");
-      } catch (fetchError) {
-        if (!active) {
-          return;
-        }
-
-        setError(fetchError.message || "Failed to load service details");
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchService();
-
-    return () => {
-      active = false;
-    };
-  }, [id, routeService]);
-
-  if (loading) {
+  if (!id || loading) {
     return <PageState message="Loading service details..." />;
   }
 
   if (error || !service) {
     return (
       <PageState>
-        <p className="text-lg text-red-500">{error || "Service not found"}</p>
+        <p className="text-lg text-red-500">{error?.message || "Service not found"}</p>
       </PageState>
     );
   }
