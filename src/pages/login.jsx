@@ -2,17 +2,15 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import hide from "../assets/images/hide.svg";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
+import AuthSocialButton from "../components/auth/AuthSocialButton";
+import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
 import { useAuth } from "../contexts/useAuth";
 
 import { resolveBackendUrl, sendJson } from "../lib/api";
 import { getHeaderOffsetClass } from "../components/layout/headerOffset";
 const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
-
-const socialButtonClassName =
-  "flex rounded-3xl border border-line bg-gray py-3 text-black font-bold poppins-regular";
 
 const isSafeRedirectPath = (value) => (
   typeof value === "string" && value.startsWith("/") && !value.startsWith("//")
@@ -149,22 +147,18 @@ const Login = () => {
           <p className="text-center text-wrap justify-center lg:py-10 py-5 md:text-3xl text-2xl poppins-bold text-brown">
             Log in to your account
           </p>
-          <button
-            type="button"
-            className={`${socialButtonClassName} px-12 lg:px-28`}
+          <AuthSocialButton
+            className="px-12 lg:px-28"
+            icon={facebook}
+            label="Continue with Facebook"
             onClick={() => handleSocialLogin('facebook')}
-          >
-            <img className="h-6 w-8" src={facebook} alt="Facebook" />
-            Continue with Facebook
-          </button>
-          <button
-            type="button"
-            className={`${socialButtonClassName} px-14 lg:px-32`}
+          />
+          <AuthSocialButton
+            className="px-14 lg:px-32"
+            icon={google}
+            label="Continue with Google"
             onClick={() => handleSocialLogin('google')}
-          >
-            <img className="h-6 w-8" src={google} alt="Google" />
-            Continue with Google
-          </button>
+          />
         </div>
         <div
           className="flex items-center justify-center"
@@ -192,15 +186,13 @@ const Login = () => {
           <div className="flex flex-col">
             <div className="flex justify-between">
               <p className="text-sm poppins-regular ">Password</p>
-              <div className="flex">
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  <img src={hide} alt="Toggle Password Visibility" />
-                </button>
-                <p className="text-sm">{showPassword ? "Hide" : "Show"}</p>
-              </div>
+              <PasswordVisibilityButton
+                className="w-auto"
+                isVisible={showPassword}
+                onToggle={() => setShowPassword(!showPassword)}
+                showIconWhenHidden
+                textClassName="poppins-regular"
+              />
             </div>
             <input
               className="border border-line rounded-xl py-3 lg:px-32 px-14 bg-gray"

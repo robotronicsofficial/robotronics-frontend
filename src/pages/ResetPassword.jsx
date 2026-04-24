@@ -3,8 +3,9 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import hide from "../assets/images/hide.svg";
 
+import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
+import { getPasswordInputClassName } from "../components/auth/passwordInputClass";
 import { sendJson } from "../lib/api";
 import { getHeaderOffsetClass } from "../components/layout/headerOffset";
 import {
@@ -12,12 +13,6 @@ import {
   hasValidPasswordRequirements,
   PASSWORD_POLICY_MESSAGE,
 } from "../utils/passwordPolicy";
-
-const getPasswordInputClassName = (isDirty, isValid) => (
-  `w-full rounded-xl border bg-gray p-2 ${
-    isDirty ? (isValid ? "border-green-500" : "border-red-500") : "border-line"
-  }`
-);
 
 const RequirementCheck = ({ isValid, text }) => (
   <div className="flex items-center">
@@ -29,28 +24,6 @@ const RequirementCheck = ({ isValid, text }) => (
 RequirementCheck.propTypes = {
   isValid: PropTypes.bool.isRequired,
   text: PropTypes.string.isRequired,
-};
-
-const PasswordVisibilityButton = ({ isVisible, onToggle }) => (
-  <button
-    className="flex w-20 items-center justify-center gap-2"
-    onClick={onToggle}
-    type="button"
-  >
-    {isVisible ? (
-      <>
-        <img className="h-5 w-5" src={hide} alt="Hide password" />
-        <p className="text-sm poppins-light">Hide</p>
-      </>
-    ) : (
-      <p className="text-sm poppins-light">Show</p>
-    )}
-  </button>
-);
-
-PasswordVisibilityButton.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired,
 };
 
 const ResetPassword = () => {

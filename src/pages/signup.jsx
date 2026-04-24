@@ -6,10 +6,12 @@ import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import PropTypes from "prop-types";
 import AppImage from "../component/AppImage";
-import hide from "../assets/images/hide.svg";
 import robot from "../assets/images/shopRobot.webp";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
+import AuthSocialButton from "../components/auth/AuthSocialButton";
+import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
+import { getPasswordInputClassName } from "../components/auth/passwordInputClass";
 import { sendJson, resolveBackendUrl } from "../lib/api";
 import {
   getPasswordValidationState,
@@ -126,11 +128,13 @@ const Signup = () => {
     window.location.assign(resolveBackendUrl(`/auth/${provider}`));
   };
 
+  const passwordMeetsPolicy = passwordErrors.length && passwordErrors.number && passwordErrors.symbol;
+
   return (
     <div className="signin" id="signin">
-      <div className="lg:flex flex-row justify-between lg:p-14 lg:py-40 p-5">
+      <div className="justify-between p-5 lg:flex lg:p-14 lg:py-40">
         <div className="hidden lg:block">
-          <div className="items-center p-5 space-y-5 ">
+          <div className="flex flex-col items-start gap-5 p-5">
             <p
               className="text-6xl text-white text-wrap poppins-bold"
               data-aos="fade-up"
@@ -172,11 +176,11 @@ const Signup = () => {
 
 
         >
-          <div className="lg:space-y-3 space-y-1">
+          <div className="flex flex-col gap-1 lg:gap-3">
             <p className="md:text-3xl text-2xl font-bold lg:pb-5 pb-2 poppins-bold ">
               Sign Up Now
             </p>
-            <div className="lg:flex flex-row lg:space-x-2 ">
+            <div className="gap-2 lg:flex">
               <div className="flex flex-col">
                 <p className="text-sm poppins-light ">First name</p>
                 <input
@@ -211,59 +215,45 @@ const Signup = () => {
             <div className="flex flex-col">
               <p className="text-sm poppins-light">Phone number</p>
               <div className="relative" ref={phoneInputRef}>
-  <PhoneInput
-    international
-    defaultCountry="PK"
-    value={formData.phoneNumber}
-    onChange={handlePhoneChange}
-    inputProps={{
-      className: "border border-line rounded-xl p-2 pl-14 bg-gray w-full focus:outline-none focus:ring-0 focus:border-line text-base",
-      autoComplete: "tel",
-      type: "tel"
-    }}
-    countrySelectProps={{
-      className: "absolute left-0 top-0 h-full flex items-center pl-2 touch-manipulation",
-      dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-white shadow-lg border border-gray-200 rounded-md w-60 max-w-full mt-1",
-      buttonClass: "flex items-center justify-center h-full px-2 focus:outline-none"
-    }}
-    containerClass="relative w-full"
-    style={{
-      '--PhoneInputCountryFlag-height': '1.25rem',
-      '--PhoneInputCountryFlag-width': 'auto',
-      '--PhoneInputCountryFlag-borderColor': 'transparent',
-      '--PhoneInputCountrySelectArrow-color': '#555555',
-      '--PhoneInputCountrySelectArrow-opacity': '1',
-      '--PhoneInputCountrySelectArrow-width': '0.5em',
-      '--PhoneInputCountrySelectArrow-marginLeft': '0.5em',
-    }}
-  />
-</div>
+                <PhoneInput
+                  international
+                  defaultCountry="PK"
+                  value={formData.phoneNumber}
+                  onChange={handlePhoneChange}
+                  inputProps={{
+                    className: "border border-line rounded-xl p-2 pl-14 bg-gray w-full focus:outline-none focus:ring-0 focus:border-line text-base",
+                    autoComplete: "tel",
+                    type: "tel"
+                  }}
+                  countrySelectProps={{
+                    className: "absolute left-0 top-0 h-full flex items-center pl-2 touch-manipulation",
+                    dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-white shadow-lg border border-gray-200 rounded-md w-60 max-w-full mt-1",
+                    buttonClass: "flex items-center justify-center h-full px-2 focus:outline-none"
+                  }}
+                  containerClass="relative w-full"
+                  style={{
+                    '--PhoneInputCountryFlag-height': '1.25rem',
+                    '--PhoneInputCountryFlag-width': 'auto',
+                    '--PhoneInputCountryFlag-borderColor': 'transparent',
+                    '--PhoneInputCountrySelectArrow-color': '#555555',
+                    '--PhoneInputCountrySelectArrow-opacity': '1',
+                    '--PhoneInputCountrySelectArrow-width': '0.5em',
+                    '--PhoneInputCountrySelectArrow-marginLeft': '0.5em',
+                  }}
+                />
+              </div>
             </div>
 
             <div className="flex flex-col">
-              <div className="flex flex-row justify-between items-center">
+              <div className="flex items-center justify-between">
                 <p className="text-sm poppins-light">Password</p>
-                <button
-                  className="flex items-center justify-center space-x-2 w-20"
-                  onClick={togglePasswordVisibility}
-                  type="button"
-                >
-                  {showPassword ? (
-                    <>
-                      <img className="h-5 w-5" src={hide} alt="Hide password" />
-                      <p className="text-sm poppins-light">Hide</p>
-                    </>
-                  ) : (
-                    <p className="text-sm poppins-light">Show</p>
-                  )}
-                </button>
+                <PasswordVisibilityButton
+                  isVisible={showPassword}
+                  onToggle={togglePasswordVisibility}
+                />
               </div>
               <input
-                className={`border rounded-xl p-2 bg-gray ${formData.password ?
-                  (passwordErrors.length && passwordErrors.number && passwordErrors.symbol) ?
-                    'border-green-500' : 'border-red-500'
-                  : 'border-line'
-                  }`}
+                className={getPasswordInputClassName(formData.password, passwordMeetsPolicy)}
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
@@ -286,28 +276,15 @@ const Signup = () => {
             </div>
 
             <div className="flex flex-col mt-4">
-              <div className="flex flex-row justify-between items-center">
+              <div className="flex items-center justify-between">
                 <p className="text-sm poppins-light">Confirm Password</p>
-                <button
-                  className="flex items-center justify-center space-x-2 w-20"
-                  onClick={toggleConfirmPasswordVisibility}
-                  type="button"
-                >
-                  {showConfirmPassword ? (
-                    <>
-                      <img className="h-5 w-5" src={hide} alt="Hide password" />
-                      <p className="text-sm poppins-light">Hide</p>
-                    </>
-                  ) : (
-                    <p className="text-sm poppins-light">Show</p>
-                  )}
-                </button>
+                <PasswordVisibilityButton
+                  isVisible={showConfirmPassword}
+                  onToggle={toggleConfirmPasswordVisibility}
+                />
               </div>
               <input
-                className={`border rounded-xl p-2 bg-gray ${formData.confirmPassword ?
-                  passwordErrors.match ? 'border-green-500' : 'border-red-500'
-                  : 'border-line'
-                  }`}
+                className={getPasswordInputClassName(formData.confirmPassword, passwordErrors.match)}
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 value={formData.confirmPassword}
@@ -321,7 +298,7 @@ const Signup = () => {
               )}
             </div>
 
-            <div className="lg:space-y-3 space-y-1">
+            <div className="flex flex-col gap-1 lg:gap-3">
               <div className="flex items-center py-5">
                 <input
                   id="terms-checkbox"
@@ -365,35 +342,31 @@ const Signup = () => {
               Already have an account?{" "}
               <Link
                 to="/Login"
-                className="cursor-pointer underline underline-offset-4"
+                className="underline underline-offset-4"
               >
                 Log in
               </Link>
             </p>
           </div>
           <div className="flex flex-col lg:py-10 py-5">
-            <div className="flex flex-row justify-center items-center ">
+            <div className="flex items-center justify-center">
               <div className="h-0 w-52 border border-line "></div>
               <p className=" text-xl poppins-semibold p-2">OR</p>
               <div className="h-0 w-52 border border-line"></div>
             </div>
-            <div className="flex flex-col lg:space-y-4 space-y-2 items-center justify-center lg:py-20 py-10 ">
-              <button
-                type="button"
-                className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-28 px-12"
+            <div className="flex flex-col items-center justify-center gap-2 py-10 lg:gap-4 lg:py-20">
+              <AuthSocialButton
+                className="px-12 lg:px-28"
+                icon={facebook}
+                label="Continue with Facebook"
                 onClick={() => handleSocialLogin('facebook')}
-              >
-                <img className="h-6 w-8" src={facebook} alt="Facebook" />
-                Continue with Facebook
-              </button>
-              <button
-                type="button"
-                className="poppins-regular flex flex-row bg-gray border border-line text-black font-bold rounded-3xl py-3 lg:px-32 px-14"
+              />
+              <AuthSocialButton
+                className="px-14 lg:px-32"
+                icon={google}
+                label="Continue with Google"
                 onClick={() => handleSocialLogin('google')}
-              >
-                <img className="h-6 w-8" src={google} alt="Google" />
-                Continue with Google
-              </button>
+              />
             </div>
           </div>
         </div>
