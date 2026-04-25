@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { X } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { Heart, X } from "lucide-react";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
@@ -52,7 +52,19 @@ const WishListD = () => {
       <div data-aos="fade-up">
         <h1 className="ml-14 text-2xl text-foreground poppins-bold">WishList</h1>
         {items.length === 0 ? (
-          <div className="px-14 py-12 text-muted-foreground">No saved items yet.</div>
+          <div className="flex flex-col items-start gap-4 px-14 py-12">
+            <Heart aria-hidden="true" className="size-12 text-muted-foreground" />
+            <p className="max-w-md text-muted-foreground">
+              Your wishlist is empty. Add items you&apos;re thinking about, and compare them later before checkout.
+            </p>
+            <Button
+              type="button"
+              onClick={() => navigate({ to: "/shop" })}
+              className="h-auto rounded-lg bg-primary px-5 py-3 font-semibold text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              Browse products
+            </Button>
+          </div>
         ) : (
           items.map((item) => (
             <div
@@ -72,7 +84,7 @@ const WishListD = () => {
                     <X />
                   </Button>
                 </div>
-                <Button type="button" variant="ghost" className="h-auto p-0" onClick={() => navigate(getCommerceItemRoute(item))}>
+                <Button type="button" variant="ghost" className="h-auto p-0" onClick={() => navigate({ to: getCommerceItemRoute(item) })}>
                   <img
                     src={resolveBackendAssetUrl(item.image || item.images?.[0], "https://via.placeholder.com/160")}
                     className="size-20 object-cover"
@@ -83,7 +95,7 @@ const WishListD = () => {
                   <Button
                     type="button"
                     variant="link"
-                    onClick={() => navigate(getCommerceItemRoute(item))}
+                    onClick={() => navigate({ to: getCommerceItemRoute(item) })}
                     className="h-auto justify-start p-0 text-left text-xl text-foreground"
                   >
                     {item.name || "Saved item"}
@@ -106,7 +118,7 @@ const WishListD = () => {
                   <Button
                     type="button"
                     onClick={() => handleMoveToCart(item)}
-                    className="h-auto rounded-lg bg-warning px-4 py-2 font-bold text-background"
+                    className="h-auto rounded-lg bg-warning px-4 py-2 font-bold text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
                     Add to Cart
                   </Button>

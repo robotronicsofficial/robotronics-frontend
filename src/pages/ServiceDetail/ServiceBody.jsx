@@ -37,11 +37,13 @@ const ServiceBody = ({ service }) => {
       <div className="px-6 py-10 lg:px-20">
         <h2 className="mb-10 text-4xl leading-none lg:text-5xl">
           What Makes <br />
-          Devsinc Your ERP Partner?
+          {service?.name ? `${service.name} at Robotronics Different?` : "Robotronics Different?"}
         </h2>
+        <p className="mb-8 max-w-3xl text-wrap text-base text-muted-foreground lg:text-lg">
+          Kids build real robots and write real code with mentors who love this stuff. Small groups, hands-on projects, and a curriculum that grows with your child from their first blinking LED to autonomous robots they can show off at home.
+        </p>
         <div className="aspect-video w-full">
-          <img className="w-full h-full object-contain" src={robo} alt="" />
-          {/* <img className="w-full h-full object-contain" src={robo} alt="" /> */}
+          <img className="w-full h-full object-contain" src={robo} alt="Kids building a robot at Robotronics" />
         </div>
       </div>
     </>

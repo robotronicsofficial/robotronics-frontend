@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import logo from "../assets/logo/robotronicsCharacter.svg";
 import basket from "../assets/logo/basket.svg";
 import { useAuth } from "../contexts/useAuth";
@@ -57,6 +57,23 @@ const readCurrentUserLabel = (currentUser) => {
   if (displayName) return displayName;
   return currentUser.email?.split("@")[0] || "";
 };
+
+function NavLink({ className, end, ...props }) {
+  const activeOptions = end ? { exact: true } : undefined;
+
+  if (typeof className === "function") {
+    return (
+      <Link
+        {...props}
+        activeOptions={activeOptions}
+        activeProps={{ className: className({ isActive: true }) }}
+        inactiveProps={{ className: className({ isActive: false }) }}
+      />
+    );
+  }
+
+  return <Link {...props} activeOptions={activeOptions} className={className} />;
+}
 
 function useDismissableMenu(onDismiss) {
   const ref = useRef(null);
@@ -213,6 +230,21 @@ function UserMenu({ label, onProfile, onLogout }) {
   );
 }
 
+function AuthLoadingSlot({ mobile = false }) {
+  if (mobile) {
+    return (
+      <div className="flex flex-col gap-2" aria-label="Loading account">
+        <div className="h-10 rounded bg-muted" />
+        <div className="h-10 rounded border border-border" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-9 w-32 rounded-lg border border-border bg-muted" aria-label="Loading account" />
+  );
+}
+
 function CartButton({ totalQuantity, onClick, className = "" }) {
   return (
     <Button
@@ -321,13 +353,13 @@ export default function Header() {
   const totalQuantity = useCartStore(selectCartQuantity);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { currentUser, logout } = useAuth();
+  const { currentUser, isAuthLoading, logout } = useAuth();
   const currentUserLabel = readCurrentUserLabel(currentUser);
 
   const closeMenu = () => setMenuOpen(false);
   const toggleMenu = () => setMenuOpen((prev) => !prev);
-  const goToDashboard = () => navigate("/Dashboard/userInfo");
-  const goToCart = () => navigate(CART_PATH);
+  const goToDashboard = () => navigate({ to: "/Dashboard/userInfo" });
+  const goToCart = () => navigate({ to: CART_PATH });
 
   return (
     <header className="bg-transparent relative top-20 z-header w-full">
@@ -379,7 +411,9 @@ export default function Header() {
             data-aos="fade-left"
           >
             <SubscribeCTA />
-            {currentUser ? (
+            {isAuthLoading ? (
+              <AuthLoadingSlot />
+            ) : currentUser ? (
               <UserMenu
                 label={currentUserLabel}
                 onProfile={goToDashboard}
@@ -467,7 +501,9 @@ export default function Header() {
 
             <Separator className="my-4" />
 
-            {currentUser ? (
+            {isAuthLoading ? (
+              <AuthLoadingSlot mobile />
+            ) : currentUser ? (
               <div className="flex flex-col gap-2">
                 <Button
                   type="button"

@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useVerifyEmailMutation } from '../hooks/useAuthMutations';
 
 const VerifyEmail = () => {
-  const [searchParams] = useSearchParams();
+  const search = useSearch({ strict: false });
   const [status, setStatus] = useState('verifying');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const VerifyEmail = () => {
       if (verificationStarted.current) return;
       verificationStarted.current = true;
       
-      const token = searchParams.get('token');
+      const token = search.token;
       if (!token) {
         setStatus('error');
         setMessage('Verification token is missing');
@@ -32,7 +32,7 @@ const VerifyEmail = () => {
         setStatus('success');
         setMessage(data.message);
         redirectTimer = setTimeout(() => {
-          navigate('/Login', { state: { emailVerified: true } });
+          navigate({ to: '/Login', search: { emailVerified: true } });
         }, 3000);
       } catch (error) {
         setStatus('error');
@@ -47,14 +47,19 @@ const VerifyEmail = () => {
         clearTimeout(redirectTimer);
       }
     };
-  }, [searchParams, navigate, verifyEmailMutation]);
+  }, [search.token, navigate, verifyEmailMutation]);
 
   return (
     <main className="mx-auto flex min-h-[80vh] max-w-xl flex-col items-center justify-center px-4 text-center">
         {status === 'verifying' && (
           <>
             <Spinner className="size-14 text-primary" />
-            <h1 className="mt-6 text-xl font-semibold text-foreground">Verifying your email...</h1>
+            <h1
+              aria-live="polite"
+              className="mt-6 text-xl font-semibold text-foreground"
+            >
+              Verifying your email...
+            </h1>
           </>
         )}
 
@@ -63,7 +68,7 @@ const VerifyEmail = () => {
             <h1 className="text-3xl font-bold text-primary">
               Email Verified!
             </h1>
-            <p className="mb-6 mt-3 text-muted-foreground">
+            <p aria-live="polite" className="mb-6 mt-3 text-muted-foreground">
               {message} Redirecting to login page...
             </p>
             <Spinner className="size-8 text-primary" />
@@ -71,7 +76,7 @@ const VerifyEmail = () => {
         )}
 
         {status === 'error' && (
-          <div role="alert" className="flex flex-col items-center gap-6">
+          <div role="alert" aria-live="polite" className="flex flex-col items-center gap-6">
             <h1 className="text-3xl font-bold text-destructive">
               Verification Failed
             </h1>
@@ -79,9 +84,10 @@ const VerifyEmail = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => navigate('/Signup')}
+              onClick={() => navigate({ to: '/Signup' })}
+              disabled={verifyEmailMutation.isPending}
             >
-              Try Again
+              {verifyEmailMutation.isPending ? "Retrying…" : "Try Again"}
             </Button>
           </div>
         )}

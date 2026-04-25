@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "@tanstack/react-router";
 import ServiceInto from "./ServiceInto";
 import ServiceBody from "./ServiceBody";
 import QuickContact from "../../component/international/services/quickContact";
@@ -6,7 +6,7 @@ import PageState from "../../components/layout/PageState";
 import { useService } from "../../hooks/useServices";
 
 const ServiceDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams({ strict: false });
   const location = useLocation();
   const routeService = location.state?.service;
   const {

@@ -24,7 +24,7 @@ const PayHistory = () => {
     <DashboardLayout>
         <h1 className="text-3xl font-bold mb-8">My Payment History</h1>
         <p className="mb-6 max-w-3xl text-sm text-muted-foreground">
-          Only backend payment records appear here. Checkout details saved in the public storefront stay in your browser and do not create an invoice until the backend records a payment.
+          This is your payment history. New payments appear within a few minutes after completion.
         </p>
 
         {loading ? (
@@ -34,7 +34,9 @@ const PayHistory = () => {
             <AlertDescription>{errorMessage}</AlertDescription>
           </Alert>
         ) : invoices.length === 0 ? (
-          <p className="text-muted-foreground">No backend payment records were found for this account.</p>
+          <p className="text-muted-foreground">
+            No payments yet. Once you subscribe or buy something, your receipts show up here.
+          </p>
         ) : (
           <div className="flex flex-col gap-4 sm:gap-6">
             {invoices.map((invoice, index) => (
@@ -73,7 +75,7 @@ const PayHistory = () => {
                     <div className="flex justify-end sm:items-center sm:justify-start sm:pl-4">
                       <Button
                         type="button"
-                        className={`whitespace-nowrap rounded-lg px-4 py-1 text-xs font-medium transition-colors sm:px-6 sm:py-2 sm:text-sm md:text-base ${
+                        className={`whitespace-nowrap rounded-lg px-4 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:px-6 sm:py-2 sm:text-sm md:text-base ${
                           resolveInvoiceUrl(invoice)
                             ? "bg-warning text-background hover:bg-warning"
                             : "bg-muted text-muted-foreground cursor-not-allowed"

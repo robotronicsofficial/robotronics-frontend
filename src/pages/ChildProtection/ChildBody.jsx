@@ -1,4 +1,8 @@
 import React from "react";
+import { ShieldAlert, Mail, LifeBuoy } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+
+const REPORT_EMAIL = "safety@robotronics.com";
 
 const ChildBody = () => {
   return (
@@ -16,6 +20,48 @@ const ChildBody = () => {
               >
                 Child Protection Policy
               </h1>
+
+              {/* Reporting contact card */}
+              <section
+                aria-labelledby="report-a-concern-heading"
+                data-aos="fade-up"
+                className="flex flex-col gap-y-4 rounded-2xl border border-border bg-card p-6 lg:p-8"
+              >
+                <div className="flex items-center gap-x-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <ShieldAlert className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <h2
+                    id="report-a-concern-heading"
+                    className="text-2xl poppins-semibold text-foreground"
+                  >
+                    Report a concern
+                  </h2>
+                </div>
+
+                <p className="text-base poppins-light text-muted-foreground">
+                  If a child has shared anything that worries you, or if you&apos;ve noticed unsafe behavior from anyone on our platform, tell us. We respond within 24 hours.
+                </p>
+
+                <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
+                  <a
+                    href={`mailto:${REPORT_EMAIL}`}
+                    className="inline-flex items-center gap-x-2 rounded-full bg-primary px-5 py-2.5 text-primary-foreground poppins-medium hover:opacity-90"
+                  >
+                    <Mail className="h-4 w-4" aria-hidden="true" />
+                    {REPORT_EMAIL}
+                  </a>
+
+                  <Link
+                    to="/contactUs"
+                    className="inline-flex items-center gap-x-2 rounded-full border border-border bg-background px-5 py-2.5 text-foreground poppins-medium hover:bg-muted"
+                  >
+                    <LifeBuoy className="h-4 w-4" aria-hidden="true" />
+                    Or reach us via Contact Us
+                  </Link>
+                </div>
+              </section>
+
               <ol className="flex flex-col text-xl poppins-light gap-y-2" data-aos="fade-up">
                 <li><strong>1. Commitment:</strong> We are committed to ensuring the safety and well-being of all children participating in our courses. Our policies are designed to protect children from harm and ensure their positive development.</li>
 

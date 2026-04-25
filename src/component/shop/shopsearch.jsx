@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState, useMemo } from "react";
-import { ArrowRight, Heart, Search, ShoppingBag } from "lucide-react";
+import { ArrowRight, Heart, Search, ShoppingBag, X } from "lucide-react";
 import {
   createProductCommerceItem,
   getCommerceItemKey,
@@ -11,6 +11,7 @@ import ShopPages from "../shop/shopPages";
 import shopHome from "../../assets/shopHome.png";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { cn } from "../../lib/utils";
+import { formatShopCurrency } from "../../lib/shopCheckout";
 import { useProducts } from "../../hooks/useProducts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,9 @@ import {
   useCartStore,
 } from "../../stores/cartStore";
 import { useSavedItems, useToggleSavedItemMutation } from "../../hooks/useSavedItems";
+
+const DEFAULT_PRICE_RANGE = [0, 600000];
+const DEFAULT_SHIPPING_DAYS = 15;
 
 const HeaderSummaryItem = ({ icon, label }) => (
   <div className="flex w-full items-center justify-between gap-4">
@@ -49,10 +53,28 @@ const Shopsearch = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [priceRange, setPriceRange] = useState([0, 600000]);
-  const [shippingDays, setShippingDays] = useState(15);
+  const [priceRange, setPriceRange] = useState(DEFAULT_PRICE_RANGE);
+  const [shippingDays, setShippingDays] = useState(DEFAULT_SHIPPING_DAYS);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [sortOption, setSortOption] = useState("Popularity");
+
+  const isPriceRangeActive =
+    priceRange[0] !== DEFAULT_PRICE_RANGE[0] ||
+    priceRange[1] !== DEFAULT_PRICE_RANGE[1];
+  const isShippingActive = shippingDays !== DEFAULT_SHIPPING_DAYS;
+  const hasActiveFilters =
+    Boolean(searchQuery) ||
+    Boolean(selectedCategory) ||
+    isPriceRangeActive ||
+    isShippingActive;
+
+  const resetFilters = () => {
+    setSearchQuery("");
+    setPriceRange(DEFAULT_PRICE_RANGE);
+    setShippingDays(DEFAULT_SHIPPING_DAYS);
+    setSelectedCategory(null);
+    setCurrentPage(1);
+  };
 
   const productsPerPage = 9;
 
@@ -126,7 +148,7 @@ const Shopsearch = () => {
             />
             <HeaderSummaryItem
               icon={<ShoppingBag className="text-background" />}
-              label={`${totalQuantity} Products - PKR ${Number(totalPrice || 0).toLocaleString()}`}
+              label={`${totalQuantity} Products - ${formatShopCurrency(totalPrice)}`}
             />
           </div>
         </div>
@@ -173,29 +195,108 @@ const Shopsearch = () => {
           onShippingChange={setShippingDays}
           onCategoryChange={setSelectedCategory}
         />
-        <div className="grid min-h-screen flex-1 grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-x-20 gap-y-4 px-5 lg:px-10 lg:py-10">
-          {currentProducts.map((product) => {
-            const catalogItem = createProductCommerceItem(product);
-            const itemKey = catalogItem ? getCommerceItemKey(catalogItem) : "";
+        <div className="flex flex-1 flex-col gap-4 px-5 lg:px-10 lg:py-10">
+          {hasActiveFilters && (
+            <div className="flex flex-wrap items-center gap-2">
+              {searchQuery && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-sm text-foreground">
+                  Search: {searchQuery}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5 p-0 text-muted-foreground hover:text-destructive"
+                    onClick={() => setSearchQuery("")}
+                    aria-label="Clear search query"
+                  >
+                    <X className="size-3" />
+                  </Button>
+                </span>
+              )}
+              {selectedCategory && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-sm text-foreground">
+                  Category: {selectedCategory}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5 p-0 text-muted-foreground hover:text-destructive"
+                    onClick={() => setSelectedCategory(null)}
+                    aria-label="Clear category filter"
+                  >
+                    <X className="size-3" />
+                  </Button>
+                </span>
+              )}
+              {isPriceRangeActive && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-sm text-foreground">
+                  {formatShopCurrency(priceRange[0])} – {formatShopCurrency(priceRange[1])}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5 p-0 text-muted-foreground hover:text-destructive"
+                    onClick={() => setPriceRange(DEFAULT_PRICE_RANGE)}
+                    aria-label="Clear price range filter"
+                  >
+                    <X className="size-3" />
+                  </Button>
+                </span>
+              )}
+              {isShippingActive && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-sm text-foreground">
+                  Ships in {shippingDays} days
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5 p-0 text-muted-foreground hover:text-destructive"
+                    onClick={() => setShippingDays(DEFAULT_SHIPPING_DAYS)}
+                    aria-label="Clear shipping days filter"
+                  >
+                    <X className="size-3" />
+                  </Button>
+                </span>
+              )}
+            </div>
+          )}
+          <div className="grid min-h-screen grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-x-20 gap-y-4">
+            {currentProducts.map((product) => {
+              const catalogItem = createProductCommerceItem(product);
+              const itemKey = catalogItem ? getCommerceItemKey(catalogItem) : "";
 
-            return (
-              <Shopproduct
-                key={product._id}
-                title={product.name}
-                price={product.price}
-                image={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
-                isSaved={itemKey ? savedItemKeys.has(itemKey) : false}
-                onAddToWishlist={() => handleToggleSavedItem(product)}
-                onAddToCart={() => {
-                  if (catalogItem) {
-                    addToCart(catalogItem);
-                  }
-                }}
-                productId={product._id}
-              />
-            );
-          })}
-          {currentProducts.length === 0 && <p className="text-center w-full">No products found.</p>}
+              return (
+                <Shopproduct
+                  key={product._id}
+                  title={product.name}
+                  price={product.price}
+                  image={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
+                  isSaved={itemKey ? savedItemKeys.has(itemKey) : false}
+                  onAddToWishlist={() => handleToggleSavedItem(product)}
+                  onAddToCart={() => {
+                    if (catalogItem) {
+                      addToCart(catalogItem);
+                    }
+                  }}
+                  productId={product._id}
+                />
+              );
+            })}
+            {currentProducts.length === 0 && (
+              <div className="col-span-full flex flex-col items-center gap-4 py-16 text-center">
+                <p className="text-muted-foreground">No products found.</p>
+                {hasActiveFilters && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={resetFilters}
+                  >
+                    Clear filters
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

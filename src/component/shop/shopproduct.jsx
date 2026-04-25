@@ -1,7 +1,8 @@
 import { Heart } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import { formatShopCurrency } from "../../lib/shopCheckout";
 
 
 const Shopproduct = ({
@@ -18,7 +19,7 @@ const Shopproduct = ({
 
   // Function to handle the click and navigate to product detail page
   const handleProductClick = () => {
-    navigate(`/ProductDetailPage/${productId}`);
+    navigate({ to: `/ProductDetailPage/${productId}` });
   };
 
 
@@ -39,7 +40,7 @@ const Shopproduct = ({
           <p className="text-foreground hover:text-foreground text-xl poppins-bold my-2">
             {title}
           </p>
-          <p className="text-accent poppins-bold text-xl">PKR {Number(price || 0).toLocaleString()}</p>
+          <p className="text-accent poppins-bold text-xl">{formatShopCurrency(price)}</p>
         </div>
       </Button>
 

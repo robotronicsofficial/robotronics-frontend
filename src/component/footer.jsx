@@ -5,7 +5,7 @@ import up from "../assets/logo/uparrow.svg";
 import mobile from "../assets/images/mobile.png";
 import apple from "../assets/logo/apple.svg";
 import pstore from "../assets/logo/Playstor.svg";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { BrandIcon } from "../components/ui/brand-icons";
 import AppImage from "./AppImage";
 import { Button } from "@/components/ui/button";

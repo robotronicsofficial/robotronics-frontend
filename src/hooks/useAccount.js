@@ -5,17 +5,17 @@ import {
   createChildPin,
   fetchChildAccessList,
   fetchChildEnrollment,
-  fetchParent,
+  fetchCurrentParent,
   fetchPayments,
   saveParent,
   verifyChildPin,
 } from "../lib/account";
 import { queryKeys } from "../lib/queryKeys";
 
-export const useParent = (userId) =>
+export const useCurrentParent = (userId) =>
   useQuery({
-    queryKey: queryKeys.subscription.parent(userId),
-    queryFn: () => fetchParent(userId),
+    queryKey: queryKeys.subscription.currentParent(userId),
+    queryFn: fetchCurrentParent,
     enabled: Boolean(userId),
   });
 
@@ -47,7 +47,7 @@ export const useSaveParentMutation = () => {
     mutationFn: saveParent,
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.subscription.parent(variables?.parent?.userId),
+        queryKey: queryKeys.subscription.currentParent(variables?.parent?.userId),
       });
     },
   });
@@ -59,7 +59,7 @@ export const useActivateSubscriptionMutation = (userId) => {
   return useMutation({
     mutationFn: activateSubscription,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.parent(userId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.currentParent(userId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.subscription.children });
       queryClient.invalidateQueries({ queryKey: queryKeys.payments.all });
     },
@@ -72,7 +72,7 @@ export const useCreateChildPinMutation = (userId) => {
   return useMutation({
     mutationFn: createChildPin,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.parent(userId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.currentParent(userId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.subscription.children });
     },
   });
@@ -84,7 +84,7 @@ export const useChangeChildPinMutation = (userId) => {
   return useMutation({
     mutationFn: changeChildPin,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.parent(userId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.currentParent(userId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.subscription.children });
     },
   });

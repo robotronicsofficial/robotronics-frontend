@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { BellRing, Star } from "lucide-react";
 import robo from "../../../assets/logo/Robotrinic.svg";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
@@ -57,14 +57,14 @@ const Shop = () => {
             {featuredCourses.map((course) => (
               <Card
                 key={course._id}
-                onClick={() => navigate(`/CoursesProduct/${course._id}`)}
+                onClick={() => navigate({ to: `/CoursesProduct/${course._id}` })}
                 className="overflow-hidden text-left"
                 role="button"
                 tabIndex={0}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    navigate(`/CoursesProduct/${course._id}`);
+                    navigate({ to: `/CoursesProduct/${course._id}` });
                   }
                 }}
               >

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Share2 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import Pagination from "./Pagination";
 import CenteredState from "../../components/layout/CenteredState";
 import { Badge } from "@/components/ui/badge";

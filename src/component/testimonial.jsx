@@ -1,26 +1,38 @@
-import ceo1 from "../assets/images/ceo1.svg";
-import ceo2 from "../assets/images/ceo2.svg";
-import ceo3 from "../assets/images/ceo3.svg";
-import ceo4 from "../assets/images/ceo4.svg";
-import ceo5 from "../assets/images/ceo5.svg";
-import ceo7 from "../assets/images/ceo7.svg";
+import reviewImgKSA from "../assets/imagesContent/review/ksa.jpg";
+import reviewImgPak from "../assets/imagesContent/review/pak.jpg";
+import reviewImgUAE from "../assets/imagesContent/review/uae.jpg";
+import reviewImgUK from "../assets/imagesContent/review/uk.jpg";
 import TestimonialCard from "./testimonialCard";
 
-const REVIEW_LONG =
-  "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.";
-const REVIEW_SHORT =
-  "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam";
-const REVIEW_BRIEF =
-  "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.";
-
 const testimonials = [
-  { image: ceo1, name: "Amet minim", role: "CEO, Avito", review: REVIEW_LONG },
-  { image: ceo3, name: "Jon Sari", role: "CEO, Avito", review: REVIEW_SHORT },
-  { image: ceo2, name: "Amet minim", role: "CEO, Avito", review: REVIEW_BRIEF },
-  { image: ceo5, name: "Amet minim", role: "CEO, Avito", review: REVIEW_LONG },
-  { image: ceo5, name: "Amet minim", role: "CEO, Avito", review: REVIEW_LONG },
-  { image: ceo4, name: "Amet minim", role: "CEO, Avito", review: REVIEW_SHORT },
-  { image: ceo7, name: "Amet minim", role: "CEO, Avito", review: REVIEW_SHORT },
+  {
+    image: reviewImgUAE,
+    name: "Omar Al Harbi",
+    role: "Age 13, UAE",
+    review:
+      "The subscription changed the way I learn! The coding lessons are fun, and I love collecting certificates after completing each module. The quizzes keep me on my toes, and I'm already building small robotics projects at home!",
+  },
+  {
+    image: reviewImgPak,
+    name: "Ahmed Mansoor",
+    role: "Age 12, Lahore",
+    review:
+      "I joined the membership and it was totally worth it. I can access so many courses, collect certificates, and get help through live chat whenever I'm stuck.",
+  },
+  {
+    image: reviewImgKSA,
+    name: "Nasser Al Shammari",
+    role: "Age 9, KSA",
+    review:
+      "The subscription platform is just like Netflix but for learning! I've completed courses on AI and E-commerce, and I even helped my dad set up his online store. The platform is easy to use on my tablet too!",
+  },
+  {
+    image: reviewImgUK,
+    name: "Oliver Bennett",
+    role: "Age 10, UK",
+    review:
+      "I love the subscription because it makes learning feel like a game. The videos are fun and the projects are cool. My parents can even see my progress from their dashboard.",
+  },
 ];
 
 const Testimonial = () => {
@@ -31,7 +43,7 @@ const Testimonial = () => {
           className="text-foreground lg:text-6xl text-2xl poppins-semibold m-5"
           data-aos="fade-down"
         >
-          Are my clients happy?
+          What young builders and their families are saying
         </p>
       </div>
       <div

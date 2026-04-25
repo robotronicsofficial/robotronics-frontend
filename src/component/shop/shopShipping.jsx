@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import CustomerOrder from "./customerOrder";
 import CustomerProduct from "./customerProduct";
 import OrderSummaryLine from "./OrderSummaryLine";
@@ -30,7 +30,8 @@ const summaryTotalValueClassName = `${summaryValueBaseClassName} text-primary`;
 
 const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const location = useLocation();
+  const { currentUser, isAuthLoading } = useAuth();
   const cart = useCartStore(selectCart);
   const clearCart = useCartStore((state) => state.clearCart);
   const checkout = useMemo(() => loadShopCheckout(), []);
@@ -53,7 +54,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       return;
     }
 
-    navigate("/CustomerInfo");
+    navigate({ to: "/CustomerInfo" });
   };
 
   const handleEditPayment = () => {
@@ -62,12 +63,20 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       return;
     }
 
-    navigate("/ShippingService");
+    navigate({ to: "/ShippingService" });
   };
 
   const handleSubmitCheckoutIntent = async () => {
+    if (isAuthLoading) {
+      setSubmitStatus({ type: "info", message: "Checking your account. Please try again in a moment." });
+      return;
+    }
+
     if (!currentUser) {
-      navigate("/login");
+      navigate({
+        to: "/Login",
+        search: { redirect: location.href },
+      });
       return;
     }
 

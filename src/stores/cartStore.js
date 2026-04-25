@@ -63,6 +63,20 @@ export const useCartStore = create(
           }),
         }));
       },
+      removeItemEntirely: (payload) => {
+        const normalizedItem = normalizeCommerceCartItem(payload);
+        if (!normalizedItem?.itemId) {
+          return;
+        }
+
+        const itemKey = getCommerceItemKey(normalizedItem);
+
+        set((state) => ({
+          cart: state.cart.filter(
+            (item) => getCommerceItemKey(item) !== itemKey,
+          ),
+        }));
+      },
       clearCart: () => set({ cart: [] }),
     }),
     {

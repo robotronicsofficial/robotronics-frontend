@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import AppImage from "../../AppImage";
 import robot from "../../../assets/images/IServicesS4.webp";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
@@ -17,7 +17,7 @@ const OurServices = () => {
   const navigate = useNavigate();
 
   const handleNavigate = (service) => {
-    navigate(`/ServiceDetail/${service._id}`, { state: { service } });
+    navigate({ to: `/ServiceDetail/${service._id}`, state: { service } });
   };
 
   return (

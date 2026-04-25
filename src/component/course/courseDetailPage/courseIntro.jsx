@@ -4,7 +4,7 @@ import robo from "../../../assets/images/shopRobot.webp";
 import python from "../../../assets/images/python.webp";
 import star from "../../../assets/images/shopStar.svg";
 import { createCourseCommerceItem } from "../../../lib/commerceItems";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import AvatarStack from "@/components/ui/avatar-stack";
@@ -19,7 +19,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
   const addToCart = useCartStore((state) => state.addToCart);
   const resolvedImage = resolveBackendAssetUrl(image, python);
 
-  const handleViewPlans = () => navigate("/subscriptions");
+  const handleViewPlans = () => navigate({ to: "/subscriptions" });
   const handleGiftCourse = () => {
     const courseItem = createCourseCommerceItem({
       _id: id,
@@ -33,7 +33,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
       addToCart(courseItem);
     }
 
-    navigate("/gift-courses");
+    navigate({ to: "/gift-courses" });
   };
 
   return (

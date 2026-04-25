@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { createProductCommerceItem } from "../../../lib/commerceItems";
 
 import AppImage from "../../AppImage";
@@ -13,14 +13,14 @@ import { useProduct, useProducts } from "../../../hooks/useProducts";
 import { useCartStore } from "../../../stores/cartStore";
 import { useSavedItems, useToggleSavedItemMutation } from "../../../hooks/useSavedItems";
 import StarRating from "../../../components/rating/StarRating";
-import { Badge } from "@/components/ui/badge";
+import { formatShopCurrency } from "../../../lib/shopCheckout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const resolveImageUrl = (image) => resolveBackendAssetUrl(image, robo);
 
 const Intro = () => {
-  const { id } = useParams();
+  const { id } = useParams({ strict: false });
   const navigate = useNavigate();
   const addToCart = useCartStore((state) => state.addToCart);
   const { data: products = [] } = useProducts();
@@ -94,21 +94,27 @@ const Intro = () => {
     );
   }
 
+  const productRating = Number(product.ratings || 0);
+  const hasRating = productRating > 0;
+
   return (
     <div className="bg-muted">
-      <div className="flex lg:px-14 lg:py-5">
-        <div className="hidden justify-center lg:flex" data-aos="fade-up">
-          <div className="h-94 w-94 rounded-full bg-background p-14">
+      <div className="flex flex-col lg:flex-row lg:px-14 lg:py-5">
+        <div
+          className="flex flex-col items-center gap-4 p-4 lg:flex-row lg:justify-center lg:p-0"
+          data-aos="fade-up"
+        >
+          <div className="h-64 w-64 rounded-full bg-background p-10 lg:h-94 lg:w-94 lg:p-14">
             <AppImage src={selectedImage} alt="Selected" loading="eager" />
           </div>
-          <div className="flex gap-3 py-10">
+          <div className="flex gap-2 overflow-x-auto py-2 lg:flex-col lg:gap-3 lg:py-10">
             {(product.images || []).map((img, idx) => (
               <Button
                 key={`${img}-${idx}`}
                 type="button"
                 variant="secondary"
                 size="icon"
-                className="size-10 rounded-none border border-border bg-card p-0"
+                className="size-10 shrink-0 rounded-none border border-border bg-card p-0"
                 onClick={() => setSelectedImage(resolveImageUrl(img))}
               >
                 <AppImage
@@ -126,9 +132,12 @@ const Intro = () => {
 
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-8 lg:gap-14">
-              <StarRating value={Number(product.ratings || 0)} className="my-6 text-2xl" />
-              {product.onSale && (
-                <Badge className="rounded-none bg-destructive px-2 py-1 text-background">ON SALE</Badge>
+              {hasRating ? (
+                <StarRating value={productRating} className="my-6 text-2xl" />
+              ) : (
+                <p className="my-6 text-sm text-muted-foreground poppins-medium">
+                  No ratings yet
+                </p>
               )}
             </div>
             <div className="flex gap-2">
@@ -170,7 +179,7 @@ const Intro = () => {
 
           <div className="items-center justify-between lg:flex lg:gap-10">
             <div className="text-primary text-2xl poppins-medium">
-              PKR {Number(product.price || 0).toLocaleString()}
+              {formatShopCurrency(product.price)}
             </div>
             <div className="flex gap-5">
               <Button
@@ -273,7 +282,7 @@ const Intro = () => {
             <div className="mt-6 flex flex-wrap items-center gap-4">
               <Button
                 type="button"
-                onClick={() => navigate("/shop")}
+                onClick={() => navigate({ to: "/shop" })}
                 className="h-auto rounded-lg bg-primary px-5 py-3 font-semibold text-foreground hover:opacity-90"
               >
                 Browse all products

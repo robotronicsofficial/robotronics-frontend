@@ -28,7 +28,7 @@ const ReviewsComponent = () => {
       role: "Age 9, KSA",
       image: reviewImg1,
       review:
-        "The subscription platform is just like Netflix but for learning! I’ve completed courses on AI and E-commerce, and I even helped my dad set up his online store. The platform is easy to use on my tablet too!",
+        "It's like having a tutor I can open whenever I want, and the projects always feel fresh. I’ve completed courses on AI and E-commerce, and I even helped my dad set up his online store. The platform is easy to use on my tablet too!",
     },
     {
       name: "Oliver Bennett",

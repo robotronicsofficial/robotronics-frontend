@@ -2,7 +2,7 @@ import AppImage from "../AppImage";
 import { useState } from "react";
 import img3 from "../../assets/images/5.webp";
 import { ArrowUpRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { getJobsErrorMessage } from "../../lib/jobs";
 import { useJobs } from "../../hooks/useJobs";
 import { Button } from "@/components/ui/button";
@@ -56,13 +56,13 @@ const CareerJoinTeam = () => {
               className="group relative flex flex-col gap-4 mb-6 border-b border-border p-4 pr-10 md:pr-16 justify-between cursor-pointer"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              onClick={() => navigate(`/CareerDetailPage/${job._id}`)}
+              onClick={() => navigate({ to: `/CareerDetailPage/${job._id}` })}
               role="button"
               tabIndex={0}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault();
-                  navigate(`/CareerDetailPage/${job._id}`);
+                  navigate({ to: `/CareerDetailPage/${job._id}` });
                 }
               }}
             >
@@ -74,7 +74,7 @@ const CareerJoinTeam = () => {
                   className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border-foreground bg-card p-3 hover:bg-foreground hover:text-background"
                   onClick={(event) => {
                     event.stopPropagation();
-                    navigate(`/CareerDetailPage/${job._id}`);
+                    navigate({ to: `/CareerDetailPage/${job._id}` });
                   }}
                   aria-label={`View ${job.position || job.title}`}
                 >

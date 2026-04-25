@@ -1,6 +1,6 @@
 // components/ChatSupport.jsx
 import { useState, useEffect, useRef, useCallback, memo } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import chatLogo from "../assets/chatLogo.png";
 import { Maximize2, Mic, Minimize2, Paperclip, Send, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -333,9 +333,9 @@ const ChatSupport = () => {
                 <div className="mb-4 flex justify-start">
                   <div className="max-w-[80%] p-4 rounded-lg bg-card text-muted-foreground rounded-bl-none border border-border">
                     <div className="flex gap-x-2">
-                      <div className="size-2 rounded-full bg-muted animate-bounce"></div>
-                      <div className="size-2 rounded-full bg-muted animate-bounce animation-delay-200"></div>
-                      <div className="size-2 rounded-full bg-muted animate-bounce animation-delay-400"></div>
+                      <div className="size-2 rounded-full bg-muted animate-pulse"></div>
+                      <div className="size-2 rounded-full bg-muted animate-pulse animation-delay-200"></div>
+                      <div className="size-2 rounded-full bg-muted animate-pulse animation-delay-400"></div>
                     </div>
                   </div>
                 </div>

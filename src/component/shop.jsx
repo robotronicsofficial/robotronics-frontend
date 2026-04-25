@@ -4,7 +4,7 @@ import robo from "../assets/logo/Robotrinic.svg";
 import leftArrow from "../assets/logo/arrow-up-left.svg";
 import rightArrow from "../assets/logo/arrow-up-right.svg";
 import { Clock, Star, Video } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -165,7 +165,7 @@ const Shop = () => {
         <div className="flex justify-center">
           <Button
             type="button"
-            onClick={() => navigate("/subscriptions")}
+            onClick={() => navigate({ to: "/subscriptions" })}
             className="h-auto rounded-full bg-primary px-8 py-3 text-lg text-foreground poppins-bold hover:bg-primary sm:text-xl"
           >
             Get Enrolled

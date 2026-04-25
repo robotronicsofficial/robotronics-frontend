@@ -3,11 +3,11 @@ import Decription from "../../component/shop/productDetail/decription";
 import CourseIntro from "../../component/course/courseDetailPage/courseIntro";
 import MoreProduct from "../../component/shop/productDetail/moreProduct";
 import { COMMERCE_ITEM_TYPES } from "../../lib/commerceItems";
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 
 import { useCourse } from "../../hooks/useCourses";
 const CoursesProductDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams({ strict: false });
   const {
     data: course,
     isLoading: loading,

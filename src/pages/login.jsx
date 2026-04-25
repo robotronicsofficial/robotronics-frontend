@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import facebook from "../assets/images/Facebooklogo.svg";
@@ -16,29 +16,27 @@ import { useAuth } from "../contexts/useAuth";
 import { resolveBackendUrl } from "../lib/api";
 import { useRequestPasswordResetMutation } from "../hooks/useAuthMutations";
 import { getHeaderOffsetClass } from "../components/layout/headerOffset";
-const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
 
 const isSafeRedirectPath = (value) => (
   typeof value === "string" && value.startsWith("/") && !value.startsWith("//")
 );
 
 const Login = () => {
-  const { currentUser, login } = useAuth();
+  const { currentUser, isAuthLoading, login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
+  const search = useSearch({ strict: false });
   const requestPasswordResetMutation = useRequestPasswordResetMutation();
-  const redirectFromState = location.state?.from
-    ? `${location.state.from.pathname || ""}${location.state.from.search || ""}${location.state.from.hash || ""}`
-    : null;
+  const redirectPath = typeof search.redirect === "string" ? search.redirect : null;
 
   useEffect(() => {
-    if (location.state?.emailVerified) {
+    if (search.emailVerified) {
       toast.success('Your email has been verified! Please sign in to continue.', {
         position: "top-center",
         autoClose: 5000,
@@ -49,28 +47,19 @@ const Login = () => {
         progress: undefined,
       });
 
-      window.history.replaceState({}, document.title);
+      navigate({ to: "/Login", replace: true });
     }
 
     if (currentUser) {
-      const redirectPath = window.sessionStorage.getItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
-      if (isSafeRedirectPath(redirectPath)) {
-        window.sessionStorage.removeItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
-        navigate(redirectPath, { replace: true });
-        return;
-      }
-
-      if (redirectPath) {
-        window.sessionStorage.removeItem(REDIRECT_AFTER_LOGIN_STORAGE_KEY);
-      }
-
-      navigate(isSafeRedirectPath(redirectFromState) ? redirectFromState : "/", { replace: true });
+      navigate({ to: isSafeRedirectPath(redirectPath) ? redirectPath : "/", replace: true });
     }
-  }, [location.state, currentUser, navigate, redirectFromState]);
+  }, [search.emailVerified, currentUser, navigate, redirectPath]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (isLoggingIn) return;
     setError(null);
+    setIsLoggingIn(true);
 
     try {
       await login(email, password);
@@ -79,6 +68,8 @@ const Login = () => {
       console.error("Error during login:", error);
       setError(error.message);
       toast.error(error.message);
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -102,6 +93,16 @@ const Login = () => {
     window.location.assign(resolveBackendUrl(`/auth/${provider}`));
   };
 
+  if (isAuthLoading) {
+    return (
+      <div className="bg-background">
+        <div className={getHeaderOffsetClass("page", "flex items-center justify-center px-6 pb-20 text-foreground")}>
+          Loading account...
+        </div>
+      </div>
+    );
+  }
+
   if (forgotPasswordMode) {
     return (
       <div className="bg-background" id="forgot-password">
@@ -116,6 +117,7 @@ const Login = () => {
               <Input
                 className="h-auto rounded-xl bg-background px-4 py-3"
                 type="email"
+                autoComplete="email"
                 value={forgotEmail}
                 onChange={(e) => setForgotEmail(e.target.value)}
                 required
@@ -124,8 +126,9 @@ const Login = () => {
             <Button
               type="submit"
               className="h-auto w-full rounded-3xl bg-foreground py-3 text-background poppins-regular"
+              disabled={requestPasswordResetMutation.isPending}
             >
-              Send Reset Instructions
+              {requestPasswordResetMutation.isPending ? "Sending…" : "Send Reset Instructions"}
             </Button>
             <Button
               type="button"
@@ -183,6 +186,7 @@ const Login = () => {
             <Input
               className="h-auto rounded-xl bg-background px-4 py-3"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -202,6 +206,8 @@ const Login = () => {
             <Input
               className="h-auto rounded-xl bg-background px-4 py-3"
               type={showPassword ? "text" : "password"}
+              name="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -229,8 +235,9 @@ const Login = () => {
           <Button
             type="submit"
             className="h-auto w-full rounded-3xl bg-foreground py-3 text-background poppins-regular"
+            disabled={isLoggingIn}
           >
-            Log in
+            {isLoggingIn ? "Logging in…" : "Log in"}
           </Button>
           {error && <p role="alert" className="text-destructive text-sm">{error}</p>}
           <Separator />
@@ -242,7 +249,7 @@ const Login = () => {
               type="button"
               variant="outline"
               className="h-auto w-full rounded-3xl bg-background py-3 text-foreground poppins-regular"
-              onClick={() => navigate('/Signup')}
+              onClick={() => navigate({ to: '/Signup' })}
             >
               Sign up
             </Button>

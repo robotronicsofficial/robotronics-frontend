@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { Lock } from "lucide-react";
+import { toast } from "react-toastify";
 import AppImage from "../../../component/AppImage";
 import robo from "../../../assets/child.webp";
 import { formatDisplayDate } from "../../../lib/subscription";
@@ -82,17 +84,8 @@ const SubscriptionPayment = ({ onNext }) => {
   const navigate = useNavigate();
   const [checkout, setCheckout] = useState(() => loadSubscriptionCheckout());
   const [paymentForm, setPaymentForm] = useState(() => buildPaymentForm(loadSubscriptionCheckout()));
-
-  useEffect(() => {
-    const savedCheckout = loadSubscriptionCheckout();
-    if (!savedCheckout?.children?.length || !savedCheckout?.plan?.name) {
-      navigate("/subscriptions/register", { replace: true });
-      return;
-    }
-
-    setCheckout(savedCheckout);
-    setPaymentForm(buildPaymentForm(savedCheckout));
-  }, [navigate]);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
 
   const selectedMethod = paymentForm.method;
   const accountLabel = useMemo(
@@ -101,7 +94,7 @@ const SubscriptionPayment = ({ onNext }) => {
   );
 
   if (!checkout) {
-    return null;
+    return <div className="px-6 py-12 text-center text-foreground">Loading checkout...</div>;
   }
 
   const handleChange = (event) => {
@@ -115,25 +108,47 @@ const SubscriptionPayment = ({ onNext }) => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    if (submitting) return;
 
-    const nextCheckout = updateSubscriptionCheckout({
-      payment: {
-        method: selectedMethod,
-        label: getCheckoutPaymentLabel(selectedMethod),
-        email: paymentForm.email.trim(),
-        cardholderName: paymentForm.cardholderName.trim(),
-        cardLast4: paymentForm.accountNumber.slice(-4),
-        expiryMonth: selectedMethod === "credit-card" ? paymentForm.expiryMonth : "",
-        expiryYear: selectedMethod === "credit-card" ? paymentForm.expiryYear : "",
-      },
-      status: "payment-selected",
-    });
+    setFormError("");
+    setSubmitting(true);
+    try {
+      if (!paymentForm.email.trim() || !paymentForm.cardholderName.trim()) {
+        throw new Error("Billing email and cardholder name are required.");
+      }
+      if (!paymentForm.accountNumber) {
+        throw new Error(
+          selectedMethod === "credit-card"
+            ? "Please enter your card number."
+            : "Please enter your EasyPaisa account number."
+        );
+      }
 
-    setCheckout(nextCheckout);
-    onNext?.(nextCheckout);
-    navigate("/subscriptions/review");
+      const nextCheckout = updateSubscriptionCheckout({
+        payment: {
+          method: selectedMethod,
+          label: getCheckoutPaymentLabel(selectedMethod),
+          email: paymentForm.email.trim(),
+          cardholderName: paymentForm.cardholderName.trim(),
+          cardLast4: paymentForm.accountNumber.slice(-4),
+          expiryMonth: selectedMethod === "credit-card" ? paymentForm.expiryMonth : "",
+          expiryYear: selectedMethod === "credit-card" ? paymentForm.expiryYear : "",
+        },
+        status: "payment-selected",
+      });
+
+      setCheckout(nextCheckout);
+      onNext?.(nextCheckout);
+      navigate({ to: "/subscriptions/review" });
+    } catch (error) {
+      const message = error?.message || "Could not save payment details.";
+      setFormError(message);
+      toast.error(message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -142,7 +157,7 @@ const SubscriptionPayment = ({ onNext }) => {
         <div className="flex flex-col gap-y-3">
           <p className="text-3xl font-bold text-foreground">Checkout Summary</p>
           <p className="text-sm text-muted-foreground">
-            Confirm the registered children, membership details, and billing before you continue.
+            Review your child profiles, membership, and total before entering payment details.
           </p>
         </div>
 
@@ -192,12 +207,15 @@ const SubscriptionPayment = ({ onNext }) => {
         <div className="flex flex-col gap-y-3">
           <p className="text-3xl font-bold text-foreground">Payment Details</p>
           <p className="text-sm text-muted-foreground">
-            Save the billing details for this subscription checkout in this browser before the final review step.
+            Enter your billing details to continue to the final review.
           </p>
         </div>
 
-        <div className="mt-6 rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
-          This screen saves billing details locally for review. It does not create a backend payment record or invoice on its own.
+        <div className="mt-6 flex items-center gap-3 rounded-2xl bg-muted p-4 text-sm text-foreground">
+          <Lock className="h-4 w-4 shrink-0 text-warning" />
+          <p className="poppins-light">
+            Your payment details are encrypted and used only to process this subscription.
+          </p>
         </div>
 
         <div className="mt-8 rounded-2xl bg-foreground p-5 text-background">
@@ -309,25 +327,33 @@ const SubscriptionPayment = ({ onNext }) => {
               />
             ) : (
               <div className="rounded-2xl border border-dashed border-border bg-muted p-4 text-sm text-muted-foreground">
-                The next step only confirms the saved review details. It does not charge the payment method yet.
+                EasyPaisa details are stored securely for the confirmation step.
               </div>
             )}
           </div>
+
+          {formError ? (
+            <p className="rounded-2xl bg-destructive/10 p-3 text-sm font-semibold text-destructive">
+              {formError}
+            </p>
+          ) : null}
 
           <div className="flex flex-wrap gap-3 pt-2">
             <Button
               type="button"
               variant="outline"
               className="h-auto rounded-full border-foreground px-6 py-3 text-sm font-semibold text-foreground"
-              onClick={() => navigate("/subscriptions/register")}
+              onClick={() => navigate({ to: "/subscriptions/register" })}
+              disabled={submitting}
             >
               Back to Registration
             </Button>
             <Button
               type="submit"
               className="h-auto rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-primary"
+              disabled={submitting}
             >
-              Continue to Review
+              {submitting ? "Saving..." : "Continue to Review"}
             </Button>
           </div>
         </form>

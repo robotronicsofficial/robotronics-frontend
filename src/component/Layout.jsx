@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "@tanstack/react-router";
 import Header from "../component/header";
 import Footer from "./footer";
 import { SCREEN_PATH } from "../router/paths";

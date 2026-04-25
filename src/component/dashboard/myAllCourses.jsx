@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { GraduationCap, Star } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { Spinner } from "../../components/ui/spinner";
@@ -57,7 +57,7 @@ const MyAllCourses = () => {
       return;
     }
 
-    navigate(`/Dashboard/courseDetail/${courseId}`);
+    navigate({ to: `/Dashboard/courseDetail/${courseId}` });
   };
 
   if (loading) {
@@ -126,7 +126,7 @@ const MyAllCourses = () => {
                   <Button
                     type="button"
                     onClick={() => handleCourseClick(course)}
-                    className="h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground hover:bg-accent"
+                    className="h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
                     <span>View Course</span>
                   </Button>
@@ -135,10 +135,18 @@ const MyAllCourses = () => {
             ))}
           </div>
         ) : (
-          <div className="w-full py-10 text-center">
-            <p className="text-muted-foreground text-lg">
-              You don&apos;t have any active courses yet.
+          <div className="flex w-full flex-col items-center gap-4 py-10 text-center">
+            <GraduationCap aria-hidden="true" className="size-12 text-muted-foreground" />
+            <p className="max-w-md text-muted-foreground text-lg">
+              No active courses yet. Pick a course from your plan and we&apos;ll add it here so you can jump right in.
             </p>
+            <Button
+              type="button"
+              onClick={() => navigate({ to: "/Dashboard/MyCoursesPage" })}
+              className="h-auto rounded-full bg-primary px-6 py-2 text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              Browse courses
+            </Button>
           </div>
         )}
 

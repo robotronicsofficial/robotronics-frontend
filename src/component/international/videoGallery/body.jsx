@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import WorkshopCard from "./WorkshopCard";
 import Pagination from "../../blog/Pagination";
 import { FormInput, FormSelect } from "../../../components/forms/FormControls";
@@ -176,7 +176,7 @@ const Intro = () => {
               setSelectedSchool("");
               setSelectedCity("");
               setSortBy("");
-              navigate("/International/videoGallery");
+              navigate({ to: "/International/videoGallery" });
             }}
           >
             Activities

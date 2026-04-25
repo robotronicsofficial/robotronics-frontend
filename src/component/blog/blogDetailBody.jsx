@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { BarChart2, Quote, Share2 } from "lucide-react";
 
 import { BrandIcon } from "../../components/ui/brand-icons";

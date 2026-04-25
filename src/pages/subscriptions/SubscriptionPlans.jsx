@@ -1,9 +1,25 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
+import { Check } from "lucide-react";
 import { usePlans } from "../../hooks/usePlans";
 import { useSelectedPlanStore } from "../../stores/selectedPlanStore";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const PlanCardSkeleton = () => (
+  <div className="flex flex-col gap-4 rounded-2xl border border-border bg-muted p-6">
+    <Skeleton className="h-6 w-2/3" />
+    <Skeleton className="h-10 w-1/2" />
+    <div className="flex flex-col gap-2">
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-5/6" />
+      <Skeleton className="h-4 w-4/6" />
+      <Skeleton className="h-4 w-5/6" />
+    </div>
+    <Skeleton className="h-10 w-full rounded-lg" />
+  </div>
+);
 
 const SubscriptionPlans = () => {
   const [isAnnual, setIsAnnual] = useState(false);
@@ -15,28 +31,32 @@ const SubscriptionPlans = () => {
     isLoading: loading,
     error,
   } = usePlans();
-  const membership = totalPlans[0] || null;
 
   const handleRegisterClick = (plan) => {
     const price = isAnnual ? plan.yearlyPrice : plan.monthlyPrice;
     const billingCycle = isAnnual ? "annual" : "monthly";
-    
+
     setSelectedPlan({
       planId: plan._id,
       plan: plan.planName,
       price,
       billingCycle,
     });
-    
-    navigate("/subscriptions/register");
-  };
-  
-  if (loading) return <div>Loading membership...</div>;
-  if (error) return <div>Error loading membership: {error.message}</div>;
-  if (!membership) return <div>Membership is not available right now.</div>;
 
-  const displayPrice = isAnnual ? membership.yearlyPrice : membership.monthlyPrice;
-  const annualSavings = Number(membership.monthlyPrice || 0) * 12 - Number(membership.yearlyPrice || 0);
+    navigate({ to: "/subscriptions/register" });
+  };
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center bg-background py-10 px-4 sm:px-8 md:px-16 lg:px-24">
+        <p className="text-destructive poppins-light">
+          Error loading memberships: {error.message}
+        </p>
+      </div>
+    );
+  }
+
+  const hasPlans = totalPlans.length > 0;
 
   return (
     <div className="flex flex-col items-center bg-background py-10 px-4 sm:px-8 md:px-16 lg:px-24">
@@ -44,56 +64,82 @@ const SubscriptionPlans = () => {
         Course Membership
       </h2>
 
-      <div className="mt-8 flex w-full max-w-xl min-h-[560px] flex-col items-center rounded-2xl border border-border bg-muted p-6">
-        <h3 className="text-2xl font-bold text-center">
-          {membership.planName || "Course Membership"}
-        </h3>
-
-        <div className="mt-4 flex items-center justify-center gap-4 poppins-light">
-          <span>Monthly</span>
-
-          <Switch
-            checked={isAnnual}
-            onCheckedChange={setIsAnnual}
-            aria-label="Toggle billing cycle"
-          />
-
-          <span>Annual</span>
-        </div>
-
-        <h4 className="mt-4 text-2xl font-bold text-center">
-          PKR {Number(displayPrice || 0).toLocaleString()}/Child
-        </h4>
-
-        <p className="mt-4 text-center text-wrap text-foreground poppins-light">
-          {membership.description}
-        </p>
-        {isAnnual && annualSavings > 0 ? (
-          <p className="mt-4 text-center text-wrap text-success font-semibold poppins-bold">
-            Save PKR {annualSavings.toLocaleString()} with annual billing.
-          </p>
-        ) : null}
-
-        <Button
-          type="button"
-          className="mt-4 h-auto w-fit rounded-lg bg-warning px-6 py-2 text-background"
-          onClick={() => handleRegisterClick(membership)}
-        >
-          Start Membership
-        </Button>
-
-        <ul className="mt-4 flex flex-1 flex-col gap-y-2 text-sm">
-          {(membership.features || []).map((feature, index) => (
-            <li
-              key={index}
-              className="flex items-center gap-2 poppins-light"
-            >
-              <span className="font-bold text-warning">+</span>
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
+      <div className="mt-6 flex items-center justify-center gap-4 poppins-light">
+        <span>Monthly</span>
+        <Switch
+          checked={isAnnual}
+          onCheckedChange={setIsAnnual}
+          aria-label="Toggle billing cycle"
+        />
+        <span>Annual</span>
       </div>
+
+      <div className="mt-8 grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {loading || !hasPlans
+          ? Array.from({ length: 3 }).map((_, index) => (
+              <PlanCardSkeleton key={index} />
+            ))
+          : totalPlans.map((plan) => {
+              const displayPrice = isAnnual ? plan.yearlyPrice : plan.monthlyPrice;
+              const annualSavings =
+                Number(plan.monthlyPrice || 0) * 12 - Number(plan.yearlyPrice || 0);
+
+              return (
+                <div
+                  key={plan._id}
+                  className="flex flex-col gap-4 rounded-2xl border border-border bg-muted p-6"
+                >
+                  <h3 className="text-xl font-bold text-center poppins-bold">
+                    {plan.planName || "Course Membership"}
+                  </h3>
+
+                  <div className="flex flex-col items-center gap-1">
+                    <p className="text-2xl font-bold text-center">
+                      PKR {Number(displayPrice || 0).toLocaleString()}
+                      <span className="text-base font-normal text-muted-foreground">
+                        /child
+                      </span>
+                    </p>
+                    {isAnnual && annualSavings > 0 ? (
+                      <p className="text-center text-success font-semibold poppins-bold text-sm">
+                        Save PKR {annualSavings.toLocaleString()} annually
+                      </p>
+                    ) : null}
+                  </div>
+
+                  {plan.description ? (
+                    <p className="text-center text-foreground poppins-light text-sm">
+                      {plan.description}
+                    </p>
+                  ) : null}
+
+                  <ul className="flex flex-1 flex-col gap-y-2 text-sm">
+                    {(plan.features || []).map((feature, index) => (
+                      <li
+                        key={index}
+                        className="flex items-start gap-2 poppins-light"
+                      >
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-warning" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button
+                    type="button"
+                    className="h-auto w-full rounded-lg bg-warning px-6 py-2 text-background"
+                    onClick={() => handleRegisterClick(plan)}
+                  >
+                    Choose plan
+                  </Button>
+                </div>
+              );
+            })}
+      </div>
+
+      <p className="mt-8 text-center text-sm text-muted-foreground poppins-light">
+        Cancel anytime. All plans include child profiles and unlimited course access.
+      </p>
     </div>
   );
 };

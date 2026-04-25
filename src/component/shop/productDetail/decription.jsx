@@ -1,7 +1,10 @@
 import PropTypes from "prop-types";
 import ShopPages from "../shopPages";
 
-const Decription = ({ description }) => {
+const Decription = ({ description, features }) => {
+  const featureList = Array.isArray(features) ? features.filter(Boolean) : [];
+  const hasFeatures = featureList.length > 0;
+
   return (
     <div className="bg-background p-2 lg:p-14">
       <div className="flex gap-4 px-2 lg:justify-center lg:gap-10" data-aos="fade-down">
@@ -22,28 +25,20 @@ const Decription = ({ description }) => {
             {description}
           </p>
         </div>
-        <div className="w-1/2 p-2">
-          <div className="flex flex-col gap-2 px-4 text-wrap text-muted-foreground lg:px-20" data-aos="fade-up">
-            <p className="text-xl poppins-semibold text-foreground lg:text-2xl">
-              FITS AND FEATURES
-            </p>
-            <p className="text-xs poppins-medium ">
-              1. Duis aute irure dolor in reprehenderit in{" "}
-            </p>
-            <p className="text-xs poppins-medium ">
-              2. Duis aute irure dolor in reprehenderit in voluptate{" "}
-            </p>
-            <p className="text-xs poppins-medium ">
-              3. Duis aute irure in reprehenderit in voluptate velit esse{" "}
-            </p>
-            <p className="text-xs poppins-medium ">
-              4. Duis aute irure dolor in reprehenderit in voluptate{" "}
-            </p>
-            <p className="text-xs poppins-medium ">
-              5. Duis aute irure voluptate velit esse{" "}
-            </p>
+        {hasFeatures && (
+          <div className="w-1/2 p-2">
+            <div className="flex flex-col gap-2 px-4 text-wrap text-muted-foreground lg:px-20" data-aos="fade-up">
+              <p className="text-xl poppins-semibold text-foreground lg:text-2xl">
+                FITS AND FEATURES
+              </p>
+              {featureList.map((feature, index) => (
+                <p key={`${index}-${feature}`} className="text-xs poppins-medium ">
+                  {index + 1}. {feature}
+                </p>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <ShopPages />
@@ -53,6 +48,7 @@ const Decription = ({ description }) => {
 
 Decription.propTypes = {
   description: PropTypes.string,
+  features: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default Decription;

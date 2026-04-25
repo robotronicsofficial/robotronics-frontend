@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import Robort from "../assets/images/heroRobot.webp";
 import AppImage from "./AppImage";
 import { BrandIcon } from "../components/ui/brand-icons";
@@ -25,26 +25,25 @@ const Intro = () => {
                     WORLD OF
                   </h1>
                 </div>
-                <div className="flex flex-wrap">
-                  
+                <div className="flex flex-nowrap whitespace-nowrap">
                   <p className="lg:text-8xl md:text-xl text-4xl font-bold text-background poppins-bold">
                     RO
                   </p>
                   <p className="lg:text-8xl md:text-6xl text-4xl font-bold text-primary poppins-bold">
-                  BOTRONICS
+                    BOTRONICS
                   </p>
                 </div>
                 <p className="text-wrap text-sm poppins-light text-background mb-10">
-                Your gateway to the future of Robotics, Coding and STEM Education. We offer hands-on learning experiences, empowering students of all ages to explore, create and innovate in the exciting world of Robotics.
+                Hands-on robotics, coding, and STEM for curious kids aged 6 to 16. Build real robots, write real code, and ship projects you can show off.
                 </p>
                 {/* Buttons */}
               <div className="flex flex-col gap-x-3 mt-10" data-aos="fade-up">
                 <Button
                   type="button"
-                  onClick={() => navigate("/subscriptions")}
+                  onClick={() => navigate({ to: "/subscriptions" })}
                   className="h-auto items-center justify-center rounded-md bg-primary p-3 px-4 text-sm text-foreground hover:bg-border hover:text-background lg:text-lg"
                 >
-                  Get Enrolled
+                  Start learning
                 </Button>
               </div>
               </div>

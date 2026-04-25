@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
-// import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "@tanstack/react-router";
 import { BrandIcon } from "../../components/ui/brand-icons";
-import { useNavigate } from "react-router-dom"; // Assuming React Router is used
+import { useNavigate } from "@tanstack/react-router"; // Assuming React Router is used
 import { getAosStaggerDelay } from "../../utils/motion";
 import { Button } from "@/components/ui/button";
 
@@ -10,7 +10,7 @@ const CareesFindRole = () => {
 
   const handleSendResume = () => {
     // Navigate to the job application form
-    navigate("/JobApplicationForm"); // Use the path to your job application form
+    navigate({ to: "/JobApplicationForm" }); // Use the path to your job application form
   };
 
   return (

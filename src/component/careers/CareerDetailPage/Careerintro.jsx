@@ -1,11 +1,11 @@
 import logo from "../../../assets/logo/Robotrinic.svg";
 import { ArrowLeft, Menu } from "lucide-react";
 import PropTypes from "prop-types";
-import { BrandIcon } from "../../../components/ui/brand-icons";
 import AppImage from "../../AppImage";
 import bar from "../../../assets/images/shopSurface.webp";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import SocialLinks from "@/components/ui/SocialLinks";
 
 const Careerintro = ({ job }) => {
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ const Careerintro = ({ job }) => {
           <div className="flex flex-row items-center" data-aos="fade-up">
             <Button
               type="button"
-              onClick={() => navigate("/CareerJob")}
+              onClick={() => navigate({ to: "/CareerJob" })}
               variant="secondary"
               size="icon"
               className="h-8 w-8 rounded-full border border-border bg-muted lg:h-12 lg:w-12"
@@ -56,56 +56,9 @@ const Careerintro = ({ job }) => {
             <p className="lg:p-3 poppins-regular p-1">Back</p>
           </div>
           {/* social icons */}
-          <div className="flex flex-row justify-between lg:gap-x-5 gap-x-2" data-aos="fade-up">
-            <p className="text-center poppins-regular pt-2">Share</p>
-            <a
-              href="https://www.facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
-            >
-              <BrandIcon brand="facebook" className="text-muted-foreground" />
-            </a>
-            <a
-              href="https://www.twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
-            >
-              <BrandIcon brand="twitter" className="text-muted-foreground" />
-            </a>
-            <a
-              href="https://www.youtube.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
-            >
-              <BrandIcon brand="youtube" className="text-muted-foreground" />
-            </a>
-            <a
-              href="https://www.instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
-            >
-              <BrandIcon brand="instagram" className="text-muted-foreground" />
-            </a>
-            <a
-              href="https://www.linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
-            >
-              <BrandIcon brand="linkedin" className="text-muted-foreground" />
-            </a>
-            <a
-              href="https://api.whatsapp.com/send?phone=1234567890"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="lg:p-3 p-1 border border-foreground rounded-xl hover:bg-foreground hover:text-background"
-            >
-              <BrandIcon brand="whatsapp" className="text-muted-foreground" />
-            </a>
+          <div className="flex flex-row items-center gap-3" data-aos="fade-up">
+            <p className="text-center poppins-regular">Share</p>
+            <SocialLinks ariaLabel="Share this role" />
           </div>
         </div>
       </div>

@@ -63,7 +63,7 @@ const Updates = () => {
                 01
               </p>
               <p className="text-background lg:text-xl lg:p-3 poppins-thin  text-wrap tracking-wide">
-              Upcoming Headstart Robotics Competition in Islamabad on 14th-1th February 2025
+              Upcoming Headstart Robotics Competition in Islamabad on 14th–15th February 2025
               </p>
             </div>
             <div className="text-wrap">

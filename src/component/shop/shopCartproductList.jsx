@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
-import { useCallback, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
 import OrderSummaryLine from "./OrderSummaryLine";
 import { useAuth } from "../../contexts/useAuth";
@@ -13,13 +14,13 @@ import {
 } from "../../lib/shopCheckout";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { selectCart, useCartStore } from "../../stores/cartStore";
-import StarRating from "../../components/rating/StarRating";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import "react-toastify/dist/ReactToastify.css";
 
-const REDIRECT_AFTER_LOGIN_STORAGE_KEY = "redirectAfterLogin";
+const PENDING_CART_STORAGE_KEY = "robotronics:pendingCart";
+
 const summaryRowClassName =
   "pb-2 font-lato font-medium text-[16px] leading-[20px] tracking-[0] text-muted-foreground";
 const summaryValueBaseClassName =
@@ -31,9 +32,11 @@ const ShopCartproductList = ({ onNext }) => {
   const cart = useCartStore(selectCart);
   const addToCart = useCartStore((state) => state.addToCart);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const removeItemEntirely = useCartStore((state) => state.removeItemEntirely);
   const [notes, setNotes] = useState(() => loadShopCheckout().note || "");
-  const { currentUser } = useAuth();
+  const { currentUser, isAuthLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const summary = useMemo(() => calculateCartSummary(cart), [cart]);
 
   const [itemQuantity, setItemQuantity] = useState(
@@ -42,6 +45,31 @@ const ShopCartproductList = ({ onNext }) => {
       return acc;
     }, {})
   );
+
+  // Restore any pending cart from a pre-login redirect. Only runs when the
+  // user is authenticated and the current cart is empty — the persisted
+  // Zustand store handles the common case, this covers the edge where the
+  // cart was cleared or opened in a new tab.
+  useEffect(() => {
+    if (!currentUser) return;
+    if (cart.length > 0) return;
+
+    try {
+      const raw = window.localStorage.getItem(PENDING_CART_STORAGE_KEY);
+      if (!raw) return;
+
+      const pending = JSON.parse(raw);
+      if (Array.isArray(pending) && pending.length > 0) {
+        pending.forEach((item) => {
+          if (item) addToCart(item);
+        });
+      }
+    } catch (restoreError) {
+      console.error("Failed to restore pending cart:", restoreError);
+    } finally {
+      window.localStorage.removeItem(PENDING_CART_STORAGE_KEY);
+    }
+  }, [currentUser, cart.length, addToCart]);
 
   const handleAddToCart = useCallback(
     (product) => {
@@ -67,12 +95,30 @@ const ShopCartproductList = ({ onNext }) => {
     [removeFromCart]
   );
 
+  const handleRemoveLine = useCallback(
+    (product) => {
+      removeItemEntirely(product);
+    },
+    [removeItemEntirely]
+  );
+
   const handleNext = useCallback(() => {
+    if (isAuthLoading) {
+      toast.info("Checking your account. Please try again in a moment.");
+      return;
+    }
+
     if (!currentUser) {
-      window.sessionStorage.setItem(
-        REDIRECT_AFTER_LOGIN_STORAGE_KEY,
-        `${window.location.pathname}${window.location.search}${window.location.hash}`
-      );
+      // Stash cart so the user doesn't lose their selections across the
+      // login redirect. Restored on mount once authenticated.
+      try {
+        window.localStorage.setItem(
+          PENDING_CART_STORAGE_KEY,
+          JSON.stringify(cart)
+        );
+      } catch (stashError) {
+        console.error("Failed to stash pending cart:", stashError);
+      }
 
       toast.error("Please sign in to proceed to checkout", {
         position: "top-center",
@@ -83,12 +129,15 @@ const ShopCartproductList = ({ onNext }) => {
         draggable: true,
       });
 
-      navigate("/Login");
+      navigate({
+        to: "/Login",
+        search: { redirect: location.href },
+      });
       return;
     }
 
     if (onNext) onNext();
-  }, [currentUser, onNext, navigate]);
+  }, [cart, currentUser, isAuthLoading, location.href, onNext, navigate]);
 
 
   return (
@@ -112,8 +161,7 @@ const ShopCartproductList = ({ onNext }) => {
                   <h1 className="mb-2 text-wrap font-Poppins text-[20px] font-bold leading-[28px] tracking-normal text-foreground">
                     {product.name}
                   </h1>
-                  <StarRating value={5} className="my-6 text-2xl" label="5 out of 5" />
-                  <div className="mb-4 flex justify-end gap-4">
+                  <div className="mb-4 flex items-center justify-end gap-4">
                     <div className="flex items-center justify-center bg-card">
                       <Button
                         type="button"
@@ -140,16 +188,31 @@ const ShopCartproductList = ({ onNext }) => {
                         +
                       </Button>
                     </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemoveLine(product)}
+                      aria-label="Remove item from cart"
+                      className="text-muted-foreground hover:text-destructive"
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
                   </div>
                   <div className="pt-10 text-right text-2xl font-bold text-foreground">
-                    PKR {Number(product.price || 0).toLocaleString()}
+                    {formatShopCurrency(product.price)}
                   </div>
                 </div>
               </div>
             </div>
           ))
         ) : (
-          <p className="p-5 text-center text-muted-foreground">Your cart is empty.</p>
+          <div className="flex flex-col items-center gap-4 p-5 text-center">
+            <p className="text-muted-foreground">Your cart is empty.</p>
+            <Button asChild className="bg-primary text-background">
+              <Link to="/shop">Continue shopping</Link>
+            </Button>
+          </div>
         )}
       </div>
       <div className="flex flex-col p-2">
@@ -159,9 +222,6 @@ const ShopCartproductList = ({ onNext }) => {
         <h2 className="mb-4 font-poppins text-[32px] font-semibold leading-[40px] tracking-[0] text-foreground">
           ORDER SUMMARY
         </h2>
-        <p className="my-6 font-poppins text-[16px] font-medium leading-[20px] tracking-[0] text-muted-foreground">
-          Apply your monthly voucher to get more discount!
-        </p>
         <div className="my-6 flex flex-col gap-3">
           <OrderSummaryLine
             label="Price"
@@ -188,15 +248,6 @@ const ShopCartproductList = ({ onNext }) => {
             valueClassName={totalSummaryValueClassName}
           />
         </div>
-        <div className="mt-6">
-          <Input
-            id="voucher"
-            type="text"
-            className="mt-2 h-auto w-full rounded-none border-x-0 border-t-0 bg-background p-2 font-poppins text-[16px] font-medium leading-[20px] tracking-[0] text-muted-foreground"
-            placeholder="Your voucher code"
-          />
-        </div>
-
         <div className="mt-20">
           <span className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-foreground">
             Write your special notes here...

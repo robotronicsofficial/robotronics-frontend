@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { resolveBackendAssetUrl } from "../utils/mediaUrl";
 
 import { Button } from "@/components/ui/button";
@@ -99,7 +99,7 @@ const Search = () => {
                 key={product._id}
                 type="button"
                 variant="ghost"
-                onClick={() => navigate(`/ProductDetailPage/${product._id}`)}
+                onClick={() => navigate({ to: `/ProductDetailPage/${product._id}` })}
                 className="h-auto flex-col items-stretch overflow-hidden rounded-2xl bg-card border border-border p-0 text-left transition hover:-translate-y-1"
               >
                 <img
@@ -136,7 +136,7 @@ const Search = () => {
           type="button"
           variant="link"
           className="text-foreground"
-          onClick={() => navigate("/shop")}
+          onClick={() => navigate({ to: "/shop" })}
         >
           Browse all products &rarr;
         </Button>

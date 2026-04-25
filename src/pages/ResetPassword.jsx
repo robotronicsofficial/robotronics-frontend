@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -36,8 +36,8 @@ const ResetPassword = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  const search = useSearch({ strict: false });
+  const token = search.token;
   const navigate = useNavigate();
   const resetPasswordMutation = useResetPasswordMutation();
 
@@ -77,7 +77,7 @@ const ResetPassword = () => {
       await resetPasswordMutation.mutateAsync({ token, password });
 
       toast.success("Password reset successfully!");
-      setTimeout(() => navigate("/Login"), 2000);
+      setTimeout(() => navigate({ to: "/Login" }), 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to reset password");
       console.error("Reset password error:", err);
@@ -94,7 +94,7 @@ const ResetPassword = () => {
         >
           <div className="flex w-full flex-col gap-1">
             <div className="flex items-center justify-between">
-              <Label className="text-sm poppins-light">New Password</Label>
+              <Label className="text-sm poppins-regular">New Password</Label>
               <PasswordVisibilityButton
                 isVisible={showPassword}
                 onToggle={togglePasswordVisibility}
@@ -103,6 +103,8 @@ const ResetPassword = () => {
             <Input
               className={getPasswordInputClassName(password, hasMinLength && hasNumber && hasSymbol)}
               type={showPassword ? "text" : "password"}
+              name="new-password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -125,7 +127,7 @@ const ResetPassword = () => {
 
           <div className="flex w-full flex-col gap-1">
             <div className="flex items-center justify-between">
-              <Label className="text-sm poppins-light">Confirm Password</Label>
+              <Label className="text-sm poppins-regular">Confirm Password</Label>
               <PasswordVisibilityButton
                 isVisible={showConfirmPassword}
                 onToggle={toggleConfirmPasswordVisibility}
@@ -134,6 +136,8 @@ const ResetPassword = () => {
             <Input
               className={getPasswordInputClassName(confirmPassword, passwordsMatch)}
               type={showConfirmPassword ? "text" : "password"}
+              name="confirm-password"
+              autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
@@ -148,14 +152,21 @@ const ResetPassword = () => {
           <Button
             type="submit"
             className="h-auto w-full rounded-3xl bg-foreground py-3 text-background poppins-regular"
-            disabled={!hasMinLength || !hasNumber || !hasSymbol || !passwordsMatch}
+            disabled={
+              resetPasswordMutation.isPending ||
+              !password ||
+              !confirmPassword ||
+              !hasMinLength ||
+              !hasNumber ||
+              !hasSymbol
+            }
           >
-            Reset Password
+            {resetPasswordMutation.isPending ? "Resetting…" : "Reset Password"}
           </Button>
 
           <Button
             type="button"
-            onClick={() => navigate('/Login')}
+            onClick={() => navigate({ to: '/Login' })}
             variant="link"
             className="text-foreground poppins-regular"
           >

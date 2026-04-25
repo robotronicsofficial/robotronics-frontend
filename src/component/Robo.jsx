@@ -1,5 +1,5 @@
 import robot from "../assets/imagesContent/roboo/roboposter.webp";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import AppImage from "./AppImage";
 import { Button } from "@/components/ui/button";
 
@@ -17,7 +17,7 @@ const Robo = () => {
       </div>
       <Button
         type="button"
-        onClick={() => navigate("/subscriptions")}
+        onClick={() => navigate({ to: "/subscriptions" })}
         className="absolute bottom-[8vh] left-[14vw] h-auto items-center justify-center rounded-[6vw] border-4 border-foreground bg-card px-10 py-8 text-sm text-primary hover:bg-card/90 md:text-3xl"
       >
         Subscribe Now

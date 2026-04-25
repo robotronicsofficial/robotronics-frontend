@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Bot, X } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import Intro from "../../component/dashboard/intro";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
@@ -67,11 +67,14 @@ const MyRobot = () => {
           </div>
         ) : items.length === 0 ? (
           <div className="flex flex-col items-start gap-4 px-8 py-12 text-foreground lg:px-14">
-            <p>No saved items yet.</p>
+            <Bot aria-hidden="true" className="size-12 text-muted-foreground" />
+            <p className="max-w-md text-muted-foreground">
+              Nothing saved yet. Tap the heart on any robot you want to build — we&apos;ll keep it here for next time.
+            </p>
             <Button
               type="button"
-              onClick={() => navigate("/shop")}
-              className="h-auto rounded-lg bg-foreground px-5 py-3 font-semibold text-primary"
+              onClick={() => navigate({ to: "/shop" })}
+              className="h-auto rounded-lg bg-foreground px-5 py-3 font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               Browse products
             </Button>
@@ -92,7 +95,7 @@ const MyRobot = () => {
                     >
                       <X />
                     </Button>
-                    <Button type="button" variant="ghost" className="h-auto p-0" onClick={() => navigate(getCommerceItemRoute(item))}>
+                    <Button type="button" variant="ghost" className="h-auto p-0" onClick={() => navigate({ to: getCommerceItemRoute(item) })}>
                       <img
                         src={resolveBackendAssetUrl(item?.image || item?.images?.[0], "https://via.placeholder.com/160")}
                         className="h-20 w-20 rounded-xl object-cover"
@@ -103,7 +106,7 @@ const MyRobot = () => {
                       <Button
                         type="button"
                         variant="link"
-                        onClick={() => navigate(getCommerceItemRoute(item))}
+                        onClick={() => navigate({ to: getCommerceItemRoute(item) })}
                         className="h-auto justify-start p-0 text-left text-xl font-bold text-foreground"
                       >
                         {item?.name || "Item"}
@@ -119,8 +122,8 @@ const MyRobot = () => {
                     <p className="text-xl font-bold text-foreground">PKR {Number(item?.price || 0).toLocaleString()}</p>
                     <Button
                       type="button"
-                      onClick={() => navigate(getCommerceItemRoute(item))}
-                      className="h-auto rounded-lg bg-warning px-4 py-2 font-semibold text-background"
+                      onClick={() => navigate({ to: getCommerceItemRoute(item) })}
+                      className="h-auto rounded-lg bg-warning px-4 py-2 font-semibold text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     >
                       {item?.itemType === "course" ? "View course" : "View product"}
                     </Button>

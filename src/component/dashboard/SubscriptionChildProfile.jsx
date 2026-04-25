@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { UserCircle } from "lucide-react";
@@ -20,13 +20,21 @@ import {
   useChangeChildPinMutation,
   useChildAccessList,
   useCreateChildPinMutation,
-  useParent,
+  useCurrentParent,
   useVerifyChildPinMutation,
 } from "../../hooks/useAccount";
 import { queryKeys } from "../../lib/queryKeys";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const resolveChildAccess = (child, childAccessList) => (
   childAccessList.find((access) => (
@@ -53,6 +61,7 @@ const SubscriptionChildProfile = () => {
   const [isVerifyPinModalOpen, setIsVerifyPinModalOpen] = useState(false);
   const [isChangePinModalOpen, setIsChangePinModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isReplacePinConfirmOpen, setIsReplacePinConfirmOpen] = useState(false);
   const [pinError, setPinError] = useState(null);
   const [selectedChildId, setSelectedChildId] = useState(null);
   const { currentUser } = useAuth();
@@ -61,18 +70,19 @@ const SubscriptionChildProfile = () => {
     data: parentData,
     isLoading: parentLoading,
     error: parentError,
-  } = useParent(userId);
+  } = useCurrentParent(userId);
+  const hasParentProfile = Boolean(parentData?._id);
   const {
     data: childAccessList = [],
     isLoading: accessLoading,
     error: accessError,
-  } = useChildAccessList(Boolean(userId));
+  } = useChildAccessList(hasParentProfile);
   const changeChildPinMutation = useChangeChildPinMutation(userId);
   const createChildPinMutation = useCreateChildPinMutation(userId);
   const verifyChildPinMutation = useVerifyChildPinMutation();
   const children = mergeChildrenWithAccess(parentData?.children || [], childAccessList);
-  const loading = Boolean(userId) && (parentLoading || accessLoading);
-  const error = parentError?.message || accessError?.message || "";
+  const loading = Boolean(userId) && (parentLoading || (hasParentProfile && accessLoading));
+  const error = parentError?.message || (hasParentProfile ? accessError?.message : "") || "";
 
   const handlePinSubmit = async (pinData) => {
     try {
@@ -183,7 +193,7 @@ const SubscriptionChildProfile = () => {
 
       setIsVerifyPinModalOpen(false);
       
-      // Store session ID locally so ProtectedChild can validate the same child session.
+      // Store the session before routing so the child-session guard can validate it.
       if (data.sessionId) {
         clearActiveChildSession();
         setActiveChildSession({
@@ -202,9 +212,9 @@ const SubscriptionChildProfile = () => {
       
       // Navigate based on whether courses exist
       if (selectedCourses.length > 0) {
-        navigate("/Dashboard/myAllCourses");
+        navigate({ to: "/Dashboard/myAllCourses" });
       } else {
-        navigate("/Dashboard/MyCoursesPage");
+        navigate({ to: "/Dashboard/MyCoursesPage" });
       }
     } catch (err) {
       console.error('Error verifying PIN:', err);
@@ -225,12 +235,18 @@ const SubscriptionChildProfile = () => {
 
   const openPinModal = (childId, hasPin) => {
     setSelectedChildId(childId);
-    
+
     if (hasPin) {
-      setIsChangePinModalOpen(true);
+      // Child already has a PIN — confirm before replacing via the create flow.
+      setIsReplacePinConfirmOpen(true);
     } else {
       setIsPinModalOpen(true);
     }
+  };
+
+  const handleConfirmReplacePin = () => {
+    setIsReplacePinConfirmOpen(false);
+    setIsChangePinModalOpen(true);
   };
 
   if (loading) {
@@ -348,6 +364,33 @@ const SubscriptionChildProfile = () => {
         onClose={() => setIsErrorModalOpen(false)}
         errorMessage={pinError}
       />
+
+      <Dialog
+        open={isReplacePinConfirmOpen}
+        onOpenChange={setIsReplacePinConfirmOpen}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Replace existing PIN?</DialogTitle>
+            <DialogDescription>
+              This child already has a PIN. Setting a new one will replace the
+              existing PIN. Continue?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsReplacePinConfirmOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="button" onClick={handleConfirmReplacePin}>
+              Replace PIN
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 };

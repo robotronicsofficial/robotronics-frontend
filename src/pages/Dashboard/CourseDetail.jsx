@@ -14,7 +14,7 @@ import {
   XIcon,
 } from "lucide-react";
 import ReviewsComponent from "../../pages/subscriptions/SubscriptionTestimonials";
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 import ChatSupport from "../../component/ChatSupport"
 import { getActiveChildSession } from "../../utils/childSessionRequest";
 import { openExternalUrl } from "../../utils/openExternalUrl";
@@ -39,6 +39,9 @@ const MAX_ATTEMPTS = {
   PRO: Infinity
 };
 
+const UNLOCK_SCORE_THRESHOLD = 60;
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
 const statusIconClassName = "mr-3 size-5 shrink-0";
 
 const isExternalUrl = (value) => /^https?:\/\//i.test(String(value || ""));
@@ -48,8 +51,38 @@ const isProtectedCourseDownload = (value) =>
 const getModuleKey = (module, sectionIndex, moduleIndex) =>
   module?.id || module?._id || `${sectionIndex}-${moduleIndex}`;
 
+const shortDateFormatter = new Intl.DateTimeFormat(undefined, {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+});
+
+const formatUnlockDate = (value) => {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startOfTarget = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const daysUntil = Math.round((startOfTarget - startOfToday) / MS_PER_DAY);
+  const formatted = shortDateFormatter.format(date);
+  if (daysUntil > 0 && daysUntil <= 7) {
+    return `Unlocks in ${daysUntil} day${daysUntil === 1 ? "" : "s"} — ${formatted}`;
+  }
+  return `Unlocks ${formatted}`;
+};
+
+const getQuizScorePercent = (quiz, totalQuestions) => {
+  if (!quiz) return null;
+  const total = Number(totalQuestions) || quiz.total || 0;
+  if (!total) return null;
+  const obtained = Number(quiz.obtainedScore);
+  if (Number.isNaN(obtained)) return null;
+  return Math.round((obtained / total) * 100);
+};
+
 const CourseDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams({ strict: false });
   const activeChildSession = getActiveChildSession();
   const childId = activeChildSession?.childId || null;
   const [actionError, setActionError] = useState(null);
@@ -61,6 +94,7 @@ const CourseDetail = () => {
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizResults, setQuizResults] = useState({});
   const [quizRetakes, setQuizRetakes] = useState({});
+  const [quizStatusMessage, setQuizStatusMessage] = useState("");
   const {
     data: courseDetail,
     isLoading: loading,
@@ -224,6 +258,28 @@ const CourseDetail = () => {
     }
   };
 
+  const retakeQuiz = (sectionIndex) => {
+    setQuizResults((prev) => {
+      const newResults = { ...prev };
+      delete newResults[sectionIndex];
+      return newResults;
+    });
+    setQuizAnswers((prev) => {
+      const nextAnswers = { ...prev };
+      Object.keys(nextAnswers).forEach((key) => {
+        if (key.startsWith(`${sectionIndex}-`)) {
+          delete nextAnswers[key];
+        }
+      });
+      return nextAnswers;
+    });
+    setQuizRetakes((prev) => ({
+      ...prev,
+      [sectionIndex]: true,
+    }));
+    setQuizStatusMessage(`Module ${sectionIndex + 1} quiz reset. Ready for another attempt.`);
+  };
+
   if (loading) {
     return (
       <CenteredState className="h-screen">
@@ -330,6 +386,9 @@ const CourseDetail = () => {
                 <AlertDescription>{actionError}</AlertDescription>
               </Alert>
             ) : null}
+            <div aria-live="polite" role="status" className="sr-only">
+              {quizStatusMessage}
+            </div>
             {/* Course Description */}
             <div className="py-5">
               <h1 className="poppins-bold text-2xl mb-4">Course Description</h1>
@@ -382,11 +441,32 @@ const CourseDetail = () => {
                         <h2 className="poppins-bold text-xl text-muted-foreground">
                           Module {sectionIndex + 1}: {section.name}
                           {!sectionUnlocked && (
-                            <span className="text-destructive ml-2 text-sm">
-                              {sectionIndex > 0 && childSections[sectionIndex - 1]?.quiz?.result !== "pass" ?
-                                "(Locked - Complete previous module quiz to unlock)" :
-                                `(Locked - Available from ${sectionDates?.startDate ?
-                                  new Date(sectionDates.startDate).toLocaleDateString() : 'a future date'})`}
+                            <span className="ml-2 flex flex-col gap-y-1 text-sm text-destructive">
+                              {sectionIndex > 0 && childSections[sectionIndex - 1]?.quiz?.result !== "pass" ? (
+                                (() => {
+                                  const prevQuiz = childSections[sectionIndex - 1]?.quiz;
+                                  const prevQuestionCount = Array.isArray(prevQuiz?.questions)
+                                    ? prevQuiz.questions.length
+                                    : 0;
+                                  const prevPercent = getQuizScorePercent(prevQuiz, prevQuestionCount);
+                                  return (
+                                    <>
+                                      <span>Complete previous module quiz to unlock</span>
+                                      {prevPercent !== null && (
+                                        <span className="text-muted-foreground">
+                                          You scored {prevPercent}% on the quiz — need {UNLOCK_SCORE_THRESHOLD}%
+                                        </span>
+                                      )}
+                                    </>
+                                  );
+                                })()
+                              ) : (
+                                <span>
+                                  {sectionDates?.startDate
+                                    ? formatUnlockDate(sectionDates.startDate)
+                                    : "Unlocks on a future date"}
+                                </span>
+                              )}
                             </span>
                           )}
                         </h2>
@@ -616,7 +696,7 @@ const CourseDetail = () => {
                                   <div className="mb-4 rounded-lg border border-border bg-card p-4">
                                     <div className={`poppins-bold text-lg mb-2 ${quizCompleted ? 'text-success' : 'text-destructive'}`}>
                                       Quiz Results: {childSection.quiz.obtainedScore}/{quizQuestions.length}
-                                      {quizCompleted ? " (Passed)" : " (Failed - Score at least 60% to unlock next module)"}
+                                      {quizCompleted ? " (Passed)" : ` (Failed - Score at least ${UNLOCK_SCORE_THRESHOLD}% to unlock next module)`}
                                     </div>
                                     <div className="flex flex-col gap-y-3">
                                       {quizQuestions.map((question, qIndex) => {
@@ -663,27 +743,8 @@ const CourseDetail = () => {
                                         <Button
                                           type="button"
                                           variant="link"
-                                          onClick={() => {
-                                            setQuizResults(prev => {
-                                              const newResults = { ...prev };
-                                              delete newResults[sectionIndex];
-                                              return newResults;
-                                            });
-                                            setQuizAnswers(prev => {
-                                              const nextAnswers = { ...prev };
-                                              Object.keys(nextAnswers).forEach((key) => {
-                                                if (key.startsWith(`${sectionIndex}-`)) {
-                                                  delete nextAnswers[key];
-                                                }
-                                              });
-                                              return nextAnswers;
-                                            });
-                                            setQuizRetakes(prev => ({
-                                              ...prev,
-                                              [sectionIndex]: true
-                                            }));
-                                          }}
-                                          className="mt-4 h-auto p-0 font-medium text-info hover:text-info"
+                                          onClick={() => retakeQuiz(sectionIndex)}
+                                          className="mt-4 h-auto p-0 font-medium text-info hover:text-info focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                         >
                                           {childPlan === 'basic' ?
                                             (isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) ?
@@ -732,7 +793,7 @@ const CourseDetail = () => {
                                       {updateChildCourseProgressMutation.isPending ? "Submitting..." : "Submit Quiz"}
                                     </Button>
                                     <div className="poppins-light text-sm text-muted-foreground mt-2">
-                                      Note: You need to score at least 60% to unlock the next module.
+                                      Note: You need to score at least {UNLOCK_SCORE_THRESHOLD}% to unlock the next module.
                                     </div>
                                   </div>
                                 )}

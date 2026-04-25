@@ -42,7 +42,7 @@ export const queryKeys = {
   },
   subscription: {
     plans: ["subscription", "plans"],
-    parent: (userId) => ["subscription", "parent", userId],
+    currentParent: (userId) => ["subscription", "current-parent", userId],
     children: ["subscription", "children"],
   },
   videoGallery: {

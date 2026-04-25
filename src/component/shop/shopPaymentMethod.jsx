@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import mastercard from "../../assets/images/mastercard.svg";
 import CustomerOrder from "./customerOrder";
 import {
@@ -66,6 +68,8 @@ const ShopPaymentMethod = ({ onNext }) => {
   const [expiryYear, setExpiryYear] = useState(
     storedCheckout.payment?.expiryYear || ""
   );
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const savedCustomer = storedCheckout.customer;
   const savedAddress = storedCheckout.address;
@@ -73,9 +77,20 @@ const ShopPaymentMethod = ({ onNext }) => {
   const addressReady = hasCheckoutAddress(savedAddress, { requiresShipping });
   const isCardPayment = selectedMethod === "Credit Card";
 
+  const clearFieldError = (name) => {
+    setFieldErrors((prev) => {
+      if (!prev[name]) return prev;
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+  };
+
   const handleContinue = () => {
+    if (isSubmitting) return;
+
     if (!customerReady || (requiresShipping && !addressReady)) {
-      navigate("/CustomerInfo");
+      navigate({ to: "/CustomerInfo" });
       return;
     }
 
@@ -85,37 +100,61 @@ const ShopPaymentMethod = ({ onNext }) => {
     const trimmedMonth = expiryMonth.trim();
     const trimmedYear = expiryYear.trim();
 
-    if (!trimmedEmail || !trimmedName || numberDigits.length < 4) {
-      alert("Complete your billing details before continuing.");
+    const errors = {};
+    if (!trimmedEmail) errors.billing_email = "Billing email is required.";
+    if (!trimmedName) {
+      errors.cardholder_name = isCardPayment
+        ? "Cardholder name is required."
+        : "Account holder name is required.";
+    }
+    if (numberDigits.length < 4) {
+      errors.account_number = isCardPayment
+        ? "Enter a valid card number."
+        : "Enter a valid account number.";
+    }
+
+    if (isCardPayment) {
+      if (!trimmedMonth || Number(trimmedMonth) < 1 || Number(trimmedMonth) > 12) {
+        errors.expiry_month = "Enter MM (01–12).";
+      }
+      if (!trimmedYear || !/^\d{4}$/.test(trimmedYear)) {
+        errors.expiry_year = "Enter a 4-digit year (e.g. 2028).";
+      }
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      toast.error("Please fix the highlighted billing fields before continuing.");
       return;
     }
 
-    if (
-      isCardPayment &&
-      (!trimmedMonth || !trimmedYear || Number(trimmedMonth) < 1 || Number(trimmedMonth) > 12)
-    ) {
-      alert("Enter a valid card expiry date.");
-      return;
+    setFieldErrors({});
+    setIsSubmitting(true);
+
+    try {
+      saveShopCheckout({
+        payment: {
+          shippingService: requiresShipping ? selectedService : "",
+          paymentMethod: selectedMethod,
+          billingEmail: trimmedEmail,
+          cardholderName: trimmedName,
+          accountLast4: numberDigits.slice(-4),
+          expiryMonth: isCardPayment ? trimmedMonth : "",
+          expiryYear: isCardPayment ? trimmedYear : "",
+        },
+      });
+
+      if (onNext) {
+        onNext();
+        return;
+      }
+
+      navigate({ to: "/Shipping" });
+    } catch (err) {
+      toast.error(err.message || "Unable to save billing details. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    saveShopCheckout({
-      payment: {
-        shippingService: requiresShipping ? selectedService : "",
-        paymentMethod: selectedMethod,
-        billingEmail: trimmedEmail,
-        cardholderName: trimmedName,
-        accountLast4: numberDigits.slice(-4),
-        expiryMonth: isCardPayment ? trimmedMonth : "",
-        expiryYear: isCardPayment ? trimmedYear : "",
-      },
-    });
-
-    if (onNext) {
-      onNext();
-      return;
-    }
-
-    navigate("/Shipping");
   };
 
   return (
@@ -135,7 +174,7 @@ const ShopPaymentMethod = ({ onNext }) => {
             <Button
               type="button"
               className="h-auto bg-foreground px-4 py-2 text-sm text-primary"
-              onClick={() => navigate("/CustomerInfo")}
+              onClick={() => navigate({ to: "/CustomerInfo" })}
             >
               Edit address
             </Button>
@@ -265,23 +304,39 @@ const ShopPaymentMethod = ({ onNext }) => {
               id="billing_email"
               label="Billing email"
               value={billingEmail}
-              onChange={setBillingEmail}
+              onChange={(next) => {
+                setBillingEmail(next);
+                clearFieldError("billing_email");
+              }}
               type="email"
               placeholder="you@example.com"
+              autoComplete="email"
+              error={fieldErrors.billing_email}
             />
             <Field
               id="cardholder_name"
               label={isCardPayment ? "Cardholder name" : "Account holder name"}
               value={cardholderName}
-              onChange={setCardholderName}
+              onChange={(next) => {
+                setCardholderName(next);
+                clearFieldError("cardholder_name");
+              }}
               placeholder="Full name"
+              autoComplete={isCardPayment ? "cc-name" : "name"}
+              error={fieldErrors.cardholder_name}
             />
             <Field
               id="account_number"
               label={isCardPayment ? "Card number" : "Account number"}
               value={accountNumber}
-              onChange={setAccountNumber}
+              onChange={(next) => {
+                setAccountNumber(next);
+                clearFieldError("account_number");
+              }}
               placeholder={isCardPayment ? "4111 1111 1111 1111" : "03XX XXX XXXX"}
+              autoComplete={isCardPayment ? "cc-number" : "off"}
+              inputMode={isCardPayment ? "numeric" : undefined}
+              error={fieldErrors.account_number}
             />
             {isCardPayment ? (
               <div className="grid gap-5 sm:grid-cols-2">
@@ -289,15 +344,27 @@ const ShopPaymentMethod = ({ onNext }) => {
                   id="expiry_month"
                   label="Expiry month"
                   value={expiryMonth}
-                  onChange={setExpiryMonth}
-                  placeholder="08"
+                  onChange={(next) => {
+                    setExpiryMonth(next);
+                    clearFieldError("expiry_month");
+                  }}
+                  placeholder="MM (01–12)"
+                  autoComplete="cc-exp-month"
+                  inputMode="numeric"
+                  error={fieldErrors.expiry_month}
                 />
                 <Field
                   id="expiry_year"
                   label="Expiry year"
                   value={expiryYear}
-                  onChange={setExpiryYear}
-                  placeholder="2028"
+                  onChange={(next) => {
+                    setExpiryYear(next);
+                    clearFieldError("expiry_year");
+                  }}
+                  placeholder="YYYY (e.g. 2028)"
+                  autoComplete="cc-exp-year"
+                  inputMode="numeric"
+                  error={fieldErrors.expiry_year}
                 />
               </div>
             ) : (
@@ -320,23 +387,47 @@ const ShopPaymentMethod = ({ onNext }) => {
         className="lg:w-1/2"
         data-aos="fade-up"
       >
-        <CustomerOrder onNext={handleContinue} buttonLabel="REVIEW ORDER" />
+        <CustomerOrder
+          onNext={handleContinue}
+          buttonLabel={isSubmitting ? "Saving…" : "REVIEW ORDER"}
+          buttonDisabled={isSubmitting}
+        />
       </div>
     </div>
   );
 };
 
-const Field = ({ id, label, value, onChange, placeholder, type = "text" }) => (
-  <FormInput
-    id={id}
-    name={id}
-    label={label}
-    type={type}
-    value={value}
-    onChange={(event) => onChange(event.target.value)}
-    placeholder={placeholder}
-    controlClassName="rounded-none border-x-0 border-t-0 border-border bg-transparent px-0 py-2.5 text-sm text-foreground focus:border-foreground"
-  />
+const Field = ({
+  id,
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  autoComplete,
+  inputMode,
+  error,
+}) => (
+  <div className="flex flex-col gap-1">
+    <FormInput
+      id={id}
+      name={id}
+      label={label}
+      type={type}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      placeholder={placeholder}
+      autoComplete={autoComplete}
+      inputMode={inputMode}
+      aria-invalid={Boolean(error) || undefined}
+      controlClassName="rounded-none border-x-0 border-t-0 border-border bg-transparent px-0 py-2.5 text-sm text-foreground focus:border-foreground"
+    />
+    {error && (
+      <p role="alert" className="text-destructive text-sm poppins-regular">
+        {error}
+      </p>
+    )}
+  </div>
 );
 
 ShopPaymentMethod.propTypes = {
@@ -350,6 +441,9 @@ Field.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   type: PropTypes.string,
+  autoComplete: PropTypes.string,
+  inputMode: PropTypes.string,
+  error: PropTypes.string,
 };
 
 export default ShopPaymentMethod;

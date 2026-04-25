@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { UserCircle } from "lucide-react";
 import { useAuth } from "../../contexts/useAuth";
@@ -7,7 +7,7 @@ import {
   getActiveChildId,
   matchesChildSessionIdentifier,
 } from "../../utils/childSessionRequest";
-import { useParent } from "../../hooks/useAccount";
+import { useCurrentParent } from "../../hooks/useAccount";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -17,7 +17,7 @@ const SubscriptionProgressCertificate = () => {
   const { currentUser } = useAuth();
   const userId = currentUser?._id;
   const activeChildId = getActiveChildId();
-  const { data: parent } = useParent(userId);
+  const { data: parent } = useCurrentParent(userId);
   const children = parent?.children || [];
 
   return (
@@ -55,11 +55,11 @@ const SubscriptionProgressCertificate = () => {
                       className="h-auto w-full rounded-lg border border-border bg-primary px-3 py-2 text-sm text-background hover:bg-primary"
                       onClick={() => {
                         if (!isUnlockedChild) {
-                          navigate("/Dashboard/ChildProfile");
+                          navigate({ to: "/Dashboard/ChildProfile" });
                           return;
                         }
 
-                        navigate("/Dashboard/ProgressCertificate/ProgressPage");
+                        navigate({ to: "/Dashboard/ProgressCertificate/ProgressPage" });
                       }}
                     >
                       {isUnlockedChild ? "View Progress" : "Unlock in Child Accounts"}

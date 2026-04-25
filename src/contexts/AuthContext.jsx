@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchCurrentUser } from '../lib/auth';
 import {
@@ -55,12 +55,14 @@ export function AuthProvider({ children }) {
       console.error('Logout error:', err);
     } finally {
       queryClient.setQueryData(queryKeys.auth.user, null);
-      navigate('/', { replace: true });
+      navigate({ to: '/', replace: true });
     }
   };
 
   const value = {
     currentUser: isError ? null : user || null,
+    isAuthLoading: isLoading,
+    isAuthenticated: Boolean(!isError && user),
     fetchUser,
     logout,
     login,
@@ -69,7 +71,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!isLoading && children}
+      {children}
     </AuthContext.Provider>
   );
 }

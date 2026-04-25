@@ -5,8 +5,10 @@ import {
   normalizeParentRecord,
 } from "./subscription";
 
-export const fetchParent = async (userId) =>
-  normalizeParentRecord(await fetchSessionJson(`/parents/${userId}`));
+export const fetchCurrentParent = async () => {
+  const payload = await fetchSessionJson("/parents/me");
+  return payload?.parent ? normalizeParentRecord(payload.parent) : null;
+};
 
 export const fetchPayments = async () => {
   const payload = await fetchSessionJson("/getPayments");

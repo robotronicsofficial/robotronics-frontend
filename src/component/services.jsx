@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { ArrowUpRight, Bot } from "lucide-react";
 import robort from "../assets/images/right-face-robot.png";
 import AppImage from "./AppImage";
@@ -13,7 +13,7 @@ const Services = () => {
   const navigate = useNavigate();
 
   const handleServiceNavigate = (service) => {
-    navigate(`/ServiceDetail/${service._id}`, { state: { service } });
+    navigate({ to: `/ServiceDetail/${service._id}`, state: { service } });
   };
 
   return (

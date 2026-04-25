@@ -162,12 +162,10 @@ const SubscriptionIntro = () => {
               What is the learning subscription?
             </h1>
             <p className="text-foreground leading-relaxed text-base sm:text-lg poppins-light">
-              The learning subscription is a course platform
-              with all the skills under one roof. It is a one-stop solution
-              for your Child to learn all the Modern Skills. From Robotics to AI
-              to Coding we have got you covered. Just like Netflix, Parents can
-              make multiple Child Accounts and engage their children in
-              productive work.
+              One membership. Every course unlocked. Progress that follows your
+              child across devices, so learning doesn&apos;t stop when the tablet
+              dies. From Robotics to AI to Coding, the whole library sits under
+              one parent account with separate profiles for each child.
               <br />
               <br />
               Activate 2 to 4 courses at a time and start your learning with

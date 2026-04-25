@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "@tanstack/react-router";
 import {
   COMMERCE_ITEM_TYPES,
   createCourseCommerceItem,
@@ -11,9 +11,9 @@ import { COURSE_PATH } from "../../../router/paths";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 
 import { cn } from "../../../lib/utils";
+import { formatShopCurrency } from "../../../lib/shopCheckout";
 import { useCourses } from "../../../hooks/useCourses";
 import { useProducts } from "../../../hooks/useProducts";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -51,7 +51,7 @@ const RelatedItemsMessage = ({ children, tone = "default" }) => (
 
 const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams({ strict: false });
   const config = RELATED_ITEM_CONFIG[itemType] || RELATED_ITEM_CONFIG.product;
   const productQuery = useProducts();
   const courseQuery = useCourses();
@@ -69,21 +69,16 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
   const topThree = useMemo(() => items.slice(0, 3), [items]);
 
   return (
-    <div className="bg-background p-14">
-      <div className="flex flex-col gap-8">
-        <p
-          className="lg:text-5xl text-2xl poppins-bold text-foreground text-center"
-          data-aos="fade-up"
-        >
-          You May Also Like This
-        </p>
-
-        <p
-          className="text-muted-foreground text-wrap poppins-light text-center"
-          data-aos="fade-up"
-        >
-          {config.subtitle}
-        </p>
+    <div className="bg-background px-6 py-10 lg:px-14 lg:py-14">
+      <div className="flex flex-col gap-6">
+        <div className="mt-8 flex flex-col gap-1" data-aos="fade-up">
+          <p className="text-xl poppins-semibold text-foreground">
+            You may also like
+          </p>
+          <p className="text-sm text-muted-foreground poppins-light">
+            {config.subtitle}
+          </p>
+        </div>
 
         {loading ? (
           <RelatedItemsMessage>{config.loadingLabel}</RelatedItemsMessage>
@@ -95,7 +90,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
             <div className="mt-4">
               <Button
                 type="button"
-                onClick={() => navigate(config.browsePath)}
+                onClick={() => navigate({ to: config.browsePath })}
                 className="h-auto rounded-lg bg-foreground px-5 py-3 font-semibold text-primary"
               >
                 {config.browseLabel}
@@ -104,40 +99,36 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
           </RelatedItemsMessage>
         ) : (
           <div
-            className="grid gap-6 lg:grid-cols-3"
+            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
             data-aos="fade-up"
           >
             {topThree.map((item, index) => (
               <Card
                 key={getCommerceItemKey(item) || index}
-                onClick={() => navigate(getCommerceItemRoute(item))}
-                className="overflow-hidden rounded-2xl bg-card text-left transition-colors hover:bg-muted/40"
+                onClick={() => navigate({ to: getCommerceItemRoute(item) })}
+                className="overflow-hidden rounded-xl bg-card text-left transition-colors hover:bg-muted/40"
                 role="button"
                 tabIndex={0}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    navigate(getCommerceItemRoute(item));
+                    navigate({ to: getCommerceItemRoute(item) });
                   }
                 }}
               >
                 <img
                   src={resolveBackendAssetUrl(item?.images?.[0], "https://via.placeholder.com/300x200")}
                   alt={item?.name || "Item"}
-                  className="h-64 w-full object-cover"
+                  className="h-40 w-full object-cover"
                   loading="lazy"
                   decoding="async"
                 />
-                <CardContent className="flex flex-col gap-3 p-5 text-foreground">
-                  <div className="flex items-start justify-between gap-3">
-                    <Badge variant="secondary" className="rounded-full bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-                      {item?.category || "General"}
-                    </Badge>
-                    <p className="text-sm font-semibold">PKR {Number(item?.price || 0).toLocaleString()}</p>
-                  </div>
-                  <h3 className="text-lg font-bold leading-snug">{item?.name || "Item"}</h3>
-                  <p className="line-clamp-2 text-sm text-muted-foreground">
-                    {item?.description || "Live catalog listing from Robotronics."}
+                <CardContent className="flex flex-col gap-2 p-4 text-foreground">
+                  <h3 className="line-clamp-1 text-sm poppins-semibold leading-snug">
+                    {item?.name || "Item"}
+                  </h3>
+                  <p className="text-sm font-semibold text-accent">
+                    {formatShopCurrency(item?.price)}
                   </p>
                 </CardContent>
               </Card>

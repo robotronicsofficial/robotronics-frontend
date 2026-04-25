@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "@tanstack/react-router";
 import Careerintro from "../../component/careers/CareerDetailPage/Careerintro";
 import CareerJobDetail from "../../component/careers/CareerDetailPage/careerJobDetail";
 import PageState from "../../components/layout/PageState";
@@ -6,7 +6,7 @@ import { getJobsErrorMessage } from "../../lib/jobs";
 import { useJob } from "../../hooks/useJobs";
 
 const CareerDetailPage = () => {
-  const { id } = useParams();
+  const { id } = useParams({ strict: false });
   const {
     data: job,
     isLoading: loading,

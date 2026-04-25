@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "@tanstack/react-router";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../contexts/useAuth";
 import CustomerProduct from "./customerProduct";
 import OrderSummaryLine from "./OrderSummaryLine";
@@ -31,18 +33,60 @@ const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
 const summaryValueClassName = `${summaryValueBaseClassName} text-foreground`;
 const summaryTotalValueClassName = `${summaryValueBaseClassName} text-primary`;
 
-const InputField = ({ label, name, value, onChange, placeholder, required = false, type = "text" }) => (
-  <FormInput label={label} name={name} value={value} onChange={onChange} placeholder={placeholder} required={required} type={type} />
+const InputField = ({
+  label,
+  name,
+  value,
+  onChange,
+  placeholder,
+  required = false,
+  type = "text",
+  autoComplete,
+  error,
+}) => (
+  <div className="flex flex-col gap-1">
+    <FormInput
+      label={label}
+      name={name}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      required={required}
+      type={type}
+      autoComplete={autoComplete}
+      aria-invalid={Boolean(error) || undefined}
+    />
+    {error && (
+      <p role="alert" className="text-destructive text-sm poppins-regular">
+        {error}
+      </p>
+    )}
+  </div>
 );
 
-const SelectField = ({ label, name, value, onChange, options, required = false }) => (
-  <FormSelect label={label} name={name} value={value} onChange={onChange} options={options} required={required} />
+const SelectField = ({ label, name, value, onChange, options, required = false, error }) => (
+  <div className="flex flex-col gap-1">
+    <FormSelect
+      label={label}
+      name={name}
+      value={value}
+      onChange={onChange}
+      options={options}
+      required={required}
+    />
+    {error && (
+      <p role="alert" className="text-destructive text-sm poppins-regular">
+        {error}
+      </p>
+    )}
+  </div>
 );
 
 const CustomerInfomation = ({ onNext }) => {
   const cart = useCartStore(selectCart);
-  const { currentUser } = useAuth();
+  const { currentUser, isAuthLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const storedCheckout = loadShopCheckout();
   const requiresShipping = hasShippableCommerceItems(cart);
   const saveCheckoutAddressMutation = useSaveCheckoutAddressMutation();
@@ -60,23 +104,70 @@ const CustomerInfomation = ({ onNext }) => {
     postalCode: storedCheckout.address?.postalCode || "",
     deliveryInstruction: storedCheckout.address?.deliveryInstruction || "",
   });
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    setFieldErrors((prev) => {
+      if (!prev[name]) return prev;
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+  };
+
+  const validateForm = (customer) => {
+    const errors = {};
+    if (!customer.firstName) errors.firstName = "First name is required.";
+    if (!customer.lastName) errors.lastName = "Last name is required.";
+    if (!customer.phone) errors.phone = "Phone number is required.";
+
+    if (requiresShipping) {
+      if (!form.country.trim()) errors.country = "Country is required.";
+      if (!form.streetAddress.trim()) errors.streetAddress = "Residential address is required.";
+      if (!form.city.trim()) errors.city = "City is required.";
+      if (!form.state.trim()) errors.state = "State is required.";
+      if (!form.postalCode.trim()) errors.postalCode = "Postal code is required.";
+    }
+
+    return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!currentUser) return alert("Please log in to continue.");
+    if (saveCheckoutAddressMutation.isPending) return;
+
+    if (isAuthLoading) {
+      toast.info("Checking your account. Please try again in a moment.");
+      return;
+    }
+
+    if (!currentUser) {
+      toast.error("Please log in to continue.");
+      navigate({
+        to: "/Login",
+        search: { redirect: location.href },
+      });
+      return;
+    }
+
+    const customer = {
+      firstName: form.firstName.trim(),
+      lastName: form.lastName.trim(),
+      phone: form.phone.trim(),
+    };
+
+    const errors = validateForm(customer);
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      toast.error("Please fix the highlighted fields before continuing.");
+      return;
+    }
+
+    setFieldErrors({});
 
     try {
-      const customer = {
-        firstName: form.firstName.trim(),
-        lastName: form.lastName.trim(),
-        phone: form.phone.trim(),
-      };
-
       if (!hasCheckoutCustomer(customer)) {
         throw new Error("First name, last name, and phone are required.");
       }
@@ -94,7 +185,7 @@ const CustomerInfomation = ({ onNext }) => {
           return;
         }
 
-        navigate("/ShippingService");
+        navigate({ to: "/ShippingService" });
         return;
       }
 
@@ -112,9 +203,9 @@ const CustomerInfomation = ({ onNext }) => {
         return;
       }
 
-      navigate("/ShippingService");
+      navigate({ to: "/ShippingService" });
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Unable to save your information. Please try again.");
     }
   };
 
@@ -126,28 +217,30 @@ const CustomerInfomation = ({ onNext }) => {
       <div className="flex flex-col lg:w-4/5">
         <form onSubmit={handleSubmit} className="mx-auto flex max-w-4xl flex-col gap-6 bg-background p-6">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <InputField label="First Name" name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name" required />
-            <InputField label="Last Name" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name" required />
+            <InputField label="First Name" name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name" required autoComplete="given-name" error={fieldErrors.firstName} />
+            <InputField label="Last Name" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name" required autoComplete="family-name" error={fieldErrors.lastName} />
           </div>
 
-          <InputField label="Phone" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" required />
+          <InputField label="Phone" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" required type="tel" autoComplete="tel" error={fieldErrors.phone} />
 
           {requiresShipping ? (
             <>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <InputField label="Country / Region" name="country" value={form.country} onChange={handleChange} placeholder="Country" required />
-                <InputField label="Company Name" name="companyName" value={form.companyName} onChange={handleChange} placeholder="Company (optional)" />
+                <InputField label="Country / Region" name="country" value={form.country} onChange={handleChange} placeholder="Country" required autoComplete="country" error={fieldErrors.country} />
+                <InputField label="Company Name" name="companyName" value={form.companyName} onChange={handleChange} placeholder="Company (optional)" autoComplete="organization" />
               </div>
 
-              <InputField label="Residential Address" name="streetAddress" value={form.streetAddress} onChange={handleChange} placeholder="House number and street name" required />
+              <InputField label="Residential Address" name="streetAddress" value={form.streetAddress} onChange={handleChange} placeholder="House number and street name" required autoComplete="street-address" error={fieldErrors.streetAddress} />
+
+              <InputField label="Apt / Suite" name="aptSuite" value={form.aptSuite} onChange={handleChange} placeholder="Apt, suite (optional)" autoComplete="address-line2" />
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <InputField label="City" name="city" value={form.city} onChange={handleChange} placeholder="City" required />
-                <SelectField label="State" name="state" value={form.state} onChange={handleChange} options={STATES} required />
+                <InputField label="City" name="city" value={form.city} onChange={handleChange} placeholder="City" required autoComplete="address-level2" error={fieldErrors.city} />
+                <SelectField label="State" name="state" value={form.state} onChange={handleChange} options={STATES} required error={fieldErrors.state} />
               </div>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <InputField label="Postal Code" name="postalCode" value={form.postalCode} onChange={handleChange} placeholder="Postal Code" required />
+                <InputField label="Postal Code" name="postalCode" value={form.postalCode} onChange={handleChange} placeholder="Postal Code" required autoComplete="postal-code" error={fieldErrors.postalCode} />
               </div>
 
               <FormTextarea
@@ -251,6 +344,8 @@ InputField.propTypes = {
   placeholder: PropTypes.string,
   required: PropTypes.bool,
   type: PropTypes.string,
+  autoComplete: PropTypes.string,
+  error: PropTypes.string,
 };
 
 SelectField.propTypes = {
@@ -265,6 +360,7 @@ SelectField.propTypes = {
     })
   ).isRequired,
   required: PropTypes.bool,
+  error: PropTypes.string,
 };
 
 CustomerInfomation.propTypes = {

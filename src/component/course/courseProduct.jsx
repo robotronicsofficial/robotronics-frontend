@@ -5,7 +5,7 @@ import shopStar from "../../assets/logo/shopStars.svg";
 import time from "../../assets/logo/time-svgrepo-com 1.svg";
 import download from "../../assets/logo/download.svg";
 import sale from "../../assets/logo/sales.svg";
-import { NavLink } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -77,7 +77,7 @@ const CourseProduct = ({ title, id, image, price, duration }) => {
       </CardContent>
       <CardFooter className="justify-center bg-primary p-2">
         <Button asChild className="h-auto bg-primary p-3 text-xl font-bold">
-          <NavLink to={`/CoursesProduct/${id}`}>View Course</NavLink>
+          <Link to={`/CoursesProduct/${id}`}>View Course</Link>
         </Button>
       </CardFooter>
     </Card>

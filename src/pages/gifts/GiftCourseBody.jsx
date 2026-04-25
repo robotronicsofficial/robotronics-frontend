@@ -4,7 +4,7 @@ import { useGiftCourseRequestMutation } from "../../hooks/useIntake";
 import { calculateCartSummary } from "../../lib/shopCheckout";
 import { COURSE_PATH } from "../../router/paths";
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { selectCart, useCartStore } from "../../stores/cartStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -138,7 +138,7 @@ const GiftCourseBody = () => {
                 <Button
                   type="button"
                   className="mt-4 h-auto rounded-lg bg-foreground px-5 py-3 text-sm font-semibold text-primary"
-                  onClick={() => navigate(COURSE_PATH)}
+                  onClick={() => navigate({ to: COURSE_PATH })}
                 >
                   Browse Courses
                 </Button>
@@ -183,7 +183,7 @@ const GiftCourseBody = () => {
                   type="button"
                   variant="outline"
                   className="h-auto rounded-lg bg-card px-5 py-2 text-sm text-muted-foreground poppins-bold lg:px-12 lg:text-xl"
-                  onClick={() => navigate(COURSE_PATH)}
+                  onClick={() => navigate({ to: COURSE_PATH })}
                   disabled={isSubmitting}
                 >
                   Cancel

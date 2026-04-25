@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PhoneInput from 'react-phone-number-input';
@@ -174,37 +174,40 @@ const Signup = () => {
             </p>
             <div className="flex flex-col gap-3 lg:flex-row lg:gap-4">
               <div className="flex flex-1 flex-col gap-1">
-                <Label className="text-sm poppins-light">First name</Label>
+                <Label className="text-sm poppins-regular">First name</Label>
                 <Input
                   className="h-auto rounded-xl bg-background px-3 py-2"
                   name="firstName"
+                  autoComplete="given-name"
                   value={formData.firstName}
                   onChange={handleChange}
                 />
               </div>
               <div className="flex flex-1 flex-col gap-1">
-                <Label className="text-sm poppins-light">Last name</Label>
+                <Label className="text-sm poppins-regular">Last name</Label>
                 <Input
                   className="h-auto rounded-xl bg-background px-3 py-2"
                   name="lastName"
+                  autoComplete="family-name"
                   value={formData.lastName}
                   onChange={handleChange}
                 />
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <Label className="text-sm poppins-light">Email address</Label>
+              <Label className="text-sm poppins-regular">Email address</Label>
               <Input
                 className="h-auto rounded-xl bg-background px-3 py-2"
                 type="email"
                 name="email"
+                autoComplete="email"
                 value={formData.email}
                 onChange={handleChange}
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <Label className="text-sm poppins-light">Phone number</Label>
+              <Label className="text-sm poppins-regular">Phone number</Label>
               <div className="relative" ref={phoneInputRef}>
                 <PhoneInput
                   international
@@ -228,7 +231,7 @@ const Signup = () => {
 
             <div className="flex flex-col">
               <div className="flex items-center justify-between">
-                <Label className="text-sm poppins-light">Password</Label>
+                <Label className="text-sm poppins-regular">Password</Label>
                 <PasswordVisibilityButton
                   isVisible={showPassword}
                   onToggle={togglePasswordVisibility}
@@ -238,6 +241,7 @@ const Signup = () => {
                 className={getPasswordInputClassName(formData.password, passwordMeetsPolicy)}
                 type={showPassword ? "text" : "password"}
                 name="password"
+                autoComplete="new-password"
                 value={formData.password}
                 onChange={handleChange}
               />
@@ -259,7 +263,7 @@ const Signup = () => {
 
             <div className="flex flex-col mt-4">
               <div className="flex items-center justify-between">
-                <Label className="text-sm poppins-light">Confirm Password</Label>
+                <Label className="text-sm poppins-regular">Confirm Password</Label>
                 <PasswordVisibilityButton
                   isVisible={showConfirmPassword}
                   onToggle={toggleConfirmPasswordVisibility}
@@ -269,6 +273,7 @@ const Signup = () => {
                 className={getPasswordInputClassName(formData.confirmPassword, passwordErrors.match)}
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
+                autoComplete="new-password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
               />
@@ -309,7 +314,7 @@ const Signup = () => {
                 {registerMutation.isPending ? (
                   <>
                     <Spinner />
-                    Processing...
+                    Creating account…
                   </>
                 ) : (
                   "Sign up"

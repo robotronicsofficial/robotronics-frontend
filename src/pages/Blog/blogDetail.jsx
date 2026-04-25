@@ -1,11 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 import Intro from "../../component/blog/intro";
 import BlogDetailBody from "../../component/blog/blogDetailBody";
 import PageState from "../../components/layout/PageState";
 
 import { useBlog, useBlogs } from "../../hooks/useBlogs";
 const BlogDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams({ strict: false });
   const {
     data: blog,
     isLoading: blogLoading,

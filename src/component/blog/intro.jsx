@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
