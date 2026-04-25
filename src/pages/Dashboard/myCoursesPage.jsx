@@ -1,5 +1,5 @@
-import MyCourses from "../../component/dashboard/myCourses"
-import Intro from "../../component/dashboard/intro"
+import MyCourses from "@/components/site/dashboard/myCourses"
+import Intro from "@/components/site/dashboard/intro"
 const MyCoursesPage = () => {
   return (
     <div>

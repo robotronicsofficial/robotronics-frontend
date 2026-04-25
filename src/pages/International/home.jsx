@@ -1,9 +1,9 @@
-import Intro from "../../component/international/services/intro";
-import Offers from "../../component/offers";
-import Updates from "../../component/updates";
-import QuickContact from "../../component/international/services/quickContact";
-import Shop from "../../component/international/internationalPage/Shop";
-import Marquees from "../../component/marquees";
+import Intro from "@/components/site/international/services/intro";
+import Offers from "@/components/site/offers";
+import Updates from "@/components/site/updates";
+import QuickContact from "@/components/site/international/services/quickContact";
+import Shop from "@/components/site/international/internationalPage/Shop";
+import Marquees from "@/components/site/marquees";
 const IHome = () => {
   return (
     <div>

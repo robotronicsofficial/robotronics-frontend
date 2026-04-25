@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { Bot, X } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
-import Intro from "../../component/dashboard/intro";
-import DashboardLayout from "../../components/layout/DashboardLayout";
+import Intro from "@/components/site/dashboard/intro";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import {

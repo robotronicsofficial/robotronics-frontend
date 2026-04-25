@@ -1,13 +1,13 @@
-import Graph from "../component/graph";
-import Intro from "../component/intro";
-import Offers from "../component/offers";
-import Services from "../component/services";
-import Shop from "../component/shop";
-import Testimonial from "../component/testimonial";
-import Updates from "../component/updates";
-import BoToBtn from "../component/goToBtn";
-import Marquees from "../component/marquees";
-import Robo from "../component/Robo"
+import Graph from "@/components/site/graph";
+import Intro from "@/components/site/intro";
+import Offers from "@/components/site/offers";
+import Services from "@/components/site/services";
+import Shop from "@/components/site/shop";
+import Testimonial from "@/components/site/testimonial";
+import Updates from "@/components/site/updates";
+import BoToBtn from "@/components/site/goToBtn";
+import Marquees from "@/components/site/marquees";
+import Robo from "@/components/site/Robo"
 
 const Home = () => {
   return (

@@ -1,8 +1,8 @@
-import Intro from "../../component/international/services/intro"
-import Updates from "../../component/updates"
-import OurServices from "../../component/international/services/ourServices"
-import QuickContact from "../../component/international/services/quickContact"
-import Marquees from "../../component/marquees"
+import Intro from "@/components/site/international/services/intro"
+import Updates from "@/components/site/updates"
+import OurServices from "@/components/site/international/services/ourServices"
+import QuickContact from "@/components/site/international/services/quickContact"
+import Marquees from "@/components/site/marquees"
 const IServices = () => {
   return (
     <div>

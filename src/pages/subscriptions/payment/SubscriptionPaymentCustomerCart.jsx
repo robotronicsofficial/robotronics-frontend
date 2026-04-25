@@ -1,5 +1,5 @@
 import SubscriptionPayment from "../register/SubscriptionPayment";
-import YtVideos from "../../../component/course/courseDetailPage/ytVideos";
+import YtVideos from "@/components/site/course/courseDetailPage/ytVideos";
 
 const SubscriptionPaymentCustomerCart = () => {
   return (

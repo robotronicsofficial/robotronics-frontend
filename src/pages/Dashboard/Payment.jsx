@@ -1,5 +1,5 @@
-import Intro from "../../component/dashboard/intro"
-import Payhistory from '../../component/dashboard/Payhistory'
+import Intro from "@/components/site/dashboard/intro"
+import Payhistory from '@/components/site/dashboard/Payhistory'
 
 const Payment = () => {
   return (

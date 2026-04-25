@@ -1,5 +1,5 @@
-import ShippingIntro from "../../component/shop/shippingIntro"
-import ShopShipping from "../../component/shop/shopShipping"
+import ShippingIntro from "@/components/site/shop/shippingIntro"
+import ShopShipping from "@/components/site/shop/shopShipping"
 const Shipping = () => {
   return (
     <div>

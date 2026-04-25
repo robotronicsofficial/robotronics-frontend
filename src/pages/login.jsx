@@ -4,8 +4,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
-import AuthSocialButton from "../components/auth/AuthSocialButton";
-import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
+import AuthSocialButton from "@/components/auth/AuthSocialButton";
+import PasswordVisibilityButton from "@/components/auth/PasswordVisibilityButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,7 +15,7 @@ import { useAuth } from "../contexts/useAuth";
 
 import { resolveBackendUrl } from "../lib/api";
 import { useRequestPasswordResetMutation } from "../hooks/useAuthMutations";
-import { getHeaderOffsetClass } from "../components/layout/headerOffset";
+import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
 import {
   buildAuthRedirectSearch,
   consumePostAuthRedirect,

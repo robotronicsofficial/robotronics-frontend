@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import AppImage from "../../component/AppImage";
+import AppImage from "@/components/site/AppImage";
 import { cn } from "@/lib/utils";
 
 const AvatarStack = ({ images, size = "md", className, imageClassName, alt = "" }) => {

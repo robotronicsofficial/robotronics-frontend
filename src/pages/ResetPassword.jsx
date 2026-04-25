@@ -4,14 +4,14 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
-import { getPasswordInputClassName } from "../components/auth/passwordInputClass";
+import PasswordVisibilityButton from "@/components/auth/PasswordVisibilityButton";
+import { getPasswordInputClassName } from "@/components/auth/passwordInputClass";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useResetPasswordMutation } from "../hooks/useAuthMutations";
-import { getHeaderOffsetClass } from "../components/layout/headerOffset";
+import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
 import {
   getPasswordValidationState,
   hasValidPasswordRequirements,

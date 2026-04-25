@@ -1,4 +1,4 @@
-import CartsStep from "../../component/shop/steps/cartsStep"
+import CartsStep from "@/components/site/shop/steps/cartsStep"
 const Cart = () => {
   return (
     <div className="shopCarthero" id="shopCarthero">

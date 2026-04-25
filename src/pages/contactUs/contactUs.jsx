@@ -1,6 +1,6 @@
-import Intro from "../../component/contactUs/intro"
-import ContactMap from "../../component/contactUs/contactMap"
-import ContactUsForm from "../../component/contactUs/contactUsForm"
+import Intro from "@/components/site/contactUs/intro"
+import ContactMap from "@/components/site/contactUs/contactMap"
+import ContactUsForm from "@/components/site/contactUs/contactUsForm"
 const COntactUS = () => {
   return (
     <div>

@@ -1,6 +1,6 @@
 // import React from 'react'
-import Intro from '../../component/dashboard/intro'
-import SubscriptionProgressCertificate from '../../component/dashboard/SubscriptionProgressCertificate'
+import Intro from '@/components/site/dashboard/intro'
+import SubscriptionProgressCertificate from '@/components/site/dashboard/SubscriptionProgressCertificate'
 
 const ProgressCertificate = () => {
   return (

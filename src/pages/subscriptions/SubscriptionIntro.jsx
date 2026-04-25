@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import AppImage from "../../component/AppImage";
+import AppImage from "@/components/site/AppImage";
 import bg from "../../assets/images/courses_details.svg";
 import yt from "../../assets/images/courseDetailsYoutube.webp";
 import { CheckSquare, Share2 } from "lucide-react";
-import { BrandIcon } from "../../components/ui/brand-icons";
+import { BrandIcon } from "@/components/ui/brand-icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 

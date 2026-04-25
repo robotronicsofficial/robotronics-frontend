@@ -1,6 +1,6 @@
-import Intro from "../../component/dashboard/intro";
-// import PayHistory from "../../component/dashboard/Payhistory";
-import SubscriptionChildProfile from "../../component/dashboard/SubscriptionChildProfile";
+import Intro from "@/components/site/dashboard/intro";
+// import PayHistory from "@/components/site/dashboard/Payhistory";
+import SubscriptionChildProfile from "@/components/site/dashboard/SubscriptionChildProfile";
 // import React from 'react'
 
 const ChildProfile = () => {

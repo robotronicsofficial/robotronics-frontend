@@ -1,7 +1,7 @@
 import { useParams } from "@tanstack/react-router";
-import Intro from "../../component/blog/intro";
-import BlogDetailBody from "../../component/blog/blogDetailBody";
-import PageState from "../../components/layout/PageState";
+import Intro from "@/components/site/blog/intro";
+import BlogDetailBody from "@/components/site/blog/blogDetailBody";
+import PageState from "@/components/layout/PageState";
 
 import { useBlog, useBlogs } from "../../hooks/useBlogs";
 const BlogDetail = () => {

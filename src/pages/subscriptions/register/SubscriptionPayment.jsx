@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
 import { toast } from "react-toastify";
-import AppImage from "../../../component/AppImage";
+import AppImage from "@/components/site/AppImage";
 import robo from "../../../assets/child.webp";
 import { formatDisplayDate } from "../../../lib/subscription";
 import {
@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { FormInput } from "../../../components/forms/FormControls";
+import { FormInput } from "@/components/forms/FormControls";
 
 const PAYMENT_OPTIONS = [
   {

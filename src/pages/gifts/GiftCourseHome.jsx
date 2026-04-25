@@ -1,5 +1,5 @@
 import GiftCourseBody from "./GiftCourseBody";
-import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
+import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
 
 const GiftCourseHome = () => (
   <div>

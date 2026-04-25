@@ -1,8 +1,8 @@
 
-import CareerIntro from "../../component/careers/careerIntro";
-import CareerJoinTeam from "../../component/careers/careerJoinTeam";
-import CareerTestimonials from "../../component/careers/careerTestimonials";
-import CareesFindRole from "../../component/careers/careesFindRole"
+import CareerIntro from "@/components/site/careers/careerIntro";
+import CareerJoinTeam from "@/components/site/careers/careerJoinTeam";
+import CareerTestimonials from "@/components/site/careers/careerTestimonials";
+import CareesFindRole from "@/components/site/careers/careesFindRole"
 const CareerJob = () => {
   return (
     <div>

@@ -8,7 +8,7 @@ import {
   redirect,
 } from "@tanstack/react-router";
 import "react-toastify/dist/ReactToastify.css";
-import Layout from "./component/Layout";
+import Layout from "@/components/site/Layout";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { fetchCurrentUser } from "./lib/auth";
 import { verifyChildSession } from "./lib/childSession";
@@ -23,7 +23,7 @@ import {
 } from "./router/paths";
 import { useSelectedPlanStore } from "./stores/selectedPlanStore";
 import { clearActiveChildSession, getActiveChildSession } from "./utils/childSessionRequest";
-import { getHeaderOffsetClass } from "./components/layout/headerOffset";
+import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
 import { buildRedirectSearchFromLocation } from "./utils/authRedirect";
 
 const ToastContainer = lazy(() => import("react-toastify").then((module) => ({
@@ -62,9 +62,9 @@ const VideoGallery = lazy(() => import("./pages/International/videoGallery"));
 const IServices = lazy(() => import("./pages/International/services"));
 const IHome = lazy(() => import("./pages/International/home"));
 const Screen = lazy(() => import("./pages/SplashScreen/screen"));
-const Search = lazy(() => import("./component/search"));
+const Search = lazy(() => import("@/components/site/search"));
 const MyRobort = lazy(() => import("./pages/Dashboard/myRobot"));
-const JobApplicationForm = lazy(() => import("./component/careers/CareerDetailPage/jobApplicationForm"));
+const JobApplicationForm = lazy(() => import("@/components/site/careers/CareerDetailPage/jobApplicationForm"));
 const SubscriptionPaymentHome = lazy(() => import("./pages/subscriptions/payment/SubscriptionPaymentHome"));
 const SubscriptionReviewOrderHome = lazy(() => import("./pages/subscriptions/review/SubscriptionReviewOrderHome"));
 const ChildHome = lazy(() => import("./pages/ChildProtection/ChildHome"));
@@ -75,8 +75,8 @@ const RefundPolicy = lazy(() => import("./pages/policies/RefundPolicy"));
 const ServiceDetail = lazy(() => import("./pages/ServiceDetail/ServiceDetail"));
 const ChildProfile = lazy(() => import("./pages/Dashboard/ChildProfile"));
 const ProgressCertificate = lazy(() => import("./pages/Dashboard/ProgressCertificate"));
-const SubscriptionProgressPage = lazy(() => import("./component/dashboard/SubscriptionProgressPage"));
-const MyAllCourses = lazy(() => import("./component/dashboard/myAllCourses"));
+const SubscriptionProgressPage = lazy(() => import("@/components/site/dashboard/SubscriptionProgressPage"));
+const MyAllCourses = lazy(() => import("@/components/site/dashboard/myAllCourses"));
 
 const RouteFallback = () => (
   <div className={getHeaderOffsetClass("dashboardWide", "bg-background px-4 pb-16 text-center text-foreground")}>

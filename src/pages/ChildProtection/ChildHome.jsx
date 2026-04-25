@@ -1,4 +1,4 @@
-import Intro from '../../component/contactUs/intro';
+import Intro from '@/components/site/contactUs/intro';
 import ChildBody from './ChildBody';
 
 const ChildHome = () => {

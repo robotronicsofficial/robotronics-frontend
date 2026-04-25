@@ -1,5 +1,5 @@
-import Shopintro from "../component/shop/shopintro"
-import Shopsearch from "../component/shop/shopsearch"
+import Shopintro from "@/components/site/shop/shopintro"
+import Shopsearch from "@/components/site/shop/shopsearch"
 
 const Shop = () => {
   return (

@@ -1,5 +1,5 @@
-import WishListD from "../../component/dashboard/wishList"
-import Intro from "../../component/dashboard/intro"
+import WishListD from "@/components/site/dashboard/wishList"
+import Intro from "@/components/site/dashboard/intro"
 const WishList = () => {
   return (
     <div>   

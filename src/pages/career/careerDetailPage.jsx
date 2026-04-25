@@ -1,7 +1,7 @@
 import { Link, useParams } from "@tanstack/react-router";
-import Careerintro from "../../component/careers/CareerDetailPage/Careerintro";
-import CareerJobDetail from "../../component/careers/CareerDetailPage/careerJobDetail";
-import PageState from "../../components/layout/PageState";
+import Careerintro from "@/components/site/careers/CareerDetailPage/Careerintro";
+import CareerJobDetail from "@/components/site/careers/CareerDetailPage/careerJobDetail";
+import PageState from "@/components/layout/PageState";
 import { getJobsErrorMessage } from "../../lib/jobs";
 import { useJob } from "../../hooks/useJobs";
 

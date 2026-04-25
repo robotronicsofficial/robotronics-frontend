@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../contexts/useAuth";
 import { useLocation, useNavigate } from "@tanstack/react-router";
-import AppImage from "../../../component/AppImage";
+import AppImage from "@/components/site/AppImage";
 import robo from "../../../assets/child.webp";
 import { Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import { normalizeParentRecord } from "../../../lib/subscription";
@@ -15,7 +15,7 @@ import { useSelectedPlanStore } from "../../../stores/selectedPlanStore";
 import { useCurrentParent, useSaveParentMutation } from "../../../hooks/useAccount";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { FormInput, FormSelect } from "../../../components/forms/FormControls";
+import { FormInput, FormSelect } from "@/components/forms/FormControls";
 
 const DRAFT_STORAGE_KEY = "robotronics:subscriptionDraft";
 

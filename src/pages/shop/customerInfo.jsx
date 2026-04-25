@@ -1,5 +1,5 @@
-import CustomerInfoIntro from "../../component/shop/customerInfoIntro"
-import CustomerInfomation from "../../component/shop/CustomerInfomation"
+import CustomerInfoIntro from "@/components/site/shop/customerInfoIntro"
+import CustomerInfomation from "@/components/site/shop/CustomerInfomation"
 const CustomerInfo = () => {
   return (
     <div>

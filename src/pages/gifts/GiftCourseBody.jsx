@@ -1,4 +1,4 @@
-import CustomerOrder from "../../component/shop/customerOrder";
+import CustomerOrder from "@/components/site/shop/customerOrder";
 import { useAuth } from "../../contexts/useAuth";
 import { useGiftCourseRequestMutation } from "../../hooks/useIntake";
 import { calculateCartSummary } from "../../lib/shopCheckout";
@@ -9,7 +9,7 @@ import { selectCart, useCartStore } from "../../stores/cartStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { FormInput, FormTextarea } from "../../components/forms/FormControls";
+import { FormInput, FormTextarea } from "@/components/forms/FormControls";
 
 const buildCurrentUserName = (currentUser) => (
   [

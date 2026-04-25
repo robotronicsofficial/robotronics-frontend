@@ -1,0 +1,555 @@
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
+import logo from "@/assets/logo/robotronicsCharacter.svg";
+import basket from "@/assets/logo/basket.svg";
+import { useAuth } from "@/contexts/useAuth";
+import { ChevronDown, Menu, Star, UserCircle, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { CART_PATH, CONTACT_PATH } from "@/router/paths";
+import { selectCartQuantity, useCartStore } from "@/stores/cartStore";
+
+const PRIMARY_ITEMS = [
+  { to: "/Course", label: "Courses" },
+  { to: "/International/Iservices", label: "Services" },
+  { to: "/shop", label: "Shop" },
+];
+
+const LEARN_GROUP = {
+  label: "Resources",
+  items: [
+    { to: "/International/videoGallery", label: "Events", description: "Workshops and competitions" },
+    { to: "/Blog", label: "Blog", description: "Articles and tutorials" },
+  ],
+};
+
+const COMPANY_GROUP = {
+  label: "Company",
+  items: [
+    { to: "/aboutUs", label: "About Us" },
+    { to: "/International/home", label: "International" },
+    { to: "/CareerJob", label: "Careers" },
+    { to: CONTACT_PATH, label: "Contact" },
+  ],
+};
+
+const FEATURED_ITEM = { to: "/subscriptions", label: "Subscriptions" };
+
+const MOBILE_SECTIONS = [
+  { label: "Home", items: [{ to: "/", label: "Home", end: true }] },
+  LEARN_GROUP,
+  { label: "Browse", items: PRIMARY_ITEMS },
+  COMPANY_GROUP,
+];
+
+const navLinkClass = ({ isActive }) =>
+  [
+    "cursor-pointer whitespace-nowrap poppins-light text-sm lg:text-base transition duration-200",
+    "border-b-2",
+    isActive
+      ? "text-foreground border-accent"
+      : "text-foreground border-transparent hover:border-foreground",
+  ].join(" ");
+
+const readCurrentUserLabel = (currentUser) => {
+  if (!currentUser) return "";
+  const displayName = currentUser.name || currentUser.username || currentUser.firstName;
+  if (displayName) return displayName;
+  return currentUser.email?.split("@")[0] || "";
+};
+
+function NavLink({ className, end, ...props }) {
+  const activeOptions = end ? { exact: true } : undefined;
+
+  if (typeof className === "function") {
+    return (
+      <Link
+        {...props}
+        activeOptions={activeOptions}
+        activeProps={{ className: className({ isActive: true }) }}
+        inactiveProps={{ className: className({ isActive: false }) }}
+      />
+    );
+  }
+
+  return <Link {...props} activeOptions={activeOptions} className={className} />;
+}
+
+function useDismissableMenu(onDismiss) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handlePointer = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        onDismiss();
+      }
+    };
+    const handleKey = (event) => {
+      if (event.key === "Escape") onDismiss();
+    };
+    document.addEventListener("mousedown", handlePointer);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handlePointer);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [onDismiss]);
+
+  return ref;
+}
+
+function NavDropdown({ label, items }) {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const ref = useDismissableMenu(() => setOpen(false));
+  const hasActive = items.some((item) => location.pathname.startsWith(item.to));
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  return (
+    <div className="relative" ref={ref}>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className={[
+          "h-auto rounded-full px-3 py-1",
+          "cursor-pointer whitespace-nowrap poppins-light text-sm lg:text-base transition duration-200",
+          "inline-flex items-center gap-1 text-foreground",
+          "hover:bg-primary/15 hover:text-foreground",
+          "aria-expanded:bg-primary/20 aria-expanded:text-foreground",
+          hasActive ? "bg-primary/15" : "bg-transparent",
+        ].join(" ")}
+      >
+        <span>{label}</span>
+        <ChevronDown
+          className={`text-sm text-muted-foreground transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </Button>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] overflow-hidden rounded-xl bg-card border border-border shadow-lg z-dropdown"
+        >
+          {items.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              role="menuitem"
+              className={({ isActive }) =>
+                [
+                  "flex flex-col px-4 py-3 transition duration-150",
+                  isActive ? "bg-primary/15 text-foreground" : "text-foreground hover:bg-primary/10",
+                ].join(" ")
+              }
+            >
+              <span className="poppins-light text-sm">{item.label}</span>
+              {item.description && (
+                <span className="text-xs text-muted-foreground mt-0.5">{item.description}</span>
+              )}
+            </NavLink>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function UserMenu({ label, onProfile, onLogout }) {
+  const [open, setOpen] = useState(false);
+  const ref = useDismissableMenu(() => setOpen(false));
+
+  return (
+    <div className="relative" ref={ref}>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label={`Account menu for ${label}`}
+        className="h-auto gap-2 whitespace-nowrap rounded-full px-2 py-1"
+      >
+        <UserCircle className="text-xl text-foreground" />
+        <span className="poppins-light text-sm capitalize hidden xl:inline max-w-[8rem] truncate">
+          {label}
+        </span>
+        <ChevronDown
+          className={`text-sm text-muted-foreground transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </Button>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute right-0 mt-2 min-w-[14rem] rounded-lg bg-card border border-border shadow-lg z-dropdown py-1"
+        >
+          <div className="px-4 py-2 border-b border-border">
+            <div className="text-xs text-muted-foreground">Signed in as</div>
+            <div className="poppins-light text-sm capitalize truncate">{label}</div>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            role="menuitem"
+            onClick={() => {
+              setOpen(false);
+              onProfile();
+            }}
+            className="h-auto w-full justify-start rounded-none px-4 py-2 text-left text-sm text-foreground poppins-light"
+          >
+            Dashboard
+          </Button>
+          <Separator className="my-1" />
+          <Button
+            type="button"
+            variant="ghost"
+            role="menuitem"
+            onClick={() => {
+              setOpen(false);
+              onLogout();
+            }}
+            className="h-auto w-full justify-start rounded-none px-4 py-2 text-left text-sm text-accent poppins-light"
+          >
+            Logout
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AuthLoadingSlot({ mobile = false }) {
+  if (mobile) {
+    return (
+      <div className="flex flex-col gap-2" aria-label="Loading account">
+        <div className="h-10 rounded bg-muted" />
+        <div className="h-10 rounded border border-border" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-9 w-32 rounded-lg border border-border bg-muted" aria-label="Loading account" />
+  );
+}
+
+function CartButton({ totalQuantity, onClick, className = "" }) {
+  return (
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon-sm"
+      onClick={onClick}
+      aria-label={`Cart${totalQuantity > 0 ? `, ${totalQuantity} items` : ""}`}
+      className={`relative cursor-pointer ${className}`}
+    >
+      <img src={basket} alt="" className="w-6 h-6" />
+      {totalQuantity > 0 && (
+        <span className="absolute -top-2 -right-2 bg-accent text-background rounded-full text-xs font-bold px-1.5 py-0.5 min-w-[1.25rem] text-center">
+          {totalQuantity}
+        </span>
+      )}
+    </Button>
+  );
+}
+
+function SubscribeCTA({ onClick }) {
+  return (
+    <NavLink
+      to={FEATURED_ITEM.to}
+      onClick={onClick}
+      className={({ isActive }) =>
+        [
+          "poppins-bold whitespace-nowrap text-sm lg:text-base rounded-lg px-4 py-2 inline-flex items-center gap-1.5 transition duration-200 shrink-0",
+          "bg-primary text-foreground hover:bg-accent hover:text-background",
+          isActive ? "ring-2 ring-ring ring-offset-2" : "",
+        ].join(" ")
+      }
+    >
+      <Star className="text-sm" />
+      <span>{FEATURED_ITEM.label}</span>
+    </NavLink>
+  );
+}
+
+function MobileGroup({ group, onNavigate }) {
+  const location = useLocation();
+  const hasActive = group.items.some((item) =>
+    item.end ? location.pathname === item.to : location.pathname.startsWith(item.to),
+  );
+  const [open, setOpen] = useState(hasActive);
+
+  if (group.items.length === 1) {
+    const item = group.items[0];
+    return (
+      <NavLink
+        to={item.to}
+        end={item.end}
+        onClick={onNavigate}
+        className={({ isActive }) =>
+          `block py-3 border-b cursor-pointer px-2 poppins-light transition duration-150 ${
+            isActive ? "bg-muted text-accent" : "hover:bg-muted"
+          }`
+        }
+      >
+        {item.label}
+      </NavLink>
+    );
+  }
+
+  return (
+    <div className="border-b">
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        className="h-auto w-full justify-between rounded-none py-3 px-2 text-left poppins-light"
+      >
+        <span>{group.label}</span>
+        <ChevronDown
+          className={`text-sm text-muted-foreground transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </Button>
+      {open && (
+        <ul className="pl-4 pb-2 flex flex-col gap-1">
+          {group.items.map((item) => (
+            <li key={item.to}>
+              <NavLink
+                to={item.to}
+                end={item.end}
+                onClick={onNavigate}
+                className={({ isActive }) =>
+                  `block py-2 px-2 rounded poppins-light text-sm transition duration-150 ${
+                    isActive ? "bg-muted text-accent" : "hover:bg-muted"
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export default function Header() {
+  const totalQuantity = useCartStore(selectCartQuantity);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { currentUser, isAuthLoading, logout } = useAuth();
+  const currentUserLabel = readCurrentUserLabel(currentUser);
+
+  const closeMenu = () => setMenuOpen(false);
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const goToDashboard = () => navigate({ to: "/Dashboard/userInfo" });
+  const goToCart = () => navigate({ to: CART_PATH });
+
+  return (
+    <header className="bg-transparent relative top-20 z-header w-full">
+      <div className="w-full h-full flex items-center justify-center absolute">
+        <div className="bg-card flex items-center gap-4 lg:gap-6 p-3 sm:p-5 border border-border w-site-shell mt-6 mb-6 rounded-2xl">
+          <NavLink
+            to="/"
+            end
+            className="flex items-center gap-2 whitespace-nowrap shrink-0"
+            data-aos="fade-right"
+          >
+            <img src={logo} alt="Robotronics Pakistan" className="w-12 h-12 sm:w-20 sm:h-20" />
+            <div className="flex flex-col leading-tight">
+              <span className="text-[10px] sm:text-xs poppins-bold">ROBOTRONICS</span>
+              <span className="text-[10px] sm:text-xs poppins-bold text-primary tracking-widest">
+                PAKISTAN
+              </span>
+            </div>
+          </NavLink>
+
+          <nav
+            className="hidden lg:flex lg:items-center flex-grow min-w-0"
+            data-aos="fade-down"
+          >
+            <ul className="flex items-center gap-x-6 xl:gap-x-8 mx-auto">
+              <li>
+                <NavLink to="/" end className={navLinkClass}>
+                  Home
+                </NavLink>
+              </li>
+              {PRIMARY_ITEMS.map((item) => (
+                <li key={item.to}>
+                  <NavLink to={item.to} className={navLinkClass}>
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
+              <li>
+                <NavDropdown label={LEARN_GROUP.label} items={LEARN_GROUP.items} />
+              </li>
+              <li>
+                <NavDropdown label={COMPANY_GROUP.label} items={COMPANY_GROUP.items} />
+              </li>
+            </ul>
+          </nav>
+
+          <div
+            className="hidden lg:flex lg:items-center gap-3 shrink-0"
+            data-aos="fade-left"
+          >
+            <SubscribeCTA />
+            {isAuthLoading ? (
+              <AuthLoadingSlot />
+            ) : currentUser ? (
+              <UserMenu
+                label={currentUserLabel}
+                onProfile={goToDashboard}
+                onLogout={logout}
+              />
+            ) : (
+              <div className="flex border rounded-lg">
+                <NavLink
+                  to="/Signup"
+                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-accent hover:text-background"
+                >
+                  Sign Up
+                </NavLink>
+                <NavLink
+                  to="/Login"
+                  className="whitespace-nowrap py-1 px-3 rounded m-1 cursor-pointer focus:outline-none transition duration-200 hover:bg-accent hover:text-background"
+                >
+                  Login
+                </NavLink>
+              </div>
+            )}
+            <CartButton totalQuantity={totalQuantity} onClick={goToCart} />
+          </div>
+
+          <div className="flex items-center lg:hidden gap-3 shrink-0 ml-auto">
+            <CartButton totalQuantity={totalQuantity} onClick={goToCart} />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              className="rounded-md p-1"
+              data-aos="fade-left"
+              onClick={toggleMenu}
+              aria-label="Open menu"
+              aria-expanded={menuOpen}
+            >
+              <Menu className="text-2xl" />
+            </Button>
+          </div>
+
+          <div
+            className={`${menuOpen ? "fixed" : "hidden"} inset-0 bg-foreground/50 z-overlay lg:hidden`}
+            onClick={closeMenu}
+            aria-hidden="true"
+          />
+
+          <nav
+            className={`${
+              menuOpen ? "fixed" : "hidden"
+            } lg:hidden top-0 right-0 h-full w-3/4 bg-card shadow-lg z-modal p-4 overflow-y-auto transition-all duration-300 ease-in-out`}
+            aria-label="Mobile navigation"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold">Menu</h2>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                onClick={closeMenu}
+                aria-label="Close menu"
+                className="text-muted-foreground hover:text-foreground p-1"
+              >
+                <X className="text-2xl" />
+              </Button>
+            </div>
+
+            <div className="flex flex-col">
+              {MOBILE_SECTIONS.map((group) => (
+                <MobileGroup key={group.label} group={group} onNavigate={closeMenu} />
+              ))}
+
+              <NavLink
+                to={FEATURED_ITEM.to}
+                onClick={closeMenu}
+                className={({ isActive }) =>
+                  `flex items-center gap-2 py-3 mt-4 rounded-lg cursor-pointer px-4 poppins-bold transition duration-150 ${
+                    isActive ? "bg-accent text-background" : "bg-primary text-foreground hover:bg-accent hover:text-background"
+                  }`
+                }
+              >
+                <Star className="text-sm" />
+                <span>{FEATURED_ITEM.label}</span>
+              </NavLink>
+            </div>
+
+            <Separator className="my-4" />
+
+            {isAuthLoading ? (
+              <AuthLoadingSlot mobile />
+            ) : currentUser ? (
+              <div className="flex flex-col gap-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="flex items-center gap-2 py-3 px-2 text-left capitalize poppins-light hover:bg-muted transition duration-150 rounded"
+                  onClick={() => {
+                    closeMenu();
+                    goToDashboard();
+                  }}
+                >
+                  <UserCircle className="text-xl text-foreground" />
+                  <span className="truncate">{currentUserLabel}</span>
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    logout();
+                    closeMenu();
+                  }}
+                  className="h-auto w-full border-accent px-4 py-2 text-accent hover:bg-accent hover:text-background"
+                >
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <NavLink
+                  to="/Signup"
+                  className="py-2 px-4 rounded cursor-pointer bg-accent text-background text-center transition duration-200"
+                  onClick={closeMenu}
+                >
+                  Sign Up
+                </NavLink>
+                <NavLink
+                  to="/Login"
+                  className="py-2 px-4 rounded cursor-pointer border border-accent text-accent text-center transition duration-200"
+                  onClick={closeMenu}
+                >
+                  Login
+                </NavLink>
+              </div>
+            )}
+          </nav>
+        </div>
+      </div>
+    </header>
+  );
+}

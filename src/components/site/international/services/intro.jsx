@@ -1,0 +1,101 @@
+import { BrandIcon } from "@/components/ui/brand-icons";
+import { getAosStaggerDelay } from "@/utils/motion";
+
+const Intro = () => {
+  return (
+    <div className="internationalServices">
+      <div
+        className="w-full pt-60"
+        data-aos="fade-up"
+
+
+      >
+        <div className="flex flex-col gap-y-10 lg:p-10 p-4 lg:px-24 lg:w-1/2">
+          {/* Text */}
+          <div className="flex flex-col gap-y-2">
+            <div
+              className="flex flex-row gap-x-2"
+              data-aos="fade-up"
+
+
+            >
+              {/* <h1 className=" md:text-3xl text-xl poppins-extralight text-background">
+                ROBOTRONICS
+              </h1>
+              <h1 className=" md:text-3xl tex-xl poppins-bold text-background font-bold">
+                WELCOMES
+              </h1> */}
+            </div>
+            <div
+              className="flex flex-wrap"
+              data-aos="fade-up"
+
+
+            >
+              <p className="lg:text-8xl text-4xl poppins-bold text-primary">
+                OUR&nbsp;
+              </p>
+              <p className="lg:text-8xl text-4xl poppins-bold text-background">
+                SERVICES
+              </p>
+            </div>
+            <p
+              className="text-wrap text-sm poppins-extralight text-background"
+              data-aos="fade-up"
+            >
+              Robotronics has successfully taught 15,000+ International Student
+              across the globe. International Students are invited to explore
+              the future of Robotics, Coding and STEM Education. We offer
+              hands-on learning experiences, empowering students of all ages to
+              explore, create and innovate in the exciting world of Robotics &
+              STEM.
+            </p>
+          </div>
+          {/* Social Icons */}
+          <div className="flex flex-row py-10 gap-x-2 lg:gap-x-5">
+            {[
+              {
+                href: "https://www.facebook.com/robotronicspakistan/",
+                brand: "facebook",
+              },
+              {
+                href: "https://twitter.com/robotronicspk",
+                brand: "twitter",
+              },
+              {
+                href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
+                brand: "youtube",
+              },
+              {
+                href: "https://www.instagram.com/robotronicspk/?hl=en",
+                brand: "instagram",
+              },
+              {
+                href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
+                brand: "linkedin",
+              },
+              {
+                href: "https://api.whatsapp.com/send?phone=1234567890",
+                brand: "whatsapp",
+              },
+            ].map(({ href, brand }, index) => (
+              <a
+                key={index}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-aos="fade-up"
+                data-aos-delay={getAosStaggerDelay(index)}
+                className="lg:p-3 p-2 border border-foreground bg-card rounded-xl hover:bg-foreground hover:text-background"
+              >
+                <BrandIcon brand={brand} />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Intro;

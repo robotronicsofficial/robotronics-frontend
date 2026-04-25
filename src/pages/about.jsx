@@ -1,10 +1,10 @@
-import Intro from "../component/about/aboutIntro";
-import AboutRobotronics from "../component/about/aboutRobotronics";
-import AboutScience from "../component/about/aboutScience"
-import AboutVision from "../component/about/aboutVision"
-import AboutSquad from "../component/about/aboutSquad"
-import Gotobtn from "../component/goToBtn"
-import Marquees from "../component/marquees";
+import Intro from "@/components/site/about/aboutIntro";
+import AboutRobotronics from "@/components/site/about/aboutRobotronics";
+import AboutScience from "@/components/site/about/aboutScience"
+import AboutVision from "@/components/site/about/aboutVision"
+import AboutSquad from "@/components/site/about/aboutSquad"
+import Gotobtn from "@/components/site/goToBtn"
+import Marquees from "@/components/site/marquees";
 const About = () => {
   return (
     <div className="flex flex-col" >

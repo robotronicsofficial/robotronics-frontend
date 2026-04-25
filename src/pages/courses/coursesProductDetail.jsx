@@ -1,7 +1,7 @@
-import YtVideos from "../../component/course/courseDetailPage/ytVideos";
-import Decription from "../../component/shop/productDetail/decription";
-import CourseIntro from "../../component/course/courseDetailPage/courseIntro";
-import MoreProduct from "../../component/shop/productDetail/moreProduct";
+import YtVideos from "@/components/site/course/courseDetailPage/ytVideos";
+import Decription from "@/components/site/shop/productDetail/decription";
+import CourseIntro from "@/components/site/course/courseDetailPage/courseIntro";
+import MoreProduct from "@/components/site/shop/productDetail/moreProduct";
 import { COMMERCE_ITEM_TYPES } from "../../lib/commerceItems";
 import { useParams } from "@tanstack/react-router";
 

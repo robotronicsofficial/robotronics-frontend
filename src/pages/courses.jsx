@@ -1,5 +1,5 @@
-import Shopintro from "../component/shop/shopintro"
-import ShopCoursesIntro from "../component/shop/shopCoursesIntro"
+import Shopintro from "@/components/site/shop/shopintro"
+import ShopCoursesIntro from "@/components/site/shop/shopCoursesIntro"
 const Course = () => {
   return (
         <div className="" >

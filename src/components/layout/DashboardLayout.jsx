@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import LeftNav from "../../component/dashboard/leftNav";
+import LeftNav from "@/components/site/dashboard/leftNav";
 import { cn } from "../../lib/utils";
 import { getHeaderOffsetClass } from "./headerOffset";
 

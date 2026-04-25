@@ -1,5 +1,5 @@
-import CheckoutIntro from "../../component/shop/CheckoutIntro";
-import ShopPaymentMethod from "../../component/shop/shopPaymentMethod"
+import CheckoutIntro from "@/components/site/shop/CheckoutIntro";
+import ShopPaymentMethod from "@/components/site/shop/shopPaymentMethod"
 
 const ShippingService = () => {
   return (

@@ -1,4 +1,4 @@
-import Footer from "../../../component/footer";
+import Footer from "@/components/site/footer";
 import SubscriptionPaymentCart from "./SubscriptionPaymentCart";
 
 const SubscriptionPaymentShell = () => {

@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import ReviewsComponent from "../../pages/subscriptions/SubscriptionTestimonials";
 import { useParams } from "@tanstack/react-router";
-import ChatSupport from "../../component/ChatSupport"
+import ChatSupport from "@/components/site/ChatSupport"
 import { getActiveChildSession } from "../../utils/childSessionRequest";
 import { openExternalUrl } from "../../utils/openExternalUrl";
 import {
@@ -23,13 +23,13 @@ import {
   useDownloadChildCourseContentMutation,
   useUpdateChildCourseProgressMutation,
 } from "../../hooks/useChildCourses";
-import VideoPlayer from "../../component/VideoPlayer";
-import CenteredState from "../../components/layout/CenteredState";
-import { getHeaderOffsetClass } from "../../components/layout/headerOffset";
-import DialogShell from "../../components/ui/dialog-shell";
-import { Spinner } from "../../components/ui/spinner";
+import VideoPlayer from "@/components/site/VideoPlayer";
+import CenteredState from "@/components/layout/CenteredState";
+import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
+import DialogShell from "@/components/ui/dialog-shell";
+import { Spinner } from "@/components/ui/spinner";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
-import StarRating from "../../components/rating/StarRating";
+import StarRating from "@/components/rating/StarRating";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";

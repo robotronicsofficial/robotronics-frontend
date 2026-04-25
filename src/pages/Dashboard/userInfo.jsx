@@ -1,4 +1,4 @@
-import UserInfoIntro from "../../component/dashboard/userInfoIntro"
+import UserInfoIntro from "@/components/site/dashboard/userInfoIntro"
 const UserInfo = () => {
   return (
     <div>
