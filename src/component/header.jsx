@@ -118,12 +118,12 @@ function NavDropdown({ label, items }) {
         aria-haspopup="menu"
         aria-expanded={open}
         className={[
-          "h-auto rounded-none bg-transparent px-0 py-0 hover:bg-transparent",
+          "h-auto rounded-full px-3 py-1",
           "cursor-pointer whitespace-nowrap poppins-light text-sm lg:text-base transition duration-200",
-          "border-b-2 inline-flex items-center gap-1",
-          hasActive
-            ? "text-foreground border-accent"
-            : "text-foreground border-transparent hover:border-foreground",
+          "inline-flex items-center gap-1 text-foreground",
+          "hover:bg-primary/15 hover:text-foreground",
+          "aria-expanded:bg-primary/20 aria-expanded:text-foreground",
+          hasActive ? "bg-primary/15" : "bg-transparent",
         ].join(" ")}
       >
         <span>{label}</span>
@@ -137,7 +137,7 @@ function NavDropdown({ label, items }) {
       {open && (
         <div
           role="menu"
-          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] rounded-xl bg-card border border-border shadow-lg z-dropdown py-2"
+          className="absolute left-1/2 -translate-x-1/2 mt-3 min-w-[16rem] overflow-hidden rounded-xl bg-card border border-border shadow-lg z-dropdown"
         >
           {items.map((item) => (
             <NavLink
@@ -146,8 +146,8 @@ function NavDropdown({ label, items }) {
               role="menuitem"
               className={({ isActive }) =>
                 [
-                  "flex flex-col px-4 py-2 transition duration-150",
-                  isActive ? "bg-muted text-accent" : "text-foreground hover:bg-muted",
+                  "flex flex-col px-4 py-3 transition duration-150",
+                  isActive ? "bg-primary/15 text-foreground" : "text-foreground hover:bg-primary/10",
                 ].join(" ")
               }
             >
