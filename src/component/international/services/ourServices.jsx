@@ -4,6 +4,7 @@ import AppImage from "../../AppImage";
 import robot from "../../../assets/images/IServicesS4.webp";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
 import { useServices } from "../../../hooks/useServices";
+import QueryErrorState from "../../../components/layout/QueryErrorState";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -12,6 +13,7 @@ const OurServices = () => {
     data: services = [],
     isLoading: loading,
     error,
+    refetch,
   } = useServices();
   const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
@@ -26,10 +28,16 @@ const OurServices = () => {
         <h2 className="lg:text-6xl md:text-5xl text-4xl text-foreground poppins-bold mb-16">
           Our Services
         </h2>
-        {error && <p className="text-destructive">We couldn&apos;t load services right now.</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {loading ? (
             <p className="text-center text-lg">Loading services...</p>
+          ) : error ? (
+            <QueryErrorState
+              className="col-span-full"
+              title="Couldn't load services"
+              message={error.message}
+              onRetry={() => refetch()}
+            />
           ) : services.length > 0 ? (
             (showAll ? services : services.slice(0, 6)).map((service) => {
               const imageUrl = resolveBackendAssetUrl(service.thumbnailImage, robot);
@@ -63,10 +71,8 @@ const OurServices = () => {
                 </Card>
               );
             })
-          ) : !error ? (
-            <p className="text-center text-lg">No services available right now.</p>
           ) : (
-            null
+            <p className="text-center text-lg">No services available right now.</p>
           )}
         </div>
 

@@ -128,18 +128,17 @@ const SubscriptionIntro = () => {
               {/* Features */}
               <div className="w-full rounded-md border border-border bg-background px-4 py-6 sm:px-6 sm:py-7 md:px-10 lg:px-8">
                 <h3 className="text-lg sm:text-xl mb-4 font-semibold poppins-bold">
-                Subscription features:
+                  Subscription features:
                 </h3>
                 <ul className="flex flex-col list-none gap-y-3 text-muted-foreground">
                   {[
-                    "30+ Courses in one Subscription",
+                    "30+ courses in one subscription",
                     "Robotics, STEM, AI, Coding all included",
                     "180+ hours of recorded Lectures",
                     "Freelancing Skills including E-Commerce",
                     "Easy to Understand Language",
                     "24/7 live support for active learners",
                     "Multiple Child Accounts under one Parent",
-
                   ].map((item, index) => (
                     <li
                       key={index}
@@ -162,7 +161,7 @@ const SubscriptionIntro = () => {
               What is the learning subscription?
             </h1>
             <p className="text-foreground leading-relaxed text-base sm:text-lg poppins-light">
-              One membership. Every course unlocked. Progress that follows your
+	              One subscription plan. Every course unlocked. Progress that follows your
               child across devices, so learning doesn&apos;t stop when the tablet
               dies. From Robotics to AI to Coding, the whole library sits under
               one parent account with separate profiles for each child.

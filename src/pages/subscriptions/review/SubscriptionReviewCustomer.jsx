@@ -55,7 +55,7 @@ const SubscriptionReviewCustomer = () => {
 
       if (!checkout.plan?.planId || !checkout.plan?.billingCycle) {
         throw new Error(
-          "Subscription membership is missing. Start the membership checkout again."
+          "Subscription plan is missing. Start the subscription checkout again."
         );
       }
 
@@ -164,10 +164,10 @@ const SubscriptionReviewCustomer = () => {
           </div>
 
           <div className="flex flex-col gap-y-4 rounded-2xl bg-muted p-5">
-            <SummaryLine
-              label="Membership"
-              value={checkout.plan.name || "Subscription"}
-            />
+	            <SummaryLine
+	              label="Subscription plan"
+	              value={checkout.plan.name || "Subscription"}
+	            />
             <SummaryLine
               label="Billing cycle"
               value={checkout.plan.billingCycle || "N/A"}

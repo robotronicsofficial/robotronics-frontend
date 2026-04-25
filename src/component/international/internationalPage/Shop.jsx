@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { BellRing, Star } from "lucide-react";
 import robo from "../../../assets/logo/Robotrinic.svg";
 import { resolveBackendAssetUrl } from "../../../utils/mediaUrl";
+import QueryErrorState from "../../../components/layout/QueryErrorState";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -14,6 +15,7 @@ const Shop = () => {
     data: courses = [],
     isLoading: loading,
     error,
+    refetch,
   } = useCourses();
 
   const featuredCourses = useMemo(() => courses.slice(0, 6), [courses]);
@@ -45,9 +47,12 @@ const Shop = () => {
             Loading live courses...
           </div>
         ) : error ? (
-          <div className="rounded-2xl border border-border bg-card p-10 text-center text-destructive">
-            We couldn&apos;t load courses right now.
-          </div>
+          <QueryErrorState
+            className="rounded-2xl border border-border bg-card p-6"
+            title="Couldn't load courses"
+            message={error.message}
+            onRetry={() => refetch()}
+          />
         ) : featuredCourses.length === 0 ? (
           <div className="rounded-2xl border border-border bg-card p-10 text-center text-foreground">
             No courses available right now.

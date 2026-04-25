@@ -15,10 +15,10 @@ export const verifyEmailToken = (token) =>
 
 export const fetchCurrentUser = () => fetchSessionJson(AUTH_USER_PATH);
 
-export const loginUser = ({ email, password }) =>
+export const loginUser = ({ email, password, rememberMe }) =>
   sendSessionJson(AUTH_LOGIN_PATH, {
     method: "POST",
-    body: { email, password },
+    body: { email, password, rememberMe },
   });
 
 export const logoutUser = () =>

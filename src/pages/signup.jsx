@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { Link, useSearch } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PhoneInput from 'react-phone-number-input';
@@ -26,9 +26,16 @@ import {
   hasValidPasswordRequirements,
   PASSWORD_POLICY_MESSAGE,
 } from "../utils/passwordPolicy";
+import {
+  buildAuthRedirectSearch,
+  getSafeRedirectPath,
+  savePostAuthRedirect,
+} from "../utils/authRedirect";
 
 const Signup = () => {
   const registerMutation = useRegisterMutation();
+  const search = useSearch({ strict: false });
+  const redirectPath = getSafeRedirectPath(search.redirect);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -40,30 +47,10 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-  const phoneInputRef = useRef(null);
   const passwordErrors = getPasswordValidationState(
     formData.password,
     formData.confirmPassword,
   );
-  useEffect(() => {
-    // This effect will run after the component mounts
-    if (phoneInputRef.current) {
-      // Find the input element within the phone input component
-      const inputElement = phoneInputRef.current.querySelector('input');
-
-      if (inputElement) {
-        // Apply your custom classes
-        inputElement.classList.add(
-          'border', 'border-border', 'rounded-xl', 'p-2',
-          'bg-background', 'w-full', 'focus:outline-none',
-          'focus:ring-0', 'focus:border-border'
-        );
-
-        // Remove any unwanted classes
-        inputElement.classList.remove('PhoneInputInput');
-      }
-    }
-  }, []);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -119,6 +106,7 @@ const Signup = () => {
         password: formData.password
       });
 
+      savePostAuthRedirect(redirectPath);
       toast.success("Email sent successfully! Please verify your email.");
     } catch (error) {
       toast.error(error.message);
@@ -208,13 +196,13 @@ const Signup = () => {
 
             <div className="flex flex-col gap-1">
               <Label className="text-sm poppins-regular">Phone number</Label>
-              <div className="relative" ref={phoneInputRef}>
+              <div className="relative">
                 <PhoneInput
                   international
                   defaultCountry="PK"
                   value={formData.phoneNumber}
                   onChange={handlePhoneChange}
-                  inputProps={{
+                  numberInputProps={{
                     className: "border border-border rounded-xl p-2 pl-14 bg-background w-full focus:outline-none focus:ring-0 focus:border-border text-base",
                     autoComplete: "tel",
                     type: "tel"
@@ -224,7 +212,7 @@ const Signup = () => {
                     dropdownClass: "absolute z-dropdown max-h-60 overflow-y-auto bg-card shadow-lg border border-border rounded-md w-60 max-w-full mt-1",
                     buttonClass: "flex items-center justify-center h-full px-2 focus:outline-none"
                   }}
-                  containerClass="phone-input relative w-full"
+                  className="phone-input relative w-full"
                 />
               </div>
             </div>
@@ -325,6 +313,7 @@ const Signup = () => {
               Already have an account?{" "}
               <Link
                 to="/Login"
+                search={buildAuthRedirectSearch(redirectPath)}
                 className="underline underline-offset-4"
               >
                 Log in

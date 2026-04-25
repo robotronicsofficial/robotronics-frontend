@@ -50,7 +50,7 @@ const SubscriptionPlans = () => {
     return (
       <div className="flex flex-col items-center bg-background py-10 px-4 sm:px-8 md:px-16 lg:px-24">
         <p className="text-destructive poppins-light">
-          Error loading memberships: {error.message}
+          Error loading subscription plans: {error.message}
         </p>
       </div>
     );
@@ -61,7 +61,7 @@ const SubscriptionPlans = () => {
   return (
     <div className="flex flex-col items-center bg-background py-10 px-4 sm:px-8 md:px-16 lg:px-24">
       <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center poppins-bold">
-        Course Membership
+        Learning Subscription Plans
       </h2>
 
       <div className="mt-6 flex items-center justify-center gap-4 poppins-light">
@@ -89,9 +89,9 @@ const SubscriptionPlans = () => {
                   key={plan._id}
                   className="flex flex-col gap-4 rounded-2xl border border-border bg-muted p-6"
                 >
-                  <h3 className="text-xl font-bold text-center poppins-bold">
-                    {plan.planName || "Course Membership"}
-                  </h3>
+	                  <h3 className="text-xl font-bold text-center poppins-bold">
+	                    {plan.planName || "Learning Subscription"}
+	                  </h3>
 
                   <div className="flex flex-col items-center gap-1">
                     <p className="text-2xl font-bold text-center">
@@ -125,20 +125,20 @@ const SubscriptionPlans = () => {
                     ))}
                   </ul>
 
-                  <Button
-                    type="button"
-                    className="h-auto w-full rounded-lg bg-warning px-6 py-2 text-background"
-                    onClick={() => handleRegisterClick(plan)}
-                  >
-                    Choose plan
-                  </Button>
+	                  <Button
+	                    type="button"
+	                    className="h-auto w-full rounded-lg bg-primary px-6 py-2 text-primary-foreground hover:bg-accent hover:text-background"
+	                    onClick={() => handleRegisterClick(plan)}
+	                  >
+	                    Choose subscription
+	                  </Button>
                 </div>
               );
             })}
       </div>
 
       <p className="mt-8 text-center text-sm text-muted-foreground poppins-light">
-        Cancel anytime. All plans include child profiles and unlimited course access.
+        Cancel anytime. All subscription plans include child profiles and course access.
       </p>
     </div>
   );

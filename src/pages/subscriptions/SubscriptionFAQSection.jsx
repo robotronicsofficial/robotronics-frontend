@@ -58,7 +58,7 @@ const faqs = [
   {
     question: "What is the fee structure?",
     answer:
-      "The membership supports monthly and annual billing. The current price is shown before registration, and the annual plan includes a savings discount.",
+      "The subscription supports monthly and annual billing. The current price is shown before registration, and the annual plan includes a savings discount.",
   },
 ];
 

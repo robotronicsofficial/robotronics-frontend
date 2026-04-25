@@ -3,11 +3,11 @@ import { GraduationCap, Star } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
+import QueryErrorState from "../../components/layout/QueryErrorState";
 import { Spinner } from "../../components/ui/spinner";
 import { getActiveChildSession } from "../../utils/childSessionRequest";
 import { useChildCourses } from "../../hooks/useChildCourses";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
@@ -21,6 +21,7 @@ const MyAllCourses = () => {
     data: activeCourses = [],
     isLoading: loading,
     error,
+    refetch,
   } = useChildCourses(childId);
 
   const displayedCourses = activeCourses;
@@ -71,10 +72,12 @@ const MyAllCourses = () => {
   if (error) {
     return (
       <CenteredState className="min-h-screen bg-muted px-6">
-        <Alert variant="destructive" className="max-w-md">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error.message}</AlertDescription>
-        </Alert>
+        <QueryErrorState
+          className="max-w-md"
+          title="Couldn't load active courses"
+          message={error.message}
+          onRetry={() => refetch()}
+        />
       </CenteredState>
     );
   }

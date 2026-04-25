@@ -54,7 +54,7 @@ const faqs = [
   {
     question: "What is the fee structure?",
     answer:
-      "The current membership price is shown during checkout, with monthly and annual billing available.",
+      "The current subscription price is shown during checkout, with monthly and annual billing available.",
   },
 ];
 

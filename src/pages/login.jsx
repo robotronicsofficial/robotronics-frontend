@@ -7,24 +7,26 @@ import google from "../assets/images/Googlelogo.svg";
 import AuthSocialButton from "../components/auth/AuthSocialButton";
 import PasswordVisibilityButton from "../components/auth/PasswordVisibilityButton";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "../contexts/useAuth";
 
 import { resolveBackendUrl } from "../lib/api";
 import { useRequestPasswordResetMutation } from "../hooks/useAuthMutations";
 import { getHeaderOffsetClass } from "../components/layout/headerOffset";
-
-const isSafeRedirectPath = (value) => (
-  typeof value === "string" && value.startsWith("/") && !value.startsWith("//")
-);
+import {
+  buildAuthRedirectSearch,
+  consumePostAuthRedirect,
+  getSafeRedirectPath,
+} from "../utils/authRedirect";
 
 const Login = () => {
   const { currentUser, isAuthLoading, login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -33,10 +35,11 @@ const Login = () => {
   const navigate = useNavigate();
   const search = useSearch({ strict: false });
   const requestPasswordResetMutation = useRequestPasswordResetMutation();
-  const redirectPath = typeof search.redirect === "string" ? search.redirect : null;
+  const redirectPath = getSafeRedirectPath(search.redirect);
 
   useEffect(() => {
     if (search.emailVerified) {
+      const nextRedirectPath = redirectPath || consumePostAuthRedirect();
       toast.success('Your email has been verified! Please sign in to continue.', {
         position: "top-center",
         autoClose: 5000,
@@ -47,11 +50,16 @@ const Login = () => {
         progress: undefined,
       });
 
-      navigate({ to: "/Login", replace: true });
+      navigate({
+        to: "/Login",
+        search: buildAuthRedirectSearch(nextRedirectPath),
+        replace: true,
+      });
+      return;
     }
 
     if (currentUser) {
-      navigate({ to: isSafeRedirectPath(redirectPath) ? redirectPath : "/", replace: true });
+      navigate({ to: redirectPath || "/", replace: true });
     }
   }, [search.emailVerified, currentUser, navigate, redirectPath]);
 
@@ -62,7 +70,7 @@ const Login = () => {
     setIsLoggingIn(true);
 
     try {
-      await login(email, password);
+      await login(email, password, rememberMe);
       toast.success("Login successful!");
     } catch (error) {
       console.error("Error during login:", error);
@@ -218,18 +226,21 @@ const Login = () => {
               variant="link"
               className="h-auto justify-end p-0 text-right text-sm font-bold text-foreground poppins-regular"
             >
-              Forget your password
+              Forgot password?
             </Button>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-start gap-3 rounded-xl border border-border bg-muted/40 px-4 py-3">
             <Checkbox
-              id="keep-signed-in"
+              id="remember-me"
+              checked={rememberMe}
+              onCheckedChange={(checked) => setRememberMe(checked === true)}
+              className="mt-0.5"
             />
             <Label
-              htmlFor="keep-signed-in"
-              className="text-sm poppins-regular text-muted-foreground"
+              htmlFor="remember-me"
+              className="cursor-pointer text-sm leading-5 text-muted-foreground poppins-regular"
             >
-              Keep me signed in until I sign out
+              Keep me signed in on this device for 30 days
             </Label>
           </div>
           <Button
@@ -249,7 +260,7 @@ const Login = () => {
               type="button"
               variant="outline"
               className="h-auto w-full rounded-3xl bg-background py-3 text-foreground poppins-regular"
-              onClick={() => navigate({ to: '/Signup' })}
+              onClick={() => navigate({ to: '/Signup', search: buildAuthRedirectSearch(redirectPath) })}
             >
               Sign up
             </Button>

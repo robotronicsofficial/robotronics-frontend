@@ -1,9 +1,10 @@
 import { MoveDown, Star } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "react-toastify";
 import CenteredState from "../../components/layout/CenteredState";
 import DashboardLayout from "../../components/layout/DashboardLayout";
-import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
+import QueryErrorState from "../../components/layout/QueryErrorState";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardFooter } from "../../components/ui/card";
 import DialogShell from "../../components/ui/dialog-shell";
@@ -27,6 +28,7 @@ const MyCourses = () => {
     data: selectableCourses = {},
     isLoading: loading,
     error,
+    refetch,
   } = useSelectableChildCourses(childId);
   const saveChildCoursesMutation = useSaveChildCoursesMutation();
   const courses = selectableCourses.courses || [];
@@ -57,7 +59,7 @@ const MyCourses = () => {
       }, 1500);
     } catch (err) {
       console.error("Error saving courses:", err);
-      alert(`Error saving courses: ${err.message}`);
+      toast.error(`Error saving courses: ${err.message}`);
     }
   };
 
@@ -109,10 +111,12 @@ const MyCourses = () => {
   if (error) {
     return (
       <CenteredState className="min-h-screen bg-muted px-6">
-        <Alert variant="destructive" className="max-w-md">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error.message}</AlertDescription>
-        </Alert>
+        <QueryErrorState
+          className="max-w-md"
+          title="Couldn't load available courses"
+          message={error.message}
+          onRetry={() => refetch()}
+        />
       </CenteredState>
     );
   }

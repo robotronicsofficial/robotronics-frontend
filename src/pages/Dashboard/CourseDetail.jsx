@@ -212,13 +212,13 @@ const CourseDetail = () => {
       return;
     }
 
-    const maxAttempts = childPlan === 'pro' ? MAX_ATTEMPTS.PRO : MAX_ATTEMPTS.BASIC;
-    if (childPlan === 'basic' && section.quiz.lastAttemptDate && isSameDay(section.quiz.lastAttemptDate, new Date())) {
-      if (section.quiz.attempts >= maxAttempts) {
-        alert(`You've reached the maximum number of attempts (${maxAttempts}) for today. Try again tomorrow.`);
-        return;
-      }
-    }
+	    const maxAttempts = childPlan === 'pro' ? MAX_ATTEMPTS.PRO : MAX_ATTEMPTS.BASIC;
+	    if (childPlan === 'basic' && section.quiz.lastAttemptDate && isSameDay(section.quiz.lastAttemptDate, new Date())) {
+	      if (section.quiz.attempts >= maxAttempts) {
+	        setActionError(`You've reached the maximum number of attempts (${maxAttempts}) for today. Try again tomorrow.`);
+	        return;
+	      }
+	    }
 
     if (!section?.quiz?.questions?.length) {
       return;

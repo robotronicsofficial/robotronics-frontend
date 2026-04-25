@@ -116,10 +116,10 @@ const WishListD = () => {
                 </div>
                 <div>
                   <Button
-                    type="button"
-                    onClick={() => handleMoveToCart(item)}
-                    className="h-auto rounded-lg bg-warning px-4 py-2 font-bold text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  >
+	                    type="button"
+	                    onClick={() => handleMoveToCart(item)}
+	                    className="h-auto rounded-lg bg-primary px-4 py-2 font-bold text-primary-foreground hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+	                  >
                     Add to Cart
                   </Button>
                 </div>

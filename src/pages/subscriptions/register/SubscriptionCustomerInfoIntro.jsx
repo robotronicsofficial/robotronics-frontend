@@ -6,7 +6,7 @@ const SubscriptionCustomerInfoIntro = () => {
       <div className="flex flex-col ">
         <div className=" items-center"data-aos="fade-down" >
           <p className="text-foreground font-poppins font-bold text-wrap lg:text-4xl text-2xl text-center self-center mt-header-page pb-6">
-            Subscription <br /> Registration Process
+            Subscription <br /> Setup Process
           </p>
         </div>
         <div className=""data-aos="fade-up">

@@ -3,6 +3,11 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useVerifyEmailMutation } from '../hooks/useAuthMutations';
+import {
+  buildAuthRedirectSearch,
+  consumePostAuthRedirect,
+  getSafeRedirectPath,
+} from '../utils/authRedirect';
 
 const VerifyEmail = () => {
   const search = useSearch({ strict: false });
@@ -11,6 +16,7 @@ const VerifyEmail = () => {
   const navigate = useNavigate();
   const verificationStarted = useRef(false);
   const verifyEmailMutation = useVerifyEmailMutation();
+  const redirectPath = getSafeRedirectPath(search.redirect);
 
   useEffect(() => {
     let redirectTimer = null;
@@ -28,11 +34,18 @@ const VerifyEmail = () => {
 
       try {
         const data = await verifyEmailMutation.mutateAsync(token);
+        const nextRedirectPath = redirectPath || consumePostAuthRedirect();
 
         setStatus('success');
         setMessage(data.message);
         redirectTimer = setTimeout(() => {
-          navigate({ to: '/Login', search: { emailVerified: true } });
+          navigate({
+            to: '/Login',
+            search: {
+              emailVerified: true,
+              ...buildAuthRedirectSearch(nextRedirectPath),
+            },
+          });
         }, 3000);
       } catch (error) {
         setStatus('error');
@@ -47,7 +60,7 @@ const VerifyEmail = () => {
         clearTimeout(redirectTimer);
       }
     };
-  }, [search.token, navigate, verifyEmailMutation]);
+  }, [search.token, navigate, verifyEmailMutation, redirectPath]);
 
   return (
     <main className="mx-auto flex min-h-[80vh] max-w-xl flex-col items-center justify-center px-4 text-center">

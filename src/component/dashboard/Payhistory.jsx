@@ -75,11 +75,11 @@ const PayHistory = () => {
                     <div className="flex justify-end sm:items-center sm:justify-start sm:pl-4">
                       <Button
                         type="button"
-                        className={`whitespace-nowrap rounded-lg px-4 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:px-6 sm:py-2 sm:text-sm md:text-base ${
-                          resolveInvoiceUrl(invoice)
-                            ? "bg-warning text-background hover:bg-warning"
-                            : "bg-muted text-muted-foreground cursor-not-allowed"
-                        }`}
+	                        className={`whitespace-nowrap rounded-lg px-4 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:px-6 sm:py-2 sm:text-sm md:text-base ${
+	                          resolveInvoiceUrl(invoice)
+	                            ? "bg-primary text-primary-foreground hover:bg-accent hover:text-background"
+	                            : "bg-muted text-muted-foreground cursor-not-allowed"
+	                        }`}
                         disabled={!resolveInvoiceUrl(invoice)}
                         onClick={() => {
                           const invoiceUrl = resolveInvoiceUrl(invoice);

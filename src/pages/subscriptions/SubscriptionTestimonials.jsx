@@ -21,7 +21,7 @@ const ReviewsComponent = () => {
       role: "Age 12, Lahore",
       image: reviewImg2,
       review:
-        "I joined the membership and it was totally worth it. I can access so many courses, collect certificates, and get help through live chat whenever I'm stuck.",
+        "I joined the subscription and it was totally worth it. I can access so many courses, collect certificates, and get help through live chat whenever I'm stuck.",
     },
     {
       name: "Nasser Al Shammari",

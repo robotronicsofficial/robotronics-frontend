@@ -156,9 +156,9 @@ const SubscriptionPayment = ({ onNext }) => {
       <div className="lg:w-[38%] rounded-3xl bg-muted p-6 md:p-10">
         <div className="flex flex-col gap-y-3">
           <p className="text-3xl font-bold text-foreground">Checkout Summary</p>
-          <p className="text-sm text-muted-foreground">
-            Review your child profiles, membership, and total before entering payment details.
-          </p>
+	          <p className="text-sm text-muted-foreground">
+	            Review your child profiles, subscription plan, and total before entering payment details.
+	          </p>
         </div>
 
         <div className="flex flex-col mt-8 gap-y-4">
@@ -174,7 +174,7 @@ const SubscriptionPayment = ({ onNext }) => {
                     {[child.firstName, child.lastName].filter(Boolean).join(" ") || "Student"}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {checkout.plan.name} · {checkout.plan.billingCycle || "Subscription"}
+	                    {checkout.plan.name} · {checkout.plan.billingCycle || "Subscription"}
                   </p>
                   {child.childCode ? (
                     <p className="text-xs uppercase tracking-[0.18em] text-accent">{child.childCode}</p>
@@ -193,7 +193,7 @@ const SubscriptionPayment = ({ onNext }) => {
             <SummaryRow label="Order code" value={checkout.orderCode} />
             <SummaryRow label="Registered on" value={formatDisplayDate(checkout.orderDate)} />
             <SummaryRow label="Children" value={checkout.totalChildren} />
-            <SummaryRow label="Membership" value={checkout.plan.name || "Subscription"} />
+            <SummaryRow label="Subscription plan" value={checkout.plan.name || "Subscription"} />
             <SummaryRow label="Billing cycle" value={checkout.plan.billingCycle || "N/A"} />
             <div className="border-t border-border pt-4">
               <SummaryRow label="Total" value={formatCheckoutCurrency(checkout.totalPrice)} highlight />

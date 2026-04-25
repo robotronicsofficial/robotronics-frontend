@@ -18,9 +18,8 @@ import { ensureArray, formatDisplayDate } from "../../lib/subscription";
 import { fetchChildEnrollment } from "../../lib/account";
 import {
   useChangeChildPinMutation,
-  useChildAccessList,
+  useChildAccounts,
   useCreateChildPinMutation,
-  useCurrentParent,
   useVerifyChildPinMutation,
 } from "../../hooks/useAccount";
 import { queryKeys } from "../../lib/queryKeys";
@@ -36,23 +35,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const resolveChildAccess = (child, childAccessList) => (
-  childAccessList.find((access) => (
-    access.childId === child._id || access.childId === child.childCode
-  )) || null
-);
-
-const mergeChildrenWithAccess = (parentChildren, childAccessList) =>
-  parentChildren.map((child) => {
-    const childAccess = resolveChildAccess(child, childAccessList);
-
-    return {
-      ...child,
-      accessChildId: childAccess?.childId || child._id || child.childCode || "",
-      hasPin: Boolean(childAccess?.hasPin),
-    };
-  });
-
 const SubscriptionChildProfile = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -67,22 +49,17 @@ const SubscriptionChildProfile = () => {
   const { currentUser } = useAuth();
   const userId = currentUser?._id;
   const {
-    data: parentData,
-    isLoading: parentLoading,
-    error: parentError,
-  } = useCurrentParent(userId);
-  const hasParentProfile = Boolean(parentData?._id);
-  const {
-    data: childAccessList = [],
-    isLoading: accessLoading,
-    error: accessError,
-  } = useChildAccessList(hasParentProfile);
+    data: childAccountsData,
+    isLoading: childAccountsLoading,
+    error: childAccountsError,
+  } = useChildAccounts(userId);
   const changeChildPinMutation = useChangeChildPinMutation(userId);
   const createChildPinMutation = useCreateChildPinMutation(userId);
   const verifyChildPinMutation = useVerifyChildPinMutation();
-  const children = mergeChildrenWithAccess(parentData?.children || [], childAccessList);
-  const loading = Boolean(userId) && (parentLoading || (hasParentProfile && accessLoading));
-  const error = parentError?.message || (hasParentProfile ? accessError?.message : "") || "";
+  const parentData = childAccountsData?.parent || null;
+  const children = childAccountsData?.children || [];
+  const loading = Boolean(userId) && childAccountsLoading;
+  const error = childAccountsError?.message || "";
 
   const handlePinSubmit = async (pinData) => {
     try {
@@ -205,7 +182,7 @@ const SubscriptionChildProfile = () => {
 
       // Fetch child's courses data
       const coursesData = await queryClient.fetchQuery({
-        queryKey: queryKeys.childCourses.active(childAccessId),
+        queryKey: queryKeys.childCourses.enrollment(childAccessId),
         queryFn: () => fetchChildEnrollment(childAccessId),
       });
       const selectedCourses = ensureArray(coursesData?.courses);
@@ -268,7 +245,26 @@ const SubscriptionChildProfile = () => {
     <DashboardLayout contentClassName="px-6">
         <h1 className="pl-4 mb-4 text-2xl font-bold md:text-3xl">Child Accounts</h1>
 
-        {children.length > 0 ? (
+        {!parentData ? (
+          <Card className="mx-4 max-w-2xl">
+            <CardContent className="flex flex-col items-start gap-4">
+              <div>
+                <p className="text-xl font-semibold text-foreground">Set up child accounts</p>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  This login does not have a parent subscription profile yet. Choose a
+                  subscription and add child details to create child accounts.
+                </p>
+              </div>
+              <Button
+                type="button"
+                className="h-auto rounded-lg bg-primary px-5 py-3 text-background"
+                onClick={() => navigate({ to: "/subscriptions" })}
+              >
+                Choose Subscription
+              </Button>
+            </CardContent>
+          </Card>
+        ) : children.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 p-4 md:grid-cols-2 lg:p-5">
             {children.map((child) => {
               const hasPin = child.hasPin;
@@ -325,9 +321,24 @@ const SubscriptionChildProfile = () => {
             })}
           </div>
         ) : (
-          <div className="w-full p-4 text-center">
-            <p className="text-lg">No child accounts found</p>
-          </div>
+          <Card className="mx-4 max-w-2xl">
+            <CardContent className="flex flex-col items-start gap-4">
+              <div>
+                <p className="text-xl font-semibold text-foreground">No child accounts yet</p>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  Your parent profile is ready, but no children are registered on it yet.
+                  Add a child through the subscription flow to start learning access.
+                </p>
+              </div>
+              <Button
+                type="button"
+                className="h-auto rounded-lg bg-primary px-5 py-3 text-background"
+                onClick={() => navigate({ to: "/subscriptions" })}
+              >
+                Add Child Account
+              </Button>
+            </CardContent>
+          </Card>
         )}
 
       <SuccessModal

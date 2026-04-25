@@ -1,7 +1,6 @@
 import { fetchSessionJson, sendSessionJson } from "./api";
 import {
   ensureArray,
-  normalizeChildAccessRecord,
   normalizeParentRecord,
 } from "./subscription";
 
@@ -10,14 +9,18 @@ export const fetchCurrentParent = async () => {
   return payload?.parent ? normalizeParentRecord(payload.parent) : null;
 };
 
+export const fetchChildAccounts = async (userId) => {
+  const payload = await fetchSessionJson(`/parents/${encodeURIComponent(userId)}/child-accounts`);
+
+  return {
+    parent: payload?.parent ? normalizeParentRecord(payload.parent) : null,
+    children: ensureArray(payload?.children),
+  };
+};
+
 export const fetchPayments = async () => {
   const payload = await fetchSessionJson("/getPayments");
   return Array.isArray(payload) ? payload : [];
-};
-
-export const fetchChildAccessList = async () => {
-  const payload = await fetchSessionJson("/getAllChild");
-  return ensureArray(payload?.childCourse).map(normalizeChildAccessRecord);
 };
 
 export const fetchChildEnrollment = (childId) =>

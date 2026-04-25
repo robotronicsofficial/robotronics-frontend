@@ -15,7 +15,7 @@ const SECTIONS = [
   },
   {
     title: "Subscriptions & Payments",
-    body: "The course membership supports monthly and annual billing. Payments are collected in advance through approved payment gateways (e.g., Bank Alfalah). Subscriptions renew automatically unless cancelled prior to renewal.",
+    body: "The learning subscription supports monthly and annual billing. Payments are collected in advance through approved payment gateways (e.g., Bank Alfalah). Subscriptions renew automatically unless cancelled prior to renewal.",
   },
   {
     title: "Refunds & Cancellations",

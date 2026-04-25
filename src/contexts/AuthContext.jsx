@@ -32,8 +32,8 @@ export function AuthProvider({ children }) {
     return result.data || null;
   };
 
-  const login = async (email, password) => {
-    await loginMutation.mutateAsync({ email, password });
+  const login = async (email, password, rememberMe = false) => {
+    await loginMutation.mutateAsync({ email, password, rememberMe });
     await fetchUser();
   };
 

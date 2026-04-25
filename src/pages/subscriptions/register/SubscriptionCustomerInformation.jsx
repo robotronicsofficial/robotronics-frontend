@@ -350,7 +350,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
     }
 
     if (!planId || !billingCycle) {
-      toast.error("Please start the membership checkout before continuing");
+      toast.error("Please start the subscription checkout before continuing");
       return navigate({ to: "/subscriptions" });
     }
 
@@ -428,9 +428,9 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
             <div className="flex flex-wrap gap-2">
               <Button
                 type="button"
-                onClick={handleRestoreDraft}
-                className="h-auto rounded-lg bg-warning px-4 py-2 text-sm text-background"
-              >
+	                onClick={handleRestoreDraft}
+	                className="h-auto rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground hover:bg-accent hover:text-background"
+	              >
                 Restore
               </Button>
               <Button
@@ -739,10 +739,10 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
               <div className="flex flex-row gap-x-3">
                 <AppImage className="lg:h-24 lg:w-24" src={robo} alt="" />
                 <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
-                  <p className="text-wrap">
-                    <span className="font-bold">Membership:</span>{" "}
-                    <span className="font-normal">{plan}</span>
-                  </p>
+	                  <p className="text-wrap">
+	                    <span className="font-bold">Subscription plan:</span>{" "}
+	                    <span className="font-normal">{plan}</span>
+	                  </p>
                   <p className="text-wrap">
                     <span className="font-bold">Name:</span>{" "}
                     <span className="font-normal">

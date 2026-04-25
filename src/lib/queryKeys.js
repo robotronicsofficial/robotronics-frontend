@@ -8,6 +8,7 @@ export const queryKeys = {
   },
   childCourses: {
     plan: (childId) => ["child-courses", childId, "plan"],
+    enrollment: (childId) => ["child-courses", childId, "enrollment"],
     selectable: (childId) => ["child-courses", childId, "selectable"],
     active: (childId) => ["child-courses", childId, "active"],
     detail: (childId, courseId) => ["child-courses", childId, courseId],
@@ -43,7 +44,9 @@ export const queryKeys = {
   subscription: {
     plans: ["subscription", "plans"],
     currentParent: (userId) => ["subscription", "current-parent", userId],
-    children: ["subscription", "children"],
+    currentParentRoot: ["subscription", "current-parent"],
+    childAccounts: (userId) => ["subscription", "child-accounts", userId],
+    childAccountsRoot: ["subscription", "child-accounts"],
   },
   videoGallery: {
     all: ["video-gallery"],

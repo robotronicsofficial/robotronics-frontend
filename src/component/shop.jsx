@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { resolveBackendAssetUrl } from "../utils/mediaUrl";
 import AppImage from "./AppImage";
 import { useCourses } from "../hooks/useCourses";
+import QueryErrorState from "../components/layout/QueryErrorState";
 
 const ServiceCard = ({ service }) => {
   return (
@@ -79,6 +80,7 @@ const Shop = () => {
     data: services = [],
     isLoading: loading,
     error,
+    refetch,
   } = useCourses();
   const [currentIndex, setCurrentIndex] = useState(0);
   const servicesPerPage = 3;
@@ -102,7 +104,15 @@ const Shop = () => {
 
   if (loading) return <div className="text-center py-20">Loading...</div>;
   if (error)
-    return <div className="text-center py-20 text-destructive">We couldn&apos;t load courses right now.</div>;
+    return (
+      <div className="mx-auto max-w-xl px-4 py-20">
+        <QueryErrorState
+          title="Couldn't load courses"
+          message={error.message}
+          onRetry={() => refetch()}
+        />
+      </div>
+    );
 
   return (
     <section className="bg-background py-8 md:py-12">

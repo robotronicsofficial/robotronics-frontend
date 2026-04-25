@@ -35,7 +35,8 @@ export const useLogoutMutation = () => {
       clearActiveChildSession();
       queryClient.setQueryData(queryKeys.auth.user, null);
       queryClient.removeQueries({ queryKey: queryKeys.savedItems.all });
-      queryClient.removeQueries({ queryKey: queryKeys.subscription.children });
+      queryClient.removeQueries({ queryKey: queryKeys.subscription.currentParentRoot });
+      queryClient.removeQueries({ queryKey: queryKeys.subscription.childAccountsRoot });
       queryClient.removeQueries({ queryKey: queryKeys.payments.all });
     },
   });

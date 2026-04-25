@@ -24,6 +24,7 @@ import {
 import { useSelectedPlanStore } from "./stores/selectedPlanStore";
 import { clearActiveChildSession, getActiveChildSession } from "./utils/childSessionRequest";
 import { getHeaderOffsetClass } from "./components/layout/headerOffset";
+import { buildRedirectSearchFromLocation } from "./utils/authRedirect";
 
 const ToastContainer = lazy(() => import("react-toastify").then((module) => ({
   default: module.ToastContainer,
@@ -94,11 +95,6 @@ const RouterError = ({ error }) => (
   </div>
 );
 
-const buildRedirectSearch = (location) => {
-  const href = location?.href || `${location?.pathname || ""}${location?.searchStr || ""}${location?.hash || ""}`;
-  return href && href !== "/Login" ? { redirect: href } : {};
-};
-
 const requireCurrentUser = async ({ context, location }) => {
   const user = await context.queryClient.fetchQuery({
     queryKey: queryKeys.auth.user,
@@ -109,7 +105,7 @@ const requireCurrentUser = async ({ context, location }) => {
   if (!user) {
     throw redirect({
       to: "/Login",
-      search: buildRedirectSearch(location),
+      search: buildRedirectSearchFromLocation(location),
       replace: true,
     });
   }

@@ -141,13 +141,13 @@ const ShopCartproductList = ({ onNext }) => {
 
 
   return (
-    <div className="lg:flex">
-      <div className="flex-col pr-5 lg:w-2/3">
+    <div className="flex flex-col gap-8 lg:flex-row">
+      <div className="flex-col lg:w-2/3 lg:pr-5">
         {cart.length > 0 ? (
           cart.map((product) => (
             <div className="mx-auto max-w-4xl py-8" key={getCommerceItemKey(product)}>
               <div className="flex flex-col gap-6 sm:flex-row">
-                <div className="size-[15vw] overflow-hidden">
+                <div className="h-40 w-full overflow-hidden rounded-lg sm:size-40">
                   <img
                     src={resolveBackendAssetUrl(product.image || product.images?.[0], "https://via.placeholder.com/300x200")}
                     alt={product.name}
@@ -215,10 +215,10 @@ const ShopCartproductList = ({ onNext }) => {
           </div>
         )}
       </div>
-      <div className="flex flex-col p-2">
+      <div className="hidden flex-col p-2 lg:flex">
         <div className="h-full w-0 border border-border"></div>
       </div>
-      <div className="flex flex-col rounded-lg bg-background px-6 py-6 lg:px-10">
+      <div className="flex w-full flex-col rounded-lg bg-background px-4 py-6 sm:px-6 lg:w-1/3 lg:px-10">
         <h2 className="mb-4 font-poppins text-[32px] font-semibold leading-[40px] tracking-[0] text-foreground">
           ORDER SUMMARY
         </h2>
@@ -254,7 +254,7 @@ const ShopCartproductList = ({ onNext }) => {
           </span>
 
           <Textarea
-            className="mt-1 block h-[139px] w-[401px] border-border bg-background p-7 font-poppins font-light"
+            className="mt-1 block min-h-36 w-full border-border bg-background p-4 font-poppins font-light sm:p-7"
             value={notes}
             onChange={(e) => {
               setNotes(e.target.value);
@@ -268,7 +268,7 @@ const ShopCartproductList = ({ onNext }) => {
             type="button"
             onClick={handleNext}
             aria-label="Proceed to Checkout"
-            className="h-11 w-[408px] gap-2.5 bg-foreground p-3 font-semibold text-background"
+            className="h-11 w-full max-w-md gap-2.5 bg-foreground p-3 font-semibold text-background"
           >
             PROCEED TO CHECKOUT
           </Button>

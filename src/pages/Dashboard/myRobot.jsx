@@ -121,10 +121,10 @@ const MyRobot = () => {
                   <div className="flex flex-col items-start gap-3 lg:items-end">
                     <p className="text-xl font-bold text-foreground">PKR {Number(item?.price || 0).toLocaleString()}</p>
                     <Button
-                      type="button"
-                      onClick={() => navigate({ to: getCommerceItemRoute(item) })}
-                      className="h-auto rounded-lg bg-warning px-4 py-2 font-semibold text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                    >
+	                      type="button"
+	                      onClick={() => navigate({ to: getCommerceItemRoute(item) })}
+	                      className="h-auto rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+	                    >
                       {item?.itemType === "course" ? "View course" : "View product"}
                     </Button>
                   </div>

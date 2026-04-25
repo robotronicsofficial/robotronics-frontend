@@ -3,12 +3,14 @@ import { ArrowUpRight, Bot } from "lucide-react";
 import robort from "../assets/images/right-face-robot.png";
 import AppImage from "./AppImage";
 import { useServices } from "../hooks/useServices";
+import QueryErrorState from "../components/layout/QueryErrorState";
 
 const Services = () => {
   const {
     data: services = [],
     isLoading: loading,
     error,
+    refetch,
   } = useServices();
   const navigate = useNavigate();
 
@@ -40,58 +42,64 @@ const Services = () => {
 
       {/* Services Grid */}
       <div className="px-4 sm:px-6 py-6 sm:py-8">
-  {error && <p className="text-destructive text-sm sm:text-base mb-4">We couldn&apos;t load services right now.</p>}
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-    {loading ? (
-      <div className="col-span-full py-10">
-        <p className="text-center text-background text-lg sm:text-xl">Loading services...</p>
-      </div>
-    ) : services.length > 0 ? (
-      services.slice(0,6).map((service) => (
-        <div
-          key={service._id}
-          className="h-full flex flex-col p-4 sm:p-5 border border-card rounded-xl sm:rounded-2xl transition-all hover:scale-[1.02]"
-        >
-          {/* Icon with consistent size */}
-          <div className="text-4xl sm:text-5xl md:text-6xl text-background mb-3 sm:mb-4">
-            <Bot />
-          </div>
-
-          {/* Title with fixed height */}
-          <div className="min-h-[60px] sm:min-h-[70px] flex items-center">
-            <h3 className="text-background poppins-bold text-lg sm:text-xl md:text-2xl lg:text-3xl line-clamp-2 text-wrap">
-              {service.name}
-            </h3>
-          </div>
-
-          {/* Description with fixed height and consistent alignment */}
-          <div className="min-h-[100px] sm:min-h-[120px] mb-4 sm:mb-6 flex flex-col justify-center">
-            <p className="text-background poppins-light text-sm sm:text-base line-clamp-3 text-wrap">
-              {service.description}
-            </p>
-          </div>
-
-          {/* Bottom section with consistent alignment */}
-          <div className="mt-auto border-t border-card/50 pt-3 sm:pt-4">
-            <div
-              className="flex items-center gap-2 cursor-pointer group"
-              onClick={() => handleServiceNavigate(service)}
-            >
-              <div className="text-background text-sm sm:text-base underline poppins-light group-hover:text-primary transition-colors">
-                View Detail
-              </div>
-              <ArrowUpRight className="text-lg sm:text-xl text-primary group-hover:translate-x-1 transition-transform" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          {loading ? (
+            <div className="col-span-full py-10">
+              <p className="text-center text-background text-lg sm:text-xl">Loading services...</p>
             </div>
-          </div>
+          ) : error ? (
+            <QueryErrorState
+              className="col-span-full rounded-2xl bg-card p-4"
+              title="Couldn't load services"
+              message={error.message}
+              onRetry={() => refetch()}
+            />
+          ) : services.length > 0 ? (
+            services.slice(0, 6).map((service) => (
+              <div
+                key={service._id}
+                className="h-full flex flex-col p-4 sm:p-5 border border-card rounded-xl sm:rounded-2xl transition-all hover:scale-[1.02]"
+              >
+                {/* Icon with consistent size */}
+                <div className="text-4xl sm:text-5xl md:text-6xl text-background mb-3 sm:mb-4">
+                  <Bot />
+                </div>
+
+                {/* Title with fixed height */}
+                <div className="min-h-[60px] sm:min-h-[70px] flex items-center">
+                  <h3 className="text-background poppins-bold text-lg sm:text-xl md:text-2xl lg:text-3xl line-clamp-2 text-wrap">
+                    {service.name}
+                  </h3>
+                </div>
+
+                {/* Description with fixed height and consistent alignment */}
+                <div className="min-h-[100px] sm:min-h-[120px] mb-4 sm:mb-6 flex flex-col justify-center">
+                  <p className="text-background poppins-light text-sm sm:text-base line-clamp-3 text-wrap">
+                    {service.description}
+                  </p>
+                </div>
+
+                {/* Bottom section with consistent alignment */}
+                <div className="mt-auto border-t border-card/50 pt-3 sm:pt-4">
+                  <div
+                    className="flex items-center gap-2 cursor-pointer group"
+                    onClick={() => handleServiceNavigate(service)}
+                  >
+                    <div className="text-background text-sm sm:text-base underline poppins-light group-hover:text-primary transition-colors">
+                      View Detail
+                    </div>
+                    <ArrowUpRight className="text-lg sm:text-xl text-primary group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full py-10">
+              <p className="text-center text-background text-lg sm:text-xl">No services available right now.</p>
+            </div>
+          )}
         </div>
-      ))
-    ) : !error ? (
-      <div className="col-span-full py-10">
-        <p className="text-center text-background text-lg sm:text-xl">No services available right now.</p>
       </div>
-    ) : null}
-  </div>
-</div>
     </div>
   );
 };

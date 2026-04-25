@@ -13,7 +13,7 @@ import { useContactRequestMutation } from "../../hooks/useIntake";
 
 const CONTACT_SERVICES = {
   school: [
-    "Course Membership",
+    "Learning Subscription",
     "Robotics Curriculum Integration",
     "Teacher Training Program",
     "After-School Robotics Club",
@@ -21,7 +21,7 @@ const CONTACT_SERVICES = {
     "Competition Preparation",
   ],
   parent: [
-    "Course Membership",
+    "Learning Subscription",
     "Weekend Robotics Classes",
     "Holiday Robotics Camps",
     "One-on-One Tutoring",

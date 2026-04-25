@@ -3,7 +3,7 @@ import {
   activateSubscription,
   changeChildPin,
   createChildPin,
-  fetchChildAccessList,
+  fetchChildAccounts,
   fetchChildEnrollment,
   fetchCurrentParent,
   fetchPayments,
@@ -19,6 +19,13 @@ export const useCurrentParent = (userId) =>
     enabled: Boolean(userId),
   });
 
+export const useChildAccounts = (userId) =>
+  useQuery({
+    queryKey: queryKeys.subscription.childAccounts(userId),
+    queryFn: () => fetchChildAccounts(userId),
+    enabled: Boolean(userId),
+  });
+
 export const usePayments = (enabled) =>
   useQuery({
     queryKey: queryKeys.payments.all,
@@ -26,16 +33,9 @@ export const usePayments = (enabled) =>
     enabled,
   });
 
-export const useChildAccessList = (enabled) =>
-  useQuery({
-    queryKey: queryKeys.subscription.children,
-    queryFn: fetchChildAccessList,
-    enabled,
-  });
-
 export const useChildEnrollment = (childId) =>
   useQuery({
-    queryKey: queryKeys.childCourses.active(childId),
+    queryKey: queryKeys.childCourses.enrollment(childId),
     queryFn: () => fetchChildEnrollment(childId),
     enabled: Boolean(childId),
   });
@@ -49,6 +49,9 @@ export const useSaveParentMutation = () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.subscription.currentParent(variables?.parent?.userId),
       });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.subscription.childAccounts(variables?.parent?.userId),
+      });
     },
   });
 };
@@ -60,7 +63,7 @@ export const useActivateSubscriptionMutation = (userId) => {
     mutationFn: activateSubscription,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.subscription.currentParent(userId) });
-      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.children });
+      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.childAccounts(userId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.payments.all });
     },
   });
@@ -73,7 +76,7 @@ export const useCreateChildPinMutation = (userId) => {
     mutationFn: createChildPin,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.subscription.currentParent(userId) });
-      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.children });
+      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.childAccounts(userId) });
     },
   });
 };
@@ -85,7 +88,7 @@ export const useChangeChildPinMutation = (userId) => {
     mutationFn: changeChildPin,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.subscription.currentParent(userId) });
-      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.children });
+      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.childAccounts(userId) });
     },
   });
 };
