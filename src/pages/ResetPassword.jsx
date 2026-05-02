@@ -87,14 +87,14 @@ const ResetPassword = () => {
   return (
     <div className="bg-background" id="reset-password">
       <div className={getHeaderOffsetClass("mx-auto flex w-full max-w-md flex-col items-center gap-6 px-6 pb-20 md:px-10 lg:px-16")}>
-        <p className="text-4xl poppins-bold text-foreground">Reset Password</p>
+        <p className="text-4xl text-foreground">Reset Password</p>
         <form
           onSubmit={handleSubmit}
           className="flex w-full flex-col gap-4"
         >
           <div className="flex w-full flex-col gap-1">
             <div className="flex items-center justify-between">
-              <Label className="text-sm poppins-regular">New Password</Label>
+              <Label className="text-sm">New Password</Label>
               <PasswordVisibilityButton
                 isVisible={showPassword}
                 onToggle={togglePasswordVisibility}
@@ -127,7 +127,7 @@ const ResetPassword = () => {
 
           <div className="flex w-full flex-col gap-1">
             <div className="flex items-center justify-between">
-              <Label className="text-sm poppins-regular">Confirm Password</Label>
+              <Label className="text-sm">Confirm Password</Label>
               <PasswordVisibilityButton
                 isVisible={showConfirmPassword}
                 onToggle={toggleConfirmPasswordVisibility}
@@ -151,7 +151,7 @@ const ResetPassword = () => {
 
           <Button
             type="submit"
-            className="h-auto w-full rounded-3xl bg-foreground py-3 text-background poppins-regular"
+            className="h-auto w-full rounded-3xl bg-foreground py-3 text-background"
             disabled={
               resetPasswordMutation.isPending ||
               !password ||
@@ -168,12 +168,12 @@ const ResetPassword = () => {
             type="button"
             onClick={() => navigate({ to: '/Login' })}
             variant="link"
-            className="text-foreground poppins-regular"
+            className="text-foreground"
           >
             Back to Login
           </Button>
         </form>
-        {error && <p role="alert" className="text-destructive text-sm poppins-regular">{error}</p>}
+        {error && <p role="alert" className="text-destructive text-sm">{error}</p>}
       </div>
     </div>
   );

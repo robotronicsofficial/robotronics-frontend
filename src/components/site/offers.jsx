@@ -10,8 +10,8 @@ const OfferItem = ({ icon, alt, title, description }) => (
       <AppImage src={icon} alt={alt} className="w-full h-auto object-contain" />
     </div>
     <div className="flex flex-col gap-2 sm:gap-3 text-center sm:text-left">
-      <h3 className="text-background poppins-bold text-xl sm:text-2xl">{title}</h3>
-      <p className="text-background poppins-medium text-xs xs:text-sm sm:text-base max-w-[280px] xs:max-w-none mx-auto sm:mx-0 text-wrap">
+      <h3 className="text-background text-xl sm:text-2xl">{title}</h3>
+      <p className="text-background text-xs xs:text-sm sm:text-base max-w-[280px] xs:max-w-none mx-auto sm:mx-0 text-wrap">
         {description}
       </p>
     </div>

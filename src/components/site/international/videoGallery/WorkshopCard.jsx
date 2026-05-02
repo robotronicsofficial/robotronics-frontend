@@ -36,7 +36,7 @@ const WorkshopCard = ({ workshop }) => {
       </div>
       <div className="px-3 py-4 bg-foreground relative flex min-h-64 flex-col">
         <div className="min-h-8 text-background">
-          <p className="poppins-medium my-3">
+          <p className="my-3">
             {workshop.activity}
           </p>
           <div className="absolute right-2 -top-10 size-20 overflow-hidden rounded-full border-2 border-card bg-primary">
@@ -49,15 +49,15 @@ const WorkshopCard = ({ workshop }) => {
         </div>
 
         <div className="mt-2 flex flex-1 flex-col">
-          <h3 className="text-lg text-background poppins-bold text-wrap leading-none my-4">
+          <h3 className="text-lg text-background text-wrap leading-none my-4">
             {workshop.workshopName}
           </h3>
-          <p className="text-background text-wrap poppins-light md:text-xs">
+          <p className="text-background text-wrap md:text-xs">
             {workshop.description}
           </p>
         </div>
 
-        <div className="mt-4 flex items-center justify-between gap-1 px-2 text-background poppins-light">
+        <div className="mt-4 flex items-center justify-between gap-1 px-2 text-background">
           <p className="flex items-center gap-2 text-sm">
             <Clock />
             {workshop.timeFrom} To {workshop.timeTo}{" "}

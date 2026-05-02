@@ -15,8 +15,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 const fieldWrapperClassName = "flex flex-col gap-2";
-const labelClassName = "text-sm poppins-light text-muted-foreground";
-const controlClassName = "min-h-11 rounded-xl bg-background px-4 py-3 poppins-light";
+const labelClassName = "text-sm  text-muted-foreground";
+const controlClassName = "min-h-11 rounded-xl bg-background px-4 py-3 ";
 
 const emitChange = (name, value, onChange) => {
   onChange({

@@ -16,21 +16,21 @@ const Intro = ({ blog }) => {
         <p className="text-sm uppercase tracking-[0.35em]" data-aos="fade-up">
           {blog?.categories?.[0] || "Blog"}
         </p>
-        <p className="lg:text-6xl text-4xl poppins-extrabold mt-10" data-aos="fade-up">
+        <p className="lg:text-6xl text-4xl mt-10" data-aos="fade-up">
           {blog?.title || "Blog Post"}
         </p>
-        <p className="max-w-3xl text-base lg:text-lg poppins-light" data-aos="fade-up">
+        <p className="max-w-3xl text-base lg:text-lg" data-aos="fade-up">
           {(blog?.paragraphs?.[0] || "Read the latest update from Robotronics.").slice(0, 180)}
           {(blog?.paragraphs?.[0] || "").length > 180 ? "..." : ""}
         </p>
-        <div className="flex flex-wrap gap-4 text-sm poppins-light" data-aos="fade-up">
+        <div className="flex flex-wrap gap-4 text-sm" data-aos="fade-up">
           <span>{blog?.authorName || "Robotronics"}</span>
           <span>{blog?.date ? new Date(blog.date).toLocaleDateString() : "Unknown date"}</span>
           <span>{Number(blog?.views || 0).toLocaleString()} views</span>
         </div>
         <Link
           to="/Blog"
-          className="w-fit rounded-xl bg-card p-5 text-sm text-foreground poppins-light lg:text-2xl"
+          className="w-fit rounded-xl bg-card p-5 text-sm text-foreground lg:text-2xl"
           data-aos="fade-up"
         >
           Back to Blog

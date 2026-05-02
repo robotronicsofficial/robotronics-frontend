@@ -100,8 +100,8 @@ const JobApplicationForm = ({ job = null }) => {
   return (
     <>
     <div className="mx-10 my-8 flex flex-col gap-5 lg:px-24">
-          <h1 className="text-4xl poppins-bold text-foreground"data-aos="fade-up"  >Job Application</h1>
-          <h2 className="text-xl poppins-light text-foreground"data-aos="fade-up"  >
+          <h1 className="text-4xl text-foreground"data-aos="fade-up"  >Job Application</h1>
+          <h2 className="text-xl text-foreground"data-aos="fade-up"  >
             Submit your details and CV for {jobTitle || "the selected role"}
           </h2>
         </div>

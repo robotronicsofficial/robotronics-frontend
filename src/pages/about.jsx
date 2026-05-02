@@ -130,7 +130,7 @@ const FinalCta = () => (
             asChild
             size="marketingLg"
             variant="ghost"
-            className="text-background hover:bg-background/10 hover:text-background"
+            className="text-background hover:bg-background/10"
           >
             <Link to="/contactUs">For Schools</Link>
           </Button>

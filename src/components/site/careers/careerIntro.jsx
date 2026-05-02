@@ -7,13 +7,13 @@ const CareerIntro = () => {
           
         >
           {/* text */}
-          <h1 className="lg:text-7xl text-5xl poppins-extrabold py-5 text-background">
+          <h1 className="lg:text-7xl text-5xl py-5 text-background">
             Career
           </h1>
-          <h1 className="text-2xl lg:text-4xl font-sans poppins-bold text-background">
+          <h1 className="text-2xl lg:text-4xl font-sans text-background">
             We are always on the lookout
           </h1>
-          <h1 className="text-2xl lg:text-4xl font-sans poppins-bold text-background">
+          <h1 className="text-2xl lg:text-4xl font-sans text-background">
             for new and proposing Talent
           </h1>
         </div>

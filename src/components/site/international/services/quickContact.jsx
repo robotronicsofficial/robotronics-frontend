@@ -63,10 +63,10 @@ const QuickContact = () => {
 
         >
           <div>
-            <h1 className="text-4xl text-left poppins-bold text-foreground">
+            <h1 className="text-4xl text-left text-foreground">
               Quick Contact
             </h1>
-            <p className="text-xl text-wrap poppins-regular text-left">
+            <p className="text-xl text-wrap text-left">
               Feel free to contact us through Twitter or Facebook if you prefer!
             </p>
           </div>
@@ -101,7 +101,7 @@ const QuickContact = () => {
             <Button
               type="submit"
               disabled={quickContactRequestMutation.isPending}
-              className="mt-4 h-auto w-full bg-primary py-3 text-background poppins-bold"
+              className="mt-4 h-auto w-full bg-primary py-3 text-background"
             >
               {quickContactRequestMutation.isPending ? "Sending..." : "Send Message"}
             </Button>

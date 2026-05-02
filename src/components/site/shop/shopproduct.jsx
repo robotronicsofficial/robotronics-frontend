@@ -37,10 +37,10 @@ const Shopproduct = ({
           />
         </div>
         <div className="text-wrap w-full">
-          <p className="text-foreground hover:text-foreground text-xl poppins-bold my-2">
+          <p className="text-foreground hover:text-foreground text-xl my-2">
             {title}
           </p>
-          <p className="text-accent poppins-bold text-xl">{formatShopCurrency(price)}</p>
+          <p className="text-accent text-xl">{formatShopCurrency(price)}</p>
         </div>
       </Button>
 
@@ -49,7 +49,7 @@ const Shopproduct = ({
         <Button
           type="button"
           variant="secondary"
-          className="mb-2 h-auto bg-muted/30 p-2 text-foreground poppins-medium"
+          className="mb-2 h-auto bg-muted/30 p-2 text-foreground"
           onClick={(e) => {
             e.stopPropagation(); // Prevent link navigation
             onAddToCart(); // Trigger add to cart
@@ -59,7 +59,7 @@ const Shopproduct = ({
         </Button>
         <Button
           type="button"
-          className="h-auto bg-accent p-2 text-foreground poppins-medium"
+          className="h-auto bg-accent p-2 text-foreground"
           onClick={(e) => {
             e.stopPropagation(); // Prevent link navigation
             onAddToWishlist(); // Trigger add to wishlist

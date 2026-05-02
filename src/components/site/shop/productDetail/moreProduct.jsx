@@ -72,10 +72,10 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
     <div className="bg-background px-6 py-10 lg:px-14 lg:py-14">
       <div className="flex flex-col gap-6">
         <div className="mt-8 flex flex-col gap-1" data-aos="fade-up">
-          <p className="text-xl poppins-semibold text-foreground">
+          <p className="text-xl text-foreground">
             You may also like
           </p>
-          <p className="text-sm text-muted-foreground poppins-light">
+          <p className="text-sm text-muted-foreground">
             {config.subtitle}
           </p>
         </div>
@@ -124,7 +124,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                   decoding="async"
                 />
                 <CardContent className="flex flex-col gap-2 p-4 text-foreground">
-                  <h3 className="line-clamp-1 text-sm poppins-semibold leading-snug">
+                  <h3 className="line-clamp-1 text-sm leading-snug">
                     {item?.name || "Item"}
                   </h3>
                   <p className="text-sm font-semibold text-accent">

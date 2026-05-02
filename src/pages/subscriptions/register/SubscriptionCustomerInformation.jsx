@@ -88,7 +88,7 @@ const InputField = ({
       type={type}
     />
     {hint ? (
-      <p className="text-xs text-muted-foreground poppins-light">{hint}</p>
+      <p className="text-xs text-muted-foreground">{hint}</p>
     ) : null}
   </div>
 );
@@ -136,7 +136,7 @@ const OptionalSection = ({ label, open, onToggle, children }) => (
       onClick={onToggle}
       className="flex items-center justify-between gap-3 text-left"
     >
-      <span className="text-sm font-semibold text-foreground poppins-bold">
+      <span className="text-sm font-semibold text-foreground">
         {label}
       </span>
       {open ? (
@@ -422,14 +422,14 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
       <div className="flex flex-col lg:w-3/5">
         {draftBannerVisible ? (
           <div className="mx-6 mt-6 flex flex-col gap-3 rounded-2xl bg-muted p-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-foreground poppins-light">
+            <p className="text-sm text-foreground">
               We saved your progress. Continue where you left off?
             </p>
             <div className="flex flex-wrap gap-2">
               <Button
                 type="button"
 	                onClick={handleRestoreDraft}
-	                className="h-auto rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground hover:bg-accent hover:text-background"
+	                className="h-auto rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground hover:bg-primary-hover"
 	              >
                 Restore
               </Button>
@@ -451,7 +451,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
         >
           {/* Parent Info — required only */}
           <div className="flex flex-col gap-4">
-            <h2 className="text-xl md:text-2xl poppins-bold text-foreground">
+            <h2 className="text-xl md:text-2xl text-foreground">
               Parent details
             </h2>
 
@@ -556,7 +556,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
             return (
               <div key={index} className="flex flex-col w-full pt-6 gap-y-6">
                 <div className="flex flex-col gap-y-2 px-2">
-                  <h1 className="text-2xl md:text-4xl poppins-bold text-foreground text-wrap">
+                  <h1 className="text-2xl md:text-4xl text-foreground text-wrap">
                     {savedChildren.length === 0
                       ? "Register your child"
                       : `Child ${index + 1} information`}
@@ -673,7 +673,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                     <Button
                       type="button"
                       onClick={() => saveChildForm(index)}
-                      className="h-auto bg-success px-6 py-2 text-center text-sm text-background poppins-bold hover:bg-success/90 lg:px-12 lg:text-base"
+                      className="h-auto bg-success px-6 py-2 text-center text-sm text-background hover:bg-success/90 lg:px-12 lg:text-base"
                     >
                       Save child
                     </Button>
@@ -682,7 +682,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                     <Button
                       type="button"
                       onClick={addChildForm}
-                      className="h-auto bg-foreground px-6 py-2 text-center text-sm text-primary poppins-bold lg:px-12 lg:text-base"
+                      className="h-auto bg-foreground px-6 py-2 text-center text-sm text-primary lg:px-12 lg:text-base"
                     >
                       Add another child
                     </Button>
@@ -692,7 +692,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                       type="button"
                       onClick={() => removeChildForm(index)}
                       variant="destructive"
-                      className="h-auto px-4 py-2 text-center text-sm poppins-bold"
+                      className="h-auto px-4 py-2 text-center text-sm"
                     >
                       <Trash2 className="mr-2 h-4 w-4" />
                       Remove
@@ -709,7 +709,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
               type="button"
               variant="outline"
               onClick={() => navigate({ to: "/subscriptions" })}
-              className="h-auto w-full bg-card px-6 py-2 text-muted-foreground poppins-bold md:w-auto"
+              className="h-auto w-full bg-card px-6 py-2 text-muted-foreground md:w-auto"
             >
               Cancel
             </Button>
@@ -725,7 +725,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
       {/* Right Side - Order Summary */}
       <div className="flex flex-col lg:px-14 px-5 lg:p-8 p-4 lg:gap-y-20 gap-y-8">
         <div className="flex flex-col lg:gap-y-8 gap-y-4">
-          <p className="lg:text-4xl text-2xl poppins-bold text-foreground">
+          <p className="lg:text-4xl text-2xl text-foreground">
             Review your registration
           </p>
         </div>
@@ -734,7 +734,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
           savedChildren.map((child, index) => (
             <div
               key={index}
-              className="flex flex-col lg:gap-y-5 gap-y-2 poppins-extralight"
+              className="flex flex-col lg:gap-y-5 gap-y-2"
             >
               <div className="flex flex-row gap-x-3">
                 <AppImage className="lg:h-24 lg:w-24" src={robo} alt="" />
@@ -762,8 +762,8 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
             </div>
           ))
         ) : (
-          <div className="flex flex-col lg:gap-y-5 gap-y-2 poppins-extralight">
-            <p className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-muted-foreground">
+          <div className="flex flex-col lg:gap-y-5 gap-y-2">
+            <p className="font-medium text-[16px] leading-[20px] tracking-[0] text-muted-foreground">
               No children registered yet
             </p>
           </div>
@@ -799,7 +799,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            className="h-auto bg-foreground py-2 text-center text-sm text-primary poppins-bold lg:px-20 lg:text-xl"
+            className="h-auto bg-foreground py-2 text-center text-sm text-primary lg:px-20 lg:text-xl"
             onClick={handleSubmit}
             disabled={saveParentMutation.isPending}
           >

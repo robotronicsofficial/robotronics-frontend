@@ -19,16 +19,16 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col items-start gap-1">
               <BarChart2 size={20} className="text-muted-foreground" />
-              <span className="text-sm poppins-extralight">views</span>
-              <span className="text-sm poppins-extralight">{Number(blog?.views || 0).toLocaleString()}</span>
+              <span className="text-sm">views</span>
+              <span className="text-sm">{Number(blog?.views || 0).toLocaleString()}</span>
             </div>
             <div className="flex flex-col items-start gap-1">
               <Share2 size={20} className="text-muted-foreground" />
-              <span className="text-sm poppins-extralight">shares</span>
-              <span className="text-sm poppins-extralight">{Number(blog?.shares || 0).toLocaleString()}</span>
+              <span className="text-sm">shares</span>
+              <span className="text-sm">{Number(blog?.shares || 0).toLocaleString()}</span>
             </div>
-            <BrandIcon brand="facebook" size={20} className="poppins-extralight" />
-            <BrandIcon brand="twitter" size={20} className="poppins-extralight" />
+            <BrandIcon brand="facebook" size={20} className="" />
+            <BrandIcon brand="twitter" size={20} className="" />
           </div>
 
           <div className="flex flex-col justify-center gap-5 md:p-5 md:px-10">
@@ -39,13 +39,13 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
                 alt={blog?.authorName || "Author"}
               />
               <div>
-                <p className="text-foreground poppins-semibold text-lg">{blog?.authorName || "Robotronics"}</p>
-                <p className="text-sm poppins-light">{blog?.date ? new Date(blog.date).toLocaleDateString() : "Unknown date"}</p>
+                <p className="text-foreground text-lg">{blog?.authorName || "Robotronics"}</p>
+                <p className="text-sm">{blog?.date ? new Date(blog.date).toLocaleDateString() : "Unknown date"}</p>
               </div>
             </div>
 
             {paragraphs.map((paragraph, index) => (
-              <p key={`${blog?._id}-${index}`} className="text-wrap text-sm text-justify poppins-light leading-8">
+              <p key={`${blog?._id}-${index}`} className="text-wrap text-sm text-justify leading-8">
                 {paragraph}
               </p>
             ))}
@@ -53,10 +53,10 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         </div>
 
         <div className="flex flex-col">
-          <h1 className="text-foreground text-5xl py-3 leading-8 poppins-semibold">Categories</h1>
+          <h1 className="text-foreground text-5xl py-3 leading-8">Categories</h1>
           <ul>
             {(categories.length > 0 ? categories : tags).map((category, index) => (
-              <li key={`${category}-${index}`} className="text-2xl p-2 underline poppins-light leading-8">
+              <li key={`${category}-${index}`} className="text-2xl p-2 underline leading-8">
                 {category}
               </li>
             ))}
@@ -68,7 +68,7 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="lg:w-2/3">
             <Quote size={24} className="text-muted-foreground" />
-            <p className="text-balance text-foreground poppins-regular lg:text-6xl text-2xl">
+            <p className="text-balance text-foreground lg:text-6xl text-2xl">
               {leadQuote}
             </p>
             <Quote size={24} className="text-muted-foreground" />
@@ -104,14 +104,14 @@ const BlogDetailBody = ({ blog, previousBlog, nextBlog }) => {
         )}
 
         <div className="flex gap-10">
-          <p className="text-center self-center poppins-light">{Number(blog?.shares || 0).toLocaleString()} Shares</p>
+          <p className="text-center self-center">{Number(blog?.shares || 0).toLocaleString()} Shares</p>
           <div className="flex gap-3">
             <BrandIcon brand="facebook" className="self-center text-primary text-2xl" />
-            <p className="text-center self-center text-info poppins-light">Share</p>
+            <p className="text-center self-center text-info">Share</p>
           </div>
           <div className="flex gap-3">
             <BrandIcon brand="twitter" className="text-center text-info self-center" />
-            <p className="text-center self-center poppins-light">X</p>
+            <p className="text-center self-center">X</p>
           </div>
         </div>
 

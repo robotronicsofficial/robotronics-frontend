@@ -119,7 +119,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
     <div className="bg-background lg:flex lg:gap-6">
       <div className="flex flex-col gap-8 pt-4 lg:w-2/3 lg:gap-12 lg:pt-8">
         <div className="flex flex-col gap-4 lg:gap-6">
-          <p className="lg:text-4xl text-2xl poppins-bold text-foreground">CHECKOUT SUMMARY</p>
+          <p className="lg:text-4xl text-2xl text-foreground">CHECKOUT SUMMARY</p>
           <p className="font-lato font-medium text-base leading-5 text-muted-foreground">
             Review the saved customer details, fulfillment requirements, locally saved payment reference, and items for this checkout draft.
           </p>
@@ -149,10 +149,10 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           <section className="flex flex-col gap-4 bg-foreground p-5 text-background">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-lg poppins-extrabold">
+                <p className="text-lg">
                   {requiresShipping ? "DELIVERY DETAILS" : "CUSTOMER DETAILS"}
                 </p>
-                <p className="text-sm poppins-light">
+                <p className="text-sm">
                   {requiresShipping
                     ? "Saved customer and delivery details for this order."
                     : "Saved customer details for this digital order."}
@@ -169,8 +169,8 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
             </div>
 
             {customerReady || submittedIntent ? (
-              <div className="flex flex-col gap-2 text-sm poppins-light">
-                <p className="text-base poppins-extrabold">
+              <div className="flex flex-col gap-2 text-sm">
+                <p className="text-base">
                   {submittedIntent?.customer?.name || `${checkout.customer?.firstName || ""} ${checkout.customer?.lastName || ""}`.trim()}
                 </p>
                 <p>{submittedIntent?.customer?.phone || checkout.customer?.phone}</p>
@@ -198,7 +198,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                 )}
               </div>
             ) : (
-              <p className="text-sm poppins-light">
+              <p className="text-sm">
                 No customer details are saved yet for this checkout.
               </p>
             )}
@@ -207,8 +207,8 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           <section className="flex flex-col gap-4 border border-muted bg-card p-5 text-foreground">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-lg poppins-extrabold">PAYMENT DETAILS</p>
-                <p className="text-sm poppins-light">Saved locally in this browser for the current checkout draft.</p>
+                <p className="text-lg">PAYMENT DETAILS</p>
+                <p className="text-sm">Saved locally in this browser for the current checkout draft.</p>
               </div>
               <Button
                 type="button"
@@ -220,7 +220,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
             </div>
 
             {paymentReady || submittedIntent ? (
-              <div className="flex flex-col gap-2 text-sm poppins-light">
+              <div className="flex flex-col gap-2 text-sm">
                 {requiresShipping ? (
                   <p>
                     <span className="font-semibold">Shipping service:</span>{" "}
@@ -249,7 +249,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                 ) : null}
               </div>
             ) : (
-              <p className="text-sm poppins-light">
+              <p className="text-sm">
                 No local payment details are saved yet for this checkout.
               </p>
             )}
@@ -259,7 +259,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         <section className="flex flex-col gap-5">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-2xl text-foreground poppins-bold">ORDER ITEMS</p>
+              <p className="text-2xl text-foreground">ORDER ITEMS</p>
               <p className="text-sm text-muted-foreground">
                 These items are currently in your cart and included in the checkout summary.
               </p>
@@ -292,7 +292,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         </section>
 
         <section className="flex flex-col gap-4 border border-muted bg-card p-5 text-foreground">
-          <p className="text-xl poppins-bold">TOTALS</p>
+          <p className="text-xl">TOTALS</p>
           <OrderSummaryLine
             label="Shipping"
             value={formatShopCurrency(displaySummary.shipping)}

@@ -25,10 +25,10 @@ const Error = () => {
         />
 
         <div className="flex flex-col gap-3">
-          <p className="poppins-semibold text-sm uppercase tracking-[0.2em] text-primary">
+          <p className="text-sm uppercase tracking-[0.2em] text-primary">
             404 &middot; Page not found
           </p>
-          <h1 className="poppins-extrabold text-3xl text-foreground md:text-4xl">
+          <h1 className="text-3xl text-foreground md:text-4xl">
             Looks like that robot wandered off.
           </h1>
           <p className="lato-regular text-base text-muted-foreground md:text-lg">
@@ -41,7 +41,7 @@ const Error = () => {
             <li key={to} className="flex">
               <Link
                 to={to}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm text-foreground transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background poppins-semibold sm:w-auto"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm text-foreground transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
               >
                 <Icon className="size-4" aria-hidden="true" />
                 <span>{label}</span>

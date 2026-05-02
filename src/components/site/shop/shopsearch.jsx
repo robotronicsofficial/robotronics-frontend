@@ -32,7 +32,7 @@ const HeaderSummaryItem = ({ icon, label }) => (
       <div className="rounded-full bg-foreground p-2">
         {icon}
       </div>
-      <p className="px-3 text-center text-sm poppins-bold lg:text-base">{label}</p>
+      <p className="px-3 text-center text-sm lg:text-base">{label}</p>
     </div>
     <ArrowRight className="shrink-0 text-muted-foreground" />
   </div>
@@ -158,7 +158,7 @@ const Shopsearch = () => {
       </div>
 
       <div className="items-center gap-x-6 lg:flex">
-        <div className="lg:text-2xl poppins-regular lg:w-1/5 self-center">
+        <div className="lg:text-2xl lg:w-1/5 self-center">
           CATEGORY
           <div className="h-1.5 w-14 border bg-foreground border-foreground mt-4"></div>
         </div>

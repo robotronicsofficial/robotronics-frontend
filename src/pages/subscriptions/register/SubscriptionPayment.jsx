@@ -213,7 +213,7 @@ const SubscriptionPayment = ({ onNext }) => {
 
         <div className="mt-6 flex items-center gap-3 rounded-2xl bg-muted p-4 text-sm text-foreground">
           <Lock className="h-4 w-4 shrink-0 text-warning" />
-          <p className="poppins-light">
+          <p className="">
             Your payment details are encrypted and used only to process this subscription.
           </p>
         </div>

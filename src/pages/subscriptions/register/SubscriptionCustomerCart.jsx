@@ -50,7 +50,7 @@ const SubscriptionCustomerCart = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 md:py-16">
-        <h1 className="text-wrap text-2xl poppins-bold text-foreground md:text-4xl">
+        <h1 className="text-wrap text-2xl text-foreground md:text-4xl">
           {steps[currentStep].title}
         </h1>
         <div>{steps[currentStep].content}</div>

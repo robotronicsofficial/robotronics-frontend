@@ -1,13 +1,5 @@
-// import TermsBody from './TermsBody'
-import TermsAndConditions from './TermsAndConditions'
-const TermsHome = () => {
-  return (
-    <div>
-      {/* <Intro/> */}
-      {/* <TermsBody/> */}
-      <TermsAndConditions/>
-    </div>
-  )
-}
+import TermsAndConditions from "./TermsAndConditions";
 
-export default TermsHome
+const TermsHome = () => <TermsAndConditions />;
+
+export default TermsHome;

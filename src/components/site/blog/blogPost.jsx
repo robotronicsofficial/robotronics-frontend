@@ -53,10 +53,10 @@ const BlogCard = ({ cardData }) => {
         </div>
       </div>
       <CardContent className="px-6 py-4">
-        <div className="font-bold text-wrap poppins-bold text-xl mb-2">
+        <div className="font-bold text-wrap text-xl mb-2">
           {mappedData.title}
         </div>
-        <p className="text-muted-foreground text-wrap poppins-light text-base">
+        <p className="text-muted-foreground text-wrap text-base">
           {mappedData.description}
         </p>
       </CardContent>
@@ -68,23 +68,23 @@ const BlogCard = ({ cardData }) => {
               src={mappedData.author.avatar}
               alt={mappedData.author.name}
             />
-            <p className="text-muted-foreground leading-none poppins-light ">
+            <p className="text-muted-foreground leading-none">
               {mappedData.author.name}
             </p>
           </div>
           <div className="text-sm flex">
-            <Link to={`/BlogDetail/${cardData._id}`} className="text-xl poppins-light">VIEW POST</Link>
+            <Link to={`/BlogDetail/${cardData._id}`} className="text-xl">VIEW POST</Link>
           </div>
         </div>
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex gap-3">
             <p className="text-muted-foreground hidden lg:block sm:block">-----</p>
-            <p className="text-muted-foreground poppins-light">{mappedData.date}</p>
+            <p className="text-muted-foreground">{mappedData.date}</p>
             <span className="text-muted-foreground">•</span>
           </div>
           <div className="flex items-center gap-1">
             <Share2 />
-            <span className="text-muted-foreground poppins-light">
+            <span className="text-muted-foreground">
               {mappedData.shares} shares
             </span>
           </div>

@@ -109,7 +109,7 @@ const SubscriptionReviewCustomer = () => {
                 Subscription active
               </p>
             </div>
-            <p className="text-sm text-muted-foreground poppins-light">
+            <p className="text-sm text-muted-foreground">
               The subscription is active and course access has been assigned to
               the registered children.
             </p>
@@ -155,10 +155,10 @@ const SubscriptionReviewCustomer = () => {
       <div className="flex justify-center px-4 py-8 md:px-10">
         <div className="flex w-full max-w-2xl flex-col gap-y-6 rounded-3xl border border-border bg-card p-6 md:p-10">
           <div className="flex flex-col gap-y-2">
-            <p className="text-2xl md:text-3xl font-bold text-foreground poppins-bold">
+            <p className="text-2xl md:text-3xl font-bold text-foreground">
               Confirm your subscription
             </p>
-            <p className="text-sm text-muted-foreground poppins-light">
+            <p className="text-sm text-muted-foreground">
               Everything looks right? Confirm to activate access for your child.
             </p>
           </div>
@@ -220,7 +220,7 @@ const SubscriptionReviewCustomer = () => {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <button
               type="button"
-              className="text-sm font-semibold text-foreground underline underline-offset-4 poppins-light"
+              className="text-sm font-semibold text-foreground underline underline-offset-4"
               onClick={() => navigate({ to: "/subscriptions/payment" })}
             >
               Edit details

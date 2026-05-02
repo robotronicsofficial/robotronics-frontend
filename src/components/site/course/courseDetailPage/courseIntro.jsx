@@ -39,9 +39,9 @@ const CourseIntro = ({ id, title, image, price, category }) => {
   return (
     <div className="bg-muted"data-aos="fade-right">
       {/* parent */}
-      <div className=" p-10 lg:flex flex-row ">
+      <div className="p-10 lg:flex flex-row">
         {/* left */}
-        <div className="lg:flex flex-row justify-center ">
+        <div className="lg:flex flex-row justify-center">
           {/* img */}
           <div className="rounded-full bg-background max-w-full max-h-full flex items-center justify-center">
             <AppImage
@@ -60,7 +60,7 @@ const CourseIntro = ({ id, title, image, price, category }) => {
         <div className="flex flex-col p-5 lg:px-24 lg:gap-y-5 gap-y-3">
           {/* title */}
           <div>
-            <p className="poppins-bold text-foreground lg:text-6xl ">{title}</p>
+            <p className="text-foreground lg:text-6xl">{title}</p>
           </div>
           {/* sale */}
           <div className="flex flex-col gap-y-8">
@@ -75,15 +75,15 @@ const CourseIntro = ({ id, title, image, price, category }) => {
             </div>
             {/* text */}
             <div className="flex flex-row gap-x-2">
-              <p className="text-sm text-muted-foreground poppins-thin">
+              <p className="text-sm text-muted-foreground">
                 261 products sold .
               </p>
-              <p className="text-sm text-muted-foreground poppins-thin">
+              <p className="text-sm text-muted-foreground">
                 3,1k products watched
               </p>
             </div>
           </div>
-          <div className="text-primary text-2xl poppins-bold">
+          <div className="text-primary text-2xl">
             {price != null ? `Pkr ${price}` : "Included"}
           </div>
           {/* buy now */}

@@ -67,7 +67,7 @@ const CartsStep = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 md:py-16">
-        <h1 className="text-wrap text-4xl poppins-bold text-foreground">{steps[currentStep].title}</h1>
+        <h1 className="text-wrap text-4xl text-foreground">{steps[currentStep].title}</h1>
         <div>{steps[currentStep].content}</div>
       </div>
     </>

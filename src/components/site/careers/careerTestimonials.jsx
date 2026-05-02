@@ -69,8 +69,8 @@ const CareerTestimonials = () => {
           <div className="flex flex-col justify-between lg:py-10 py-5">
             <div></div>
             <div>
-              <p className="text-xl poppins-ligt text-background">Our Employees</p>
-              <p className="lg:text-6xl poppins-bold text-3xl text-primary font-bold">
+              <p className="text-xl  text-background">Our Employees</p>
+              <p className="lg:text-6xl text-3xl text-primary font-bold">
                 TESTIMONIALS
               </p>
             </div>
@@ -85,7 +85,7 @@ const CareerTestimonials = () => {
           className="w-full border-t border-border pt-6 text-xl italic font-semibold text-muted-foreground dark:text-background"
           data-aos="fade-up"
         >
-          <p className="text-wrap poppins-extralight text-foreground">{quote}</p>
+          <p className="text-wrap text-foreground">{quote}</p>
         </blockquote>
         {/* name */}
         <div
@@ -94,8 +94,8 @@ const CareerTestimonials = () => {
 
 
         >
-          <p className="text-primary poppins-extralight text-2xl">{name}</p>
-          <p className="text-background poppins-extralight">{job}</p>
+          <p className="text-primary text-2xl">{name}</p>
+          <p className="text-background">{job}</p>
         </div>
         {/* Buttons */}
         <div className="flex flex-col gap-x-2">

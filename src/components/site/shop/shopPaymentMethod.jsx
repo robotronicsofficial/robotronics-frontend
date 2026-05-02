@@ -166,8 +166,8 @@ const ShopPaymentMethod = ({ onNext }) => {
         <section className="flex flex-col gap-4 p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-2">
-              <p className="text-3xl text-foreground poppins-bold">SHIPPING & PAYMENT</p>
-              <p className="text-sm text-foreground poppins-light">
+              <p className="text-3xl text-foreground">SHIPPING & PAYMENT</p>
+              <p className="text-sm text-foreground">
                 Save the payment details for this checkout draft. Shipping is only required when your cart has physical products.
               </p>
             </div>
@@ -210,8 +210,8 @@ const ShopPaymentMethod = ({ onNext }) => {
         {requiresShipping ? (
           <section className="flex flex-col gap-5 border-t border-border p-6">
             <div className="flex flex-col gap-2">
-              <p className="text-3xl text-foreground poppins-bold">SHIPPING SERVICE</p>
-              <p className="text-sm text-foreground poppins-light">
+              <p className="text-3xl text-foreground">SHIPPING SERVICE</p>
+              <p className="text-sm text-foreground">
                 Choose the delivery partner you want stored with this checkout draft.
               </p>
             </div>
@@ -234,10 +234,10 @@ const ShopPaymentMethod = ({ onNext }) => {
                       />
                       <div className="flex w-full flex-col gap-2">
                         <div className="flex justify-between gap-4">
-                          <p className="poppins-bold">{service.value}</p>
+                          <p className="">{service.value}</p>
                           <p className="text-sm">{service.note}</p>
                         </div>
-                        <p className="text-sm poppins-light">{service.description}</p>
+                        <p className="text-sm">{service.description}</p>
                       </div>
                     </div>
                   </Label>
@@ -255,8 +255,8 @@ const ShopPaymentMethod = ({ onNext }) => {
 
         <section className="flex flex-col gap-5 border-t border-border p-6">
           <div className="flex flex-col gap-2">
-            <p className="text-3xl text-foreground poppins-bold">PAYMENT METHOD</p>
-            <p className="text-sm text-foreground poppins-light">
+            <p className="text-3xl text-foreground">PAYMENT METHOD</p>
+            <p className="text-sm text-foreground">
               Save the billing method you want attached to this checkout draft.
             </p>
           </div>
@@ -279,10 +279,10 @@ const ShopPaymentMethod = ({ onNext }) => {
                     />
                     <div className="flex w-full flex-col gap-2">
                       <div className="flex items-center justify-between gap-4">
-                        <p className="poppins-bold">{method.value}</p>
+                        <p className="">{method.value}</p>
                         <img src={mastercard} className="h-6 w-6" alt="payment method icon" />
                       </div>
-                      <p className="text-sm poppins-light">{method.description}</p>
+                      <p className="text-sm">{method.description}</p>
                     </div>
                   </div>
                 </Label>
@@ -293,8 +293,8 @@ const ShopPaymentMethod = ({ onNext }) => {
 
         <section className="flex flex-col gap-5 border-t border-border p-6">
           <div className="flex flex-col gap-2">
-            <p className="text-3xl text-foreground poppins-bold">BILLING DETAILS</p>
-            <p className="text-sm text-foreground poppins-light">
+            <p className="text-3xl text-foreground">BILLING DETAILS</p>
+            <p className="text-sm text-foreground">
               These details are used for the order summary and kept locally in this browser until you submit the checkout request.
             </p>
           </div>
@@ -423,7 +423,7 @@ const Field = ({
       controlClassName="rounded-none border-x-0 border-t-0 border-border bg-transparent px-0 py-2.5 text-sm text-foreground focus:border-foreground"
     />
     {error && (
-      <p role="alert" className="text-destructive text-sm poppins-regular">
+      <p role="alert" className="text-destructive text-sm">
         {error}
       </p>
     )}

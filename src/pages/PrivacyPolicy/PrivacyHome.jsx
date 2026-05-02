@@ -1,13 +1,5 @@
-import Intro from '@/components/site/contactUs/intro'
-import PrivacyPolicy from './PrivacyPolicy'
+import PrivacyPolicy from "./PrivacyPolicy";
 
-const PrivacyHome = () => {
-  return (
-    <div>
-      <Intro/>
-      <PrivacyPolicy/>
-    </div>
-  )
-}
+const PrivacyHome = () => <PrivacyPolicy />;
 
-export default PrivacyHome
+export default PrivacyHome;

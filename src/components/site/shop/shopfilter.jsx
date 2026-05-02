@@ -49,7 +49,7 @@ const Shopfilter = ({
       {/* All Products */}
       <div className="lg:pt-6 pt-3 text-foreground">
         <div className="flex justify-between">
-          <p className="poppins-semibold lg:text-2xl text-xl">All PRODUCTS</p>
+          <p className="lg:text-2xl text-xl">All PRODUCTS</p>
           <Button
             type="button"
             variant="ghost"

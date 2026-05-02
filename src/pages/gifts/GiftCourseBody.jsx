@@ -124,7 +124,7 @@ const GiftCourseBody = () => {
         <div className="flex flex-col md:w-4/5">
           <div className="w-full">
             <div className="flex flex-col gap-y-5 py-8">
-              <h2 className="poppins-bold px-6 text-2xl text-foreground md:px-20 md:text-4xl">
+              <h2 className="px-6 text-2xl text-foreground md:px-20 md:text-4xl">
                 Gift Request Details
               </h2>
             </div>
@@ -132,7 +132,7 @@ const GiftCourseBody = () => {
             {!courseItems.length ? (
               <Card className="mx-auto mb-6 max-w-4xl rounded-md">
                 <CardContent className="p-5">
-                <p className="poppins-medium">
+                <p className="">
                   Choose at least one course before sending a gift request.
                 </p>
                 <Button
@@ -182,7 +182,7 @@ const GiftCourseBody = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-auto rounded-lg bg-card px-5 py-2 text-sm text-muted-foreground poppins-bold lg:px-12 lg:text-xl"
+                  className="h-auto rounded-lg bg-card px-5 py-2 text-sm text-muted-foreground lg:px-12 lg:text-xl"
                   onClick={() => navigate({ to: COURSE_PATH })}
                   disabled={isSubmitting}
                 >
@@ -190,7 +190,7 @@ const GiftCourseBody = () => {
                 </Button>
                 <Button
                   type="submit"
-                  className="h-auto rounded-lg bg-foreground px-5 py-2 text-sm text-background poppins-bold lg:px-12 lg:text-xl"
+                  className="h-auto rounded-lg bg-foreground px-5 py-2 text-sm text-background lg:px-12 lg:text-xl"
                   disabled={isSubmitting || !courseItems.length}
                 >
                   {isSubmitting ? "Sending..." : "Send Gift"}

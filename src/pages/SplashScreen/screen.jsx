@@ -50,10 +50,10 @@ const Screen = () => {
       aria-label="Continue to Robotronics home"
       className="flex h-svh w-full cursor-pointer flex-col items-center justify-center gap-6 bg-background px-6 text-center animate-in fade-in duration-500"
     >
-      <p className="poppins-extralight text-2xl tracking-[0.3em] text-muted-foreground md:text-3xl">
+      <p className="text-2xl tracking-[0.3em] text-muted-foreground md:text-3xl">
         WELCOME TO
       </p>
-      <h1 className="poppins-extrabold text-5xl text-primary md:text-7xl lg:text-8xl">
+      <h1 className="text-5xl text-primary md:text-7xl lg:text-8xl">
         ROBOTRONICS
       </h1>
       <p className="lato-regular max-w-xl text-base text-muted-foreground md:text-lg">

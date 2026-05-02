@@ -37,7 +37,7 @@ const CareesFindRole = () => {
           >
             Send Your Resume
           </Button>
-          <Button type="button" variant="outline" size="icon" className="h-auto rounded-full border-foreground bg-card px-4 py-3 text-foreground hover:bg-foreground hover:text-background">
+          <Button type="button" variant="outline" size="icon" className="h-auto rounded-full border-foreground bg-card px-4 py-3 text-foreground hover:bg-foreground">
             <ArrowUpRight size={24} />
           </Button>
         </div>
@@ -61,7 +61,7 @@ const CareesFindRole = () => {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-3 border border-foreground rounded-xl hover:bg-foreground hover:text-background transition transform hover:scale-105"
+            className="p-3 border border-foreground rounded-xl hover:bg-foreground transition transform hover:scale-105"
             data-aos="fade-up"
             data-aos-delay={getAosStaggerDelay(index)}
           >

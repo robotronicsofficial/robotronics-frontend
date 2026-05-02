@@ -30,7 +30,7 @@ function Marquee({ imagesurls, direction }) {
       };
 
   return (
-    <div className="flex gap-6 w-full overflow-hidden ">
+    <div className="flex gap-6 w-full overflow-hidden">
       <motion.div
         initial={{ x: offsets.initial }}
         animate={{ x: animationTarget }}
@@ -43,7 +43,7 @@ function Marquee({ imagesurls, direction }) {
           <img
             key={index}
             src={url}
-            className=" select-none size-24 md:size-28 rounded-3xl"
+            className="select-none size-24 md:size-28 rounded-3xl"
             alt={`Marquee image ${index + 1}`}
           />
         ))}
@@ -60,7 +60,7 @@ function Marquee({ imagesurls, direction }) {
           <img
             key={index}
             src={url}
-            className="select-none size-24 md:size-28  rounded-3xl"
+            className="select-none size-24 md:size-28 rounded-3xl"
           />
         ))}
       </motion.div>

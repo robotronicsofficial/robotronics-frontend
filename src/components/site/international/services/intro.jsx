@@ -19,10 +19,10 @@ const Intro = () => {
 
 
             >
-              {/* <h1 className=" md:text-3xl text-xl poppins-extralight text-background">
+              {/* <h1 className="md:text-3xl text-xl text-background">
                 ROBOTRONICS
               </h1>
-              <h1 className=" md:text-3xl tex-xl poppins-bold text-background font-bold">
+              <h1 className="md:text-3xl tex-xl text-background font-bold">
                 WELCOMES
               </h1> */}
             </div>
@@ -32,15 +32,15 @@ const Intro = () => {
 
 
             >
-              <p className="lg:text-8xl text-4xl poppins-bold text-primary">
+              <p className="lg:text-8xl text-4xl text-primary">
                 OUR&nbsp;
               </p>
-              <p className="lg:text-8xl text-4xl poppins-bold text-background">
+              <p className="lg:text-8xl text-4xl text-background">
                 SERVICES
               </p>
             </div>
             <p
-              className="text-wrap text-sm poppins-extralight text-background"
+              className="text-wrap text-sm text-background"
               data-aos="fade-up"
             >
               Robotronics has successfully taught 15,000+ International Student
@@ -86,7 +86,7 @@ const Intro = () => {
                 rel="noopener noreferrer"
                 data-aos="fade-up"
                 data-aos-delay={getAosStaggerDelay(index)}
-                className="lg:p-3 p-2 border border-foreground bg-card rounded-xl hover:bg-foreground hover:text-background"
+                className="lg:p-3 p-2 border border-foreground bg-card rounded-xl hover:bg-foreground"
               >
                 <BrandIcon brand={brand} />
               </a>

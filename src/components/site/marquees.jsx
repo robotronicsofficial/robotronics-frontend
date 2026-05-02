@@ -33,7 +33,7 @@ function Marquees({direction}) {
   ];
 
   return (
-    <div className=" w-full relative overflow-hidden bg-muted">
+    <div className="w-full relative overflow-hidden bg-muted">
       {images.map((item, index) => (
         <Marquee
           key={index}

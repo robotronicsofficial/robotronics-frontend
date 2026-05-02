@@ -8,7 +8,7 @@ import { selectCart, useCartStore } from "@/stores/cartStore";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-const summaryLabelClassName = "text-sm poppins-light";
+const summaryLabelClassName = "text-sm ";
 
 const CustomerOrder = ({
   onNext,
@@ -28,13 +28,13 @@ const CustomerOrder = ({
       data-aos="fade-top"
     >
       <div className="flex flex-col gap-4 lg:gap-8">
-        <p className="md:text-4xl text-2xl poppins-bold">YOUR ORDER</p>
-        <p className="text-sm text-muted-foreground poppins-regular">
+        <p className="md:text-4xl text-2xl">YOUR ORDER</p>
+        <p className="text-sm text-muted-foreground">
           Review all the products you want to buy
         </p>
       </div>
 
-      <div className="flex flex-col gap-2 poppins-extralight lg:gap-5">
+      <div className="flex flex-col gap-2 lg:gap-5">
         {items.length > 0 ? (
           items.map((product) => (
             <CustomerProduct
@@ -59,25 +59,25 @@ const CustomerOrder = ({
           label="Shipping"
           value={formatShopCurrency(summary.shipping)}
           labelClassName={summaryLabelClassName}
-          valueClassName="text-sm poppins-bold lg:text-xl"
+          valueClassName="text-sm  lg:text-xl"
         />
         <OrderSummaryLine
           label="Discount 10%"
           value={`- ${formatShopCurrency(summary.discount)}`}
           labelClassName={summaryLabelClassName}
-          valueClassName="text-sm poppins-bold"
+          valueClassName="text-sm "
         />
         <OrderSummaryLine
           label="Price"
           value={formatShopCurrency(summary.subtotal)}
           labelClassName={summaryLabelClassName}
-          valueClassName="text-xl poppins-bold"
+          valueClassName="text-xl "
         />
         <OrderSummaryLine
           label="Total Price"
           value={formatShopCurrency(summary.total)}
           labelClassName={summaryLabelClassName}
-          valueClassName="text-xl text-primary poppins-bold"
+          valueClassName="text-xl text-primary "
         />
         <div className="flex flex-col gap-1 py-2 lg:gap-3 lg:py-4">
           <Separator className="bg-muted" />

@@ -9,7 +9,7 @@ const AuthSocialButton = ({ icon, label, onClick, className }) => (
     variant="outline"
     size="lg"
     className={cn(
-      "h-auto rounded-3xl bg-background py-3 text-foreground font-bold poppins-regular",
+      "h-auto rounded-3xl bg-background py-3 text-foreground font-bold ",
       className,
     )}
     onClick={onClick}

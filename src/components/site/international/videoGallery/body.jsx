@@ -169,7 +169,7 @@ const Intro = () => {
       <div className="flex flex-wrap md:flex-nowrap gap-8 md:gap-x-6">
         <aside className="w-full p-8 md:w-80 overflow-hidden">
           <h2
-            className="font-bold text-3xl poppins-bold text-foreground mb-4 cursor-pointer"
+            className="font-bold text-3xl text-foreground mb-4 cursor-pointer"
             onClick={() => {
               setSelectedCategory("");
               setSelectedDate("");
@@ -188,7 +188,7 @@ const Intro = () => {
             {categories.map((category) => (
               <li
                 key={category}
-                className={`cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
+                className={`cursor-pointer  lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
                   selectedCategory === category.trim().toLowerCase()
                     ? "font-semibold text-accent"
                     : "text-muted-foreground hover:text-muted-foreground"
@@ -214,7 +214,7 @@ const Intro = () => {
               .map((category) => (
                 <li
                   key={category}
-                  className={`cursor-pointer poppins-light lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
+                  className={`cursor-pointer  lg:text-base text-sm lg:pt-5 pt-2 transition-colors duration-300 ${
                     selectedCategory === category.trim().toLowerCase()
                       ? "font-semibold text-accent"
                       : "text-muted-foreground hover:text-muted-foreground"

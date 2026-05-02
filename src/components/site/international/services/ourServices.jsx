@@ -25,7 +25,7 @@ const OurServices = () => {
   return (
     <div className="OurServices p-20">
       <div className="container mx-auto">
-        <h2 className="lg:text-6xl md:text-5xl text-4xl text-foreground poppins-bold mb-16">
+        <h2 className="lg:text-6xl md:text-5xl text-4xl text-foreground mb-16">
           Our Services
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -63,7 +63,7 @@ const OurServices = () => {
                       alt={`Image representing ${service.name}`}
                     />
                     <div className="absolute inset-x-0 top-0 flex justify-center bg-foreground/50 p-4">
-                      <h3 className="text-3xl text-background poppins-bold text-wrap text-center">
+                      <h3 className="text-3xl text-background text-wrap text-center">
                         {service.name}
                       </h3>
                     </div>

@@ -4,7 +4,7 @@ const YtVideos = () => {
       {/* <p className="lg:text-6xl text-4xl text-foreground text-center font-bold">FQA</p> */}
       <div className="lg:p-10 p-5 lg:flex flex-row lg:gap-x-5 lg:gap-y-0 gap-y-8 justify-center">
         {/* video 1 */}
-        <div className=" bg-card  ">
+        <div className="bg-card">
           <iframe
             width="100%"
             height="315"
@@ -14,18 +14,18 @@ const YtVideos = () => {
             allowFullScreen
           ></iframe>
           <div className="p-6">
-            <p className="text-base poppins-light text-primary">23 Feb, 2022</p>
-            <p className="lg:text-2xl text-xl text-wrap text-foreground poppins-bold">
+            <p className="text-base text-primary">23 Feb, 2022</p>
+            <p className="lg:text-2xl text-xl text-wrap text-foreground">
               Python Initial Language
             </p>
-            <p className="text-wrap poppins-extralight text-xs text-muted-foreground">
+            <p className="text-wrap text-xs text-muted-foreground">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>
           </div>
         </div>
         {/* video 2 */}
-        <div className=" bg-card">
+        <div className="bg-card">
           <iframe
             width="100%"
             height="315"
@@ -35,18 +35,18 @@ const YtVideos = () => {
             allowFullScreen
           ></iframe>
           <div className="p-6">
-            <p className="text-base poppins-lights text-primary">23 Feb, 2022</p>
-            <p className="lg:text-2xl text-xl text-wrap text-foreground poppins-bold">
+            <p className="text-base  text-primary">23 Feb, 2022</p>
+            <p className="lg:text-2xl text-xl text-wrap text-foreground">
               Python Initial Language
             </p>
-            <p className="text-wrap poppins-extralight text-xs text-muted-foreground">
+            <p className="text-wrap text-xs text-muted-foreground">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>
           </div>
         </div>
         {/* video 3 */}
-        <div className=" bg-card">
+        <div className="bg-card">
           <iframe
             width="100%"
             height="315"
@@ -56,11 +56,11 @@ const YtVideos = () => {
             allowFullScreen
           ></iframe>
           <div className="p-6">
-            <p className="text-base poppins-light text-primary">23 Feb, 2022</p>
-            <p className="lg:text-2xl text-xl text-wrap text-foreground poppins-bold">
+            <p className="text-base text-primary">23 Feb, 2022</p>
+            <p className="lg:text-2xl text-xl text-wrap text-foreground">
               Python Initial Language
             </p>
-            <p className="text-wrap poppins-extralight text-xs text-muted-foreground">
+            <p className="text-wrap text-xs text-muted-foreground">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>

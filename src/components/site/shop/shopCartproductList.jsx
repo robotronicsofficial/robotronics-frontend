@@ -219,7 +219,7 @@ const ShopCartproductList = ({ onNext }) => {
         <div className="h-full w-0 border border-border"></div>
       </div>
       <div className="flex w-full flex-col rounded-lg bg-background px-4 py-6 sm:px-6 lg:w-1/3 lg:px-10">
-        <h2 className="mb-4 font-poppins text-[32px] font-semibold leading-[40px] tracking-[0] text-foreground">
+        <h2 className="mb-4 text-[32px] font-semibold leading-[40px] tracking-[0] text-foreground">
           ORDER SUMMARY
         </h2>
         <div className="my-6 flex flex-col gap-3">
@@ -249,12 +249,12 @@ const ShopCartproductList = ({ onNext }) => {
           />
         </div>
         <div className="mt-20">
-          <span className="font-poppins font-medium text-[16px] leading-[20px] tracking-[0] text-foreground">
+          <span className="font-medium text-[16px] leading-[20px] tracking-[0] text-foreground">
             Write your special notes here...
           </span>
 
           <Textarea
-            className="mt-1 block min-h-36 w-full border-border bg-background p-4 font-poppins font-light sm:p-7"
+            className="mt-1 block min-h-36 w-full border-border bg-background p-4 font-light sm:p-7"
             value={notes}
             onChange={(e) => {
               setNotes(e.target.value);

@@ -57,7 +57,7 @@ const InputField = ({
       aria-invalid={Boolean(error) || undefined}
     />
     {error && (
-      <p role="alert" className="text-destructive text-sm poppins-regular">
+      <p role="alert" className="text-destructive text-sm">
         {error}
       </p>
     )}
@@ -75,7 +75,7 @@ const SelectField = ({ label, name, value, onChange, options, required = false, 
       required={required}
     />
     {error && (
-      <p role="alert" className="text-destructive text-sm poppins-regular">
+      <p role="alert" className="text-destructive text-sm">
         {error}
       </p>
     )}
@@ -267,13 +267,13 @@ const CustomerInfomation = ({ onNext }) => {
       {/* Right - Cart Summary */}
       <div className="flex flex-col gap-8 p-4 px-5 lg:gap-20 lg:p-8 lg:px-14">
         <div className="flex flex-col gap-4 lg:gap-8">
-          <p className="lg:text-4xl poppins-bold text-foreground">YOUR ORDER</p>
+          <p className="lg:text-4xl text-foreground">YOUR ORDER</p>
           <p className="font-lato font-medium text-base leading-5 text-muted-foreground">
             Review all the products you want to buy
           </p>
         </div>
 
-        <div className="flex flex-col gap-2 poppins-extralight lg:gap-5">
+        <div className="flex flex-col gap-2 lg:gap-5">
           {cart.length > 0 ? (
             cart.map((product) => (
               <CustomerProduct
@@ -324,7 +324,7 @@ const CustomerInfomation = ({ onNext }) => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            className="h-auto bg-foreground py-2 text-center text-sm text-primary poppins-bold lg:px-20 lg:text-xl"
+            className="h-auto bg-foreground py-2 text-center text-sm text-primary lg:px-20 lg:text-xl"
             onClick={handleSubmit}
             disabled={saveCheckoutAddressMutation.isPending}
           >

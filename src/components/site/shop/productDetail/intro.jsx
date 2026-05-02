@@ -128,23 +128,23 @@ const Intro = () => {
         </div>
 
         <div className="flex flex-col gap-8 p-5 lg:gap-14 lg:px-24" data-aos="fade-up">
-          <p className="poppins-bold lg:text-4xl text-wrap">{product.name}</p>
+          <p className="lg:text-4xl text-wrap">{product.name}</p>
 
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-8 lg:gap-14">
               {hasRating ? (
                 <StarRating value={productRating} className="my-6 text-2xl" />
               ) : (
-                <p className="my-6 text-sm text-muted-foreground poppins-medium">
+                <p className="my-6 text-sm text-muted-foreground">
                   No ratings yet
                 </p>
               )}
             </div>
             <div className="flex gap-2">
-              <p className="text-sm poppins-medium text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {product.productSold ?? 0} products sold,
               </p>
-              <p className="text-sm poppins-medium text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {product.productWatched ?? 0} products watched
               </p>
             </div>
@@ -178,7 +178,7 @@ const Intro = () => {
           </div>
 
           <div className="items-center justify-between lg:flex lg:gap-10">
-            <div className="text-primary text-2xl poppins-medium">
+            <div className="text-primary text-2xl">
               {formatShopCurrency(product.price)}
             </div>
             <div className="flex gap-5">
@@ -214,11 +214,11 @@ const Intro = () => {
 
       <div className="bg-background p-2 lg:p-14">
         <div className="flex gap-4 px-2 lg:justify-center lg:gap-10" data-aos="fade-down">
-          <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
+          <p className="lg:text-3xl font-bold text-wrap text-foreground">
             PRODUCT DETAIL
           </p>
           <p className="h-8 w-0 border border-foreground"></p>
-          <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
+          <p className="lg:text-3xl font-bold text-wrap text-foreground">
             DELIVERY AND RETURN
           </p>
         </div>
@@ -226,12 +226,12 @@ const Intro = () => {
         <div className="flex justify-between p-5">
           <div className="flex w-1/2 flex-col gap-2 p-2">
             <p
-              className="lg:text-2xl text-xl poppins-semibold text-foreground"
+              className="lg:text-2xl text-xl text-foreground"
               data-aos="fade-up"
             >
               DESCRIPTION
             </p>
-            <p className="text-wrap text-xs poppins-medium text-muted-foreground" data-aos="fade-up">
+            <p className="text-wrap text-xs text-muted-foreground" data-aos="fade-up">
               {product?.description || "No description available."}
             </p>
           </div>
@@ -241,17 +241,17 @@ const Intro = () => {
               className="flex flex-col gap-2 px-4 text-wrap text-muted-foreground lg:px-20"
               data-aos="fade-up"
             >
-              <p className="lg:text-2xl text-xl poppins-semibold text-foreground">
+              <p className="lg:text-2xl text-xl text-foreground">
                 FITS AND FEATURES
               </p>
               {Array.isArray(product?.features) && product.features.length > 0 ? (
                 product.features.map((feature, index) => (
-                  <p key={index} className="text-xs poppins-medium">
+                  <p key={index} className="text-xs">
                     {index + 1}. {feature}
                   </p>
                 ))
               ) : (
-                <p className="text-xs poppins-medium">No features listed.</p>
+                <p className="text-xs">No features listed.</p>
               )}
             </div>
           </div>

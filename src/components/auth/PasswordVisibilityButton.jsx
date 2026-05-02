@@ -21,14 +21,14 @@ const PasswordVisibilityButton = ({
     {isVisible ? (
       <>
         <img className="h-5 w-5" src={hide} alt="Hide password" />
-        <p className={cn("text-sm poppins-light", textClassName)}>Hide</p>
+        <p className={cn("text-sm ", textClassName)}>Hide</p>
       </>
     ) : (
       <>
         {showIconWhenHidden && (
           <img className="h-5 w-5" src={hide} alt="Show password" />
         )}
-        <p className={cn("text-sm poppins-light", textClassName)}>Show</p>
+        <p className={cn("text-sm ", textClassName)}>Show</p>
       </>
     )}
   </Button>

@@ -25,11 +25,11 @@ const Shop = () => {
       {/* intro */}
       <div className="p-5 flex flex-wrap w-full">
         <div className="flex justify-between lg:px-8" data-aos="fade-up">
-          <div className="flex lg:w-1/2 ">
+          <div className="flex lg:w-1/2">
             <img src={robo} />
-            <div className="m-4 content-center text-wrap text-foreground text-2xl md:text-5xl poppins-bold">
+            <div className="m-4 content-center text-wrap text-foreground text-2xl md:text-5xl">
               Upcoming{" "}
-              <span className=" content-center text-primary text-2xl md:text-5xl poppins-bold">
+              <span className="content-center text-primary text-2xl md:text-5xl">
                 Courses-
               </span>{" "}
               Gear up for some Fun
@@ -102,7 +102,7 @@ const Shop = () => {
                 </CardContent>
                 <CardFooter className="my-2 flex items-center justify-center p-0">
                   <Button type="button" className="rounded-full bg-primary px-4 py-2 font-bold text-background">
-                    <span className="poppins-medium px-2 text-base">View Course</span>
+                    <span className="px-2 text-base">View Course</span>
                     <BellRing className="text-center text-lg" />
                   </Button>
                 </CardFooter>

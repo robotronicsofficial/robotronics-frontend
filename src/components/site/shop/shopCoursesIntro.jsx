@@ -37,7 +37,7 @@ const ShopCoursesIntro = () => {
           <div className="flex w-full justify-between">
             <div className="flex">
               <Home className="h-5" data-aos="fade-up" />
-              <p className="px-3 text-sm poppins-bold lg:text-base" data-aos="fade-up">
+              <p className="px-3 text-sm lg:text-base" data-aos="fade-up">
                 Main Page
               </p>
             </div>
@@ -48,7 +48,7 @@ const ShopCoursesIntro = () => {
               <a href="#">
                 <div className="flex">
                   <Heart className="h-6" />
-                  <p className="px-3 text-sm poppins-bold lg:text-base">
+                  <p className="px-3 text-sm lg:text-base">
                     Wish List (0)
                   </p>
                 </div>
@@ -59,7 +59,7 @@ const ShopCoursesIntro = () => {
             <div className="flex w-full justify-between">
               <div className="flex">
                 <ShoppingBag className="h-6" />
-                <p className="px-3 text-sm poppins-bold lg:text-base">
+                <p className="px-3 text-sm lg:text-base">
                   2 Products - $1000
                 </p>
               </div>
@@ -73,11 +73,11 @@ const ShopCoursesIntro = () => {
         </div>
 
         <div className="py-4 lg:flex lg:py-10" data-aos="fade-down">
-          <div className="self-center lg:w-1/5 lg:text-xl poppins-light">
+          <div className="self-center lg:w-1/5 lg:text-xl">
             Category
           </div>
           <div className="lg:w-4/5">
-            <p className="text-xl poppins-bold lg:text-2xl">Catalog</p>
+            <p className="text-xl lg:text-2xl">Catalog</p>
             <div className="flex lg:gap-3">
               <div className="flex flex-1">
                 <Button type="button" variant="outline" size="icon" className="h-auto rounded-none border-border bg-card p-2">
@@ -163,7 +163,7 @@ const ShopCoursesIntro = () => {
           </div>
 
           <div className="flex" data-aos="fade-up">
-            <p className="text-sm poppins-regular lg:text-base">
+            <p className="text-sm lg:text-base">
               SHOWED 1 - 9 OF 30 PRODUCTS
             </p>
           </div>

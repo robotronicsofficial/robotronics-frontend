@@ -23,16 +23,16 @@ const Careerintro = ({ job }) => {
   return (
     <div className="bg-background">
       {/* upper */}
-      <div className=" lg:p-10 p-5 lg:py-14">
+      <div className="lg:p-10 p-5 lg:py-14">
         {/* upper */}
-        <div className="flex flex-row justify-between items-center ">
+        <div className="flex flex-row justify-between items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center" data-aos="fade-up">
             <img src={logo} alt="logo" className="w-20 h-20" />
-            <h1 className=" poppins-bold text-xs">
+            <h1 className="text-xs">
               ROBOTRONICS
               <br />
-              <p className="text-xs poppins-bold text-primary  ">P A K I S T A N</p>
+              <p className="text-xs text-primary">P A K I S T A N</p>
             </h1>
           </Link>
           {/* button */}
@@ -53,11 +53,11 @@ const Careerintro = ({ job }) => {
             >
               <ArrowLeft className="text-muted-foreground" size={24} />
             </Button>
-            <p className="lg:p-3 poppins-regular p-1">Back</p>
+            <p className="lg:p-3 p-1">Back</p>
           </div>
           {/* social icons */}
           <div className="flex flex-row items-center gap-3" data-aos="fade-up">
-            <p className="text-center poppins-regular">Share</p>
+            <p className="text-center">Share</p>
             <SocialLinks ariaLabel="Share this role" />
           </div>
         </div>
@@ -66,7 +66,7 @@ const Careerintro = ({ job }) => {
       {/* lower */}
       <div className="flex flex-col">
         <div className="flex flex-col items-center bg-muted p-5 rounded-xl mx-5" data-aos="fade-up">
-          <h2 className="lg:text-5xl poppins-bold text-3xl text-foreground mb-5 text-center">
+          <h2 className="lg:text-5xl text-3xl text-foreground mb-5 text-center">
             {displayPosition}
           </h2>
           <div className="relative py-5 lg:py-24 w-full">
@@ -78,16 +78,16 @@ const Careerintro = ({ job }) => {
             />
             <div className="absolute inset-0 flex flex-row justify-around items-center text-background">
               <div className="text-center">
-                <p className="poppins-bold text-xs">Date</p>
-                <p className="text-xs poppins-extralight ">{displayDate}</p>
+                <p className="text-xs">Date</p>
+                <p className="text-xs">{displayDate}</p>
               </div>
               <div className="text-center">
-                <p className="poppins-bold text-xs">Category</p>
-                <p className="text-xs poppins-extralight ">{displayCategory}</p>
+                <p className="text-xs">Category</p>
+                <p className="text-xs">{displayCategory}</p>
               </div>
               <div className="text-center">
-                <p className="poppins-bold text-xs">Location</p>
-                <p className="text-xs poppins-extralight ">{displayLocation}</p>
+                <p className="text-xs">Location</p>
+                <p className="text-xs">{displayLocation}</p>
               </div>
             </div>
           </div>
