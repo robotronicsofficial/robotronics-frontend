@@ -1,102 +1,121 @@
 import { useState } from "react";
+
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { useAuth } from "@/contexts/useAuth";
-import { openExternalUrl } from "@/utils/openExternalUrl";
-import { usePayments } from "@/hooks/useAccount";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Heading, Text } from "@/components/ui/typography";
+import { useAuth } from "@/contexts/useAuth";
+import { openExternalUrl } from "@/utils/openExternalUrl";
+import { usePayments } from "@/hooks/useAccount";
+import { formatPKR } from "@/utils/formatPrice";
 
 const resolveInvoiceUrl = (payment = {}) =>
   payment.invoiceUrl || payment.invoiceDownloadUrl || payment.downloadUrl || "";
+
+const InvoiceField = ({ label, value }) => (
+  <div className="flex flex-col gap-0.5">
+    <span className="text-caption uppercase tracking-wide text-muted-foreground">
+      {label}
+    </span>
+    <span className="text-body-sm font-medium text-foreground">{value || "—"}</span>
+  </div>
+);
+
+const InvoiceCard = ({ invoice, fullName, onUnavailable }) => {
+  const invoiceUrl = resolveInvoiceUrl(invoice);
+  return (
+    <Card>
+      <CardContent className="flex flex-col gap-5">
+        <div className="flex items-center justify-between gap-3 border-b border-border pb-4">
+          <Text size="sm" weight="semibold" className="text-foreground">
+            {fullName}
+          </Text>
+          <Text size="sm" weight="semibold" className="text-foreground">
+            {formatPKR(invoice.amount)}
+          </Text>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <InvoiceField label="Payment ID" value={invoice.paymentId} />
+          <InvoiceField label="Invoice ID" value={invoice.invoiceId} />
+          <InvoiceField label="Service" value={invoice.service} />
+          <InvoiceField
+            label="Paid"
+            value={invoice.paidAt ? new Date(invoice.paidAt).toLocaleDateString() : null}
+          />
+        </div>
+
+        <div className="flex justify-end">
+          <Button
+            type="button"
+            variant={invoiceUrl ? "default" : "ghost"}
+            disabled={!invoiceUrl}
+            onClick={() => {
+              if (!invoiceUrl || !openExternalUrl(invoiceUrl)) {
+                onUnavailable();
+              }
+            }}
+          >
+            {invoiceUrl ? "Open invoice" : "Invoice unavailable"}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 const PayHistory = () => {
   const { currentUser } = useAuth();
   const [error, setError] = useState("");
   const {
     data: invoices = [],
-    isLoading: loading,
+    isLoading,
     error: paymentsError,
   } = usePayments(Boolean(currentUser?._id));
   const errorMessage = error || paymentsError?.message || "";
+  const fullName =
+    [currentUser?.firstName, currentUser?.lastName].filter(Boolean).join(" ") || "Account holder";
 
   return (
-    <DashboardLayout>
-        <h1 className="text-3xl font-bold mb-8">My Payment History</h1>
-        <p className="mb-6 max-w-3xl text-sm text-muted-foreground">
-          This is your payment history. New payments appear within a few minutes after completion.
-        </p>
+    <DashboardLayout contentClassName="px-6">
+      <div className="mb-8 flex flex-col gap-1">
+        <Heading level={1} className="text-h1">
+          Payment history
+        </Heading>
+        <Text tone="muted" className="max-w-2xl">
+          New payments appear within a few minutes after completion.
+        </Text>
+      </div>
 
-        {loading ? (
-          <p className="text-muted-foreground">Loading payment history...</p>
-        ) : errorMessage ? (
-          <Alert variant="destructive" className="max-w-xl">
-            <AlertDescription>{errorMessage}</AlertDescription>
-          </Alert>
-        ) : invoices.length === 0 ? (
-          <p className="text-muted-foreground">
-            No payments yet. Once you subscribe or buy something, your receipts show up here.
-          </p>
-        ) : (
-          <div className="flex flex-col gap-4 sm:gap-6">
-            {invoices.map((invoice, index) => (
-              <Card key={index}>
-                <CardContent className="flex flex-col gap-4 sm:gap-6">
-                  <h3 className="text-base font-semibold text-muted-foreground sm:text-lg md:text-xl">
-                    {[currentUser?.firstName, currentUser?.lastName].filter(Boolean).join(" ") || "User"}
-                  </h3>
-
-                  <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
-                    <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:gap-6 lg:grid-cols-5">
-                      <div>
-                        <p className="text-xs font-medium sm:text-sm md:text-base">Payment ID</p>
-                        <p className="text-xs sm:text-sm md:text-base">{invoice.paymentId || "Not available"}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium sm:text-sm md:text-base">Invoice ID</p>
-                        <p className="text-xs sm:text-sm md:text-base">{invoice.invoiceId || "Not available"}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium sm:text-sm md:text-base">Service</p>
-                        <p className="text-xs sm:text-sm md:text-base">{invoice.service || "Not available"}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium sm:text-sm md:text-base">Paid at</p>
-                        <p className="text-xs sm:text-sm md:text-base">
-                          {invoice.paidAt ? new Date(invoice.paidAt).toLocaleDateString() : "Not available"}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium sm:text-sm md:text-base">Amount</p>
-                        <p className="text-xs sm:text-sm md:text-base">Rs {invoice.amount}/-</p>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-end sm:items-center sm:justify-start sm:pl-4">
-                      <Button
-                        type="button"
-	                        className={`whitespace-nowrap rounded-lg px-4 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:px-6 sm:py-2 sm:text-sm md:text-base ${
-	                          resolveInvoiceUrl(invoice)
-	                            ? "bg-primary text-primary-foreground hover:bg-primary-hover"
-	                            : "bg-muted text-muted-foreground cursor-not-allowed"
-	                        }`}
-                        disabled={!resolveInvoiceUrl(invoice)}
-                        onClick={() => {
-                          const invoiceUrl = resolveInvoiceUrl(invoice);
-                          if (!invoiceUrl || !openExternalUrl(invoiceUrl)) {
-                            setError("This payment record does not include a downloadable invoice link.");
-                          }
-                        }}
-                      >
-                        {resolveInvoiceUrl(invoice) ? "Open Invoice" : "Invoice Unavailable"}
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
+      {isLoading ? (
+        <Text tone="muted">Loading payment history…</Text>
+      ) : errorMessage ? (
+        <Alert variant="destructive" className="max-w-xl">
+          <AlertDescription>{errorMessage}</AlertDescription>
+        </Alert>
+      ) : invoices.length === 0 ? (
+        <Card>
+          <CardContent>
+            <Text tone="muted">
+              No payments yet. Once you subscribe or buy something, your receipts show up here.
+            </Text>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {invoices.map((invoice, index) => (
+            <InvoiceCard
+              key={invoice.paymentId || invoice.invoiceId || index}
+              invoice={invoice}
+              fullName={fullName}
+              onUnavailable={() =>
+                setError("This payment record does not include a downloadable invoice link.")
+              }
+            />
+          ))}
+        </div>
+      )}
     </DashboardLayout>
   );
 };

@@ -1,10 +1,13 @@
 import PropTypes from "prop-types";
 import { Link } from "@tanstack/react-router";
+import { Calendar, KeyRound, Mail, Phone, User } from "lucide-react";
+
 import Intro from "../dashboard/intro";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import QueryErrorState from "@/components/layout/QueryErrorState";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Heading, Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import { useCurrentParent } from "@/hooks/useAccount";
 
@@ -12,7 +15,6 @@ const MASKED_PASSWORD = "••••••••";
 
 const formatAccountDate = (dateString) => {
   if (!dateString) return "Unknown";
-
   try {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -24,26 +26,20 @@ const formatAccountDate = (dateString) => {
   }
 };
 
-const AccountDetailRow = ({ label, value }) => (
-  <div>
-    <p className="text-foreground">{label}</p>
-    <p className="text-foreground">{value}</p>
-    <div className="mt-4 w-full border border-border"></div>
+const InfoRow = ({ icon: Icon, label, value }) => (
+  <div className="flex items-start gap-3 border-b border-border py-4 first:border-t last:border-b-0">
+    <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+    <div className="flex min-w-0 flex-1 flex-col">
+      <span className="text-caption uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
+      <span className="break-words text-body text-foreground">{value}</span>
+    </div>
   </div>
 );
 
-AccountDetailRow.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.node.isRequired,
-};
-
-const AccountSummaryLine = ({ label, value }) => (
-  <p className="text-foreground">
-    <span className="font-semibold">{label}:</span> {value}
-  </p>
-);
-
-AccountSummaryLine.propTypes = {
+InfoRow.propTypes = {
+  icon: PropTypes.elementType.isRequired,
   label: PropTypes.string.isRequired,
   value: PropTypes.node.isRequired,
 };
@@ -60,10 +56,11 @@ const DashboardNextStep = ({ userId }) => {
 
   if (isLoading) {
     return (
-      <Card className="mb-8">
-        <CardContent className="flex flex-col gap-2">
-          <p className="text-lg font-semibold text-foreground">Checking subscription...</p>
-          <p className="text-sm text-muted-foreground">Loading your child profiles and next step.</p>
+      <Card className="mb-6">
+        <CardContent>
+          <Text size="sm" tone="muted">
+            Checking subscription…
+          </Text>
         </CardContent>
       </Card>
     );
@@ -72,7 +69,7 @@ const DashboardNextStep = ({ userId }) => {
   if (error) {
     return (
       <QueryErrorState
-        className="mb-8"
+        className="mb-6"
         title="Couldn't load subscription details"
         message={error.message}
         onRetry={() => refetch()}
@@ -81,24 +78,21 @@ const DashboardNextStep = ({ userId }) => {
   }
 
   return (
-    <Card className="mb-8">
-      <CardContent className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p className="text-lg font-semibold text-foreground">
+    <Card tone="tinted" className="mb-6">
+      <CardContent className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-1">
+          <Heading level={3} className="text-h5">
             {hasChildren ? "Continue learning" : "Set up learning access"}
-          </p>
-          <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+          </Heading>
+          <Text size="sm" tone="muted" className="max-w-xl">
             {hasChildren
               ? `${children.length} child profile${children.length === 1 ? "" : "s"} ready. Open Child Accounts to unlock a child session and continue courses.`
-              : "Choose a subscription plan, add child profiles, then unlock the child's course dashboard."}
-          </p>
+              : "Choose a subscription plan, add child profiles, then unlock your child's course dashboard."}
+          </Text>
         </div>
-        <Button
-          asChild
-          className="h-auto rounded-lg bg-primary px-5 py-3 text-primary-foreground hover:bg-primary-hover"
-        >
+        <Button asChild size="marketing">
           <Link to={hasChildren ? "/Dashboard/ChildProfile" : "/subscriptions"}>
-            {hasChildren ? "Open Child Accounts" : "Choose Subscription"}
+            {hasChildren ? "Open child accounts" : "Choose subscription"}
           </Link>
         </Button>
       </CardContent>
@@ -112,50 +106,32 @@ DashboardNextStep.propTypes = {
 
 const UserInfoIntro = () => {
   const { currentUser } = useAuth();
-  const displayName = [currentUser?.firstName, currentUser?.lastName].filter(Boolean).join(" ") || "Not provided";
+  const displayName =
+    [currentUser?.firstName, currentUser?.lastName].filter(Boolean).join(" ") || "Not provided";
   const displayEmail = currentUser?.email || "Not provided";
   const memberSince = formatAccountDate(currentUser?.createdAt);
 
   return (
     <div className="bg-background min-h-screen px-4 md:px-20">
       <Intro />
-      <DashboardLayout
-        className="bg-background min-h-0 flex flex-col md:flex-col lg:flex-row px-0"
-        contentClassName="w-full px-6 py-6 md:px-10 p-0"
-        navClassName="w-full lg:w-1/3"
-        navProps={{ "data-aos": "fade-up" }}
-      >
-        <div data-aos="fade-up">
-          <DashboardNextStep userId={currentUser?._id} />
-          <div>
-            <p className="mb-2 text-xl lg:text-2xl">My Info</p>
-            <p className="text-base lg:text-xl">Account Details</p>
-          </div>
+      <DashboardLayout contentClassName="px-6">
+        <DashboardNextStep userId={currentUser?._id} />
 
-          <div className="mt-6 flex flex-col gap-6 text-muted-foreground">
-            <AccountDetailRow label="Name" value={displayName} />
-            <AccountDetailRow label="Email" value={displayEmail} />
-            {currentUser?.phone && (
-              <AccountDetailRow label="Phone Number" value={currentUser.phone} />
-            )}
-            <AccountDetailRow label="Password" value={MASKED_PASSWORD} />
-            <AccountDetailRow label="Account Created" value={memberSince} />
-          </div>
+        <div className="mb-6 flex flex-col gap-1">
+          <Heading level={1} className="text-h1">
+            My info
+          </Heading>
+          <Text tone="muted">Account details and contact information.</Text>
+        </div>
 
-          <div className="mt-8 flex items-center justify-between">
-            <p className="text-base lg:text-xl text-foreground">Account Summary</p>
-          </div>
-
-          <Card className="mt-4">
-            <CardContent className="flex flex-col gap-4">
-              <AccountSummaryLine label="Name" value={displayName} />
-              <AccountSummaryLine label="Email" value={displayEmail} />
-              {currentUser?.phone && (
-                <AccountSummaryLine label="Phone" value={currentUser.phone} />
-              )}
-              <AccountSummaryLine label="Member Since" value={memberSince} />
-            </CardContent>
-          </Card>
+        <div className="rounded-2xl border border-border bg-card px-5">
+          <InfoRow icon={User} label="Name" value={displayName} />
+          <InfoRow icon={Mail} label="Email" value={displayEmail} />
+          {currentUser?.phone && (
+            <InfoRow icon={Phone} label="Phone number" value={currentUser.phone} />
+          )}
+          <InfoRow icon={KeyRound} label="Password" value={MASKED_PASSWORD} />
+          <InfoRow icon={Calendar} label="Member since" value={memberSince} />
         </div>
       </DashboardLayout>
     </div>
