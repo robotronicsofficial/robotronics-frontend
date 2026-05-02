@@ -6,7 +6,7 @@ import { Heading, Highlight, Text } from "@/components/ui/typography";
 import { SectionInverse } from "@/components/layout/SectionInverse";
 
 export const FinalCTASection = () => (
-  <SectionInverse className="py-24 md:py-32">
+  <SectionInverse className="pt-24 pb-12 md:pt-32 md:pb-16">
     <Container size="wide">
       <div className="mx-auto flex max-w-2xl flex-col items-center gap-7 text-center">
         <Heading level={2} tone="inverted" className="text-display-lg">

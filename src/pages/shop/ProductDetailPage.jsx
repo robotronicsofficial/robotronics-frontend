@@ -3,7 +3,7 @@ import MoreProduct from '@/components/site/shop/productDetail/moreProduct';
 
 const ProductDetailPage = () => {
   return (
-    <div className="pt-header-auth-md bg-muted">
+    <div className="pt-header bg-muted">
         <Intro/>
         <MoreProduct/>
     </div>

@@ -58,10 +58,10 @@ const IconButtonLink = ({ to, label, count, className, children }) => (
 
 const SignedOutActions = () => (
   <div className="flex items-center gap-2">
-    <Button asChild variant="ghost" size="sm" className="h-9 px-3 text-body-sm">
+    <Button asChild variant="ghost" className="h-9 rounded-full px-4 text-body-sm">
       <Link to="/Login">Sign in</Link>
     </Button>
-    <Button asChild size="sm" className="h-9 px-4 text-body-sm">
+    <Button asChild className="h-9 rounded-full px-5 text-body-sm font-semibold">
       <Link to="/Signup">Get started</Link>
     </Button>
   </div>
