@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import ShopPages from "../shopPages";
 
 const Decription = ({ description, features }) => {
   const featureList = Array.isArray(features) ? features.filter(Boolean) : [];
@@ -40,8 +39,6 @@ const Decription = ({ description, features }) => {
           </div>
         )}
       </div>
-
-      <ShopPages />
     </div>
   );
 };

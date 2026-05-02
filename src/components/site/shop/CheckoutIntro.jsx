@@ -38,7 +38,7 @@ const CheckoutIntro = ({ activeStep = 1 }) => {
   const activeIndex = Math.min(Math.max(activeStep - 1, 0), STEPS.length - 1);
 
   return (
-    <div className="shopCarthero" id="shopCarthero">
+    <div className="bg-muted/40 pt-header" id="shopCarthero">
       <div className="flex flex-col lg:py-20 py-10">
         <div className="items-center" data-aos="fade-up">
           <p className="text-foreground font-bold lg:text-5xl text-2xl text-center self-center">

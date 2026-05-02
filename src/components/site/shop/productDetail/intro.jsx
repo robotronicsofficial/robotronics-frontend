@@ -257,7 +257,7 @@ const Intro = () => {
           </div>
         </div>
 
-        <section className="shopPages flex items-center gap-8 px-5 lg:px-14" id="shopPages">
+        <section className="flex items-center gap-8 bg-muted/40 px-5 lg:px-14" id="shopPages">
           <div className="flex-1 py-8 lg:py-20">
             <div className="flex flex-col justify-content">
               <p

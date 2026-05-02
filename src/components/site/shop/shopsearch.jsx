@@ -7,7 +7,6 @@ import {
 } from "@/lib/commerceItems";
 import Shopfilter from "../shop/shopfilter";
 import Shopproduct from "../shop/shopproduct";
-import ShopPages from "../shop/shopPages";
 import shopHome from "@/assets/shopHome.png";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { cn } from "@/lib/utils";
@@ -300,7 +299,6 @@ const Shopsearch = () => {
         </div>
       </div>
 
-      <ShopPages />
       <div className="justify-between lg:flex lg:p-5">
         <div className="flex">
           {Array.from({ length: totalPages }, (_, i) => (

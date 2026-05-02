@@ -4,7 +4,6 @@ import arow from "@/assets/logo/shopArowIcon.svg";
 import icon from "@/assets/logo/searchicon.svg";
 import { cn } from "@/lib/utils";
 import CourseProduct from "../course/courseProduct";
-import ShopPages from "../shop/shopPages";
 import { useCourses } from "@/hooks/useCourses";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -146,7 +145,6 @@ const ShopCoursesIntro = () => {
       </div>
 
       <div className="flex-1">
-        <ShopPages />
         <div className="justify-between lg:flex lg:p-5">
           <div className="flex">
             {paginationPages.map((page) => (
