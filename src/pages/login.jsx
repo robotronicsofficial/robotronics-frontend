@@ -104,7 +104,7 @@ const Login = () => {
   if (isAuthLoading) {
     return (
       <div className="bg-background">
-        <div className={getHeaderOffsetClass("page", "flex items-center justify-center px-6 pb-20 text-foreground")}>
+        <div className={getHeaderOffsetClass("flex items-center justify-center px-6 pb-20 text-foreground")}>
           Loading account...
         </div>
       </div>
@@ -114,7 +114,7 @@ const Login = () => {
   if (forgotPasswordMode) {
     return (
       <div className="bg-background" id="forgot-password">
-        <div className={getHeaderOffsetClass("page", "flex flex-col items-center justify-center gap-6 px-6 pb-20 md:px-10 lg:px-16")}>
+        <div className={getHeaderOffsetClass("flex flex-col items-center justify-center gap-6 px-6 pb-20 md:px-10 lg:px-16")}>
           <p className="text-4xl poppins-bold text-foreground">Forgot Password</p>
           <form
             onSubmit={handleForgotPassword}
@@ -155,7 +155,7 @@ const Login = () => {
 
   return (
     <div className="bg-background" id="signin">
-      <div className={getHeaderOffsetClass("auth", "mx-auto flex w-full max-w-md flex-col gap-6 px-6 py-8 md:px-10 lg:px-16")}>
+      <div className={getHeaderOffsetClass("mx-auto flex w-full max-w-md flex-col gap-6 px-6 py-8 md:px-10 lg:px-16")}>
         <div
           className="flex flex-col items-center gap-4"
           data-aos="fade-up"

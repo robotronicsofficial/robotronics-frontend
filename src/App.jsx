@@ -77,15 +77,16 @@ const ChildProfile = lazy(() => import("./pages/Dashboard/ChildProfile"));
 const ProgressCertificate = lazy(() => import("./pages/Dashboard/ProgressCertificate"));
 const SubscriptionProgressPage = lazy(() => import("@/components/site/dashboard/SubscriptionProgressPage"));
 const MyAllCourses = lazy(() => import("@/components/site/dashboard/myAllCourses"));
+const StyleGuide = lazy(() => import("./pages/styleguide"));
 
 const RouteFallback = () => (
-  <div className={getHeaderOffsetClass("dashboardWide", "bg-background px-4 pb-16 text-center text-foreground")}>
+  <div className={getHeaderOffsetClass("bg-background px-4 pb-16 text-center text-foreground")}>
     Loading page...
   </div>
 );
 
 const RouterError = ({ error }) => (
-  <div className={getHeaderOffsetClass("dashboardWide", "bg-background px-6 pb-16 text-center text-foreground")}>
+  <div className={getHeaderOffsetClass("bg-background px-6 pb-16 text-center text-foreground")}>
     <div className="mx-auto max-w-lg rounded-lg border border-border bg-card p-6">
       <h1 className="text-2xl font-semibold">Page failed to load</h1>
       <p className="mt-3 text-sm text-muted-foreground">
@@ -235,6 +236,7 @@ const childRoute = (path, component) => makeRoute({ parent: childSessionRoute, p
 
 const routeTree = rootRoute.addChildren([
   publicRoute("/", Home),
+  publicRoute("/styleguide", StyleGuide),
   publicRoute("/Search", Search),
   publicRoute(SCREEN_PATH, Screen),
   publicRoute("/aboutUs", AboutUs),

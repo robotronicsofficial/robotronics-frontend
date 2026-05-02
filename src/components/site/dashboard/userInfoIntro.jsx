@@ -122,7 +122,6 @@ const UserInfoIntro = () => {
       <DashboardLayout
         className="bg-background min-h-0 flex flex-col md:flex-col lg:flex-row px-0"
         contentClassName="w-full px-6 py-6 md:px-10 p-0"
-        headerOffsetVariant="dashboardWide"
         navClassName="w-full lg:w-1/3"
         navProps={{ "data-aos": "fade-up" }}
       >

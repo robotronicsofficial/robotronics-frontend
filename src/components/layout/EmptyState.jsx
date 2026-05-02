@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 import { cn } from "@/lib/utils";
-import { Heading, Text } from "@/components/typography";
+import { Heading, Text } from "@/components/ui/typography";
 
 const EmptyState = ({
   action,
@@ -21,11 +21,9 @@ const EmptyState = ({
         <Icon aria-hidden="true" className="h-6 w-6" />
       </div>
     )}
-    <Heading as="h2" variant="card">
-      {title}
-    </Heading>
+    <Heading level={3}>{title}</Heading>
     {description && (
-      <Text className="mt-2 max-w-md" variant="muted">
+      <Text className="mt-2 max-w-md" tone="muted">
         {description}
       </Text>
     )}

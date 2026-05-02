@@ -19,6 +19,9 @@ const badgeVariants = cva(
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
         link: "text-primary underline-offset-4 hover:underline",
+        /* "Most Popular" pill for the highlighted pricing card.
+           Same colors as default — distinct slot kept for intent clarity. */
+        popular: "bg-primary text-primary-foreground tracking-wide uppercase",
       },
     },
     defaultVariants: {

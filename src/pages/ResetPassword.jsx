@@ -86,7 +86,7 @@ const ResetPassword = () => {
 
   return (
     <div className="bg-background" id="reset-password">
-      <div className={getHeaderOffsetClass("page", "mx-auto flex w-full max-w-md flex-col items-center gap-6 px-6 pb-20 md:px-10 lg:px-16")}>
+      <div className={getHeaderOffsetClass("mx-auto flex w-full max-w-md flex-col items-center gap-6 px-6 pb-20 md:px-10 lg:px-16")}>
         <p className="text-4xl poppins-bold text-foreground">Reset Password</p>
         <form
           onSubmit={handleSubmit}

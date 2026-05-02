@@ -9,7 +9,7 @@ const Iaboutntro = () => {
         <div className="overflow-hidden" >
         <div className="flex justify-between h-full w-full p-10 bg-foreground/70 md:bg-foreground/50">
             {/* text */}
-            <div className={getHeaderOffsetClass("aboutHero", "flex flex-col gap-y-5 lg:w-1/2 md:ml-10")}>
+            <div className={getHeaderOffsetClass("flex flex-col gap-y-5 lg:w-1/2 md:ml-10")}>
               {/* Text */}
               <div className="flex flex-col gap-y-2"data-aos="fade-up">
                 <div className="flex flex-row gap-x-2">

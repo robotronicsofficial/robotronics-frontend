@@ -34,7 +34,7 @@ const Intro = () => {
   });
 
   return (
-    <div className={getHeaderOffsetClass("page", "bg-background hidden md:block")}>
+    <div className={getHeaderOffsetClass("bg-background hidden md:block")}>
       <div>
         {breadcrumbs.length > 0 && (
           <nav aria-label="Breadcrumb" className="flex w-full bg-muted rounded-lg px-7 py-2 lg:w-1/2">

@@ -44,7 +44,6 @@ const MyRobot = () => {
       <DashboardLayout
         className="block min-h-0 bg-background lg:flex"
         contentClassName="w-full py-10 p-0"
-        headerOffsetVariant="dashboardWide"
         navClassName="lg:w-1/3 w-2/3"
       >
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4 px-8 lg:px-14">

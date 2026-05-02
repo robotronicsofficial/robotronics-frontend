@@ -308,7 +308,7 @@ const CourseDetail = () => {
 
   return (
     <div>
-      <div className={getHeaderOffsetClass("page", "bg-background")}>
+      <div className={getHeaderOffsetClass("bg-background")}>
         <div className="bg-muted p-6">
           <div className="max-w-7xl mx-auto">
             <div className="lg:flex flex-wrap lg:flex-nowrap lg:gap-x-6">
