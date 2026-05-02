@@ -1,20 +1,29 @@
 import SubscriptionCustomerCart from "./SubscriptionCustomerCart";
-const SubscriptionCustomerInfoIntro = () => {
-  return (
-    <div className="shopCarthero" id="shopCarthero">
-      {/* parent */}
-      <div className="flex flex-col">
-        <div className="items-center"data-aos="fade-down" >
-          <p className="text-foreground font-bold text-wrap lg:text-4xl text-2xl text-center self-center mt-header pb-6">
-            Subscription <br /> Setup Process
-          </p>
+import { Container } from "@/components/ui/container";
+import {
+  Display,
+  Eyebrow,
+  Highlight,
+  Text,
+} from "@/components/ui/typography";
+
+const SubscriptionCustomerInfoIntro = () => (
+  <>
+    <section className="bg-background pt-header pb-10">
+      <Container size="wide">
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 text-center">
+          <Eyebrow>Subscription setup</Eyebrow>
+          <Display size="md">
+            Add your <Highlight>child profile</Highlight>.
+          </Display>
+          <Text tone="muted" className="max-w-prose">
+            Tell us about your child so we can personalize their learning path. You can add more children after checkout.
+          </Text>
         </div>
-        <div className=""data-aos="fade-up">
-          <SubscriptionCustomerCart />
-        </div>
-      </div>
-    </div>
-  );
-};
+      </Container>
+    </section>
+    <SubscriptionCustomerCart />
+  </>
+);
 
 export default SubscriptionCustomerInfoIntro;
