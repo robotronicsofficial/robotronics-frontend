@@ -50,7 +50,7 @@ const WishListD = () => {
       withHeaderOffset={false}
     >
       <div data-aos="fade-up">
-        <h1 className="ml-14 text-2xl text-foreground poppins-bold">WishList</h1>
+        <h1 className="ml-14 text-2xl text-foreground">WishList</h1>
         {items.length === 0 ? (
           <div className="flex flex-col items-start gap-4 px-14 py-12">
             <Heart aria-hidden="true" className="size-12 text-muted-foreground" />
@@ -101,24 +101,24 @@ const WishListD = () => {
                     {item.name || "Saved item"}
                   </Button>
                   <div className="flex items-center gap-2">
-                    <p className="text-foreground poppins-bold text-sm">Category:</p>
+                    <p className="text-foreground text-sm">Category:</p>
                     <p className="text-sm">{item.category || "General"}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <p className="text-foreground font-bold text-sm">Type:</p>
-                    <p className="text-sm poppins-bold">{item.itemType}</p>
+                    <p className="text-sm">{item.itemType}</p>
                   </div>
                 </div>
               </div>
               <div className="flex items-end gap-5">
                 <div>
-                  <p className="text-xl poppins-bold">PKR {Number(item.price || 0).toLocaleString()}</p>
+                  <p className="text-xl">PKR {Number(item.price || 0).toLocaleString()}</p>
                 </div>
                 <div>
                   <Button
 	                    type="button"
 	                    onClick={() => handleMoveToCart(item)}
-	                    className="h-auto rounded-lg bg-primary px-4 py-2 font-bold text-primary-foreground hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+	                    className="h-auto rounded-lg bg-primary px-4 py-2 font-bold text-primary-foreground hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 	                  >
                     Add to Cart
                   </Button>

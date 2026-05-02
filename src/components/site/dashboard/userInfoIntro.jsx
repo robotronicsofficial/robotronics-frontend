@@ -26,8 +26,8 @@ const formatAccountDate = (dateString) => {
 
 const AccountDetailRow = ({ label, value }) => (
   <div>
-    <p className="text-foreground poppins-bold">{label}</p>
-    <p className="text-foreground poppins-regular">{value}</p>
+    <p className="text-foreground">{label}</p>
+    <p className="text-foreground">{value}</p>
     <div className="mt-4 w-full border border-border"></div>
   </div>
 );
@@ -38,7 +38,7 @@ AccountDetailRow.propTypes = {
 };
 
 const AccountSummaryLine = ({ label, value }) => (
-  <p className="text-foreground poppins-bold">
+  <p className="text-foreground">
     <span className="font-semibold">{label}:</span> {value}
   </p>
 );
@@ -95,7 +95,7 @@ const DashboardNextStep = ({ userId }) => {
         </div>
         <Button
           asChild
-          className="h-auto rounded-lg bg-primary px-5 py-3 text-primary-foreground hover:bg-accent hover:text-background"
+          className="h-auto rounded-lg bg-primary px-5 py-3 text-primary-foreground hover:bg-primary-hover"
         >
           <Link to={hasChildren ? "/Dashboard/ChildProfile" : "/subscriptions"}>
             {hasChildren ? "Open Child Accounts" : "Choose Subscription"}
@@ -128,8 +128,8 @@ const UserInfoIntro = () => {
         <div data-aos="fade-up">
           <DashboardNextStep userId={currentUser?._id} />
           <div>
-            <p className="mb-2 text-xl poppins-bold lg:text-2xl">My Info</p>
-            <p className="text-base lg:text-xl poppins-light">Account Details</p>
+            <p className="mb-2 text-xl lg:text-2xl">My Info</p>
+            <p className="text-base lg:text-xl">Account Details</p>
           </div>
 
           <div className="mt-6 flex flex-col gap-6 text-muted-foreground">
@@ -143,7 +143,7 @@ const UserInfoIntro = () => {
           </div>
 
           <div className="mt-8 flex items-center justify-between">
-            <p className="text-base lg:text-xl poppins-bold text-foreground">Account Summary</p>
+            <p className="text-base lg:text-xl text-foreground">Account Summary</p>
           </div>
 
           <Card className="mt-4">

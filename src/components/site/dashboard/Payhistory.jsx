@@ -77,7 +77,7 @@ const PayHistory = () => {
                         type="button"
 	                        className={`whitespace-nowrap rounded-lg px-4 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:px-6 sm:py-2 sm:text-sm md:text-base ${
 	                          resolveInvoiceUrl(invoice)
-	                            ? "bg-primary text-primary-foreground hover:bg-accent hover:text-background"
+	                            ? "bg-primary text-primary-foreground hover:bg-primary-hover"
 	                            : "bg-muted text-muted-foreground cursor-not-allowed"
 	                        }`}
                         disabled={!resolveInvoiceUrl(invoice)}

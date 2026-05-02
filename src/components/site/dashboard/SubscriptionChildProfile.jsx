@@ -273,26 +273,26 @@ const SubscriptionChildProfile = () => {
                   <CardContent className="flex flex-col gap-6">
                     <div className="flex items-center gap-4">
                       <UserCircle className="size-10" />
-                      <p className="text-foreground poppins-bold text-xl md:text-2xl">
+                      <p className="text-foreground text-xl md:text-2xl">
                         {child.firstName} {child.lastName}
                       </p>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <p className="text-foreground poppins-bold text-sm md:text-base">
+                      <p className="text-foreground text-sm md:text-base">
                         <span className="font-semibold">Email:</span> {child.email}
                       </p>
                       {child.dateOfBirth && (
-                        <p className="text-foreground poppins-bold text-sm md:text-base">
+                        <p className="text-foreground text-sm md:text-base">
                           <span className="font-semibold">Date of Birth:</span> {formatDisplayDate(child.dateOfBirth)}
                         </p>
                       )}
-                      <p className="text-foreground poppins-bold text-sm md:text-base">
+                      <p className="text-foreground text-sm md:text-base">
                         <span className="font-semibold">Phone:</span> {child.phone}
                       </p>
-                      <p className="text-foreground poppins-bold text-sm md:text-base">
+                      <p className="text-foreground text-sm md:text-base">
                         <span className="font-semibold">School:</span> {child.schoolName}
                       </p>
-                      <p className="text-foreground poppins-bold text-sm md:text-base text-wrap">
+                      <p className="text-foreground text-sm md:text-base text-wrap">
                         <span className="font-semibold">Address:</span> {child.streetAddress}, {child.city}, {child.postalCode}
                       </p>
                     </div>

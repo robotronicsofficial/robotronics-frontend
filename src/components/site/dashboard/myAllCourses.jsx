@@ -90,7 +90,7 @@ const MyAllCourses = () => {
     >
       {/* Course Listing */}
       <div>
-        <h1 className="text-foreground lg:text-2xl text-base poppins-bold mb-6">
+        <h1 className="text-foreground lg:text-2xl text-base mb-6">
           Your Active Courses
         </h1>
 
@@ -116,12 +116,12 @@ const MyAllCourses = () => {
                     </p>
                     <div className="flex items-center gap-2">
                       <Star className="text-primary" />
-                      <p className="text-muted-foreground poppins-light text-base">
+                      <p className="text-muted-foreground text-base">
                         ({course.reviews || 0} Rating)
                       </p>
                     </div>
                   </div>
-                  <div className="poppins-bold text-left text-xl font-bold text-wrap">
+                  <div className="text-left text-xl font-bold text-wrap">
                     {course.title}
                   </div>
                 </CardContent>
@@ -129,7 +129,7 @@ const MyAllCourses = () => {
                   <Button
                     type="button"
                     onClick={() => handleCourseClick(course)}
-                    className="h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
                     <span>View Course</span>
                   </Button>
@@ -146,7 +146,7 @@ const MyAllCourses = () => {
             <Button
               type="button"
               onClick={() => navigate({ to: "/Dashboard/MyCoursesPage" })}
-              className="h-auto rounded-full bg-primary px-6 py-2 text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="h-auto rounded-full bg-primary px-6 py-2 text-foreground hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               Browse courses
             </Button>

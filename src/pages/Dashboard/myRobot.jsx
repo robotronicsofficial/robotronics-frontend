@@ -48,7 +48,7 @@ const MyRobot = () => {
       >
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4 px-8 lg:px-14">
           <div>
-            <h1 className="text-foreground poppins-bold lg:text-2xl text-base">My Saved Items</h1>
+            <h1 className="text-foreground lg:text-2xl text-base">My Saved Items</h1>
             <p className="text-sm text-muted-foreground">Items you saved for later from the live catalog.</p>
           </div>
           <div className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground">
@@ -122,7 +122,7 @@ const MyRobot = () => {
                     <Button
 	                      type="button"
 	                      onClick={() => navigate({ to: getCommerceItemRoute(item) })}
-	                      className="h-auto rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+	                      className="h-auto rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 	                    >
                       {item?.itemType === "course" ? "View course" : "View product"}
                     </Button>

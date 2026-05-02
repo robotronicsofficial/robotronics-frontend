@@ -43,7 +43,7 @@ const PinModal = ({
           autoFocus
         />
 
-        <Button type="submit" className="w-full bg-primary text-background hover:bg-accent">
+        <Button type="submit" className="w-full bg-primary text-background hover:bg-primary-hover">
           {mode === "verify" ? "VERIFY PIN" : "CONFIRM PIN"}
         </Button>
       </form>

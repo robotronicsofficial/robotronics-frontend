@@ -130,7 +130,7 @@ const MyCourses = () => {
     >
       {/* Course Listing */}
       <div data-aos="fade-up">
-        <h1 className="text-foreground lg:text-2xl text-base poppins-bold mb-6">
+        <h1 className="text-foreground lg:text-2xl text-base mb-6">
           {hasFixedCourseLimit ? `Select ${maxCourses} Courses` : "Select Courses"}
         </h1>
 
@@ -150,7 +150,7 @@ const MyCourses = () => {
             onClick={saveSelectedCourses}
             className={`h-auto rounded-full px-6 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
               buttonEnabled
-                ? "bg-primary hover:bg-accent"
+                ? "bg-primary hover:bg-primary-hover"
                 : "bg-muted cursor-not-allowed"
             }`}
             disabled={!buttonEnabled || !canSaveCourses}
@@ -199,12 +199,12 @@ const MyCourses = () => {
                     </p>
                     <div className="flex items-center gap-2">
                       <Star className="text-primary" />
-                      <p className="text-muted-foreground poppins-light text-base">
+                      <p className="text-muted-foreground text-base">
                         ({course.reviews || 0} Rating)
                       </p>
                     </div>
                   </div>
-                  <div className="poppins-bold text-left text-xl font-bold text-wrap">
+                  <div className="text-left text-xl font-bold text-wrap">
                     {course.title}
                   </div>
                 </CardContent>
@@ -222,7 +222,7 @@ const MyCourses = () => {
                   <Button
                     type="button"
                     onClick={() => navigate({ to: `/Dashboard/courseDetail/${course._id}` })}
-                    className="h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
                     <span>View Detail</span>
                     <MoveDown className="text-xs" />
@@ -291,7 +291,7 @@ const MyCourses = () => {
             </p>
             <Button
               type="button"
-              className="mx-auto min-w-32 rounded-full bg-primary text-foreground hover:bg-accent hover:text-background"
+              className="mx-auto min-w-32 rounded-full bg-primary text-foreground hover:bg-primary-hover"
               onClick={() => setShowModal(false)}
             >
               Close
