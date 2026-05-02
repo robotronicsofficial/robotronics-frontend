@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { CheckCircle2 } from "lucide-react";
-import YtVideos from "@/components/site/course/courseDetailPage/ytVideos";
 import { useActivateSubscriptionMutation } from "../../../hooks/useAccount";
 import { formatDisplayDate } from "../../../lib/subscription";
 import {
@@ -145,7 +144,6 @@ const SubscriptionReviewCustomer = () => {
             </div>
           </div>
         </div>
-        <YtVideos />
       </div>
     );
   }
@@ -238,8 +236,6 @@ const SubscriptionReviewCustomer = () => {
           </div>
         </div>
       </div>
-
-      <YtVideos />
     </div>
   );
 };
