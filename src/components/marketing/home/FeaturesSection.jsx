@@ -1,6 +1,7 @@
 import { Award, CheckCircle2 } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
+import { GlareHover } from "@/components/ui/glare-hover";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 
 /* Mustard scribble underline. Echoes the hand-marker treatment used in
@@ -42,13 +43,16 @@ const SKILLS = [
 ];
 
 /* Cell shell. Centralizes the bento card chrome so the six cells share one
-   resting silhouette and we vary content, not packaging. */
+   resting silhouette and we vary content, not packaging. GlareHover adds a
+   cursor-following warm glow on hover — soft-light blend so it tints the
+   surface without obscuring text or fighting inner decorations. */
 const Cell = ({ className = "", children }) => (
-  <article
-    className={`relative flex flex-col gap-6 overflow-hidden rounded-3xl border border-border bg-card p-7 lg:p-8 ${className}`}
+  <GlareHover
+    as="article"
+    className={`flex flex-col gap-6 rounded-3xl border border-border bg-card p-7 lg:p-8 ${className}`}
   >
     {children}
-  </article>
+  </GlareHover>
 );
 
 /* AI Trainer — the load-bearing card. Real chat preview replaces a bullet point
