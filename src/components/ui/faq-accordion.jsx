@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
 import { Plus } from "lucide-react";
 
+import { AnimatedList } from "@/components/ui/animated-list";
 import { cn } from "@/lib/utils";
 
 /* FAQ list. Native `<details>` for accessibility + zero JS state.
-   Chevron rotates 45° (Plus → X) and turns mustard when open. */
+   Chevron rotates 45° (Plus → X) and turns mustard when open. The list as
+   a whole staggers in on viewport entry via AnimatedList. */
 export const FaqAccordion = ({ items, className }) => (
-  <div className={cn("flex flex-col divide-y divide-border", className)}>
+  <AnimatedList className={cn("flex flex-col divide-y divide-border", className)}>
     {items.map((item) => (
       <details
         key={item.question}
@@ -26,7 +28,7 @@ export const FaqAccordion = ({ items, className }) => (
         </div>
       </details>
     ))}
-  </div>
+  </AnimatedList>
 );
 
 FaqAccordion.propTypes = {

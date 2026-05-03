@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import { BillingToggle } from "@/components/ui/billing-toggle";
 import { Container } from "@/components/ui/container";
+import { StarBorder } from "@/components/ui/star-border";
 import { Heading, Text } from "@/components/ui/typography";
 import { PlanCard } from "@/components/marketing/PlanCard";
 import { cn } from "@/lib/utils";
@@ -85,34 +86,45 @@ const AUDIENCE_OPTIONS = [
   { value: "school", label: "For schools" },
 ];
 
-const AudienceToggle = ({ value, onChange }) => (
-  <div
-    role="radiogroup"
-    aria-label="Audience"
-    className="inline-flex items-center gap-1 rounded-full border border-border bg-card p-1"
-  >
-    {AUDIENCE_OPTIONS.map((option) => {
-      const selected = value === option.value;
-      return (
-        <button
-          key={option.value}
-          type="button"
-          role="radio"
-          aria-checked={selected}
-          onClick={() => onChange(option.value)}
-          className={cn(
-            "inline-flex h-10 items-center rounded-full px-5 text-body-sm font-semibold transition-colors",
-            selected
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground",
-          )}
-        >
-          {option.label}
-        </button>
-      );
-    })}
-  </div>
-);
+/* Two equal-width options → CSS-only traveling thumb. Width is fixed at
+   `calc(50% - p)`, position via `translateX(activeIndex * 100%)`. No JS
+   measurement, no layout properties animated. */
+const AudienceToggle = ({ value, onChange }) => {
+  const activeIndex = AUDIENCE_OPTIONS.findIndex((o) => o.value === value);
+  return (
+    <div
+      role="radiogroup"
+      aria-label="Audience"
+      className="relative grid grid-cols-2 rounded-full border border-border bg-card p-1"
+    >
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full bg-primary transition-transform duration-[var(--duration-base)] ease-out-quint motion-reduce:transition-none"
+        style={{ transform: `translateX(${activeIndex * 100}%)` }}
+      />
+      {AUDIENCE_OPTIONS.map((option) => {
+        const selected = value === option.value;
+        return (
+          <button
+            key={option.value}
+            type="button"
+            role="radio"
+            aria-checked={selected}
+            onClick={() => onChange(option.value)}
+            className={cn(
+              "relative inline-flex h-10 items-center justify-center rounded-full px-5 text-body-sm font-semibold transition-colors duration-[var(--duration-fast)]",
+              selected
+                ? "text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            {option.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
 
 AudienceToggle.propTypes = {
   value: PropTypes.oneOf(["parent", "school"]).isRequired,
@@ -129,12 +141,20 @@ export const PricingSection = () => {
       <Container size="wide">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-5 text-center">
           <AudienceToggle value={audience} onChange={setAudience} />
-          <Heading level={2} className="text-display-md">
-            {config.heading}
-          </Heading>
-          <Text size="lg" tone="muted">
-            {config.description}
-          </Text>
+          {/* Heading + description re-mount on audience change so the
+             swap-in keyframe runs. BillingToggle stays outside — its
+             savingsLabel changes silently in place. */}
+          <div
+            key={audience}
+            className="flex flex-col items-center gap-5 animate-swap-in motion-reduce:animate-none"
+          >
+            <Heading level={2} className="text-display-md">
+              {config.heading}
+            </Heading>
+            <Text size="lg" tone="muted">
+              {config.description}
+            </Text>
+          </div>
           <BillingToggle
             value={cycle}
             onChange={setCycle}
@@ -143,16 +163,23 @@ export const PricingSection = () => {
           />
         </div>
         <div
+          key={audience}
           className={cn(
-            "mx-auto mt-12 grid gap-6",
+            "mx-auto mt-12 grid gap-6 animate-swap-in motion-reduce:animate-none",
             config.layout === "pair"
               ? "max-w-4xl grid-cols-1 md:grid-cols-2"
               : "max-w-xl grid-cols-1",
           )}
         >
-          {config.plans.map((plan) => (
-            <PlanCard key={plan.name} cycle={cycle} {...plan} />
-          ))}
+          {config.plans.map((plan) =>
+            plan.popular ? (
+              <StarBorder key={plan.name} className="rounded-xl">
+                <PlanCard cycle={cycle} {...plan} />
+              </StarBorder>
+            ) : (
+              <PlanCard key={plan.name} cycle={cycle} {...plan} />
+            ),
+          )}
         </div>
       </Container>
     </section>
