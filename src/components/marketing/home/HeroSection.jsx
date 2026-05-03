@@ -12,6 +12,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { DitherBackdrop } from "@/components/ui/dither-backdrop";
 import { Highlight, Text } from "@/components/ui/typography";
 
 /* Hand-marker scribble used to underline a single keyword in the headline.
@@ -197,42 +198,46 @@ const TrustItem = ({ value, label }) => (
 );
 
 export const HeroSection = () => (
-  <section className="relative overflow-hidden bg-background pt-header pb-24 md:pb-32">
-    {/* Atmosphere — layered mustard glow, soft dot grid, and a faint starburst
-        behind the visual. Brief reads "minimal" but the page also has to feel
-        alive; these all run at low opacity so mustard stays a highlight, not
-        a wash. */}
+  <section className="relative isolate overflow-hidden bg-background pt-header pb-24 md:pb-32">
+    {/* Atmosphere — three layers, lightest in front:
+        1. Dither shader (z-30 below page): subtle mustard grain across the
+           whole hero. Lazy-loaded, paused off-screen.
+        2. Mustard radial glows: warm light bias toward the visual side.
+        3. Dot grid: gentle structure to anchor the typography column.
+       Mustard stays a highlight, not a wash. */}
+    <DitherBackdrop className="-z-30" />
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10"
+      className="pointer-events-none absolute inset-0 -z-20"
     >
       <div
-        className="absolute -right-40 -top-40 h-[44rem] w-[44rem] rounded-full opacity-50 blur-3xl"
+        className="absolute -right-40 -top-40 h-[44rem] w-[44rem] rounded-full opacity-25 blur-3xl"
         style={{
           background:
             "radial-gradient(closest-side, var(--color-primary-soft), transparent 70%)",
         }}
       />
       <div
-        className="absolute -bottom-40 -left-32 h-[28rem] w-[28rem] rounded-full opacity-30 blur-3xl"
+        className="absolute -bottom-40 -left-32 h-[28rem] w-[28rem] rounded-full opacity-20 blur-3xl"
         style={{
           background:
             "radial-gradient(closest-side, var(--color-primary-soft), transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute inset-0 opacity-[0.4]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, var(--color-border) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-          maskImage:
-            "radial-gradient(ellipse at center, black 30%, transparent 75%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse at center, black 30%, transparent 75%)",
         }}
       />
     </div>
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 -z-10 opacity-[0.35]"
+      style={{
+        backgroundImage:
+          "radial-gradient(circle, var(--color-border) 1px, transparent 1px)",
+        backgroundSize: "28px 28px",
+        maskImage:
+          "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+        WebkitMaskImage:
+          "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+      }}
+    />
 
     <Container size="wide">
       <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
