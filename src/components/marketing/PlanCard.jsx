@@ -7,16 +7,16 @@ import { Heading, Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { formatPKR } from "@/utils/formatPrice";
 
-/* Two-zone pricing card: a mustard-washed gradient header carries the price
-   (and the "Popular" tag when applicable), and a clean white body carries
-   the name, description, features, and pill CTA. The gradient is the only
-   visual emphasis — no border, no halo — so the three tones differ only in
-   how saturated the wash is.
-   - default → softest cream-mustard (lower-emphasis tier)
-   - tinted  → mid mustard (single-plan B2C default)
-   - highlighted → richest mustard (popular B2B Pro tier)
-   A radial highlight sits in the top-right of every header so the header
-   reads as light bouncing off mustard, not a flat color block. */
+/* Two-zone pricing card: a gradient header carries the price (and the
+   "Popular" tag when applicable), and a clean white body carries the name,
+   description, features, and pill CTA. Mustard is the anchor (left) and
+   the warm-sunset extensions (peach → rose → violet) flow toward the right
+   so the header reads as iridescent without losing the brand voice.
+   - default → mustard-only (lowest emphasis, no extension hues)
+   - tinted  → mustard → peach → rose (warm two-step)
+   - highlighted → mustard → rose → violet (full sunset, popular tier)
+   The radial in the top-right corner is the "light bouncing off the
+   surface" highlight that gives the gradient depth instead of reading flat. */
 const TONE_BACKGROUNDS = {
   default: {
     backgroundImage:
@@ -24,11 +24,11 @@ const TONE_BACKGROUNDS = {
   },
   tinted: {
     backgroundImage:
-      "radial-gradient(circle at 80% 0%, var(--color-brand-100), transparent 60%), linear-gradient(135deg, var(--color-brand-200), var(--color-brand-500))",
+      "radial-gradient(circle at 100% 0%, var(--color-gradient-rose), transparent 60%), linear-gradient(135deg, var(--color-brand-300) 0%, var(--color-gradient-peach) 55%, var(--color-gradient-rose) 100%)",
   },
   highlighted: {
     backgroundImage:
-      "radial-gradient(circle at 80% 0%, var(--color-brand-100), transparent 60%), linear-gradient(135deg, var(--color-brand-300), var(--color-brand-600))",
+      "radial-gradient(circle at 100% 25%, var(--color-gradient-violet), transparent 65%), linear-gradient(135deg, var(--color-brand-400) 0%, var(--color-gradient-rose) 50%, var(--color-gradient-violet) 100%)",
   },
 };
 

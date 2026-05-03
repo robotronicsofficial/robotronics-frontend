@@ -39,6 +39,13 @@
   --color-brand-800: #6e571f;
   --color-brand-900: #4d3c16;
 
+  /* Color · gradient extension (warm-sunset hues used only inside the
+     gradient header of pricing cards and similar showcase moments. Mustard
+     stays the brand anchor; these are companions, not new accents.) */
+  --color-gradient-peach: #fdc28a;
+  --color-gradient-rose: #f3a4b4;
+  --color-gradient-violet: #b9a3d7;
+
   /* Color · semantic (light theme — overridden by `.dark` below) */
   --color-background: #ffffff;
   --color-foreground: var(--color-neutral-900);
@@ -167,6 +174,22 @@
   --duration-base: 220ms;
   --duration-slow: 360ms;
 
+  /* Tier-2 state-change keyframe — consumed via `animate-swap-in`.
+     Starts at low opacity (not zero) so swaps read as a soft re-entry,
+     not a flash of empty space. Only opacity + transform — never layout. */
+  --animate-swap-in: swap-in var(--duration-base) var(--ease-out-quint);
+
+  @keyframes swap-in {
+    from {
+      opacity: 0.35;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   /* Layout */
   --spacing-shell: 80rem;
   --spacing-shell-narrow: 56rem;
@@ -226,6 +249,12 @@
   --color-ring: var(--color-brand-400);
 
   --color-overlay: rgb(0 0 0 / 0.7);
+
+  /* Gradient extension — deeper variants so light foreground text on a dark
+     theme still has contrast across the pricing card header. */
+  --color-gradient-peach: #6b4d2c;
+  --color-gradient-rose: #5e3942;
+  --color-gradient-violet: #3d3552;
 
   color-scheme: dark;
 }
