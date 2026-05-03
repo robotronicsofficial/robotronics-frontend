@@ -1,3 +1,4 @@
+import { BlurText } from "@/components/ui/blur-text";
 import { Container } from "@/components/ui/container";
 import { Stepper } from "@/components/ui/stepper";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
@@ -27,7 +28,7 @@ export const HowItWorksSection = () => (
       <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
         <Eyebrow>How it works</Eyebrow>
         <Heading level={2} className="text-display-md text-balance">
-          From sign-up to skills, in four steps.
+          <BlurText text="From sign-up to skills, in four steps." />
         </Heading>
         <Text size="lg" tone="muted" className="text-pretty">
           No setup, no hardware, no special trainers. Pick a plan and your child starts learning the same day.

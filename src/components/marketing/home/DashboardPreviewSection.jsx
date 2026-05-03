@@ -1,6 +1,8 @@
+import { motion, useReducedMotion } from "framer-motion";
 import { Award, BookOpen, Sparkles, TrendingUp, Users } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
+import { CountUp } from "@/components/ui/count-up";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 
 /* A second, larger dashboard preview composed entirely of tokens.
@@ -8,27 +10,33 @@ import { Eyebrow, Heading, Text } from "@/components/ui/typography";
    actually get inside the product. No screenshots — purely UI primitives
    so it always looks correct under brand changes. */
 
-const ChildRow = ({ initials, name, badge, progress }) => (
-  <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-4">
-    <div className="grid size-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground text-body-sm font-semibold">
-      {initials}
-    </div>
-    <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-      <div className="flex items-center justify-between gap-2">
-        <span className="truncate text-body-sm font-semibold text-foreground">
-          {name}
-        </span>
-        <span className="text-caption text-muted-foreground">{badge}</span>
+const ChildRow = ({ initials, name, badge, progress }) => {
+  const reduced = useReducedMotion();
+  return (
+    <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-4">
+      <div className="grid size-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground text-body-sm font-semibold">
+        {initials}
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-        <div
-          className="h-full rounded-full bg-primary"
-          style={{ width: `${progress}%` }}
-        />
+      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+        <div className="flex items-center justify-between gap-2">
+          <span className="truncate text-body-sm font-semibold text-foreground">
+            {name}
+          </span>
+          <span className="text-caption text-muted-foreground">{badge}</span>
+        </div>
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+          <motion.div
+            className="h-full rounded-full bg-primary"
+            initial={reduced ? { width: `${progress}%` } : { width: "0%" }}
+            whileInView={{ width: `${progress}%` }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const StatTile = ({ icon: Icon, label, value }) => (
   <div className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4">
@@ -90,9 +98,9 @@ export const DashboardPreviewSection = () => (
           </div>
 
           <div className="mt-5 grid grid-cols-3 gap-3">
-            <StatTile icon={Award} label="Certificates" value="12" />
-            <StatTile icon={BookOpen} label="Courses" value="8" />
-            <StatTile icon={TrendingUp} label="Streak" value="21d" />
+            <StatTile icon={Award} label="Certificates" value={<CountUp to={12} />} />
+            <StatTile icon={BookOpen} label="Courses" value={<CountUp to={8} />} />
+            <StatTile icon={TrendingUp} label="Streak" value={<CountUp to={21} suffix="d" />} />
           </div>
 
           <div className="mt-5 flex items-center gap-3 rounded-xl border border-primary bg-primary-soft p-4">
