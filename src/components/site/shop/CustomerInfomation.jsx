@@ -2,10 +2,15 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useAuth } from "@/contexts/useAuth";
+
 import CustomerProduct from "./customerProduct";
 import OrderSummaryLine from "./OrderSummaryLine";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Heading, Text } from "@/components/ui/typography";
+import { FormInput, FormSelect, FormTextarea } from "@/components/forms/FormControls";
+import { useAuth } from "@/contexts/useAuth";
 import {
   calculateCartSummary,
   formatShopCurrency,
@@ -13,13 +18,15 @@ import {
   loadShopCheckout,
   saveShopCheckout,
 } from "@/lib/shopCheckout";
-import { getCommerceItemKey, hasShippableCommerceItems } from "@/lib/commerceItems";
+import {
+  getCommerceItemKey,
+  hasShippableCommerceItems,
+} from "@/lib/commerceItems";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { useSaveCheckoutAddressMutation } from "@/hooks/useShopOrders";
-import { FormInput, FormSelect, FormTextarea } from "@/components/forms/FormControls";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },
@@ -28,10 +35,6 @@ const STATES = [
   { value: "ICT", label: "Islamabad Capital Territory" },
   { value: "SIN", label: "Sindh" },
 ];
-const summaryLabelClassName = "font-lato text-base text-muted-foreground";
-const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
-const summaryValueClassName = `${summaryValueBaseClassName} text-foreground`;
-const summaryTotalValueClassName = `${summaryValueBaseClassName} text-primary`;
 
 const InputField = ({
   label,
@@ -57,12 +60,22 @@ const InputField = ({
       aria-invalid={Boolean(error) || undefined}
     />
     {error && (
-      <p role="alert" className="text-destructive text-sm">
-        {error}
-      </p>
+      <Text role="alert" size="xs" className="text-destructive">{error}</Text>
     )}
   </div>
 );
+
+InputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  required: PropTypes.bool,
+  type: PropTypes.string,
+  autoComplete: PropTypes.string,
+  error: PropTypes.string,
+};
 
 const SelectField = ({ label, name, value, onChange, options, required = false, error }) => (
   <div className="flex flex-col gap-1">
@@ -75,12 +88,25 @@ const SelectField = ({ label, name, value, onChange, options, required = false, 
       required={required}
     />
     {error && (
-      <p role="alert" className="text-destructive text-sm">
-        {error}
-      </p>
+      <Text role="alert" size="xs" className="text-destructive">{error}</Text>
     )}
   </div>
 );
+
+SelectField.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  required: PropTypes.bool,
+  error: PropTypes.string,
+};
 
 const CustomerInfomation = ({ onNext }) => {
   const cart = useCartStore(selectCart);
@@ -175,16 +201,11 @@ const CustomerInfomation = ({ onNext }) => {
       const note = storedCheckout.note || "";
 
       if (!requiresShipping) {
-        saveShopCheckout({
-          customer,
-          address: null,
-        });
-
+        saveShopCheckout({ customer, address: null });
         if (onNext) {
           onNext();
           return;
         }
-
         navigate({ to: "/ShippingService" });
         return;
       }
@@ -202,165 +223,232 @@ const CustomerInfomation = ({ onNext }) => {
         onNext();
         return;
       }
-
       navigate({ to: "/ShippingService" });
     } catch (err) {
       toast.error(err.message || "Unable to save your information. Please try again.");
     }
   };
 
-  // --- Discount Calculation ---
   const summary = calculateCartSummary(cart);
+  const continueLabel = requiresShipping
+    ? "Continue to shipping"
+    : "Continue to payment";
 
   return (
-    <div className="bg-background lg:flex">
-      <div className="flex flex-col lg:w-4/5">
-        <form onSubmit={handleSubmit} className="mx-auto flex max-w-4xl flex-col gap-6 bg-background p-6">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <InputField label="First Name" name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name" required autoComplete="given-name" error={fieldErrors.firstName} />
-            <InputField label="Last Name" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name" required autoComplete="family-name" error={fieldErrors.lastName} />
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <Card>
+        <CardContent>
+          <form
+            id="shop-customer-information"
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-5"
+          >
+            <Heading level={3} className="text-h4">Your details</Heading>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <InputField
+                label="First name"
+                name="firstName"
+                value={form.firstName}
+                onChange={handleChange}
+                placeholder="First name"
+                required
+                autoComplete="given-name"
+                error={fieldErrors.firstName}
+              />
+              <InputField
+                label="Last name"
+                name="lastName"
+                value={form.lastName}
+                onChange={handleChange}
+                placeholder="Last name"
+                required
+                autoComplete="family-name"
+                error={fieldErrors.lastName}
+              />
+            </div>
+
+            <InputField
+              label="Phone"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="Phone"
+              required
+              type="tel"
+              autoComplete="tel"
+              error={fieldErrors.phone}
+            />
+
+            {requiresShipping ? (
+              <>
+                <Heading level={3} className="text-h4 pt-4">Shipping address</Heading>
+
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <InputField
+                    label="Country / region"
+                    name="country"
+                    value={form.country}
+                    onChange={handleChange}
+                    placeholder="Country"
+                    required
+                    autoComplete="country"
+                    error={fieldErrors.country}
+                  />
+                  <InputField
+                    label="Company name"
+                    name="companyName"
+                    value={form.companyName}
+                    onChange={handleChange}
+                    placeholder="Company (optional)"
+                    autoComplete="organization"
+                  />
+                </div>
+
+                <InputField
+                  label="Residential address"
+                  name="streetAddress"
+                  value={form.streetAddress}
+                  onChange={handleChange}
+                  placeholder="House number and street name"
+                  required
+                  autoComplete="street-address"
+                  error={fieldErrors.streetAddress}
+                />
+
+                <InputField
+                  label="Apt / suite"
+                  name="aptSuite"
+                  value={form.aptSuite}
+                  onChange={handleChange}
+                  placeholder="Apt, suite (optional)"
+                  autoComplete="address-line2"
+                />
+
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <InputField
+                    label="City"
+                    name="city"
+                    value={form.city}
+                    onChange={handleChange}
+                    placeholder="City"
+                    required
+                    autoComplete="address-level2"
+                    error={fieldErrors.city}
+                  />
+                  <SelectField
+                    label="State"
+                    name="state"
+                    value={form.state}
+                    onChange={handleChange}
+                    options={STATES}
+                    required
+                    error={fieldErrors.state}
+                  />
+                </div>
+
+                <InputField
+                  label="Postal code"
+                  name="postalCode"
+                  value={form.postalCode}
+                  onChange={handleChange}
+                  placeholder="Postal code"
+                  required
+                  autoComplete="postal-code"
+                  error={fieldErrors.postalCode}
+                />
+
+                <FormTextarea
+                  label="Delivery instruction"
+                  name="deliveryInstruction"
+                  value={form.deliveryInstruction}
+                  onChange={handleChange}
+                  placeholder="Delivery instruction"
+                />
+              </>
+            ) : (
+              <Alert>
+                <AlertDescription>
+                  This order only contains digital items, so we only need your
+                  contact details here.
+                </AlertDescription>
+              </Alert>
+            )}
+          </form>
+        </CardContent>
+      </Card>
+
+      <Card className="lg:sticky lg:top-24 lg:self-start">
+        <CardContent className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <Heading level={3} className="text-h4">Your order</Heading>
+            <Text size="sm" tone="muted">
+              Review the products before continuing.
+            </Text>
           </div>
 
-          <InputField label="Phone" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" required type="tel" autoComplete="tel" error={fieldErrors.phone} />
+          <div className="flex flex-col gap-4">
+            {cart.length > 0 ? (
+              cart.map((product) => (
+                <CustomerProduct
+                  key={getCommerceItemKey(product)}
+                  title={product.name}
+                  item={product.quantity}
+                  price={Number(product.price || 0).toLocaleString()}
+                  priceLabel="PKR"
+                  image={resolveBackendAssetUrl(
+                    product.image || product.images?.[0],
+                    "https://via.placeholder.com/300x200",
+                  )}
+                />
+              ))
+            ) : (
+              <Text size="sm" tone="muted">Your cart is empty.</Text>
+            )}
+          </div>
 
-          {requiresShipping ? (
-            <>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <InputField label="Country / Region" name="country" value={form.country} onChange={handleChange} placeholder="Country" required autoComplete="country" error={fieldErrors.country} />
-                <InputField label="Company Name" name="companyName" value={form.companyName} onChange={handleChange} placeholder="Company (optional)" autoComplete="organization" />
-              </div>
-
-              <InputField label="Residential Address" name="streetAddress" value={form.streetAddress} onChange={handleChange} placeholder="House number and street name" required autoComplete="street-address" error={fieldErrors.streetAddress} />
-
-              <InputField label="Apt / Suite" name="aptSuite" value={form.aptSuite} onChange={handleChange} placeholder="Apt, suite (optional)" autoComplete="address-line2" />
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <InputField label="City" name="city" value={form.city} onChange={handleChange} placeholder="City" required autoComplete="address-level2" error={fieldErrors.city} />
-                <SelectField label="State" name="state" value={form.state} onChange={handleChange} options={STATES} required error={fieldErrors.state} />
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <InputField label="Postal Code" name="postalCode" value={form.postalCode} onChange={handleChange} placeholder="Postal Code" required autoComplete="postal-code" error={fieldErrors.postalCode} />
-              </div>
-
-              <FormTextarea
-                label="Delivery Instruction"
-                name="deliveryInstruction"
-                value={form.deliveryInstruction}
-                onChange={handleChange}
-                placeholder="Delivery Instruction"
+          <div className="flex flex-col gap-3 border-t border-border pt-4">
+            <OrderSummaryLine
+              label="Subtotal"
+              value={formatShopCurrency(summary.subtotal)}
+              labelClassName="text-body-sm text-muted-foreground"
+              valueClassName="text-body font-medium"
+            />
+            <OrderSummaryLine
+              label="Discount (10%)"
+              value={`- ${formatShopCurrency(summary.discount)}`}
+              labelClassName="text-body-sm text-muted-foreground"
+              valueClassName="text-body-sm"
+            />
+            <OrderSummaryLine
+              label="Shipping"
+              value={formatShopCurrency(summary.shipping)}
+              labelClassName="text-body-sm text-muted-foreground"
+              valueClassName="text-body-sm"
+            />
+            <div className="border-t border-border pt-3">
+              <OrderSummaryLine
+                label="Total"
+                value={formatShopCurrency(summary.total)}
+                labelClassName="text-body-sm text-muted-foreground"
+                valueClassName="text-h5 font-semibold text-primary"
               />
-            </>
-          ) : (
-            <div className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
-              This order only contains digital items, so we only need your contact details here.
             </div>
-          )}
-        </form>
-      </div>
+          </div>
 
-      {/* Divider Line */}
-      <div className="px-1">
-        <Separator orientation="vertical" className="ml-8" />
-      </div>
-
-      {/* Right - Cart Summary */}
-      <div className="flex flex-col gap-8 p-4 px-5 lg:gap-20 lg:p-8 lg:px-14">
-        <div className="flex flex-col gap-4 lg:gap-8">
-          <p className="lg:text-4xl text-foreground">YOUR ORDER</p>
-          <p className="font-lato font-medium text-base leading-5 text-muted-foreground">
-            Review all the products you want to buy
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-2 lg:gap-5">
-          {cart.length > 0 ? (
-            cart.map((product) => (
-              <CustomerProduct
-                key={getCommerceItemKey(product)}
-                title={product.name}
-                item={product.quantity}
-                price={Number(product.price || 0).toLocaleString()}
-                priceLabel="PKR"
-                image={resolveBackendAssetUrl(product.image || product.images?.[0], "https://via.placeholder.com/300x200")}
-              />
-            ))
-          ) : (
-            <p className="p-5 text-center text-muted-foreground">Your cart is empty.</p>
-          )}
-        </div>
-
-        <Separator />
-
-        <div className="flex flex-col gap-2">
-          <OrderSummaryLine
-            label="Shipping"
-            value={formatShopCurrency(summary.shipping)}
-            labelClassName={summaryLabelClassName}
-            valueClassName={summaryValueClassName}
-          />
-          <OrderSummaryLine
-            label="Discount 10%"
-            value={`- ${formatShopCurrency(summary.discount)}`}
-            labelClassName={summaryLabelClassName}
-            valueClassName={summaryValueClassName}
-          />
-          <OrderSummaryLine
-            label="Price"
-            value={formatShopCurrency(summary.subtotal)}
-            labelClassName={summaryLabelClassName}
-            valueClassName={summaryValueClassName}
-          />
-          <OrderSummaryLine
-            label="Total Price"
-            value={formatShopCurrency(summary.total)}
-            labelClassName={summaryLabelClassName}
-            valueClassName={summaryTotalValueClassName}
-          />
-        </div>
-
-        <Separator />
-
-        <div className="flex justify-center">
           <Button
             type="submit"
-            className="h-auto bg-foreground py-2 text-center text-sm text-primary lg:px-20 lg:text-xl"
-            onClick={handleSubmit}
+            form="shop-customer-information"
+            size="marketing"
             disabled={saveCheckoutAddressMutation.isPending}
+            className="w-full"
           >
-            {saveCheckoutAddressMutation.isPending ? "Processing..." : requiresShipping ? "CONTINUE TO SHIPPING" : "CONTINUE TO PAYMENT"}
+            {saveCheckoutAddressMutation.isPending ? "Processing…" : continueLabel}
           </Button>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
-};
-
-InputField.propTypes = {
-  label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-  required: PropTypes.bool,
-  type: PropTypes.string,
-  autoComplete: PropTypes.string,
-  error: PropTypes.string,
-};
-
-SelectField.propTypes = {
-  label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  required: PropTypes.bool,
-  error: PropTypes.string,
 };
 
 CustomerInfomation.propTypes = {
