@@ -1,8 +1,11 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { Minus, Plus } from "lucide-react";
+
 import RangeSlider from "@/components/forms/RangeSlider";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Eyebrow, Text } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 const categories = [
   "Lego Robots",
@@ -16,6 +19,35 @@ const shippingMarks = [7, 15, 30, 45, 60].map((value) => ({
   value,
   label: String(value),
 }));
+
+const FilterSection = ({ title, isOpen, onToggle, children }) => (
+  <div className="flex flex-col gap-4 border-b border-border pb-6 last:border-b-0 last:pb-0">
+    <div className="flex items-center justify-between">
+      <Eyebrow as="h3">{title}</Eyebrow>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-sm"
+        onClick={onToggle}
+        aria-label={isOpen ? `Collapse ${title}` : `Expand ${title}`}
+      >
+        {isOpen ? (
+          <Minus className="size-4" aria-hidden="true" />
+        ) : (
+          <Plus className="size-4" aria-hidden="true" />
+        )}
+      </Button>
+    </div>
+    {isOpen && children}
+  </div>
+);
+
+FilterSection.propTypes = {
+  title: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
+  children: PropTypes.node,
+};
 
 const Shopfilter = ({
   onPriceRangeChange,
@@ -45,113 +77,69 @@ const Shopfilter = ({
   };
 
   return (
-    <div className="hidden lg:block min-w-64">
-      {/* All Products */}
-      <div className="lg:pt-6 pt-3 text-foreground">
-        <div className="flex justify-between">
-          <p className="lg:text-2xl text-xl">All PRODUCTS</p>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="h-auto w-auto text-sm lg:text-xl"
-            onClick={() => setIsOpenProducts(!isOpenProducts)}
-          >
-            {isOpenProducts ? "-" : "+"}
-          </Button>
+    <aside className="hidden min-w-64 flex-col gap-8 lg:flex">
+      <FilterSection
+        title="All products"
+        isOpen={isOpenProducts}
+        onToggle={() => setIsOpenProducts(!isOpenProducts)}
+      >
+        <div className="flex flex-col gap-1">
+          {categories.map((category) => (
+            <button
+              type="button"
+              key={category}
+              onClick={() => handleCategoryClick(category)}
+              className={cn(
+                "rounded-lg px-3 py-2 text-left text-body-sm transition-colors",
+                selectedCategory === category
+                  ? "bg-primary-soft font-semibold text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+            >
+              {category}
+            </button>
+          ))}
         </div>
-        <div className="h-0 lg:w-full border border-foreground"></div>
-        {isOpenProducts && (
-          <div className="flex flex-col">
-            {categories.map((category) => (
-              <Button
-                type="button"
-                key={category}
-                variant="ghost"
-                className={cn(
-                  "h-auto justify-start rounded-none px-0 pt-2 text-left text-sm transition-colors duration-200 hover:bg-transparent lg:pt-5 lg:text-base",
-                  selectedCategory === category
-                    ? "font-semibold text-accent"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-                onClick={() => handleCategoryClick(category)}
-              >
-                {category}
-              </Button>
-            ))}
-          </div>
-        )}
-      </div>
+      </FilterSection>
 
-      {/* Shipping */}
-      <div className="lg:pt-20 pt-8">
-        <div className="flex justify-between">
-          <p className="text-bold font-bold lg:text-2xl text-xl">SHIPPING</p>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="h-auto w-auto text-sm lg:text-xl"
-            onClick={() => setIsOpenShipping(!isOpenShipping)}
-          >
-            {isOpenShipping ? "-" : "+"}
-          </Button>
+      <FilterSection
+        title="Shipping"
+        isOpen={isOpenShipping}
+        onToggle={() => setIsOpenShipping(!isOpenShipping)}
+      >
+        <RangeSlider
+          min={7}
+          max={60}
+          step={1}
+          marks={shippingMarks}
+          value={shippingDays}
+          onChange={handleShippingChange}
+          snapValues={shippingMarks.map((mark) => mark.value)}
+        />
+        <div className="rounded-lg bg-muted p-3 text-center">
+          <Text size="sm" weight="semibold">{shippingDays} days</Text>
         </div>
-        <div className="h-0 lg:w-full border border-foreground"></div>
-        {isOpenShipping && (
-          <div>
-            <div className="mt-8">
-              <RangeSlider
-                min={7}
-                max={60}
-                step={1}
-                marks={shippingMarks}
-                value={shippingDays}
-                onChange={handleShippingChange}
-                snapValues={shippingMarks.map((mark) => mark.value)}
-              />
-            </div>
-            <div className="mt-8 rounded bg-card p-2 text-center text-foreground">
-              {shippingDays} Days
-            </div>
-          </div>
-        )}
-      </div>
+      </FilterSection>
 
-      {/* Price Filter */}
-      <div className="flex justify-between mt-6">
-        <p className="text-bold font-bold lg:text-2xl text-xl">PRICE</p>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="h-auto w-auto text-sm lg:text-xl"
-          onClick={() => setIsOpenPrice(!isOpenPrice)}
-        >
-          {isOpenPrice ? "-" : "+"}
-        </Button>
-      </div>
-      <div className="mb-8 border bg-foreground border-foreground"></div>
-      {isOpenPrice && (
-        <>
-          <div className="mt-4">
-            <RangeSlider
-              min={0}
-              max={600000}
-              step={1000}
-              value={priceRange}
-              onChange={handleRangeChange}
-            />
-          </div>
-          <div className="mt-4 flex justify-center gap-2">
-            <p className="rounded bg-card p-2 text-center text-foreground">
-              PKR {priceRange[0].toLocaleString()} - PKR{" "}
-              {priceRange[1].toLocaleString()}
-            </p>
-          </div>
-        </>
-      )}
-    </div>
+      <FilterSection
+        title="Price"
+        isOpen={isOpenPrice}
+        onToggle={() => setIsOpenPrice(!isOpenPrice)}
+      >
+        <RangeSlider
+          min={0}
+          max={600000}
+          step={1000}
+          value={priceRange}
+          onChange={handleRangeChange}
+        />
+        <div className="rounded-lg bg-muted p-3 text-center">
+          <Text size="sm" weight="semibold">
+            PKR {priceRange[0].toLocaleString()} – PKR {priceRange[1].toLocaleString()}
+          </Text>
+        </div>
+      </FilterSection>
+    </aside>
   );
 };
 

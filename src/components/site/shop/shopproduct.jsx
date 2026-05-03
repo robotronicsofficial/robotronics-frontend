@@ -1,9 +1,10 @@
 import { Heart } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
+
 import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/typography";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { formatShopCurrency } from "@/lib/shopCheckout";
-
 
 const Shopproduct = ({
   title,
@@ -14,59 +15,54 @@ const Shopproduct = ({
   productId,
   isSaved = false,
 }) => {
-
   const navigate = useNavigate();
-
-  // Function to handle the click and navigate to product detail page
   const handleProductClick = () => {
     navigate({ to: `/ProductDetailPage/${productId}` });
   };
 
-
   return (
-    <div className="group relative w-full max-w-72">
-       {/* Image and Title wrapped in a clickable div that triggers navigation */}
-       <Button type="button" variant="ghost" onClick={handleProductClick} className="h-auto w-full flex-col items-stretch p-0 text-left hover:bg-transparent">
-        <div className="aspect-square w-full overflow-hidden rounded-2xl">
+    <div className="group relative flex w-full max-w-72 flex-col gap-3">
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={handleProductClick}
+        className="h-auto flex-col items-stretch p-0 text-left hover:bg-transparent"
+      >
+        <div className="aspect-square w-full overflow-hidden rounded-2xl bg-muted">
           <img
-            className="h-full w-full object-fit group-hover:opacity-50"
+            className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-50"
             src={resolveBackendAssetUrl(image, "https://via.placeholder.com/300x200")}
-            alt="Product"
+            alt={title || "Product"}
             loading="lazy"
             decoding="async"
           />
         </div>
-        <div className="text-wrap w-full">
-          <p className="text-foreground hover:text-foreground text-xl my-2">
-            {title}
-          </p>
-          <p className="text-accent text-xl">{formatShopCurrency(price)}</p>
+        <div className="flex flex-col gap-1 pt-2">
+          <Text size="lg" weight="semibold">{title}</Text>
+          <Text size="lg" tone="brand">{formatShopCurrency(price)}</Text>
         </div>
       </Button>
 
-      {/* Add to Cart and Add to Wishlist buttons */}
-      <div className="absolute left-1/2 top-1/2 flex w-11/12 -translate-x-1/2 -translate-y-1/2 transform flex-col opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      <div className="absolute left-1/2 top-[40%] flex w-11/12 -translate-x-1/2 -translate-y-1/2 flex-col gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
         <Button
           type="button"
-          variant="secondary"
-          className="mb-2 h-auto bg-muted/30 p-2 text-foreground"
           onClick={(e) => {
-            e.stopPropagation(); // Prevent link navigation
-            onAddToCart(); // Trigger add to cart
+            e.stopPropagation();
+            onAddToCart();
           }}
         >
-          Add to Cart
+          Add to cart
         </Button>
         <Button
           type="button"
-          className="h-auto bg-accent p-2 text-foreground"
+          variant="outline"
           onClick={(e) => {
-            e.stopPropagation(); // Prevent link navigation
-            onAddToWishlist(); // Trigger add to wishlist
+            e.stopPropagation();
+            onAddToWishlist();
           }}
         >
-          {isSaved ? <Heart className="mr-5 ml-3"  fill="currentColor" /> : <Heart className="mr-5 ml-3"  />}
-          {isSaved ? "Saved" : "Add to Wishlist"}
+          <Heart className="size-4" fill={isSaved ? "currentColor" : "none"} aria-hidden="true" />
+          {isSaved ? "Saved" : "Add to wishlist"}
         </Button>
       </div>
     </div>

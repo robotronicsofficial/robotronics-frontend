@@ -1,5 +1,8 @@
-import { CheckoutProgress, CheckoutStepButton } from "@/components/checkout/CheckoutProgress";
 import { useState } from "react";
+
+import { CheckoutProgress, CheckoutStepButton } from "@/components/checkout/CheckoutProgress";
+import { Container } from "@/components/ui/container";
+import { Heading } from "@/components/ui/typography";
 import ShopCartproductList from "../shopCartproductList";
 import CustomerInfomation from "../CustomerInfomation";
 import ShopPaymentMethod from "../shopPaymentMethod";
@@ -15,25 +18,25 @@ const CartsStep = () => {
   const steps = [
     {
       icon: shopBag,
-      title: "CART",
-      description: "Review all your product and edit the number.",
+      title: "Cart",
+      description: "Review all your products and edit quantities.",
       content: <ShopCartproductList onNext={() => setCurrentStep(1)} />,
     },
     {
       icon: userIcon,
-      title: "CUSTOMER INFORMATION",
+      title: "Customer information",
       description: "Add your name, phone number and address.",
       content: <CustomerInfomation onNext={() => setCurrentStep(2)} />,
     },
     {
       icon: cardIcon,
-      title: "SHIPPING & PAYMENT",
+      title: "Shipping & payment",
       description: "Choose your courier and billing method.",
       content: <ShopPaymentMethod onNext={() => setCurrentStep(3)} />,
     },
     {
       icon: eyeIcon,
-      title: "REVIEW ORDER",
+      title: "Review order",
       description: "Confirm the saved checkout details and cart items.",
       content: (
         <ShopShipping
@@ -48,12 +51,10 @@ const CartsStep = () => {
   const progressValue = progressMap[currentStep] || 0;
 
   return (
-    <>
-      <div className="mt-10 flex justify-center">
-        <CheckoutProgress value={progressValue} />
-      </div>
+    <Container size="wide" className="flex flex-col gap-10 pb-16">
+      <CheckoutProgress value={progressValue} className="mt-10" />
 
-      <div className="mt-10 flex flex-col items-center justify-center gap-[10vw] lg:flex-row">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, index) => (
           <CheckoutStepButton
             key={index}
@@ -66,11 +67,13 @@ const CartsStep = () => {
         ))}
       </div>
 
-      <div className="container mx-auto px-4 py-8 md:py-16">
-        <h1 className="text-wrap text-4xl text-foreground">{steps[currentStep].title}</h1>
+      <div className="flex flex-col gap-6">
+        <Heading level={2} className="text-h3">
+          {steps[currentStep].title}
+        </Heading>
         <div>{steps[currentStep].content}</div>
       </div>
-    </>
+    </Container>
   );
 };
 

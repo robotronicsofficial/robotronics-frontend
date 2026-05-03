@@ -1,5 +1,10 @@
 import { useMemo } from "react";
 import { useParams, useNavigate } from "@tanstack/react-router";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Container } from "@/components/ui/container";
+import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import {
   COMMERCE_ITEM_TYPES,
   createCourseCommerceItem,
@@ -8,22 +13,19 @@ import {
   getCommerceItemRoute,
 } from "@/lib/commerceItems";
 import { COURSE_PATH } from "@/router/paths";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
-
 import { cn } from "@/lib/utils";
 import { formatShopCurrency } from "@/lib/shopCheckout";
+import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useCourses } from "@/hooks/useCourses";
 import { useProducts } from "@/hooks/useProducts";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 
 const RELATED_ITEM_CONFIG = {
   [COMMERCE_ITEM_TYPES.product]: {
     browsePath: "/shop",
     browseLabel: "Browse the store",
     emptyLabel: "No other products are available right now.",
-    subtitle: "Top Selling Products",
-    loadingLabel: "Loading related products...",
+    subtitle: "Top selling products",
+    loadingLabel: "Loading related products…",
     errorLabel: "Failed to load related products",
     createItem: createProductCommerceItem,
   },
@@ -31,8 +33,8 @@ const RELATED_ITEM_CONFIG = {
     browsePath: COURSE_PATH,
     browseLabel: "Browse courses",
     emptyLabel: "No other courses are available right now.",
-    subtitle: "Top Selling Courses",
-    loadingLabel: "Loading related courses...",
+    subtitle: "Top selling courses",
+    loadingLabel: "Loading related courses…",
     errorLabel: "Failed to load related courses",
     createItem: createCourseCommerceItem,
   },
@@ -59,25 +61,21 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
   const loading = query.isLoading;
   const error = query.error;
   const items = useMemo(
-    () => (query.data || [])
-      .map((entry) => config.createItem(entry))
-      .filter(Boolean)
-      .filter((entry) => entry.itemId !== id),
+    () =>
+      (query.data || [])
+        .map((entry) => config.createItem(entry))
+        .filter(Boolean)
+        .filter((entry) => entry.itemId !== id),
     [config, id, query.data],
   );
-
   const topThree = useMemo(() => items.slice(0, 3), [items]);
 
   return (
-    <div className="bg-background px-6 py-10 lg:px-14 lg:py-14">
-      <div className="flex flex-col gap-6">
-        <div className="mt-8 flex flex-col gap-1" data-aos="fade-up">
-          <p className="text-xl text-foreground">
-            You may also like
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {config.subtitle}
-          </p>
+    <section className="bg-background py-14">
+      <Container size="wide" className="flex flex-col gap-6">
+        <div className="flex flex-col gap-1" data-aos="fade-up">
+          <Eyebrow>{config.subtitle}</Eyebrow>
+          <Heading level={2} className="text-h3">You may also like</Heading>
         </div>
 
         {loading ? (
@@ -86,12 +84,11 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
           <RelatedItemsMessage tone="error">{config.errorLabel}</RelatedItemsMessage>
         ) : topThree.length === 0 ? (
           <RelatedItemsMessage>
-            {config.emptyLabel}
-            <div className="mt-4">
+            <div className="flex flex-col items-center gap-4">
+              <Text tone="muted">{config.emptyLabel}</Text>
               <Button
                 type="button"
                 onClick={() => navigate({ to: config.browsePath })}
-                className="h-auto rounded-lg bg-foreground px-5 py-3 font-semibold text-primary"
               >
                 {config.browseLabel}
               </Button>
@@ -99,14 +96,14 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
           </RelatedItemsMessage>
         ) : (
           <div
-            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
             data-aos="fade-up"
           >
             {topThree.map((item, index) => (
               <Card
                 key={getCommerceItemKey(item) || index}
                 onClick={() => navigate({ to: getCommerceItemRoute(item) })}
-                className="overflow-hidden rounded-xl bg-card text-left transition-colors hover:bg-muted/40"
+                className="cursor-pointer overflow-hidden p-0 text-left transition-shadow hover:shadow-lg"
                 role="button"
                 tabIndex={0}
                 onKeyDown={(event) => {
@@ -116,27 +113,32 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                   }
                 }}
               >
-                <img
-                  src={resolveBackendAssetUrl(item?.images?.[0], "https://via.placeholder.com/300x200")}
-                  alt={item?.name || "Item"}
-                  className="h-40 w-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <CardContent className="flex flex-col gap-2 p-4 text-foreground">
-                  <h3 className="line-clamp-1 text-sm leading-snug">
+                <div className="aspect-[4/3] overflow-hidden bg-muted">
+                  <img
+                    src={resolveBackendAssetUrl(
+                      item?.images?.[0],
+                      "https://via.placeholder.com/300x200",
+                    )}
+                    alt={item?.name || "Item"}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <CardContent className="flex flex-col gap-1.5 p-4">
+                  <Text weight="semibold" className="line-clamp-1">
                     {item?.name || "Item"}
-                  </h3>
-                  <p className="text-sm font-semibold text-accent">
+                  </Text>
+                  <Text size="sm" tone="brand" weight="semibold">
                     {formatShopCurrency(item?.price)}
-                  </p>
+                  </Text>
                 </CardContent>
               </Card>
             ))}
           </div>
         )}
-      </div>
-    </div>
+      </Container>
+    </section>
   );
 };
 

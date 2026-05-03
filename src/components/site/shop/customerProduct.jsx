@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
-import AppImage from "../AppImage";
-import img from "@/assets/images/customerProduct.webp";
 import { Pencil, Trash2 } from "lucide-react";
+
+import AppImage from "../AppImage";
 import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/typography";
+import img from "@/assets/images/customerProduct.webp";
 
 const CustomerProduct = ({
   title,
@@ -13,47 +15,50 @@ const CustomerProduct = ({
   onDelete,
   onEdit,
   priceLabel = "Pkr",
-}) => {
-  return (
-    <div className="flex gap-3">
-      <div>
-        <AppImage
-          className={imageClassName}
-          src={image || img}
-          alt={title}
-        />
-      </div>
-      <div className="flex flex-col gap-1 text-wrap text-sm lg:text-base">
-        <p className="font-bold">{title}</p>
-        <div className="flex gap-2">
-          <span>Quantity:</span>
-          <p className="text-muted-foreground">{item}</p>
-        </div>
+}) => (
+  <div className="flex gap-3">
+    <AppImage
+      className={imageClassName}
+      src={image || img}
+      alt={title}
+    />
+    <div className="flex flex-col gap-1">
+      <Text size="sm" weight="semibold">{title}</Text>
+      <Text size="sm" tone="muted">
+        Quantity: <span className="text-foreground">{item}</span>
+      </Text>
 
-        <div className="flex items-center gap-3">
-          <p className="font-bold">{priceLabel ? `${priceLabel} ` : ""}{price}</p>
-          {onEdit ? (
-            <Button type="button" aria-label="Edit product" variant="ghost" size="icon-sm" onClick={onEdit}>
-              <Pencil />
-            </Button>
-          ) : null}
-          {onDelete ? (
-            <Button
-              type="button"
-              aria-label="Delete product"
-              variant="ghost"
-              size="icon-sm"
-              className="text-destructive"
-              onClick={onDelete}
-            >
-              <Trash2 />
-            </Button>
-          ) : null}
-        </div>
+      <div className="flex items-center gap-3">
+        <Text size="sm" weight="semibold">
+          {priceLabel ? `${priceLabel} ` : ""}{price}
+        </Text>
+        {onEdit && (
+          <Button
+            type="button"
+            aria-label="Edit product"
+            variant="ghost"
+            size="icon-sm"
+            onClick={onEdit}
+          >
+            <Pencil className="size-4" />
+          </Button>
+        )}
+        {onDelete && (
+          <Button
+            type="button"
+            aria-label="Delete product"
+            variant="ghost"
+            size="icon-sm"
+            className="text-muted-foreground hover:text-destructive"
+            onClick={onDelete}
+          >
+            <Trash2 className="size-4" />
+          </Button>
+        )}
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 CustomerProduct.propTypes = {
   title: PropTypes.string,

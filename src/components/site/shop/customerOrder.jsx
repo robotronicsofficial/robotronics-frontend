@@ -1,18 +1,18 @@
-import CustomerProduct from "@/components/site/shop/customerProduct";
 import PropTypes from "prop-types";
+
+import CustomerProduct from "@/components/site/shop/customerProduct";
+import OrderSummaryLine from "./OrderSummaryLine";
+import { Button } from "@/components/ui/button";
+import { Heading, Text } from "@/components/ui/typography";
+import { Separator } from "@/components/ui/separator";
 import { calculateCartSummary, formatShopCurrency } from "@/lib/shopCheckout";
 import { getCommerceItemKey } from "@/lib/commerceItems";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
-import OrderSummaryLine from "./OrderSummaryLine";
 import { selectCart, useCartStore } from "@/stores/cartStore";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-
-const summaryLabelClassName = "text-sm ";
 
 const CustomerOrder = ({
   onNext,
-  buttonLabel = "CONTINUE TO SHIPPING",
+  buttonLabel = "Continue to shipping",
   buttonDisabled = false,
   itemsOverride = null,
   summaryOverride = null,
@@ -23,18 +23,15 @@ const CustomerOrder = ({
   const summary = summaryOverride || calculateCartSummary(items);
 
   return (
-    <div
-      className="flex flex-col gap-8 p-4 px-5 lg:gap-20 lg:p-8 lg:px-14"
-      data-aos="fade-top"
-    >
-      <div className="flex flex-col gap-4 lg:gap-8">
-        <p className="md:text-4xl text-2xl">YOUR ORDER</p>
-        <p className="text-sm text-muted-foreground">
-          Review all the products you want to buy
-        </p>
+    <div className="flex flex-col gap-6 p-5 lg:p-8" data-aos="fade-top">
+      <div className="flex flex-col gap-2">
+        <Heading level={3} className="text-h4">Your order</Heading>
+        <Text size="sm" tone="muted">
+          Review all the products you want to buy.
+        </Text>
       </div>
 
-      <div className="flex flex-col gap-2 lg:gap-5">
+      <div className="flex flex-col gap-4">
         {items.length > 0 ? (
           items.map((product) => (
             <CustomerProduct
@@ -46,54 +43,50 @@ const CustomerOrder = ({
             />
           ))
         ) : (
-          <p className="text-sm text-muted-foreground">Your cart is empty.</p>
+          <Text size="sm" tone="muted">Your cart is empty.</Text>
         )}
       </div>
 
-      <div className="flex flex-col py-2 lg:py-5">
-        <Separator className="bg-muted" />
-      </div>
+      <Separator />
 
-      <div className="flex flex-col gap-2 lg:gap-5">
+      <div className="flex flex-col gap-3">
         <OrderSummaryLine
           label="Shipping"
           value={formatShopCurrency(summary.shipping)}
-          labelClassName={summaryLabelClassName}
-          valueClassName="text-sm  lg:text-xl"
+          labelClassName="text-body-sm text-muted-foreground"
+          valueClassName="text-body-sm"
         />
         <OrderSummaryLine
           label="Discount 10%"
           value={`- ${formatShopCurrency(summary.discount)}`}
-          labelClassName={summaryLabelClassName}
-          valueClassName="text-sm "
+          labelClassName="text-body-sm text-muted-foreground"
+          valueClassName="text-body-sm"
         />
         <OrderSummaryLine
-          label="Price"
+          label="Subtotal"
           value={formatShopCurrency(summary.subtotal)}
-          labelClassName={summaryLabelClassName}
-          valueClassName="text-xl "
+          labelClassName="text-body-sm text-muted-foreground"
+          valueClassName="text-body font-medium"
         />
+        <Separator />
         <OrderSummaryLine
-          label="Total Price"
+          label="Total"
           value={formatShopCurrency(summary.total)}
-          labelClassName={summaryLabelClassName}
-          valueClassName="text-xl text-primary "
+          labelClassName="text-body-sm text-muted-foreground"
+          valueClassName="text-h5 font-semibold text-primary"
         />
-        <div className="flex flex-col gap-1 py-2 lg:gap-3 lg:py-4">
-          <Separator className="bg-muted" />
-        </div>
-        {showContinueButton ? (
-          <div className="flex justify-center py-2 lg:py-4">
-            <Button
-              type="button"
-              className="h-auto bg-foreground px-5 py-2 text-center text-sm font-bold text-primary lg:px-20 lg:text-xl"
-              onClick={onNext}
-              disabled={buttonDisabled || !items.length}
-            >
-              {buttonLabel}
-            </Button>
-          </div>
-        ) : null}
+
+        {showContinueButton && (
+          <Button
+            type="button"
+            size="marketing"
+            onClick={onNext}
+            disabled={buttonDisabled || !items.length}
+            className="mt-2 w-full"
+          >
+            {buttonLabel}
+          </Button>
+        )}
       </div>
     </div>
   );
