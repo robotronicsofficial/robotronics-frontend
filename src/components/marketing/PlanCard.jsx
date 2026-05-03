@@ -1,23 +1,37 @@
 import PropTypes from "prop-types";
 import { Link } from "@tanstack/react-router";
-import { Check } from "lucide-react";
+import { Check, ChevronsRight } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Heading, Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { formatPKR } from "@/utils/formatPrice";
 
-/* Pricing card used by both the B2C and B2B sections.
-   `tone` chooses the surface variant; `popular` adds the "Most Popular" pill.
-   `cycle` toggles the displayed pricing between monthly and annual. */
+/* Two-zone pricing card: a mustard-washed gradient header carries the price
+   (and the "Popular" tag when applicable), and a clean white body carries
+   the name, description, features, and pill CTA. The gradient is the only
+   visual emphasis — no border, no halo — so the three tones differ only in
+   how saturated the wash is.
+   - default → softest cream-mustard (lower-emphasis tier)
+   - tinted  → mid mustard (single-plan B2C default)
+   - highlighted → richest mustard (popular B2B Pro tier)
+   A radial highlight sits in the top-right of every header so the header
+   reads as light bouncing off mustard, not a flat color block. */
+const TONE_BACKGROUNDS = {
+  default: {
+    backgroundImage:
+      "radial-gradient(circle at 80% 0%, var(--color-brand-50), transparent 55%), linear-gradient(135deg, var(--color-brand-100), var(--color-brand-300))",
+  },
+  tinted: {
+    backgroundImage:
+      "radial-gradient(circle at 80% 0%, var(--color-brand-100), transparent 60%), linear-gradient(135deg, var(--color-brand-200), var(--color-brand-500))",
+  },
+  highlighted: {
+    backgroundImage:
+      "radial-gradient(circle at 80% 0%, var(--color-brand-100), transparent 60%), linear-gradient(135deg, var(--color-brand-300), var(--color-brand-600))",
+  },
+};
+
 export const PlanCard = ({
   name,
   description,
@@ -30,71 +44,94 @@ export const PlanCard = ({
   className,
 }) => {
   const price = cycle === "annual" ? pricing.annualMonthly : pricing.monthly;
-  const cycleLabel =
-    cycle === "annual" ? "/month, billed annually" : "/month";
+  const billedLabel =
+    cycle === "annual" ? "Billed annually" : "Billed monthly";
+  const headerBg = TONE_BACKGROUNDS[tone] ?? TONE_BACKGROUNDS.default;
+
+  const ctaButton = (
+    <Button
+      asChild={Boolean(cta.to)}
+      type={cta.to ? undefined : "button"}
+      onClick={cta.to ? undefined : cta.onClick}
+      size="marketing"
+      className="group/cta w-full gap-2 rounded-full"
+    >
+      {cta.to ? (
+        <Link to={cta.to}>
+          {cta.label}
+          <ChevronsRight className="size-4 transition-transform group-hover/cta:translate-x-0.5" />
+        </Link>
+      ) : (
+        <>
+          {cta.label}
+          <ChevronsRight className="size-4 transition-transform group-hover/cta:translate-x-0.5" />
+        </>
+      )}
+    </Button>
+  );
 
   return (
-    <Card tone={tone} className={cn("relative", className)}>
-      {popular && (
-        <Badge variant="popular" className="absolute right-5 top-5">
-          Most Popular
-        </Badge>
+    <article
+      className={cn(
+        "flex flex-col overflow-hidden rounded-3xl bg-card shadow-md",
+        className,
       )}
-
-      <CardHeader>
-        <CardTitle className="text-h3 font-semibold">{name}</CardTitle>
-        {description && (
-          <Text size="sm" tone="muted" className="mt-1">
-            {description}
-          </Text>
-        )}
-      </CardHeader>
-
-      <CardContent className="flex flex-col gap-6">
-        <div className="flex items-baseline gap-2">
-          <Heading level={1} className="text-display-md leading-none">
-            {formatPKR(price)}
-          </Heading>
-          <Text size="sm" tone="muted">
-            {cycleLabel}
-          </Text>
+    >
+      {/* Gradient header — Popular eyebrow always reserves space so paired
+         cards (Basic/Pro) line up at the price baseline. */}
+      <div
+        className="relative flex flex-col gap-3 px-7 pb-7 pt-6"
+        style={headerBg}
+      >
+        <span
+          className={cn(
+            "text-caption font-semibold uppercase tracking-[0.14em]",
+            popular ? "text-foreground/80" : "invisible",
+          )}
+        >
+          {popular ? "Popular" : "·"}
+        </span>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-baseline gap-2">
+            <span className="text-display-md font-bold leading-none text-foreground">
+              {formatPKR(price)}
+            </span>
+            <span className="text-body-sm text-foreground/70">/month</span>
+          </div>
+          <span className="text-caption text-foreground/60">{billedLabel}</span>
         </div>
+      </div>
+
+      {/* Body — name, description, divider, feature list, pill CTA pinned
+         to the bottom (mt-auto) so paired cards align CTA-to-CTA. */}
+      <div className="flex flex-1 flex-col gap-6 px-7 pb-7 pt-6">
+        <div className="flex flex-col gap-1.5">
+          <Heading level={3} className="text-h3 font-semibold">
+            {name}
+          </Heading>
+          {description && (
+            <Text size="sm" tone="muted">
+              {description}
+            </Text>
+          )}
+        </div>
+
+        <span aria-hidden="true" className="block h-px w-full bg-border" />
 
         <ul className="flex flex-col gap-3">
           {features.map((feature) => (
             <li key={feature} className="flex items-start gap-3">
-              <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground">
+              <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border border-border text-foreground">
                 <Check className="size-3" strokeWidth={3} />
               </span>
               <Text size="sm">{feature}</Text>
             </li>
           ))}
         </ul>
-      </CardContent>
 
-      <CardFooter className="bg-transparent">
-        {cta.to ? (
-          <Button
-            asChild
-            size="marketing"
-            variant={popular || tone === "tinted" ? "default" : "outline"}
-            className="w-full"
-          >
-            <Link to={cta.to}>{cta.label}</Link>
-          </Button>
-        ) : (
-          <Button
-            type="button"
-            onClick={cta.onClick}
-            size="marketing"
-            variant={popular || tone === "tinted" ? "default" : "outline"}
-            className="w-full"
-          >
-            {cta.label}
-          </Button>
-        )}
-      </CardFooter>
-    </Card>
+        <div className="mt-auto pt-2">{ctaButton}</div>
+      </div>
+    </article>
   );
 };
 

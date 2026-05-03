@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 import { BillingToggle } from "@/components/ui/billing-toggle";
 import { Container } from "@/components/ui/container";
-import { StarBorder } from "@/components/ui/star-border";
 import { Heading, Text } from "@/components/ui/typography";
 import { PlanCard } from "@/components/marketing/PlanCard";
 import { cn } from "@/lib/utils";
@@ -171,15 +170,9 @@ export const PricingSection = () => {
               : "max-w-xl grid-cols-1",
           )}
         >
-          {config.plans.map((plan) =>
-            plan.popular ? (
-              <StarBorder key={plan.name} className="rounded-xl">
-                <PlanCard cycle={cycle} {...plan} />
-              </StarBorder>
-            ) : (
-              <PlanCard key={plan.name} cycle={cycle} {...plan} />
-            ),
-          )}
+          {config.plans.map((plan) => (
+            <PlanCard key={plan.name} cycle={cycle} {...plan} />
+          ))}
         </div>
       </Container>
     </section>

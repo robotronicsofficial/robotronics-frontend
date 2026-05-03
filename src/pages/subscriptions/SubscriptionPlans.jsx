@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
 import { BillingToggle } from "@/components/ui/billing-toggle";
-import { Card, CardContent } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
@@ -10,20 +9,36 @@ import { PlanCard } from "@/components/marketing/PlanCard";
 import { usePlans } from "../../hooks/usePlans";
 import { useSelectedPlanStore } from "../../stores/selectedPlanStore";
 
+/* Mirrors PlanCard's gradient-header / white-body shape so the loading state
+   doesn't shift layout once data arrives. */
 const PlanCardSkeleton = () => (
-  <Card className="p-6">
-    <CardContent className="flex flex-col gap-4 px-0">
-      <Skeleton className="h-6 w-2/3" />
-      <Skeleton className="h-12 w-1/2" />
+  <article className="flex flex-col overflow-hidden rounded-3xl bg-card shadow-md">
+    <div
+      className="flex flex-col gap-3 px-7 pb-7 pt-6"
+      style={{
+        backgroundImage:
+          "radial-gradient(circle at 80% 0%, var(--color-brand-50), transparent 55%), linear-gradient(135deg, var(--color-brand-100), var(--color-brand-300))",
+      }}
+    >
+      <Skeleton className="h-3 w-16 bg-foreground/10" />
+      <Skeleton className="h-10 w-32 bg-foreground/10" />
+      <Skeleton className="h-3 w-24 bg-foreground/10" />
+    </div>
+    <div className="flex flex-1 flex-col gap-6 px-7 pb-7 pt-6">
       <div className="flex flex-col gap-2">
+        <Skeleton className="h-6 w-2/3" />
+        <Skeleton className="h-4 w-5/6" />
+      </div>
+      <span aria-hidden="true" className="block h-px w-full bg-border" />
+      <div className="flex flex-col gap-3">
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-5/6" />
         <Skeleton className="h-4 w-4/6" />
         <Skeleton className="h-4 w-5/6" />
       </div>
-      <Skeleton className="mt-2 h-12 w-full rounded-full" />
-    </CardContent>
-  </Card>
+      <Skeleton className="mt-auto h-12 w-full rounded-full" />
+    </div>
+  </article>
 );
 
 const SubscriptionPlans = () => {
