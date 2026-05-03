@@ -1,10 +1,9 @@
-import video from "../../assets/videos/video-preview.mp4";
 import { useState } from "react";
 import {
   CheckIcon,
   ChevronDownIcon,
-  CirclePlayIcon,
   ChevronRightIcon,
+  CirclePlayIcon,
   ClipboardListIcon,
   DownloadIcon,
   GraduationCapIcon,
@@ -13,9 +12,26 @@ import {
   RotateCcwIcon,
   XIcon,
 } from "lucide-react";
-import ReviewsComponent from "../../pages/subscriptions/SubscriptionTestimonials";
 import { useParams } from "@tanstack/react-router";
-import ChatSupport from "@/components/site/ChatSupport"
+
+import video from "../../assets/videos/video-preview.mp4";
+import ReviewsComponent from "../../pages/subscriptions/SubscriptionTestimonials";
+import ChatSupport from "@/components/site/ChatSupport";
+import VideoPlayer from "@/components/site/VideoPlayer";
+import CenteredState from "@/components/layout/CenteredState";
+import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Container } from "@/components/ui/container";
+import DialogShell from "@/components/ui/dialog-shell";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Spinner } from "@/components/ui/spinner";
+import { Display, Heading, Text } from "@/components/ui/typography";
+import StarRating from "@/components/rating/StarRating";
+import { cn } from "@/lib/utils";
+import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import { getActiveChildSession } from "../../utils/childSessionRequest";
 import { openExternalUrl } from "../../utils/openExternalUrl";
 import {
@@ -23,26 +39,10 @@ import {
   useDownloadChildCourseContentMutation,
   useUpdateChildCourseProgressMutation,
 } from "../../hooks/useChildCourses";
-import VideoPlayer from "@/components/site/VideoPlayer";
-import CenteredState from "@/components/layout/CenteredState";
-import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
-import DialogShell from "@/components/ui/dialog-shell";
-import { Spinner } from "@/components/ui/spinner";
-import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
-import StarRating from "@/components/rating/StarRating";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-const MAX_ATTEMPTS = {
-  BASIC: 2,
-  PRO: Infinity
-};
-
+const MAX_ATTEMPTS = { BASIC: 2, PRO: Infinity };
 const UNLOCK_SCORE_THRESHOLD = 60;
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
-
-const statusIconClassName = "mr-3 size-5 shrink-0";
 
 const isExternalUrl = (value) => /^https?:\/\//i.test(String(value || ""));
 const isProtectedCourseDownload = (value) =>
@@ -81,13 +81,97 @@ const getQuizScorePercent = (quiz, totalQuestions) => {
   return Math.round((obtained / total) * 100);
 };
 
+const isSameDay = (date1, date2) => {
+  if (!date1 || !date2) return false;
+  const d1 = new Date(date1);
+  const d2 = new Date(date2);
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+  );
+};
+
+const QuizQuestionResult = ({ index, question, userAnswer, isCorrect }) => (
+  <div className="border-b border-border pb-3 last:border-b-0">
+    <Text size="sm" className="mb-1 font-medium">
+      {index + 1}. {question.questionText}
+    </Text>
+    <Text size="sm" tone="muted" className="mb-1">
+      Your answer: {userAnswer}
+    </Text>
+    <span
+      className={cn(
+        "flex items-center gap-1 text-caption",
+        isCorrect ? "text-success" : "text-destructive",
+      )}
+    >
+      {isCorrect ? (
+        <>
+          <CheckIcon aria-hidden="true" className="size-4" />
+          Correct
+        </>
+      ) : (
+        <>
+          <XIcon aria-hidden="true" className="size-4" />
+          Incorrect
+        </>
+      )}
+    </span>
+  </div>
+);
+
+const ModuleContentRow = ({ content, fileUrl, onPlayVideo, onDownload }) => (
+  <div className="flex items-center justify-between gap-4 rounded-lg p-3 transition-colors hover:bg-background">
+    <div className="flex min-w-0 items-center gap-2">
+      {content.type === "video" && (
+        <>
+          <CirclePlayIcon className="size-5 shrink-0 text-primary" />
+          <Button
+            type="button"
+            variant="link"
+            onClick={() => onPlayVideo(fileUrl)}
+            className="h-auto p-0 font-normal text-foreground"
+          >
+            {content.name}
+          </Button>
+        </>
+      )}
+      {(content.type === "assignment" || content.type === "book") && (
+        <>
+          {content.type === "assignment" ? (
+            <ClipboardListIcon className="size-5 shrink-0 text-primary" />
+          ) : (
+            <LaptopIcon className="size-5 shrink-0 text-primary" />
+          )}
+          <Text size="sm" className="truncate">{content.name}</Text>
+        </>
+      )}
+    </div>
+    <div className="flex shrink-0 items-center gap-4">
+      {content.type === "video" && (
+        <Text size="sm" tone="muted">10 min</Text>
+      )}
+      {(content.type === "assignment" || content.type === "book") && (
+        <Button
+          type="button"
+          variant="link"
+          onClick={() => onDownload(content)}
+          className="h-auto gap-1 p-0 text-body-sm"
+        >
+          <DownloadIcon className="size-4" />
+          Download
+        </Button>
+      )}
+    </div>
+  </div>
+);
+
 const CourseDetail = () => {
   const { id } = useParams({ strict: false });
   const activeChildSession = getActiveChildSession();
   const childId = activeChildSession?.childId || null;
   const [actionError, setActionError] = useState(null);
-
-  // State for managing UI
   const [expandedModules, setExpandedModules] = useState({});
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [currentVideo, setCurrentVideo] = useState("");
@@ -95,6 +179,7 @@ const CourseDetail = () => {
   const [quizResults, setQuizResults] = useState({});
   const [quizRetakes, setQuizRetakes] = useState({});
   const [quizStatusMessage, setQuizStatusMessage] = useState("");
+
   const {
     data: courseDetail,
     isLoading: loading,
@@ -102,6 +187,7 @@ const CourseDetail = () => {
   } = useChildCourseDetail({ childId, courseId: id });
   const updateChildCourseProgressMutation = useUpdateChildCourseProgressMutation();
   const downloadChildCourseContentMutation = useDownloadChildCourseContentMutation();
+
   const courseData = courseDetail?.courseDetails || null;
   const childCourseData = courseDetail?.childCourse || null;
   const plan = courseDetail?.plan || null;
@@ -111,19 +197,14 @@ const CourseDetail = () => {
 
   const isSectionUnlocked = (section, sectionIndex) => {
     if (!section?.startDate || !section?.endDate) return true;
-
     const now = new Date();
     const startDate = new Date(section.startDate);
-    // const endDate = new Date(section.endDate);
-
     const isDateValid = now >= startDate;
-
     if (sectionIndex > 0) {
       const prevSection = childSections[sectionIndex - 1];
       const prevQuizPassed = prevSection?.quiz?.result === "pass";
       return isDateValid && prevQuizPassed;
     }
-
     return isDateValid;
   };
 
@@ -135,10 +216,7 @@ const CourseDetail = () => {
   };
 
   const toggleModule = (moduleId) => {
-    setExpandedModules((prev) => ({
-      ...prev,
-      [moduleId]: !prev[moduleId],
-    }));
+    setExpandedModules((prev) => ({ ...prev, [moduleId]: !prev[moduleId] }));
   };
 
   const handlePlayVideo = (url) => {
@@ -182,46 +260,32 @@ const CourseDetail = () => {
   };
 
   const handleQuizAnswer = (sectionIndex, questionId, answer) => {
-    setQuizAnswers(prev => ({
+    setQuizAnswers((prev) => ({
       ...prev,
-      [`${sectionIndex}-${questionId}`]: answer
+      [`${sectionIndex}-${questionId}`]: answer,
     }));
   };
 
-  const isSameDay = (date1, date2) => {
-    if (!date1 || !date2) return false;
-    const d1 = new Date(date1);
-    const d2 = new Date(date2);
-    return (
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate()
-    );
-  };
-
   const submitQuiz = async (sectionIndex) => {
-    const childPlan = plan?.name?.toLowerCase() || 'basic';
+    const childPlan = plan?.name?.toLowerCase() || "basic";
     const section = childSections[sectionIndex];
-
-    if (!section?.quiz) {
-      return;
-    }
+    if (!section?.quiz) return;
 
     const questions = Array.isArray(section.quiz.questions) ? section.quiz.questions : [];
-    if (questions.length === 0) {
-      return;
-    }
+    if (questions.length === 0) return;
 
-	    const maxAttempts = childPlan === 'pro' ? MAX_ATTEMPTS.PRO : MAX_ATTEMPTS.BASIC;
-	    if (childPlan === 'basic' && section.quiz.lastAttemptDate && isSameDay(section.quiz.lastAttemptDate, new Date())) {
-	      if (section.quiz.attempts >= maxAttempts) {
-	        setActionError(`You've reached the maximum number of attempts (${maxAttempts}) for today. Try again tomorrow.`);
-	        return;
-	      }
-	    }
-
-    if (!section?.quiz?.questions?.length) {
-      return;
+    const maxAttempts = childPlan === "pro" ? MAX_ATTEMPTS.PRO : MAX_ATTEMPTS.BASIC;
+    if (
+      childPlan === "basic" &&
+      section.quiz.lastAttemptDate &&
+      isSameDay(section.quiz.lastAttemptDate, new Date())
+    ) {
+      if (section.quiz.attempts >= maxAttempts) {
+        setActionError(
+          `You've reached the maximum number of attempts (${maxAttempts}) for today. Try again tomorrow.`,
+        );
+        return;
+      }
     }
 
     const answers = questions.map((question) => ({
@@ -238,45 +302,36 @@ const CourseDetail = () => {
         answers,
       });
 
-      setQuizResults(prev => ({
+      setQuizResults((prev) => ({
         ...prev,
         [sectionIndex]: {
           score: responsePayload?.quiz?.score ?? 0,
           total: responsePayload?.quiz?.total ?? questions.length,
           details: responsePayload?.quiz?.details || {},
-          passed: Boolean(responsePayload?.quiz?.passed)
-        }
+          passed: Boolean(responsePayload?.quiz?.passed),
+        },
       }));
-      setQuizRetakes(prev => ({
-        ...prev,
-        [sectionIndex]: false
-      }));
-
-    } catch (error) {
-      console.error("Failed to update quiz results:", error);
-      setActionError(error.message || "Failed to update quiz results");
+      setQuizRetakes((prev) => ({ ...prev, [sectionIndex]: false }));
+    } catch (err) {
+      console.error("Failed to update quiz results:", err);
+      setActionError(err.message || "Failed to update quiz results");
     }
   };
 
   const retakeQuiz = (sectionIndex) => {
     setQuizResults((prev) => {
-      const newResults = { ...prev };
-      delete newResults[sectionIndex];
-      return newResults;
+      const next = { ...prev };
+      delete next[sectionIndex];
+      return next;
     });
     setQuizAnswers((prev) => {
-      const nextAnswers = { ...prev };
-      Object.keys(nextAnswers).forEach((key) => {
-        if (key.startsWith(`${sectionIndex}-`)) {
-          delete nextAnswers[key];
-        }
+      const next = { ...prev };
+      Object.keys(next).forEach((key) => {
+        if (key.startsWith(`${sectionIndex}-`)) delete next[key];
       });
-      return nextAnswers;
+      return next;
     });
-    setQuizRetakes((prev) => ({
-      ...prev,
-      [sectionIndex]: true,
-    }));
+    setQuizRetakes((prev) => ({ ...prev, [sectionIndex]: true }));
     setQuizStatusMessage(`Module ${sectionIndex + 1} quiz reset. Ready for another attempt.`);
   };
 
@@ -290,7 +345,7 @@ const CourseDetail = () => {
 
   if (error) {
     return (
-      <CenteredState className="min-h-screen bg-muted px-6">
+      <CenteredState className="min-h-screen px-6">
         <Alert variant="destructive" className="max-w-md">
           <AlertDescription>{error.message}</AlertDescription>
         </Alert>
@@ -301,122 +356,119 @@ const CourseDetail = () => {
   if (!courseData || !childCourseData) {
     return (
       <CenteredState className="h-screen">
-        <div className="text-muted-foreground">Course data not found</div>
+        <Text tone="muted">Course data not found.</Text>
       </CenteredState>
     );
   }
 
   return (
-    <div>
-      <div className={getHeaderOffsetClass("bg-background")}>
-        <div className="bg-muted p-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="lg:flex flex-wrap lg:flex-nowrap lg:gap-x-6">
-              {/* Left Side */}
-              <div
-                className="flex flex-col w-full lg:w-2/3 gap-y-4"
-                data-aos="fade-up"
+    <div className="bg-background">
+      <section className={getHeaderOffsetClass("bg-background pb-10")}>
+        <Container size="wide">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[2fr_1fr]" data-aos="fade-up">
+            <div className="flex flex-col gap-5">
+              <img
+                src={resolveBackendAssetUrl(courseData.banner)}
+                alt={courseData.title || "Course banner"}
+                className="aspect-video w-full rounded-2xl object-cover"
+              />
 
-
-              >
-                <div>
-                  <img
-                    src={resolveBackendAssetUrl(courseData.banner)}
-                    alt="Course"
-                    className="aspect-video w-full rounded-2xl object-cover object-center"
-                  />
-                </div>
-                <div className="flex items-center gap-8 pt-4">
-                  <span className="bg-muted text-muted-foreground text-sm font-medium px-3 py-1 bg-card rounded-full">
+              <div className="flex flex-wrap items-center gap-4">
+                {courseData.category && (
+                  <Badge variant="secondary" className="rounded-full">
                     {courseData.category}
-                  </span>
-                  <div className="flex items-center justify-center gap-2">
-                    <StarRating value={courseReviews} className="text-2xl" />
-
-                    <span className="text-foreground text-sm">({courseReviews} Reviews)</span>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex w-full max-w-3xl items-center">
-                    <h1 className="lg:text-5xl text-2xl text-foreground font-medium mb-4">
-                      {courseData.title}
-                    </h1>
-                  </div>
-                  <div className="flex items-center gap-x-2 text-muted-foreground">
-                    <GraduationCapIcon />
-                    <span className="text-muted-foreground my-2">{courseData.studentsDownloaded ?? 0} Students Enrolled</span>
-                  </div>
-
-                  <div className="mt-6 flex min-h-20 w-full max-w-3xl items-center justify-between rounded-lg bg-muted px-8 text-muted-foreground">
-                    <div className="inline-block">{courseData.month ?? 0} Months </div>
-                    <div className="inline-block">{courseData.numLessons ?? 0} Lectures</div>
-                    <div className="inline-block">{courseData.numModules ?? 0} Module</div>
-                    <div className="inline-block">{courseData.numQuizzes ?? 0} Quizes</div>
-                  </div>
+                  </Badge>
+                )}
+                <div className="flex items-center gap-2">
+                  <StarRating value={courseReviews} className="text-h5" />
+                  <Text size="sm" tone="muted">({courseReviews} reviews)</Text>
                 </div>
               </div>
 
-              {/* Right Side with Video */}
-              <div className="mt-6 flex w-full flex-col gap-y-4 rounded-2xl bg-accent lg:mt-0 lg:w-1/3">
-                <div className="aspect-video w-full overflow-hidden rounded-2xl bg-muted">
-                  <VideoPlayer
-                    src={video}
-                    title="Course preview video"
-                    autoPlay
-                    muted
-                    loop
-                    controls
-                    className="h-full w-full rounded-lg object-cover"
-                  />
-                </div>
+              <Display size="md" className="text-balance">
+                {courseData.title}
+              </Display>
+
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <GraduationCapIcon className="size-5" aria-hidden="true" />
+                <Text size="sm" tone="muted">
+                  {courseData.studentsDownloaded ?? 0} students enrolled
+                </Text>
               </div>
+
+              <Card>
+                <CardContent className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  {[
+                    { label: "Months", value: courseData.month ?? 0 },
+                    { label: "Lectures", value: courseData.numLessons ?? 0 },
+                    { label: "Modules", value: courseData.numModules ?? 0 },
+                    { label: "Quizzes", value: courseData.numQuizzes ?? 0 },
+                  ].map((stat) => (
+                    <div key={stat.label} className="flex flex-col">
+                      <Text size="xs" tone="muted" className="uppercase tracking-wide">
+                        {stat.label}
+                      </Text>
+                      <Text size="lg" weight="semibold">{stat.value}</Text>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <>
-        <div className="bg-background lg:px-24 py-8 rounded-3xl">
-          <div
-            className="rounded-md border border-border bg-card p-8 py-10"
-            data-aos="fade-up"
-          >
-            {actionError ? (
-              <Alert variant="destructive" className="mb-4">
+            <Card className="overflow-hidden p-0">
+              <div className="aspect-video bg-muted">
+                <VideoPlayer
+                  src={video}
+                  title="Course preview video"
+                  autoPlay
+                  muted
+                  loop
+                  controls
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            </Card>
+          </div>
+        </Container>
+      </section>
+
+      <Container size="wide" className="pb-16">
+        <Card data-aos="fade-up">
+          <CardContent className="flex flex-col gap-10 py-8">
+            {actionError && (
+              <Alert variant="destructive">
                 <AlertDescription>{actionError}</AlertDescription>
               </Alert>
-            ) : null}
+            )}
             <div aria-live="polite" role="status" className="sr-only">
               {quizStatusMessage}
             </div>
-            {/* Course Description */}
-            <div className="py-5">
-              <h1 className="text-2xl mb-4">Course Description</h1>
-              <p className="text-wrap text-foreground">{courseData.description}</p>
+
+            <div className="flex flex-col gap-3">
+              <Heading level={2} className="text-h3">Course description</Heading>
+              <Text tone="muted">{courseData.description}</Text>
             </div>
 
-            {/* What You'll Learn */}
-            <div className="lg:flex flex-row flex-wrap justify-between gap-8">
-              {/* left */}
-              <div className="flex flex-col gap-y-4 flex-1">
-                <h1 className="text-xl">
-                  What you will learn in this course?
-                </h1>
-                <ul className="flex flex-col gap-y-2">
-                  {courseSections.map((item, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className="bg-primary rounded-full h-4 w-4 flex items-center justify-center mt-1 mr-2 flex-shrink-0">
-                        <ChevronRightIcon className="text-background text-xs" />
-                      </div>
-                      <span className="text-foreground">{item.name}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="flex flex-col gap-3">
+              <Heading level={3} className="text-h4">
+                What you will learn in this course
+              </Heading>
+              <ul className="flex flex-col gap-2">
+                {courseSections.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <span
+                      aria-hidden="true"
+                      className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-primary"
+                    >
+                      <ChevronRightIcon className="size-3 text-primary-foreground" />
+                    </span>
+                    <Text>{item.name}</Text>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            {/* Course Curriculum */}
-            <div className="mt-12">
+            <div className="flex flex-col gap-10">
               {courseSections.map((section, sectionIndex) => {
                 const childSection = childSections[sectionIndex];
                 const quizQuestions = childSection?.quiz?.questions || [];
@@ -425,414 +477,439 @@ const CourseDetail = () => {
                 const quizCompleted = childSection?.quiz?.result === "pass";
                 const quizAttempted = childSection?.quiz?.attempts > 0;
                 const isRetakingQuiz = quizRetakes[sectionIndex];
-                const showQuizResults = !isRetakingQuiz && (quizResults[sectionIndex] || quizCompleted);
-                const childPlan = plan?.name?.toLowerCase() || 'basic';
-                const maxAttempts = childPlan === 'pro' ? MAX_ATTEMPTS.PRO : MAX_ATTEMPTS.BASIC;
-                const attemptsExhausted = childPlan === 'basic' &&
+                const showQuizResults =
+                  !isRetakingQuiz && (quizResults[sectionIndex] || quizCompleted);
+                const childPlan = plan?.name?.toLowerCase() || "basic";
+                const maxAttempts = childPlan === "pro" ? MAX_ATTEMPTS.PRO : MAX_ATTEMPTS.BASIC;
+                const attemptsExhausted =
+                  childPlan === "basic" &&
                   childSection?.quiz?.lastAttemptDate &&
                   isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) &&
                   childSection?.quiz?.attempts >= maxAttempts;
 
                 return (
-                  <div key={sectionIndex} className="mb-10">
-                    <div className="flex items-center mb-6">
-                      <div className="w-3 h-8 bg-primary rounded mr-3"></div>
-                      <div className="flex justify-between items-center w-full">
-                        <h2 className="text-xl text-muted-foreground">
+                  <section key={sectionIndex} className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-2 border-b border-border pb-4 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex flex-col gap-1">
+                        <Heading level={2} className="text-h4">
                           Module {sectionIndex + 1}: {section.name}
-                          {!sectionUnlocked && (
-                            <span className="ml-2 flex flex-col gap-y-1 text-sm text-destructive">
-                              {sectionIndex > 0 && childSections[sectionIndex - 1]?.quiz?.result !== "pass" ? (
-                                (() => {
-                                  const prevQuiz = childSections[sectionIndex - 1]?.quiz;
-                                  const prevQuestionCount = Array.isArray(prevQuiz?.questions)
-                                    ? prevQuiz.questions.length
-                                    : 0;
-                                  const prevPercent = getQuizScorePercent(prevQuiz, prevQuestionCount);
-                                  return (
-                                    <>
-                                      <span>Complete previous module quiz to unlock</span>
-                                      {prevPercent !== null && (
-                                        <span className="text-muted-foreground">
-                                          You scored {prevPercent}% on the quiz — need {UNLOCK_SCORE_THRESHOLD}%
-                                        </span>
-                                      )}
-                                    </>
-                                  );
-                                })()
-                              ) : (
-                                <span>
-                                  {sectionDates?.startDate
-                                    ? formatUnlockDate(sectionDates.startDate)
-                                    : "Unlocks on a future date"}
-                                </span>
-                              )}
-                            </span>
-                          )}
-                        </h2>
-                        <div className="text-l text-primary ml-4 flex gap-4">
-                          <span>{section.modules?.length || 0} Lectures </span> -
-                          <span>{section.timeDuration} mins </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Always show all modules but mark locked ones */}
-                    {(section.modules || []).map((module, moduleIndex) => {
-                      const moduleKey = getModuleKey(module, sectionIndex, moduleIndex);
-
-                      return (
-                        <div
-                          key={moduleKey}
-                          className={`mb-6 rounded-lg ${sectionUnlocked ? "bg-card" : "bg-muted opacity-80"
-                            } transition-colors duration-200`}
-                        >
-                          {/* Module Header */}
-                          <div
-                            className={`p-5 flex justify-between items-center ${sectionUnlocked ? 'cursor-pointer hover:bg-muted' : 'cursor-not-allowed'
-                              } transition-colors duration-200`}
-                            onClick={() => sectionUnlocked && toggleModule(moduleKey)}
-                          >
-                            <div className="flex items-center">
-                              {!sectionUnlocked && (
-                                <LockKeyholeIcon
-                                  aria-hidden="true"
-                                  className={`${statusIconClassName} text-primary`}
-                                />
-                              )}
-                              <span className="mr-3 text-primary">
-                                <CirclePlayIcon className="text-2xl" />
-                              </span>
-                              <h3 className="text-muted-foreground">
-                                <span className="text-primary">Lecture {moduleIndex + 1}:</span> {module.name}
-                              </h3>
-                            </div>
-                            <div className="flex items-center gap-x-6">
-                              {sectionUnlocked && (
-                                <span className="text-primary text-sm bg-muted px-3 py-1 rounded-full">
-                                  Preview
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Module Content (collapsible) */}
-                          {expandedModules[moduleKey] && sectionUnlocked && (
-                            <div className="px-6 py-4 bg-muted border-t border-border">
-                              {/* Learning Objectives */}
-                              {module.learningObjectives && module.learningObjectives.length > 0 && (
-                                <div className="mb-6 p-4 bg-background rounded-lg border border-border">
-                                  <div className="flex items-center mb-3">
-                                    <h4 className="text-foreground">
-                                      What You&apos;ll Learn in this lecture
-                                    </h4>
-                                  </div>
-                                  <ul className="flex flex-col gap-y-2">
-                                    {module.learningObjectives.map((obj, idx) => (
-                                      <li key={idx} className="flex items-start">
-                                        <span className="text-muted-foreground">• {obj}</span>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              )}
-
-                              {/* Content Items */}
-                              <div className="flex flex-col gap-y-3">
-                                {(module.contents || []).map((content) => {
-                                  const fileUrl = resolveBackendAssetUrl(content.file);
-
-                                  return (
-                                    <div
-                                      key={content.id || content._id || `${moduleKey}-${content.type}-${content.name}`}
-                                      className="flex justify-between items-center p-3 hover:bg-background rounded-lg transition-colors duration-200"
-                                    >
-                                      <div className="flex items-center gap-2">
-                                        {content.type === "video" && (
-                                          <>
-                                            <CirclePlayIcon className="text-primary text-lg" />
-                                            <Button
-                                              type="button"
-                                              variant="link"
-                                              onClick={() => handlePlayVideo(fileUrl)}
-                                              className="h-auto p-0 font-normal text-foreground"
-                                            >
-                                              {content.name}
-                                            </Button>
-                                          </>
-                                        )}
-                                        {(content.type === "assignment" || content.type === "book") && (
-                                          <>
-                                            {content.type === "assignment" ? (
-                                              <ClipboardListIcon className="text-primary text-lg" />
-                                            ) : (
-                                              <LaptopIcon className="text-primary text-lg" />
-                                            )}
-                                            <span className="">
-                                              {content.name}
-                                            </span>
-                                          </>
-                                        )}
-                                      </div>
-                                      <div className="flex items-center gap-x-4">
-                                        {content.type === "video" && (
-                                          <span className="text-primary text-sm hover:text-primary">
-                                            10 min
-                                          </span>
-                                        )}
-                                        {(content.type === "assignment" || content.type === "book") && (
-                                          <Button
-                                            type="button"
-                                            variant="link"
-                                            onClick={() => handleDownloadContent(content)}
-                                            className="h-auto p-0 text-sm font-medium text-primary hover:text-primary"
-                                          >
-                                            <DownloadIcon className="mr-1" />
-                                            Download
-                                          </Button>
-                                        )}
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-
-                    {/* Quiz Section for the Module */}
-                    {quizQuestions.length > 0 && (
-                      <div className={`mt-8 rounded-lg p-6 border ${quizCompleted ? 'border-success/20 bg-success/10' :
-                        attemptsExhausted ? 'border-destructive/20 bg-destructive/10' :
-                          'border-info/20 bg-muted'
-                        } ${!sectionUnlocked ? 'opacity-60' : ''}`}>
-                        <div className="flex items-center mb-4">
-                          <div className="w-3 h-8 bg-primary rounded mr-3"></div>
-                          <h3 className="text-xl text-foreground">
-                            Module {sectionIndex + 1} Quiz
-                            {!sectionUnlocked && " (Locked)"}
-                            {quizCompleted && " (Completed)"}
-                            {attemptsExhausted && " (Attempts Exhausted for Today)"}
-                          </h3>
-                        </div>
-
-                        {attemptsExhausted ? (
-                          <div className="rounded-lg border border-border bg-card p-4">
-                            <div className="text-destructive text-lg mb-2">
-                              You&apos;ve used all {maxAttempts} attempts for today.
-                            </div>
-                            <div className="text-muted-foreground">
-                              {childPlan === 'basic' ?
-                                "You can try again tomorrow with fresh attempts." :
-                                "You can continue attempting this quiz as you have unlimited attempts."}
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="overflow-hidden rounded-lg border border-border bg-card">
-                            {/* Quiz Header */}
-                            <div
-                              className="p-4 flex justify-between items-center cursor-pointer hover:bg-muted transition-colors duration-200"
-                              onClick={() => sectionUnlocked && toggleModule(`quiz-${sectionIndex}`)}
-                            >
-                              <div className="flex items-center">
-                                {!sectionUnlocked ? (
-                                  <LockKeyholeIcon
-                                    aria-hidden="true"
-                                    className={`${statusIconClassName} text-primary`}
-                                  />
-                                ) : quizCompleted ? (
-                                  <CheckIcon
-                                    aria-hidden="true"
-                                    className={`${statusIconClassName} text-success`}
-                                  />
-                                ) : quizAttempted ? (
-                                  <RotateCcwIcon
-                                    aria-hidden="true"
-                                    className={`${statusIconClassName} text-warning`}
-                                  />
-                                ) : (
-                                  <ClipboardListIcon
-                                    aria-hidden="true"
-                                    className={`${statusIconClassName} text-primary`}
-                                  />
-                                )}
-                                <h4 className="text-muted-foreground">
-                                  Test your knowledge from this module
-                                  {quizCompleted && " (Completed)"}
-                                  {quizAttempted && !quizCompleted && (
-                                    childPlan === 'basic' ? (
-                                      isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) ?
-                                        ` (Attempt ${childSection.quiz.attempts} of ${maxAttempts} today)` :
-                                        ` (${maxAttempts} fresh attempts available today)`
-                                    ) : ` (Attempt ${childSection.quiz.attempts})`
-                                  )}
-                                  {!sectionUnlocked && (sectionIndex > 0 ?
-                                    " (Complete previous module quiz to unlock)" :
-                                    " (Complete previous modules to unlock)")}
-                                </h4>
-                              </div>
-                              <div className="flex items-center gap-x-4">
-                                <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full">
-                                  {quizQuestions.length} questions
-                                </span>
-                                {sectionUnlocked && (
-                                  <span className="text-primary">
-                                    {expandedModules[`quiz-${sectionIndex}`] ? (
-                                      <ChevronDownIcon aria-hidden="true" className="size-5" />
-                                    ) : (
-                                      <ChevronRightIcon aria-hidden="true" className="size-5" />
+                        </Heading>
+                        {!sectionUnlocked && (
+                          <div className="flex flex-col gap-1">
+                            {sectionIndex > 0 &&
+                            childSections[sectionIndex - 1]?.quiz?.result !== "pass" ? (
+                              (() => {
+                                const prevQuiz = childSections[sectionIndex - 1]?.quiz;
+                                const prevQuestionCount = Array.isArray(prevQuiz?.questions)
+                                  ? prevQuiz.questions.length
+                                  : 0;
+                                const prevPercent = getQuizScorePercent(
+                                  prevQuiz,
+                                  prevQuestionCount,
+                                );
+                                return (
+                                  <>
+                                    <Text size="sm" className="text-destructive">
+                                      Complete previous module quiz to unlock
+                                    </Text>
+                                    {prevPercent !== null && (
+                                      <Text size="xs" tone="muted">
+                                        You scored {prevPercent}% on the quiz — need{" "}
+                                        {UNLOCK_SCORE_THRESHOLD}%
+                                      </Text>
                                     )}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Quiz Content */}
-                            {expandedModules[`quiz-${sectionIndex}`] && sectionUnlocked && (
-                              <div className="px-6 py-4 bg-muted border-t border-border">
-                                {showQuizResults ? (
-                                  <div className="mb-4 rounded-lg border border-border bg-card p-4">
-                                    <div className={` text-lg mb-2 ${quizCompleted ? 'text-success' : 'text-destructive'}`}>
-                                      Quiz Results: {childSection.quiz.obtainedScore}/{quizQuestions.length}
-                                      {quizCompleted ? " (Passed)" : ` (Failed - Score at least ${UNLOCK_SCORE_THRESHOLD}% to unlock next module)`}
-                                    </div>
-                                    <div className="flex flex-col gap-y-3">
-                                      {quizQuestions.map((question, qIndex) => {
-                                        const userAnswer = quizAnswers[`${sectionIndex}-${question._id}`] || question.childAnswer;
-                                        const isCorrect = Boolean(
-                                          quizResults[sectionIndex]?.details?.[question._id] ?? question.isCorrect
-                                        );
-
-                                        return (
-                                          <div key={question._id} className="border-b pb-3">
-                                            <div className="mb-1">
-                                              {qIndex + 1}. {question.questionText}
-                                            </div>
-                                            <div className="text-sm text-muted-foreground mb-1">
-                                              Your answer: {userAnswer}
-                                            </div>
-                                            <div className={`flex items-center gap-1  text-sm ${isCorrect ? 'text-success' : 'text-destructive'}`}>
-                                              {isCorrect ? (
-                                                <>
-                                                  <CheckIcon aria-hidden="true" className="size-4" />
-                                                  Correct
-                                                </>
-                                              ) : (
-                                                <>
-                                                  <XIcon aria-hidden="true" className="size-4" />
-                                                  Incorrect
-                                                </>
-                                              )}
-                                            </div>
-
-                                          </div>
-                                        );
-                                      })}
-                                    </div>
-                                    {!quizCompleted && (
-                                      childPlan === 'basic' &&
-                                        childSection.quiz.lastAttemptDate &&
-                                        isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) &&
-                                        childSection.quiz.attempts >= maxAttempts ? (
-                                        <div className="mt-4 text-muted-foreground">
-                                          You&apos;ve used all {maxAttempts} attempts for today. Try again tomorrow.
-                                        </div>
-                                      ) : (
-                                        <Button
-                                          type="button"
-                                          variant="link"
-                                          onClick={() => retakeQuiz(sectionIndex)}
-                                          className="mt-4 h-auto p-0 font-medium text-info hover:text-info focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                        >
-                                          {childPlan === 'basic' ?
-                                            (isSameDay(childSection.quiz.lastAttemptDate, new Date().toISOString()) ?
-                                              `Retake Quiz (Attempt ${childSection.quiz.attempts + 1} of ${maxAttempts} today)` :
-                                              `Retake Quiz (${maxAttempts} fresh attempts available)`) :
-                                            'Retake Quiz'}
-                                        </Button>
-                                      )
-                                    )}
-                                  </div>
-                                ) : (
-                                  <div className="flex flex-col gap-y-4">
-                                    {childPlan === 'basic' && (
-                                      <div className="text-sm text-muted-foreground mb-2">
-                                        Attempt {childSection.quiz.attempts + 1} of {maxAttempts} today
-                                      </div>
-                                    )}
-                                    {quizQuestions.map((question, qIndex) => (
-                                      <div key={question._id} className="rounded-lg border border-border bg-card p-4">
-                                        <div className="mb-2">
-                                          {qIndex + 1}. {question.questionText}
-                                        </div>
-                                        <RadioGroup
-                                          value={quizAnswers[`${sectionIndex}-${question._id}`] || ""}
-                                          onValueChange={(option) => handleQuizAnswer(sectionIndex, question._id, option)}
-                                          className="flex flex-col gap-y-2"
-                                        >
-                                          {(question.options || []).map((option, oIndex) => (
-                                            <label key={oIndex} className="flex items-center gap-x-2">
-                                              <RadioGroupItem
-                                                value={option}
-                                                id={`quiz-${sectionIndex}-${question._id}-${oIndex}`}
-                                              />
-                                              <span>{option}</span>
-                                            </label>
-                                          ))}
-                                        </RadioGroup>
-                                      </div>
-                                    ))}
-                                    <Button
-                                      type="button"
-                                      onClick={() => submitQuiz(sectionIndex)}
-                                      disabled={updateChildCourseProgressMutation.isPending}
-                                      className="h-auto rounded-lg bg-info px-4 py-2 font-medium text-background hover:bg-info"
-                                    >
-                                      {updateChildCourseProgressMutation.isPending ? "Submitting..." : "Submit Quiz"}
-                                    </Button>
-                                    <div className="text-sm text-muted-foreground mt-2">
-                                      Note: You need to score at least {UNLOCK_SCORE_THRESHOLD}% to unlock the next module.
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
+                                  </>
+                                );
+                              })()
+                            ) : (
+                              <Text size="sm" className="text-destructive">
+                                {sectionDates?.startDate
+                                  ? formatUnlockDate(sectionDates.startDate)
+                                  : "Unlocks on a future date"}
+                              </Text>
                             )}
                           </div>
                         )}
                       </div>
+                      <div className="flex shrink-0 gap-3 text-body-sm text-primary">
+                        <span>{section.modules?.length || 0} lectures</span>
+                        <span aria-hidden="true">·</span>
+                        <span>{section.timeDuration} mins</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      {(section.modules || []).map((module, moduleIndex) => {
+                        const moduleKey = getModuleKey(module, sectionIndex, moduleIndex);
+                        const isExpanded = expandedModules[moduleKey];
+
+                        return (
+                          <div
+                            key={moduleKey}
+                            className={cn(
+                              "overflow-hidden rounded-xl border border-border transition-colors",
+                              sectionUnlocked ? "bg-card" : "bg-muted opacity-80",
+                            )}
+                          >
+                            <button
+                              type="button"
+                              onClick={() => sectionUnlocked && toggleModule(moduleKey)}
+                              disabled={!sectionUnlocked}
+                              className={cn(
+                                "flex w-full items-center justify-between gap-4 p-5 text-left",
+                                sectionUnlocked
+                                  ? "cursor-pointer hover:bg-muted"
+                                  : "cursor-not-allowed",
+                              )}
+                            >
+                              <div className="flex min-w-0 items-center gap-3">
+                                {!sectionUnlocked ? (
+                                  <LockKeyholeIcon
+                                    aria-hidden="true"
+                                    className="size-5 shrink-0 text-primary"
+                                  />
+                                ) : (
+                                  <CirclePlayIcon
+                                    aria-hidden="true"
+                                    className="size-5 shrink-0 text-primary"
+                                  />
+                                )}
+                                <Text className="truncate">
+                                  <span className="font-semibold text-primary">
+                                    Lecture {moduleIndex + 1}:
+                                  </span>{" "}
+                                  {module.name}
+                                </Text>
+                              </div>
+                              <div className="flex shrink-0 items-center gap-3">
+                                {sectionUnlocked && (
+                                  <Badge variant="secondary" className="rounded-full">
+                                    Preview
+                                  </Badge>
+                                )}
+                                {sectionUnlocked &&
+                                  (isExpanded ? (
+                                    <ChevronDownIcon
+                                      aria-hidden="true"
+                                      className="size-5 text-primary"
+                                    />
+                                  ) : (
+                                    <ChevronRightIcon
+                                      aria-hidden="true"
+                                      className="size-5 text-primary"
+                                    />
+                                  ))}
+                              </div>
+                            </button>
+
+                            {isExpanded && sectionUnlocked && (
+                              <div className="flex flex-col gap-4 border-t border-border bg-muted px-6 py-5">
+                                {module.learningObjectives?.length > 0 && (
+                                  <div className="flex flex-col gap-3 rounded-lg border border-border bg-background p-4">
+                                    <Heading level={4} className="text-h5">
+                                      What you&apos;ll learn in this lecture
+                                    </Heading>
+                                    <ul className="flex flex-col gap-2">
+                                      {module.learningObjectives.map((obj, idx) => (
+                                        <li key={idx}>
+                                          <Text size="sm" tone="muted">
+                                            • {obj}
+                                          </Text>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+
+                                <div className="flex flex-col gap-2">
+                                  {(module.contents || []).map((content) => (
+                                    <ModuleContentRow
+                                      key={
+                                        content.id ||
+                                        content._id ||
+                                        `${moduleKey}-${content.type}-${content.name}`
+                                      }
+                                      content={content}
+                                      fileUrl={resolveBackendAssetUrl(content.file)}
+                                      onPlayVideo={handlePlayVideo}
+                                      onDownload={handleDownloadContent}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {quizQuestions.length > 0 && (
+                      <Card
+                        className={cn(
+                          "border",
+                          quizCompleted && "border-success/40 bg-success/10",
+                          attemptsExhausted && "border-destructive/40 bg-destructive/10",
+                          !sectionUnlocked && "opacity-60",
+                        )}
+                      >
+                        <CardContent className="flex flex-col gap-4">
+                          <div className="flex items-center gap-3">
+                            <Heading level={3} className="text-h5">
+                              Module {sectionIndex + 1} quiz
+                            </Heading>
+                            {!sectionUnlocked && (
+                              <Badge variant="secondary" className="rounded-full">
+                                Locked
+                              </Badge>
+                            )}
+                            {quizCompleted && (
+                              <Badge className="rounded-full">Completed</Badge>
+                            )}
+                            {attemptsExhausted && (
+                              <Badge variant="destructive" className="rounded-full">
+                                Attempts exhausted
+                              </Badge>
+                            )}
+                          </div>
+
+                          {attemptsExhausted ? (
+                            <div className="rounded-lg border border-border bg-card p-4">
+                              <Text className="text-destructive">
+                                You&apos;ve used all {maxAttempts} attempts for today.
+                              </Text>
+                              <Text size="sm" tone="muted" className="mt-1">
+                                {childPlan === "basic"
+                                  ? "You can try again tomorrow with fresh attempts."
+                                  : "You can continue attempting this quiz as you have unlimited attempts."}
+                              </Text>
+                            </div>
+                          ) : (
+                            <div className="overflow-hidden rounded-xl border border-border bg-card">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  sectionUnlocked && toggleModule(`quiz-${sectionIndex}`)
+                                }
+                                disabled={!sectionUnlocked}
+                                className="flex w-full items-center justify-between gap-4 p-4 text-left transition-colors hover:bg-muted disabled:cursor-not-allowed"
+                              >
+                                <div className="flex min-w-0 items-center gap-3">
+                                  {!sectionUnlocked ? (
+                                    <LockKeyholeIcon
+                                      aria-hidden="true"
+                                      className="size-5 shrink-0 text-primary"
+                                    />
+                                  ) : quizCompleted ? (
+                                    <CheckIcon
+                                      aria-hidden="true"
+                                      className="size-5 shrink-0 text-success"
+                                    />
+                                  ) : quizAttempted ? (
+                                    <RotateCcwIcon
+                                      aria-hidden="true"
+                                      className="size-5 shrink-0 text-warning"
+                                    />
+                                  ) : (
+                                    <ClipboardListIcon
+                                      aria-hidden="true"
+                                      className="size-5 shrink-0 text-primary"
+                                    />
+                                  )}
+                                  <Text size="sm" tone="muted" className="truncate">
+                                    Test your knowledge from this module
+                                    {quizAttempted && !quizCompleted && (
+                                      childPlan === "basic"
+                                        ? isSameDay(
+                                            childSection.quiz.lastAttemptDate,
+                                            new Date().toISOString(),
+                                          )
+                                          ? ` (Attempt ${childSection.quiz.attempts} of ${maxAttempts} today)`
+                                          : ` (${maxAttempts} fresh attempts available today)`
+                                        : ` (Attempt ${childSection.quiz.attempts})`
+                                    )}
+                                  </Text>
+                                </div>
+                                <div className="flex shrink-0 items-center gap-3">
+                                  <Badge variant="secondary" className="rounded-full">
+                                    {quizQuestions.length} questions
+                                  </Badge>
+                                  {sectionUnlocked &&
+                                    (expandedModules[`quiz-${sectionIndex}`] ? (
+                                      <ChevronDownIcon
+                                        aria-hidden="true"
+                                        className="size-5 text-primary"
+                                      />
+                                    ) : (
+                                      <ChevronRightIcon
+                                        aria-hidden="true"
+                                        className="size-5 text-primary"
+                                      />
+                                    ))}
+                                </div>
+                              </button>
+
+                              {expandedModules[`quiz-${sectionIndex}`] && sectionUnlocked && (
+                                <div className="border-t border-border bg-muted px-6 py-5">
+                                  {showQuizResults ? (
+                                    <div className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4">
+                                      <Text
+                                        className={
+                                          quizCompleted
+                                            ? "font-semibold text-success"
+                                            : "font-semibold text-destructive"
+                                        }
+                                      >
+                                        Quiz results: {childSection.quiz.obtainedScore}/
+                                        {quizQuestions.length}
+                                        {quizCompleted
+                                          ? " (Passed)"
+                                          : ` (Failed — score at least ${UNLOCK_SCORE_THRESHOLD}% to unlock next module)`}
+                                      </Text>
+                                      <div className="flex flex-col gap-3">
+                                        {quizQuestions.map((question, qIndex) => {
+                                          const userAnswer =
+                                            quizAnswers[`${sectionIndex}-${question._id}`] ||
+                                            question.childAnswer;
+                                          const isCorrect = Boolean(
+                                            quizResults[sectionIndex]?.details?.[question._id] ??
+                                              question.isCorrect,
+                                          );
+                                          return (
+                                            <QuizQuestionResult
+                                              key={question._id}
+                                              index={qIndex}
+                                              question={question}
+                                              userAnswer={userAnswer}
+                                              isCorrect={isCorrect}
+                                            />
+                                          );
+                                        })}
+                                      </div>
+                                      {!quizCompleted &&
+                                        (childPlan === "basic" &&
+                                        childSection.quiz.lastAttemptDate &&
+                                        isSameDay(
+                                          childSection.quiz.lastAttemptDate,
+                                          new Date().toISOString(),
+                                        ) &&
+                                        childSection.quiz.attempts >= maxAttempts ? (
+                                          <Text size="sm" tone="muted">
+                                            You&apos;ve used all {maxAttempts} attempts for today.
+                                            Try again tomorrow.
+                                          </Text>
+                                        ) : (
+                                          <Button
+                                            type="button"
+                                            variant="link"
+                                            onClick={() => retakeQuiz(sectionIndex)}
+                                            className="h-auto self-start p-0 font-medium"
+                                          >
+                                            {childPlan === "basic"
+                                              ? isSameDay(
+                                                  childSection.quiz.lastAttemptDate,
+                                                  new Date().toISOString(),
+                                                )
+                                                ? `Retake quiz (Attempt ${
+                                                    childSection.quiz.attempts + 1
+                                                  } of ${maxAttempts} today)`
+                                                : `Retake quiz (${maxAttempts} fresh attempts available)`
+                                              : "Retake quiz"}
+                                          </Button>
+                                        ))}
+                                    </div>
+                                  ) : (
+                                    <div className="flex flex-col gap-4">
+                                      {childPlan === "basic" && (
+                                        <Text size="sm" tone="muted">
+                                          Attempt {childSection.quiz.attempts + 1} of{" "}
+                                          {maxAttempts} today
+                                        </Text>
+                                      )}
+                                      {quizQuestions.map((question, qIndex) => (
+                                        <div
+                                          key={question._id}
+                                          className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4"
+                                        >
+                                          <Text className="font-medium">
+                                            {qIndex + 1}. {question.questionText}
+                                          </Text>
+                                          <RadioGroup
+                                            value={
+                                              quizAnswers[`${sectionIndex}-${question._id}`] || ""
+                                            }
+                                            onValueChange={(option) =>
+                                              handleQuizAnswer(sectionIndex, question._id, option)
+                                            }
+                                            className="flex flex-col gap-2"
+                                          >
+                                            {(question.options || []).map((option, oIndex) => (
+                                              <label
+                                                key={oIndex}
+                                                className="flex items-center gap-2 text-body-sm"
+                                              >
+                                                <RadioGroupItem
+                                                  value={option}
+                                                  id={`quiz-${sectionIndex}-${question._id}-${oIndex}`}
+                                                />
+                                                <span>{option}</span>
+                                              </label>
+                                            ))}
+                                          </RadioGroup>
+                                        </div>
+                                      ))}
+                                      <Button
+                                        type="button"
+                                        onClick={() => submitQuiz(sectionIndex)}
+                                        disabled={updateChildCourseProgressMutation.isPending}
+                                        className="self-start"
+                                      >
+                                        {updateChildCourseProgressMutation.isPending
+                                          ? "Submitting…"
+                                          : "Submit quiz"}
+                                      </Button>
+                                      <Text size="sm" tone="muted">
+                                        Note: You need to score at least{" "}
+                                        {UNLOCK_SCORE_THRESHOLD}% to unlock the next module.
+                                      </Text>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
                     )}
-                  </div>
+                  </section>
                 );
               })}
             </div>
-          </div>
+          </CardContent>
+        </Card>
+      </Container>
+
+      <DialogShell
+        isOpen={showVideoModal}
+        onClose={() => setShowVideoModal(false)}
+        title="Course lesson video"
+        titleClassName="sr-only"
+        className="h-[90vh] max-w-5xl p-4 sm:max-w-5xl"
+      >
+        <div className="flex min-h-0 flex-1 items-center justify-center">
+          <VideoPlayer
+            src={currentVideo}
+            title="Course lesson video"
+            autoPlay
+            controls
+            className="min-h-[70vh] w-full"
+          />
         </div>
+      </DialogShell>
 
-        <DialogShell
-          isOpen={showVideoModal}
-          onClose={() => setShowVideoModal(false)}
-          title="Course lesson video"
-          titleClassName="sr-only"
-          className="h-[90vh] max-w-5xl p-4 sm:max-w-5xl"
-        >
-          <div className="flex min-h-0 flex-1 items-center justify-center">
-            <VideoPlayer
-              src={currentVideo}
-              title="Course lesson video"
-              autoPlay
-              controls
-              className="min-h-[70vh] w-full"
-            />
-          </div>
-        </DialogShell>
-
-        <ReviewsComponent />
-      </>
+      <ReviewsComponent />
       <ChatSupport />
     </div>
   );
-}
+};
 
 export default CourseDetail;
