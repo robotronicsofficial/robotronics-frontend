@@ -40,21 +40,6 @@ const MarkerUnderline = () => (
   </svg>
 );
 
-/* Live activity pill — pulsing mustard dot + parent count. Replaces the
-   plain eyebrow so the hero opens with momentum, not a label. */
-const LivePill = () => (
-  <div className="inline-flex items-center gap-2.5 rounded-full border border-border bg-card/80 py-1.5 pr-4 pl-2 shadow-xs backdrop-blur">
-    <span className="relative grid size-5 place-items-center">
-      <span className="absolute inset-0 animate-ping rounded-full bg-primary/40" />
-      <span className="relative size-2 rounded-full bg-primary" />
-    </span>
-    <span className="text-caption font-medium text-foreground">
-      <span className="font-semibold">2,148 kids</span>{" "}
-      <span className="text-muted-foreground">learning right now</span>
-    </span>
-  </div>
-);
-
 /* Inline rating row that sits beneath the CTAs — cheap, high-signal trust. */
 const RatingRow = () => (
   <div className="flex flex-wrap items-center gap-3">
@@ -245,8 +230,6 @@ export const HeroSection = () => (
     <Container size="wide">
       <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
         <div className="flex flex-col items-start gap-7">
-          <LivePill />
-
           <h1 className="font-sans font-extrabold tracking-[-0.035em] text-foreground text-balance text-[clamp(3rem,6vw+1rem,6.5rem)] leading-[0.95] max-w-2xl">
             <ShinyText>Future skills</ShinyText>
             <span className="block">for your child,</span>

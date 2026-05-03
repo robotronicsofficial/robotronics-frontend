@@ -2,6 +2,7 @@ import { Award, CheckCircle2 } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
 import { GlareHover } from "@/components/ui/glare-hover";
+import { TextType } from "@/components/ui/text-type";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 
 /* Mustard scribble underline. Echoes the hand-marker treatment used in
@@ -85,7 +86,7 @@ const AiTrainerCell = () => (
         </span>
         <div className="max-w-[20rem] rounded-2xl rounded-bl-md border border-border bg-background px-4 py-2.5">
           <p className="text-body-sm text-foreground">
-            Why won&apos;t my robot turn left?
+            <TextType text="Why won't my robot turn left?" />
           </p>
         </div>
       </div>
