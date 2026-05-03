@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { CountUp } from "@/components/ui/count-up";
 import { DitherBackdrop } from "@/components/ui/dither-backdrop";
+import { Magnet } from "@/components/ui/magnet";
 import { RotatingText } from "@/components/ui/rotating-text";
 import { ShinyText } from "@/components/ui/shiny-text";
 import { Text } from "@/components/ui/typography";
@@ -252,12 +253,14 @@ export const HeroSection = () => (
           </Text>
 
           <div className="flex flex-wrap items-center gap-3">
-            <Button asChild size="marketingLg" className="group/cta gap-2.5">
-              <Link to="/subscriptions">
-                Start learning
-                <ArrowRight className="size-4 transition-transform group-hover/cta:translate-x-0.5" />
-              </Link>
-            </Button>
+            <Magnet>
+              <Button asChild size="marketingLg" className="group/cta gap-2.5">
+                <Link to="/subscriptions">
+                  Start learning
+                  <ArrowRight className="size-4 transition-transform group-hover/cta:translate-x-0.5" />
+                </Link>
+              </Button>
+            </Magnet>
             <Button asChild size="marketingLg" variant="outline">
               <Link to="/contactUs">For schools</Link>
             </Button>
