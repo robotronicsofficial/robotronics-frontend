@@ -12,8 +12,11 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { CountUp } from "@/components/ui/count-up";
 import { DitherBackdrop } from "@/components/ui/dither-backdrop";
-import { Highlight, Text } from "@/components/ui/typography";
+import { RotatingText } from "@/components/ui/rotating-text";
+import { ShinyText } from "@/components/ui/shiny-text";
+import { Text } from "@/components/ui/typography";
 
 /* Hand-marker scribble used to underline a single keyword in the headline.
    Brief calls for keyword highlights in mustard; this is the warmer take
@@ -245,12 +248,15 @@ export const HeroSection = () => (
           <LivePill />
 
           <h1 className="font-sans font-extrabold tracking-[-0.035em] text-foreground text-balance text-[clamp(3rem,6vw+1rem,6.5rem)] leading-[0.95] max-w-2xl">
-            <Highlight>Future skills</Highlight>
+            <ShinyText>Future skills</ShinyText>
             <span className="block">for your child,</span>
             <span className="block">
               powered by{" "}
               <span className="relative inline-block whitespace-nowrap">
-                AI
+                <RotatingText
+                  words={["AI", "robotics", "coding"]}
+                  className="text-primary"
+                />
                 <MarkerUnderline />
               </span>
               .
@@ -277,8 +283,14 @@ export const HeroSection = () => (
           <RatingRow />
 
           <dl className="mt-2 flex flex-wrap items-start gap-x-12 gap-y-6 border-t border-border pt-8">
-            <TrustItem value="150,000+" label="Kids learning" />
-            <TrustItem value="140+" label="Partner schools" />
+            <TrustItem
+              value={<CountUp to={150000} suffix="+" />}
+              label="Kids learning"
+            />
+            <TrustItem
+              value={<CountUp to={140} suffix="+" />}
+              label="Partner schools"
+            />
             <TrustItem value="Global" label="Access" />
           </dl>
         </div>
