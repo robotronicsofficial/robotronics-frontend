@@ -1,5 +1,8 @@
-import { CheckoutProgress, CheckoutStepButton } from "@/components/checkout/CheckoutProgress";
 import { useState } from "react";
+
+import { CheckoutProgress, CheckoutStepButton } from "@/components/checkout/CheckoutProgress";
+import { Container } from "@/components/ui/container";
+import { Heading } from "@/components/ui/typography";
 import SubscriptionCustomerInformation from "./SubscriptionCustomerInformation";
 import SubscriptionPayment from "./SubscriptionPayment";
 import userIcon from "../../../assets/user-circle.png";
@@ -11,18 +14,14 @@ const SubscriptionCustomerCart = () => {
   const steps = [
     {
       icon: userIcon,
-      title: "PARENT & CHILD INFORMATION",
+      title: "Parent & child information",
       description: "Add your name, phone number and address.",
-      content: (
-        <SubscriptionCustomerInformation
-          onNext={() => setCurrentStep(1)}
-        />
-      ),
+      content: <SubscriptionCustomerInformation onNext={() => setCurrentStep(1)} />,
     },
     {
       icon: cardIcon,
-      title: "SUBSCRIPTION PAYMENT",
-      description: "Submit your Payment Information",
+      title: "Subscription payment",
+      description: "Submit your payment information.",
       content: <SubscriptionPayment />,
     },
   ];
@@ -31,12 +30,10 @@ const SubscriptionCustomerCart = () => {
   const progressValue = progressMap[currentStep] || 0;
 
   return (
-    <>
-      <div className="mt-10 flex justify-center">
-        <CheckoutProgress value={progressValue} />
-      </div>
+    <Container size="wide" className="flex flex-col gap-10 pb-16">
+      <CheckoutProgress value={progressValue} className="mt-10" />
 
-      <div className="mt-10 flex flex-col items-center justify-evenly gap-[10vw] lg:flex-row">
+      <div className="grid gap-6 md:grid-cols-2">
         {steps.map((step, index) => (
           <CheckoutStepButton
             key={index}
@@ -49,13 +46,13 @@ const SubscriptionCustomerCart = () => {
         ))}
       </div>
 
-      <div className="container mx-auto px-4 py-8 md:py-16">
-        <h1 className="text-wrap text-2xl text-foreground md:text-4xl">
+      <div className="flex flex-col gap-6">
+        <Heading level={2} className="text-h3">
           {steps[currentStep].title}
-        </h1>
+        </Heading>
         <div>{steps[currentStep].content}</div>
       </div>
-    </>
+    </Container>
   );
 };
 

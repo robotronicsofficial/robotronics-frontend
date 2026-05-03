@@ -1,21 +1,25 @@
 import PropTypes from "prop-types";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import { useAuth } from "../../../contexts/useAuth";
 import { useLocation, useNavigate } from "@tanstack/react-router";
+import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+
 import AppImage from "@/components/site/AppImage";
-import robo from "../../../assets/child.webp";
-import { Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Heading, Text } from "@/components/ui/typography";
+import { FormInput, FormSelect } from "@/components/forms/FormControls";
+import { cn } from "@/lib/utils";
+import { useAuth } from "../../../contexts/useAuth";
+import { useCurrentParent, useSaveParentMutation } from "../../../hooks/useAccount";
+import { useSelectedPlanStore } from "../../../stores/selectedPlanStore";
 import { normalizeParentRecord } from "../../../lib/subscription";
 import {
   buildSubscriptionCheckout,
   saveSubscriptionCheckout,
 } from "../../../lib/subscriptionCheckout";
-import { useSelectedPlanStore } from "../../../stores/selectedPlanStore";
-import { useCurrentParent, useSaveParentMutation } from "../../../hooks/useAccount";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { FormInput, FormSelect } from "@/components/forms/FormControls";
+import { formatPKR } from "@/utils/formatPrice";
+import robo from "../../../assets/child.webp";
 
 const DRAFT_STORAGE_KEY = "robotronics:subscriptionDraft";
 
@@ -62,9 +66,9 @@ const EMPTY_CHILD_FORM = {
 };
 
 const withoutSavedFlag = (child) => {
-  const nextChild = { ...child };
-  delete nextChild.saved;
-  return nextChild;
+  const next = { ...child };
+  delete next.saved;
+  return next;
 };
 
 const InputField = ({
@@ -87,9 +91,9 @@ const InputField = ({
       required={required}
       type={type}
     />
-    {hint ? (
-      <p className="text-xs text-muted-foreground">{hint}</p>
-    ) : null}
+    {hint && (
+      <Text size="xs" tone="muted">{hint}</Text>
+    )}
   </div>
 );
 
@@ -124,7 +128,7 @@ SelectField.propTypes = {
     PropTypes.shape({
       value: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
   required: PropTypes.bool,
 };
@@ -136,16 +140,14 @@ const OptionalSection = ({ label, open, onToggle, children }) => (
       onClick={onToggle}
       className="flex items-center justify-between gap-3 text-left"
     >
-      <span className="text-sm font-semibold text-foreground">
-        {label}
-      </span>
+      <Text size="sm" weight="semibold">{label}</Text>
       {open ? (
-        <ChevronUp className="h-4 w-4 text-muted-foreground" />
+        <ChevronUp className="size-4 text-muted-foreground" aria-hidden="true" />
       ) : (
-        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+        <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
       )}
     </button>
-    {open ? <div className="flex flex-col gap-4">{children}</div> : null}
+    {open && <div className="flex flex-col gap-4">{children}</div>}
   </div>
 );
 
@@ -154,6 +156,21 @@ OptionalSection.propTypes = {
   open: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
+};
+
+const SummaryRow = ({ label, value, highlight = false }) => (
+  <div className="flex items-start justify-between gap-4">
+    <Text size="sm" tone="muted">{label}</Text>
+    <Text size="sm" weight={highlight ? "semibold" : "regular"} className="text-right">
+      {value}
+    </Text>
+  </div>
+);
+
+SummaryRow.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  highlight: PropTypes.bool,
 };
 
 const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
@@ -176,7 +193,6 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   const draftRestoredRef = useRef(false);
   const hasHydratedRef = useRef(false);
 
-  // Detect a persisted draft on mount and offer restore.
   useEffect(() => {
     if (hasHydratedRef.current) return;
     try {
@@ -193,7 +209,6 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
     hasHydratedRef.current = true;
   }, []);
 
-  // Prefill from authenticated user (and saved parent record) when no draft is being restored.
   useEffect(() => {
     if (draftRestoredRef.current) return;
     if (!loadedParent && !currentUser) return;
@@ -215,7 +230,6 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
     }));
   }, [loadedParent, currentUser]);
 
-  // Autosave every field change to localStorage.
   useEffect(() => {
     if (!hasHydratedRef.current) return;
     try {
@@ -239,7 +253,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
             parsed.childrenForms.map((child) => ({
               ...EMPTY_CHILD_FORM,
               ...child,
-            }))
+            })),
           );
         }
         draftRestoredRef.current = true;
@@ -288,8 +302,8 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
           prev.filter(
             (child) =>
               child.firstName !== removedChild.firstName ||
-              child.lastName !== removedChild.lastName
-          )
+              child.lastName !== removedChild.lastName,
+          ),
         );
       }
     }
@@ -326,7 +340,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
         (c) =>
           c.firstName === child.firstName &&
           c.lastName === child.lastName &&
-          c.email === child.email
+          c.email === child.email,
       )
     ) {
       setSavedChildren((prev) => [...prev, child]);
@@ -357,14 +371,14 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
     const unsavedChildren = childrenForms.filter((child) => !child.saved);
     if (unsavedChildren.length > 0) {
       toast.error(
-        `Please save ${unsavedChildren.length} unsaved child form(s) before continuing`
+        `Please save ${unsavedChildren.length} unsaved child form(s) before continuing`,
       );
       return;
     }
 
     const requiredParentFields = ["firstName", "lastName", "email", "phone", "country"];
     const missingParentFields = requiredParentFields.filter(
-      (field) => !parentForm[field]
+      (field) => !parentForm[field],
     );
 
     if (missingParentFields.length > 0) {
@@ -383,7 +397,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
         data?.parent || {
           ...parentForm,
           children: childrenForms.map(withoutSavedFlag),
-        }
+        },
       );
       const persistedChildren = persistedParent.children;
       const checkout = buildSubscriptionCheckout({
@@ -395,7 +409,6 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
       saveSubscriptionCheckout(checkout);
       onSaveChildren?.(persistedChildren);
 
-      // Clear autosave once submission succeeds.
       try {
         localStorage.removeItem(DRAFT_STORAGE_KEY);
       } catch {
@@ -418,395 +431,358 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   const totalPrice = savedChildren.length * price;
 
   return (
-    <div className="lg:flex flex-row bg-background">
-      <div className="flex flex-col lg:w-3/5">
-        {draftBannerVisible ? (
-          <div className="mx-6 mt-6 flex flex-col gap-3 rounded-2xl bg-muted p-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-foreground">
-              We saved your progress. Continue where you left off?
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                type="button"
-	                onClick={handleRestoreDraft}
-	                className="h-auto rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground hover:bg-primary-hover"
-	              >
-                Restore
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleDiscardDraft}
-                className="h-auto rounded-lg px-4 py-2 text-sm"
-              >
-                Start over
-              </Button>
-            </div>
-          </div>
-        ) : null}
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      <div className="flex flex-col gap-6">
+        {draftBannerVisible && (
+          <Card>
+            <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <Text size="sm">
+                We saved your progress. Continue where you left off?
+              </Text>
+              <div className="flex flex-wrap gap-2">
+                <Button type="button" size="sm" onClick={handleRestoreDraft}>
+                  Restore
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={handleDiscardDraft}
+                >
+                  Start over
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-y-6 bg-background p-6 max-w-4xl"
-        >
-          {/* Parent Info — required only */}
-          <div className="flex flex-col gap-4">
-            <h2 className="text-xl md:text-2xl text-foreground">
-              Parent details
-            </h2>
+        <Card>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+              <section className="flex flex-col gap-4">
+                <Heading level={3} className="text-h4">Parent details</Heading>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputField
-                label="Parent First Name"
-                name="firstName"
-                value={parentForm.firstName}
-                onChange={handleParentChange}
-                placeholder="Parent First Name"
-                required
-              />
-              <InputField
-                label="Parent Last Name"
-                name="lastName"
-                value={parentForm.lastName}
-                onChange={handleParentChange}
-                placeholder="Parent Last Name"
-                required
-              />
-            </div>
-
-            <InputField
-              label="Parent Email"
-              name="email"
-              type="email"
-              value={parentForm.email}
-              onChange={handleParentChange}
-              placeholder="parent@example.com"
-              required
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputField
-                label="Phone"
-                name="phone"
-                value={parentForm.phone}
-                onChange={handleParentChange}
-                placeholder="Phone"
-                required
-              />
-              <InputField
-                label="Country / Region"
-                name="country"
-                value={parentForm.country}
-                onChange={handleParentChange}
-                placeholder="Country"
-                required
-              />
-            </div>
-          </div>
-
-          <OptionalSection
-            label="Billing address (optional — collected at payment if needed)"
-            open={parentOptionalOpen}
-            onToggle={() => setParentOptionalOpen((value) => !value)}
-          >
-            <InputField
-              label="Residential Address"
-              name="streetAddress"
-              value={parentForm.streetAddress}
-              onChange={handleParentChange}
-              placeholder="House number and street name"
-            />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputField
-                label="Apt / Suite"
-                name="aptSuite"
-                value={parentForm.aptSuite}
-                onChange={handleParentChange}
-                placeholder="Apt, suite, unit (optional)"
-              />
-              <InputField
-                label="City"
-                name="city"
-                value={parentForm.city}
-                onChange={handleParentChange}
-                placeholder="City"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <SelectField
-                label="State"
-                name="state"
-                value={parentForm.state}
-                onChange={handleParentChange}
-                options={STATES}
-              />
-              <InputField
-                label="Postal Code"
-                name="postalCode"
-                value={parentForm.postalCode}
-                onChange={handleParentChange}
-                placeholder="Postal Code"
-              />
-            </div>
-          </OptionalSection>
-
-          {/* Children Info */}
-          {childrenForms.map((child, index) => {
-            const optionalOpen = Boolean(childOptionalOpen[index]);
-            return (
-              <div key={index} className="flex flex-col w-full pt-6 gap-y-6">
-                <div className="flex flex-col gap-y-2 px-2">
-                  <h1 className="text-2xl md:text-4xl text-foreground text-wrap">
-                    {savedChildren.length === 0
-                      ? "Register your child"
-                      : `Child ${index + 1} information`}
-                  </h1>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <InputField
-                    label="First Name"
+                    label="Parent first name"
                     name="firstName"
-                    value={child.firstName}
-                    onChange={(e) => handleChildChange(index, e)}
-                    placeholder="First Name"
+                    value={parentForm.firstName}
+                    onChange={handleParentChange}
+                    placeholder="Parent first name"
                     required
                   />
                   <InputField
-                    label="Last Name"
+                    label="Parent last name"
                     name="lastName"
-                    value={child.lastName}
-                    onChange={(e) => handleChildChange(index, e)}
-                    placeholder="Last Name"
+                    value={parentForm.lastName}
+                    onChange={handleParentChange}
+                    placeholder="Parent last name"
                     required
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InputField
+                  label="Parent email"
+                  name="email"
+                  type="email"
+                  value={parentForm.email}
+                  onChange={handleParentChange}
+                  placeholder="parent@example.com"
+                  required
+                />
+
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <InputField
-                    label="Date of Birth"
-                    name="dateOfBirth"
-                    type="date"
-                    value={child.dateOfBirth}
-                    onChange={(e) => handleChildChange(index, e)}
-                    placeholder="Date of Birth"
+                    label="Phone"
+                    name="phone"
+                    value={parentForm.phone}
+                    onChange={handleParentChange}
+                    placeholder="Phone"
                     required
                   />
-                  <SelectField
-                    label="Gender"
-                    name="gender"
-                    value={child.gender}
-                    onChange={(e) => handleChildChange(index, e)}
-                    options={GENDER_OPTIONS}
+                  <InputField
+                    label="Country / region"
+                    name="country"
+                    value={parentForm.country}
+                    onChange={handleParentChange}
+                    placeholder="Country"
                     required
                   />
                 </div>
 
                 <OptionalSection
-                  label="Additional details (optional)"
-                  open={optionalOpen}
-                  onToggle={() => toggleChildOptional(index)}
+                  label="Billing address (optional — collected at payment if needed)"
+                  open={parentOptionalOpen}
+                  onToggle={() => setParentOptionalOpen((value) => !value)}
                 >
                   <InputField
-                    label="Child Email"
-                    name="email"
-                    type="email"
-                    value={child.email}
-                    onChange={(e) => handleChildChange(index, e)}
-                    placeholder="child@example.com"
-                    hint="Optional: used for progress updates"
-                  />
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <InputField
-                      label="School Name"
-                      name="schoolName"
-                      value={child.schoolName}
-                      onChange={(e) => handleChildChange(index, e)}
-                      placeholder="School Name"
-                    />
-                    <InputField
-                      label="Country / Region"
-                      name="country"
-                      value={child.country}
-                      onChange={(e) => handleChildChange(index, e)}
-                      placeholder="Country"
-                    />
-                  </div>
-
-                  <InputField
-                    label="House Address"
+                    label="Residential address"
                     name="streetAddress"
-                    value={child.streetAddress}
-                    onChange={(e) => handleChildChange(index, e)}
+                    value={parentForm.streetAddress}
+                    onChange={handleParentChange}
                     placeholder="House number and street name"
                   />
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <InputField
+                      label="Apt / suite"
+                      name="aptSuite"
+                      value={parentForm.aptSuite}
+                      onChange={handleParentChange}
+                      placeholder="Apt, suite, unit (optional)"
+                    />
                     <InputField
                       label="City"
                       name="city"
-                      value={child.city}
-                      onChange={(e) => handleChildChange(index, e)}
+                      value={parentForm.city}
+                      onChange={handleParentChange}
                       placeholder="City"
                     />
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <SelectField
+                      label="State"
+                      name="state"
+                      value={parentForm.state}
+                      onChange={handleParentChange}
+                      options={STATES}
+                    />
                     <InputField
-                      label="Phone"
-                      name="phone"
-                      value={child.phone}
-                      onChange={(e) => handleChildChange(index, e)}
-                      placeholder="Phone"
+                      label="Postal code"
+                      name="postalCode"
+                      value={parentForm.postalCode}
+                      onChange={handleParentChange}
+                      placeholder="Postal code"
                     />
                   </div>
-
-                  <InputField
-                    label="Postal Code"
-                    name="postalCode"
-                    value={child.postalCode}
-                    onChange={(e) => handleChildChange(index, e)}
-                    placeholder="Postal Code"
-                  />
                 </OptionalSection>
+              </section>
 
-                <div className="flex flex-wrap gap-3 mt-2">
-                  {!child.saved && (
-                    <Button
-                      type="button"
-                      onClick={() => saveChildForm(index)}
-                      className="h-auto bg-success px-6 py-2 text-center text-sm text-background hover:bg-success/90 lg:px-12 lg:text-base"
+              {childrenForms.map((child, index) => {
+                const optionalOpen = Boolean(childOptionalOpen[index]);
+                return (
+                  <section key={index} className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between gap-3 border-t border-border pt-6">
+                      <Heading level={3} className="text-h4">
+                        {savedChildren.length === 0
+                          ? "Register your child"
+                          : `Child ${index + 1}`}
+                      </Heading>
+                      {child.saved && (
+                        <Text size="xs" tone="brand" className="font-semibold uppercase tracking-wide">
+                          Saved
+                        </Text>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <InputField
+                        label="First name"
+                        name="firstName"
+                        value={child.firstName}
+                        onChange={(e) => handleChildChange(index, e)}
+                        placeholder="First name"
+                        required
+                      />
+                      <InputField
+                        label="Last name"
+                        name="lastName"
+                        value={child.lastName}
+                        onChange={(e) => handleChildChange(index, e)}
+                        placeholder="Last name"
+                        required
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <InputField
+                        label="Date of birth"
+                        name="dateOfBirth"
+                        type="date"
+                        value={child.dateOfBirth}
+                        onChange={(e) => handleChildChange(index, e)}
+                        placeholder="Date of birth"
+                        required
+                      />
+                      <SelectField
+                        label="Gender"
+                        name="gender"
+                        value={child.gender}
+                        onChange={(e) => handleChildChange(index, e)}
+                        options={GENDER_OPTIONS}
+                        required
+                      />
+                    </div>
+
+                    <OptionalSection
+                      label="Additional details (optional)"
+                      open={optionalOpen}
+                      onToggle={() => toggleChildOptional(index)}
                     >
-                      Save child
-                    </Button>
-                  )}
-                  {index === childrenForms.length - 1 && (
-                    <Button
-                      type="button"
-                      onClick={addChildForm}
-                      className="h-auto bg-foreground px-6 py-2 text-center text-sm text-primary lg:px-12 lg:text-base"
-                    >
-                      Add another child
-                    </Button>
-                  )}
-                  {index > 0 && (
-                    <Button
-                      type="button"
-                      onClick={() => removeChildForm(index)}
-                      variant="destructive"
-                      className="h-auto px-4 py-2 text-center text-sm"
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Remove
-                    </Button>
-                  )}
-                </div>
+                      <InputField
+                        label="Child email"
+                        name="email"
+                        type="email"
+                        value={child.email}
+                        onChange={(e) => handleChildChange(index, e)}
+                        placeholder="child@example.com"
+                        hint="Optional: used for progress updates"
+                      />
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <InputField
+                          label="School name"
+                          name="schoolName"
+                          value={child.schoolName}
+                          onChange={(e) => handleChildChange(index, e)}
+                          placeholder="School name"
+                        />
+                        <InputField
+                          label="Country / region"
+                          name="country"
+                          value={child.country}
+                          onChange={(e) => handleChildChange(index, e)}
+                          placeholder="Country"
+                        />
+                      </div>
+                      <InputField
+                        label="House address"
+                        name="streetAddress"
+                        value={child.streetAddress}
+                        onChange={(e) => handleChildChange(index, e)}
+                        placeholder="House number and street name"
+                      />
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <InputField
+                          label="City"
+                          name="city"
+                          value={child.city}
+                          onChange={(e) => handleChildChange(index, e)}
+                          placeholder="City"
+                        />
+                        <InputField
+                          label="Phone"
+                          name="phone"
+                          value={child.phone}
+                          onChange={(e) => handleChildChange(index, e)}
+                          placeholder="Phone"
+                        />
+                      </div>
+                      <InputField
+                        label="Postal code"
+                        name="postalCode"
+                        value={child.postalCode}
+                        onChange={(e) => handleChildChange(index, e)}
+                        placeholder="Postal code"
+                      />
+                    </OptionalSection>
+
+                    <div className="flex flex-wrap gap-3">
+                      {!child.saved && (
+                        <Button type="button" onClick={() => saveChildForm(index)}>
+                          Save child
+                        </Button>
+                      )}
+                      {index === childrenForms.length - 1 && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={addChildForm}
+                        >
+                          Add another child
+                        </Button>
+                      )}
+                      {index > 0 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          onClick={() => removeChildForm(index)}
+                          className="text-muted-foreground hover:text-destructive"
+                        >
+                          <Trash2 className="size-4" aria-hidden="true" />
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+                  </section>
+                );
+              })}
+
+              <div className="flex border-t border-border pt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => navigate({ to: "/subscriptions" })}
+                >
+                  Cancel
+                </Button>
               </div>
-            );
-          })}
-
-          {/* Cancel */}
-          <div className="flex flex-col md:flex-row justify-between mt-6 gap-y-4 md:gap-y-0 md:gap-x-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => navigate({ to: "/subscriptions" })}
-              className="h-auto w-full bg-card px-6 py-2 text-muted-foreground md:w-auto"
-            >
-              Cancel
-            </Button>
-          </div>
-        </form>
+            </form>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Divider */}
-      <div className="px-1">
-        <Separator orientation="vertical" className="ml-8" />
-      </div>
+      <Card className="lg:sticky lg:top-24 lg:self-start">
+        <CardContent className="flex flex-col gap-6">
+          <Heading level={3} className="text-h4">Review your registration</Heading>
 
-      {/* Right Side - Order Summary */}
-      <div className="flex flex-col lg:px-14 px-5 lg:p-8 p-4 lg:gap-y-20 gap-y-8">
-        <div className="flex flex-col lg:gap-y-8 gap-y-4">
-          <p className="lg:text-4xl text-2xl text-foreground">
-            Review your registration
-          </p>
-        </div>
-
-        {savedChildren.length > 0 ? (
-          savedChildren.map((child, index) => (
-            <div
-              key={index}
-              className="flex flex-col lg:gap-y-5 gap-y-2"
-            >
-              <div className="flex flex-row gap-x-3">
-                <AppImage className="lg:h-24 lg:w-24" src={robo} alt="" />
-                <div className="lg:text-base text-wrap text-sm flex flex-col gap-1">
-	                  <p className="text-wrap">
-	                    <span className="font-bold">Subscription plan:</span>{" "}
-	                    <span className="font-normal">{plan}</span>
-	                  </p>
-                  <p className="text-wrap">
-                    <span className="font-bold">Name:</span>{" "}
-                    <span className="font-normal">
+          <div className="flex flex-col gap-4">
+            {savedChildren.length > 0 ? (
+              savedChildren.map((child, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "flex items-start gap-3 rounded-2xl border border-border bg-card p-3",
+                  )}
+                >
+                  <AppImage className="size-16 rounded-2xl bg-muted p-2" src={robo} alt="" />
+                  <div className="flex min-w-0 flex-1 flex-col gap-1">
+                    <Text weight="semibold">
                       {child.firstName} {child.lastName}
-                    </span>
-                  </p>
-                  <p className="text-wrap">
-                    <span className="font-bold">Billing:</span>{" "}
-                    <span className="font-normal">{billingCycle}</span>
-                  </p>
+                    </Text>
+                    <Text size="xs" tone="muted">
+                      {plan} · {billingCycle}
+                    </Text>
+                  </div>
+                  <Text size="sm" weight="semibold">
+                    {formatPKR(price)}
+                  </Text>
                 </div>
-                <p className="text-wrap">
-                  <span className="font-bold">Price:</span>{" "}
-                  <span className="font-normal">{price?.toLocaleString()}</span>
-                </p>
-              </div>
+              ))
+            ) : (
+              <Text size="sm" tone="muted">
+                No children registered yet.
+              </Text>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-2 border-t border-border pt-4">
+            <SummaryRow
+              label="Number of children"
+              value={savedChildren.length}
+            />
+            <SummaryRow
+              label="Price per child"
+              value={formatPKR(price || 0)}
+            />
+            <div className="border-t border-border pt-2">
+              <SummaryRow
+                label="Total"
+                value={formatPKR(totalPrice || 0)}
+                highlight
+              />
             </div>
-          ))
-        ) : (
-          <div className="flex flex-col lg:gap-y-5 gap-y-2">
-            <p className="font-medium text-[16px] leading-[20px] tracking-[0] text-muted-foreground">
-              No children registered yet
-            </p>
           </div>
-        )}
 
-        <Separator />
-
-        <div className="flex flex-col gap-y-2">
-          <div className="flex justify-between">
-            <p className="text-muted-foreground font-lato text-base">
-              Number of Children
-            </p>
-            <p className="font-lato text-[20px]">{savedChildren.length}</p>
-          </div>
-          <div className="flex justify-between">
-            <p className="text-muted-foreground font-lato text-base">
-              Price per Child
-            </p>
-            <p className="font-lato text-[20px]">
-              PKR {price?.toLocaleString() || "0"}
-            </p>
-          </div>
-          <div className="flex justify-between">
-            <p className="text-muted-foreground font-lato text-base">Total Price</p>
-            <p className="font-lato text-[20px] font-extrabold">
-              PKR {totalPrice?.toLocaleString() || "0"}
-            </p>
-          </div>
-        </div>
-
-        <Separator />
-
-        <div className="flex justify-center">
           <Button
-            type="submit"
-            className="h-auto bg-foreground py-2 text-center text-sm text-primary lg:px-20 lg:text-xl"
+            type="button"
+            size="marketing"
             onClick={handleSubmit}
             disabled={saveParentMutation.isPending}
+            className="w-full"
           >
-            {saveParentMutation.isPending ? "Processing..." : "Continue to register"}
+            {saveParentMutation.isPending ? "Processing…" : "Continue to register"}
           </Button>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

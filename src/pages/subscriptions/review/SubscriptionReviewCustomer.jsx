@@ -2,6 +2,11 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { CheckCircle2 } from "lucide-react";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Display, Heading, Text } from "@/components/ui/typography";
 import { useActivateSubscriptionMutation } from "../../../hooks/useAccount";
 import { formatDisplayDate } from "../../../lib/subscription";
 import {
@@ -9,18 +14,17 @@ import {
   loadSubscriptionCheckout,
   updateSubscriptionCheckout,
 } from "../../../lib/subscriptionCheckout";
-import { Button } from "@/components/ui/button";
 
 const SummaryLine = ({ label, value, highlight = false }) => (
   <div className="flex items-start justify-between gap-4">
-    <p className="text-sm text-muted-foreground">{label}</p>
-    <p
-      className={`text-right text-sm ${
-        highlight ? "font-bold text-foreground" : "text-foreground"
-      }`}
+    <Text size="sm" tone="muted">{label}</Text>
+    <Text
+      size="sm"
+      weight={highlight ? "semibold" : "regular"}
+      className="text-right"
     >
       {value}
-    </p>
+    </Text>
   </div>
 );
 
@@ -35,14 +39,14 @@ const SubscriptionReviewCustomer = () => {
   const [checkout, setCheckout] = useState(() => loadSubscriptionCheckout());
   const [activationError, setActivationError] = useState("");
   const activateSubscriptionMutation = useActivateSubscriptionMutation(
-    checkout?.parent?.userId
+    checkout?.parent?.userId,
   );
 
   if (!checkout) {
     return (
-      <div className="px-6 py-12 text-center text-foreground">
-        Loading checkout...
-      </div>
+      <Text tone="muted" className="px-6 py-12 text-center">
+        Loading checkout…
+      </Text>
     );
   }
 
@@ -54,7 +58,7 @@ const SubscriptionReviewCustomer = () => {
 
       if (!checkout.plan?.planId || !checkout.plan?.billingCycle) {
         throw new Error(
-          "Subscription plan is missing. Start the subscription checkout again."
+          "Subscription plan is missing. Start the subscription checkout again.",
         );
       }
 
@@ -81,7 +85,7 @@ const SubscriptionReviewCustomer = () => {
 
   const childrenLabel = checkout.children
     .map((child) =>
-      [child.firstName, child.lastName].filter(Boolean).join(" ")
+      [child.firstName, child.lastName].filter(Boolean).join(" "),
     )
     .filter(Boolean)
     .join(", ");
@@ -99,20 +103,18 @@ const SubscriptionReviewCustomer = () => {
 
   if (isActive) {
     return (
-      <div>
-        <div className="flex justify-center px-4 py-10 md:px-10">
-          <div className="flex w-full max-w-xl flex-col gap-y-6 rounded-3xl border border-border bg-card p-8">
+      <div className="flex justify-center px-4 py-10 md:px-10">
+        <Card className="w-full max-w-xl">
+          <CardContent className="flex flex-col gap-5">
             <div className="flex items-center gap-3">
-              <CheckCircle2 className="h-8 w-8 text-success" />
-              <p className="text-2xl font-bold text-foreground">
-                Subscription active
-              </p>
+              <CheckCircle2 className="size-7 text-success" aria-hidden="true" />
+              <Display size="md">Subscription active</Display>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <Text tone="muted">
               The subscription is active and course access has been assigned to
               the registered children.
-            </p>
-            <div className="flex flex-col gap-y-3 rounded-2xl bg-muted p-5">
+            </Text>
+            <div className="flex flex-col gap-3 rounded-2xl bg-muted p-5">
               <SummaryLine label="Order code" value={checkout.orderCode} />
               <SummaryLine label="Children" value={checkout.totalChildren} />
               <SummaryLine
@@ -128,44 +130,42 @@ const SubscriptionReviewCustomer = () => {
             <div className="flex flex-wrap gap-3">
               <Button
                 type="button"
-                className="h-auto rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-primary"
                 onClick={() => navigate({ to: "/Dashboard/ChildProfile" })}
               >
-                Open Child Dashboard
+                Open child dashboard
               </Button>
               <Button
                 type="button"
                 variant="outline"
-                className="h-auto rounded-full border-foreground px-5 py-3 text-sm font-semibold text-foreground"
                 onClick={() => navigate({ to: "/" })}
               >
-                Back to Home
+                Back to home
               </Button>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="flex justify-center px-4 py-8 md:px-10">
-        <div className="flex w-full max-w-2xl flex-col gap-y-6 rounded-3xl border border-border bg-card p-6 md:p-10">
-          <div className="flex flex-col gap-y-2">
-            <p className="text-2xl md:text-3xl font-bold text-foreground">
+    <div className="flex justify-center px-4 py-8 md:px-10">
+      <Card className="w-full max-w-2xl">
+        <CardContent className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <Heading level={2} className="text-h3">
               Confirm your subscription
-            </p>
-            <p className="text-sm text-muted-foreground">
+            </Heading>
+            <Text tone="muted">
               Everything looks right? Confirm to activate access for your child.
-            </p>
+            </Text>
           </div>
 
-          <div className="flex flex-col gap-y-4 rounded-2xl bg-muted p-5">
-	            <SummaryLine
-	              label="Subscription plan"
-	              value={checkout.plan.name || "Subscription"}
-	            />
+          <div className="flex flex-col gap-4 rounded-2xl bg-muted p-5">
+            <SummaryLine
+              label="Subscription plan"
+              value={checkout.plan.name || "Subscription"}
+            />
             <SummaryLine
               label="Billing cycle"
               value={checkout.plan.billingCycle || "N/A"}
@@ -209,33 +209,33 @@ const SubscriptionReviewCustomer = () => {
             </div>
           </div>
 
-          {activationError ? (
-            <p className="rounded-2xl bg-destructive/10 p-3 text-sm font-semibold text-destructive">
-              {activationError}
-            </p>
-          ) : null}
+          {activationError && (
+            <Alert variant="destructive">
+              <AlertDescription>{activationError}</AlertDescription>
+            </Alert>
+          )}
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <button
-              type="button"
-              className="text-sm font-semibold text-foreground underline underline-offset-4"
-              onClick={() => navigate({ to: "/subscriptions/payment" })}
-            >
-              Edit details
-            </button>
             <Button
               type="button"
-              className="h-auto rounded-full bg-foreground px-8 py-3 text-sm font-semibold text-primary"
+              variant="link"
+              onClick={() => navigate({ to: "/subscriptions/payment" })}
+              className="self-start"
+            >
+              Edit details
+            </Button>
+            <Button
+              type="button"
               onClick={handleConfirmOrder}
               disabled={activateSubscriptionMutation.isPending}
             >
               {activateSubscriptionMutation.isPending
-                ? "Confirming..."
+                ? "Confirming…"
                 : "Confirm subscription"}
             </Button>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
