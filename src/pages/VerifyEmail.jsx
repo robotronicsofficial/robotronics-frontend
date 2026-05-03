@@ -1,13 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import { useVerifyEmailMutation } from '../hooks/useAuthMutations';
+
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { Display, Heading, Text } from "@/components/ui/typography";
+import { useVerifyEmailMutation } from "../hooks/useAuthMutations";
 import {
   buildAuthRedirectSearch,
   consumePostAuthRedirect,
   getSafeRedirectPath,
-} from '../utils/authRedirect';
+} from "../utils/authRedirect";
 
 const VerifyEmail = () => {
   const search = useSearch({ strict: false });
@@ -63,47 +65,40 @@ const VerifyEmail = () => {
   }, [search.token, navigate, verifyEmailMutation, redirectPath]);
 
   return (
-    <main className="mx-auto flex min-h-[80vh] max-w-xl flex-col items-center justify-center px-4 text-center">
-        {status === 'verifying' && (
-          <>
-            <Spinner className="size-14 text-primary" />
-            <h1
-              aria-live="polite"
-              className="mt-6 text-xl font-semibold text-foreground"
-            >
-              Verifying your email...
-            </h1>
-          </>
-        )}
+    <main className="mx-auto flex min-h-[80vh] max-w-xl flex-col items-center justify-center gap-4 px-4 text-center">
+      {status === "verifying" && (
+        <>
+          <Spinner className="size-14 text-primary" />
+          <Heading level={2} aria-live="polite" className="mt-6">
+            Verifying your email…
+          </Heading>
+        </>
+      )}
 
-        {status === 'success' && (
-          <>
-            <h1 className="text-3xl font-bold text-primary">
-              Email Verified!
-            </h1>
-            <p aria-live="polite" className="mb-6 mt-3 text-muted-foreground">
-              {message} Redirecting to login page...
-            </p>
-            <Spinner className="size-8 text-primary" />
-          </>
-        )}
+      {status === "success" && (
+        <>
+          <Display size="md" tone="brand">Email verified</Display>
+          <Text tone="muted" aria-live="polite">
+            {message} Redirecting to login…
+          </Text>
+          <Spinner className="size-8 text-primary" />
+        </>
+      )}
 
-        {status === 'error' && (
-          <div role="alert" aria-live="polite" className="flex flex-col items-center gap-6">
-            <h1 className="text-3xl font-bold text-destructive">
-              Verification Failed
-            </h1>
-            <p className="text-muted-foreground">{message}</p>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => navigate({ to: '/Signup' })}
-              disabled={verifyEmailMutation.isPending}
-            >
-              {verifyEmailMutation.isPending ? "Retrying…" : "Try Again"}
-            </Button>
-          </div>
-        )}
+      {status === "error" && (
+        <div role="alert" aria-live="polite" className="flex flex-col items-center gap-4">
+          <Display size="md" className="text-destructive">Verification failed</Display>
+          <Text tone="muted">{message}</Text>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate({ to: "/Signup" })}
+            disabled={verifyEmailMutation.isPending}
+          >
+            {verifyEmailMutation.isPending ? "Retrying…" : "Try again"}
+          </Button>
+        </div>
+      )}
     </main>
   );
 };

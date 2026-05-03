@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Display, Text } from "@/components/ui/typography";
 import { useResetPasswordMutation } from "../hooks/useAuthMutations";
 import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
 import {
@@ -21,7 +22,9 @@ import {
 const RequirementCheck = ({ isValid, text }) => (
   <div className="flex items-center gap-2">
     <Badge variant={isValid ? "default" : "destructive"} className="size-4 rounded-full p-0" />
-    <span className={`text-xs ${isValid ? 'text-success' : 'text-destructive'}`}>{text}</span>
+    <Text size="xs" tone={isValid ? "default" : "default"} className={isValid ? "text-success" : "text-destructive"}>
+      {text}
+    </Text>
   </div>
 );
 
@@ -87,14 +90,15 @@ const ResetPassword = () => {
   return (
     <div className="bg-background" id="reset-password">
       <div className={getHeaderOffsetClass("mx-auto flex w-full max-w-md flex-col items-center gap-6 px-6 pb-20 md:px-10 lg:px-16")}>
-        <p className="text-4xl text-foreground">Reset Password</p>
-        <form
-          onSubmit={handleSubmit}
-          className="flex w-full flex-col gap-4"
-        >
-          <div className="flex w-full flex-col gap-1">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <Display size="md">Reset password</Display>
+          <Text tone="muted">Choose a new password to sign back in.</Text>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
+          <div className="flex w-full flex-col gap-1.5">
             <div className="flex items-center justify-between">
-              <Label className="text-sm">New Password</Label>
+              <Label>New password</Label>
               <PasswordVisibilityButton
                 isVisible={showPassword}
                 onToggle={togglePasswordVisibility}
@@ -110,24 +114,15 @@ const ResetPassword = () => {
               required
             />
             <div className="mt-2 grid grid-cols-2 gap-2">
-              <RequirementCheck
-                isValid={hasMinLength}
-                text="8+ characters"
-              />
-              <RequirementCheck
-                isValid={hasNumber}
-                text="Contains number"
-              />
-              <RequirementCheck
-                isValid={hasSymbol}
-                text="Contains symbol"
-              />
+              <RequirementCheck isValid={hasMinLength} text="8+ characters" />
+              <RequirementCheck isValid={hasNumber} text="Contains number" />
+              <RequirementCheck isValid={hasSymbol} text="Contains symbol" />
             </div>
           </div>
 
-          <div className="flex w-full flex-col gap-1">
+          <div className="flex w-full flex-col gap-1.5">
             <div className="flex items-center justify-between">
-              <Label className="text-sm">Confirm Password</Label>
+              <Label>Confirm password</Label>
               <PasswordVisibilityButton
                 isVisible={showConfirmPassword}
                 onToggle={toggleConfirmPasswordVisibility}
@@ -143,15 +138,16 @@ const ResetPassword = () => {
               required
             />
             {confirmPassword && (
-              <p className={`text-xs ${passwordsMatch ? 'text-success' : 'text-destructive'}`}>
-                {passwordsMatch ? 'Passwords match!' : 'Passwords do not match'}
-              </p>
+              <Text size="xs" className={passwordsMatch ? "text-success" : "text-destructive"}>
+                {passwordsMatch ? "Passwords match" : "Passwords do not match"}
+              </Text>
             )}
           </div>
 
           <Button
             type="submit"
-            className="h-auto w-full rounded-3xl bg-foreground py-3 text-background"
+            size="marketing"
+            className="w-full"
             disabled={
               resetPasswordMutation.isPending ||
               !password ||
@@ -161,19 +157,22 @@ const ResetPassword = () => {
               !hasSymbol
             }
           >
-            {resetPasswordMutation.isPending ? "Resetting…" : "Reset Password"}
+            {resetPasswordMutation.isPending ? "Resetting…" : "Reset password"}
           </Button>
 
           <Button
             type="button"
-            onClick={() => navigate({ to: '/Login' })}
+            onClick={() => navigate({ to: "/Login" })}
             variant="link"
-            className="text-foreground"
           >
-            Back to Login
+            Back to login
           </Button>
         </form>
-        {error && <p role="alert" className="text-destructive text-sm">{error}</p>}
+        {error && (
+          <Text role="alert" size="sm" className="text-destructive">
+            {error}
+          </Text>
+        )}
       </div>
     </div>
   );
