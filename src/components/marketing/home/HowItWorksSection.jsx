@@ -26,14 +26,14 @@ export const HowItWorksSection = () => (
     <Container size="wide">
       <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
         <Eyebrow>How it works</Eyebrow>
-        <Heading level={2} className="text-display-md">
-          Four steps from sign-up to skills.
+        <Heading level={2} className="text-display-md text-balance">
+          From sign-up to skills, in four steps.
         </Heading>
-        <Text size="lg" tone="muted">
+        <Text size="lg" tone="muted" className="text-pretty">
           No setup, no hardware, no special trainers. Pick a plan and your child starts learning the same day.
         </Text>
       </div>
-      <Stepper steps={STEPS} activeIndex={STEPS.length - 1} className="mt-14" />
+      <Stepper steps={STEPS} activeIndex={STEPS.length - 1} className="mt-16 max-w-5xl mx-auto" />
     </Container>
   </section>
 );

@@ -18,7 +18,7 @@ const Brand = () => (
       aria-hidden="true"
       className="h-8 w-8 shrink-0"
     />
-    <span className="text-h5 font-semibold tracking-tight">Robotronics</span>
+    <span className="text-body font-semibold tracking-tight">Robotronics</span>
   </Link>
 );
 
