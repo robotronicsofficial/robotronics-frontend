@@ -7,14 +7,18 @@ import { CART_PATH, CONTACT_PATH, COURSE_PATH } from "@/router/paths";
 
 export const PRIMARY_NAV = [
   { to: COURSE_PATH, label: "Courses" },
-  { to: "/International/Iservices", label: "Services" },
-  { to: "/shop", label: "Shop" },
   { to: "/subscriptions", label: "Plans" },
+  { to: "/shop", label: "Shop" },
 ];
 
 export const RESOURCES_NAV = {
   label: "Resources",
   items: [
+    {
+      to: "/International/Iservices",
+      label: "Services",
+      description: "What we run for schools and homes.",
+    },
     {
       to: "/International/videoGallery",
       label: "Events",
@@ -25,16 +29,26 @@ export const RESOURCES_NAV = {
       label: "Blog",
       description: "Articles, tutorials, and stories.",
     },
-  ],
-};
-
-export const COMPANY_NAV = {
-  label: "Company",
-  items: [
-    { to: "/aboutUs", label: "About" },
-    { to: "/International/home", label: "International" },
-    { to: "/CareerJob", label: "Careers" },
-    { to: CONTACT_PATH, label: "Contact" },
+    {
+      to: "/aboutUs",
+      label: "About",
+      description: "Who we are and why we build.",
+    },
+    {
+      to: "/International/home",
+      label: "International",
+      description: "Programs around the world.",
+    },
+    {
+      to: "/CareerJob",
+      label: "Careers",
+      description: "Join the team.",
+    },
+    {
+      to: CONTACT_PATH,
+      label: "Contact",
+      description: "Talk to us.",
+    },
   ],
 };
 

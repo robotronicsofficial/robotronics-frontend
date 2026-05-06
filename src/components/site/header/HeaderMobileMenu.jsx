@@ -14,7 +14,6 @@ import { cn } from "@/lib/utils";
 
 import {
   ACCOUNT_NAV,
-  COMPANY_NAV,
   PRIMARY_NAV,
   RESOURCES_NAV,
 } from "./headerNav.config";
@@ -42,7 +41,6 @@ const HeaderMobileMenu = () => {
   const groups = [
     PRIMARY_NAV,
     RESOURCES_NAV.items,
-    COMPANY_NAV.items,
     currentUser ? ACCOUNT_NAV : null,
   ].filter(Boolean);
 

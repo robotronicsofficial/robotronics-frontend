@@ -11,7 +11,7 @@ import {
 import { Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 
-import { COMPANY_NAV, PRIMARY_NAV, RESOURCES_NAV } from "./headerNav.config";
+import { PRIMARY_NAV, RESOURCES_NAV } from "./headerNav.config";
 
 const baseLinkClass =
   "inline-flex h-9 items-center rounded-md px-3 text-body-sm font-medium transition-colors";
@@ -91,7 +91,6 @@ const HeaderNav = () => (
       <NavLink key={item.to} {...item} />
     ))}
     <NavDropdown {...RESOURCES_NAV} />
-    <NavDropdown {...COMPANY_NAV} />
   </nav>
 );
 
