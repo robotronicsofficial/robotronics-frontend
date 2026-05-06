@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heading, Text } from "@/components/ui/typography";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
-import { formatPKR } from "@/utils/formatPrice";
+import { useFormatMoney } from "@/utils/formatPrice";
 import { cn } from "@/lib/utils";
 import {
   useSavedItems,
@@ -18,6 +18,7 @@ import {
 const CourseProduct = ({ title, id, image, price, duration, category }) => {
   const { data: savedItems = [] } = useSavedItems();
   const toggleSavedItemMutation = useToggleSavedItemMutation();
+  const formatMoney = useFormatMoney();
   const isSaved = savedItems.some(
     (item) => item.itemType === "course" && item.itemId === id,
   );
@@ -75,7 +76,7 @@ const CourseProduct = ({ title, id, image, price, duration, category }) => {
             {duration ?? "Self-paced"}
           </div>
           <Text size="sm" weight="semibold" className="text-foreground">
-            {price != null ? formatPKR(price) : "Included"}
+            {price != null ? formatMoney(price) : "Included"}
           </Text>
         </div>
 

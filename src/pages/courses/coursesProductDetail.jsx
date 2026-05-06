@@ -16,7 +16,7 @@ import { createCourseCommerceItem } from "@/lib/commerceItems";
 import { useCourse } from "../../hooks/useCourses";
 import { useCartStore } from "@/stores/cartStore";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
-import { formatPKR } from "@/utils/formatPrice";
+import { useFormatMoney } from "@/utils/formatPrice";
 
 const HIGHLIGHTS = [
   {
@@ -40,6 +40,7 @@ const CoursesProductDetail = () => {
   const { id } = useParams({ strict: false });
   const navigate = useNavigate();
   const addToCart = useCartStore((state) => state.addToCart);
+  const formatMoney = useFormatMoney();
 
   const { data: course, isLoading, error } = useCourse(id);
 
@@ -102,7 +103,7 @@ const CoursesProductDetail = () => {
                 )}
                 {course.price != null && (
                   <Badge variant="outline" className="font-semibold">
-                    {formatPKR(course.price)}
+                    {formatMoney(course.price)}
                   </Badge>
                 )}
               </div>

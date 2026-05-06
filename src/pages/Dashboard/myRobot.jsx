@@ -14,9 +14,11 @@ import {
   useRemoveSavedItemMutation,
   useSavedItems,
 } from "../../hooks/useSavedItems";
-import { formatPKR } from "@/utils/formatPrice";
+import { useFormatMoney } from "@/utils/formatPrice";
 
-const SavedItemRow = ({ item, onView, onRemove }) => (
+const SavedItemRow = ({ item, onView, onRemove }) => {
+  const formatMoney = useFormatMoney();
+  return (
   <Card>
     <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
       <button
@@ -50,7 +52,7 @@ const SavedItemRow = ({ item, onView, onRemove }) => (
 
       <div className="flex items-center gap-3 sm:flex-col sm:items-end sm:gap-2">
         <Text size="sm" weight="semibold" className="text-foreground">
-          {formatPKR(item?.price)}
+          {formatMoney(item?.price)}
         </Text>
         <div className="flex items-center gap-2">
           <Button
@@ -75,7 +77,8 @@ const SavedItemRow = ({ item, onView, onRemove }) => (
       </div>
     </CardContent>
   </Card>
-);
+  );
+};
 
 const MyRobot = () => {
   const navigate = useNavigate();
@@ -85,6 +88,7 @@ const MyRobot = () => {
     error,
   } = useSavedItems();
   const removeSavedItemMutation = useRemoveSavedItemMutation();
+  const formatMoney = useFormatMoney();
 
   const totalValue = useMemo(
     () => items.reduce((sum, item) => sum + Number(item?.price || 0), 0),
@@ -118,7 +122,7 @@ const MyRobot = () => {
             <span className="font-semibold">{items.length}</span>
             <span className="mx-2 text-muted-foreground">·</span>
             <span className="text-muted-foreground">Value:</span>{" "}
-            <span className="font-semibold">{formatPKR(totalValue)}</span>
+            <span className="font-semibold">{formatMoney(totalValue)}</span>
           </div>
         </div>
 

@@ -8,7 +8,7 @@ import { Heading, Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import { openExternalUrl } from "@/utils/openExternalUrl";
 import { usePayments } from "@/hooks/useAccount";
-import { formatPKR } from "@/utils/formatPrice";
+import { useFormatMoney } from "@/utils/formatPrice";
 
 const resolveInvoiceUrl = (payment = {}) =>
   payment.invoiceUrl || payment.invoiceDownloadUrl || payment.downloadUrl || "";
@@ -24,6 +24,7 @@ const InvoiceField = ({ label, value }) => (
 
 const InvoiceCard = ({ invoice, fullName, onUnavailable }) => {
   const invoiceUrl = resolveInvoiceUrl(invoice);
+  const formatMoney = useFormatMoney();
   return (
     <Card>
       <CardContent className="flex flex-col gap-5">
@@ -32,7 +33,7 @@ const InvoiceCard = ({ invoice, fullName, onUnavailable }) => {
             {fullName}
           </Text>
           <Text size="sm" weight="semibold" className="text-foreground">
-            {formatPKR(invoice.amount)}
+            {formatMoney(invoice.amount)}
           </Text>
         </div>
 

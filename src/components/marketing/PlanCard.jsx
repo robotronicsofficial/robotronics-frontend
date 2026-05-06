@@ -5,7 +5,7 @@ import { Check, ChevronsRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Heading, Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
-import { formatPKR } from "@/utils/formatPrice";
+import { useFormatMoney } from "@/utils/formatPrice";
 
 /* Two-zone pricing card: a gradient header carries the price (and the
    "Popular" tag when applicable), and a clean white body carries the name,
@@ -47,6 +47,7 @@ export const PlanCard = ({
   const billedLabel =
     cycle === "annual" ? "Billed annually" : "Billed monthly";
   const headerBg = TONE_BACKGROUNDS[tone] ?? TONE_BACKGROUNDS.default;
+  const formatMoney = useFormatMoney();
 
   const ctaButton = (
     <Button
@@ -94,7 +95,7 @@ export const PlanCard = ({
         <div className="flex flex-col gap-1">
           <div className="flex items-baseline gap-2">
             <span className="text-display-md font-bold leading-none text-foreground">
-              {formatPKR(price)}
+              {formatMoney(price)}
             </span>
             <span className="text-body-sm text-foreground/70">/month</span>
           </div>

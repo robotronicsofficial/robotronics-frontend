@@ -18,7 +18,7 @@ import {
   buildSubscriptionCheckout,
   saveSubscriptionCheckout,
 } from "../../../lib/subscriptionCheckout";
-import { formatPKR } from "@/utils/formatPrice";
+import { useFormatMoney } from "@/utils/formatPrice";
 import robo from "../../../assets/child.webp";
 
 const DRAFT_STORAGE_KEY = "robotronics:subscriptionDraft";
@@ -183,6 +183,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   const billingCycle = useSelectedPlanStore((state) => state.billingCycle);
   const { data: loadedParent } = useCurrentParent(currentUser?._id);
   const saveParentMutation = useSaveParentMutation();
+  const formatMoney = useFormatMoney();
 
   const [parentForm, setParentForm] = useState(EMPTY_PARENT_FORM);
   const [childrenForms, setChildrenForms] = useState([{ ...EMPTY_CHILD_FORM }]);
@@ -743,7 +744,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                     </Text>
                   </div>
                   <Text size="sm" weight="semibold">
-                    {formatPKR(price)}
+                    {formatMoney(price)}
                   </Text>
                 </div>
               ))
@@ -761,12 +762,12 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
             />
             <SummaryRow
               label="Price per child"
-              value={formatPKR(price || 0)}
+              value={formatMoney(price || 0)}
             />
             <div className="border-t border-border pt-2">
               <SummaryRow
                 label="Total"
-                value={formatPKR(totalPrice || 0)}
+                value={formatMoney(totalPrice || 0)}
                 highlight
               />
             </div>

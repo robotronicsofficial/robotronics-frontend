@@ -13,9 +13,11 @@ import {
   useRemoveSavedItemMutation,
   useSavedItems,
 } from "@/hooks/useSavedItems";
-import { formatPKR } from "@/utils/formatPrice";
+import { useFormatMoney } from "@/utils/formatPrice";
 
-const WishListItem = ({ item, onRemove, onView, onMoveToCart }) => (
+const WishListItem = ({ item, onRemove, onView, onMoveToCart }) => {
+  const formatMoney = useFormatMoney();
+  return (
   <Card>
     <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
       <Button
@@ -57,7 +59,7 @@ const WishListItem = ({ item, onRemove, onView, onMoveToCart }) => (
 
       <div className="flex items-center gap-4">
         <Text size="sm" weight="semibold" className="text-foreground">
-          {formatPKR(item.price)}
+          {formatMoney(item.price)}
         </Text>
         <Button type="button" onClick={() => onMoveToCart(item)} className="rounded-full">
           Add to cart
@@ -65,7 +67,8 @@ const WishListItem = ({ item, onRemove, onView, onMoveToCart }) => (
       </div>
     </CardContent>
   </Card>
-);
+  );
+};
 
 const WishListD = () => {
   const addToCart = useCartStore((state) => state.addToCart);

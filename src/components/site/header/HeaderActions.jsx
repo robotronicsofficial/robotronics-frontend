@@ -15,6 +15,7 @@ import { useAuth } from "@/contexts/useAuth";
 import { cn } from "@/lib/utils";
 import { selectCartQuantity, useCartStore } from "@/stores/cartStore";
 
+import CurrencySelector from "./CurrencySelector";
 import { ACCOUNT_NAV, CART_PATH } from "./headerNav.config";
 
 const getDisplayName = (user) =>
@@ -130,6 +131,9 @@ const HeaderActions = () => {
 
   return (
     <div className="flex items-center gap-1">
+      <div className="hidden lg:flex">
+        <CurrencySelector />
+      </div>
       <IconButtonLink
         to="/Search"
         label="Search"
