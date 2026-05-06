@@ -770,6 +770,9 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                 highlight
               />
             </div>
+            <Text size="xs" tone="muted">
+              Each child is billed separately on the same parent account.
+            </Text>
           </div>
 
           <Button

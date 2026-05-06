@@ -114,7 +114,7 @@ const SubscriptionPlans = () => {
         )}
 
         <Text tone="muted" size="sm" className="mt-10 text-center">
-          Cancel anytime. Every plan includes child profiles and full course access.
+          Cancel anytime. Each child has their own subscription — add multiple kids at the same per-child rate.
         </Text>
       </Container>
     </section>

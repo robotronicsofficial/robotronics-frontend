@@ -98,7 +98,9 @@ export const PlanCard = ({
             </span>
             <span className="text-body-sm text-foreground/70">/month</span>
           </div>
-          <span className="text-caption text-foreground/60">{billedLabel}</span>
+          <span className="text-caption text-foreground/60">
+            Per child · {billedLabel}
+          </span>
         </div>
       </div>
 

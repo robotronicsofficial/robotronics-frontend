@@ -17,7 +17,12 @@ const FAQ_ITEMS = [
   {
     question: "Who can register for a learning subscription?",
     answer:
-      "Any child aged 6 and up. Parents create one account and add a profile per child — siblings each need their own active subscription.",
+      "Any child aged 6 and up. Parents create one account and add a profile per child.",
+  },
+  {
+    question: "If I have more than one child, do I pay once or per child?",
+    answer:
+      "Per child. Each kid is a separate subscription on the same parent account — there's no shared family seat. Add as many children as you like at checkout; each is billed at the same per-child rate.",
   },
   {
     question: "Do you provide e-certificates?",
