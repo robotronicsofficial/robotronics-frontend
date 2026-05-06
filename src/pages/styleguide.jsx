@@ -213,21 +213,21 @@ const TypographySection = () => (
       <Subhead>Body</Subhead>
       <TypeRow label="body-lg" sample="1.125rem">
         <Text size="lg">
-          AI, Coding, Robotics &amp; 30+ skills — all in one subscription. Built for curious kids, trusted by parents.
+          AI, Coding, Robotics &amp; 30+ skills under one parent account. Every active child has a separate paid seat.
         </Text>
       </TypeRow>
       <TypeRow label="body" sample="1rem">
         <Text>
-          AI, Coding, Robotics &amp; 30+ skills — all in one subscription. Built for curious kids, trusted by parents.
+          AI, Coding, Robotics &amp; 30+ skills under one parent account. Every active child has a separate paid seat.
         </Text>
       </TypeRow>
       <TypeRow label="body-sm" sample="0.875rem">
         <Text size="sm">
-          AI, Coding, Robotics &amp; 30+ skills — all in one subscription.
+          One parent account, separate paid seats for each active learner.
         </Text>
       </TypeRow>
       <TypeRow label="caption" sample="0.8125rem">
-        <Text size="xs">Like Netflix — but for learning.</Text>
+        <Text size="xs">Skill-building, not screen time.</Text>
       </TypeRow>
       <TypeRow label="eyebrow" sample="0.75rem · tracked">
         <Eyebrow>Future Skills · Ages 6–16</Eyebrow>
@@ -579,7 +579,7 @@ const InverseSection = () => (
           Turn screen time into <Highlight>skill time</Highlight>.
         </Heading>
         <Text size="lg" className="text-background/80">
-          AI, Coding, Robotics — all in one simple subscription.
+          AI, Coding, Robotics, and clear paid seats for every active learner.
         </Text>
         <Button size="marketingLg">Start Learning Now</Button>
       </div>

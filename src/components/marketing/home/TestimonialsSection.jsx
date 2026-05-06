@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 const TESTIMONIALS = [
   {
-    quote: "It's like Netflix — but for learning. My daughter actually asks for screen time now.",
+    quote: "Screen time finally became skill time. My daughter actually asks to build the next project.",
     name: "Sana Iqbal",
     role: "Parent of two · Karachi",
   },

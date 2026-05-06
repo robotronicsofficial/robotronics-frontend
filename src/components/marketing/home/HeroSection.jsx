@@ -11,18 +11,15 @@ import { RotatingText } from "@/components/ui/rotating-text";
 import { ShinyText } from "@/components/ui/shiny-text";
 import { Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { HeroBuildLab } from "./visuals/HeroBuildLab";
 
-/* Hand-marker scribble used to underline a single keyword. Default mustard
-   under the headline keyword on the left; re-colored to black under
-   `builders` on the right. Same SVG, two paint jobs — a tiny brand pattern
-   that ties the two halves together. */
 const MarkerUnderline = ({ className }) => (
   <svg
     aria-hidden="true"
     viewBox="0 0 220 18"
     preserveAspectRatio="none"
     className={cn(
-      "pointer-events-none absolute -bottom-2 left-0 h-3 w-full text-primary",
+      "pointer-events-none block h-3 w-full text-primary",
       className,
     )}
   >
@@ -38,7 +35,6 @@ const MarkerUnderline = ({ className }) => (
   </svg>
 );
 
-/* Inline rating row that sits beneath the CTAs — cheap, high-signal trust. */
 const RatingRow = () => (
   <div className="flex flex-wrap items-center gap-3">
     <div className="flex items-center gap-0.5 text-primary">
@@ -53,9 +49,6 @@ const RatingRow = () => (
   </div>
 );
 
-/* Compact 4-step strip — surfaces the program flow on first paint so a
-   visitor sees how short the path to value is before scrolling. The full
-   HowItWorksSection below repeats each step with its description. */
 const HERO_STEPS = ["Choose a plan", "Select courses", "Learn with AI", "Track progress"];
 
 const HeroStepStrip = () => (
@@ -87,31 +80,8 @@ const TrustItem = ({ value, label }) => (
   </div>
 );
 
-/* Editorial poster — drenched mustard ground, static multi-line claim.
-   Type bottom-anchored to the block (justify-end) so the empty top reads
-   as deliberate negative space, the way a magazine cover does. Marker
-   squiggle echoed under `builders` mirrors the squiggle on the left
-   headline, turning a one-off ornament into a brand pattern. */
-const HeroPoster = () => (
-  <div className="relative flex aspect-[4/5] w-full flex-col justify-end overflow-hidden rounded-3xl bg-primary p-10 text-primary-foreground lg:aspect-auto lg:h-full lg:min-h-[36rem] lg:p-12">
-    <h2 className="font-sans font-black tracking-[-0.04em] text-primary-foreground leading-[0.88] text-[clamp(3.25rem,10vw,9rem)]">
-      The new
-      <br />
-      <span className="relative inline-block">
-        builders
-        <MarkerUnderline className="-bottom-3 h-5 text-primary-foreground" />
-      </span>
-      .
-    </h2>
-  </div>
-);
-
-/* Product demo video — same frame as HeroPoster so swapping doesn't shift
-   layout. Falls back to the poster when no URL is configured. Mustard
-   ground stays during load; the video itself sits muted/looping/inline
-   so it works on iOS and won't grab audio focus. */
 const HeroVideo = ({ src }) => (
-  <div className="relative flex aspect-[4/5] w-full overflow-hidden rounded-3xl bg-primary lg:aspect-auto lg:h-full lg:min-h-[36rem]">
+  <div className="relative flex aspect-[4/5] w-full overflow-hidden rounded-3xl bg-primary lg:aspect-auto lg:h-[34rem]">
     <video
       src={src}
       autoPlay
@@ -131,17 +101,11 @@ HeroVideo.propTypes = {
 
 const HeroVisual = () => {
   const videoUrl = import.meta.env.VITE_HERO_VIDEO_URL;
-  return videoUrl ? <HeroVideo src={videoUrl} /> : <HeroPoster />;
+  return videoUrl ? <HeroVideo src={videoUrl} /> : <HeroBuildLab />;
 };
 
 export const HeroSection = () => (
-  <section className="relative isolate overflow-hidden bg-background pt-header pb-24 md:pb-32">
-    {/* Atmosphere — three layers, lightest in front:
-        1. Dither shader (z-30 below page): subtle mustard grain across the
-           whole hero. Lazy-loaded, paused off-screen.
-        2. Mustard radial glows: warm light bias toward the visual side.
-        3. Dot grid: gentle structure to anchor the typography column.
-       Mustard stays a highlight, not a wash. */}
+  <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
     <DitherBackdrop className="-z-30" />
     <div
       aria-hidden="true"
@@ -177,9 +141,9 @@ export const HeroSection = () => (
     />
 
     <Container size="wide">
-      <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-[1.1fr_1fr] lg:items-stretch lg:gap-20">
-        <div className="flex flex-col items-start justify-center gap-7">
-          <h1 className="font-sans font-extrabold tracking-[-0.035em] text-foreground text-balance text-[clamp(3rem,6vw+1rem,6.5rem)] leading-[0.95] max-w-2xl">
+      <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] lg:items-center lg:gap-14 xl:gap-16">
+        <div className="flex min-w-0 flex-col items-start justify-center gap-5">
+          <h1 className="font-sans font-extrabold tracking-[-0.035em] text-foreground text-balance text-[clamp(2.75rem,4.8vw+1rem,5.5rem)] leading-[0.96] max-w-2xl">
             <ShinyText>Future skills</ShinyText>
             <span className="block">for your child,</span>
             <span className="block">
@@ -188,17 +152,20 @@ export const HeroSection = () => (
                 <RotatingText
                   words={["AI", "robotics", "coding"]}
                   className="text-primary"
+                  decoration={<MarkerUnderline />}
+                  decorationClassName="-bottom-1"
                 />
-                <MarkerUnderline />
               </span>
               .
             </span>
           </h1>
 
           <Text size="lg" tone="muted" className="max-w-lg">
-            AI, coding, robotics &amp; 30+ skills, all in one simple
-            subscription. Like Netflix, but for learning.
+            AI, coding, and robotics for every child. One parent account,
+            separate paid seats.
           </Text>
+
+          <HeroStepStrip />
 
           <div className="flex flex-wrap items-center gap-3">
             <Magnet>
@@ -216,9 +183,7 @@ export const HeroSection = () => (
 
           <RatingRow />
 
-          <HeroStepStrip />
-
-          <dl className="mt-2 flex flex-wrap items-start gap-x-12 gap-y-6 border-t border-border pt-8">
+          <dl className="mt-1 flex flex-wrap items-start gap-x-12 gap-y-5 border-t border-border pt-6">
             <TrustItem
               value={<CountUp to={150000} suffix="+" />}
               label="Kids learning"
@@ -231,8 +196,8 @@ export const HeroSection = () => (
           </dl>
         </div>
 
-        <div className="flex w-full justify-center lg:justify-end">
-          <div className="w-full max-w-md lg:max-w-none">
+        <div className="flex min-w-0 w-full justify-center lg:justify-end">
+          <div className="w-full min-w-0 max-w-md lg:max-w-[40rem]">
             <HeroVisual />
           </div>
         </div>

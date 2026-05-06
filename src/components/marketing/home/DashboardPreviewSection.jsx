@@ -58,7 +58,9 @@ export const DashboardPreviewSection = () => (
             See exactly what your child is learning.
           </Heading>
           <Text size="lg" tone="muted">
-            Track progress, manage every child profile from a single account, and watch certificates roll in. No more guessing what happened during screen time.
+            Track progress, manage every child profile from one parent account,
+            and keep billing clear: every active learner has a separate paid
+            subscription.
           </Text>
           <ul className="mt-2 flex flex-col gap-3 text-body-sm text-foreground">
             <li className="flex items-center gap-2">
@@ -83,7 +85,7 @@ export const DashboardPreviewSection = () => (
                 Family overview
               </span>
               <span className="text-caption text-muted-foreground">
-                3 active learners
+                3 active learners · billed separately
               </span>
             </div>
             <div className="rounded-full bg-primary-soft px-3 py-1 text-caption font-semibold text-primary">

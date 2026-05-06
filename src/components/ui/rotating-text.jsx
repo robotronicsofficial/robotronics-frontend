@@ -1,22 +1,35 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { cn } from "@/lib/utils";
 
-/* Cycles through `words` on a fixed interval, swapping with a vertical
-   slide. The widest word reserves horizontal space (invisible sizer), so
-   the surrounding line never reflows. Reduced-motion users see the first
-   word, frozen. The clip box has `pb-[0.15em]` so descenders (g, y, p)
-   aren't shaved by `overflow-hidden`. */
+/* Cycles through `words` on a fixed interval. The longest word reserves line
+   width so headlines do not re-wrap; the current-word sizer keeps decorations
+   synced to the active text width. */
 export const RotatingText = ({
   words,
   interval = 2400,
   className,
   itemClassName,
+  decoration,
+  decorationClassName,
 }) => {
   const reduced = useReducedMotion();
   const [index, setIndex] = useState(0);
+  const [activeWidth, setActiveWidth] = useState(0);
+  const activeWordRef = useRef(null);
+
+  const measureActiveWord = useCallback((node) => {
+    activeWordRef.current = node;
+    if (node) setActiveWidth(node.offsetWidth);
+  }, []);
 
   useEffect(() => {
     if (reduced || words.length <= 1) return;
@@ -27,23 +40,48 @@ export const RotatingText = ({
     return () => clearInterval(id);
   }, [words.length, interval, reduced]);
 
+  useLayoutEffect(() => {
+    const node = activeWordRef.current;
+    if (!node) return undefined;
+
+    const updateWidth = () => setActiveWidth(node.offsetWidth);
+    updateWidth();
+
+    if (typeof ResizeObserver === "undefined") return undefined;
+
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, [index]);
+
   const longest = words.reduce((a, b) => (b.length > a.length ? b : a), "");
 
   return (
     <span
       className={cn(
-        "relative inline-block align-baseline whitespace-nowrap",
+        "relative inline-block pb-[0.22em] align-baseline whitespace-nowrap",
         className,
       )}
     >
       <span aria-hidden="true" className="invisible">
         {longest}
       </span>
-      <span className="absolute inset-0 overflow-hidden pb-[0.15em]">
-        <AnimatePresence mode="wait" initial={false}>
+      <span
+        ref={measureActiveWord}
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none invisible absolute left-0 top-0 inline-block",
+          itemClassName,
+        )}
+      >
+        {words[index]}
+      </span>
+      <span className="absolute left-0 top-0 h-[1.08em] w-full overflow-hidden pb-[0.16em]">
+        <AnimatePresence initial={false}>
           <motion.span
             key={words[index]}
-            className={cn("absolute inset-0", itemClassName)}
+            className={cn("absolute left-0 top-0 inline-block", itemClassName)}
             initial={{ y: "100%" }}
             animate={{ y: "0%" }}
             exit={{ y: "-100%" }}
@@ -53,6 +91,20 @@ export const RotatingText = ({
           </motion.span>
         </AnimatePresence>
       </span>
+      {decoration && (
+        <span
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute bottom-0 left-0 block transition-[width] duration-200 ease-out",
+            decorationClassName,
+          )}
+          style={{
+            width: activeWidth ? `${activeWidth}px` : undefined,
+          }}
+        >
+          {decoration}
+        </span>
+      )}
     </span>
   );
 };
@@ -62,4 +114,6 @@ RotatingText.propTypes = {
   interval: PropTypes.number,
   className: PropTypes.string,
   itemClassName: PropTypes.string,
+  decoration: PropTypes.node,
+  decorationClassName: PropTypes.string,
 };

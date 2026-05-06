@@ -14,7 +14,8 @@ export const FinalCTASection = () => (
           Turn screen time into <ShinyText>skill time</ShinyText>.
         </Heading>
         <Text size="lg" className="text-background/75">
-          AI, Coding, Robotics — all in one simple subscription. Start your child today.
+          AI, Coding, Robotics, and clear paid seats for every active learner.
+          Start your child today.
         </Text>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Button asChild size="marketingLg">

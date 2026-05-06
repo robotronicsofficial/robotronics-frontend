@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
 import { Container } from "@/components/ui/container";
-import { Heading, Text } from "@/components/ui/typography";
+import { Text } from "@/components/ui/typography";
 import { FormInput, FormSelect } from "@/components/forms/FormControls";
 import { cn } from "@/lib/utils";
 import { useVideoGallery } from "@/hooks/useVideoGallery";

@@ -119,7 +119,8 @@ const Footer = () => (
         <div className="flex flex-col gap-5">
           <Brand />
           <Text size="sm" className="max-w-sm text-background/70">
-            AI, Coding, Robotics &amp; 30+ skills — all in one subscription. Built for curious kids, trusted by parents and schools worldwide.
+            AI, Coding, Robotics &amp; 30+ skills under one parent account.
+            Every active child has a separate paid seat.
           </Text>
           <div className="mt-2 flex flex-col gap-2">
             <Eyebrow className="text-background/55">Follow along</Eyebrow>

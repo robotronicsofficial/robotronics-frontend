@@ -2,8 +2,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import PropTypes from "prop-types";
 import { Children, createElement } from "react";
 
-import { cn } from "@/lib/utils";
-
 /* Stagger-reveal children on viewport entry. Each direct child is wrapped
    in a motion shell. `as` controls the parent tag, `itemAs` the per-item
    wrapper. Reduced-motion users see the list rendered instantly without a
