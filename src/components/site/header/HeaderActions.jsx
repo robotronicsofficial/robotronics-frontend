@@ -131,9 +131,6 @@ const HeaderActions = () => {
 
   return (
     <div className="flex items-center gap-1">
-      <div className="hidden lg:flex">
-        <CurrencySelector />
-      </div>
       <IconButtonLink
         to="/Search"
         label="Search"
@@ -141,10 +138,17 @@ const HeaderActions = () => {
       >
         <Search aria-hidden="true" />
       </IconButtonLink>
+      <div className="hidden lg:flex">
+        <CurrencySelector />
+      </div>
       <IconButtonLink to={CART_PATH} label="Cart" count={cartQuantity}>
         <ShoppingCart aria-hidden="true" />
       </IconButtonLink>
-      <div className="hidden items-center gap-1 lg:flex lg:pl-2">
+      <span
+        aria-hidden="true"
+        className="mx-2 hidden h-5 w-px bg-border lg:block"
+      />
+      <div className="hidden items-center gap-1 lg:flex">
         {currentUser ? (
           <UserMenu user={currentUser} onSignOut={handleSignOut} />
         ) : (
