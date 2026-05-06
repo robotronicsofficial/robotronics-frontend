@@ -1,3 +1,4 @@
+import { BuildShowcaseSection } from "@/components/marketing/home/BuildShowcaseSection";
 import { DashboardPreviewSection } from "@/components/marketing/home/DashboardPreviewSection";
 import { FaqSection } from "@/components/marketing/home/FaqSection";
 import { FeaturesSection } from "@/components/marketing/home/FeaturesSection";
@@ -12,6 +13,7 @@ const Home = () => (
   <>
     <HeroSection />
     <HowItWorksSection />
+    <BuildShowcaseSection />
     <FeaturesSection />
     <PricingSection />
     <DashboardPreviewSection />
