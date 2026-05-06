@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { BillingToggle } from "@/components/ui/billing-toggle";
 import { Container } from "@/components/ui/container";
 import { Heading, Text } from "@/components/ui/typography";
+import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdown";
 import { PlanCard } from "@/components/marketing/PlanCard";
 import { cn } from "@/lib/utils";
 
@@ -160,6 +161,7 @@ export const PricingSection = () => {
             savingsLabel={config.savingsLabel}
             className="mt-2"
           />
+          {cycle === "annual" && <AnnualOfferCountdown />}
         </div>
         <div
           key={audience}

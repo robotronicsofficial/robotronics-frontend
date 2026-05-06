@@ -5,6 +5,7 @@ import { BillingToggle } from "@/components/ui/billing-toggle";
 import { Container } from "@/components/ui/container";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
+import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdown";
 import { PlanCard } from "@/components/marketing/PlanCard";
 import { usePlans } from "../../hooks/usePlans";
 import { useSelectedPlanStore } from "../../stores/selectedPlanStore";
@@ -76,6 +77,7 @@ const SubscriptionPlans = () => {
             savingsLabel="Save up to 60%"
             className="mt-4"
           />
+          {cycle === "annual" && <AnnualOfferCountdown />}
         </div>
 
         {error ? (
