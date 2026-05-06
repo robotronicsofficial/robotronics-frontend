@@ -57,8 +57,9 @@ const Header = () => {
       )}
     >
       <div
+        data-scrolled={scrolled || undefined}
         className={cn(
-          "mx-auto flex h-16 items-center justify-between gap-6 backdrop-blur transition-[max-width,background-color,border-radius,box-shadow,border-color,padding] duration-300 ease-out",
+          "group/header mx-auto flex h-16 items-center justify-between gap-6 backdrop-blur transition-[max-width,background-color,border-radius,box-shadow,border-color,padding] duration-300 ease-out",
           scrolled
             ? "max-w-[68rem] rounded-full border border-border bg-background/85 px-4 shadow-lg supports-backdrop-filter:bg-background/70 sm:px-5"
             : "max-w-shell-wide border border-transparent bg-background/35 px-6 supports-backdrop-filter:bg-background/25 lg:px-8",

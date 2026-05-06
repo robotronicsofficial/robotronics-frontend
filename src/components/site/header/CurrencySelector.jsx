@@ -1,47 +1,60 @@
-import { Globe } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import {
   SUPPORTED_CURRENCIES,
   selectCurrencyCode,
   useCurrencyStore,
 } from "@/stores/currencyStore";
 
-/* Compact currency switcher for the header. Trigger shows the active
-   code; the menu lists code + descriptive label so a first-time user
-   knows what each abbreviation means. The icon is a single tell that
-   the control is region/locale, not generic settings. */
+/* Header micro-control. Reuses the Resources-nav dropdown shape so the
+   header reads as one consistent piece — no form-input borders, no
+   verbose Intl.NumberFormat row, just a tight code + label per item. */
 const CurrencySelector = () => {
   const code = useCurrencyStore(selectCurrencyCode);
   const setCode = useCurrencyStore((state) => state.setCode);
 
   return (
-    <Select value={code} onValueChange={setCode}>
-      <SelectTrigger
-        size="sm"
+    <DropdownMenu>
+      <DropdownMenuTrigger
         aria-label="Currency"
-        className="h-9 gap-2 rounded-full px-3"
+        className="group inline-flex h-9 items-center gap-1 rounded-md px-2.5 text-body-sm font-medium text-muted-foreground outline-none transition-[padding,gap] duration-200 ease-out hover:bg-muted hover:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground group-data-[scrolled]/header:gap-0 group-data-[scrolled]/header:px-1.5"
       >
-        <Globe aria-hidden="true" className="size-3.5 text-muted-foreground" />
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent align="end" className="min-w-44">
-        {SUPPORTED_CURRENCIES.map((currency) => (
-          <SelectItem key={currency.code} value={currency.code}>
-            <span className="flex items-center gap-2">
-              <span className="font-semibold tabular-nums">{currency.code}</span>
-              <span className="text-muted-foreground">{currency.label}</span>
-            </span>
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+        {code}
+        <ChevronDown
+          aria-hidden="true"
+          className="size-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180 group-data-[scrolled]/header:hidden"
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-44 p-1">
+        {SUPPORTED_CURRENCIES.map((currency) => {
+          const active = currency.code === code;
+          return (
+            <DropdownMenuItem
+              key={currency.code}
+              onSelect={() => setCode(currency.code)}
+              className={cn(
+                "flex items-center justify-between gap-3 rounded-sm px-2.5 py-1.5",
+                active && "bg-secondary",
+              )}
+            >
+              <span className="font-semibold tabular-nums text-foreground">
+                {currency.code}
+              </span>
+              <span className="text-caption text-muted-foreground">
+                {currency.label}
+              </span>
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
