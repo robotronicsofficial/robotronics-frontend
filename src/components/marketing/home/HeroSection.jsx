@@ -148,14 +148,14 @@ export const HeroSection = () => (
       className="pointer-events-none absolute inset-0 -z-20"
     >
       <div
-        className="absolute -right-40 -top-40 h-[44rem] w-[44rem] rounded-full opacity-25 blur-3xl"
+        className="absolute -right-40 -top-40 h-[44rem] w-[44rem] rounded-full opacity-25 blur-2xl"
         style={{
           background:
             "radial-gradient(closest-side, var(--color-primary-soft), transparent 70%)",
         }}
       />
       <div
-        className="absolute -bottom-40 -left-32 h-[28rem] w-[28rem] rounded-full opacity-20 blur-3xl"
+        className="absolute -bottom-40 -left-32 h-[28rem] w-[28rem] rounded-full opacity-20 blur-2xl"
         style={{
           background:
             "radial-gradient(closest-side, var(--color-primary-soft), transparent 70%)",
