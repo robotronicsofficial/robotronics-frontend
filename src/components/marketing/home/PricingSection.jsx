@@ -173,7 +173,12 @@ export const PricingSection = () => {
           )}
         >
           {config.plans.map((plan) => (
-            <PlanCard key={plan.name} cycle={cycle} {...plan} />
+            <PlanCard
+              key={plan.name}
+              cycle={cycle}
+              giftable={audience === "parent"}
+              {...plan}
+            />
           ))}
         </div>
       </Container>

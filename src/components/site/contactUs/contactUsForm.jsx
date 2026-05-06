@@ -1,6 +1,7 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearch } from "@tanstack/react-router";
 
 import { BrandIcon } from "@/components/ui/brand-icons";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,13 @@ import { FormSelect } from "@/components/forms/FormControls";
 import FloatingField from "@/components/forms/FloatingField";
 import { useContactRequestMutation } from "@/hooks/useIntake";
 import { cn } from "@/lib/utils";
+
+const buildGiftIntro = (plan, cycle) => {
+  const cycleLabel = cycle === "annual" ? "annual" : cycle === "monthly" ? "monthly" : "";
+  const planText = plan ? `the ${plan} plan` : "a learning plan";
+  const cycleSuffix = cycleLabel ? ` (${cycleLabel} billing)` : "";
+  return `Hi — I'd like to gift ${planText}${cycleSuffix}. Please tell me how to set this up and what details you'll need from me.`;
+};
 
 const CONTACT_SERVICES = {
   school: [
@@ -118,6 +126,20 @@ const ContactUsForm = () => {
   const contactRequestMutation = useContactRequestMutation();
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [status, setStatus] = useState(null);
+  const search = useSearch({ strict: false });
+
+  useEffect(() => {
+    if (search?.topic !== "gift") return;
+    setFormData((prev) =>
+      prev.message
+        ? prev
+        : {
+            ...prev,
+            userType: prev.userType || "parent",
+            message: buildGiftIntro(search.plan, search.cycle),
+          },
+    );
+  }, [search?.topic, search?.plan, search?.cycle]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

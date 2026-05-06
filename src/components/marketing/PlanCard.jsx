@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 import { Link } from "@tanstack/react-router";
-import { Check, ChevronsRight } from "lucide-react";
+import { Check, ChevronsRight, Gift } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Heading, Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { CONTACT_PATH } from "@/router/paths";
 import { useFormatMoney } from "@/utils/formatPrice";
 
 /* Two-zone pricing card: a gradient header carries the price (and the
@@ -41,6 +42,7 @@ export const PlanCard = ({
   tone = "default",
   popular = false,
   cycle = "monthly",
+  giftable = true,
   className,
 }) => {
   const price = cycle === "annual" ? pricing.annualMonthly : pricing.monthly;
@@ -132,7 +134,19 @@ export const PlanCard = ({
           ))}
         </ul>
 
-        <div className="mt-auto pt-2">{ctaButton}</div>
+        <div className="mt-auto flex flex-col gap-2 pt-2">
+          {ctaButton}
+          {giftable && (
+            <Link
+              to={CONTACT_PATH}
+              search={{ topic: "gift", plan: name, cycle }}
+              className="inline-flex items-center justify-center gap-2 rounded-full px-3 py-2 text-body-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <Gift aria-hidden="true" className="size-4" />
+              Gift this plan
+            </Link>
+          )}
+        </div>
       </div>
     </article>
   );
@@ -154,5 +168,6 @@ PlanCard.propTypes = {
   tone: PropTypes.oneOf(["default", "tinted", "highlighted"]),
   popular: PropTypes.bool,
   cycle: PropTypes.oneOf(["monthly", "annual"]),
+  giftable: PropTypes.bool,
   className: PropTypes.string,
 };
