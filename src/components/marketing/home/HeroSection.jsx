@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight, ChevronRight, Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -50,6 +50,30 @@ const RatingRow = () => (
       parent reviews
     </span>
   </div>
+);
+
+/* Compact 4-step strip — surfaces the program flow on first paint so a
+   visitor sees how short the path to value is before scrolling. The full
+   HowItWorksSection below repeats each step with its description. */
+const HERO_STEPS = ["Choose a plan", "Select courses", "Learn with AI", "Track progress"];
+
+const HeroStepStrip = () => (
+  <ol
+    aria-label="How it works"
+    className="flex flex-wrap items-center gap-x-3 gap-y-2 text-body-sm"
+  >
+    {HERO_STEPS.map((label, index) => (
+      <li key={label} className="flex items-center gap-2">
+        <span className="grid size-6 shrink-0 place-items-center rounded-full bg-primary text-caption font-semibold text-primary-foreground">
+          {index + 1}
+        </span>
+        <span className="font-medium text-foreground">{label}</span>
+        {index < HERO_STEPS.length - 1 && (
+          <ChevronRight aria-hidden="true" className="size-3.5 text-border" />
+        )}
+      </li>
+    ))}
+  </ol>
 );
 
 const TrustItem = ({ value, label }) => (
@@ -168,6 +192,8 @@ export const HeroSection = () => (
           </div>
 
           <RatingRow />
+
+          <HeroStepStrip />
 
           <dl className="mt-2 flex flex-wrap items-start gap-x-12 gap-y-6 border-t border-border pt-8">
             <TrustItem
