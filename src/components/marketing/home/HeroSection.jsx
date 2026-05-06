@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, ChevronRight, Star } from "lucide-react";
 
@@ -87,16 +88,10 @@ const TrustItem = ({ value, label }) => (
 );
 
 /* Editorial poster — drenched mustard ground, static multi-line claim.
-   Three moves over the previous pass:
-     1. Type bottom-anchored to the block (justify-end) — empty top reads
-        as deliberate negative space, the way a magazine cover does, not
-        as a gap waiting for content.
-     2. Marker squiggle echoed under `builders` in black, mirroring the
-        mustard squiggle under the rotating headline keyword on the left.
-        Turns a one-off ornament into a brand pattern.
-     3. Bigger type + no shadow — the block reads as a region of the page,
-        not a card floating on it. Confidence comes from scale + commitment
-        to the color, not from chrome. */
+   Type bottom-anchored to the block (justify-end) so the empty top reads
+   as deliberate negative space, the way a magazine cover does. Marker
+   squiggle echoed under `builders` mirrors the squiggle on the left
+   headline, turning a one-off ornament into a brand pattern. */
 const HeroPoster = () => (
   <div className="relative flex aspect-[4/5] w-full flex-col justify-end overflow-hidden rounded-3xl bg-primary p-10 text-primary-foreground lg:aspect-auto lg:h-full lg:min-h-[36rem] lg:p-12">
     <h2 className="font-sans font-black tracking-[-0.04em] text-primary-foreground leading-[0.88] text-[clamp(3.25rem,10vw,9rem)]">
@@ -110,6 +105,34 @@ const HeroPoster = () => (
     </h2>
   </div>
 );
+
+/* Product demo video — same frame as HeroPoster so swapping doesn't shift
+   layout. Falls back to the poster when no URL is configured. Mustard
+   ground stays during load; the video itself sits muted/looping/inline
+   so it works on iOS and won't grab audio focus. */
+const HeroVideo = ({ src }) => (
+  <div className="relative flex aspect-[4/5] w-full overflow-hidden rounded-3xl bg-primary lg:aspect-auto lg:h-full lg:min-h-[36rem]">
+    <video
+      src={src}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-label="Product demo"
+      className="size-full object-cover"
+    />
+  </div>
+);
+
+HeroVideo.propTypes = {
+  src: PropTypes.string.isRequired,
+};
+
+const HeroVisual = () => {
+  const videoUrl = import.meta.env.VITE_HERO_VIDEO_URL;
+  return videoUrl ? <HeroVideo src={videoUrl} /> : <HeroPoster />;
+};
 
 export const HeroSection = () => (
   <section className="relative isolate overflow-hidden bg-background pt-header pb-24 md:pb-32">
@@ -210,7 +233,7 @@ export const HeroSection = () => (
 
         <div className="flex w-full justify-center lg:justify-end">
           <div className="w-full max-w-md lg:max-w-none">
-            <HeroPoster />
+            <HeroVisual />
           </div>
         </div>
       </div>
