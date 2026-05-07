@@ -1,13 +1,9 @@
 import { useMemo, useState } from "react";
 
 import CourseProduct from "@/components/site/course/courseProduct";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import { Container } from "@/components/ui/container";
-import {
-  Display,
-  Eyebrow,
-  Highlight,
-  Text,
-} from "@/components/ui/typography";
+import { Display, Highlight, Text } from "@/components/ui/typography";
 import { useCourses } from "@/hooks/useCourses";
 import { cn } from "@/lib/utils";
 
@@ -45,19 +41,16 @@ const Courses = () => {
 
   return (
     <>
-      <section className="bg-background pt-header pb-12">
-        <Container size="wide">
-          <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">
-            <Eyebrow>Courses</Eyebrow>
-            <Display size="lg">
-              Pick a track. <Highlight>Build something real.</Highlight>
-            </Display>
-            <Text size="lg" tone="muted" className="max-w-2xl">
-              30+ structured courses across AI, coding, robotics, and entrepreneurship — every one of them ships with project code so kids actually build.
-            </Text>
-          </div>
-        </Container>
-      </section>
+      <MarketingHero
+        size="page"
+        eyebrow="Courses"
+        title={
+          <Display size="md">
+            Pick a track. <Highlight>Build something real.</Highlight>
+          </Display>
+        }
+        subtitle="30+ structured courses across AI, coding, robotics, and entrepreneurship — every one of them ships with project code so kids actually build."
+      />
 
       <section className="bg-background pb-24">
         <Container size="wide">

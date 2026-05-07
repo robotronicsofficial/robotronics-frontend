@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { Heart, Minus, Plus } from "lucide-react";
+import { ArrowRight, Heart, Minus, Plus, ShoppingCart } from "lucide-react";
 
 import AppImage from "../../AppImage";
 import CenteredState from "@/components/layout/CenteredState";
+import HeroAtmospherics from "@/components/marketing/HeroAtmospherics";
 import StarRating from "@/components/rating/StarRating";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -71,27 +72,33 @@ const Intro = () => {
 
   if (isLoading) {
     return (
-      <CenteredState className="bg-background py-16">
-        <Text tone="muted">Loading product…</Text>
-      </CenteredState>
+      <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
+        <CenteredState className="py-16">
+          <Text tone="muted">Loading product…</Text>
+        </CenteredState>
+      </section>
     );
   }
 
   if (productError) {
     return (
-      <CenteredState className="bg-background py-16">
-        <Text className="text-destructive">
-          {productError.message || "We couldn't load this product right now."}
-        </Text>
-      </CenteredState>
+      <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
+        <CenteredState className="py-16">
+          <Text className="text-destructive">
+            {productError.message || "We couldn't load this product right now."}
+          </Text>
+        </CenteredState>
+      </section>
     );
   }
 
   if (!product) {
     return (
-      <CenteredState className="bg-background py-16">
-        <Text tone="muted">Product not found.</Text>
-      </CenteredState>
+      <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
+        <CenteredState className="py-16">
+          <Text tone="muted">Product not found.</Text>
+        </CenteredState>
+      </section>
     );
   }
 
@@ -100,11 +107,16 @@ const Intro = () => {
   const productImages = product.images || [];
 
   return (
-    <section className="bg-background py-12">
+    <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
+      <HeroAtmospherics variant="full" />
+
       <Container size="wide">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2" data-aos="fade-up">
+        <div
+          className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14"
+          data-aos="fade-up"
+        >
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-5">
-            <div className="aspect-square w-full overflow-hidden rounded-3xl bg-muted lg:flex-1">
+            <div className="aspect-square w-full overflow-hidden rounded-3xl border border-border bg-card lg:flex-1">
               <AppImage
                 src={selectedImage}
                 alt={product.name || "Product"}
@@ -143,15 +155,20 @@ const Intro = () => {
           </div>
 
           <div className="flex flex-col gap-6">
-            <Display size="md" className="text-balance">
-              {product.name}
-            </Display>
+            <div className="flex flex-col gap-3">
+              <Eyebrow>Robotronics shop</Eyebrow>
+              <Display size="md" className="text-balance">
+                {product.name}
+              </Display>
+            </div>
 
             <div className="flex flex-wrap items-center gap-4">
               {hasRating ? (
                 <StarRating value={productRating} className="text-h5" />
               ) : (
-                <Text size="sm" tone="muted">No ratings yet</Text>
+                <Text size="sm" tone="muted">
+                  No ratings yet
+                </Text>
               )}
               <Text size="sm" tone="muted">
                 {product.productSold ?? 0} sold · {product.productWatched ?? 0} viewed
@@ -208,6 +225,7 @@ const Intro = () => {
                     if (cartItem) addToCart(cartItem);
                   }}
                 >
+                  <ShoppingCart className="size-4" aria-hidden="true" />
                   Add to cart
                 </Button>
                 <Button
@@ -227,14 +245,20 @@ const Intro = () => {
           </div>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-10 md:grid-cols-2">
-          <div className="flex flex-col gap-3" data-aos="fade-up">
+        <div className="grid grid-cols-1 gap-4 pt-16 md:grid-cols-2">
+          <div
+            className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6"
+            data-aos="fade-up"
+          >
             <Eyebrow>Description</Eyebrow>
             <Text tone="muted">
               {product?.description || "No description available."}
             </Text>
           </div>
-          <div className="flex flex-col gap-3" data-aos="fade-up">
+          <div
+            className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6"
+            data-aos="fade-up"
+          >
             <Eyebrow>Fits and features</Eyebrow>
             {Array.isArray(product?.features) && product.features.length > 0 ? (
               <ul className="flex flex-col gap-2">
@@ -247,33 +271,32 @@ const Intro = () => {
                 ))}
               </ul>
             ) : (
-              <Text size="sm" tone="muted">No features listed.</Text>
+              <Text size="sm" tone="muted">
+                No features listed.
+              </Text>
             )}
           </div>
         </div>
 
         <div
-          className="mt-16 grid grid-cols-1 items-center gap-10 rounded-3xl bg-muted p-8 lg:grid-cols-2 lg:p-14"
+          className="mt-16 flex flex-col gap-8 rounded-3xl border border-border bg-muted/40 p-8 lg:flex-row lg:items-center lg:justify-between lg:p-12"
           id="shopPages"
         >
-          <div className="flex flex-col gap-4">
-            <Heading level={2} tone="brand" className="text-h2" data-aos="fade-right">
-              Keep exploring
-            </Heading>
-            <Heading level={3} className="text-h3" data-aos="fade-left">
-              Live catalog
+          <div className="flex max-w-xl flex-col gap-3">
+            <Eyebrow>Keep exploring</Eyebrow>
+            <Heading level={2} className="text-h3" data-aos="fade-right">
+              Browse the live catalog
             </Heading>
             <Text tone="muted" data-aos="fade-up">
-              Browse the live store inventory instead of a filler promo block.
+              Step away from this product to see every kit, robotics module, and
+              learning bundle currently in stock.
             </Text>
-            <div data-aos="fade-up">
-              <Button type="button" onClick={() => navigate({ to: "/shop" })}>
-                Browse all products
-              </Button>
-            </div>
           </div>
-          <div data-aos="fade-left">
-            <AppImage src={robo} alt="Product spotlight illustration" className="w-full" />
+          <div className="flex flex-wrap items-center gap-3" data-aos="fade-left">
+            <Button type="button" onClick={() => navigate({ to: "/shop" })}>
+              Browse all products
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </Button>
           </div>
         </div>
       </Container>

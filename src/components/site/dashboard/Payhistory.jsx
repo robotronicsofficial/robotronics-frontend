@@ -4,7 +4,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heading, Text } from "@/components/ui/typography";
+import { Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import { openExternalUrl } from "@/utils/openExternalUrl";
 import { usePayments } from "@/hooks/useAccount";
@@ -80,15 +80,6 @@ const PayHistory = () => {
 
   return (
     <DashboardLayout contentClassName="px-6">
-      <div className="mb-8 flex flex-col gap-1">
-        <Heading level={1} className="text-h1">
-          Payment history
-        </Heading>
-        <Text tone="muted" className="max-w-2xl">
-          New payments appear within a few minutes after completion.
-        </Text>
-      </div>
-
       {isLoading ? (
         <Text tone="muted">Loading payment history…</Text>
       ) : errorMessage ? (

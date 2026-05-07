@@ -1,8 +1,9 @@
+import PropTypes from "prop-types";
 import { useMemo } from "react";
 import { useParams, useNavigate } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import {
@@ -43,13 +44,18 @@ const RELATED_ITEM_CONFIG = {
 const RelatedItemsMessage = ({ children, tone = "default" }) => (
   <div
     className={cn(
-      "rounded-2xl border border-border bg-card p-10 text-center",
+      "rounded-xl border border-border bg-card p-10 text-center",
       tone === "error" ? "text-destructive" : "text-foreground",
     )}
   >
     {children}
   </div>
 );
+
+RelatedItemsMessage.propTypes = {
+  children: PropTypes.node,
+  tone: PropTypes.oneOf(["default", "error"]),
+};
 
 const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
   const navigate = useNavigate();
@@ -71,75 +77,89 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
   const topThree = useMemo(() => items.slice(0, 3), [items]);
 
   return (
-    <section className="bg-background py-14">
-      <Container size="wide" className="flex flex-col gap-6">
-        <div className="flex flex-col gap-1" data-aos="fade-up">
-          <Eyebrow>{config.subtitle}</Eyebrow>
-          <Heading level={2} className="text-h3">You may also like</Heading>
-        </div>
-
-        {loading ? (
-          <RelatedItemsMessage>{config.loadingLabel}</RelatedItemsMessage>
-        ) : error ? (
-          <RelatedItemsMessage tone="error">{config.errorLabel}</RelatedItemsMessage>
-        ) : topThree.length === 0 ? (
-          <RelatedItemsMessage>
-            <div className="flex flex-col items-center gap-4">
-              <Text tone="muted">{config.emptyLabel}</Text>
-              <Button
-                type="button"
-                onClick={() => navigate({ to: config.browsePath })}
-              >
-                {config.browseLabel}
-              </Button>
-            </div>
-          </RelatedItemsMessage>
-        ) : (
+    <section className="bg-background py-20 md:py-24">
+      <Container size="wide">
+        <div className="flex flex-col gap-10">
           <div
-            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+            className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
             data-aos="fade-up"
           >
-            {topThree.map((item, index) => (
-              <Card
-                key={getCommerceItemKey(item) || index}
-                onClick={() => navigate({ to: getCommerceItemRoute(item) })}
-                className="cursor-pointer overflow-hidden p-0 text-left transition-shadow hover:shadow-lg"
-                role="button"
-                tabIndex={0}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    navigate({ to: getCommerceItemRoute(item) });
-                  }
-                }}
-              >
-                <div className="aspect-[4/3] overflow-hidden bg-muted">
-                  <img
-                    src={resolveBackendAssetUrl(
-                      item?.images?.[0],
-                      "https://via.placeholder.com/300x200",
-                    )}
-                    alt={item?.name || "Item"}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <CardContent className="flex flex-col gap-1.5 p-4">
-                  <Text weight="semibold" className="line-clamp-1">
-                    {item?.name || "Item"}
-                  </Text>
-                  <Text size="sm" tone="brand" weight="semibold">
-                    {formatShopCurrency(item?.price)}
-                  </Text>
-                </CardContent>
-              </Card>
-            ))}
+            <div className="flex max-w-xl flex-col gap-3">
+              <Eyebrow>{config.subtitle}</Eyebrow>
+              <Heading level={2} className="text-display-md">
+                You may also like
+              </Heading>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate({ to: config.browsePath })}
+            >
+              {config.browseLabel}
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </Button>
           </div>
-        )}
+
+          {loading ? (
+            <RelatedItemsMessage>{config.loadingLabel}</RelatedItemsMessage>
+          ) : error ? (
+            <RelatedItemsMessage tone="error">{config.errorLabel}</RelatedItemsMessage>
+          ) : topThree.length === 0 ? (
+            <RelatedItemsMessage>
+              <div className="flex flex-col items-center gap-4">
+                <Text tone="muted">{config.emptyLabel}</Text>
+                <Button
+                  type="button"
+                  onClick={() => navigate({ to: config.browsePath })}
+                >
+                  {config.browseLabel}
+                </Button>
+              </div>
+            </RelatedItemsMessage>
+          ) : (
+            <div
+              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+              data-aos="fade-up"
+            >
+              {topThree.map((item, index) => (
+                <button
+                  key={getCommerceItemKey(item) || index}
+                  type="button"
+                  onClick={() => navigate({ to: getCommerceItemRoute(item) })}
+                  className="flex cursor-pointer flex-col gap-4 overflow-hidden rounded-xl border border-border bg-card p-0 text-left transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-lg"
+                >
+                  <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
+                    <img
+                      src={resolveBackendAssetUrl(
+                        item?.images?.[0],
+                        "https://via.placeholder.com/300x200",
+                      )}
+                      alt={item?.name || "Item"}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2 p-5 pt-0">
+                    <Text weight="semibold" className="line-clamp-1">
+                      {item?.name || "Item"}
+                    </Text>
+                    <Text size="sm" tone="brand" weight="semibold">
+                      {formatShopCurrency(item?.price)}
+                    </Text>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </Container>
     </section>
   );
+};
+
+MoreProduct.propTypes = {
+  itemType: PropTypes.oneOf(Object.values(COMMERCE_ITEM_TYPES)),
 };
 
 export default MoreProduct;

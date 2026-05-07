@@ -7,7 +7,8 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heading, Text } from "@/components/ui/typography";
+import { Container } from "@/components/ui/container";
+import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
 import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
 import {
@@ -105,27 +106,33 @@ const MyRobot = () => {
 
   return (
     <div className="bg-background min-h-screen">
-      <div className="px-4 md:px-20">
+      <Container size="wide">
         <Intro />
-      </div>
+      </Container>
+      <section className="bg-background pb-12 md:pb-16">
+        <Container size="wide">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div className="flex flex-col gap-3">
+              <Eyebrow>Saved for later</Eyebrow>
+              <Heading level={1} className="text-display-md">
+                My saved items
+              </Heading>
+              <Text size="lg" tone="muted" className="max-w-2xl">
+                Items you saved for later from the live catalog.
+              </Text>
+            </div>
+            <div className="rounded-xl border border-border bg-card px-4 py-3 text-body-sm text-foreground">
+              <span className="text-muted-foreground">Saved:</span>{" "}
+              <span className="font-semibold">{items.length}</span>
+              <span className="mx-2 text-muted-foreground">·</span>
+              <span className="text-muted-foreground">Value:</span>{" "}
+              <span className="font-semibold">{formatMoney(totalValue)}</span>
+            </div>
+          </div>
+        </Container>
+      </section>
 
       <DashboardLayout contentClassName="px-6">
-        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div className="flex flex-col gap-1">
-            <Heading level={1} className="text-h1">
-              My saved items
-            </Heading>
-            <Text tone="muted">Items you saved for later from the live catalog.</Text>
-          </div>
-          <div className="rounded-xl border border-border bg-card px-4 py-3 text-body-sm text-foreground">
-            <span className="text-muted-foreground">Saved:</span>{" "}
-            <span className="font-semibold">{items.length}</span>
-            <span className="mx-2 text-muted-foreground">·</span>
-            <span className="text-muted-foreground">Value:</span>{" "}
-            <span className="font-semibold">{formatMoney(totalValue)}</span>
-          </div>
-        </div>
-
         {isLoading ? (
           <Text tone="muted">Loading saved items…</Text>
         ) : error ? (

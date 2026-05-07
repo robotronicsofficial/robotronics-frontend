@@ -210,9 +210,9 @@ const ContactUsForm = () => {
 
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-1 rounded-2xl border border-border bg-card p-6 md:p-8"
+            className="flex flex-col gap-5 rounded-2xl border border-border bg-card p-6 md:p-8"
           >
-            <div className="grid grid-cols-1 gap-1 md:grid-cols-2 md:gap-x-4">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-x-4">
               <FloatingField type="text" name="name" id="name" label="Name" value={formData.name} onChange={handleChange} required />
               <FloatingField type="email" name="email" id="email" label="Email" value={formData.email} onChange={handleChange} required />
               <FloatingField type="tel" name="phone" id="phone" label="Phone" value={formData.phone} onChange={handleChange} required />
@@ -243,7 +243,7 @@ const ContactUsForm = () => {
             />
 
             {formData.userType && (
-              <div className="mb-5 flex flex-col gap-3 rounded-xl border border-border bg-muted/40 p-4">
+              <div className="flex flex-col gap-3 rounded-xl border border-border bg-muted/40 p-4">
                 <Label className="text-caption uppercase tracking-wide text-muted-foreground">
                   Services I&apos;m interested in
                 </Label>
@@ -272,7 +272,7 @@ const ContactUsForm = () => {
               <div
                 role={status.kind === "error" ? "alert" : "status"}
                 className={cn(
-                  "mb-2 rounded-lg border px-4 py-3 text-body-sm",
+                  "rounded-lg border px-4 py-3 text-body-sm",
                   status.kind === "error"
                     ? "border-destructive/40 bg-destructive/10 text-destructive"
                     : "border-success/40 bg-success/10 text-success",
@@ -285,7 +285,7 @@ const ContactUsForm = () => {
             <Button
               type="submit"
               size="marketing"
-              className="mt-2 w-full"
+              className="w-full"
               disabled={contactRequestMutation.isPending}
             >
               {contactRequestMutation.isPending ? "Sending…" : "Send message"}

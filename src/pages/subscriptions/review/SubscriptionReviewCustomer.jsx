@@ -6,6 +6,7 @@ import { CheckCircle2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Container } from "@/components/ui/container";
 import { Display, Heading, Text } from "@/components/ui/typography";
 import { useActivateSubscriptionMutation } from "../../../hooks/useAccount";
 import { formatDisplayDate } from "../../../lib/subscription";
@@ -44,9 +45,11 @@ const SubscriptionReviewCustomer = () => {
 
   if (!checkout) {
     return (
-      <Text tone="muted" className="px-6 py-12 text-center">
-        Loading checkout…
-      </Text>
+      <Container size="wide" className="py-12">
+        <Text tone="muted" className="text-center">
+          Loading checkout…
+        </Text>
+      </Container>
     );
   }
 
@@ -103,140 +106,144 @@ const SubscriptionReviewCustomer = () => {
 
   if (isActive) {
     return (
-      <div className="flex justify-center px-4 py-10 md:px-10">
-        <Card className="w-full max-w-xl">
-          <CardContent className="flex flex-col gap-5">
-            <div className="flex items-center gap-3">
-              <CheckCircle2 className="size-7 text-success" aria-hidden="true" />
-              <Display size="md">Subscription active</Display>
+      <Container size="wide" className="py-10">
+        <div className="flex justify-center">
+          <Card className="w-full max-w-xl">
+            <CardContent className="flex flex-col gap-5">
+              <div className="flex items-center gap-3">
+                <CheckCircle2 className="size-7 text-success" aria-hidden="true" />
+                <Display size="md">Subscription active</Display>
+              </div>
+              <Text tone="muted">
+                The subscription is active and course access has been assigned to
+                the registered children.
+              </Text>
+              <div className="flex flex-col gap-3 rounded-2xl bg-muted p-5">
+                <SummaryLine label="Order code" value={checkout.orderCode} />
+                <SummaryLine label="Children" value={checkout.totalChildren} />
+                <SummaryLine
+                  label="Payment method"
+                  value={checkout.payment.label || "Not selected"}
+                />
+                <SummaryLine
+                  label="Checkout total"
+                  value={formatCheckoutCurrency(checkout.totalPrice)}
+                  highlight
+                />
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  type="button"
+                  onClick={() => navigate({ to: "/Dashboard/ChildProfile" })}
+                >
+                  Open child dashboard
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => navigate({ to: "/" })}
+                >
+                  Back to home
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </Container>
+    );
+  }
+
+  return (
+    <Container size="wide" className="py-8">
+      <div className="flex justify-center">
+        <Card className="w-full max-w-2xl">
+          <CardContent className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <Heading level={2} className="text-h3">
+                Confirm your subscription
+              </Heading>
+              <Text tone="muted">
+                Everything looks right? Confirm to activate access for your child.
+              </Text>
             </div>
-            <Text tone="muted">
-              The subscription is active and course access has been assigned to
-              the registered children.
-            </Text>
-            <div className="flex flex-col gap-3 rounded-2xl bg-muted p-5">
+
+            <div className="flex flex-col gap-4 rounded-2xl bg-muted p-5">
+              <SummaryLine
+                label="Subscription plan"
+                value={checkout.plan.name || "Subscription"}
+              />
+              <SummaryLine
+                label="Billing cycle"
+                value={checkout.plan.billingCycle || "N/A"}
+              />
               <SummaryLine label="Order code" value={checkout.orderCode} />
-              <SummaryLine label="Children" value={checkout.totalChildren} />
+              <SummaryLine
+                label="Order date"
+                value={formatDisplayDate(checkout.orderDate)}
+              />
+              <SummaryLine
+                label="Children"
+                value={childrenLabel || checkout.totalChildren}
+              />
+              <SummaryLine
+                label="Parent"
+                value={
+                  [checkout.parent.firstName, checkout.parent.lastName]
+                    .filter(Boolean)
+                    .join(" ") || "N/A"
+                }
+              />
+              <SummaryLine
+                label="Contact"
+                value={checkout.parent.email || checkout.parent.phone || "N/A"}
+              />
+              <SummaryLine label="Billing address" value={addressLine} />
               <SummaryLine
                 label="Payment method"
-                value={checkout.payment.label || "Not selected"}
+                value={
+                  checkout.payment.cardLast4
+                    ? `${checkout.payment.label || "Card"} •••• ${checkout.payment.cardLast4}`
+                    : checkout.payment.label || "Not selected"
+                }
               />
-              <SummaryLine
-                label="Checkout total"
-                value={formatCheckoutCurrency(checkout.totalPrice)}
-                highlight
-              />
+              <div className="border-t border-border pt-4">
+                <SummaryLine
+                  label="Total"
+                  value={formatCheckoutCurrency(checkout.totalPrice)}
+                  highlight
+                />
+              </div>
             </div>
-            <div className="flex flex-wrap gap-3">
+
+            {activationError && (
+              <Alert variant="destructive">
+                <AlertDescription>{activationError}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <Button
                 type="button"
-                onClick={() => navigate({ to: "/Dashboard/ChildProfile" })}
+                variant="link"
+                onClick={() => navigate({ to: "/subscriptions/payment" })}
+                className="self-start"
               >
-                Open child dashboard
+                Edit details
               </Button>
               <Button
                 type="button"
-                variant="outline"
-                onClick={() => navigate({ to: "/" })}
+                onClick={handleConfirmOrder}
+                disabled={activateSubscriptionMutation.isPending}
               >
-                Back to home
+                {activateSubscriptionMutation.isPending
+                  ? "Confirming…"
+                  : "Confirm subscription"}
               </Button>
             </div>
           </CardContent>
         </Card>
       </div>
-    );
-  }
-
-  return (
-    <div className="flex justify-center px-4 py-8 md:px-10">
-      <Card className="w-full max-w-2xl">
-        <CardContent className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <Heading level={2} className="text-h3">
-              Confirm your subscription
-            </Heading>
-            <Text tone="muted">
-              Everything looks right? Confirm to activate access for your child.
-            </Text>
-          </div>
-
-          <div className="flex flex-col gap-4 rounded-2xl bg-muted p-5">
-            <SummaryLine
-              label="Subscription plan"
-              value={checkout.plan.name || "Subscription"}
-            />
-            <SummaryLine
-              label="Billing cycle"
-              value={checkout.plan.billingCycle || "N/A"}
-            />
-            <SummaryLine label="Order code" value={checkout.orderCode} />
-            <SummaryLine
-              label="Order date"
-              value={formatDisplayDate(checkout.orderDate)}
-            />
-            <SummaryLine
-              label="Children"
-              value={childrenLabel || checkout.totalChildren}
-            />
-            <SummaryLine
-              label="Parent"
-              value={
-                [checkout.parent.firstName, checkout.parent.lastName]
-                  .filter(Boolean)
-                  .join(" ") || "N/A"
-              }
-            />
-            <SummaryLine
-              label="Contact"
-              value={checkout.parent.email || checkout.parent.phone || "N/A"}
-            />
-            <SummaryLine label="Billing address" value={addressLine} />
-            <SummaryLine
-              label="Payment method"
-              value={
-                checkout.payment.cardLast4
-                  ? `${checkout.payment.label || "Card"} •••• ${checkout.payment.cardLast4}`
-                  : checkout.payment.label || "Not selected"
-              }
-            />
-            <div className="border-t border-border pt-4">
-              <SummaryLine
-                label="Total"
-                value={formatCheckoutCurrency(checkout.totalPrice)}
-                highlight
-              />
-            </div>
-          </div>
-
-          {activationError && (
-            <Alert variant="destructive">
-              <AlertDescription>{activationError}</AlertDescription>
-            </Alert>
-          )}
-
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <Button
-              type="button"
-              variant="link"
-              onClick={() => navigate({ to: "/subscriptions/payment" })}
-              className="self-start"
-            >
-              Edit details
-            </Button>
-            <Button
-              type="button"
-              onClick={handleConfirmOrder}
-              disabled={activateSubscriptionMutation.isPending}
-            >
-              {activateSubscriptionMutation.isPending
-                ? "Confirming…"
-                : "Confirm subscription"}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+    </Container>
   );
 };
 

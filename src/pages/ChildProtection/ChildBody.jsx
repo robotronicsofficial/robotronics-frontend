@@ -42,7 +42,7 @@ const SECTIONS = [
 const ReportCard = () => (
   <section
     aria-labelledby="report-heading"
-    className="mb-10 flex flex-col gap-4 rounded-2xl border border-primary bg-primary-soft p-6 md:p-8"
+    className="flex flex-col gap-4 rounded-2xl border border-primary bg-primary-soft p-6 md:p-8"
   >
     <div className="flex items-center gap-3">
       <span

@@ -5,38 +5,37 @@ import { Container } from "@/components/ui/container";
 import { Stat } from "@/components/ui/stat";
 import {
   Display,
-  Eyebrow,
   Heading,
   Highlight,
   Text,
 } from "@/components/ui/typography";
 import { SectionInverse } from "@/components/layout/SectionInverse";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import OurServices from "@/components/site/international/services/ourServices";
 import QuickContact from "@/components/site/international/services/quickContact";
 import { CONTACT_PATH } from "@/router/paths";
 
 const HeroSection = () => (
-  <section className="bg-background pt-header pb-12">
-    <Container size="wide">
-      <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">
-        <Eyebrow>Robotronics International</Eyebrow>
-        <Display size="lg">
-          AI &amp; Robotics learning, <Highlight>shipping worldwide</Highlight>.
-        </Display>
-        <Text size="lg" tone="muted" className="max-w-2xl">
-          15,000+ international students learning robotics, coding, and AI through Robotronics. Available wherever a modern browser reaches.
-        </Text>
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <Button asChild size="marketingLg">
-            <Link to="/subscriptions">Start Learning</Link>
-          </Button>
-          <Button asChild size="marketingLg" variant="outline">
-            <Link to="/International/Iservices">Browse services</Link>
-          </Button>
-        </div>
-      </div>
-    </Container>
-  </section>
+  <MarketingHero
+    size="page"
+    eyebrow="Robotronics International"
+    title={
+      <Display size="md">
+        AI &amp; Robotics learning, <Highlight>shipping worldwide</Highlight>.
+      </Display>
+    }
+    subtitle="15,000+ international students learning robotics, coding, and AI through Robotronics. Available wherever a modern browser reaches."
+    actions={
+      <>
+        <Button asChild size="marketingLg">
+          <Link to="/subscriptions">Start Learning</Link>
+        </Button>
+        <Button asChild size="marketingLg" variant="outline">
+          <Link to="/International/Iservices">Browse services</Link>
+        </Button>
+      </>
+    }
+  />
 );
 
 const TrustSection = () => (

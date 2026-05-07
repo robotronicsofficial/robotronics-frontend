@@ -302,15 +302,6 @@ const SubscriptionChildProfile = () => {
 
   return (
     <DashboardLayout contentClassName="px-6">
-      <div className="mb-8 flex flex-col gap-1">
-        <Heading level={1} className="text-h1">
-          Child accounts
-        </Heading>
-        <Text tone="muted">
-          Manage logins and PINs for the kids on your subscription.
-        </Text>
-      </div>
-
       {!parentData ? (
         <EmptyStateCard
           title="Set up child accounts"

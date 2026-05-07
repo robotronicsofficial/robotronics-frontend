@@ -54,7 +54,7 @@ const Screen = () => {
       <Text tone="muted" className="max-w-xl">
         Hands-on robotics, coding, and STEM for kids.
       </Text>
-      <Text size="sm" tone="subtle" className="mt-6">
+      <Text size="sm" tone="subtle">
         Press any key to continue
       </Text>
     </button>

@@ -5,7 +5,7 @@ import CenteredState from "@/components/layout/CenteredState";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heading, Text } from "@/components/ui/typography";
+import { Text } from "@/components/ui/typography";
 import { getCommerceItemRoute } from "@/lib/commerceItems";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useCartStore } from "@/stores/cartStore";
@@ -102,13 +102,6 @@ const WishListD = () => {
 
   return (
     <DashboardLayout contentClassName="px-6">
-      <div className="mb-8 flex flex-col gap-1">
-        <Heading level={1} className="text-h1">
-          Wishlist
-        </Heading>
-        <Text tone="muted">Items you saved for later from the live catalog.</Text>
-      </div>
-
       {items.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-start gap-4 py-10">

@@ -22,53 +22,55 @@ export const PolicyPage = ({
 }) => (
   <div className="bg-background pt-header pb-20">
     <Container size="narrow" className="px-6">
-      <header className="flex flex-col gap-3 border-b border-border pb-10">
-        {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-        <Display size="md">{title}</Display>
-        {lastUpdated && (
-          <Text size="sm" tone="subtle">
-            Last updated: {lastUpdated}
-          </Text>
-        )}
-        {intro && (
-          <Text size="lg" tone="muted" className="mt-2 max-w-prose">
-            {intro}
-          </Text>
-        )}
-      </header>
+      <div className="flex flex-col gap-10">
+        <header className="flex flex-col gap-3 border-b border-border pb-10">
+          {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
+          <Display size="md">{title}</Display>
+          {lastUpdated && (
+            <Text size="sm" tone="subtle">
+              Last updated: {lastUpdated}
+            </Text>
+          )}
+          {intro && (
+            <Text size="lg" tone="muted" className="mt-2 max-w-prose">
+              {intro}
+            </Text>
+          )}
+        </header>
 
-      {children && <div className="mt-10">{children}</div>}
+        {children && <div>{children}</div>}
 
-      {sections && (
-        <ol className="mt-10 flex flex-col gap-10">
-          {sections.map((section, idx) => (
-            <li key={section.title} className="flex flex-col gap-3">
-              <Heading level={2} className="text-h3">
-                {idx + 1}. {section.title}
-              </Heading>
-              {section.body &&
-                (Array.isArray(section.body) ? (
-                  section.body.map((paragraph, i) => (
-                    <Text key={i} tone="muted" className="max-w-prose">
-                      {paragraph}
+        {sections && (
+          <ol className="flex flex-col gap-10">
+            {sections.map((section, idx) => (
+              <li key={section.title} className="flex flex-col gap-3">
+                <Heading level={2} className="text-h3">
+                  {idx + 1}. {section.title}
+                </Heading>
+                {section.body &&
+                  (Array.isArray(section.body) ? (
+                    section.body.map((paragraph, i) => (
+                      <Text key={i} tone="muted" className="max-w-prose">
+                        {paragraph}
+                      </Text>
+                    ))
+                  ) : (
+                    <Text tone="muted" className="max-w-prose">
+                      {section.body}
                     </Text>
-                  ))
-                ) : (
-                  <Text tone="muted" className="max-w-prose">
-                    {section.body}
-                  </Text>
-                ))}
-              {section.items && (
-                <ul className="ml-5 flex max-w-prose list-disc flex-col gap-2 text-body text-muted-foreground marker:text-primary">
-                  {section.items.map((item, i) => (
-                    <li key={i}>{item}</li>
                   ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ol>
-      )}
+                {section.items && (
+                  <ul className="flex max-w-prose list-disc flex-col gap-2 pl-5 text-body text-muted-foreground marker:text-primary">
+                    {section.items.map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ol>
+        )}
+      </div>
     </Container>
   </div>
 );

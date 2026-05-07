@@ -4,8 +4,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { BillingToggle } from "@/components/ui/billing-toggle";
 import { Container } from "@/components/ui/container";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Eyebrow, Heading, Text } from "@/components/ui/typography";
+import { Display, Highlight, Text } from "@/components/ui/typography";
 import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdown";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import { PlanCard } from "@/components/marketing/PlanCard";
 import { usePlans } from "../../hooks/usePlans";
 import { useSelectedPlanStore } from "../../stores/selectedPlanStore";
@@ -61,65 +62,70 @@ const SubscriptionPlans = () => {
   };
 
   return (
-    <section className="bg-background py-20 md:py-28">
-      <Container size="wide">
-        <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
-          <Eyebrow>Pricing</Eyebrow>
-          <Heading level={2} className="text-display-md">
-            Choose the plan that fits your child.
-          </Heading>
-          <Text size="lg" tone="muted">
-            One subscription unlocks every future skill. Cancel anytime — no calls, no forms.
+    <>
+      <MarketingHero
+        size="page"
+        eyebrow="Pricing"
+        title={
+          <Display size="md">
+            Choose the plan that <Highlight>fits your child</Highlight>.
+          </Display>
+        }
+        subtitle="One subscription unlocks every future skill. Cancel anytime — no calls, no forms."
+        className="pt-20 md:pt-28"
+      >
+        <BillingToggle
+          value={cycle}
+          onChange={setCycle}
+          savingsLabel="Save up to 60%"
+          className="mt-4 self-center"
+        />
+        {cycle === "annual" && <AnnualOfferCountdown />}
+      </MarketingHero>
+
+      <section className="relative isolate overflow-hidden bg-background pb-20 md:pb-28">
+        <Container size="wide">
+          {error ? (
+            <div className="mx-auto max-w-md rounded-xl border border-destructive bg-destructive/10 p-6 text-center">
+              <Text tone="muted">
+                We couldn&apos;t load plans right now. Please refresh, or contact support if the issue persists.
+              </Text>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {isLoading || plans.length === 0
+                ? Array.from({ length: 3 }).map((_, i) => <PlanCardSkeleton key={i} />)
+                : plans.map((plan, i) => {
+                    const isHighlighted = i === 0;
+                    return (
+                      <PlanCard
+                        key={plan._id}
+                        name={plan.planName || "Learning Subscription"}
+                        description={plan.description}
+                        pricing={{
+                          monthly: Number(plan.monthlyPrice || 0),
+                          annual: Number(plan.yearlyPrice || 0),
+                        }}
+                        features={plan.features || []}
+                        cta={{
+                          label: "Choose plan",
+                          onClick: () => handleSelect(plan),
+                        }}
+                        tone={isHighlighted ? "tinted" : "default"}
+                        popular={isHighlighted && plans.length > 1}
+                        cycle={cycle}
+                      />
+                    );
+                  })}
+            </div>
+          )}
+
+          <Text tone="muted" size="sm" className="mt-10 text-center">
+            Cancel anytime. Each child has their own subscription — add multiple kids at the same per-child rate.
           </Text>
-          <BillingToggle
-            value={cycle}
-            onChange={setCycle}
-            savingsLabel="Save up to 60%"
-            className="mt-4"
-          />
-          {cycle === "annual" && <AnnualOfferCountdown />}
-        </div>
-
-        {error ? (
-          <div className="mx-auto mt-12 max-w-md rounded-xl border border-destructive bg-destructive/10 p-6 text-center">
-            <Text tone="muted">
-              We couldn&apos;t load plans right now. Please refresh, or contact support if the issue persists.
-            </Text>
-          </div>
-        ) : (
-          <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {isLoading || plans.length === 0
-              ? Array.from({ length: 3 }).map((_, i) => <PlanCardSkeleton key={i} />)
-              : plans.map((plan, i) => {
-                  const isHighlighted = i === 0;
-                  return (
-                    <PlanCard
-                      key={plan._id}
-                      name={plan.planName || "Learning Subscription"}
-                      description={plan.description}
-                      pricing={{
-                        monthly: Number(plan.monthlyPrice || 0),
-                        annual: Number(plan.yearlyPrice || 0),
-                      }}
-                      features={plan.features || []}
-                      cta={{
-                        label: "Choose plan",
-                        onClick: () => handleSelect(plan),
-                      }}
-                      tone={isHighlighted ? "tinted" : "default"}
-                      popular={isHighlighted &&  plans.length > 1}
-                      cycle={cycle}
-                    />
-                  );
-                })}
-          </div>
-        )}
-
-        <Text tone="muted" size="sm" className="mt-10 text-center">
-          Cancel anytime. Each child has their own subscription — add multiple kids at the same per-child rate.
-        </Text>
-      </Container>
-    </section>
+        </Container>
+      </section>
+    </>
   );
 };
 

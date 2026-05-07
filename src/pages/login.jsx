@@ -5,38 +5,27 @@ import "react-toastify/dist/ReactToastify.css";
 
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
+import AuthShell from "@/components/auth/AuthShell";
 import AuthSocialButton from "@/components/auth/AuthSocialButton";
 import PasswordVisibilityButton from "@/components/auth/PasswordVisibilityButton";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Container } from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Heading, Text } from "@/components/ui/typography";
+import { Display, Text } from "@/components/ui/typography";
 import { useAuth } from "../contexts/useAuth";
 import { resolveBackendUrl } from "../lib/api";
 import { useRequestPasswordResetMutation } from "../hooks/useAuthMutations";
-import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
 import {
   buildAuthRedirectSearch,
   consumePostAuthRedirect,
   getSafeRedirectPath,
 } from "../utils/authRedirect";
 
-const AuthShell = ({ children }) => (
-  <div className={getHeaderOffsetClass("bg-background pb-20")}>
-    <Container size="narrow" className="px-4">
-      <div className="mx-auto flex w-full max-w-md flex-col gap-6">{children}</div>
-    </Container>
-  </div>
-);
-
 const FieldLabel = ({ htmlFor, children, action }) => (
   <div className="flex items-center justify-between">
-    <Label htmlFor={htmlFor} className="text-body-sm text-foreground">
-      {children}
-    </Label>
+    <Label htmlFor={htmlFor}>{children}</Label>
     {action}
   </div>
 );
@@ -120,9 +109,7 @@ const Login = () => {
     return (
       <AuthShell>
         <header className="flex flex-col items-center gap-2 text-center">
-          <Heading level={1} className="text-h1">
-            Reset your password
-          </Heading>
+          <Display size="md">Reset your password</Display>
           <Text tone="muted">
             Enter the email tied to your account — we&apos;ll send a reset link.
           </Text>
@@ -164,9 +151,7 @@ const Login = () => {
   return (
     <AuthShell>
       <header className="flex flex-col items-center gap-2 text-center">
-        <Heading level={1} className="text-h1">
-          Welcome back
-        </Heading>
+        <Display size="md">Welcome back</Display>
         <Text tone="muted">Sign in to your Robotronics.ai account.</Text>
       </header>
 
@@ -238,17 +223,16 @@ const Login = () => {
           </Button>
         </div>
 
-        <Label
-          htmlFor="remember-me"
-          className="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-muted/40 px-4 py-3 text-body-sm font-normal text-muted-foreground"
-        >
+        <div className="flex items-center gap-3">
           <Checkbox
             id="remember-me"
             checked={rememberMe}
             onCheckedChange={(checked) => setRememberMe(checked === true)}
           />
-          Keep me signed in on this device for 30 days
-        </Label>
+          <Label htmlFor="remember-me" className="cursor-pointer">
+            Remember me
+          </Label>
+        </div>
 
         <Button type="submit" size="marketing" className="w-full" disabled={isLoggingIn}>
           {isLoggingIn ? "Logging in…" : "Log in"}

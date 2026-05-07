@@ -1,10 +1,7 @@
 import { Container } from "@/components/ui/container";
 import { FaqAccordion } from "@/components/ui/faq-accordion";
-import {
-  Display,
-  Eyebrow,
-  Text,
-} from "@/components/ui/typography";
+import { Display } from "@/components/ui/typography";
+import MarketingHero from "@/components/marketing/MarketingHero";
 
 const FAQ_ITEMS = [
   {
@@ -65,18 +62,21 @@ const FAQ_ITEMS = [
 ];
 
 const FAQs = () => (
-  <div className="bg-background pt-header pb-20">
-    <Container size="narrow" className="px-6">
-      <header className="flex flex-col gap-3 border-b border-border pb-10">
-        <Eyebrow>Help</Eyebrow>
-        <Display size="md">Frequently asked questions</Display>
-        <Text size="lg" tone="muted" className="max-w-prose">
-          The questions parents and schools ask first. Don&apos;t see yours? Reach out to support — we reply within a business day.
-        </Text>
-      </header>
-      <FaqAccordion items={FAQ_ITEMS} className="mt-6" />
-    </Container>
-  </div>
+  <>
+    <MarketingHero
+      size="page"
+      align="left"
+      containerSize="narrow"
+      eyebrow="Help"
+      title={<Display size="lg">Frequently asked questions</Display>}
+      subtitle="The questions parents and schools ask first. Don't see yours? Reach out to support — we reply within a business day."
+    />
+    <section className="bg-background pb-20">
+      <Container size="narrow" className="px-6">
+        <FaqAccordion items={FAQ_ITEMS} />
+      </Container>
+    </section>
+  </>
 );
 
 export default FAQs;

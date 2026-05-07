@@ -1,35 +1,77 @@
-import React from "react";
-import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import PropTypes from "prop-types";
+
+import AppImage from "@/components/site/AppImage";
+import { Container } from "@/components/ui/container";
+import { Display, Eyebrow, Highlight, Text } from "@/components/ui/typography";
+import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 
 const ServiceInto = ({ service }) => {
   const bannerImage = resolveBackendAssetUrl(service?.bannerImage);
+  const name = service?.name || "Service";
+  const title = service?.title || "Service details";
+  const overview = service?.overview;
 
   return (
-    <div className="hero" id="hero">
-      <div className="relative flex min-h-screen flex-col items-end justify-center gap-y-5 overflow-hidden p-6">
-        {bannerImage && (
-          <img
-            src={bannerImage}
-            alt=""
-            className="absolute inset-0 size-full object-cover"
-            aria-hidden="true"
-          />
-        )}
-        <div className="relative flex items-center justify-center">
-          <div className="bg-foreground/50 text-background p-8 w-full max-w-5xl rounded-3xl border border-border leading-none mb-10">
-            <div>
-              <p className="text-[3vw] md:text-[2vw] font-semibold pb-6">
-                {service?.name || "Service"}
-              </p>
-              <h2 className="text-[5vw] md:text-[4vw] lg:text-[3.5vw] font-bold leading-[1.2] md:leading-[1.3] lg:leading-[1.2] text-wrap">
-                {service?.title || "Service details"}
-              </h2>
-            </div>
-          </div>
-        </div>
+    <section className="relative isolate overflow-hidden bg-background pt-header pb-20 md:pb-28">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20">
+        <div
+          className="absolute -right-40 -top-40 h-[44rem] w-[44rem] rounded-full opacity-25 blur-2xl"
+          style={{ background: "radial-gradient(closest-side, var(--color-primary-soft), transparent 70%)" }}
+        />
+        <div
+          className="absolute -bottom-40 -left-32 h-[28rem] w-[28rem] rounded-full opacity-20 blur-2xl"
+          style={{ background: "radial-gradient(closest-side, var(--color-primary-soft), transparent 70%)" }}
+        />
       </div>
-    </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.35]"
+        style={{
+          backgroundImage: "radial-gradient(circle, var(--color-border) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+          maskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+          WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+        }}
+      />
+
+      <Container size="wide">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="flex max-w-2xl flex-col gap-5">
+            <Eyebrow>{name}</Eyebrow>
+            <Display size="lg">
+              <Highlight>{title}</Highlight>
+            </Display>
+            {overview ? (
+              <Text size="lg" tone="muted" className="max-w-xl">
+                {overview}
+              </Text>
+            ) : null}
+          </div>
+
+          {bannerImage ? (
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-muted/40">
+              <AppImage
+                src={bannerImage}
+                alt={`${name} program banner`}
+                className="h-full w-full object-cover"
+                fetchPriority="high"
+                loading="eager"
+              />
+            </div>
+          ) : null}
+        </div>
+      </Container>
+    </section>
   );
+};
+
+ServiceInto.propTypes = {
+  service: PropTypes.shape({
+    name: PropTypes.string,
+    title: PropTypes.string,
+    overview: PropTypes.string,
+    bannerImage: PropTypes.string,
+  }),
 };
 
 export default ServiceInto;

@@ -1,10 +1,5 @@
-import SubscriptionPaymentShell from './SubscriptionPaymentShell'
-const SubscriptionPaymentHome = () => {
-  return (
-    <div>
-      <SubscriptionPaymentShell/>
-    </div>
-  )
-}
+import SubscriptionPaymentShell from "./SubscriptionPaymentShell";
 
-export default SubscriptionPaymentHome
+const SubscriptionPaymentHome = () => <SubscriptionPaymentShell />;
+
+export default SubscriptionPaymentHome;

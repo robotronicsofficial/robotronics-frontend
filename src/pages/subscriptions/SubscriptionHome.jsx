@@ -11,6 +11,7 @@ import {
   Text,
 } from "@/components/ui/typography";
 import { SectionInverse } from "@/components/layout/SectionInverse";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import SubscriptionPlans from "./SubscriptionPlans";
 import { CONTACT_PATH } from "@/router/paths";
 
@@ -48,19 +49,16 @@ const FAQ_ITEMS = [
 ];
 
 const SubscriptionIntro = () => (
-  <section className="bg-background pt-header pb-12">
-    <Container size="wide">
-      <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">
-        <Eyebrow>Subscriptions</Eyebrow>
-        <Display size="lg">
-          One subscription. <Highlight>Every future skill.</Highlight>
-        </Display>
-        <Text size="lg" tone="muted" className="max-w-xl">
-          AI, Coding, Robotics &amp; 30+ skills — all in one plan. Built for kids 6–16, trusted by parents and schools.
-        </Text>
-      </div>
-    </Container>
-  </section>
+  <MarketingHero
+    size="flagship"
+    eyebrow="Subscriptions"
+    title={
+      <Display size="lg">
+        One subscription. <Highlight>Every future skill.</Highlight>
+      </Display>
+    }
+    subtitle="AI, Coding, Robotics & 30+ skills — all in one plan. Built for kids 6–16, trusted by parents and schools."
+  />
 );
 
 const SubscriptionFaq = () => (

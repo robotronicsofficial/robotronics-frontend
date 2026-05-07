@@ -3,6 +3,7 @@ import { Award, Clock, Layers, Sparkles } from "lucide-react";
 
 import AppImage from "@/components/site/AppImage";
 import python from "@/assets/images/python.webp";
+import MarketingHero from "@/components/marketing/MarketingHero";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -10,6 +11,7 @@ import {
   Display,
   Eyebrow,
   Heading,
+  Highlight,
   Text,
 } from "@/components/ui/typography";
 import { createCourseCommerceItem } from "@/lib/commerceItems";
@@ -83,65 +85,65 @@ const CoursesProductDetail = () => {
 
   return (
     <>
-      <section className="bg-background pt-header pb-16 md:pb-20">
-        <Container size="wide">
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
-            <div className="flex flex-col gap-5">
-              {course.category && <Eyebrow>{course.category}</Eyebrow>}
-              <Display size="md">{course.title}</Display>
-              {course.description && (
-                <Text size="lg" tone="muted" className="max-w-prose">
-                  {course.description}
-                </Text>
-              )}
-              <div className="mt-2 flex flex-wrap items-center gap-3">
-                {course.month && (
-                  <Badge variant="outline" className="gap-1.5">
-                    <Clock className="size-3" />
-                    {course.month}
-                  </Badge>
-                )}
-                {course.price != null && (
-                  <Badge variant="outline" className="font-semibold">
-                    {formatMoney(course.price)}
-                  </Badge>
-                )}
-              </div>
-              <div className="mt-4 flex flex-wrap gap-3">
-                <Button asChild size="marketing">
-                  <Link to="/subscriptions">Subscribe to learn</Link>
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="marketing"
-                  onClick={handleGiftCourse}
-                >
-                  Gift this course
-                </Button>
-              </div>
-            </div>
-
-            <div className="flex justify-center lg:justify-end">
-              <div className="aspect-square w-full max-w-md overflow-hidden rounded-2xl border border-border bg-muted">
-                <AppImage
-                  src={resolveBackendAssetUrl(course.thumbnail, python)}
-                  alt={course.title}
-                  className="size-full object-cover"
-                  loading="eager"
-                />
-              </div>
-            </div>
+      <MarketingHero
+        size="page"
+        align="left"
+        eyebrow={
+          course.category ? (
+            <span className="inline-flex w-fit items-center rounded-full bg-primary-soft px-3 py-1">
+              <Eyebrow tone="brand">{course.category}</Eyebrow>
+            </span>
+          ) : null
+        }
+        title={<Display size="md">{course.title}</Display>}
+        subtitle={course.description || null}
+        actions={
+          <>
+            <Button asChild size="marketingLg">
+              <Link to="/subscriptions">Subscribe to learn</Link>
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="marketingLg"
+              onClick={handleGiftCourse}
+            >
+              Gift this course
+            </Button>
+          </>
+        }
+        visual={
+          <div className="aspect-square w-full max-w-md overflow-hidden rounded-2xl border border-border bg-muted">
+            <AppImage
+              src={resolveBackendAssetUrl(course.thumbnail, python)}
+              alt={course.title}
+              className="size-full object-cover"
+              loading="eager"
+            />
           </div>
-        </Container>
-      </section>
+        }
+      >
+        <div className="flex flex-wrap items-center gap-3">
+          {course.month && (
+            <Badge variant="outline" className="gap-1.5">
+              <Clock className="size-3" />
+              {course.month}
+            </Badge>
+          )}
+          {course.price != null && (
+            <Badge variant="outline" className="font-semibold">
+              {formatMoney(course.price)}
+            </Badge>
+          )}
+        </div>
+      </MarketingHero>
 
       <section className="bg-muted/40 py-20">
         <Container size="wide">
           <div className="flex max-w-2xl flex-col gap-3">
             <Eyebrow>What&apos;s included</Eyebrow>
             <Heading level={2} className="text-display-md">
-              Built to actually stick.
+              Built to <Highlight>actually stick</Highlight>.
             </Heading>
           </div>
           <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -152,7 +154,7 @@ const CoursesProductDetail = () => {
               >
                 <span
                   aria-hidden="true"
-                  className="grid size-10 place-items-center rounded-lg bg-primary-soft text-primary"
+                  className="grid size-11 place-items-center rounded-lg bg-primary-soft text-primary"
                 >
                   <Icon className="size-5" />
                 </span>

@@ -1,9 +1,5 @@
 import GiftCourseHome from "./GiftCourseHome";
 
-const GiftCourse = () => (
-  <div>
-    <GiftCourseHome />
-  </div>
-);
+const GiftCourse = () => <GiftCourseHome />;
 
 export default GiftCourse;

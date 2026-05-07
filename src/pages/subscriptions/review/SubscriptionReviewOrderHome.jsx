@@ -1,11 +1,5 @@
-import SubscriptionReviewCart from './SubscriptionReviewCart'
+import SubscriptionReviewCart from "./SubscriptionReviewCart";
 
-const SubscriptionReviewOrderHome = () => {
-  return (
-    <div>
-      <SubscriptionReviewCart/>
-    </div>
-  )
-}
+const SubscriptionReviewOrderHome = () => <SubscriptionReviewCart />;
 
-export default SubscriptionReviewOrderHome
+export default SubscriptionReviewOrderHome;

@@ -35,15 +35,6 @@ const SubscriptionProgressCertificate = () => {
 
   return (
     <DashboardLayout contentClassName="px-6">
-      <div className="mb-8 flex flex-col gap-1">
-        <Heading level={1} className="text-h1">
-          Progress &amp; certificates
-        </Heading>
-        <Text tone="muted">
-          Pick a child profile to view their course progress and earned certificates.
-        </Text>
-      </div>
-
       {children.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {children.map((child) => {

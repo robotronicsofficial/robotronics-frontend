@@ -7,7 +7,8 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import QueryErrorState from "@/components/layout/QueryErrorState";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heading, Text } from "@/components/ui/typography";
+import { Container } from "@/components/ui/container";
+import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import { useCurrentParent } from "@/hooks/useAccount";
 
@@ -112,17 +113,25 @@ const UserInfoIntro = () => {
   const memberSince = formatAccountDate(currentUser?.createdAt);
 
   return (
-    <div className="bg-background min-h-screen px-4 md:px-20">
-      <Intro />
+    <div className="bg-background min-h-screen">
+      <Container size="wide">
+        <Intro />
+      </Container>
+      <section className="bg-background pb-12 md:pb-16">
+        <Container size="wide">
+          <div className="flex flex-col gap-3">
+            <Eyebrow>Account</Eyebrow>
+            <Heading level={1} className="text-display-md">
+              My info
+            </Heading>
+            <Text size="lg" tone="muted" className="max-w-2xl">
+              Account details and contact information used across Robotronics.ai.
+            </Text>
+          </div>
+        </Container>
+      </section>
       <DashboardLayout contentClassName="px-6">
         <DashboardNextStep userId={currentUser?._id} />
-
-        <div className="mb-6 flex flex-col gap-1">
-          <Heading level={1} className="text-h1">
-            My info
-          </Heading>
-          <Text tone="muted">Account details and contact information.</Text>
-        </div>
 
         <div className="rounded-2xl border border-border bg-card px-5">
           <InfoRow icon={User} label="Name" value={displayName} />
