@@ -36,6 +36,31 @@ const GENDER_OPTIONS = [
   { value: "female", label: "Female" },
 ];
 
+const REQUIRED_PARENT_FIELDS = [
+  "firstName",
+  "lastName",
+  "email",
+  "country",
+  "streetAddress",
+  "city",
+  "state",
+  "phone",
+  "postalCode",
+];
+
+const REQUIRED_CHILD_FIELDS = [
+  "firstName",
+  "lastName",
+  "email",
+  "dateOfBirth",
+  "country",
+  "streetAddress",
+  "city",
+  "phone",
+  "postalCode",
+  "gender",
+];
+
 const EMPTY_PARENT_FORM = {
   firstName: "",
   lastName: "",
@@ -187,12 +212,12 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
 
   const [parentForm, setParentForm] = useState(EMPTY_PARENT_FORM);
   const [childrenForms, setChildrenForms] = useState([{ ...EMPTY_CHILD_FORM }]);
-  const [savedChildren, setSavedChildren] = useState([]);
-  const [parentOptionalOpen, setParentOptionalOpen] = useState(false);
-  const [childOptionalOpen, setChildOptionalOpen] = useState({});
+  const [parentOptionalOpen, setParentOptionalOpen] = useState(true);
+  const [childOptionalOpen, setChildOptionalOpen] = useState({ 0: true });
   const [draftBannerVisible, setDraftBannerVisible] = useState(false);
   const draftRestoredRef = useRef(false);
   const hasHydratedRef = useRef(false);
+  const savedChildren = childrenForms.filter((child) => child.saved);
 
   useEffect(() => {
     if (hasHydratedRef.current) return;
@@ -283,30 +308,22 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
     const { name, value } = e.target;
     setChildrenForms((prev) => {
       const updated = [...prev];
-      updated[index] = { ...updated[index], [name]: value };
+      updated[index] = { ...updated[index], [name]: value, saved: false };
       return updated;
     });
   };
 
   const addChildForm = () => {
+    const nextIndex = childrenForms.length;
     setChildrenForms((prev) => [...prev, { ...EMPTY_CHILD_FORM }]);
+    setChildOptionalOpen((current) => ({ ...current, [nextIndex]: true }));
   };
 
   const removeChildForm = (index) => {
     if (childrenForms.length > 1) {
       const updatedChildren = [...childrenForms];
-      const removedChild = updatedChildren.splice(index, 1)[0];
+      updatedChildren.splice(index, 1);
       setChildrenForms(updatedChildren);
-
-      if (removedChild.saved) {
-        setSavedChildren((prev) =>
-          prev.filter(
-            (child) =>
-              child.firstName !== removedChild.firstName ||
-              child.lastName !== removedChild.lastName,
-          ),
-        );
-      }
     }
   };
 
@@ -315,8 +332,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
   };
 
   const saveChildForm = (index) => {
-    const requiredParentFields = ["firstName", "lastName", "email", "phone", "country"];
-    const isParentComplete = requiredParentFields.every((field) => parentForm[field]);
+    const isParentComplete = REQUIRED_PARENT_FIELDS.every((field) => parentForm[field]);
 
     if (!isParentComplete) {
       toast.error("Please complete all required parent information first");
@@ -324,8 +340,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
     }
 
     const child = childrenForms[index];
-    const requiredChildFields = ["firstName", "lastName", "dateOfBirth", "gender"];
-    const isChildComplete = requiredChildFields.every((field) => child[field]);
+    const isChildComplete = REQUIRED_CHILD_FIELDS.every((field) => child[field]);
 
     if (!isChildComplete) {
       toast.error("Please complete all required child information");
@@ -336,16 +351,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
     updatedChildrenForms[index] = { ...updatedChildrenForms[index], saved: true };
     setChildrenForms(updatedChildrenForms);
 
-    if (
-      !savedChildren.some(
-        (c) =>
-          c.firstName === child.firstName &&
-          c.lastName === child.lastName &&
-          c.email === child.email,
-      )
-    ) {
-      setSavedChildren((prev) => [...prev, child]);
-    }
+    toast.success("Child details saved");
   };
 
   const handleSubmit = async (e) => {
@@ -377,8 +383,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
       return;
     }
 
-    const requiredParentFields = ["firstName", "lastName", "email", "phone", "country"];
-    const missingParentFields = requiredParentFields.filter(
+    const missingParentFields = REQUIRED_PARENT_FIELDS.filter(
       (field) => !parentForm[field],
     );
 
@@ -512,7 +517,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                 </div>
 
                 <OptionalSection
-                  label="Billing address (optional — collected at payment if needed)"
+                  label="Billing address"
                   open={parentOptionalOpen}
                   onToggle={() => setParentOptionalOpen((value) => !value)}
                 >
@@ -522,6 +527,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                     value={parentForm.streetAddress}
                     onChange={handleParentChange}
                     placeholder="House number and street name"
+                    required
                   />
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <InputField
@@ -537,6 +543,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                       value={parentForm.city}
                       onChange={handleParentChange}
                       placeholder="City"
+                      required
                     />
                   </div>
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -546,6 +553,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                       value={parentForm.state}
                       onChange={handleParentChange}
                       options={STATES}
+                      required
                     />
                     <InputField
                       label="Postal code"
@@ -553,6 +561,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                       value={parentForm.postalCode}
                       onChange={handleParentChange}
                       placeholder="Postal code"
+                      required
                     />
                   </div>
                 </OptionalSection>
@@ -615,7 +624,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                     </div>
 
                     <OptionalSection
-                      label="Additional details (optional)"
+                      label="Child contact and address"
                       open={optionalOpen}
                       onToggle={() => toggleChildOptional(index)}
                     >
@@ -626,7 +635,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                         value={child.email}
                         onChange={(e) => handleChildChange(index, e)}
                         placeholder="child@example.com"
-                        hint="Optional: used for progress updates"
+                        required
                       />
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <InputField
@@ -642,6 +651,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                           value={child.country}
                           onChange={(e) => handleChildChange(index, e)}
                           placeholder="Country"
+                          required
                         />
                       </div>
                       <InputField
@@ -650,6 +660,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                         value={child.streetAddress}
                         onChange={(e) => handleChildChange(index, e)}
                         placeholder="House number and street name"
+                        required
                       />
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <InputField
@@ -658,6 +669,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                           value={child.city}
                           onChange={(e) => handleChildChange(index, e)}
                           placeholder="City"
+                          required
                         />
                         <InputField
                           label="Phone"
@@ -665,6 +677,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                           value={child.phone}
                           onChange={(e) => handleChildChange(index, e)}
                           placeholder="Phone"
+                          required
                         />
                       </div>
                       <InputField
@@ -673,6 +686,7 @@ const SubscriptionCustomerInformation = ({ onNext, onSaveChildren }) => {
                         value={child.postalCode}
                         onChange={(e) => handleChildChange(index, e)}
                         placeholder="Postal code"
+                        required
                       />
                     </OptionalSection>
 

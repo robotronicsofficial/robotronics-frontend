@@ -45,7 +45,8 @@ export const PlanCard = ({
   giftable = true,
   className,
 }) => {
-  const price = cycle === "annual" ? pricing.annualMonthly : pricing.monthly;
+  const price = cycle === "annual" ? pricing.annual : pricing.monthly;
+  const priceSuffix = cycle === "annual" ? "/year" : "/month";
   const billedLabel =
     cycle === "annual" ? "Billed annually" : "Billed monthly";
   const headerBg = TONE_BACKGROUNDS[tone] ?? TONE_BACKGROUNDS.default;
@@ -99,7 +100,7 @@ export const PlanCard = ({
             <span className="text-display-md font-bold leading-none text-foreground">
               {formatMoney(price)}
             </span>
-            <span className="text-body-sm text-foreground/70">/month</span>
+            <span className="text-body-sm text-foreground/70">{priceSuffix}</span>
           </div>
           <span className="text-caption text-foreground/60">
             Per child · {billedLabel}
@@ -157,7 +158,7 @@ PlanCard.propTypes = {
   description: PropTypes.node,
   pricing: PropTypes.shape({
     monthly: PropTypes.number.isRequired,
-    annualMonthly: PropTypes.number.isRequired,
+    annual: PropTypes.number.isRequired,
   }).isRequired,
   features: PropTypes.arrayOf(PropTypes.node).isRequired,
   cta: PropTypes.shape({

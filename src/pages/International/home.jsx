@@ -13,6 +13,7 @@ import {
 import { SectionInverse } from "@/components/layout/SectionInverse";
 import OurServices from "@/components/site/international/services/ourServices";
 import QuickContact from "@/components/site/international/services/quickContact";
+import { CONTACT_PATH } from "@/router/paths";
 
 const HeroSection = () => (
   <section className="bg-background pt-header pb-12">
@@ -61,7 +62,7 @@ const FinalCta = () => (
           Run a school, run a learning center, or want to distribute? Let&apos;s talk.
         </Text>
         <Button asChild size="marketingLg">
-          <Link to="/contactUs">Talk to international team</Link>
+          <Link to={CONTACT_PATH}>Talk to international team</Link>
         </Button>
       </div>
     </Container>

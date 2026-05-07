@@ -32,7 +32,6 @@ export const BillingToggle = ({
   return (
     <div
       ref={containerRef}
-      role="radiogroup"
       aria-label="Billing cycle"
       className={cn(
         "relative inline-flex items-center rounded-full border border-border bg-card p-1",
@@ -54,8 +53,7 @@ export const BillingToggle = ({
             key={option.value}
             data-value={option.value}
             type="button"
-            role="radio"
-            aria-checked={selected}
+            aria-pressed={selected}
             onClick={() => onChange(option.value)}
             className={cn(
               "relative inline-flex h-9 items-center gap-2 rounded-full px-4 text-body-sm font-medium transition-colors duration-[var(--duration-fast)]",

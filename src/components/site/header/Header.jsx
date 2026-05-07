@@ -43,23 +43,34 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setScrolled(window.scrollY > SCROLL_THRESHOLD);
+    };
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-header w-full transition-[padding] duration-300 ease-out",
+        "sticky top-0 z-header w-full duration-300 ease-out",
         scrolled ? "px-3 pt-3 sm:px-6" : "px-0 pt-0",
       )}
     >
       <div
         data-scrolled={scrolled || undefined}
         className={cn(
-          "group/header mx-auto flex h-16 items-center justify-between gap-6 transition-[max-width,background-color,border-radius,box-shadow,border-color,padding] duration-300 ease-out",
+          "group/header mx-auto flex h-16 items-center justify-between gap-6 transition-[background-color,border-color,box-shadow] duration-300 ease-out",
           scrolled
             ? "max-w-[68rem] rounded-full border border-border bg-background/85 px-4 shadow-lg backdrop-blur supports-backdrop-filter:bg-background/70 sm:px-5"
             : "max-w-shell-wide border border-transparent bg-background/35 px-6 lg:px-8",

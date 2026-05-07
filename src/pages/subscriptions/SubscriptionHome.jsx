@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/typography";
 import { SectionInverse } from "@/components/layout/SectionInverse";
 import SubscriptionPlans from "./SubscriptionPlans";
+import { CONTACT_PATH } from "@/router/paths";
 
 const FAQ_ITEMS = [
   {
@@ -97,7 +98,7 @@ const SubscriptionFinalCta = () => (
           variant="ghost"
           className="text-background hover:bg-background/10"
         >
-          <Link to="/contactUs">Talk to schools team</Link>
+          <Link to={CONTACT_PATH}>Talk to schools team</Link>
         </Button>
       </div>
     </Container>

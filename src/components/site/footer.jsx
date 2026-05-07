@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/container";
 import { Eyebrow, Text } from "@/components/ui/typography";
 import { SectionInverse } from "@/components/layout/SectionInverse";
 import { cn } from "@/lib/utils";
+import { CONTACT_PATH } from "@/router/paths";
 
 const QUICK_LINKS = [
   { label: "About", to: "/aboutUs" },
@@ -18,7 +19,7 @@ const QUICK_LINKS = [
 
 const RESOURCE_LINKS = [
   { label: "FAQs", to: "/faqs" },
-  { label: "Contact", to: "/contactUs" },
+  { label: "Contact", to: CONTACT_PATH },
   { label: "Child protection", to: "/ChildProtection" },
   { label: "Terms & conditions", to: "/TermsConditions" },
   { label: "Privacy policy", to: "/PrivacyPolicy" },

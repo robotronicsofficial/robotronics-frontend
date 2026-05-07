@@ -12,6 +12,7 @@ import {
   Text,
 } from "@/components/ui/typography";
 import { SectionInverse } from "@/components/layout/SectionInverse";
+import { CONTACT_PATH } from "@/router/paths";
 
 const VALUES = [
   {
@@ -132,7 +133,7 @@ const FinalCta = () => (
             variant="ghost"
             className="text-background hover:bg-background/10"
           >
-            <Link to="/contactUs">For Schools</Link>
+            <Link to={CONTACT_PATH}>For Schools</Link>
           </Button>
         </div>
       </div>

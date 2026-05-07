@@ -43,7 +43,7 @@ const PlanCardSkeleton = () => (
 );
 
 const SubscriptionPlans = () => {
-  const [cycle, setCycle] = useState("annual");
+  const [cycle, setCycle] = useState("monthly");
   const navigate = useNavigate();
   const setSelectedPlan = useSelectedPlanStore((state) => state.setSelectedPlan);
 
@@ -99,7 +99,7 @@ const SubscriptionPlans = () => {
                       description={plan.description}
                       pricing={{
                         monthly: Number(plan.monthlyPrice || 0),
-                        annualMonthly: Number(plan.yearlyPrice || 0),
+                        annual: Number(plan.yearlyPrice || 0),
                       }}
                       features={plan.features || []}
                       cta={{

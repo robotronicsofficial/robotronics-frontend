@@ -1,4 +1,5 @@
 import { ensureArray, normalizeChildProfile, normalizeParentRecord } from "./subscription";
+import { formatMoney } from "@/utils/formatPrice";
 
 const STORAGE_KEY = "subscription_checkout";
 const DEFAULT_PAYMENT_METHOD = "credit-card";
@@ -145,4 +146,4 @@ export const clearSubscriptionCheckout = () => {
 };
 
 export const formatCheckoutCurrency = (amount) =>
-  `PKR ${Number(amount || 0).toLocaleString()}`;
+  formatMoney(amount);

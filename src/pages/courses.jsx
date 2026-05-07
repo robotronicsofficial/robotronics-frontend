@@ -88,9 +88,9 @@ const Courses = () => {
                   key={course._id}
                   id={course._id}
                   title={course.title}
-                  image={course.image}
+                  image={course.thumbnail}
                   price={course.price}
-                  duration={course.duration}
+                  duration={course.month}
                   category={course.category}
                 />
               ))}

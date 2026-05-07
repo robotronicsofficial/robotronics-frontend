@@ -114,8 +114,24 @@ const requireCurrentUser = async ({ context, location }) => {
   return { currentUser: user };
 };
 
-const requireChildSession = async ({ context }) => {
-  const childSession = getActiveChildSession();
+const getExpectedChildId = ({ location, params }) => {
+  const queryChildId = location?.search?.childId;
+  if (queryChildId) {
+    return String(queryChildId);
+  }
+
+  const pathname = location?.pathname || "";
+  const idFromPath = params?.id ? String(params.id) : null;
+  return idFromPath &&
+    (pathname.startsWith("/Dashboard/MyCoursesPage/") ||
+      pathname.startsWith("/Dashboard/myAllCourses/"))
+    ? idFromPath
+    : null;
+};
+
+const requireChildSession = async ({ context, location, params }) => {
+  const expectedChildId = getExpectedChildId({ location, params });
+  const childSession = getActiveChildSession(expectedChildId);
 
   if (!childSession) {
     throw redirect({ to: DASHBOARD_CHILD_PROFILE_PATH, replace: true });
@@ -203,13 +219,13 @@ const childSessionRoute = createRoute({
 });
 
 const selectedSubscriptionPlanRoute = createRoute({
-  getParentRoute: () => authenticatedRoute,
+  getParentRoute: () => rootRoute,
   id: "selectedSubscriptionPlan",
   beforeLoad: requireSelectedSubscriptionPlan,
 });
 
 const subscriptionCheckoutRoute = createRoute({
-  getParentRoute: () => authenticatedRoute,
+  getParentRoute: () => rootRoute,
   id: "subscriptionCheckout",
   beforeLoad: requireSubscriptionCheckout,
 });
@@ -286,7 +302,9 @@ const routeTree = rootRoute.addChildren([
     authRoute("/Dashboard/ProgressCertificate", ProgressCertificate),
     childSessionRoute.addChildren([
       childRoute("/Dashboard/MyCoursesPage", MyCoursesPage),
+      childRoute("/Dashboard/MyCoursesPage/$id", MyCoursesPage),
       childRoute("/Dashboard/myAllCourses", MyAllCourses),
+      childRoute("/Dashboard/myAllCourses/$id", MyAllCourses),
       childRoute("/Dashboard/courseDetail/$id", CourseDetail),
       childRoute("/Dashboard/ProgressCertificate/ProgressPage", SubscriptionProgressPage),
     ]),

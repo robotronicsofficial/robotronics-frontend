@@ -7,6 +7,7 @@ import { Heading, Text } from "@/components/ui/typography";
 import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdown";
 import { PlanCard } from "@/components/marketing/PlanCard";
 import { cn } from "@/lib/utils";
+import { CONTACT_PATH } from "@/router/paths";
 
 const AUDIENCES = {
   parent: {
@@ -20,7 +21,7 @@ const AUDIENCES = {
       {
         name: "All-in-One Learning Plan",
         description: "One subscription. Every future skill your child needs.",
-        pricing: { monthly: 2499, annualMonthly: 999 },
+        pricing: { monthly: 2499, annual: 11988 },
         features: [
           "Access to 30+ future skills (AI, Coding, Robotics, Freelancing)",
           "Learn 2 courses at a time",
@@ -48,7 +49,7 @@ const AUDIENCES = {
         name: "Basic",
         description:
           "Everything a school needs to launch a future-skills program.",
-        pricing: { monthly: 30000, annualMonthly: 12000 },
+        pricing: { monthly: 30000, annual: 144000 },
         features: [
           "Up to 300 students",
           "Full AI, Coding & Robotics curriculum",
@@ -57,14 +58,14 @@ const AUDIENCES = {
           "Certificate generation system",
           "School management dashboard",
         ],
-        cta: { label: "Get Started", to: "/contactUs" },
+        cta: { label: "Get Started", to: CONTACT_PATH },
         tone: "default",
       },
       {
         name: "Pro",
         description:
           "Everything in Basic, plus the tools schools ask for once they grow.",
-        pricing: { monthly: 75000, annualMonthly: 75000 },
+        pricing: { monthly: 75000, annual: 900000 },
         features: [
           "Everything in Basic",
           "AI-powered performance insights",
@@ -73,7 +74,7 @@ const AUDIENCES = {
           "Dedicated onboarding",
           "Access to premium resources",
         ],
-        cta: { label: "Contact Sales", to: "/contactUs" },
+        cta: { label: "Contact Sales", to: CONTACT_PATH },
         tone: "highlighted",
         popular: true,
       },
@@ -93,7 +94,6 @@ const AudienceToggle = ({ value, onChange }) => {
   const activeIndex = AUDIENCE_OPTIONS.findIndex((o) => o.value === value);
   return (
     <div
-      role="radiogroup"
       aria-label="Audience"
       className="relative grid grid-cols-2 rounded-full border border-border bg-card p-1"
     >
@@ -108,8 +108,7 @@ const AudienceToggle = ({ value, onChange }) => {
           <button
             key={option.value}
             type="button"
-            role="radio"
-            aria-checked={selected}
+            aria-pressed={selected}
             onClick={() => onChange(option.value)}
             className={cn(
               "relative inline-flex h-10 items-center justify-center rounded-full px-5 text-body-sm font-semibold transition-colors duration-[var(--duration-fast)]",

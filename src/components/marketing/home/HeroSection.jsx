@@ -5,12 +5,12 @@ import { ArrowRight, ChevronRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { CountUp } from "@/components/ui/count-up";
-import { DitherBackdrop } from "@/components/ui/dither-backdrop";
 import { Magnet } from "@/components/ui/magnet";
 import { RotatingText } from "@/components/ui/rotating-text";
 import { ShinyText } from "@/components/ui/shiny-text";
 import { Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { CONTACT_PATH } from "@/router/paths";
 import { HeroBuildLab } from "./visuals/HeroBuildLab";
 
 const MarkerUnderline = ({ className }) => (
@@ -106,7 +106,6 @@ const HeroVisual = () => {
 
 export const HeroSection = () => (
   <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
-    <DitherBackdrop className="-z-30" />
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 -z-20"
@@ -177,7 +176,7 @@ export const HeroSection = () => (
               </Button>
             </Magnet>
             <Button asChild size="marketingLg" variant="outline">
-              <Link to="/contactUs">For schools</Link>
+              <Link to={CONTACT_PATH}>For schools</Link>
             </Button>
           </div>
 

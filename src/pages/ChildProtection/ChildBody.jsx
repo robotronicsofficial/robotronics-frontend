@@ -4,6 +4,7 @@ import { LifeBuoy, Mail, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Heading, Text } from "@/components/ui/typography";
 import { PolicyPage } from "@/components/marketing/PolicyPage";
+import { CONTACT_PATH } from "@/router/paths";
 
 const REPORT_EMAIL = "safety@robotronics.com";
 
@@ -67,7 +68,7 @@ const ReportCard = () => (
         </a>
       </Button>
       <Button asChild size="marketing" variant="outline">
-        <Link to="/contactUs">
+        <Link to={CONTACT_PATH}>
           <LifeBuoy className="size-4" />
           Or use the contact form
         </Link>

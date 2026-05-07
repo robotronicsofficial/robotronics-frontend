@@ -136,12 +136,12 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const postalCode = addressData.postalCode || checkout.address?.postalCode;
   const deliveryInstruction =
     addressData.deliveryInstruction || checkout.address?.deliveryInstruction;
-  const shippingService = paymentData.shippingService || checkout.payment.shippingService;
-  const paymentMethod = paymentData.paymentMethod || checkout.payment.paymentMethod;
-  const billingEmail = paymentData.billingEmail || checkout.payment.billingEmail;
-  const accountLast4 = paymentData.accountLast4 || checkout.payment.accountLast4;
-  const expiryMonth = paymentData.expiryMonth || checkout.payment.expiryMonth;
-  const expiryYear = paymentData.expiryYear || checkout.payment.expiryYear;
+  const shippingService = paymentData.shippingService || checkout.payment?.shippingService;
+  const paymentMethod = paymentData.paymentMethod || checkout.payment?.paymentMethod;
+  const billingEmail = paymentData.billingEmail || checkout.payment?.billingEmail;
+  const accountLast4 = paymentData.accountLast4 || checkout.payment?.accountLast4;
+  const expiryMonth = paymentData.expiryMonth || checkout.payment?.expiryMonth;
+  const expiryYear = paymentData.expiryYear || checkout.payment?.expiryYear;
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
