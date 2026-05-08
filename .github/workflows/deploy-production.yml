@@ -108,10 +108,10 @@ jobs:
 
           reload_or_start_nginx() {
             sudo nginx -t
-            if sudo systemctl is-active --quiet nginx; then
-              sudo systemctl reload nginx
+            if pgrep -x nginx > /dev/null; then
+              sudo nginx -s reload
             else
-              sudo systemctl start nginx
+              sudo nginx
             fi
           }
 
