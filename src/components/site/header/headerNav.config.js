@@ -8,6 +8,7 @@ import { CART_PATH, CONTACT_PATH, COURSE_PATH } from "@/router/paths";
 export const PRIMARY_NAV = [
   { to: COURSE_PATH, label: "Courses" },
   { to: "/subscriptions", label: "Plans" },
+  { to: "/for-schools", label: "For schools" },
   { to: "/shop", label: "Shop" },
 ];
 

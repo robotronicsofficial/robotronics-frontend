@@ -2,19 +2,13 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { LogOut, Search, ShoppingCart } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import { cn } from "@/lib/utils";
 import { selectCartQuantity, useCartStore } from "@/stores/cartStore";
 
+import ChildSessionSwitcher from "./ChildSessionSwitcher";
+import HeaderPopover from "./HeaderPopover";
 import { ACCOUNT_NAV, CART_PATH } from "./headerNav.config";
 
 const getDisplayName = (user) =>
@@ -72,49 +66,63 @@ const UserMenu = ({ user, onSignOut }) => {
   const initials = getInitials(user) || "U";
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        aria-label="Account menu"
-        className={cn(
-          "grid h-9 w-9 place-items-center rounded-full border border-border bg-secondary text-body-sm font-semibold text-foreground",
-          "transition-colors hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        )}
-      >
-        {initials}
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-60">
-        <div className="px-2.5 pt-2 pb-3">
-          <Text size="sm" weight="semibold" className="truncate">
-            {displayName}
-          </Text>
-          {user?.email && (
-            <Text size="xs" tone="muted" className="truncate">
-              {user.email}
-            </Text>
+    <HeaderPopover
+      contentClassName="min-w-60"
+      trigger={({ triggerProps }) => (
+        <button
+          {...triggerProps}
+          aria-label="Account menu"
+          className={cn(
+            "grid h-9 w-9 place-items-center rounded-full border border-border bg-secondary text-body-sm font-semibold text-foreground",
+            "transition-colors hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           )}
-        </div>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel>Dashboard</DropdownMenuLabel>
-        {ACCOUNT_NAV.map((item) => (
-          <DropdownMenuItem key={item.to} asChild>
-            <Link to={item.to} className="flex items-center gap-2">
+        >
+          {initials}
+        </button>
+      )}
+    >
+      {({ close }) => (
+        <>
+          <div className="px-2.5 pt-2 pb-3">
+            <Text size="sm" weight="semibold" className="truncate">
+              {displayName}
+            </Text>
+            {user?.email && (
+              <Text size="xs" tone="muted" className="truncate">
+                {user.email}
+              </Text>
+            )}
+          </div>
+          <hr className="-mx-2 border-border" />
+          <div className="px-2.5 py-2 text-caption font-semibold text-muted-foreground">
+            Dashboard
+          </div>
+          {ACCOUNT_NAV.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              role="menuitem"
+              className="flex items-center gap-2 rounded-md px-2.5 py-2 text-body-sm text-foreground transition-colors hover:bg-muted focus:bg-muted focus:outline-none"
+            >
               {item.label}
             </Link>
-          </DropdownMenuItem>
-        ))}
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={(event) => {
-            event.preventDefault();
-            onSignOut();
-          }}
-          className="text-destructive focus:bg-destructive/10 focus:text-destructive"
-        >
-          <LogOut aria-hidden="true" className="h-4 w-4" />
-          Sign out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          ))}
+          <hr className="-mx-2 my-1 border-border" />
+          <button
+            type="button"
+            role="menuitem"
+            onClick={() => {
+              close();
+              onSignOut();
+            }}
+            className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-body-sm text-destructive transition-colors hover:bg-destructive/10 focus:bg-destructive/10 focus:outline-none"
+          >
+            <LogOut aria-hidden="true" className="h-4 w-4" />
+            Sign out
+          </button>
+        </>
+      )}
+    </HeaderPopover>
   );
 };
 
@@ -144,9 +152,12 @@ const HeaderActions = () => {
         aria-hidden="true"
         className="mx-2 hidden h-5 w-px bg-border lg:block"
       />
-      <div className="hidden items-center gap-1 lg:flex">
+      <div className="hidden items-center gap-2 lg:flex">
         {currentUser ? (
-          <UserMenu user={currentUser} onSignOut={handleSignOut} />
+          <>
+            <ChildSessionSwitcher />
+            <UserMenu user={currentUser} onSignOut={handleSignOut} />
+          </>
         ) : (
           <SignedOutActions />
         )}

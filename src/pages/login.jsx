@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "sonner";
 
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";

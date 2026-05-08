@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { CreditCard } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 import CustomerOrder from "./customerOrder";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -21,7 +21,6 @@ import {
 import { hasShippableCommerceItems } from "@/lib/commerceItems";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 
-import "react-toastify/dist/ReactToastify.css";
 
 const SHIPPING_SERVICES = [
   {

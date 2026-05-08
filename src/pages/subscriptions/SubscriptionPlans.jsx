@@ -8,8 +8,9 @@ import { Display, Highlight, Text } from "@/components/ui/typography";
 import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdown";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { PlanCard } from "@/components/marketing/PlanCard";
+import { CHECKOUT_PATH, buildCheckoutSearch } from "@/components/checkout/checkoutNav";
 import { usePlans } from "../../hooks/usePlans";
-import { useSelectedPlanStore } from "../../stores/selectedPlanStore";
+import { useCheckoutStore } from "../../stores/checkoutStore";
 
 /* Mirrors PlanCard's gradient-header / white-body shape so the loading state
    doesn't shift layout once data arrives. */
@@ -44,21 +45,23 @@ const PlanCardSkeleton = () => (
 );
 
 const SubscriptionPlans = () => {
-  const [cycle, setCycle] = useState("monthly");
+  const [cycle, setCycle] = useState("annual");
   const navigate = useNavigate();
-  const setSelectedPlan = useSelectedPlanStore((state) => state.setSelectedPlan);
+  const setPlan = useCheckoutStore((state) => state.setPlan);
 
   const { data: plans = [], isLoading, error } = usePlans();
 
   const handleSelect = (plan) => {
     const price = cycle === "annual" ? plan.yearlyPrice : plan.monthlyPrice;
-    setSelectedPlan({
+    setPlan({
       planId: plan._id,
-      plan: plan.planName,
-      price,
+      name: plan.planName,
+      price: Number(price || 0),
       billingCycle: cycle,
+      courseAccess: plan.courseAccess,
+      maxQuizAttemptsPerDay: plan.maxQuizAttemptsPerDay,
     });
-    navigate({ to: "/subscriptions/register" });
+    navigate({ to: CHECKOUT_PATH, search: buildCheckoutSearch("kids") });
   };
 
   return (

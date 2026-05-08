@@ -38,6 +38,12 @@ export const activateSubscription = (body) =>
     body,
   });
 
+export const createSubscriptionCheckoutIntent = (body) =>
+  sendSessionJson("/subscriptions/checkout-intents", {
+    method: "POST",
+    body,
+  });
+
 export const createChildPin = (body) =>
   sendSessionJson("/AddChildData", {
     method: "POST",
@@ -53,11 +59,18 @@ export const changeChildPin = ({ childId, oldPin, newPin }) =>
     },
   });
 
-export const verifyChildPin = ({ childId, pin }) =>
+export const verifyChildPin = ({ childId, pin, force = false }) =>
   sendSessionJson("/verifyChildPin", {
     method: "POST",
     body: {
       childId,
       pin,
+      force,
     },
+  });
+
+export const resetChildPin = ({ childId, newPin }) =>
+  sendSessionJson(`/children/${childId}/pin/reset`, {
+    method: "POST",
+    body: { newPin },
   });

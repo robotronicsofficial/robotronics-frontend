@@ -7,28 +7,22 @@ import {
   Outlet,
   redirect,
 } from "@tanstack/react-router";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "sonner";
 import Layout from "@/components/site/Layout";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { fetchCurrentUser } from "./lib/auth";
 import { verifyChildSession } from "./lib/childSession";
 import { queryClient } from "./lib/queryClient.js";
 import { queryKeys } from "./lib/queryKeys";
-import { loadSubscriptionCheckout } from "./lib/subscriptionCheckout";
 import {
   CART_PATH,
   CONTACT_PATH,
   DASHBOARD_CHILD_PROFILE_PATH,
   SCREEN_PATH,
 } from "./router/paths";
-import { useSelectedPlanStore } from "./stores/selectedPlanStore";
 import { clearActiveChildSession, getActiveChildSession } from "./utils/childSessionRequest";
 import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
 import { buildRedirectSearchFromLocation } from "./utils/authRedirect";
-
-const ToastContainer = lazy(() => import("react-toastify").then((module) => ({
-  default: module.ToastContainer,
-})));
 
 const Home = lazy(() => import("./pages/home"));
 const AboutUs = lazy(() => import("./pages/about"));
@@ -48,7 +42,8 @@ const ShippingService = lazy(() => import("./pages/shop/shippingService"));
 const CareerJob = lazy(() => import("./pages/career/careerJob"));
 const CareerDetailPage = lazy(() => import("./pages/career/careerDetailPage"));
 const SubscriptionHome = lazy(() => import("./pages/subscriptions/SubscriptionHome"));
-const SubscriptionRegister = lazy(() => import("./pages/subscriptions/register/SubscriptionRegister"));
+const CheckoutWizard = lazy(() => import("./pages/subscriptions/checkout/CheckoutWizard"));
+const ForSchools = lazy(() => import("./pages/forSchools"));
 const Blog = lazy(() => import("./pages/Blog/blog"));
 const BlogDetail = lazy(() => import("./pages/Blog/blogDetail"));
 const ContactUs = lazy(() => import("./pages/contactUs/contactUs"));
@@ -65,8 +60,6 @@ const Screen = lazy(() => import("./pages/SplashScreen/screen"));
 const Search = lazy(() => import("@/components/site/search"));
 const MyRobort = lazy(() => import("./pages/Dashboard/myRobot"));
 const JobApplicationForm = lazy(() => import("@/components/site/careers/CareerDetailPage/jobApplicationForm"));
-const SubscriptionPaymentHome = lazy(() => import("./pages/subscriptions/payment/SubscriptionPaymentHome"));
-const SubscriptionReviewOrderHome = lazy(() => import("./pages/subscriptions/review/SubscriptionReviewOrderHome"));
 const ChildHome = lazy(() => import("./pages/ChildProtection/ChildHome"));
 const TermsHome = lazy(() => import("./pages/policies/TermsHome"));
 const PrivacyHome = lazy(() => import("./pages/PrivacyPolicy/PrivacyHome"));
@@ -155,47 +148,13 @@ const requireChildSession = async ({ context, location, params }) => {
   return { childSession };
 };
 
-const hasSelectedSubscriptionPlan = () => {
-  const selectedPlan = useSelectedPlanStore.getState();
-  return Boolean(selectedPlan.planId && selectedPlan.billingCycle);
-};
-
-const hasSubscriptionCheckout = () => {
-  const checkout = loadSubscriptionCheckout();
-  return Boolean(checkout?.children?.length && checkout?.plan?.name);
-};
-
-const requireSelectedSubscriptionPlan = () => {
-  if (!hasSelectedSubscriptionPlan()) {
-    throw redirect({ to: "/subscriptions", replace: true });
-  }
-};
-
-const requireSubscriptionCheckout = () => {
-  if (!hasSubscriptionCheckout()) {
-    throw redirect({ to: "/subscriptions/register", replace: true });
-  }
-};
-
 const RootLayout = () => (
   <AuthProvider>
     <Layout>
       <Suspense fallback={<RouteFallback />}>
         <Outlet />
       </Suspense>
-      <Suspense fallback={null}>
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </Suspense>
+      <Toaster closeButton richColors position="top-center" duration={5000} />
     </Layout>
   </AuthProvider>
 );
@@ -216,18 +175,6 @@ const childSessionRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   id: "childSession",
   beforeLoad: requireChildSession,
-});
-
-const selectedSubscriptionPlanRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  id: "selectedSubscriptionPlan",
-  beforeLoad: requireSelectedSubscriptionPlan,
-});
-
-const subscriptionCheckoutRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  id: "subscriptionCheckout",
-  beforeLoad: requireSubscriptionCheckout,
 });
 
 const makeRoute = ({ parent = rootRoute, path, component: Component, beforeLoad }) => createRoute({
@@ -282,6 +229,11 @@ const routeTree = rootRoute.addChildren([
   publicRoute("/404", Error),
   publicRoute("/International/myRobot", MyRobort),
   publicRoute("/subscriptions", SubscriptionHome),
+  publicRoute("/subscriptions/checkout", CheckoutWizard),
+  publicRoute("/for-schools", ForSchools),
+  makeRedirectRoute("/subscriptions/register", "/subscriptions/checkout"),
+  makeRedirectRoute("/subscriptions/payment", "/subscriptions/checkout"),
+  makeRedirectRoute("/subscriptions/review", "/subscriptions/checkout"),
   publicRoute("/International/videoGallery", VideoGallery),
   publicRoute("/International/Iservices", IServices),
   publicRoute("/International/home", IHome),
@@ -307,25 +259,6 @@ const routeTree = rootRoute.addChildren([
       childRoute("/Dashboard/myAllCourses/$id", MyAllCourses),
       childRoute("/Dashboard/courseDetail/$id", CourseDetail),
       childRoute("/Dashboard/ProgressCertificate/ProgressPage", SubscriptionProgressPage),
-    ]),
-    selectedSubscriptionPlanRoute.addChildren([
-      makeRoute({
-        parent: selectedSubscriptionPlanRoute,
-        path: "/subscriptions/register",
-        component: SubscriptionRegister,
-      }),
-    ]),
-    subscriptionCheckoutRoute.addChildren([
-      makeRoute({
-        parent: subscriptionCheckoutRoute,
-        path: "/subscriptions/payment",
-        component: SubscriptionPaymentHome,
-      }),
-      makeRoute({
-        parent: subscriptionCheckoutRoute,
-        path: "/subscriptions/review",
-        component: SubscriptionReviewOrderHome,
-      }),
     ]),
   ]),
 ]);

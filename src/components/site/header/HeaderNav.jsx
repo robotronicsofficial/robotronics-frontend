@@ -2,15 +2,10 @@ import PropTypes from "prop-types";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronDown } from "lucide-react";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 
+import HeaderPopover from "./HeaderPopover";
 import { PRIMARY_NAV, RESOURCES_NAV } from "./headerNav.config";
 
 const baseLinkClass =
@@ -42,35 +37,49 @@ const NavDropdown = ({ label, items }) => {
   const isActive = items.some((item) => pathname === item.to);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        className={cn(
-          baseLinkClass,
-          "group gap-1 outline-none",
-          isActive ? activeLinkClass : inactiveLinkClass,
-        )}
-      >
-        {label}
-        <ChevronDown
-          aria-hidden="true"
-          className="h-3.5 w-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180"
-        />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="min-w-72 p-2">
-        {items.map((item) => (
-          <DropdownMenuItem key={item.to} asChild>
-            <Link to={item.to} className="flex flex-col items-start gap-0.5 px-3 py-2.5">
-              <span className="text-body-sm font-medium text-foreground">{item.label}</span>
-              {item.description && (
-                <Text size="xs" tone="muted" as="span" className="font-normal">
-                  {item.description}
-                </Text>
-              )}
-            </Link>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <HeaderPopover
+      align="start"
+      contentClassName="min-w-72"
+      trigger={({ open, triggerProps }) => (
+        <button
+          {...triggerProps}
+          className={cn(
+            baseLinkClass,
+            "group gap-1 outline-none",
+            isActive ? activeLinkClass : inactiveLinkClass,
+          )}
+        >
+          {label}
+          <ChevronDown
+            aria-hidden="true"
+            className={cn(
+              "h-3.5 w-3.5 transition-transform duration-200",
+              open && "rotate-180",
+            )}
+          />
+        </button>
+      )}
+    >
+      {() => (
+        <>
+          {items.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            role="menuitem"
+            className="flex flex-col items-start gap-0.5 rounded-md px-3 py-2.5 transition-colors hover:bg-muted focus:bg-muted focus:outline-none"
+          >
+            <span className="text-body-sm font-medium text-foreground">{item.label}</span>
+            {item.description && (
+              <Text size="xs" tone="muted" as="span" className="font-normal">
+                {item.description}
+              </Text>
+            )}
+          </Link>
+          ))}
+        </>
+      )}
+    </HeaderPopover>
   );
 };
 

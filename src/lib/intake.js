@@ -6,6 +6,12 @@ export const submitContactRequest = (body) =>
     body,
   });
 
+export const submitSchoolLead = (body) =>
+  sendJson("/school-leads", {
+    method: "POST",
+    body: { ...body, source: "for-schools" },
+  });
+
 export const submitQuickContactRequest = (body) =>
   sendJson("/quickContact", {
     method: "POST",

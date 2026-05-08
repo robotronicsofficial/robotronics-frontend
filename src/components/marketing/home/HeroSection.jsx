@@ -10,7 +10,6 @@ import { RotatingText } from "@/components/ui/rotating-text";
 import { ShinyText } from "@/components/ui/shiny-text";
 import { Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
-import { CONTACT_PATH } from "@/router/paths";
 import { HeroBuildLab } from "./visuals/HeroBuildLab";
 
 const MarkerUnderline = ({ className }) => (
@@ -176,7 +175,7 @@ export const HeroSection = () => (
               </Button>
             </Magnet>
             <Button asChild size="marketingLg" variant="outline">
-              <Link to={CONTACT_PATH}>For schools</Link>
+              <Link to="/for-schools">For schools</Link>
             </Button>
           </div>
 

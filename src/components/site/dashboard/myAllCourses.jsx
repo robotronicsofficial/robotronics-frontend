@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ChevronLeft, ChevronRight, GraduationCap, Star } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, GraduationCap, PlayCircle, Star } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 
 import CenteredState from "@/components/layout/CenteredState";
@@ -8,8 +8,9 @@ import QueryErrorState from "@/components/layout/QueryErrorState";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
-import { Heading, Text } from "@/components/ui/typography";
+import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { useChildCourses } from "@/hooks/useChildCourses";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { getActiveChildSession } from "@/utils/childSessionRequest";
@@ -92,6 +93,35 @@ const Pagination = ({ page, totalPages, onChange }) => (
   </nav>
 );
 
+const ResumeHero = ({ course, onResume }) => {
+  const progress = Math.max(0, Math.min(100, Number(course?.progress) || 0));
+  const moduleLabel = course?.currentModule || course?.nextModule || course?.title;
+  return (
+    <Card className="overflow-hidden border-primary/30 bg-primary-soft p-0">
+      <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between md:p-8">
+        <div className="flex flex-col gap-2">
+          <Eyebrow tone="brand">Pick up where you left off</Eyebrow>
+          <Heading level={2} className="text-h3">
+            Continue: {moduleLabel}
+          </Heading>
+          <Text size="sm" tone="muted">
+            {progress > 0
+              ? `${progress}% complete · keep going`
+              : "Ready to start your next lesson"}
+          </Text>
+          <div className="max-w-xs">
+            <Progress value={progress} />
+          </div>
+        </div>
+        <Button type="button" size="marketingLg" onClick={onResume}>
+          <PlayCircle className="size-4" />
+          Resume learning
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
+
 const MyAllCourses = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
@@ -106,6 +136,16 @@ const MyAllCourses = () => {
 
   const totalPages = Math.max(1, Math.ceil(courses.length / COURSES_PER_PAGE));
   const visible = courses.slice((page - 1) * COURSES_PER_PAGE, page * COURSES_PER_PAGE);
+
+  /* Resume card prefers an in-progress course (1–99%); falls back to the first
+     active course if none have progress yet. */
+  const resumeCourse = useMemo(() => {
+    if (!courses.length) return null;
+    const inProgress = [...courses]
+      .filter((course) => Number(course?.progress) > 0 && Number(course?.progress) < 100)
+      .sort((a, b) => (b.progress || 0) - (a.progress || 0))[0];
+    return inProgress || courses[0];
+  }, [courses]);
 
   const handleCourseClick = (course) => {
     const courseId = resolveCourseId(course);
@@ -161,6 +201,14 @@ const MyAllCourses = () => {
         </div>
       ) : (
         <>
+          {resumeCourse && (
+            <div className="mb-8">
+              <ResumeHero
+                course={resumeCourse}
+                onResume={() => handleCourseClick(resumeCourse)}
+              />
+            </div>
+          )}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {visible.map((course) => (
               <CourseCard

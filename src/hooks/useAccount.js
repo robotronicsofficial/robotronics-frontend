@@ -3,10 +3,12 @@ import {
   activateSubscription,
   changeChildPin,
   createChildPin,
+  createSubscriptionCheckoutIntent,
   fetchChildAccounts,
   fetchChildEnrollment,
   fetchCurrentParent,
   fetchPayments,
+  resetChildPin,
   saveParent,
   verifyChildPin,
 } from "../lib/account";
@@ -69,6 +71,18 @@ export const useActivateSubscriptionMutation = (userId) => {
   });
 };
 
+export const useCreateSubscriptionCheckoutIntentMutation = (userId) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createSubscriptionCheckoutIntent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.currentParent(userId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.subscription.childAccounts(userId) });
+    },
+  });
+};
+
 export const useCreateChildPinMutation = (userId) => {
   const queryClient = useQueryClient();
 
@@ -97,3 +111,16 @@ export const useVerifyChildPinMutation = () =>
   useMutation({
     mutationFn: verifyChildPin,
   });
+
+export const useResetChildPinMutation = (userId) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: resetChildPin,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.subscription.childAccounts(userId),
+      });
+    },
+  });
+};

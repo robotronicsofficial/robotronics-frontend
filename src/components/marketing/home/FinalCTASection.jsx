@@ -5,7 +5,6 @@ import { Container } from "@/components/ui/container";
 import { ShinyText } from "@/components/ui/shiny-text";
 import { Heading, Text } from "@/components/ui/typography";
 import { SectionInverse } from "@/components/layout/SectionInverse";
-import { CONTACT_PATH } from "@/router/paths";
 
 export const FinalCTASection = () => (
   <SectionInverse className="pt-24 pb-12 md:pt-32 md:pb-16">
@@ -28,7 +27,7 @@ export const FinalCTASection = () => (
             variant="ghost"
             className="text-background hover:bg-background/10 hover:text-background"
           >
-            <Link to={CONTACT_PATH}>Talk to schools team</Link>
+            <Link to="/for-schools">Talk to schools team</Link>
           </Button>
         </div>
       </div>

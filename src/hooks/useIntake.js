@@ -4,11 +4,17 @@ import {
   submitGiftCourseRequest,
   submitJobApplication,
   submitQuickContactRequest,
+  submitSchoolLead,
 } from "../lib/intake";
 
 export const useContactRequestMutation = () =>
   useMutation({
     mutationFn: submitContactRequest,
+  });
+
+export const useSchoolLeadMutation = () =>
+  useMutation({
+    mutationFn: submitSchoolLead,
   });
 
 export const useQuickContactRequestMutation = () =>

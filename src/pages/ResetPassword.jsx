@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "sonner";
 import { Check, X } from "lucide-react";
 
 import AuthShell from "@/components/auth/AuthShell";

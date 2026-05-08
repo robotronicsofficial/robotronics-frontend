@@ -7,7 +7,7 @@ import { Heading, Text } from "@/components/ui/typography";
 import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdown";
 import { PlanCard } from "@/components/marketing/PlanCard";
 import { cn } from "@/lib/utils";
-import { CONTACT_PATH } from "@/router/paths";
+const SCHOOLS_PATH = "/for-schools";
 
 const AUDIENCES = {
   parent: {
@@ -42,14 +42,14 @@ const AUDIENCES = {
     heading: "Bring AI & Robotics to every classroom.",
     description:
       "Modern STEM curriculum without hiring expensive trainers. Designed to scale with your school.",
-    savingsLabel: "Up to 60% off",
+    savingsLabel: "Save with annual billing",
     layout: "pair",
     plans: [
       {
         name: "Basic",
         description:
           "Everything a school needs to launch a future-skills program.",
-        pricing: { monthly: 30000, annual: 144000 },
+        pricing: { monthly: 30000, annual: 300000 },
         features: [
           "Up to 300 students",
           "Full AI, Coding & Robotics curriculum",
@@ -58,14 +58,14 @@ const AUDIENCES = {
           "Certificate generation system",
           "School management dashboard",
         ],
-        cta: { label: "Get Started", to: CONTACT_PATH },
+        cta: { label: "Talk to schools team", to: SCHOOLS_PATH },
         tone: "default",
       },
       {
         name: "Pro",
         description:
           "Everything in Basic, plus the tools schools ask for once they grow.",
-        pricing: { monthly: 75000, annual: 900000 },
+        pricing: { monthly: 75000, annual: 750000 },
         features: [
           "Everything in Basic",
           "AI-powered performance insights",
@@ -74,7 +74,7 @@ const AUDIENCES = {
           "Dedicated onboarding",
           "Access to premium resources",
         ],
-        cta: { label: "Contact Sales", to: CONTACT_PATH },
+        cta: { label: "Talk to schools team", to: SCHOOLS_PATH },
         tone: "highlighted",
         popular: true,
       },

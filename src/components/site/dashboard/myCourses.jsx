@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 import CenteredState from "@/components/layout/CenteredState";
 import DashboardLayout from "@/components/layout/DashboardLayout";
@@ -162,15 +162,18 @@ const MyCourses = () => {
   const remaining = hasFixedCourseLimit
     ? Math.max(maxCourses - selectedCourses.length, 0)
     : 0;
-  const canSave = selectedCourses.length > 0
-    && (!hasFixedCourseLimit || selectedCourses.length === maxCourses);
+  /* Relaxed gate — partial saves are allowed. Plans simply cap selections at
+     `maxCourses` total. Kids can pick fewer courses now and add the rest later. */
+  const canSave = selectedCourses.length > 0;
   const saveLabel = hasFixedCourseLimit
-    ? selectedCourses.length === maxCourses
-      ? `Save ${maxCourses} courses`
-      : `Save ${selectedCourses.length} of ${maxCourses}`
+    ? selectedCourses.length === 0
+      ? `Pick at least 1 course`
+      : selectedCourses.length === maxCourses
+        ? `Save ${maxCourses} courses`
+        : `Save ${selectedCourses.length} (add up to ${maxCourses})`
     : selectedCourses.length > 0
       ? `Save ${selectedCourses.length} courses`
-      : "Save courses";
+      : "Pick at least 1 course";
 
   if (isLoading) {
     return (
@@ -208,10 +211,10 @@ const MyCourses = () => {
 
       <div className="mb-8 flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
         <Text size="sm" tone="muted">
-          {hasFixedCourseLimit && selectedCourses.length !== maxCourses
+          {hasFixedCourseLimit
             ? remaining > 0
-              ? `Pick exactly ${maxCourses} courses — ${remaining} more to go.`
-              : `Deselect until you have ${maxCourses} courses.`
+              ? `${selectedCourses.length} selected · room for ${remaining} more${selectedCourses.length === 0 ? " (pick at least 1 to start)" : ""}.`
+              : `${selectedCourses.length} of ${maxCourses} selected — your plan is full.`
             : `${selectedCourses.length} selected.`}
         </Text>
         <Button

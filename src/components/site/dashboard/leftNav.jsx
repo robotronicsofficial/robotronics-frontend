@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import {
   Bot,
@@ -11,9 +11,14 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Heading, Text } from "@/components/ui/typography";
+import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
+import { useChildAccounts } from "@/hooks/useAccount";
 import { CONTACT_PATH } from "@/router/paths";
+import {
+  getActiveChildSession,
+  matchesChildSessionIdentifier,
+} from "@/utils/childSessionRequest";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -55,6 +60,27 @@ const LeftNav = () => {
   const { currentUser, logout } = useAuth();
   const location = useLocation();
   const [openMenus, setOpenMenus] = useState({});
+  const { data: childAccountsData } = useChildAccounts(currentUser?._id);
+  const [activeSession, setActiveSession] = useState(() => getActiveChildSession());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const next = getActiveChildSession();
+      setActiveSession((prev) =>
+        prev?.sessionId === next?.sessionId ? prev : next,
+      );
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const activeChild = activeSession
+    ? (childAccountsData?.children || []).find((child) =>
+        matchesChildSessionIdentifier(child, activeSession.childId),
+      )
+    : null;
+  const activeChildName = activeChild
+    ? [activeChild.firstName, activeChild.lastName].filter(Boolean).join(" ")
+    : null;
 
   const isPathActive = (path) => {
     if (!path) return false;
@@ -80,12 +106,26 @@ const LeftNav = () => {
   return (
     <aside className="flex w-full flex-col gap-6 px-4 py-6 lg:w-72 lg:px-6">
       <div className="flex flex-col gap-1">
-        <Heading level={3} className="text-h4">
-          Hello {currentUser?.firstName || "there"}
-        </Heading>
-        <Text size="sm" tone="muted">
-          Welcome to your account.
-        </Text>
+        {activeChildName ? (
+          <>
+            <Eyebrow tone="brand">Now learning as</Eyebrow>
+            <Heading level={3} className="text-h4 truncate">
+              {activeChildName}
+            </Heading>
+            <Text size="sm" tone="muted">
+              Parent: {currentUser?.firstName || "you"}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Heading level={3} className="text-h4">
+              Hello {currentUser?.firstName || "there"}
+            </Heading>
+            <Text size="sm" tone="muted">
+              Welcome to your account.
+            </Text>
+          </>
+        )}
       </div>
 
       <nav>

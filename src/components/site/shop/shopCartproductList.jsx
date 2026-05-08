@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 import OrderSummaryLine from "./OrderSummaryLine";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,6 @@ import {
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 
-import "react-toastify/dist/ReactToastify.css";
 
 const PENDING_CART_STORAGE_KEY = "robotronics:pendingCart";
 
@@ -110,8 +109,7 @@ const ShopCartproductList = ({ onNext }) => {
       }
 
       toast.error("Please sign in to proceed to checkout", {
-        position: "top-center",
-        autoClose: 5000,
+        duration: 5000,
       });
 
       navigate({

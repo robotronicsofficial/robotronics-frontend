@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Link, useSearch } from "@tanstack/react-router";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { toast } from "sonner";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import PropTypes from "prop-types";
-import { Check, X } from "lucide-react";
+import { Check, GraduationCap, Users, X } from "lucide-react";
 
 import facebook from "../assets/images/Facebooklogo.svg";
 import google from "../assets/images/Googlelogo.svg";
@@ -68,10 +67,71 @@ const FieldLabel = ({ htmlFor, children, action }) => (
   </div>
 );
 
+const ROLES = [
+  {
+    value: "parent",
+    icon: Users,
+    title: "I'm a parent",
+    description: "Set up learning for one or more kids at home.",
+  },
+  {
+    value: "school",
+    icon: GraduationCap,
+    title: "I'm with a school",
+    description: "Roll out AI / Coding / Robotics for your classrooms.",
+  },
+];
+
+const RolePicker = ({ value, onChange }) => (
+  <div className="grid grid-cols-1 gap-3 md:grid-cols-2" role="radiogroup">
+    {ROLES.map((role) => {
+      const Icon = role.icon;
+      const isSelected = value === role.value;
+      return (
+        <button
+          key={role.value}
+          type="button"
+          onClick={() => onChange(role.value)}
+          aria-pressed={isSelected}
+          className={cn(
+            "flex flex-col gap-2 rounded-2xl border bg-card p-4 text-left transition-colors",
+            isSelected
+              ? "border-primary ring-2 ring-primary/30 bg-primary-soft"
+              : "border-border hover:border-foreground",
+          )}
+        >
+          <span
+            aria-hidden="true"
+            className={cn(
+              "grid size-9 place-items-center rounded-xl",
+              isSelected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
+            )}
+          >
+            <Icon className="size-4" />
+          </span>
+          <Text size="sm" weight="semibold">
+            {role.title}
+          </Text>
+          <Text size="xs" tone="muted">
+            {role.description}
+          </Text>
+        </button>
+      );
+    })}
+  </div>
+);
+
+RolePicker.propTypes = {
+  value: PropTypes.oneOf(["parent", "school"]).isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
 const Signup = () => {
+  const navigate = useNavigate();
   const registerMutation = useRegisterMutation();
   const search = useSearch({ strict: false });
   const redirectPath = getSafeRedirectPath(search.redirect);
+  const [role, setRole] = useState("parent");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -138,6 +198,43 @@ const Signup = () => {
     window.location.assign(resolveBackendUrl(`/auth/${provider}`));
   };
 
+  if (role === "school") {
+    return (
+      <AuthShell>
+        <header className="flex flex-col items-center gap-2 text-center">
+          <Display size="md">Schools have their own onboarding</Display>
+          <Text tone="muted" className="max-w-md">
+            We tailor pricing, rollout, and teacher accounts based on your
+            student count. Skip the personal signup and tell us about your
+            school instead.
+          </Text>
+        </header>
+
+        <RolePicker value={role} onChange={setRole} />
+
+        <div className="flex flex-col gap-3">
+          <Button
+            type="button"
+            size="marketing"
+            className="w-full"
+            onClick={() => navigate({ to: "/for-schools" })}
+          >
+            Go to schools onboarding
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="marketing"
+            className="w-full"
+            onClick={() => setRole("parent")}
+          >
+            Actually, I'm a parent
+          </Button>
+        </div>
+      </AuthShell>
+    );
+  }
+
   return (
     <AuthShell>
       <header className="flex flex-col items-center gap-2 text-center">
@@ -146,6 +243,8 @@ const Signup = () => {
           One subscription unlocks every future skill for your child.
         </Text>
       </header>
+
+      <RolePicker value={role} onChange={setRole} />
 
       <div className="flex flex-col gap-3">
         <AuthSocialButton

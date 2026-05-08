@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 import CustomerProduct from "./customerProduct";
 import OrderSummaryLine from "./OrderSummaryLine";
@@ -26,7 +26,6 @@ import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { useSaveCheckoutAddressMutation } from "@/hooks/useShopOrders";
 
-import "react-toastify/dist/ReactToastify.css";
 
 const STATES = [
   { value: "BAL", label: "Balochistan" },

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { Mail, Phone, School, MapPin, Cake, UserCircle } from "lucide-react";
+import { toast } from "sonner";
 
 import CenteredState from "@/components/layout/CenteredState";
 import DashboardLayout from "@/components/layout/DashboardLayout";
@@ -9,6 +10,7 @@ import SuccessModal from "./popUps/SuccessModal";
 import PinModal from "./popUps/PinModal";
 import ChangePinModal from "./popUps/ChangePinModal";
 import ErrorModal from "./popUps/ErrorModal";
+import ForgotPinModal from "./popUps/ForgotPinModal";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,7 +30,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import {
   useChangeChildPinMutation,
   useChildAccounts,
-  useCreateChildPinMutation,
+  useResetChildPinMutation,
   useVerifyChildPinMutation,
 } from "@/hooks/useAccount";
 import {
@@ -36,6 +38,9 @@ import {
   getChildSessionIdentifiers,
   setActiveChildSession,
 } from "@/utils/childSessionRequest";
+
+const isConcurrentSessionMessage = (message = "") =>
+  /already active|another session|already a session|currently using/i.test(message || "");
 
 const DetailRow = ({ icon: Icon, label, value }) => (
   <div className="flex items-start gap-2.5 text-body-sm">
@@ -69,6 +74,7 @@ const EmptyStateCard = ({ title, description, ctaLabel, onCta }) => (
 
 const ChildCard = ({ child, onViewCourses, onPinAction }) => {
   const fullName = [child.firstName, child.lastName].filter(Boolean).join(" ") || "Child";
+  const canManagePin = Boolean(child.hasChildAccount);
   return (
     <Card className="h-full">
       <CardContent className="flex flex-col gap-5">
@@ -115,7 +121,7 @@ const ChildCard = ({ child, onViewCourses, onPinAction }) => {
           <Button
             type="button"
             onClick={() => onViewCourses(child._id)}
-            disabled={!child.hasPin}
+            disabled={!child.hasPin || !child.hasChildAccount}
             className="flex-1"
           >
             View courses
@@ -124,9 +130,14 @@ const ChildCard = ({ child, onViewCourses, onPinAction }) => {
             type="button"
             variant="outline"
             onClick={() => onPinAction(child._id, child.hasPin)}
+            disabled={!canManagePin}
             className="flex-1"
           >
-            {child.hasPin ? "Change PIN" : "Create login PIN"}
+            {!child.hasChildAccount
+              ? "Awaiting activation"
+              : child.hasPin
+                ? "Change PIN"
+                : "Create login PIN"}
           </Button>
         </div>
       </CardContent>
@@ -143,6 +154,8 @@ const SubscriptionChildProfile = () => {
   const [isChangePinModalOpen, setIsChangePinModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isReplacePinConfirmOpen, setIsReplacePinConfirmOpen] = useState(false);
+  const [isForgotPinOpen, setIsForgotPinOpen] = useState(false);
+  const [takeoverPin, setTakeoverPin] = useState(null);
   const [pinError, setPinError] = useState(null);
   const [selectedChildId, setSelectedChildId] = useState(null);
   const { currentUser } = useAuth();
@@ -153,7 +166,7 @@ const SubscriptionChildProfile = () => {
     error: childAccountsError,
   } = useChildAccounts(userId);
   const changeChildPinMutation = useChangeChildPinMutation(userId);
-  const createChildPinMutation = useCreateChildPinMutation(userId);
+  const resetChildPinMutation = useResetChildPinMutation(userId);
   const verifyChildPinMutation = useVerifyChildPinMutation();
   const parentData = childAccountsData?.parent || null;
   const children = childAccountsData?.children || [];
@@ -194,29 +207,13 @@ const SubscriptionChildProfile = () => {
       }
       const childData = children.find((child) => child._id === selectedChildId);
       if (!childData) throw new Error("Child account not found");
-      const childPlanId = childData.plan?.planId || childData.plan?.id;
-      if (!childPlanId || !childData.plan?.billingCycle) {
-        throw new Error("Child subscription plan is missing. Refresh the page and try again.");
+      if (!childData.hasChildAccount) {
+        throw new Error("Subscription is not active for this child yet.");
       }
-      await createChildPinMutation.mutateAsync({
-        _id: childData._id,
-        firstName: childData.firstName,
-        lastName: childData.lastName,
-        email: childData.email,
-        phone: childData.phone,
-        dateOfBirth: childData.dateOfBirth,
-        country: childData.country,
-        schoolName: childData.schoolName,
-        streetAddress: childData.streetAddress,
-        city: childData.city,
-        postalCode: childData.postalCode,
-        gender: childData.gender,
-        plan: {
-          planId: childPlanId,
-          billingCycle: childData.plan.billingCycle,
-        },
-        pin: pinData,
-        userId: currentUser._id,
+      const childAccessId = childData?.accessChildId || selectedChildId;
+      await resetChildPinMutation.mutateAsync({
+        childId: childAccessId,
+        newPin: pinData,
       });
       setIsPinModalOpen(false);
       setIsSuccessModalOpen(true);
@@ -226,41 +223,87 @@ const SubscriptionChildProfile = () => {
     }
   };
 
+  const finishVerifySession = async (selectedChild, childAccessId, sessionId) => {
+    setIsVerifyPinModalOpen(false);
+    setTakeoverPin(null);
+    if (sessionId) {
+      clearActiveChildSession();
+      setActiveChildSession({
+        childId: childAccessId,
+        childIds: getChildSessionIdentifiers(selectedChild),
+        sessionId,
+      });
+    }
+    const coursesData = await queryClient.fetchQuery({
+      queryKey: queryKeys.childCourses.enrollment(childAccessId),
+      queryFn: () => fetchChildEnrollment(childAccessId),
+    });
+    const selectedCourses = ensureArray(coursesData?.courses);
+    navigate({
+      to: selectedCourses.length > 0 ? "/Dashboard/myAllCourses" : "/Dashboard/MyCoursesPage",
+    });
+  };
+
   const handleVerifyPinSubmit = async (pinData) => {
     try {
       setPinError(null);
       const selectedChild = children.find((child) => child._id === selectedChildId);
-      if (!selectedChild) throw new Error("Child account not found");
+      if (!selectedChild) throw new Error("Child account not found.");
       const childAccessId = selectedChild?.accessChildId || selectedChildId;
       const data = await verifyChildPinMutation.mutateAsync({
         childId: childAccessId,
         pin: pinData,
       });
-      if (
-        data.message === "Another session is active. Please try again later." ||
-        data.message === "Account is already active on another device"
-      ) {
-        setPinError("Another child is currently using this account. Please try again later.");
-        setIsErrorModalOpen(true);
+
+      /* Concurrent-session conflict — surface a takeover affordance instead
+         of dead-ending. The parent can decide to bump the other device. */
+      if (isConcurrentSessionMessage(data?.message)) {
+        setTakeoverPin(pinData);
         return;
       }
-      setIsVerifyPinModalOpen(false);
-      if (data.sessionId) {
-        clearActiveChildSession();
-        setActiveChildSession({
-          childId: childAccessId,
-          childIds: getChildSessionIdentifiers(selectedChild),
-          sessionId: data.sessionId,
-        });
+
+      await finishVerifySession(selectedChild, childAccessId, data.sessionId);
+    } catch (err) {
+      if (isConcurrentSessionMessage(err?.message)) {
+        setTakeoverPin(pinData);
+        return;
       }
-      const coursesData = await queryClient.fetchQuery({
-        queryKey: queryKeys.childCourses.enrollment(childAccessId),
-        queryFn: () => fetchChildEnrollment(childAccessId),
+      setPinError(err.message);
+      setIsErrorModalOpen(true);
+    }
+  };
+
+  const handleConfirmTakeover = async () => {
+    try {
+      setPinError(null);
+      const selectedChild = children.find((child) => child._id === selectedChildId);
+      if (!selectedChild) throw new Error("Child account not found.");
+      const childAccessId = selectedChild?.accessChildId || selectedChildId;
+      const data = await verifyChildPinMutation.mutateAsync({
+        childId: childAccessId,
+        pin: takeoverPin,
+        force: true,
       });
-      const selectedCourses = ensureArray(coursesData?.courses);
-      navigate({
-        to: selectedCourses.length > 0 ? "/Dashboard/myAllCourses" : "/Dashboard/MyCoursesPage",
+      await finishVerifySession(selectedChild, childAccessId, data.sessionId);
+      toast.success("Switched to this device.");
+    } catch (err) {
+      setPinError(err.message);
+      setIsErrorModalOpen(true);
+    }
+  };
+
+  const handleForgotPinSubmit = async (newPin) => {
+    try {
+      const selectedChild = children.find((child) => child._id === selectedChildId);
+      if (!selectedChild) throw new Error("Child account not found.");
+      const childAccessId = selectedChild?.accessChildId || selectedChildId;
+      await resetChildPinMutation.mutateAsync({
+        childId: childAccessId,
+        newPin,
       });
+      setIsForgotPinOpen(false);
+      setIsVerifyPinModalOpen(false);
+      toast.success("PIN reset. Use the new PIN to log in.");
     } catch (err) {
       setPinError(err.message);
       setIsErrorModalOpen(true);
@@ -346,9 +389,44 @@ const SubscriptionChildProfile = () => {
         onClose={() => setIsVerifyPinModalOpen(false)}
         onPinSubmit={handleVerifyPinSubmit}
         mode="verify"
-        title="Enter your PIN"
-        description="Please enter your 4-digit PIN to view courses."
+        title="Enter PIN"
+        description="Enter the 4-digit PIN to start a learning session."
+        onForgotPin={() => {
+          setIsVerifyPinModalOpen(false);
+          setIsForgotPinOpen(true);
+        }}
       />
+
+      <ForgotPinModal
+        isOpen={isForgotPinOpen}
+        onClose={() => setIsForgotPinOpen(false)}
+        onSubmit={handleForgotPinSubmit}
+        isPending={resetChildPinMutation.isPending}
+      />
+
+      <Dialog open={Boolean(takeoverPin)} onOpenChange={() => setTakeoverPin(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Another device is signed in</DialogTitle>
+            <DialogDescription>
+              This child is already learning on another device. Continue here
+              to bump the other session and pick up where they left off.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setTakeoverPin(null)}>
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={handleConfirmTakeover}
+              disabled={verifyChildPinMutation.isPending}
+            >
+              {verifyChildPinMutation.isPending ? "Switching…" : "Continue here"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <ChangePinModal
         isOpen={isChangePinModalOpen}

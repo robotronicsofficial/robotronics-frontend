@@ -4,6 +4,7 @@ import {
   logoutUser,
   registerUser,
   requestPasswordReset,
+  resendVerificationEmail,
   resetPassword,
   verifyEmailToken,
 } from "../lib/auth";
@@ -55,4 +56,9 @@ export const useRequestPasswordResetMutation = () =>
 export const useResetPasswordMutation = () =>
   useMutation({
     mutationFn: resetPassword,
+  });
+
+export const useResendVerificationMutation = () =>
+  useMutation({
+    mutationFn: resendVerificationEmail,
   });

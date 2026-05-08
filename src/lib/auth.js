@@ -43,3 +43,9 @@ export const resetPassword = ({ token, password }) =>
     method: "POST",
     body: { token, password },
   });
+
+export const resendVerificationEmail = (email) =>
+  sendJson("/auth/resend-verification", {
+    method: "POST",
+    body: { email },
+  });
