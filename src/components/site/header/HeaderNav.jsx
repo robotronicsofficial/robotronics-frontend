@@ -45,7 +45,7 @@ const NavDropdown = ({ label, items }) => {
           {...triggerProps}
           className={cn(
             baseLinkClass,
-            "group gap-1 outline-none",
+            "group gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
             isActive ? activeLinkClass : inactiveLinkClass,
           )}
         >

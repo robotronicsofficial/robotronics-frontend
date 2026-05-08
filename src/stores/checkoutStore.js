@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 /* ──────────────────────────────────────────────────────────────────
    checkoutStore — single source of truth for the subscription flow.
@@ -143,6 +143,7 @@ export const useCheckoutStore = create(
     }),
     {
       name: "robotronics.checkout",
+      storage: createJSONStorage(() => sessionStorage),
       version: 2,
       migrate: (persistedState) => ({
         ...initialState,

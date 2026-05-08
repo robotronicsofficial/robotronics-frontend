@@ -103,6 +103,7 @@ const PlanStep = () => {
   const currentPlan = useCheckoutStore((state) => state.plan);
   const [cycle, setCycle] = useState(currentPlan?.billingCycle || "annual");
   const { data: plans = [], isLoading, error } = usePlans();
+  const isEmpty = !isLoading && plans.length === 0;
 
   const handleSelect = (plan) => {
     const price = cycle === "annual" ? plan.yearlyPrice : plan.monthlyPrice;
@@ -145,9 +146,18 @@ const PlanStep = () => {
               </Text>
             </CardContent>
           </Card>
+        ) : isEmpty ? (
+          <Card>
+            <CardContent>
+              <Text tone="muted">
+                No subscription plans are available right now. Please refresh, or contact support
+                so we can help you choose the right plan.
+              </Text>
+            </CardContent>
+          </Card>
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {isLoading || plans.length === 0
+            {isLoading
               ? Array.from({ length: 3 }).map((_, i) => (
                   <PlanCardSkeleton key={i} />
                 ))

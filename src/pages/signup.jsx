@@ -27,6 +27,7 @@ import {
   PASSWORD_POLICY_MESSAGE,
 } from "../utils/passwordPolicy";
 import {
+  buildAuthRedirectQuery,
   buildAuthRedirectSearch,
   getSafeRedirectPath,
   savePostAuthRedirect,
@@ -83,23 +84,29 @@ const ROLES = [
 ];
 
 const RolePicker = ({ value, onChange }) => (
-  <div className="grid grid-cols-1 gap-3 md:grid-cols-2" role="radiogroup">
+  <fieldset className="grid grid-cols-1 gap-3 md:grid-cols-2">
+    <legend className="sr-only">Account type</legend>
     {ROLES.map((role) => {
       const Icon = role.icon;
       const isSelected = value === role.value;
       return (
-        <button
+        <label
           key={role.value}
-          type="button"
-          onClick={() => onChange(role.value)}
-          aria-pressed={isSelected}
           className={cn(
-            "flex flex-col gap-2 rounded-2xl border bg-card p-4 text-left transition-colors",
+            "flex cursor-pointer flex-col gap-2 rounded-2xl border bg-card p-4 text-left transition-colors",
             isSelected
               ? "border-primary ring-2 ring-primary/30 bg-primary-soft"
               : "border-border hover:border-foreground",
           )}
         >
+          <input
+            type="radio"
+            name="accountType"
+            value={role.value}
+            checked={isSelected}
+            onChange={() => onChange(role.value)}
+            className="sr-only"
+          />
           <span
             aria-hidden="true"
             className={cn(
@@ -115,10 +122,10 @@ const RolePicker = ({ value, onChange }) => (
           <Text size="xs" tone="muted">
             {role.description}
           </Text>
-        </button>
+        </label>
       );
     })}
-  </div>
+  </fieldset>
 );
 
 RolePicker.propTypes = {
@@ -177,7 +184,8 @@ const Signup = () => {
     return true;
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (event) => {
+    event.preventDefault();
     if (!validateForm()) return;
     try {
       await registerMutation.mutateAsync({
@@ -195,7 +203,8 @@ const Signup = () => {
   };
 
   const handleSocialLogin = (provider) => {
-    window.location.assign(resolveBackendUrl(`/auth/${provider}`));
+    if (redirectPath) savePostAuthRedirect(redirectPath);
+    window.location.assign(resolveBackendUrl(`/auth/${provider}${buildAuthRedirectQuery(redirectPath)}`));
   };
 
   if (role === "school") {
@@ -269,7 +278,7 @@ const Signup = () => {
         <Separator className="flex-1" />
       </div>
 
-      <div className="flex flex-col gap-4">
+      <form onSubmit={handleSignUp} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="flex flex-col gap-1.5">
             <FieldLabel htmlFor="firstName">First name</FieldLabel>
@@ -279,6 +288,7 @@ const Signup = () => {
               autoComplete="given-name"
               value={formData.firstName}
               onChange={handleChange}
+              required
             />
           </div>
           <div className="flex flex-col gap-1.5">
@@ -289,6 +299,7 @@ const Signup = () => {
               autoComplete="family-name"
               value={formData.lastName}
               onChange={handleChange}
+              required
             />
           </div>
         </div>
@@ -302,6 +313,7 @@ const Signup = () => {
             autoComplete="email"
             value={formData.email}
             onChange={handleChange}
+            required
           />
         </div>
 
@@ -318,6 +330,7 @@ const Signup = () => {
                 "w-full rounded-md border border-border bg-background p-2 pl-14 text-base focus:outline-none focus:ring-2 focus:ring-ring/40",
               autoComplete: "tel",
               type: "tel",
+              required: true,
             }}
             countrySelectProps={{
               className:
@@ -351,6 +364,7 @@ const Signup = () => {
             autoComplete="new-password"
             value={formData.password}
             onChange={handleChange}
+            required
           />
           <div className="mt-1 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
             <RequirementCheck isValid={passwordErrors.length} text="8+ characters" />
@@ -379,6 +393,7 @@ const Signup = () => {
             autoComplete="new-password"
             value={formData.confirmPassword}
             onChange={handleChange}
+            required
           />
           {formData.confirmPassword && (
             <Text
@@ -412,10 +427,9 @@ const Signup = () => {
         </div>
 
         <Button
-          type="button"
+          type="submit"
           size="marketing"
           className="w-full"
-          onClick={handleSignUp}
           disabled={!isCheckboxChecked || registerMutation.isPending}
         >
           {registerMutation.isPending ? (
@@ -427,7 +441,7 @@ const Signup = () => {
             "Create account"
           )}
         </Button>
-      </div>
+      </form>
 
       <Text tone="muted" size="sm" className="text-center">
         Already have an account?{" "}

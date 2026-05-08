@@ -18,8 +18,10 @@ import { resolveBackendUrl } from "../lib/api";
 import { useRequestPasswordResetMutation } from "../hooks/useAuthMutations";
 import {
   buildAuthRedirectSearch,
+  buildAuthRedirectQuery,
   consumePostAuthRedirect,
   getSafeRedirectPath,
+  savePostAuthRedirect,
 } from "../utils/authRedirect";
 
 const FieldLabel = ({ htmlFor, children, action }) => (
@@ -91,7 +93,8 @@ const Login = () => {
   };
 
   const handleSocialLogin = (provider) => {
-    window.location.assign(resolveBackendUrl(`/auth/${provider}`));
+    if (redirectPath) savePostAuthRedirect(redirectPath);
+    window.location.assign(resolveBackendUrl(`/auth/${provider}${buildAuthRedirectQuery(redirectPath)}`));
   };
 
   if (isAuthLoading) {

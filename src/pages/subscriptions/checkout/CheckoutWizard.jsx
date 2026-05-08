@@ -26,6 +26,7 @@ const CheckoutWizard = () => {
   const requestedStep = getStepFromSearch(search);
   const explicitStep = Boolean(search?.step);
   const setStep = useCheckoutStore((state) => state.setStep);
+  const reset = useCheckoutStore((state) => state.reset);
   const status = useCheckoutStore((state) => state.status);
 
   const hasPlan = useCheckoutStore(selectHasPlan);
@@ -39,7 +40,11 @@ const CheckoutWizard = () => {
      instead of letting them land on a step the store can't fulfill. Order
      matters: `welcome` short-circuits on `status === "active"`; otherwise
      each step requires the previous step's data to be present. */
+  const shouldStartFreshCheckout =
+    (status === "submitted" || status === "active") && requestedStep !== "welcome";
+
   const resolvedStep = (() => {
+    if (shouldStartFreshCheckout) return "plan";
     if (status === "submitted" || status === "active") return "welcome";
     if (requestedStep === "welcome" && status !== "submitted" && status !== "active") return "confirm";
     if (requestedStep === "confirm" && !paymentComplete) return "payment";
@@ -54,6 +59,20 @@ const CheckoutWizard = () => {
   })();
 
   useEffect(() => {
+    if (shouldStartFreshCheckout) {
+      reset();
+      if (requestedStep !== "plan") {
+        navigate({
+          to: CHECKOUT_PATH,
+          search: buildCheckoutSearch("plan"),
+          replace: true,
+        });
+        return;
+      }
+      setStep("plan");
+      return;
+    }
+
     if (resolvedStep !== requestedStep) {
       navigate({
         to: CHECKOUT_PATH,
@@ -63,7 +82,7 @@ const CheckoutWizard = () => {
       return;
     }
     setStep(resolvedStep);
-  }, [resolvedStep, requestedStep, navigate, setStep]);
+  }, [resolvedStep, requestedStep, navigate, setStep, reset, shouldStartFreshCheckout]);
 
   switch (resolvedStep) {
     case "kids":

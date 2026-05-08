@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ChevronDown, LogOut, RefreshCw, UserCircle, X } from "lucide-react";
+import { ChevronDown, LogOut, RefreshCw, UserCircle } from "lucide-react";
 import { toast } from "sonner";
 
 import PinDigitFields from "@/components/forms/PinDigitFields";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Eyebrow, Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import {
@@ -51,21 +58,6 @@ const ChildSessionSwitcher = () => {
     }, 2000);
     return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    if (!pendingChild) {
-      return undefined;
-    }
-
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        closePinDialog();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [pendingChild]);
 
   const children = childAccountsData?.children || [];
   if (!children.length) return null;
@@ -268,37 +260,21 @@ const ChildSessionSwitcher = () => {
         )}
       </HeaderPopover>
 
-      {pendingChild && (
-        <div className="fixed inset-0 z-modal grid place-items-center p-4">
-          <button
-            type="button"
-            aria-label="Close PIN dialog"
-            className="absolute inset-0 bg-overlay"
-            onClick={closePinDialog}
-          />
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="switch-child-title"
-            aria-describedby="switch-child-description"
-            className="relative w-full max-w-md rounded-lg border border-border bg-popover p-6 text-popover-foreground shadow-xl"
-          >
-            <button
-              type="button"
-              aria-label="Close PIN dialog"
-              onClick={closePinDialog}
-              className="absolute right-3 top-3 grid size-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              <X aria-hidden="true" className="size-4" />
-            </button>
-            <div className="mb-5 pr-8 text-center">
-              <h2 id="switch-child-title" className="text-h3">
+      <Dialog open={Boolean(pendingChild)} onOpenChange={(open) => {
+        if (!open) closePinDialog();
+      }}>
+        {pendingChild && (
+          <DialogContent className="w-full max-w-md p-6">
+            <DialogHeader className="mb-3 pr-8 text-center">
+              <DialogTitle className="text-h3">
                 Switch to {pendingChild.firstName}
-              </h2>
-              <Text id="switch-child-description" size="sm" tone="muted" className="mt-2">
-                Enter the 4-digit PIN to start their learning session.
-              </Text>
-            </div>
+              </DialogTitle>
+              <DialogDescription asChild>
+                <Text size="sm" tone="muted" className="mt-2">
+                  Enter the 4-digit PIN to start their learning session.
+                </Text>
+              </DialogDescription>
+            </DialogHeader>
             <form onSubmit={handlePinSubmit} className="flex flex-col gap-5">
               <PinDigitFields
                 idPrefix="switch-child-pin"
@@ -321,9 +297,9 @@ const ChildSessionSwitcher = () => {
                 Forgot PIN?
               </Button>
             </form>
-          </div>
-        </div>
-      )}
+          </DialogContent>
+        )}
+      </Dialog>
     </>
   );
 };

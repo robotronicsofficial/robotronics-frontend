@@ -213,10 +213,10 @@ const ContactUsForm = () => {
             className="flex flex-col gap-5 rounded-2xl border border-border bg-card p-6 md:p-8"
           >
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-x-4">
-              <FloatingField type="text" name="name" id="name" label="Name" value={formData.name} onChange={handleChange} required />
-              <FloatingField type="email" name="email" id="email" label="Email" value={formData.email} onChange={handleChange} required />
-              <FloatingField type="tel" name="phone" id="phone" label="Phone" value={formData.phone} onChange={handleChange} required />
-              <FloatingField type="text" name="city" id="city" label="City" value={formData.city} onChange={handleChange} required />
+              <FloatingField type="text" name="name" id="name" label="Name" value={formData.name} onChange={handleChange} autoComplete="name" required />
+              <FloatingField type="email" name="email" id="email" label="Email" value={formData.email} onChange={handleChange} autoComplete="email" required />
+              <FloatingField type="tel" name="phone" id="phone" label="Phone" value={formData.phone} onChange={handleChange} autoComplete="tel" required />
+              <FloatingField type="text" name="city" id="city" label="City" value={formData.city} onChange={handleChange} autoComplete="address-level2" required />
             </div>
 
             <FormSelect
@@ -229,7 +229,7 @@ const ContactUsForm = () => {
             />
 
             {formData.userType === "school" && (
-              <FloatingField type="text" name="schoolName" id="schoolName" label="School name" value={formData.schoolName} onChange={handleChange} required />
+              <FloatingField type="text" name="schoolName" id="schoolName" label="School name" value={formData.schoolName} onChange={handleChange} autoComplete="organization" required />
             )}
 
             <FloatingField
@@ -239,6 +239,7 @@ const ContactUsForm = () => {
               label={formData.userType === "school" ? "School address" : "Your address"}
               value={formData.address}
               onChange={handleChange}
+              autoComplete="street-address"
               required
             />
 

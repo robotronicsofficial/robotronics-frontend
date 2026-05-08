@@ -11,6 +11,11 @@ export const buildAuthRedirectSearch = (redirectPath) => {
   return safeRedirectPath ? { redirect: safeRedirectPath } : {};
 };
 
+export const buildAuthRedirectQuery = (redirectPath) => {
+  const safeRedirectPath = getSafeRedirectPath(redirectPath);
+  return safeRedirectPath ? `?redirect=${encodeURIComponent(safeRedirectPath)}` : "";
+};
+
 export const buildRedirectSearchFromLocation = (location, currentAuthPath = "/Login") => {
   const href = location?.href || `${location?.pathname || ""}${location?.searchStr || ""}${location?.hash || ""}`;
   return href && href !== currentAuthPath ? buildAuthRedirectSearch(href) : {};

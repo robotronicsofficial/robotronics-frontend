@@ -99,7 +99,10 @@ const WelcomeStep = () => {
           <Button
             type="button"
             variant="outline"
-            onClick={() => navigate({ to: "/" })}
+            onClick={() => {
+              reset();
+              navigate({ to: "/" });
+            }}
           >
             Back to home
           </Button>

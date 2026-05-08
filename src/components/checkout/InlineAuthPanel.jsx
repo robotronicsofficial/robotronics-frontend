@@ -28,7 +28,7 @@ import {
   hasValidPasswordRequirements,
   PASSWORD_POLICY_MESSAGE,
 } from "@/utils/passwordPolicy";
-import { savePostAuthRedirect } from "@/utils/authRedirect";
+import { buildAuthRedirectQuery, savePostAuthRedirect } from "@/utils/authRedirect";
 import { cn } from "@/lib/utils";
 
 /* ──────────────────────────────────────────────────────────────────
@@ -95,7 +95,7 @@ export const InlineAuthPanel = ({
 
   const handleSocialLogin = (provider) => {
     if (redirectPath) savePostAuthRedirect(redirectPath);
-    window.location.assign(resolveBackendUrl(`/auth/${provider}`));
+    window.location.assign(resolveBackendUrl(`/auth/${provider}${buildAuthRedirectQuery(redirectPath)}`));
   };
 
   const handleSignup = async (event) => {
