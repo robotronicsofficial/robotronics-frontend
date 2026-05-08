@@ -39,9 +39,6 @@ jobs:
             "DEPLOY_USER='${PRODUCTION_SSH_USER}' bash -s" <<'EOF'
           set -euo pipefail
 
-          nginx -t
-          systemctl enable --now nginx || nginx
-
           if ! id "${DEPLOY_USER}" >/dev/null 2>&1; then
             echo "Deploy user does not exist: ${DEPLOY_USER}" >&2
             exit 1
@@ -53,8 +50,17 @@ jobs:
           chmod 440 /etc/sudoers.d/robotronics-frontend-deploy
           visudo -cf /etc/sudoers.d/robotronics-frontend-deploy
 
-          readlink -f /srv/robotronics/frontend/current || true
+          nginx -t
+          systemctl stop nginx || true
+          pkill -x nginx || true
+          rm -f /run/nginx.pid /var/run/nginx.pid
+          systemctl enable nginx || true
+          nginx
+          sleep 1
           pgrep -x nginx >/dev/null
+          nginx -s reload
+
+          readlink -f /srv/robotronics/frontend/current || true
           EOF
 
           ssh -p "${ssh_port}" "${PRODUCTION_SSH_USER}@${PRODUCTION_SSH_HOST}" \
