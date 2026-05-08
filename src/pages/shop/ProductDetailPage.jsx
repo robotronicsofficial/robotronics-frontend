@@ -1,13 +1,11 @@
-import Intro from '../../component/shop/productDetail/intro'
-import MoreProduct from '../../component/shop/productDetail/moreProduct';
+import Intro from "@/components/site/shop/productDetail/intro";
+import MoreProduct from "@/components/site/shop/productDetail/moreProduct";
 
-const ProductDetailPage = () => {
-  return (
-    <div className="pt-[9rem] bg-lightgray">
-        <Intro/>
-        <MoreProduct/>
-    </div>
-  )
-}
+const ProductDetailPage = () => (
+  <>
+    <Intro />
+    <MoreProduct />
+  </>
+);
 
 export default ProductDetailPage;

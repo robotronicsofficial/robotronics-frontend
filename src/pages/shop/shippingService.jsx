@@ -1,13 +1,20 @@
-import CheckoutIntro from "../../component/shop/CheckoutIntro";
-import ShopPaymentMethod from "../../component/shop/shopPaymentMethod"
+import CheckoutIntro from "@/components/site/shop/CheckoutIntro";
+import MarketingHero from "@/components/marketing/MarketingHero";
+import ShopPaymentMethod from "@/components/site/shop/shopPaymentMethod";
 
-const ShippingService = () => {
-  return (
-    <div>
-        <CheckoutIntro activeStep={3} />
-        <ShopPaymentMethod/>
-    </div>
-  )
-}
+const ShippingService = () => (
+  <>
+    <MarketingHero
+      size="compact"
+      step={{ current: 3, label: "Shipping & payment", total: 4 }}
+      title="Shipping and payment"
+      subtitle="Choose a courier and a billing method to continue."
+      containerSize="wide"
+    >
+      <CheckoutIntro activeStep={3} />
+    </MarketingHero>
+    <ShopPaymentMethod />
+  </>
+);
 
 export default ShippingService;

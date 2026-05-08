@@ -1,4 +1,5 @@
 import { hasShippableCommerceItems } from "./commerceItems";
+import { formatMoney } from "@/utils/formatPrice";
 
 const STORAGE_KEY = "shop_checkout";
 export const SHIPPING_COST = 500;
@@ -151,7 +152,7 @@ export const buildShopCheckoutIntentRequest = ({ checkout = {}, cart = [] } = {}
 };
 
 export const formatShopCurrency = (amount) =>
-  `PKR ${Number(amount || 0).toLocaleString()}`;
+  formatMoney(amount);
 
 export const calculateCartSummary = (cart = []) => {
   const subtotal = cart.reduce(

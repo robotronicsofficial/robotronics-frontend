@@ -1,106 +1,134 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetchPlans, setSubscriptionPlan } from "../../store/plans/planSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
+
+import { BillingToggle } from "@/components/ui/billing-toggle";
+import { Container } from "@/components/ui/container";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Display, Highlight, Text } from "@/components/ui/typography";
+import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdown";
+import MarketingHero from "@/components/marketing/MarketingHero";
+import { PlanCard } from "@/components/marketing/PlanCard";
+import { CHECKOUT_PATH, buildCheckoutSearch } from "@/components/checkout/checkoutNav";
+import { usePlans } from "../../hooks/usePlans";
+import { useCheckoutStore } from "../../stores/checkoutStore";
+
+/* Mirrors PlanCard's gradient-header / white-body shape so the loading state
+   doesn't shift layout once data arrives. */
+const PlanCardSkeleton = () => (
+  <article className="flex flex-col overflow-hidden rounded-3xl bg-card shadow-md">
+    <div
+      className="flex flex-col gap-3 px-7 pb-7 pt-6"
+      style={{
+        backgroundImage:
+          "radial-gradient(circle at 80% 0%, var(--color-brand-50), transparent 55%), linear-gradient(135deg, var(--color-brand-100), var(--color-brand-300))",
+      }}
+    >
+      <Skeleton className="h-3 w-16 bg-foreground/10" />
+      <Skeleton className="h-10 w-32 bg-foreground/10" />
+      <Skeleton className="h-3 w-24 bg-foreground/10" />
+    </div>
+    <div className="flex flex-1 flex-col gap-6 px-7 pb-7 pt-6">
+      <div className="flex flex-col gap-2">
+        <Skeleton className="h-6 w-2/3" />
+        <Skeleton className="h-4 w-5/6" />
+      </div>
+      <span aria-hidden="true" className="block h-px w-full bg-border" />
+      <div className="flex flex-col gap-3">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+        <Skeleton className="h-4 w-4/6" />
+        <Skeleton className="h-4 w-5/6" />
+      </div>
+      <Skeleton className="mt-auto h-12 w-full rounded-full" />
+    </div>
+  </article>
+);
 
 const SubscriptionPlans = () => {
-  const [isAnnual, setIsAnnual] = useState(false);
+  const [cycle, setCycle] = useState("annual");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const setPlan = useCheckoutStore((state) => state.setPlan);
 
-  const { totalPlans, loading, error } = useSelector((state) => state.plans);
-  const membership = totalPlans[0] || null;
+  const { data: plans = [], isLoading, error } = usePlans();
 
-  useEffect(() => {
-    dispatch(fetchPlans());
-  }, [dispatch]);
-
-  const handleRegisterClick = (plan) => {
-    const price = isAnnual ? plan.yearlyPrice : plan.monthlyPrice;
-    const billingCycle = isAnnual ? "annual" : "monthly";
-    
-    dispatch(setSubscriptionPlan({
+  const handleSelect = (plan) => {
+    const price = cycle === "annual" ? plan.yearlyPrice : plan.monthlyPrice;
+    setPlan({
       planId: plan._id,
-      plan: plan.planName,
-      price,
-      billingCycle
-    }));
-    
-    navigate("/subscriptions/register");
+      name: plan.planName,
+      price: Number(price || 0),
+      billingCycle: cycle,
+      courseAccess: plan.courseAccess,
+      maxQuizAttemptsPerDay: plan.maxQuizAttemptsPerDay,
+    });
+    navigate({ to: CHECKOUT_PATH, search: buildCheckoutSearch("kids") });
   };
-  
-  if (loading) return <div>Loading membership...</div>;
-  if (error) return <div>Error loading membership: {error}</div>;
-  if (!membership) return <div>Membership is not available right now.</div>;
-
-  const displayPrice = isAnnual ? membership.yearlyPrice : membership.monthlyPrice;
-  const annualSavings = Number(membership.monthlyPrice || 0) * 12 - Number(membership.yearlyPrice || 0);
 
   return (
-    <div className="bg-[#ebe5e2] py-8 px-4 sm:px-8 md:px-16 lg:px-24">
-      <div className="flex flex-col items-center justify-center">
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold mb-6 sm:mb-8 text-center poppins-bold">
-          Course Membership
-        </h2>
+    <>
+      <MarketingHero
+        size="page"
+        eyebrow="Pricing"
+        title={
+          <Display size="md">
+            Choose the plan that <Highlight>fits your child</Highlight>.
+          </Display>
+        }
+        subtitle="One subscription unlocks every future skill. Cancel anytime — no calls, no forms."
+        className="pt-20 md:pt-28"
+      >
+        <BillingToggle
+          value={cycle}
+          onChange={setCycle}
+          savingsLabel="Save up to 60%"
+          className="mt-4 self-center"
+        />
+        {cycle === "annual" && <AnnualOfferCountdown />}
+      </MarketingHero>
 
-        <div className="flex justify-center bg-gray-200 py-10 px-4 w-full mt-6">
-          <div className="w-full max-w-xl min-h-[560px] bg-[#D9D9D9] rounded-2xl p-6 flex flex-col shadow-lg items-center">
-            <h3 className="text-2xl font-bold mb-4 text-center">
-              {membership.planName || "Course Membership"}
-            </h3>
-
-            <div className="flex items-center justify-center gap-4 mb-4 poppins-light">
-              <span>Monthly</span>
-
-              <button
-                type="button"
-                className={`w-14 h-7 bg-white rounded-full flex items-center p-1 ${
-                  isAnnual ? "justify-end" : "justify-start"
-                }`}
-                onClick={() => setIsAnnual((currentValue) => !currentValue)}
-                aria-label="Toggle billing cycle"
-              >
-                <span className="block w-5 h-5 bg-orange-400 rounded-full" />
-              </button>
-
-              <span>Annual</span>
+      <section className="relative isolate overflow-hidden bg-background pb-20 md:pb-28">
+        <Container size="wide">
+          {error ? (
+            <div className="mx-auto max-w-md rounded-xl border border-destructive bg-destructive/10 p-6 text-center">
+              <Text tone="muted">
+                We couldn&apos;t load plans right now. Please refresh, or contact support if the issue persists.
+              </Text>
             </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {isLoading || plans.length === 0
+                ? Array.from({ length: 3 }).map((_, i) => <PlanCardSkeleton key={i} />)
+                : plans.map((plan, i) => {
+                    const isHighlighted = i === 0;
+                    return (
+                      <PlanCard
+                        key={plan._id}
+                        name={plan.planName || "Learning Subscription"}
+                        description={plan.description}
+                        pricing={{
+                          monthly: Number(plan.monthlyPrice || 0),
+                          annual: Number(plan.yearlyPrice || 0),
+                        }}
+                        features={plan.features || []}
+                        cta={{
+                          label: "Choose plan",
+                          onClick: () => handleSelect(plan),
+                        }}
+                        tone={isHighlighted ? "tinted" : "default"}
+                        popular={isHighlighted && plans.length > 1}
+                        cycle={cycle}
+                      />
+                    );
+                  })}
+            </div>
+          )}
 
-            <h4 className="text-2xl font-bold mb-4 text-center">
-              PKR {Number(displayPrice || 0).toLocaleString()}/Child
-            </h4>
-
-            <p className="text-center mb-4 text-wrap text-[#362D2C] poppins-light">
-              {membership.description}
-            </p>
-            {isAnnual && annualSavings > 0 ? (
-              <p className="text-center mb-4 text-wrap text-green-700 font-semibold poppins-bold">
-                Save PKR {annualSavings.toLocaleString()} with annual billing.
-              </p>
-            ) : null}
-
-            <button
-              className="bg-orange-400 text-white py-2 px-6 rounded-lg mb-4 w-fit poppins-light"
-              onClick={() => handleRegisterClick(membership)}
-            >
-              Start Membership
-            </button>
-
-            <ul className="flex-1 space-y-2 text-sm mb-4">
-              {(membership.features || []).map((feature, index) => (
-                <li
-                  key={index}
-                  className="flex items-center gap-2 poppins-light"
-                >
-                  <span className="font-bold text-orange-500">+</span>
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+          <Text tone="muted" size="sm" className="mt-10 text-center">
+            Cancel anytime. Each child has their own subscription — add multiple kids at the same per-child rate.
+          </Text>
+        </Container>
+      </section>
+    </>
   );
 };
 

@@ -1,10 +1,7 @@
-import UserInfoIntro from "../../component/dashboard/userInfoIntro"
-const UserInfo = () => {
-  return (
-    <div>
-      <UserInfoIntro/>
-    </div>
-  )
-}
+import UserInfoIntro from "@/components/site/dashboard/userInfoIntro";
 
-export default UserInfo
+const UserInfo = () => {
+  return <UserInfoIntro />;
+};
+
+export default UserInfo;

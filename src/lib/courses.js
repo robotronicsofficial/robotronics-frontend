@@ -12,3 +12,6 @@ export const fetchCourses = async () => {
   const payload = await fetchBackendJson("/get-courses");
   return normalizeCoursesPayload(payload);
 };
+
+export const fetchCourseById = (courseId) =>
+  fetchBackendJson(`/coursesById/${courseId}`);

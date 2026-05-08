@@ -1,31 +1,27 @@
-import Graph from "../component/graph";
-import Intro from "../component/intro";
-import Offers from "../component/offers";
-import Services from "../component/services";
-import Shop from "../component/shop";
-import Testimonial from "../component/testimonial";
-import Updates from "../component/updates";
-import BoToBtn from "../component/goToBtn";
-import Marquees from "../component/marquees";
-import Robo from "../component/Robo"
+import { BuildShowcaseSection } from "@/components/marketing/home/BuildShowcaseSection";
+import { DashboardPreviewSection } from "@/components/marketing/home/DashboardPreviewSection";
+import { FaqSection } from "@/components/marketing/home/FaqSection";
+import { FeaturesSection } from "@/components/marketing/home/FeaturesSection";
+import { FinalCTASection } from "@/components/marketing/home/FinalCTASection";
+import { HeroSection } from "@/components/marketing/home/HeroSection";
+import { HowItWorksSection } from "@/components/marketing/home/HowItWorksSection";
+import { PricingSection } from "@/components/marketing/home/PricingSection";
+import { TestimonialsSection } from "@/components/marketing/home/TestimonialsSection";
+import { TrustSection } from "@/components/marketing/home/TrustSection";
 
-const Home = () => {
-  return (
-    <div className="flex flex-col">
-      <Intro />
-      <Marquees direction = "left"/>
-      <Graph />
-      <Robo/>
-      <Services />
-      <Offers />
-      <Shop />
-      <Updates />
-      <div className="hidden md:block">
-        <Testimonial />
-      </div>
-      <BoToBtn />
-    </div>
-  );
-};
+const Home = () => (
+  <>
+    <HeroSection />
+    <HowItWorksSection />
+    <BuildShowcaseSection />
+    <FeaturesSection />
+    <PricingSection />
+    <DashboardPreviewSection />
+    <TrustSection />
+    <TestimonialsSection />
+    <FaqSection />
+    <FinalCTASection />
+  </>
+);
 
 export default Home;

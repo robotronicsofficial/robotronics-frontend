@@ -1,61 +1,70 @@
-import React from "react";
+import { PolicyPage } from "@/components/marketing/PolicyPage";
 
-const RefundPolicy = () => {
-  return (
-    <div className="lg:p-20 p-8 bg-background space-y-12">
-      <div className="lg:w-full px-6">
-                <br></br><br></br>
-                <br></br>
+const SUPPORT_EMAIL = "support@robotronicsofficial.com";
 
-        <h1 className="text-4xl poppins-bold text-brown mb-3">Refund &amp; Return Policy</h1>
+const SECTIONS = [
+  {
+    title: "Courses & subscriptions",
+    items: [
+      "All course and subscription payments (monthly or annual) are non-refundable once processed.",
+      <>
+        Cancel upcoming subscription renewals at any time before the next billing cycle by emailing{" "}
+        <a
+          href={`mailto:${SUPPORT_EMAIL}`}
+          className="text-primary underline underline-offset-4 hover:text-primary-hover"
+        >
+          {SUPPORT_EMAIL}
+        </a>
+        .
+      </>,
+      "For verified technical issues or duplicate charges, we'll investigate and, if validated, process refunds within 7–10 business days.",
+    ],
+  },
+  {
+    title: "Robotics kits (physical products)",
+    items: [
+      "If a kit arrives defective or damaged, notify us within 3 days to initiate a return.",
+      "Returns accepted only if the product is unused, in its original packaging, and accompanied by proof of purchase.",
+      "After inspection, replacements or refunds are processed within 10–15 working days.",
+      "Return shipping is paid by the buyer unless the item was faulty or shipped incorrectly.",
+    ],
+  },
+  {
+    title: "Digital goods & course access",
+    items: [
+      "Access to digital content begins immediately after payment, so refunds are generally not available once accessed.",
+      "In exceptional cases (e.g., wrong course purchased), course switches may be requested within 48 hours, subject to approval.",
+    ],
+  },
+  {
+    title: "Cancellation by Robotronics",
+    body: "We reserve the right to cancel subscriptions or orders in cases of fraud, policy violation, or misuse. Full or partial refunds may be issued at our discretion in such instances.",
+  },
+  {
+    title: "How to request a refund",
+    body: (
+      <>
+        Email{" "}
+        <a
+          href={`mailto:${SUPPORT_EMAIL}`}
+          className="text-primary underline underline-offset-4 hover:text-primary-hover"
+        >
+          {SUPPORT_EMAIL}
+        </a>{" "}
+        with your order ID, date of purchase, and reason for the refund or return.
+      </>
+    ),
+  },
+];
 
-        <section className="text-lg poppins-light space-y-4">
-          <h2 className="text-2xl poppins-semibold">1. Courses &amp; Subscriptions</h2>
-          <ul className="list-disc ml-6 space-y-2">
-            <li>All course and subscription payments (Monthly or Annual) are non-refundable once processed.</li>
-            <li>
-              Users may cancel upcoming subscription renewals at any time before the next billing cycle by emailing{" "}
-              <a href="mailto:support@robotronicsofficial.com" className="underline">support@robotronicsofficial.com</a>.
-            </li>
-            <li>
-              In case of verified technical issues or duplicate charges, we will investigate and, if validated, process
-              refunds within 7–10 business days.
-            </li>
-          </ul>
-
-          <h2 className="text-2xl poppins-semibold mt-4">2. Robotics Kits (Physical Products)</h2>
-          <ul className="list-disc ml-6 space-y-2">
-            <li>If a kit is defective or damaged on delivery, notify us within 3 days to initiate a return.</li>
-            <li>Returns accepted only if the product is unused and in original packaging with proof of purchase.</li>
-            <li>After inspection, replacements or refunds will be processed within 10–15 working days.</li>
-            <li>Return shipping is paid by the buyer unless the item was faulty or shipped incorrectly.</li>
-          </ul>
-
-          <h2 className="text-2xl poppins-semibold mt-4">3. Digital Goods &amp; Course Access</h2>
-          <ul className="list-disc ml-6 space-y-2">
-            <li>Access to digital content begins immediately after payment; due to this, refunds are generally not available once accessed.</li>
-            <li>In exceptional circumstances (e.g., wrong course purchased), course switches may be requested within 48 hours subject to approval.</li>
-          </ul>
-
-          <h2 className="text-2xl poppins-semibold mt-4">4. Cancellation by Robotronics</h2>
-          <p>
-            We reserve the right to cancel subscriptions/orders in cases of fraud, policy violation or misuse. We may issue
-            full or partial refunds at our discretion in such instances.
-          </p>
-
-          <h2 className="text-2xl poppins-semibold mt-4">5. How to Request a Refund</h2>
-          <p>
-            Email <a href="mailto:support@robotronicsofficial.com" className="underline">support@robotronicsofficial.com</a> with:
-          </p>
-          <ul className="list-disc ml-6 space-y-2">
-            <li>Order ID</li>
-            <li>Date of Purchase</li>
-            <li>Reason for Refund/Return</li>
-          </ul>
-        </section>
-      </div>
-    </div>
-  );
-};
+const RefundPolicy = () => (
+  <PolicyPage
+    eyebrow="Legal"
+    title="Refund & Return Policy"
+    lastUpdated="April 25, 2026"
+    intro="When refunds and returns are available across courses, subscriptions, and physical kits."
+    sections={SECTIONS}
+  />
+);
 
 export default RefundPolicy;

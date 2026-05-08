@@ -21,14 +21,14 @@ const ReviewsComponent = () => {
       role: "Age 12, Lahore",
       image: reviewImg2,
       review:
-        "I joined the membership and it was totally worth it. I can access so many courses, collect certificates, and get help through live chat whenever I'm stuck.",
+        "I joined the subscription and it was totally worth it. I can access so many courses, collect certificates, and get help through live chat whenever I'm stuck.",
     },
     {
       name: "Nasser Al Shammari",
       role: "Age 9, KSA",
       image: reviewImg1,
       review:
-        "The subscription platform is just like Netflix but for learning! I’ve completed courses on AI and E-commerce, and I even helped my dad set up his online store. The platform is easy to use on my tablet too!",
+        "It's like having a tutor I can open whenever I want, and the projects always feel fresh. I’ve completed courses on AI and E-commerce, and I even helped my dad set up his online store. The platform is easy to use on my tablet too!",
     },
     {
       name: "Oliver Bennett",
@@ -40,10 +40,10 @@ const ReviewsComponent = () => {
   ];
 
   return (
-    <div className="bg-[#ebe5e2]">
+    <div className="bg-background">
       <div className="w-full px-6 sm:px-12 lg:px-24">
         <div className="mx-4">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-brown text-center py-6 sm:py-8 poppins-bold">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-foreground text-center py-6 sm:py-8">
             See what others are achieving through learning
           </h1>
         </div>
@@ -53,7 +53,7 @@ const ReviewsComponent = () => {
         {reviews.map((review, index) => (
           <div
             key={index}
-            className="p-4 sm:p-5 lg:p-6 border border-gray-200 rounded-2xl hover:shadow-sm transition-shadow"
+            className="p-4 sm:p-5 lg:p-6 border border-border rounded-2xl transition-colors hover:bg-muted/40"
           >
             <div className="flex gap-3 sm:gap-4 lg:gap-6">
               <img
@@ -63,10 +63,10 @@ const ReviewsComponent = () => {
               />
               <div className="flex-1 flex flex-col gap-1 sm:gap-2">
                 <div>
-                  <p className="text-brown text-sm sm:text-base lg:text-lg font-bold poppins-bold">
+                  <p className="text-foreground text-sm sm:text-base lg:text-lg font-bold">
                     {review.name}
                   </p>
-                  <p className="text-brown text-xs sm:text-sm poppins-regular">
+                  <p className="text-foreground text-xs sm:text-sm">
                     {review.role}
                   </p>
                 </div>
@@ -77,7 +77,7 @@ const ReviewsComponent = () => {
                 />
               </div>
             </div>
-            <p className="mt-2 sm:mt-3 text-brown text-xs sm:text-sm lg:text-base text-wrap poppins-regular">
+            <p className="mt-2 sm:mt-3 text-foreground text-xs sm:text-sm lg:text-base text-wrap">
               {review.review}
             </p>
           </div>

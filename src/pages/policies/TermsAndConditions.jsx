@@ -1,79 +1,64 @@
-import React from "react";
+import { PolicyPage } from "@/components/marketing/PolicyPage";
 
-const TermsAndConditions = () => {
-  return (
-    <div className="lg:p-20 p-8 bg-background space-y-12">
-      <div className="lg:w-full px-6">
-        <br></br>        <br></br>        <br></br>
+const SECTIONS = [
+  {
+    title: "Acceptance of terms",
+    body: "By accessing or using our website, mobile application, or related services, you agree to comply with and be bound by these terms. If you don't agree, please discontinue use.",
+  },
+  {
+    title: "Services",
+    body: "We provide online and onsite educational courses, workshops, and robotics kits covering programming, AI, ML, Arduino, and related STEM fields. Courses are designed for children and young learners. Users under 18 must have parental or guardian consent.",
+  },
+  {
+    title: "Account registration",
+    body: "Some content requires a registered account with accurate personal details. You are responsible for maintaining the confidentiality of your credentials and all activity under your account.",
+  },
+  {
+    title: "Subscriptions & payments",
+    body: "The learning subscription supports monthly and annual billing. Payments are collected in advance through approved gateways (e.g., Bank Alfalah). Subscriptions renew automatically unless cancelled before renewal.",
+  },
+  {
+    title: "Refunds & cancellations",
+    body: "Refunds are handled according to our Refund & Return Policy. Refunds are not available except in cases described there.",
+  },
+  {
+    title: "User conduct",
+    body: "Users must behave respectfully towards instructors and peers. Harassment, cheating, or sharing content with unauthorized users may result in suspension or termination.",
+  },
+  {
+    title: "Intellectual property",
+    body: "All course materials, quizzes, videos, logos, and text are the exclusive property of Robotronics Pakistan. Unauthorized reproduction or distribution is prohibited.",
+  },
+  {
+    title: "Limitation of liability",
+    body: "Robotronics Pakistan is not liable for indirect or consequential damages. Maximum liability is limited to the amount paid for the affected service.",
+  },
+  {
+    title: "AI chatbot support",
+    body: "Our AI chatbot helps answer course-related queries. AI responses are informational and not a substitute for professional advice.",
+  },
+  {
+    title: "Robotics kits sales",
+    body: "Physical kits are subject to availability. Images are for reference; specs and prices may change.",
+  },
+  {
+    title: "Governing law",
+    body: "These terms are governed by the laws of Punjab, Pakistan. Disputes are resolved via arbitration in Punjab.",
+  },
+  {
+    title: "Changes to terms",
+    body: "We may update these terms periodically. Continued use after changes indicates acceptance.",
+  },
+];
 
-
-        <h1 className="text-4xl poppins-bold text-brown mb-6">Terms &amp; Conditions</h1>
-        <ol className="text-xl poppins-light space-y-4 list-decimal ml-6">
-          <li>
-            <strong>Acceptance of Terms:</strong> By accessing or using our website,
-            mobile application, or related services (“Services”), you agree to comply with
-            and be bound by these Terms and Conditions. If you do not agree, please discontinue use.
-          </li>
-
-          <li>
-            <strong>Services:</strong> We provide online and onsite educational courses,
-            workshops, and robotics kits covering Programming, AI, ML, Arduino and related STEM fields.
-            Our courses are designed for children and young learners. Users under 18 must have parental or guardian consent.
-          </li>
-
-          <li>
-            <strong>Account Registration:</strong> To access certain content, users must create an account
-            with accurate personal details. You are responsible for maintaining confidentiality of your credentials
-            and all activities under your account.
-          </li>
-
-          <li>
-            <strong>Subscriptions &amp; Payments:</strong> The course membership supports monthly and annual billing.
-            Payments are collected in advance through approved payment gateways (e.g., Bank Alfalah). Subscriptions
-            renew automatically unless cancelled prior to renewal.
-          </li>
-
-          <li>
-            <strong>Refunds &amp; Cancellations:</strong> Refunds are handled according to our Refund &amp; Return Policy.
-            Refunds are not available except in cases described in that policy.
-          </li>
-
-          <li>
-            <strong>User Conduct:</strong> Users must behave respectfully towards instructors and peers.
-            Harassment, cheating, or sharing content with unauthorized users may result in suspension or termination.
-          </li>
-
-          <li>
-            <strong>Intellectual Property:</strong> All course materials, quizzes, videos, logos and text are the
-            exclusive property of Robotronics Pakistan. Unauthorized reproduction or distribution is prohibited.
-          </li>
-
-          <li>
-            <strong>Limitation of Liability:</strong> Robotronics Pakistan will not be liable for indirect or consequential damages.
-            Our maximum liability is limited to the amount paid by the user for the affected service.
-          </li>
-
-          <li>
-            <strong>AI Chatbot Support:</strong> Our AI chatbot helps answer course-related queries. AI responses are
-            informational and not a substitute for professional advice.
-          </li>
-
-          <li>
-            <strong>Robotics Kits Sales:</strong> Physical kits are subject to availability. Images are for reference; specs and prices may change.
-          </li>
-
-          <li>
-            <strong>Governing Law:</strong> These Terms are governed by the laws of Punjab, Pakistan, and disputes will be
-            resolved via arbitration in Punjab.
-          </li>
-
-          <li>
-            <strong>Changes to Terms:</strong> We may update these Terms periodically. Continued use after changes indicates acceptance.
-          </li>
-        </ol>
-      </div>
-    </div>
-  );
-};
+const TermsAndConditions = () => (
+  <PolicyPage
+    eyebrow="Legal"
+    title="Terms & Conditions"
+    lastUpdated="April 25, 2026"
+    intro="The rules that govern your use of Robotronics.ai products and services."
+    sections={SECTIONS}
+  />
+);
 
 export default TermsAndConditions;

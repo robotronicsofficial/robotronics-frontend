@@ -1,69 +1,82 @@
-import React from "react";
+import { Container } from "@/components/ui/container";
+import { FaqAccordion } from "@/components/ui/faq-accordion";
+import { Display } from "@/components/ui/typography";
+import MarketingHero from "@/components/marketing/MarketingHero";
 
-const faqs = [
+const FAQ_ITEMS = [
   {
     question: "Who can register for a learning subscription?",
-    answer: "Students aged 7 and above from any background can benefit from this program across the globe."
+    answer:
+      "Any child aged 6 and up. Parents create one account and add a profile per child — siblings each need their own active subscription.",
   },
   {
-    question: "Do we provide E-Certificates?",
-    answer: "Yes. Active learners can earn E-Certificates issued through STEMSOL.org, a US-based credentialing partner."
+    question: "Do you provide e-certificates?",
+    answer:
+      "Yes. Active learners earn e-certificates issued through STEMSOL.org, a US-based credentialing service recognized internationally.",
   },
   {
-    question: "How will we pay every month? Do we need to visit your office?",
-    answer: "All payments are processed online through the selected billing method."
+    question: "How do payments work?",
+    answer:
+      "All payments are processed online — no office visit required. Pick monthly or annual at checkout; annual subscriptions come with a steep discount.",
   },
   {
     question: "Which devices are required?",
-    answer: "The learning platform is responsive and accessible on laptops, tablets, and phones. Basic system configuration is sufficient."
+    answer:
+      "The platform is responsive across laptops, tablets, and phones. Any modern browser works — no special hardware required.",
   },
   {
-    question: "How many students can use this Program under one subscription?",
-    answer: "Each subscription is for one child only. Violations may lead to cancellation. Parents can add additional children by paying separately."
+    question: "How many children can use one subscription?",
+    answer:
+      "Each subscription covers one child. Parents can add additional children via the dashboard with separate billing.",
   },
   {
-    question: "Can we pay in Installments?",
-    answer: "Yes. Parents can use monthly billing when they prefer smaller recurring payments."
+    question: "Can we pay in installments?",
+    answer:
+      "Yes. Choose monthly billing if you prefer smaller recurring payments.",
   },
   {
     question: "Can we cancel the subscription?",
-    answer: "Subscriptions once paid are non-refundable. You may opt out before the next billing cycle by emailing support@robotronicsofficial.com."
+    answer:
+      "Yes — cancel from the parent dashboard whenever you like, no calls or forms. Subscriptions once paid are non-refundable for the current period.",
   },
   {
-    question: "How can we add Multiple Child Accounts?",
-    answer: "Parents can add multiple children via the dashboard. Each child gets a dedicated 4-digit PIN for login."
+    question: "How do we add multiple child accounts?",
+    answer:
+      "Add children directly from the parent dashboard. Each child gets a dedicated 4-digit PIN for login.",
   },
   {
-    question: "How will you examine if the Child is learning properly or not?",
-    answer: "Courses are split into modules. After each module, the child must pass a quiz with at least 60% to unlock the next module."
+    question: "How is progress evaluated?",
+    answer:
+      "Courses are split into modules. After each module, the child must pass a quiz with at least 60% to unlock the next one.",
   },
   {
-    question: "Students or schools from which country can benefit from the subscription?",
-    answer: "The platform is SaaS-based and accessible globally to schools and students in any country."
+    question: "Which countries does Robotronics.ai serve?",
+    answer:
+      "The platform is SaaS-based and accessible globally to schools and parents in any country.",
   },
   {
-    question: "What is the fee structure?",
-    answer: "The current membership price is shown during checkout, with monthly and annual billing available."
-  }
+    question: "What does it cost?",
+    answer:
+      "Current subscription pricing is shown during checkout, with both monthly and annual billing available.",
+  },
 ];
 
-const FAQs = () => {
-  return (
-    <div className="lg:p-20 p-8 bg-background">
-      <div className="lg:w-full px-6">
-        <br></br><br></br><br></br><br></br>
-        <h1 className="text-4xl poppins-bold text-brown mb-6">Frequently Asked Questions (FAQs)</h1>
-        <div className="space-y-6">
-          {faqs.map((f, idx) => (
-            <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm">
-              <h3 className="text-xl poppins-semibold">{f.question}</h3>
-              <p className="text-base poppins-light mt-2">{f.answer}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
+const FAQs = () => (
+  <>
+    <MarketingHero
+      size="page"
+      align="left"
+      containerSize="narrow"
+      eyebrow="Help"
+      title={<Display size="lg">Frequently asked questions</Display>}
+      subtitle="The questions parents and schools ask first. Don't see yours? Reach out to support — we reply within a business day."
+    />
+    <section className="bg-background pb-20">
+      <Container size="narrow" className="px-6">
+        <FaqAccordion items={FAQ_ITEMS} />
+      </Container>
+    </section>
+  </>
+);
 
 export default FAQs;
