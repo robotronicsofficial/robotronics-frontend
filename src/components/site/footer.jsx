@@ -1,388 +1,167 @@
-import img from "@/assets/logo/arrowN-E.svg";
-import robot from "@/assets/images/bosten.png";
-import circle from "@/assets/logo/twocircle.svg";
-import up from "@/assets/logo/uparrow.svg";
-import mobile from "@/assets/images/mobile.png";
-import apple from "@/assets/logo/apple.svg";
-import pstore from "@/assets/logo/Playstor.svg";
 import { Link } from "@tanstack/react-router";
+
+import logoMark from "@/assets/logo/robotronicsCharacter.svg";
 import { BrandIcon } from "@/components/ui/brand-icons";
-import AppImage from "./AppImage";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Container } from "@/components/ui/container";
+import { Eyebrow, Text } from "@/components/ui/typography";
+import { SectionInverse } from "@/components/layout/SectionInverse";
+import { cn } from "@/lib/utils";
+import { CONTACT_PATH } from "@/router/paths";
 
-const Footer = () => {
-  const goToTop = () => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
-  };
-  return (
-    <div className="footer flex flex-col max-w-full ">
-      {/* robotronics */}
-      <div className="flex items-center lg:text-center p-10 ">
-        {/* up button */}
-        <div className="lg:w-1/4 md:w-1/3 w-1/2">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            className="top-btn flex h-6 w-6 rounded-full border-card bg-transparent p-0 hover:bg-card/10 md:h-8 md:w-8 lg:h-12 lg:w-12"
-            data-aos="fade-up"
-            onClick={goToTop}
-          >
-            <AppImage
-              className="flex lg:h-6 lg:w-14 md:h-4 md:w-10 h-3 w-7 lg:mt-2 mt-1 items-center justify-center "
-              src={up}
-              alt="Scroll to top"
-            />
-          </Button>
+const QUICK_LINKS = [
+  { label: "About", to: "/aboutUs" },
+  { label: "Subscriptions", to: "/subscriptions" },
+  { label: "Courses", to: "/Course" },
+  { label: "Shop", to: "/shop" },
+  { label: "Blog", to: "/Blog" },
+  { label: "Careers", to: "/CareerJob" },
+];
+
+const RESOURCE_LINKS = [
+  { label: "FAQs", to: "/faqs" },
+  { label: "Contact", to: CONTACT_PATH },
+  { label: "Child protection", to: "/ChildProtection" },
+  { label: "Terms & conditions", to: "/TermsConditions" },
+  { label: "Privacy policy", to: "/PrivacyPolicy" },
+  { label: "Refund policy", to: "/RefundPolicy" },
+];
+
+const SOCIALS = [
+  {
+    href: "https://www.facebook.com/robotronicspakistan/",
+    brand: "facebook",
+    label: "Robotronics on Facebook",
+  },
+  {
+    href: "https://www.instagram.com/robotronicspk/?hl=en",
+    brand: "instagram",
+    label: "Robotronics on Instagram",
+  },
+  {
+    href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
+    brand: "linkedin",
+    label: "Robotronics on LinkedIn",
+  },
+  {
+    href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
+    brand: "youtube",
+    label: "Robotronics on YouTube",
+  },
+  {
+    href: "https://wa.me/message/TKZZPIE2A34UM1",
+    brand: "whatsapp",
+    label: "Robotronics on WhatsApp",
+  },
+];
+
+const linkClass = "text-background/70 transition-colors hover:text-primary";
+const headingClass = "text-caption font-semibold uppercase tracking-[0.16em] text-background/55";
+
+const FooterColumn = ({ heading, items, className }) => (
+  <nav aria-label={heading} className={cn("flex flex-col gap-3", className)}>
+    <span className={headingClass}>{heading}</span>
+    <ul className="flex flex-col gap-2">
+      {items.map((item) => (
+        <li key={item.to}>
+          <Link to={item.to} className={cn(linkClass, "text-body-sm")}>
+            {item.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </nav>
+);
+
+const ContactColumn = () => (
+  <div className="flex flex-col gap-3">
+    <span className={headingClass}>Get in touch</span>
+    <ul className="flex flex-col gap-3 text-body-sm text-background/70">
+      <li>
+        <span className="block text-caption uppercase tracking-wide text-background/45">
+          Email
+        </span>
+        <a className={linkClass} href="mailto:support@robotronicsofficial.com">
+          support@robotronicsofficial.com
+        </a>
+      </li>
+      <li>
+        <span className="block text-caption uppercase tracking-wide text-background/45">
+          Phone
+        </span>
+        <a className={linkClass} href="tel:+923207626842">
+          +92 320 7626 842
+        </a>
+      </li>
+      <li>
+        <span className="block text-caption uppercase tracking-wide text-background/45">
+          Office
+        </span>
+        Phase-4, DHA, Lahore, Pakistan
+      </li>
+    </ul>
+  </div>
+);
+
+const Brand = () => (
+  <Link
+    to="/"
+    aria-label="Robotronics — home"
+    className="inline-flex items-center gap-2.5 text-background transition-opacity hover:opacity-80"
+  >
+    <img src={logoMark} alt="" aria-hidden="true" className="size-8 shrink-0" />
+    <span className="text-h4 font-semibold tracking-tight">Robotronics</span>
+  </Link>
+);
+
+const Footer = () => (
+  <SectionInverse as="footer" className="mt-0">
+    <Container size="wide" className="py-16 md:py-20">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_2fr] lg:gap-20">
+        <div className="flex flex-col gap-5">
+          <Brand />
+          <Text size="sm" className="max-w-sm text-background/70">
+            AI, Coding, Robotics &amp; 30+ skills under one parent account.
+            Every active child has a separate paid seat.
+          </Text>
+          <div className="mt-2 flex flex-col gap-2">
+            <Eyebrow className="text-background/55">Follow along</Eyebrow>
+            <ul className="flex flex-wrap gap-2">
+              {SOCIALS.map(({ href, brand, label }) => (
+                <li key={brand}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="grid size-9 place-items-center rounded-full border border-background/15 text-background/70 transition-colors hover:border-primary hover:text-primary"
+                  >
+                    <BrandIcon brand={brand} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        {/* robotronics */}
-        <div className="text-left">
-          <p
-            className="text-foreground text-wrap font-black lg:text-8xl md:text-6xl text-4xl custom-outline"
-            data-aos="fade-down"
 
-          >
-            ROBOTRONICS
-          </p>
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
+          <FooterColumn heading="Explore" items={QUICK_LINKS} />
+          <FooterColumn heading="Resources" items={RESOURCE_LINKS} />
+          <ContactColumn />
         </div>
       </div>
-      {/* links */}
-      <footer className="text-background body-font">
-        <div className="container p-4 mx-auto">
-          <div className="flex flex-wrap justify-between lg:text-center md:text-center text-left">
-            <div
-              className="lg:w-1/2 flex p-10"
-              data-aos="fade-up"
+    </Container>
 
-            >
-              {/* Quick Links */}
-              <div className="w-1/2 text-wrap text-left">
-                <h2 className="title-font font-medium poppins-semibold text-primary lg:text-xl tracking-widest">
-                  Quick Links
-                </h2>
-                <nav className="flex flex-col list-none gap-y-2">
-                  <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/aboutUs"
-                    >
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/CareerJob"
-                    >
-                      Careers
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/shop"
-                    >
-                      Shop
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/Blog"
-                    >
-                      Blog
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/Course"
-                    >
-                      Courses
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/International/videoGallery"
-                    >
-                      Gallery
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/International/home"
-                    >
-                      Robotronics International
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/TermsConditions"
-                    >
-                      Terms & Conditions
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/PrivacyPolicy"
-                    >
-                      Privacy Policy
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/RefundPolicy"
-                    >
-                      Refund Policy
-                    </Link>
-                  </li>
-
-                   <li>
-                    <Link
-                      className="text-background poppins-medium cursor-pointer lg:text-xl hover:text-primary"
-                      to="/faqs"
-                    >
-                      FAQs
-                    </Link>
-                  </li>
-
-
-                </nav>
-                <AppImage className="h-7 w-7 mt-4" data-aos="fade-up" src={circle} alt="" />
-              </div>
-
-              {/* Contact Us */}
-              <div className="w-1/2 text-wrap text-left">
-                <h2 className="title-font font-medium poppins-semibold text-primary lg:text-xl tracking-widest">
-                  Contact Us
-                </h2>
-                <nav className="flex flex-col list-none gap-y-4">
-                  <li>
-                    <span className="text-background font-bold poppins-medium lg:text-xl">
-                      Email
-                    </span>
-                    <p className="text-background text-sm text-wrap poppins-regular font-thin">
-                      support@robotronicsofficial.com
-                    </p>
-                  </li>
-                  <li>
-                    <span className="text-background font-bold poppins-medium lg:text-xl">
-                      Phone
-                    </span>
-                    <p className="text-background text-wrap poppins-regular font-thin">
-                      +92 320 7626 842
-                    </p>
-                  </li>
-                  <li>
-                    <span className="text-background font-bold poppins-medium lg:text-xl">
-                      Location
-                    </span>
-                    <p className="text-background text-wrap poppins-regular font-thin">
-                      Phase-4, DHA, Lahore, Pakistan
-                    </p>
-                  </li>
-                  <li>
-                    <span className="text-background font-bold poppins-medium lg:text-xl">
-                      Mo - Fr
-                    </span>
-                    <p className="text-background text-wrap poppins-regular font-thin">
-                      9am - 6pm
-                    </p>
-                  </li>
-                </nav>
-                <img
-                  className="w-24 mt-4"
-                  data-aos="fade-up"
-                  src={robot}
-                  alt="robot"
-                />
-              </div>
-            </div>
-
-            {/* Search & App Buttons */}
-            <div
-              className="flex flex-col justify-center w-full lg:w-1/2 px-4"
-
-
-            >
-              {/* Subscribe Section */}
-              <div className="flex flex-col lg:flex-row items-center lg:items-start mb-4 gap-y-4 lg:gap-y-0 lg:gap-x-4">
-                <div className="relative w-full">
-                  <Input
-                    type="text"
-                    id="footer-field"
-                    placeholder="SUBSCRIBE NOW"
-                    className="w-full border-card bg-transparent text-background placeholder:text-background/25"
-                  />
-                </div>
-                <Button
-                  type="button"
-                  className="h-auto w-full rounded bg-primary px-6 py-3 text-background hover:bg-primary/80 lg:w-auto"
-                  aria-label="Subscribe"
-                >
-                  <AppImage src={img} alt="Subscribe Button Icon" />
-                </Button>
-              </div>
-
-              {/* Launch Countdown */}
-              <div className="flex my-4">
-                {/* img */}
-                <div className="relative w-full max-w-sm mx-auto h-72">
-  {/* Back phone */}
-  <AppImage
-    src={mobile}
-    alt="Mobile 1"
-    className="absolute left-10 top-5 w-32 sm:w-36 md:w-40 z-base"
-  />
-
-  {/* Front phone */}
-  <AppImage
-    src={mobile}
-    alt="Mobile 2"
-    className="absolute left-0 top-20 w-32 sm:w-36 md:w-40 z-raised"
-  />
-</div>
-
-
-                <div className="flex flex-col flex-wrap items-center text-wrap text-center md:w-2/3 lg:w-1/2 lg:items-start lg:text-left">
-                  <p className="text-2xl text-background poppins-bold mb-8 ">
-                    READY TO LAUNCH IN...
-                  </p>
-                  <div
-                    className="flex flex-wrap justify-center gap-4 text-background lg:justify-start"
-                    data-aos="fade-up"
-                  >
-                    <div className="text-center">
-                      <p className="text-primary poppins-regular text-sm">WEEKS</p>
-                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
-                        22 :
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-primary text-sm poppins-regular ">DAYS</p>
-                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
-                        12 :
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-primary text-sm poppins-regular ">
-                        HOURS
-                      </p>
-                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
-                        23 :
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-primary text-sm poppins-regular ">
-                        MINUTES
-                      </p>
-                      <p className="lg:text-4xl font-black text-2xl poppins-semibold ">
-                        45
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* App Store Buttons */}
-                  <div className="flex flex-col gap-6 my-10">
-                    <a
-                      href="#"
-                      className="flex items-center gap-3 rounded-xl border border-card p-4 text-background hover:bg-muted"
-                      data-aos="fade-up"
-                    >
-                      <AppImage className="h-11 w-14" src={apple} alt="apple" />
-                      <div className="flex flex-col text-left text-background">
-                        <p className="text-sm text-wrap">Download on the</p>
-                        <p className="text-2xl text-wrap font-bold">
-                          APP STORE
-                        </p>
-                      </div>
-                    </a>
-                    <a
-                      href="#"
-                      className="flex items-center gap-3 rounded-xl border border-card p-4 text-background hover:bg-muted"
-                      data-aos="fade-up"
-                    >
-                      <AppImage
-                        className="h-11 w-14"
-                        src={pstore}
-                        alt="play-store"
-                      />
-                      <div className="flex flex-col text-left text-background">
-                        <p className="text-sm text-wrap ">Download on the</p>
-                        <p className="text-2xl text-wrap font-bold">
-                          PLAY STORE
-                        </p>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer Bottom */}
-        <div className="bg-foreground border-t px-10   py-4">
-          <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center text-center lg:text-left">
-            <p className="text-sm poppins-medium text-wrap  text-background">
-              Copyright © 2025. All Rights Reserved. Powered by Robotronics.
-            </p>
-            <div className="flex flex-row gap-x-2 lg:gap-x-5">
-              {[
-                {
-                  href: "https://www.facebook.com/robotronicspakistan/",
-                  brand: "facebook",
-                },
-                // {
-                //   href: "https://twitter.com/robotronicspk",
-                //   brand: "twitter",
-                // },
-                {
-                  href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
-                  brand: "youtube",
-                },
-                {
-                  href: "https://www.instagram.com/robotronicspk/?hl=en",
-                  brand: "instagram",
-                },
-                {
-                  href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
-                  brand: "linkedin",
-                },
-                {
-                  href: "https://wa.me/message/TKZZPIE2A34UM1",
-                  brand: "whatsapp",
-                },
-              ].map(({ href, brand }, index) => (
-                <a
-                  key={index}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="lg:p-3 p-1 border border-foreground bg-card rounded-xl hover:bg-foreground hover:text-background text-foreground"
-                >
-                  <BrandIcon brand={brand} />
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </footer>
+    <div className="border-t border-background/10">
+      <Container size="wide" className="flex flex-col items-center justify-between gap-3 py-6 md:flex-row">
+        <Text size="sm" className="text-background/55">
+          © {new Date().getFullYear()} Robotronics.ai. All rights reserved.
+        </Text>
+        <Text size="sm" className="text-background/55">
+          Made for the future-ready generation.
+        </Text>
+      </Container>
     </div>
-  );
-};
+  </SectionInverse>
+);
 
 export default Footer;

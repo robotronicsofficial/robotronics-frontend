@@ -19,7 +19,7 @@ const QueryErrorState = ({
       <Button
         type="button"
         onClick={onRetry}
-        className="h-auto gap-2 rounded-lg bg-primary px-4 py-2 text-primary-foreground hover:bg-accent hover:text-background"
+        className="h-auto gap-2 rounded-lg bg-primary px-4 py-2 text-primary-foreground hover:bg-primary-hover"
       >
         <RefreshCw className="size-4" />
         Try again

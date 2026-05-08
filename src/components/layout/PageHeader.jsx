@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 import { cn } from "@/lib/utils";
-import { Heading, Text } from "@/components/typography";
+import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 
 const PageHeader = ({
   actions,
@@ -12,16 +12,10 @@ const PageHeader = ({
 }) => (
   <div className={cn("flex flex-col gap-6 md:flex-row md:items-end md:justify-between", className)}>
     <div className="max-w-3xl">
-      {eyebrow && (
-        <Text className="mb-3" variant="caption">
-          {eyebrow}
-        </Text>
-      )}
-      <Heading as="h1" variant="page">
-        {title}
-      </Heading>
+      {eyebrow && <Eyebrow className="mb-3 block">{eyebrow}</Eyebrow>}
+      <Heading level={1}>{title}</Heading>
       {children && (
-        <Text className="mt-4" variant="lead">
+        <Text className="mt-4" size="lg" tone="muted">
           {children}
         </Text>
       )}

@@ -299,7 +299,7 @@ const ChatSupport = () => {
               <div className="p-4 border-t border-border">
                 <Button
                   type="button"
-                  className="h-auto w-full rounded-lg bg-primary py-2 text-background hover:bg-accent"
+                  className="h-auto w-full rounded-lg bg-primary py-2 text-background hover:bg-primary-hover"
                   onClick={initializeChat}
                   aria-label="Start new chat"
                 >
@@ -343,7 +343,7 @@ const ChatSupport = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            <form onSubmit={handleSendMessage} className="p-4  relative">
+            <form onSubmit={handleSendMessage} className="p-4 relative">
               {selectedFile && (
                 <div className="flex items-center justify-between mb-2 px-3 py-2 bg-muted rounded-lg">
                   <div className="flex items-center">

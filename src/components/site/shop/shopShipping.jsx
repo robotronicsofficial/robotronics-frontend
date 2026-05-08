@@ -1,9 +1,15 @@
 import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
+
 import CustomerOrder from "./customerOrder";
 import CustomerProduct from "./customerProduct";
 import OrderSummaryLine from "./OrderSummaryLine";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Heading, Text } from "@/components/ui/typography";
+import { useAuth } from "@/contexts/useAuth";
 import {
   buildShopCheckoutIntentRequest,
   calculateCartSummary,
@@ -14,19 +20,20 @@ import {
   hasCheckoutPayment,
   loadShopCheckout,
 } from "@/lib/shopCheckout";
-import { getCommerceItemKey, hasShippableCommerceItems } from "@/lib/commerceItems";
-import { useAuth } from "@/contexts/useAuth";
+import {
+  getCommerceItemKey,
+  hasShippableCommerceItems,
+} from "@/lib/commerceItems";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
-
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { useSubmitShopCheckoutIntentMutation } from "@/hooks/useShopOrders";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 
-const summaryLabelClassName = "font-lato text-base text-muted-foreground";
-const summaryValueBaseClassName = "font-lato text-[20px] font-extrabold";
-const summaryValueClassName = `${summaryValueBaseClassName} text-foreground`;
-const summaryTotalValueClassName = `${summaryValueBaseClassName} text-primary`;
+const DetailRow = ({ label, value }) => (
+  <div className="flex items-start gap-1.5 text-body-sm">
+    <Text size="sm" weight="semibold">{label}:</Text>
+    <Text size="sm" tone="muted">{value}</Text>
+  </div>
+);
 
 const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const navigate = useNavigate();
@@ -53,7 +60,6 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       onEditCustomer();
       return;
     }
-
     navigate({ to: "/CustomerInfo" });
   };
 
@@ -62,13 +68,15 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       onEditPayment();
       return;
     }
-
     navigate({ to: "/ShippingService" });
   };
 
   const handleSubmitCheckoutIntent = async () => {
     if (isAuthLoading) {
-      setSubmitStatus({ type: "info", message: "Checking your account. Please try again in a moment." });
+      setSubmitStatus({
+        type: "info",
+        message: "Checking your account. Please try again in a moment.",
+      });
       return;
     }
 
@@ -94,10 +102,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
     try {
       const data = await submitShopCheckoutIntentMutation.mutateAsync({
-        ...buildShopCheckoutIntentRequest({
-          checkout,
-          cart,
-        }),
+        ...buildShopCheckoutIntentRequest({ checkout, cart }),
       });
 
       setSubmittedIntent(data.checkoutIntent || null);
@@ -115,232 +120,248 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
     }
   };
 
+  const customerData = submittedIntent?.customer || {};
+  const addressData = submittedIntent?.address || {};
+  const paymentData = submittedIntent?.payment || {};
+
+  const customerName =
+    customerData.name ||
+    `${checkout.customer?.firstName || ""} ${checkout.customer?.lastName || ""}`.trim();
+  const customerPhone = customerData.phone || checkout.customer?.phone;
+  const street = addressData.streetAddress || checkout.address?.streetAddress;
+  const aptSuite = addressData.aptSuite || checkout.address?.aptSuite;
+  const city = addressData.city || checkout.address?.city;
+  const state = addressData.state || checkout.address?.state;
+  const country = addressData.country || checkout.address?.country;
+  const postalCode = addressData.postalCode || checkout.address?.postalCode;
+  const deliveryInstruction =
+    addressData.deliveryInstruction || checkout.address?.deliveryInstruction;
+  const shippingService = paymentData.shippingService || checkout.payment?.shippingService;
+  const paymentMethod = paymentData.paymentMethod || checkout.payment?.paymentMethod;
+  const billingEmail = paymentData.billingEmail || checkout.payment?.billingEmail;
+  const accountLast4 = paymentData.accountLast4 || checkout.payment?.accountLast4;
+  const expiryMonth = paymentData.expiryMonth || checkout.payment?.expiryMonth;
+  const expiryYear = paymentData.expiryYear || checkout.payment?.expiryYear;
+
   return (
-    <div className="bg-background lg:flex lg:gap-6">
-      <div className="flex flex-col gap-8 pt-4 lg:w-2/3 lg:gap-12 lg:pt-8">
-        <div className="flex flex-col gap-4 lg:gap-6">
-          <p className="lg:text-4xl text-2xl poppins-bold text-foreground">CHECKOUT SUMMARY</p>
-          <p className="font-lato font-medium text-base leading-5 text-muted-foreground">
-            Review the saved customer details, fulfillment requirements, locally saved payment reference, and items for this checkout draft.
-          </p>
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <Heading level={2} className="text-h3">Checkout summary</Heading>
+          <Text tone="muted">
+            Review the saved customer details, fulfillment requirements, and
+            items for this checkout draft.
+          </Text>
         </div>
 
-        <Card className="rounded-2xl border-primary/30 bg-primary/10 p-0 text-sm text-foreground">
-          <CardContent className="p-4">
-          {submittedIntent
-            ? "This checkout request has been submitted to Robotronics for follow-up and CRM handling."
-            : "Review the saved checkout details, then submit the order request so Robotronics can process it in CRM."}
-          </CardContent>
-        </Card>
+        <Alert>
+          <AlertDescription>
+            {submittedIntent
+              ? "This checkout request has been submitted to Robotronics for follow-up and CRM handling."
+              : "Review the saved checkout details, then submit the order request so Robotronics can process it in CRM."}
+          </AlertDescription>
+        </Alert>
 
-        {submitStatus.message ? (
-          <div
-            className={`rounded-2xl border p-4 text-sm ${
-              submitStatus.type === "success"
-                ? "border-success/20 bg-success/10 text-success"
-                : "border-destructive/20 bg-destructive/10 text-destructive"
-            }`}
-          >
-            {submitStatus.message}
-          </div>
-        ) : null}
+        {submitStatus.message && (
+          <Alert variant={submitStatus.type === "success" ? "default" : "destructive"}>
+            <AlertDescription>{submitStatus.message}</AlertDescription>
+          </Alert>
+        )}
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          <section className="flex flex-col gap-4 bg-foreground p-5 text-background">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-lg poppins-extrabold">
-                  {requiresShipping ? "DELIVERY DETAILS" : "CUSTOMER DETAILS"}
-                </p>
-                <p className="text-sm poppins-light">
-                  {requiresShipping
-                    ? "Saved customer and delivery details for this order."
-                    : "Saved customer details for this digital order."}
-                </p>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Card>
+            <CardContent className="flex flex-col gap-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-1">
+                  <Heading level={3} className="text-h5">
+                    {requiresShipping ? "Delivery details" : "Customer details"}
+                  </Heading>
+                  <Text size="sm" tone="muted">
+                    {requiresShipping
+                      ? "Saved customer and delivery details for this order."
+                      : "Saved customer details for this digital order."}
+                  </Text>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleEditCustomer}
+                >
+                  Edit
+                </Button>
               </div>
-              <Button
-                type="button"
-                variant="outline"
-                className="h-auto border-card bg-transparent px-3 py-2 text-xs uppercase tracking-wide text-background hover:bg-card/10"
-                onClick={handleEditCustomer}
-              >
-                Edit
-              </Button>
-            </div>
 
-            {customerReady || submittedIntent ? (
-              <div className="flex flex-col gap-2 text-sm poppins-light">
-                <p className="text-base poppins-extrabold">
-                  {submittedIntent?.customer?.name || `${checkout.customer?.firstName || ""} ${checkout.customer?.lastName || ""}`.trim()}
-                </p>
-                <p>{submittedIntent?.customer?.phone || checkout.customer?.phone}</p>
-                {requiresShipping ? (
-                  <>
-                    <p>{submittedIntent?.address?.streetAddress || checkout.address?.streetAddress}</p>
-                    {(submittedIntent?.address?.aptSuite || checkout.address?.aptSuite) ? (
-                      <p>{submittedIntent?.address?.aptSuite || checkout.address?.aptSuite}</p>
-                    ) : null}
-                    <p>
-                      {submittedIntent?.address?.city || checkout.address?.city},{" "}
-                      {submittedIntent?.address?.state || checkout.address?.state},{" "}
-                      {submittedIntent?.address?.country || checkout.address?.country}
-                    </p>
-                    <p>{submittedIntent?.address?.postalCode || checkout.address?.postalCode}</p>
-                    {(submittedIntent?.address?.deliveryInstruction || checkout.address?.deliveryInstruction) ? (
-                      <p>
-                        Instruction:{" "}
-                        {submittedIntent?.address?.deliveryInstruction || checkout.address?.deliveryInstruction}
-                      </p>
-                    ) : null}
-                  </>
-                ) : (
-                  <p>No shipping address is required for this order.</p>
-                )}
-              </div>
-            ) : (
-              <p className="text-sm poppins-light">
-                No customer details are saved yet for this checkout.
-              </p>
-            )}
-          </section>
+              {customerReady || submittedIntent ? (
+                <div className="flex flex-col gap-1.5">
+                  {customerName && <Text weight="semibold">{customerName}</Text>}
+                  {customerPhone && <Text size="sm" tone="muted">{customerPhone}</Text>}
+                  {requiresShipping && (
+                    <>
+                      {street && <Text size="sm" tone="muted">{street}</Text>}
+                      {aptSuite && <Text size="sm" tone="muted">{aptSuite}</Text>}
+                      {(city || state || country) && (
+                        <Text size="sm" tone="muted">
+                          {[city, state, country].filter(Boolean).join(", ")}
+                        </Text>
+                      )}
+                      {postalCode && <Text size="sm" tone="muted">{postalCode}</Text>}
+                      {deliveryInstruction && (
+                        <DetailRow label="Instruction" value={deliveryInstruction} />
+                      )}
+                    </>
+                  )}
+                  {!requiresShipping && (
+                    <Text size="sm" tone="muted">
+                      No shipping address is required for this order.
+                    </Text>
+                  )}
+                </div>
+              ) : (
+                <Text size="sm" tone="muted">
+                  No customer details are saved yet for this checkout.
+                </Text>
+              )}
+            </CardContent>
+          </Card>
 
-          <section className="flex flex-col gap-4 border border-muted bg-card p-5 text-foreground">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-lg poppins-extrabold">PAYMENT DETAILS</p>
-                <p className="text-sm poppins-light">Saved locally in this browser for the current checkout draft.</p>
+          <Card>
+            <CardContent className="flex flex-col gap-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-1">
+                  <Heading level={3} className="text-h5">Payment details</Heading>
+                  <Text size="sm" tone="muted">
+                    Saved locally in this browser for the current checkout draft.
+                  </Text>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleEditPayment}
+                >
+                  Edit
+                </Button>
               </div>
-              <Button
-                type="button"
-                className="h-auto bg-foreground px-3 py-2 text-xs uppercase tracking-wide text-primary"
-                onClick={handleEditPayment}
-              >
-                Edit
-              </Button>
-            </div>
 
-            {paymentReady || submittedIntent ? (
-              <div className="flex flex-col gap-2 text-sm poppins-light">
-                {requiresShipping ? (
-                  <p>
-                    <span className="font-semibold">Shipping service:</span>{" "}
-                    {submittedIntent?.payment?.shippingService || checkout.payment.shippingService}
-                  </p>
-                ) : null}
-                <p>
-                  <span className="font-semibold">Payment method:</span>{" "}
-                  {submittedIntent?.payment?.paymentMethod || checkout.payment.paymentMethod}
-                </p>
-                <p>
-                  <span className="font-semibold">Billing email:</span>{" "}
-                  {submittedIntent?.payment?.billingEmail || checkout.payment.billingEmail}
-                </p>
-                <p>
-                  <span className="font-semibold">Account ending:</span>{" "}
-                  **** {submittedIntent?.payment?.accountLast4 || checkout.payment.accountLast4}
-                </p>
-                {(submittedIntent?.payment?.expiryMonth || checkout.payment.expiryMonth) &&
-                (submittedIntent?.payment?.expiryYear || checkout.payment.expiryYear) ? (
-                  <p>
-                    <span className="font-semibold">Expiry:</span>{" "}
-                    {submittedIntent?.payment?.expiryMonth || checkout.payment.expiryMonth}/
-                    {submittedIntent?.payment?.expiryYear || checkout.payment.expiryYear}
-                  </p>
-                ) : null}
-              </div>
-            ) : (
-              <p className="text-sm poppins-light">
-                No local payment details are saved yet for this checkout.
-              </p>
-            )}
-          </section>
+              {paymentReady || submittedIntent ? (
+                <div className="flex flex-col gap-1.5">
+                  {requiresShipping && shippingService && (
+                    <DetailRow label="Shipping service" value={shippingService} />
+                  )}
+                  {paymentMethod && (
+                    <DetailRow label="Payment method" value={paymentMethod} />
+                  )}
+                  {billingEmail && (
+                    <DetailRow label="Billing email" value={billingEmail} />
+                  )}
+                  {accountLast4 && (
+                    <DetailRow label="Account ending" value={`•••• ${accountLast4}`} />
+                  )}
+                  {expiryMonth && expiryYear && (
+                    <DetailRow label="Expiry" value={`${expiryMonth}/${expiryYear}`} />
+                  )}
+                </div>
+              ) : (
+                <Text size="sm" tone="muted">
+                  No local payment details are saved yet for this checkout.
+                </Text>
+              )}
+            </CardContent>
+          </Card>
         </div>
 
-        <section className="flex flex-col gap-5">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-2xl text-foreground poppins-bold">ORDER ITEMS</p>
-              <p className="text-sm text-muted-foreground">
-                These items are currently in your cart and included in the checkout summary.
-              </p>
-            </div>
+        <section className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <Heading level={3} className="text-h4">Order items</Heading>
+            <Text size="sm" tone="muted">
+              These items are currently in your cart and included in the checkout summary.
+            </Text>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             {displayItems.length > 0 ? (
               displayItems.map((product) => (
-                <div className="border border-muted bg-card p-4" key={getCommerceItemKey(product)}>
-                  <CustomerProduct
-                    title={product.name}
-                    item={product.quantity}
-                    price={formatShopCurrency(product.price ?? product.unitPrice)}
-                    priceLabel=""
-                    imageClassName="object-cover lg:h-24 lg:w-28"
-                    image={resolveBackendAssetUrl(
-                      product?.image || product?.images?.[0],
-                      "https://via.placeholder.com/300x200"
-                    )}
-                  />
-                </div>
+                <Card key={getCommerceItemKey(product)} className="p-0">
+                  <CardContent className="p-4">
+                    <CustomerProduct
+                      title={product.name}
+                      item={product.quantity}
+                      price={formatShopCurrency(product.price ?? product.unitPrice)}
+                      priceLabel=""
+                      imageClassName="object-cover h-20 w-24"
+                      image={resolveBackendAssetUrl(
+                        product?.image || product?.images?.[0],
+                        "https://via.placeholder.com/300x200",
+                      )}
+                    />
+                  </CardContent>
+                </Card>
               ))
             ) : (
-              <div className="border border-dashed border-border bg-card p-4 text-sm text-foreground">
-                Your cart is empty.
-              </div>
+              <Card>
+                <CardContent>
+                  <Text size="sm" tone="muted">Your cart is empty.</Text>
+                </CardContent>
+              </Card>
             )}
           </div>
         </section>
 
-        <section className="flex flex-col gap-4 border border-muted bg-card p-5 text-foreground">
-          <p className="text-xl poppins-bold">TOTALS</p>
-          <OrderSummaryLine
-            label="Shipping"
-            value={formatShopCurrency(displaySummary.shipping)}
-            labelClassName={summaryLabelClassName}
-            valueClassName={summaryValueClassName}
-          />
-          <OrderSummaryLine
-            label="Discount 10%"
-            value={`- ${formatShopCurrency(displaySummary.discount)}`}
-            labelClassName={summaryLabelClassName}
-            valueClassName={summaryValueClassName}
-          />
-          <OrderSummaryLine
-            label="Price"
-            value={formatShopCurrency(displaySummary.subtotal)}
-            labelClassName={summaryLabelClassName}
-            valueClassName={summaryValueClassName}
-          />
-          <OrderSummaryLine
-            label="Total Price"
-            value={formatShopCurrency(displaySummary.total)}
-            labelClassName={summaryLabelClassName}
-            valueClassName={summaryTotalValueClassName}
-          />
-        </section>
+        <Card>
+          <CardContent className="flex flex-col gap-3">
+            <Heading level={3} className="text-h5">Totals</Heading>
+            <OrderSummaryLine
+              label="Subtotal"
+              value={formatShopCurrency(displaySummary.subtotal)}
+              labelClassName="text-body-sm text-muted-foreground"
+              valueClassName="text-body font-medium"
+            />
+            <OrderSummaryLine
+              label="Discount (10%)"
+              value={`- ${formatShopCurrency(displaySummary.discount)}`}
+              labelClassName="text-body-sm text-muted-foreground"
+              valueClassName="text-body-sm"
+            />
+            <OrderSummaryLine
+              label="Shipping"
+              value={formatShopCurrency(displaySummary.shipping)}
+              labelClassName="text-body-sm text-muted-foreground"
+              valueClassName="text-body-sm"
+            />
+            <div className="border-t border-border pt-3">
+              <OrderSummaryLine
+                label="Total"
+                value={formatShopCurrency(displaySummary.total)}
+                labelClassName="text-body-sm text-muted-foreground"
+                valueClassName="text-h5 font-semibold text-primary"
+              />
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="pt-4">
-        <div className="h-full w-0 border border-border"></div>
-      </div>
-
-      <div className="lg:w-1/3">
-        <CustomerOrder
-          onNext={handleSubmitCheckoutIntent}
-          buttonDisabled={submitShopCheckoutIntentMutation.isPending || Boolean(submittedIntent)}
-          buttonLabel={
-            submittedIntent
-              ? "ORDER REQUEST SUBMITTED"
-              : submitShopCheckoutIntentMutation.isPending
-                ? "SUBMITTING ORDER REQUEST..."
-                : paymentReady
-                  ? "SUBMIT ORDER REQUEST"
-                  : "ADD PAYMENT DETAILS"
-          }
-          itemsOverride={displayItems}
-          summaryOverride={displaySummary}
-        />
-      </div>
+      <Card className="lg:sticky lg:top-24 lg:self-start">
+        <CardContent className="p-0">
+          <CustomerOrder
+            onNext={handleSubmitCheckoutIntent}
+            buttonDisabled={
+              submitShopCheckoutIntentMutation.isPending || Boolean(submittedIntent)
+            }
+            buttonLabel={
+              submittedIntent
+                ? "Order request submitted"
+                : submitShopCheckoutIntentMutation.isPending
+                  ? "Submitting…"
+                  : paymentReady
+                    ? "Submit order request"
+                    : "Add payment details"
+            }
+            itemsOverride={displayItems}
+            summaryOverride={displaySummary}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 };

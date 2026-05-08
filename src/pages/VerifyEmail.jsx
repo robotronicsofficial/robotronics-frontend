@@ -1,21 +1,33 @@
-import { useState, useRef, useEffect } from 'react';
-import { useNavigate, useSearch } from "@tanstack/react-router";
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import { useVerifyEmailMutation } from '../hooks/useAuthMutations';
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { AlertCircle, Mail } from "lucide-react";
+import { toast } from "sonner";
+
+import AuthShell from "@/components/auth/AuthShell";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
+import { Display, Text } from "@/components/ui/typography";
+import {
+  useResendVerificationMutation,
+  useVerifyEmailMutation,
+} from "../hooks/useAuthMutations";
 import {
   buildAuthRedirectSearch,
   consumePostAuthRedirect,
   getSafeRedirectPath,
-} from '../utils/authRedirect';
+} from "../utils/authRedirect";
 
 const VerifyEmail = () => {
   const search = useSearch({ strict: false });
-  const [status, setStatus] = useState('verifying');
-  const [message, setMessage] = useState('');
   const navigate = useNavigate();
-  const verificationStarted = useRef(false);
   const verifyEmailMutation = useVerifyEmailMutation();
+  const resendMutation = useResendVerificationMutation();
+  const verificationStarted = useRef(false);
+  const [status, setStatus] = useState("verifying");
+  const [message, setMessage] = useState("");
+  const [resendEmail, setResendEmail] = useState("");
   const redirectPath = getSafeRedirectPath(search.redirect);
 
   useEffect(() => {
@@ -24,11 +36,11 @@ const VerifyEmail = () => {
     const verifyEmail = async () => {
       if (verificationStarted.current) return;
       verificationStarted.current = true;
-      
+
       const token = search.token;
       if (!token) {
-        setStatus('error');
-        setMessage('Verification token is missing');
+        setStatus("error");
+        setMessage("Verification token is missing or expired.");
         return;
       }
 
@@ -36,75 +48,155 @@ const VerifyEmail = () => {
         const data = await verifyEmailMutation.mutateAsync(token);
         const nextRedirectPath = redirectPath || consumePostAuthRedirect();
 
-        setStatus('success');
-        setMessage(data.message);
+        setStatus("success");
+        setMessage(data.message || "Your email is verified.");
         redirectTimer = setTimeout(() => {
+          /* If the user came from somewhere (e.g. the wizard), send them
+             back with `verified=1` so the inline auth panel defaults to
+             login mode. Otherwise fall back to the standalone /Login. */
+          if (nextRedirectPath) {
+            const separator = nextRedirectPath.includes("?") ? "&" : "?";
+            window.location.assign(`${nextRedirectPath}${separator}verified=1`);
+            return;
+          }
           navigate({
-            to: '/Login',
+            to: "/Login",
             search: {
               emailVerified: true,
               ...buildAuthRedirectSearch(nextRedirectPath),
             },
+            replace: true,
           });
-        }, 3000);
+        }, 1500);
       } catch (error) {
-        setStatus('error');
-        setMessage(error.message || 'An error occurred during verification');
+        setStatus("error");
+        setMessage(
+          error.message ||
+            "We couldn't verify that link. It may have expired or already been used.",
+        );
       }
     };
 
     verifyEmail();
 
     return () => {
-      if (redirectTimer) {
-        clearTimeout(redirectTimer);
-      }
+      if (redirectTimer) clearTimeout(redirectTimer);
     };
   }, [search.token, navigate, verifyEmailMutation, redirectPath]);
 
+  const handleResend = async (event) => {
+    event.preventDefault();
+    if (!resendEmail) {
+      toast.error("Enter the email you signed up with.");
+      return;
+    }
+    try {
+      await resendMutation.mutateAsync(resendEmail);
+      toast.success("Verification email sent. Check your inbox.");
+    } catch (error) {
+      toast.error(error.message || "Couldn't send the email. Try again.");
+    }
+  };
+
   return (
-    <main className="mx-auto flex min-h-[80vh] max-w-xl flex-col items-center justify-center px-4 text-center">
-        {status === 'verifying' && (
+    <AuthShell>
+      <div className="flex flex-col items-center gap-5 text-center">
+        {status === "verifying" && (
           <>
-            <Spinner className="size-14 text-primary" />
-            <h1
-              aria-live="polite"
-              className="mt-6 text-xl font-semibold text-foreground"
+            <span
+              aria-hidden="true"
+              className="grid size-14 place-items-center rounded-full bg-primary-soft text-primary"
             >
-              Verifying your email...
-            </h1>
+              <Spinner className="size-7" />
+            </span>
+            <Display size="md" aria-live="polite">
+              Verifying your email…
+            </Display>
+            <Text tone="muted">Hang tight, this only takes a moment.</Text>
           </>
         )}
 
-        {status === 'success' && (
+        {status === "success" && (
           <>
-            <h1 className="text-3xl font-bold text-primary">
-              Email Verified!
-            </h1>
-            <p aria-live="polite" className="mb-6 mt-3 text-muted-foreground">
-              {message} Redirecting to login page...
-            </p>
-            <Spinner className="size-8 text-primary" />
+            <span
+              aria-hidden="true"
+              className="grid size-14 place-items-center rounded-full bg-success/15 text-success"
+            >
+              <Mail className="size-6" />
+            </span>
+            <Display size="md" tone="brand">
+              Email verified
+            </Display>
+            <Text tone="muted" aria-live="polite">
+              {message} Taking you back to where you left off…
+            </Text>
+            <Spinner className="size-6 text-primary" />
           </>
         )}
 
-        {status === 'error' && (
-          <div role="alert" aria-live="polite" className="flex flex-col items-center gap-6">
-            <h1 className="text-3xl font-bold text-destructive">
-              Verification Failed
-            </h1>
-            <p className="text-muted-foreground">{message}</p>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => navigate({ to: '/Signup' })}
-              disabled={verifyEmailMutation.isPending}
+        {status === "error" && (
+          <div
+            role="alert"
+            aria-live="polite"
+            className="flex w-full flex-col items-center gap-5"
+          >
+            <span
+              aria-hidden="true"
+              className="grid size-14 place-items-center rounded-full bg-destructive/10 text-destructive"
             >
-              {verifyEmailMutation.isPending ? "Retrying…" : "Try Again"}
-            </Button>
+              <AlertCircle className="size-7" />
+            </span>
+            <Display size="md" className="text-destructive">
+              Couldn&apos;t verify that link
+            </Display>
+            <Text tone="muted">{message}</Text>
+
+            <form
+              onSubmit={handleResend}
+              className="mt-2 flex w-full flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-left"
+            >
+              <Label htmlFor="resend-email">Enter your email to get a fresh link</Label>
+              <Input
+                id="resend-email"
+                type="email"
+                autoComplete="email"
+                value={resendEmail}
+                onChange={(event) => setResendEmail(event.target.value)}
+                placeholder="you@example.com"
+                required
+              />
+              <Button
+                type="submit"
+                size="marketing"
+                disabled={resendMutation.isPending}
+              >
+                {resendMutation.isPending
+                  ? "Sending…"
+                  : "Send a new verification email"}
+              </Button>
+            </form>
+
+            <Text tone="muted" size="sm">
+              Need help?{" "}
+              <Link
+                to="/Login"
+                className="text-foreground underline underline-offset-4"
+              >
+                Sign in
+              </Link>{" "}
+              or{" "}
+              <Link
+                to="/contact-us"
+                className="text-foreground underline underline-offset-4"
+              >
+                contact support
+              </Link>
+              .
+            </Text>
           </div>
         )}
-    </main>
+      </div>
+    </AuthShell>
   );
 };
 

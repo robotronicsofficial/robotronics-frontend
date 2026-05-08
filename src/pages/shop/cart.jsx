@@ -1,19 +1,25 @@
-import CartsStep from "@/components/site/shop/steps/cartsStep"
-const Cart = () => {
-  return (
-    <div className="shopCarthero" id="shopCarthero">
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-col items-center" data-aos="fade-down">
-          <p className="text-foreground font-poppins font-bold text-wrap lg:text-4xl text-2xl text-center mt-header-page">
-            Your cart
-          </p>
-        </div>
-        <div data-aos="fade-up">
-          <CartsStep />
-        </div>
-      </div>
-    </div>
-  );
-};
+import CartsStep from "@/components/site/shop/steps/cartsStep";
+import CheckoutIntro from "@/components/site/shop/CheckoutIntro";
+import MarketingHero from "@/components/marketing/MarketingHero";
+import { Container } from "@/components/ui/container";
+
+const Cart = () => (
+  <>
+    <MarketingHero
+      size="compact"
+      step={{ current: 1, label: "Cart", total: 4 }}
+      title="Your cart"
+      subtitle="Review your items, then proceed to checkout."
+      containerSize="wide"
+    >
+      <CheckoutIntro activeStep={1} />
+    </MarketingHero>
+    <section className="bg-background pb-20">
+      <Container size="wide">
+        <CartsStep />
+      </Container>
+    </section>
+  </>
+);
 
 export default Cart;

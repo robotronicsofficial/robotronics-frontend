@@ -1,74 +1,89 @@
 import { Clock, MapPin } from "lucide-react";
 import PropTypes from "prop-types";
+
+import { Card } from "@/components/ui/card";
+import { Heading, Text } from "@/components/ui/typography";
 import { openExternalUrl } from "@/utils/openExternalUrl";
-import { Button } from "@/components/ui/button";
 
 const WorkshopCard = ({ workshop }) => {
   const hasExternalUrl = Boolean(workshop?.url);
 
   const handleOpenWorkshop = () => {
-    if (!hasExternalUrl) {
-      return;
-    }
-
-    openExternalUrl(workshop.url);
+    if (hasExternalUrl) openExternalUrl(workshop.url);
   };
 
   return (
-    <Button
-      type="button"
-      variant="ghost"
-      className="h-auto w-full flex-col items-stretch overflow-hidden rounded-lg border border-border bg-card p-0 text-left disabled:cursor-default"
+    <Card
+      role={hasExternalUrl ? "button" : undefined}
+      tabIndex={hasExternalUrl ? 0 : undefined}
       onClick={handleOpenWorkshop}
-      disabled={!hasExternalUrl}
+      onKeyDown={(event) => {
+        if (!hasExternalUrl) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          handleOpenWorkshop();
+        }
+      }}
+      className={`flex h-full flex-col overflow-hidden p-0 ${
+        hasExternalUrl ? "cursor-pointer transition-shadow hover:shadow-lg" : ""
+      }`}
       aria-label={
         hasExternalUrl
           ? `Open ${workshop.workshopName || "workshop"} in a new tab`
           : `${workshop.workshopName || "Workshop"} has no external link`
       }
     >
-      <div className="relative aspect-video cursor-pointer">
+      <div className="aspect-video overflow-hidden bg-muted">
         <img
           src={workshop.thumbnail}
           alt={workshop.workshopName}
-          className="w-full h-full object-fill"
+          className="h-full w-full object-cover"
         />
       </div>
-      <div className="px-3 py-4 bg-foreground relative flex min-h-64 flex-col">
-        <div className="min-h-8 text-background">
-          <p className="poppins-medium my-3">
-            {workshop.activity}
-          </p>
-          <div className="absolute right-2 -top-10 size-20 overflow-hidden rounded-full border-2 border-card bg-primary">
+
+      <div className="relative flex flex-1 flex-col gap-3 p-5">
+        {workshop.schoolLogo && (
+          <div className="absolute -top-7 right-5 size-14 overflow-hidden rounded-full border-2 border-card bg-card shadow-sm">
             <img
               src={workshop.schoolLogo}
-              alt={workshop.schoolName}
-              className="w-full h-full object-cover"
+              alt={workshop.schoolName || ""}
+              className="h-full w-full object-cover"
             />
           </div>
-        </div>
+        )}
 
-        <div className="mt-2 flex flex-1 flex-col">
-          <h3 className="text-lg text-background poppins-bold text-wrap leading-none my-4">
-            {workshop.workshopName}
-          </h3>
-          <p className="text-background text-wrap poppins-light md:text-xs">
+        {workshop.activity && (
+          <Text size="xs" tone="muted" className="uppercase tracking-wide">
+            {workshop.activity}
+          </Text>
+        )}
+
+        <Heading level={4} className="text-h5">
+          {workshop.workshopName}
+        </Heading>
+
+        {workshop.description && (
+          <Text size="sm" tone="muted" className="line-clamp-3">
             {workshop.description}
-          </p>
-        </div>
+          </Text>
+        )}
 
-        <div className="mt-4 flex items-center justify-between gap-1 px-2 text-background poppins-light">
-          <p className="flex items-center gap-2 text-sm">
-            <Clock />
-            {workshop.timeFrom} To {workshop.timeTo}{" "}
-          </p>
-          <div className="flex items-center gap-1">
-            <MapPin />
-            {workshop.city}
-          </div>
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3 text-caption text-muted-foreground">
+          {(workshop.timeFrom || workshop.timeTo) && (
+            <span className="flex items-center gap-1.5">
+              <Clock className="size-3.5" aria-hidden="true" />
+              {workshop.timeFrom} {workshop.timeTo ? `– ${workshop.timeTo}` : ""}
+            </span>
+          )}
+          {workshop.city && (
+            <span className="flex items-center gap-1.5">
+              <MapPin className="size-3.5" aria-hidden="true" />
+              {workshop.city}
+            </span>
+          )}
         </div>
       </div>
-    </Button>
+    </Card>
   );
 };
 

@@ -1,21 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { createProductCommerceItem } from "@/lib/commerceItems";
+import { ArrowRight, Heart, Minus, Plus, ShoppingCart } from "lucide-react";
 
 import AppImage from "../../AppImage";
 import CenteredState from "@/components/layout/CenteredState";
-import robo from "@/assets/images/shopRobot.webp";
-import star from "@/assets/images/shopStar.svg";
-import { Heart } from "lucide-react";
-
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
-import { useProduct, useProducts } from "@/hooks/useProducts";
-import { useCartStore } from "@/stores/cartStore";
-import { useSavedItems, useToggleSavedItemMutation } from "@/hooks/useSavedItems";
+import HeroAtmospherics from "@/components/marketing/HeroAtmospherics";
 import StarRating from "@/components/rating/StarRating";
-import { formatShopCurrency } from "@/lib/shopCheckout";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { Display, Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { createProductCommerceItem } from "@/lib/commerceItems";
+import { formatShopCurrency } from "@/lib/shopCheckout";
+import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { useCartStore } from "@/stores/cartStore";
+import { useProduct, useProducts } from "@/hooks/useProducts";
+import { useSavedItems, useToggleSavedItemMutation } from "@/hooks/useSavedItems";
+import robo from "@/assets/images/shopRobot.webp";
 
 const resolveImageUrl = (image) => resolveBackendAssetUrl(image, robo);
 
@@ -55,10 +58,7 @@ const Intro = () => {
   };
 
   const handleToggleSavedItem = async () => {
-    if (!product?._id) {
-      return;
-    }
-
+    if (!product?._id) return;
     try {
       await toggleSavedItemMutation.mutateAsync({
         itemType: "product",
@@ -72,232 +72,235 @@ const Intro = () => {
 
   if (isLoading) {
     return (
-      <CenteredState className="bg-muted p-10 text-center text-lg">
-        Loading product...
-      </CenteredState>
+      <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
+        <CenteredState className="py-16">
+          <Text tone="muted">Loading product…</Text>
+        </CenteredState>
+      </section>
     );
   }
 
   if (productError) {
     return (
-      <CenteredState className="bg-muted p-10 text-center text-lg text-destructive">
-        {productError.message || "We couldn't load this product right now."}
-      </CenteredState>
+      <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
+        <CenteredState className="py-16">
+          <Text className="text-destructive">
+            {productError.message || "We couldn't load this product right now."}
+          </Text>
+        </CenteredState>
+      </section>
     );
   }
 
   if (!product) {
     return (
-      <CenteredState className="bg-muted p-10 text-center text-lg">
-        Product not found.
-      </CenteredState>
+      <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
+        <CenteredState className="py-16">
+          <Text tone="muted">Product not found.</Text>
+        </CenteredState>
+      </section>
     );
   }
 
   const productRating = Number(product.ratings || 0);
   const hasRating = productRating > 0;
+  const productImages = product.images || [];
 
   return (
-    <div className="bg-muted">
-      <div className="flex flex-col lg:flex-row lg:px-14 lg:py-5">
+    <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
+      <HeroAtmospherics variant="full" />
+
+      <Container size="wide">
         <div
-          className="flex flex-col items-center gap-4 p-4 lg:flex-row lg:justify-center lg:p-0"
+          className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14"
           data-aos="fade-up"
         >
-          <div className="h-64 w-64 rounded-full bg-background p-10 lg:h-94 lg:w-94 lg:p-14">
-            <AppImage src={selectedImage} alt="Selected" loading="eager" />
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-5">
+            <div className="aspect-square w-full overflow-hidden rounded-3xl border border-border bg-card lg:flex-1">
+              <AppImage
+                src={selectedImage}
+                alt={product.name || "Product"}
+                loading="eager"
+                className="h-full w-full object-contain p-10"
+              />
+            </div>
+            {productImages.length > 0 && (
+              <div className="flex gap-2 overflow-x-auto lg:flex-col lg:gap-3">
+                {productImages.map((img, idx) => {
+                  const url = resolveImageUrl(img);
+                  const isActive = url === selectedImage;
+                  return (
+                    <button
+                      key={`${img}-${idx}`}
+                      type="button"
+                      onClick={() => setSelectedImage(url)}
+                      aria-label={`View image ${idx + 1}`}
+                      className={cn(
+                        "size-16 shrink-0 overflow-hidden rounded-xl border bg-card transition-colors",
+                        isActive
+                          ? "border-primary ring-2 ring-primary/40"
+                          : "border-border hover:border-foreground",
+                      )}
+                    >
+                      <AppImage
+                        src={url}
+                        alt={`thumb-${idx}`}
+                        className="h-full w-full object-cover"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
-          <div className="flex gap-2 overflow-x-auto py-2 lg:flex-col lg:gap-3 lg:py-10">
-            {(product.images || []).map((img, idx) => (
-              <Button
-                key={`${img}-${idx}`}
-                type="button"
-                variant="secondary"
-                size="icon"
-                className="size-10 shrink-0 rounded-none border border-border bg-card p-0"
-                onClick={() => setSelectedImage(resolveImageUrl(img))}
-              >
-                <AppImage
-                  src={resolveImageUrl(img)}
-                  alt={`thumb-${idx}`}
-                  className="size-10"
+
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
+              <Eyebrow>Robotronics shop</Eyebrow>
+              <Display size="md" className="text-balance">
+                {product.name}
+              </Display>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-4">
+              {hasRating ? (
+                <StarRating value={productRating} className="text-h5" />
+              ) : (
+                <Text size="sm" tone="muted">
+                  No ratings yet
+                </Text>
+              )}
+              <Text size="sm" tone="muted">
+                {product.productSold ?? 0} sold · {product.productWatched ?? 0} viewed
+              </Text>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              {product.category && (
+                <Badge variant="secondary" className="rounded-full">
+                  {product.category}
+                </Badge>
+              )}
+              <div className="inline-flex items-center rounded-full border border-border bg-card">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={handleDecrease}
+                  aria-label="Decrease quantity"
+                >
+                  <Minus className="size-4" aria-hidden="true" />
+                </Button>
+                <Input
+                  type="number"
+                  className="h-8 w-12 border-0 bg-transparent text-center"
+                  value={quantity}
+                  readOnly
                 />
-              </Button>
-            ))}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={handleIncrease}
+                  aria-label="Increase quantity"
+                >
+                  <Plus className="size-4" aria-hidden="true" />
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <Display size="md" tone="brand">
+                {formatShopCurrency(product.price)}
+              </Display>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  size="marketing"
+                  onClick={() => {
+                    const cartItem = createProductCommerceItem({
+                      ...product,
+                      quantity,
+                    });
+                    if (cartItem) addToCart(cartItem);
+                  }}
+                >
+                  <ShoppingCart className="size-4" aria-hidden="true" />
+                  Add to cart
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={handleToggleSavedItem}
+                  aria-label={isSaved ? "Remove from saved items" : "Save item"}
+                >
+                  <Heart
+                    className="size-5"
+                    fill={isSaved ? "currentColor" : "none"}
+                  />
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-8 p-5 lg:gap-14 lg:px-24" data-aos="fade-up">
-          <p className="poppins-bold lg:text-4xl text-wrap">{product.name}</p>
-
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-8 lg:gap-14">
-              {hasRating ? (
-                <StarRating value={productRating} className="my-6 text-2xl" />
-              ) : (
-                <p className="my-6 text-sm text-muted-foreground poppins-medium">
-                  No ratings yet
-                </p>
-              )}
-            </div>
-            <div className="flex gap-2">
-              <p className="text-sm poppins-medium text-muted-foreground">
-                {product.productSold ?? 0} products sold,
-              </p>
-              <p className="text-sm poppins-medium text-muted-foreground">
-                {product.productWatched ?? 0} products watched
-              </p>
-            </div>
+        <div className="grid grid-cols-1 gap-4 pt-16 md:grid-cols-2">
+          <div
+            className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6"
+            data-aos="fade-up"
+          >
+            <Eyebrow>Description</Eyebrow>
+            <Text tone="muted">
+              {product?.description || "No description available."}
+            </Text>
           </div>
-          <div className="flex gap-2 lg:justify-start">
-            <div className="bg-card lg:px-5">
-              <p>{product.category}</p>
-            </div>
-
-            <div className="flex items-center bg-card">
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                className="rounded-md bg-muted px-1 lg:px-3 lg:py-1"
-                onClick={handleDecrease}
-              >
-                -
-              </Button>
-              <Input type="number" className="h-auto w-10 text-center lg:w-24" value={quantity} readOnly />
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                className="rounded-md bg-muted px-3 py-1"
-                onClick={handleIncrease}
-              >
-                +
-              </Button>
-            </div>
+          <div
+            className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6"
+            data-aos="fade-up"
+          >
+            <Eyebrow>Fits and features</Eyebrow>
+            {Array.isArray(product?.features) && product.features.length > 0 ? (
+              <ul className="flex flex-col gap-2">
+                {product.features.map((feature, index) => (
+                  <li key={index}>
+                    <Text size="sm" tone="muted">
+                      {index + 1}. {feature}
+                    </Text>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Text size="sm" tone="muted">
+                No features listed.
+              </Text>
+            )}
           </div>
+        </div>
 
-          <div className="items-center justify-between lg:flex lg:gap-10">
-            <div className="text-primary text-2xl poppins-medium">
-              {formatShopCurrency(product.price)}
-            </div>
-            <div className="flex gap-5">
-              <Button
-                type="button"
-                className="h-auto rounded-lg bg-primary p-2 text-background lg:px-7"
-                onClick={() => {
-                  const cartItem = createProductCommerceItem({
-                    ...product,
-                    quantity,
-                  });
-
-                  if (cartItem) {
-                    addToCart(cartItem);
-                  }
-                }}
-              >
-                ADD TO CART
-              </Button>
-            </div>
-            <Button
-              type="button"
-              variant="secondary"
-              className="h-auto rounded-lg bg-background p-2 px-3"
-              onClick={handleToggleSavedItem}
-              aria-label={isSaved ? "Remove from saved items" : "Save item"}
-            >
-              {isSaved ? <Heart  fill="currentColor" /> : <Heart  />}
+        <div
+          className="mt-16 flex flex-col gap-8 rounded-3xl border border-border bg-muted/40 p-8 lg:flex-row lg:items-center lg:justify-between lg:p-12"
+          id="shopPages"
+        >
+          <div className="flex max-w-xl flex-col gap-3">
+            <Eyebrow>Keep exploring</Eyebrow>
+            <Heading level={2} className="text-h3" data-aos="fade-right">
+              Browse the live catalog
+            </Heading>
+            <Text tone="muted" data-aos="fade-up">
+              Step away from this product to see every kit, robotics module, and
+              learning bundle currently in stock.
+            </Text>
+          </div>
+          <div className="flex flex-wrap items-center gap-3" data-aos="fade-left">
+            <Button type="button" onClick={() => navigate({ to: "/shop" })}>
+              Browse all products
+              <ArrowRight className="size-4" aria-hidden="true" />
             </Button>
           </div>
         </div>
-      </div>
-
-      <div className="bg-background p-2 lg:p-14">
-        <div className="flex gap-4 px-2 lg:justify-center lg:gap-10" data-aos="fade-down">
-          <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
-            PRODUCT DETAIL
-          </p>
-          <p className="h-8 w-0 border border-foreground"></p>
-          <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
-            DELIVERY AND RETURN
-          </p>
-        </div>
-
-        <div className="flex justify-between p-5">
-          <div className="flex w-1/2 flex-col gap-2 p-2">
-            <p
-              className="lg:text-2xl text-xl poppins-semibold text-foreground"
-              data-aos="fade-up"
-            >
-              DESCRIPTION
-            </p>
-            <p className="text-wrap text-xs poppins-medium text-muted-foreground" data-aos="fade-up">
-              {product?.description || "No description available."}
-            </p>
-          </div>
-
-          <div className="w-1/2 p-2">
-            <div
-              className="flex flex-col gap-2 px-4 text-wrap text-muted-foreground lg:px-20"
-              data-aos="fade-up"
-            >
-              <p className="lg:text-2xl text-xl poppins-semibold text-foreground">
-                FITS AND FEATURES
-              </p>
-              {Array.isArray(product?.features) && product.features.length > 0 ? (
-                product.features.map((feature, index) => (
-                  <p key={index} className="text-xs poppins-medium">
-                    {index + 1}. {feature}
-                  </p>
-                ))
-              ) : (
-                <p className="text-xs poppins-medium">No features listed.</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <section className="shopPages flex items-center gap-8 px-5 lg:px-14" id="shopPages">
-          <div className="flex-1 py-8 lg:py-20">
-            <div className="flex flex-col justify-content">
-              <p
-                className="flex text-primary lg:text-4xl text-2xl font-bold"
-                data-aos="fade-right"
-              >
-                Keep exploring
-              </p>
-              <p
-                className="flex text-background lg:text-4xl text-2xl font-bold"
-                data-aos="fade-left"
-              >
-                Live catalog
-              </p>
-              <p
-                className="mt-4 max-w-xl text-background/80 lg:text-lg text-sm"
-                data-aos="fade-up"
-              >
-                Browse the live store inventory instead of a filler promo block.
-              </p>
-            </div>
-            <div className="mt-6 flex flex-wrap items-center gap-4">
-              <Button
-                type="button"
-                onClick={() => navigate({ to: "/shop" })}
-                className="h-auto rounded-lg bg-primary px-5 py-3 font-semibold text-foreground hover:opacity-90"
-              >
-                Browse all products
-              </Button>
-            </div>
-            <img src={star} className="mt-6" data-aos="fade-up" alt="" />
-          </div>
-          <div className="flex-1" data-aos="fade-left">
-            <div className="flex w-full justify-content">
-              <AppImage src={robo} alt="Product spotlight illustration" />
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
+      </Container>
+    </section>
   );
 };
 

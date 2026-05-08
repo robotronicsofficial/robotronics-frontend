@@ -1,48 +1,55 @@
 import PropTypes from "prop-types";
-import ShopPages from "../shopPages";
+
+import { Container } from "@/components/ui/container";
+import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 
 const Decription = ({ description, features }) => {
   const featureList = Array.isArray(features) ? features.filter(Boolean) : [];
   const hasFeatures = featureList.length > 0;
 
   return (
-    <div className="bg-background p-2 lg:p-14">
-      <div className="flex gap-4 px-2 lg:justify-center lg:gap-10" data-aos="fade-down">
-        <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
-          PRODUCT DETAIL
-        </p>
-        <p className="h-8 w-0 border border-foreground "></p>
-        <p className="lg:text-3xl font-bold text-wrap poppins-extrabold text-foreground">
-          DELIVERY AND RETURN
-        </p>
-      </div>
-      <div className="flex justify-between p-5">
-        <div className="flex w-1/2 flex-col gap-2 p-2">
-          <p className="text-xl poppins-semibold text-foreground lg:text-2xl" data-aos="fade-up">
-            DESCRIPTION
-          </p>
-          <p className="text-wrap text-xs poppins-medium text-muted-foreground ">
-            {description}
-          </p>
-        </div>
-        {hasFeatures && (
-          <div className="w-1/2 p-2">
-            <div className="flex flex-col gap-2 px-4 text-wrap text-muted-foreground lg:px-20" data-aos="fade-up">
-              <p className="text-xl poppins-semibold text-foreground lg:text-2xl">
-                FITS AND FEATURES
-              </p>
-              {featureList.map((feature, index) => (
-                <p key={`${index}-${feature}`} className="text-xs poppins-medium ">
-                  {index + 1}. {feature}
-                </p>
-              ))}
-            </div>
+    <section className="bg-background py-16 md:py-20">
+      <Container size="wide">
+        <div className="flex flex-col gap-10">
+          <div
+            className="flex flex-col items-center gap-3 text-center"
+            data-aos="fade-down"
+          >
+            <Eyebrow>Product information</Eyebrow>
+            <Heading level={2} className="text-display-md">
+              Detail, delivery, and returns.
+            </Heading>
           </div>
-        )}
-      </div>
 
-      <ShopPages />
-    </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div
+              className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6"
+              data-aos="fade-up"
+            >
+              <Eyebrow>Description</Eyebrow>
+              <Text tone="muted">{description}</Text>
+            </div>
+            {hasFeatures && (
+              <div
+                className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6"
+                data-aos="fade-up"
+              >
+                <Eyebrow>Fits and features</Eyebrow>
+                <ul className="flex flex-col gap-2">
+                  {featureList.map((feature, index) => (
+                    <li key={`${index}-${feature}`}>
+                      <Text size="sm" tone="muted">
+                        {index + 1}. {feature}
+                      </Text>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      </Container>
+    </section>
   );
 };
 

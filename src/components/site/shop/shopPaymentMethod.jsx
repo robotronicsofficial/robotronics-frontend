@@ -1,10 +1,17 @@
 import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import mastercard from "@/assets/images/mastercard.svg";
+import { CreditCard } from "lucide-react";
+import { toast } from "sonner";
+
 import CustomerOrder from "./customerOrder";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Heading, Text } from "@/components/ui/typography";
+import { FormInput } from "@/components/forms/FormControls";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { cn } from "@/lib/utils";
 import {
   hasCheckoutCustomer,
   hasCheckoutAddress,
@@ -13,10 +20,7 @@ import {
 } from "@/lib/shopCheckout";
 import { hasShippableCommerceItems } from "@/lib/commerceItems";
 import { selectCart, useCartStore } from "@/stores/cartStore";
-import { FormInput } from "@/components/forms/FormControls";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
 
 const SHIPPING_SERVICES = [
   {
@@ -42,31 +46,76 @@ const PAYMENT_METHODS = [
   },
 ];
 
+const Field = ({
+  id,
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  autoComplete,
+  inputMode,
+  error,
+}) => (
+  <div className="flex flex-col gap-1">
+    <FormInput
+      id={id}
+      name={id}
+      label={label}
+      type={type}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      placeholder={placeholder}
+      autoComplete={autoComplete}
+      inputMode={inputMode}
+      aria-invalid={Boolean(error) || undefined}
+    />
+    {error && (
+      <Text role="alert" size="xs" className="text-destructive">
+        {error}
+      </Text>
+    )}
+  </div>
+);
+
+Field.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  type: PropTypes.string,
+  autoComplete: PropTypes.string,
+  inputMode: PropTypes.string,
+  error: PropTypes.string,
+};
+
 const ShopPaymentMethod = ({ onNext }) => {
   const navigate = useNavigate();
   const cart = useCartStore(selectCart);
   const storedCheckout = useMemo(() => loadShopCheckout(), []);
   const requiresShipping = hasShippableCommerceItems(cart);
   const [selectedService, setSelectedService] = useState(
-    storedCheckout.payment?.shippingService || (requiresShipping ? SHIPPING_SERVICES[0].value : "")
+    storedCheckout.payment?.shippingService ||
+      (requiresShipping ? SHIPPING_SERVICES[0].value : ""),
   );
   const [selectedMethod, setSelectedMethod] = useState(
-    storedCheckout.payment?.paymentMethod || PAYMENT_METHODS[0].value
+    storedCheckout.payment?.paymentMethod || PAYMENT_METHODS[0].value,
   );
   const [billingEmail, setBillingEmail] = useState(
-    storedCheckout.payment?.billingEmail || ""
+    storedCheckout.payment?.billingEmail || "",
   );
   const [cardholderName, setCardholderName] = useState(
-    storedCheckout.payment?.cardholderName || ""
+    storedCheckout.payment?.cardholderName || "",
   );
   const [accountNumber, setAccountNumber] = useState(
-    storedCheckout.payment?.accountLast4 || ""
+    storedCheckout.payment?.accountLast4 || "",
   );
   const [expiryMonth, setExpiryMonth] = useState(
-    storedCheckout.payment?.expiryMonth || ""
+    storedCheckout.payment?.expiryMonth || "",
   );
   const [expiryYear, setExpiryYear] = useState(
-    storedCheckout.payment?.expiryYear || ""
+    storedCheckout.payment?.expiryYear || "",
   );
   const [fieldErrors, setFieldErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -158,86 +207,112 @@ const ShopPaymentMethod = ({ onNext }) => {
   };
 
   return (
-    <div className="bg-background p-5 lg:flex lg:gap-6">
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
       <div
-        className="flex flex-col border border-border bg-card lg:w-2/3"
+        className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6 md:p-8"
         data-aos="fade-up"
       >
-        <section className="flex flex-col gap-4 p-6">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex flex-col gap-2">
-              <p className="text-3xl text-foreground poppins-bold">SHIPPING & PAYMENT</p>
-              <p className="text-sm text-foreground poppins-light">
-                Save the payment details for this checkout draft. Shipping is only required when your cart has physical products.
-              </p>
-            </div>
-            <Button
-              type="button"
-              className="h-auto bg-foreground px-4 py-2 text-sm text-primary"
-              onClick={() => navigate({ to: "/CustomerInfo" })}
-            >
-              Edit address
-            </Button>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex flex-col gap-2">
+            <Heading level={3} className="text-h4">
+              Shipping & payment
+            </Heading>
+            <Text size="sm" tone="muted">
+              Save the payment details for this checkout draft. Shipping is only
+              required when your cart has physical products.
+            </Text>
           </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => navigate({ to: "/CustomerInfo" })}
+          >
+            Edit address
+          </Button>
+        </div>
 
-          <p className="bg-primary/10 p-4 text-sm text-foreground">
-            This storefront flow only stores billing details locally in your browser. It does not create a backend payment record or invoice yet.
-          </p>
+        <Alert>
+          <AlertDescription>
+            This storefront flow only stores billing details locally in your
+            browser. It does not create a backend payment record or invoice yet.
+          </AlertDescription>
+        </Alert>
 
-          {customerReady ? (
-            <div className="grid gap-2 text-sm text-foreground sm:grid-cols-2">
-              <p className="font-semibold">
+        {customerReady ? (
+          <div className="rounded-xl border border-border bg-muted/40 p-4">
+            <div className="grid gap-1 sm:grid-cols-2">
+              <Text weight="semibold">
                 {savedCustomer.firstName} {savedCustomer.lastName}
-              </p>
-              <p className="sm:text-right">{savedCustomer.phone}</p>
+              </Text>
+              <Text size="sm" tone="muted" className="sm:text-right">
+                {savedCustomer.phone}
+              </Text>
               {requiresShipping && addressReady ? (
-                <p className="sm:col-span-2">
+                <Text size="sm" tone="muted" className="sm:col-span-2">
                   {savedAddress.streetAddress}
                   {savedAddress.aptSuite ? `, ${savedAddress.aptSuite}` : ""}
                   {`, ${savedAddress.city}, ${savedAddress.state}, ${savedAddress.country}`}
-                </p>
+                </Text>
               ) : (
-                <p className="sm:col-span-2 text-foreground/70">Digital order. No delivery address is required.</p>
+                <Text size="sm" tone="muted" className="sm:col-span-2">
+                  Digital order. No delivery address is required.
+                </Text>
               )}
             </div>
-          ) : (
-            <p className="bg-muted p-4 text-sm text-foreground">
+          </div>
+        ) : (
+          <Alert variant="destructive">
+            <AlertDescription>
               Add your customer details before choosing payment information.
-            </p>
-          )}
-        </section>
+            </AlertDescription>
+          </Alert>
+        )}
 
         {requiresShipping ? (
-          <section className="flex flex-col gap-5 border-t border-border p-6">
-            <div className="flex flex-col gap-2">
-              <p className="text-3xl text-foreground poppins-bold">SHIPPING SERVICE</p>
-              <p className="text-sm text-foreground poppins-light">
-                Choose the delivery partner you want stored with this checkout draft.
-              </p>
+          <section className="flex flex-col gap-4 border-t border-border pt-6">
+            <div className="flex flex-col gap-1">
+              <Heading level={3} className="text-h4">
+                Shipping service
+              </Heading>
+              <Text size="sm" tone="muted">
+                Choose the delivery partner you want stored with this checkout
+                draft.
+              </Text>
             </div>
 
-            <RadioGroup value={selectedService} onValueChange={setSelectedService} className="flex flex-col gap-4">
+            <RadioGroup
+              value={selectedService}
+              onValueChange={setSelectedService}
+              className="flex flex-col gap-3"
+            >
               {SHIPPING_SERVICES.map((service) => {
                 const isSelected = selectedService === service.value;
-
                 return (
                   <Label
                     key={service.value}
-                    className={`w-full border p-5 text-left transition ${
-                      isSelected ? "bg-foreground text-background border-foreground" : "bg-background text-foreground border-border"
-                    }`}
+                    className={cn(
+                      "flex w-full cursor-pointer flex-col gap-2 rounded-xl border p-5 transition-colors",
+                      isSelected
+                        ? "border-primary bg-primary-soft"
+                        : "border-border bg-card hover:border-foreground",
+                    )}
                   >
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-start gap-3">
                       <RadioGroupItem
                         value={service.value}
                         id={`shipping-${service.value}`}
                       />
-                      <div className="flex w-full flex-col gap-2">
-                        <div className="flex justify-between gap-4">
-                          <p className="poppins-bold">{service.value}</p>
-                          <p className="text-sm">{service.note}</p>
+                      <div className="flex flex-1 flex-col gap-1">
+                        <div className="flex flex-wrap items-start justify-between gap-2">
+                          <Text weight="semibold">{service.value}</Text>
+                          <Text size="xs" tone="muted">
+                            {service.note}
+                          </Text>
                         </div>
-                        <p className="text-sm poppins-light">{service.description}</p>
+                        <Text size="sm" tone="muted">
+                          {service.description}
+                        </Text>
                       </div>
                     </div>
                   </Label>
@@ -246,43 +321,59 @@ const ShopPaymentMethod = ({ onNext }) => {
             </RadioGroup>
           </section>
         ) : (
-          <section className="border-t border-border p-6">
-            <p className="bg-primary/10 p-4 text-sm text-foreground">
-              This checkout only contains digital items, so no shipping service needs to be selected.
-            </p>
+          <section className="border-t border-border pt-6">
+            <Alert>
+              <AlertDescription>
+                This checkout only contains digital items, so no shipping service
+                needs to be selected.
+              </AlertDescription>
+            </Alert>
           </section>
         )}
 
-        <section className="flex flex-col gap-5 border-t border-border p-6">
-          <div className="flex flex-col gap-2">
-            <p className="text-3xl text-foreground poppins-bold">PAYMENT METHOD</p>
-            <p className="text-sm text-foreground poppins-light">
+        <section className="flex flex-col gap-4 border-t border-border pt-6">
+          <div className="flex flex-col gap-1">
+            <Heading level={3} className="text-h4">
+              Payment method
+            </Heading>
+            <Text size="sm" tone="muted">
               Save the billing method you want attached to this checkout draft.
-            </p>
+            </Text>
           </div>
 
-          <RadioGroup value={selectedMethod} onValueChange={setSelectedMethod} className="grid gap-4 lg:grid-cols-2">
+          <RadioGroup
+            value={selectedMethod}
+            onValueChange={setSelectedMethod}
+            className="grid gap-3 lg:grid-cols-2"
+          >
             {PAYMENT_METHODS.map((method) => {
               const isSelected = selectedMethod === method.value;
-
               return (
                 <Label
                   key={method.value}
-                  className={`border p-5 text-left transition ${
-                    isSelected ? "bg-foreground text-background border-foreground" : "bg-background text-foreground border-border"
-                  }`}
+                  className={cn(
+                    "flex w-full cursor-pointer flex-col gap-2 rounded-xl border p-5 transition-colors",
+                    isSelected
+                      ? "border-primary bg-primary-soft"
+                      : "border-border bg-card hover:border-foreground",
+                  )}
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3">
                     <RadioGroupItem
                       value={method.value}
                       id={`payment-${method.value}`}
                     />
-                    <div className="flex w-full flex-col gap-2">
-                      <div className="flex items-center justify-between gap-4">
-                        <p className="poppins-bold">{method.value}</p>
-                        <img src={mastercard} className="h-6 w-6" alt="payment method icon" />
+                    <div className="flex flex-1 flex-col gap-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <Text weight="semibold">{method.value}</Text>
+                        <CreditCard
+                          aria-hidden="true"
+                          className="size-5 text-muted-foreground"
+                        />
                       </div>
-                      <p className="text-sm poppins-light">{method.description}</p>
+                      <Text size="sm" tone="muted">
+                        {method.description}
+                      </Text>
                     </div>
                   </div>
                 </Label>
@@ -291,15 +382,18 @@ const ShopPaymentMethod = ({ onNext }) => {
           </RadioGroup>
         </section>
 
-        <section className="flex flex-col gap-5 border-t border-border p-6">
-          <div className="flex flex-col gap-2">
-            <p className="text-3xl text-foreground poppins-bold">BILLING DETAILS</p>
-            <p className="text-sm text-foreground poppins-light">
-              These details are used for the order summary and kept locally in this browser until you submit the checkout request.
-            </p>
+        <section className="flex flex-col gap-4 border-t border-border pt-6">
+          <div className="flex flex-col gap-1">
+            <Heading level={3} className="text-h4">
+              Billing details
+            </Heading>
+            <Text size="sm" tone="muted">
+              These details are used for the order summary and kept locally in
+              this browser until you submit the checkout request.
+            </Text>
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2">
             <Field
               id="billing_email"
               label="Billing email"
@@ -333,13 +427,15 @@ const ShopPaymentMethod = ({ onNext }) => {
                 setAccountNumber(next);
                 clearFieldError("account_number");
               }}
-              placeholder={isCardPayment ? "4111 1111 1111 1111" : "03XX XXX XXXX"}
+              placeholder={
+                isCardPayment ? "4111 1111 1111 1111" : "03XX XXX XXXX"
+              }
               autoComplete={isCardPayment ? "cc-number" : "off"}
               inputMode={isCardPayment ? "numeric" : undefined}
               error={fieldErrors.account_number}
             />
             {isCardPayment ? (
-              <div className="grid gap-5 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <Field
                   id="expiry_month"
                   label="Expiry month"
@@ -368,28 +464,24 @@ const ShopPaymentMethod = ({ onNext }) => {
                 />
               </div>
             ) : (
-              <p className="bg-muted p-4 text-sm text-foreground">
-                The last four digits of your account number will be stored with the order summary.
-              </p>
+              <Alert>
+                <AlertDescription>
+                  The last four digits of your account number will be stored
+                  with the order summary.
+                </AlertDescription>
+              </Alert>
             )}
           </div>
         </section>
       </div>
 
       <div
-        className="px-1"
-        data-aos="fade-up"
-      >
-        <div className="h-full w-0 border border-muted"></div>
-      </div>
-
-      <div
-        className="lg:w-1/2"
+        className="flex flex-col overflow-hidden rounded-xl border border-border bg-card lg:sticky lg:top-24 lg:self-start"
         data-aos="fade-up"
       >
         <CustomerOrder
           onNext={handleContinue}
-          buttonLabel={isSubmitting ? "Saving…" : "REVIEW ORDER"}
+          buttonLabel={isSubmitting ? "Saving…" : "Review order"}
           buttonDisabled={isSubmitting}
         />
       </div>
@@ -397,53 +489,8 @@ const ShopPaymentMethod = ({ onNext }) => {
   );
 };
 
-const Field = ({
-  id,
-  label,
-  value,
-  onChange,
-  placeholder,
-  type = "text",
-  autoComplete,
-  inputMode,
-  error,
-}) => (
-  <div className="flex flex-col gap-1">
-    <FormInput
-      id={id}
-      name={id}
-      label={label}
-      type={type}
-      value={value}
-      onChange={(event) => onChange(event.target.value)}
-      placeholder={placeholder}
-      autoComplete={autoComplete}
-      inputMode={inputMode}
-      aria-invalid={Boolean(error) || undefined}
-      controlClassName="rounded-none border-x-0 border-t-0 border-border bg-transparent px-0 py-2.5 text-sm text-foreground focus:border-foreground"
-    />
-    {error && (
-      <p role="alert" className="text-destructive text-sm poppins-regular">
-        {error}
-      </p>
-    )}
-  </div>
-);
-
 ShopPaymentMethod.propTypes = {
   onNext: PropTypes.func,
-};
-
-Field.propTypes = {
-  id: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-  type: PropTypes.string,
-  autoComplete: PropTypes.string,
-  inputMode: PropTypes.string,
-  error: PropTypes.string,
 };
 
 export default ShopPaymentMethod;

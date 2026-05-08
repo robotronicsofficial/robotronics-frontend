@@ -1,13 +1,11 @@
-import Intro from '@/components/site/shop/productDetail/intro'
-import MoreProduct from '@/components/site/shop/productDetail/moreProduct';
+import Intro from "@/components/site/shop/productDetail/intro";
+import MoreProduct from "@/components/site/shop/productDetail/moreProduct";
 
-const ProductDetailPage = () => {
-  return (
-    <div className="pt-header-auth-md bg-muted">
-        <Intro/>
-        <MoreProduct/>
-    </div>
-  )
-}
+const ProductDetailPage = () => (
+  <>
+    <Intro />
+    <MoreProduct />
+  </>
+);
 
 export default ProductDetailPage;

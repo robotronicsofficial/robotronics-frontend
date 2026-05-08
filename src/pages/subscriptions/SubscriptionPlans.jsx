@@ -1,146 +1,134 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Check } from "lucide-react";
-import { usePlans } from "../../hooks/usePlans";
-import { useSelectedPlanStore } from "../../stores/selectedPlanStore";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Skeleton } from "@/components/ui/skeleton";
 
+import { BillingToggle } from "@/components/ui/billing-toggle";
+import { Container } from "@/components/ui/container";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Display, Highlight, Text } from "@/components/ui/typography";
+import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdown";
+import MarketingHero from "@/components/marketing/MarketingHero";
+import { PlanCard } from "@/components/marketing/PlanCard";
+import { CHECKOUT_PATH, buildCheckoutSearch } from "@/components/checkout/checkoutNav";
+import { usePlans } from "../../hooks/usePlans";
+import { useCheckoutStore } from "../../stores/checkoutStore";
+
+/* Mirrors PlanCard's gradient-header / white-body shape so the loading state
+   doesn't shift layout once data arrives. */
 const PlanCardSkeleton = () => (
-  <div className="flex flex-col gap-4 rounded-2xl border border-border bg-muted p-6">
-    <Skeleton className="h-6 w-2/3" />
-    <Skeleton className="h-10 w-1/2" />
-    <div className="flex flex-col gap-2">
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-4 w-5/6" />
-      <Skeleton className="h-4 w-4/6" />
-      <Skeleton className="h-4 w-5/6" />
+  <article className="flex flex-col overflow-hidden rounded-3xl bg-card shadow-md">
+    <div
+      className="flex flex-col gap-3 px-7 pb-7 pt-6"
+      style={{
+        backgroundImage:
+          "radial-gradient(circle at 80% 0%, var(--color-brand-50), transparent 55%), linear-gradient(135deg, var(--color-brand-100), var(--color-brand-300))",
+      }}
+    >
+      <Skeleton className="h-3 w-16 bg-foreground/10" />
+      <Skeleton className="h-10 w-32 bg-foreground/10" />
+      <Skeleton className="h-3 w-24 bg-foreground/10" />
     </div>
-    <Skeleton className="h-10 w-full rounded-lg" />
-  </div>
+    <div className="flex flex-1 flex-col gap-6 px-7 pb-7 pt-6">
+      <div className="flex flex-col gap-2">
+        <Skeleton className="h-6 w-2/3" />
+        <Skeleton className="h-4 w-5/6" />
+      </div>
+      <span aria-hidden="true" className="block h-px w-full bg-border" />
+      <div className="flex flex-col gap-3">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+        <Skeleton className="h-4 w-4/6" />
+        <Skeleton className="h-4 w-5/6" />
+      </div>
+      <Skeleton className="mt-auto h-12 w-full rounded-full" />
+    </div>
+  </article>
 );
 
 const SubscriptionPlans = () => {
-  const [isAnnual, setIsAnnual] = useState(false);
+  const [cycle, setCycle] = useState("annual");
   const navigate = useNavigate();
-  const setSelectedPlan = useSelectedPlanStore((state) => state.setSelectedPlan);
+  const setPlan = useCheckoutStore((state) => state.setPlan);
 
-  const {
-    data: totalPlans = [],
-    isLoading: loading,
-    error,
-  } = usePlans();
+  const { data: plans = [], isLoading, error } = usePlans();
 
-  const handleRegisterClick = (plan) => {
-    const price = isAnnual ? plan.yearlyPrice : plan.monthlyPrice;
-    const billingCycle = isAnnual ? "annual" : "monthly";
-
-    setSelectedPlan({
+  const handleSelect = (plan) => {
+    const price = cycle === "annual" ? plan.yearlyPrice : plan.monthlyPrice;
+    setPlan({
       planId: plan._id,
-      plan: plan.planName,
-      price,
-      billingCycle,
+      name: plan.planName,
+      price: Number(price || 0),
+      billingCycle: cycle,
+      courseAccess: plan.courseAccess,
+      maxQuizAttemptsPerDay: plan.maxQuizAttemptsPerDay,
     });
-
-    navigate({ to: "/subscriptions/register" });
+    navigate({ to: CHECKOUT_PATH, search: buildCheckoutSearch("kids") });
   };
 
-  if (error) {
-    return (
-      <div className="flex flex-col items-center bg-background py-10 px-4 sm:px-8 md:px-16 lg:px-24">
-        <p className="text-destructive poppins-light">
-          Error loading subscription plans: {error.message}
-        </p>
-      </div>
-    );
-  }
-
-  const hasPlans = totalPlans.length > 0;
-
   return (
-    <div className="flex flex-col items-center bg-background py-10 px-4 sm:px-8 md:px-16 lg:px-24">
-      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center poppins-bold">
-        Learning Subscription Plans
-      </h2>
-
-      <div className="mt-6 flex items-center justify-center gap-4 poppins-light">
-        <span>Monthly</span>
-        <Switch
-          checked={isAnnual}
-          onCheckedChange={setIsAnnual}
-          aria-label="Toggle billing cycle"
+    <>
+      <MarketingHero
+        size="page"
+        eyebrow="Pricing"
+        title={
+          <Display size="md">
+            Choose the plan that <Highlight>fits your child</Highlight>.
+          </Display>
+        }
+        subtitle="One subscription unlocks every future skill. Cancel anytime — no calls, no forms."
+        className="pt-20 md:pt-28"
+      >
+        <BillingToggle
+          value={cycle}
+          onChange={setCycle}
+          savingsLabel="Save up to 60%"
+          className="mt-4 self-center"
         />
-        <span>Annual</span>
-      </div>
+        {cycle === "annual" && <AnnualOfferCountdown />}
+      </MarketingHero>
 
-      <div className="mt-8 grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {loading || !hasPlans
-          ? Array.from({ length: 3 }).map((_, index) => (
-              <PlanCardSkeleton key={index} />
-            ))
-          : totalPlans.map((plan) => {
-              const displayPrice = isAnnual ? plan.yearlyPrice : plan.monthlyPrice;
-              const annualSavings =
-                Number(plan.monthlyPrice || 0) * 12 - Number(plan.yearlyPrice || 0);
+      <section className="relative isolate overflow-hidden bg-background pb-20 md:pb-28">
+        <Container size="wide">
+          {error ? (
+            <div className="mx-auto max-w-md rounded-xl border border-destructive bg-destructive/10 p-6 text-center">
+              <Text tone="muted">
+                We couldn&apos;t load plans right now. Please refresh, or contact support if the issue persists.
+              </Text>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {isLoading || plans.length === 0
+                ? Array.from({ length: 3 }).map((_, i) => <PlanCardSkeleton key={i} />)
+                : plans.map((plan, i) => {
+                    const isHighlighted = i === 0;
+                    return (
+                      <PlanCard
+                        key={plan._id}
+                        name={plan.planName || "Learning Subscription"}
+                        description={plan.description}
+                        pricing={{
+                          monthly: Number(plan.monthlyPrice || 0),
+                          annual: Number(plan.yearlyPrice || 0),
+                        }}
+                        features={plan.features || []}
+                        cta={{
+                          label: "Choose plan",
+                          onClick: () => handleSelect(plan),
+                        }}
+                        tone={isHighlighted ? "tinted" : "default"}
+                        popular={isHighlighted && plans.length > 1}
+                        cycle={cycle}
+                      />
+                    );
+                  })}
+            </div>
+          )}
 
-              return (
-                <div
-                  key={plan._id}
-                  className="flex flex-col gap-4 rounded-2xl border border-border bg-muted p-6"
-                >
-	                  <h3 className="text-xl font-bold text-center poppins-bold">
-	                    {plan.planName || "Learning Subscription"}
-	                  </h3>
-
-                  <div className="flex flex-col items-center gap-1">
-                    <p className="text-2xl font-bold text-center">
-                      PKR {Number(displayPrice || 0).toLocaleString()}
-                      <span className="text-base font-normal text-muted-foreground">
-                        /child
-                      </span>
-                    </p>
-                    {isAnnual && annualSavings > 0 ? (
-                      <p className="text-center text-success font-semibold poppins-bold text-sm">
-                        Save PKR {annualSavings.toLocaleString()} annually
-                      </p>
-                    ) : null}
-                  </div>
-
-                  {plan.description ? (
-                    <p className="text-center text-foreground poppins-light text-sm">
-                      {plan.description}
-                    </p>
-                  ) : null}
-
-                  <ul className="flex flex-1 flex-col gap-y-2 text-sm">
-                    {(plan.features || []).map((feature, index) => (
-                      <li
-                        key={index}
-                        className="flex items-start gap-2 poppins-light"
-                      >
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-warning" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-	                  <Button
-	                    type="button"
-	                    className="h-auto w-full rounded-lg bg-primary px-6 py-2 text-primary-foreground hover:bg-accent hover:text-background"
-	                    onClick={() => handleRegisterClick(plan)}
-	                  >
-	                    Choose subscription
-	                  </Button>
-                </div>
-              );
-            })}
-      </div>
-
-      <p className="mt-8 text-center text-sm text-muted-foreground poppins-light">
-        Cancel anytime. All subscription plans include child profiles and course access.
-      </p>
-    </div>
+          <Text tone="muted" size="sm" className="mt-10 text-center">
+            Cancel anytime. Each child has their own subscription — add multiple kids at the same per-child rate.
+          </Text>
+        </Container>
+      </section>
+    </>
   );
 };
 

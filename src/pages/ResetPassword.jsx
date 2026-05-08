@@ -1,17 +1,18 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "sonner";
+import { Check, X } from "lucide-react";
 
+import AuthShell from "@/components/auth/AuthShell";
 import PasswordVisibilityButton from "@/components/auth/PasswordVisibilityButton";
 import { getPasswordInputClassName } from "@/components/auth/passwordInputClass";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Display, Text } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 import { useResetPasswordMutation } from "../hooks/useAuthMutations";
-import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
 import {
   getPasswordValidationState,
   hasValidPasswordRequirements,
@@ -20,8 +21,23 @@ import {
 
 const RequirementCheck = ({ isValid, text }) => (
   <div className="flex items-center gap-2">
-    <Badge variant={isValid ? "default" : "destructive"} className="size-4 rounded-full p-0" />
-    <span className={`text-xs ${isValid ? 'text-success' : 'text-destructive'}`}>{text}</span>
+    <span
+      aria-hidden="true"
+      className={cn(
+        "grid size-4 place-items-center rounded-full",
+        isValid
+          ? "bg-success/15 text-success"
+          : "bg-muted text-muted-foreground",
+      )}
+    >
+      {isValid ? <Check className="size-3" /> : <X className="size-3" />}
+    </span>
+    <Text
+      size="xs"
+      className={isValid ? "text-success" : "text-muted-foreground"}
+    >
+      {text}
+    </Text>
   </div>
 );
 
@@ -49,13 +65,9 @@ const ResetPassword = () => {
     match: passwordsMatch,
   } = passwordValidation;
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () =>
     setShowConfirmPassword(!showConfirmPassword);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,97 +97,97 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="bg-background" id="reset-password">
-      <div className={getHeaderOffsetClass("page", "mx-auto flex w-full max-w-md flex-col items-center gap-6 px-6 pb-20 md:px-10 lg:px-16")}>
-        <p className="text-4xl poppins-bold text-foreground">Reset Password</p>
-        <form
-          onSubmit={handleSubmit}
-          className="flex w-full flex-col gap-4"
-        >
-          <div className="flex w-full flex-col gap-1">
-            <div className="flex items-center justify-between">
-              <Label className="text-sm poppins-regular">New Password</Label>
-              <PasswordVisibilityButton
-                isVisible={showPassword}
-                onToggle={togglePasswordVisibility}
-              />
-            </div>
-            <Input
-              className={getPasswordInputClassName(password, hasMinLength && hasNumber && hasSymbol)}
-              type={showPassword ? "text" : "password"}
-              name="new-password"
-              autoComplete="new-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <RequirementCheck
-                isValid={hasMinLength}
-                text="8+ characters"
-              />
-              <RequirementCheck
-                isValid={hasNumber}
-                text="Contains number"
-              />
-              <RequirementCheck
-                isValid={hasSymbol}
-                text="Contains symbol"
-              />
-            </div>
-          </div>
-
-          <div className="flex w-full flex-col gap-1">
-            <div className="flex items-center justify-between">
-              <Label className="text-sm poppins-regular">Confirm Password</Label>
-              <PasswordVisibilityButton
-                isVisible={showConfirmPassword}
-                onToggle={toggleConfirmPasswordVisibility}
-              />
-            </div>
-            <Input
-              className={getPasswordInputClassName(confirmPassword, passwordsMatch)}
-              type={showConfirmPassword ? "text" : "password"}
-              name="confirm-password"
-              autoComplete="new-password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-            {confirmPassword && (
-              <p className={`text-xs ${passwordsMatch ? 'text-success' : 'text-destructive'}`}>
-                {passwordsMatch ? 'Passwords match!' : 'Passwords do not match'}
-              </p>
-            )}
-          </div>
-
-          <Button
-            type="submit"
-            className="h-auto w-full rounded-3xl bg-foreground py-3 text-background poppins-regular"
-            disabled={
-              resetPasswordMutation.isPending ||
-              !password ||
-              !confirmPassword ||
-              !hasMinLength ||
-              !hasNumber ||
-              !hasSymbol
-            }
-          >
-            {resetPasswordMutation.isPending ? "Resetting…" : "Reset Password"}
-          </Button>
-
-          <Button
-            type="button"
-            onClick={() => navigate({ to: '/Login' })}
-            variant="link"
-            className="text-foreground poppins-regular"
-          >
-            Back to Login
-          </Button>
-        </form>
-        {error && <p role="alert" className="text-destructive text-sm poppins-regular">{error}</p>}
+    <AuthShell>
+      <div className="flex flex-col items-center gap-2 text-center">
+        <Display size="md">Reset password</Display>
+        <Text tone="muted">Choose a new password to sign back in.</Text>
       </div>
-    </div>
+
+      <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
+        <div className="flex w-full flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <Label>New password</Label>
+            <PasswordVisibilityButton
+              isVisible={showPassword}
+              onToggle={togglePasswordVisibility}
+            />
+          </div>
+          <Input
+            className={getPasswordInputClassName(
+              password,
+              hasMinLength && hasNumber && hasSymbol,
+            )}
+            type={showPassword ? "text" : "password"}
+            name="new-password"
+            autoComplete="new-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <RequirementCheck isValid={hasMinLength} text="8+ characters" />
+            <RequirementCheck isValid={hasNumber} text="Contains number" />
+            <RequirementCheck isValid={hasSymbol} text="Contains symbol" />
+          </div>
+        </div>
+
+        <div className="flex w-full flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <Label>Confirm password</Label>
+            <PasswordVisibilityButton
+              isVisible={showConfirmPassword}
+              onToggle={toggleConfirmPasswordVisibility}
+            />
+          </div>
+          <Input
+            className={getPasswordInputClassName(confirmPassword, passwordsMatch)}
+            type={showConfirmPassword ? "text" : "password"}
+            name="confirm-password"
+            autoComplete="new-password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+          {confirmPassword && (
+            <Text
+              size="xs"
+              className={passwordsMatch ? "text-success" : "text-destructive"}
+            >
+              {passwordsMatch ? "Passwords match" : "Passwords do not match"}
+            </Text>
+          )}
+        </div>
+
+        <Button
+          type="submit"
+          size="marketing"
+          className="w-full"
+          disabled={
+            resetPasswordMutation.isPending ||
+            !password ||
+            !confirmPassword ||
+            !hasMinLength ||
+            !hasNumber ||
+            !hasSymbol
+          }
+        >
+          {resetPasswordMutation.isPending ? "Resetting…" : "Reset password"}
+        </Button>
+
+        <Button
+          type="button"
+          onClick={() => navigate({ to: "/Login" })}
+          variant="link"
+        >
+          Back to login
+        </Button>
+      </form>
+      {error && (
+        <Text role="alert" size="sm" className="text-destructive">
+          {error}
+        </Text>
+      )}
+    </AuthShell>
   );
 };
 

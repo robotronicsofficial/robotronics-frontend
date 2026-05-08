@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 
 import hide from "../../assets/images/hide.svg";
 import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/typography";
 import { cn } from "../../lib/utils";
 
 const PasswordVisibilityButton = ({
@@ -21,14 +22,14 @@ const PasswordVisibilityButton = ({
     {isVisible ? (
       <>
         <img className="h-5 w-5" src={hide} alt="Hide password" />
-        <p className={cn("text-sm poppins-light", textClassName)}>Hide</p>
+        <Text as="span" size="xs" className={textClassName}>Hide</Text>
       </>
     ) : (
       <>
         {showIconWhenHidden && (
           <img className="h-5 w-5" src={hide} alt="Show password" />
         )}
-        <p className={cn("text-sm poppins-light", textClassName)}>Show</p>
+        <Text as="span" size="xs" className={textClassName}>Show</Text>
       </>
     )}
   </Button>

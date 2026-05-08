@@ -1,154 +1,82 @@
-import React, { useMemo, useState } from "react";
-import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Container } from "@/components/ui/container";
+import { FaqAccordion } from "@/components/ui/faq-accordion";
+import { Display } from "@/components/ui/typography";
+import MarketingHero from "@/components/marketing/MarketingHero";
 
-const faqs = [
+const FAQ_ITEMS = [
   {
     question: "Who can register for a learning subscription?",
     answer:
-      "Students aged 7 and above from any background can benefit from this program across the globe.",
+      "Any child aged 6 and up. Parents create one account and add a profile per child — siblings each need their own active subscription.",
   },
   {
-    question: "Do we provide E-Certificates?",
+    question: "Do you provide e-certificates?",
     answer:
-      "Yes. Active learners can earn E-Certificates issued through STEMSOL.org, a US-based credentialing partner.",
+      "Yes. Active learners earn e-certificates issued through STEMSOL.org, a US-based credentialing service recognized internationally.",
   },
   {
-    question: "How will we pay every month? Do we need to visit your office?",
-    answer: "All payments are processed online through the selected billing method.",
+    question: "How do payments work?",
+    answer:
+      "All payments are processed online — no office visit required. Pick monthly or annual at checkout; annual subscriptions come with a steep discount.",
   },
   {
     question: "Which devices are required?",
     answer:
-      "The learning platform is responsive and accessible on laptops, tablets, and phones. Basic system configuration is sufficient.",
+      "The platform is responsive across laptops, tablets, and phones. Any modern browser works — no special hardware required.",
   },
   {
-    question: "How many students can use this Program under one subscription?",
+    question: "How many children can use one subscription?",
     answer:
-      "Each subscription is for one child only. Violations may lead to cancellation. Parents can add additional children by paying separately.",
+      "Each subscription covers one child. Parents can add additional children via the dashboard with separate billing.",
   },
   {
-    question: "Can we pay in Installments?",
-    answer: "Yes. Parents can use monthly billing when they prefer smaller recurring payments.",
+    question: "Can we pay in installments?",
+    answer:
+      "Yes. Choose monthly billing if you prefer smaller recurring payments.",
   },
   {
     question: "Can we cancel the subscription?",
     answer:
-      "Subscriptions once paid are non-refundable. You may opt out before the next billing cycle by emailing support@robotronicsofficial.com.",
+      "Yes — cancel from the parent dashboard whenever you like, no calls or forms. Subscriptions once paid are non-refundable for the current period.",
   },
   {
-    question: "How can we add Multiple Child Accounts?",
+    question: "How do we add multiple child accounts?",
     answer:
-      "Parents can add multiple children via the dashboard. Each child gets a dedicated 4-digit PIN for login.",
+      "Add children directly from the parent dashboard. Each child gets a dedicated 4-digit PIN for login.",
   },
   {
-    question: "How will you examine if the Child is learning properly or not?",
+    question: "How is progress evaluated?",
     answer:
-      "Courses are split into modules. After each module, the child must pass a quiz with at least 60% to unlock the next module.",
+      "Courses are split into modules. After each module, the child must pass a quiz with at least 60% to unlock the next one.",
   },
   {
-    question: "Students or schools from which country can benefit from the subscription?",
+    question: "Which countries does Robotronics.ai serve?",
     answer:
-      "The platform is SaaS-based and accessible globally to schools and students in any country.",
+      "The platform is SaaS-based and accessible globally to schools and parents in any country.",
   },
   {
-    question: "What is the fee structure?",
+    question: "What does it cost?",
     answer:
-      "The current subscription price is shown during checkout, with monthly and annual billing available.",
+      "Current subscription pricing is shown during checkout, with both monthly and annual billing available.",
   },
 ];
 
-const slugify = (text) =>
-  text
-    .toLowerCase()
-    .replace(/\W+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-const FAQs = () => {
-  const [openIndex, setOpenIndex] = useState(0);
-
-  const items = useMemo(
-    () => faqs.map((faq) => ({ ...faq, slug: slugify(faq.question) })),
-    []
-  );
-
-  return (
-    <div className="bg-background p-8 lg:p-20">
-      <div className="mx-auto flex max-w-3xl flex-col gap-8 pt-16 lg:pt-24">
-        <header className="flex flex-col gap-2">
-          <h1 className="poppins-bold text-4xl text-foreground">
-            Frequently Asked Questions (FAQs)
-          </h1>
-          <p className="lato-regular text-sm text-muted-foreground">
-            Last updated: April 25, 2026
-          </p>
-        </header>
-
-        <nav
-          aria-label="FAQ table of contents"
-          className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5"
-        >
-          <p className="poppins-semibold text-sm uppercase tracking-wide text-muted-foreground">
-            On this page
-          </p>
-          <ul className="flex flex-col gap-2">
-            {items.map((item, idx) => (
-              <li key={item.slug}>
-                <a
-                  href={`#${item.slug}`}
-                  className="lato-regular text-sm text-foreground underline-offset-4 hover:text-primary hover:underline"
-                >
-                  {idx + 1}. {item.question}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <ul className="flex flex-col gap-3">
-          {items.map((item, idx) => {
-            const isOpen = openIndex === idx;
-            return (
-              <li
-                key={item.slug}
-                id={item.slug}
-                className="flex flex-col rounded-2xl border border-border bg-card scroll-mt-24"
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenIndex(isOpen ? -1 : idx)}
-                  aria-expanded={isOpen}
-                  aria-controls={`${item.slug}-panel`}
-                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-2xl"
-                >
-                  <h3 className="poppins-semibold text-base text-foreground md:text-lg">
-                    {item.question}
-                  </h3>
-                  <ChevronDown
-                    aria-hidden="true"
-                    className={cn(
-                      "size-5 shrink-0 text-muted-foreground transition-transform duration-200",
-                      isOpen && "rotate-180 text-primary"
-                    )}
-                  />
-                </button>
-                {isOpen && (
-                  <div
-                    id={`${item.slug}-panel`}
-                    className="flex flex-col px-5 pb-5"
-                  >
-                    <p className="lato-regular text-base text-muted-foreground">
-                      {item.answer}
-                    </p>
-                  </div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </div>
-  );
-};
+const FAQs = () => (
+  <>
+    <MarketingHero
+      size="page"
+      align="left"
+      containerSize="narrow"
+      eyebrow="Help"
+      title={<Display size="lg">Frequently asked questions</Display>}
+      subtitle="The questions parents and schools ask first. Don't see yours? Reach out to support — we reply within a business day."
+    />
+    <section className="bg-background pb-20">
+      <Container size="narrow" className="px-6">
+        <FaqAccordion items={FAQ_ITEMS} />
+      </Container>
+    </section>
+  </>
+);
 
 export default FAQs;

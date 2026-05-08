@@ -7,6 +7,7 @@ import img7 from "@/assets/logo/shopStars.svg"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Heading } from "@/components/ui/typography";
 const ShopItems = () => {
   return (
     <div>
@@ -21,12 +22,12 @@ const ShopItems = () => {
                 />
                 {/* name price AI */}
                 <div className="flex flex-row">
-                  <h3 className="tracking-widest text-muted-foreground text-lg font-bold title-font  py-5">
+                  <Heading level={3}>
                     Artificial Intelligence <br />
                     and Machine Learning{" "}
-                  </h3>
-                  <div className="flex flex-col p-5 px-16 ">
-                  <img  className="flex p-2 " src={img7}/>
+                  </Heading>
+                  <div className="flex flex-col p-5 px-16">
+                  <img  className="flex p-2" src={img7}/>
                   <p className="flex text-primary font-bold">PKR 50,000</p>
                   </div>
                 </div>

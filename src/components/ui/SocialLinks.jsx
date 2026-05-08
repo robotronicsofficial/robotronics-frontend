@@ -1,44 +1,37 @@
 import PropTypes from "prop-types";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaYoutube,
-  FaInstagram,
-  FaLinkedin,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { BrandIcon } from "@/components/ui/brand-icons";
 import { cn } from "@/lib/utils";
 
 // URLs are shared across footer, careers intros, about intro, etc.
 // If any of these need to change, update them here in one place.
 const SOCIAL = [
   {
-    icon: FaFacebook,
+    brand: "facebook",
     label: "Facebook",
     href: "https://www.facebook.com/robotronicspakistan/",
   },
   {
-    icon: FaTwitter,
+    brand: "twitter",
     label: "Twitter / X",
     href: "https://twitter.com/robotronicspk",
   },
   {
-    icon: FaYoutube,
+    brand: "youtube",
     label: "YouTube",
     href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
   },
   {
-    icon: FaInstagram,
+    brand: "instagram",
     label: "Instagram",
     href: "https://www.instagram.com/robotronicspk/?hl=en",
   },
   {
-    icon: FaLinkedin,
+    brand: "linkedin",
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
   },
   {
-    icon: FaWhatsapp,
+    brand: "whatsapp",
     label: "WhatsApp",
     href: "https://wa.me/message/TKZZPIE2A34UM1",
   },
@@ -58,7 +51,7 @@ export default function SocialLinks({
       className={cn("flex flex-wrap items-center gap-3", className)}
       aria-label={ariaLabel}
     >
-      {SOCIAL.map(({ icon: Icon, label, href }) => (
+      {SOCIAL.map(({ brand, label, href }) => (
         <li key={label}>
           <a
             href={href}
@@ -68,7 +61,7 @@ export default function SocialLinks({
             title={label}
             className="inline-flex size-10 items-center justify-center rounded-full bg-muted text-foreground transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            <Icon className={iconClassName} aria-hidden="true" />
+            <BrandIcon brand={brand} className={iconClassName} />
           </a>
         </li>
       ))}

@@ -7,28 +7,22 @@ import {
   Outlet,
   redirect,
 } from "@tanstack/react-router";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "sonner";
 import Layout from "@/components/site/Layout";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { fetchCurrentUser } from "./lib/auth";
 import { verifyChildSession } from "./lib/childSession";
 import { queryClient } from "./lib/queryClient.js";
 import { queryKeys } from "./lib/queryKeys";
-import { loadSubscriptionCheckout } from "./lib/subscriptionCheckout";
 import {
   CART_PATH,
   CONTACT_PATH,
   DASHBOARD_CHILD_PROFILE_PATH,
   SCREEN_PATH,
 } from "./router/paths";
-import { useSelectedPlanStore } from "./stores/selectedPlanStore";
 import { clearActiveChildSession, getActiveChildSession } from "./utils/childSessionRequest";
 import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
 import { buildRedirectSearchFromLocation } from "./utils/authRedirect";
-
-const ToastContainer = lazy(() => import("react-toastify").then((module) => ({
-  default: module.ToastContainer,
-})));
 
 const Home = lazy(() => import("./pages/home"));
 const AboutUs = lazy(() => import("./pages/about"));
@@ -48,7 +42,8 @@ const ShippingService = lazy(() => import("./pages/shop/shippingService"));
 const CareerJob = lazy(() => import("./pages/career/careerJob"));
 const CareerDetailPage = lazy(() => import("./pages/career/careerDetailPage"));
 const SubscriptionHome = lazy(() => import("./pages/subscriptions/SubscriptionHome"));
-const SubscriptionRegister = lazy(() => import("./pages/subscriptions/register/SubscriptionRegister"));
+const CheckoutWizard = lazy(() => import("./pages/subscriptions/checkout/CheckoutWizard"));
+const ForSchools = lazy(() => import("./pages/forSchools"));
 const Blog = lazy(() => import("./pages/Blog/blog"));
 const BlogDetail = lazy(() => import("./pages/Blog/blogDetail"));
 const ContactUs = lazy(() => import("./pages/contactUs/contactUs"));
@@ -65,8 +60,6 @@ const Screen = lazy(() => import("./pages/SplashScreen/screen"));
 const Search = lazy(() => import("@/components/site/search"));
 const MyRobort = lazy(() => import("./pages/Dashboard/myRobot"));
 const JobApplicationForm = lazy(() => import("@/components/site/careers/CareerDetailPage/jobApplicationForm"));
-const SubscriptionPaymentHome = lazy(() => import("./pages/subscriptions/payment/SubscriptionPaymentHome"));
-const SubscriptionReviewOrderHome = lazy(() => import("./pages/subscriptions/review/SubscriptionReviewOrderHome"));
 const ChildHome = lazy(() => import("./pages/ChildProtection/ChildHome"));
 const TermsHome = lazy(() => import("./pages/policies/TermsHome"));
 const PrivacyHome = lazy(() => import("./pages/PrivacyPolicy/PrivacyHome"));
@@ -77,15 +70,16 @@ const ChildProfile = lazy(() => import("./pages/Dashboard/ChildProfile"));
 const ProgressCertificate = lazy(() => import("./pages/Dashboard/ProgressCertificate"));
 const SubscriptionProgressPage = lazy(() => import("@/components/site/dashboard/SubscriptionProgressPage"));
 const MyAllCourses = lazy(() => import("@/components/site/dashboard/myAllCourses"));
+const StyleGuide = lazy(() => import("./pages/styleguide"));
 
 const RouteFallback = () => (
-  <div className={getHeaderOffsetClass("dashboardWide", "bg-background px-4 pb-16 text-center text-foreground")}>
+  <div className={getHeaderOffsetClass("bg-background px-4 pb-16 text-center text-foreground")}>
     Loading page...
   </div>
 );
 
 const RouterError = ({ error }) => (
-  <div className={getHeaderOffsetClass("dashboardWide", "bg-background px-6 pb-16 text-center text-foreground")}>
+  <div className={getHeaderOffsetClass("bg-background px-6 pb-16 text-center text-foreground")}>
     <div className="mx-auto max-w-lg rounded-lg border border-border bg-card p-6">
       <h1 className="text-2xl font-semibold">Page failed to load</h1>
       <p className="mt-3 text-sm text-muted-foreground">
@@ -113,8 +107,24 @@ const requireCurrentUser = async ({ context, location }) => {
   return { currentUser: user };
 };
 
-const requireChildSession = async ({ context }) => {
-  const childSession = getActiveChildSession();
+const getExpectedChildId = ({ location, params }) => {
+  const queryChildId = location?.search?.childId;
+  if (queryChildId) {
+    return String(queryChildId);
+  }
+
+  const pathname = location?.pathname || "";
+  const idFromPath = params?.id ? String(params.id) : null;
+  return idFromPath &&
+    (pathname.startsWith("/Dashboard/MyCoursesPage/") ||
+      pathname.startsWith("/Dashboard/myAllCourses/"))
+    ? idFromPath
+    : null;
+};
+
+const requireChildSession = async ({ context, location, params }) => {
+  const expectedChildId = getExpectedChildId({ location, params });
+  const childSession = getActiveChildSession(expectedChildId);
 
   if (!childSession) {
     throw redirect({ to: DASHBOARD_CHILD_PROFILE_PATH, replace: true });
@@ -138,47 +148,13 @@ const requireChildSession = async ({ context }) => {
   return { childSession };
 };
 
-const hasSelectedSubscriptionPlan = () => {
-  const selectedPlan = useSelectedPlanStore.getState();
-  return Boolean(selectedPlan.planId && selectedPlan.billingCycle);
-};
-
-const hasSubscriptionCheckout = () => {
-  const checkout = loadSubscriptionCheckout();
-  return Boolean(checkout?.children?.length && checkout?.plan?.name);
-};
-
-const requireSelectedSubscriptionPlan = () => {
-  if (!hasSelectedSubscriptionPlan()) {
-    throw redirect({ to: "/subscriptions", replace: true });
-  }
-};
-
-const requireSubscriptionCheckout = () => {
-  if (!hasSubscriptionCheckout()) {
-    throw redirect({ to: "/subscriptions/register", replace: true });
-  }
-};
-
 const RootLayout = () => (
   <AuthProvider>
     <Layout>
       <Suspense fallback={<RouteFallback />}>
         <Outlet />
       </Suspense>
-      <Suspense fallback={null}>
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </Suspense>
+      <Toaster closeButton richColors position="top-center" duration={5000} />
     </Layout>
   </AuthProvider>
 );
@@ -199,18 +175,6 @@ const childSessionRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
   id: "childSession",
   beforeLoad: requireChildSession,
-});
-
-const selectedSubscriptionPlanRoute = createRoute({
-  getParentRoute: () => authenticatedRoute,
-  id: "selectedSubscriptionPlan",
-  beforeLoad: requireSelectedSubscriptionPlan,
-});
-
-const subscriptionCheckoutRoute = createRoute({
-  getParentRoute: () => authenticatedRoute,
-  id: "subscriptionCheckout",
-  beforeLoad: requireSubscriptionCheckout,
 });
 
 const makeRoute = ({ parent = rootRoute, path, component: Component, beforeLoad }) => createRoute({
@@ -235,6 +199,7 @@ const childRoute = (path, component) => makeRoute({ parent: childSessionRoute, p
 
 const routeTree = rootRoute.addChildren([
   publicRoute("/", Home),
+  publicRoute("/styleguide", StyleGuide),
   publicRoute("/Search", Search),
   publicRoute(SCREEN_PATH, Screen),
   publicRoute("/aboutUs", AboutUs),
@@ -264,6 +229,11 @@ const routeTree = rootRoute.addChildren([
   publicRoute("/404", Error),
   publicRoute("/International/myRobot", MyRobort),
   publicRoute("/subscriptions", SubscriptionHome),
+  publicRoute("/subscriptions/checkout", CheckoutWizard),
+  publicRoute("/for-schools", ForSchools),
+  makeRedirectRoute("/subscriptions/register", "/subscriptions/checkout"),
+  makeRedirectRoute("/subscriptions/payment", "/subscriptions/checkout"),
+  makeRedirectRoute("/subscriptions/review", "/subscriptions/checkout"),
   publicRoute("/International/videoGallery", VideoGallery),
   publicRoute("/International/Iservices", IServices),
   publicRoute("/International/home", IHome),
@@ -284,28 +254,11 @@ const routeTree = rootRoute.addChildren([
     authRoute("/Dashboard/ProgressCertificate", ProgressCertificate),
     childSessionRoute.addChildren([
       childRoute("/Dashboard/MyCoursesPage", MyCoursesPage),
+      childRoute("/Dashboard/MyCoursesPage/$id", MyCoursesPage),
       childRoute("/Dashboard/myAllCourses", MyAllCourses),
+      childRoute("/Dashboard/myAllCourses/$id", MyAllCourses),
       childRoute("/Dashboard/courseDetail/$id", CourseDetail),
       childRoute("/Dashboard/ProgressCertificate/ProgressPage", SubscriptionProgressPage),
-    ]),
-    selectedSubscriptionPlanRoute.addChildren([
-      makeRoute({
-        parent: selectedSubscriptionPlanRoute,
-        path: "/subscriptions/register",
-        component: SubscriptionRegister,
-      }),
-    ]),
-    subscriptionCheckoutRoute.addChildren([
-      makeRoute({
-        parent: subscriptionCheckoutRoute,
-        path: "/subscriptions/payment",
-        component: SubscriptionPaymentHome,
-      }),
-      makeRoute({
-        parent: subscriptionCheckoutRoute,
-        path: "/subscriptions/review",
-        component: SubscriptionReviewOrderHome,
-      }),
     ]),
   ]),
 ]);

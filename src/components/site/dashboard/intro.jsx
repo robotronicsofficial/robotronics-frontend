@@ -34,7 +34,7 @@ const Intro = () => {
   });
 
   return (
-    <div className={getHeaderOffsetClass("page", "bg-background hidden md:block")}>
+    <div className={getHeaderOffsetClass("bg-background hidden md:block")}>
       <div>
         {breadcrumbs.length > 0 && (
           <nav aria-label="Breadcrumb" className="flex w-full bg-muted rounded-lg px-7 py-2 lg:w-1/2">
@@ -46,14 +46,14 @@ const Intro = () => {
                     {isLast ? (
                       <span
                         aria-current="page"
-                        className="text-xs lg:text-sm poppins-extralight text-foreground"
+                        className="text-xs lg:text-sm text-foreground"
                       >
                         {breadcrumb.name}
                       </span>
                     ) : (
                       <Link
                         to={breadcrumb.href}
-                        className="text-xs lg:text-sm poppins-extralight text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+                        className="text-xs lg:text-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
                       >
                         {breadcrumb.name}
                       </Link>

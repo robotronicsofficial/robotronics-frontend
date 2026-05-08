@@ -10,6 +10,13 @@ const normalizeBackendPath = (value) => {
 
   const normalizedPath = value.trim().replace(/\\/g, "/");
 
+  if (
+    normalizedPath === BACKEND_API_PREFIX ||
+    normalizedPath.startsWith(`${BACKEND_API_PREFIX}/`)
+  ) {
+    return normalizedPath.slice(BACKEND_API_PREFIX.length) || "/";
+  }
+
   return normalizedPath.startsWith("/")
     ? normalizedPath
     : `/${normalizedPath}`;

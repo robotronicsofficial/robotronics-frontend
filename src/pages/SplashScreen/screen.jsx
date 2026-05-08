@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
+import { Display, Eyebrow, Text } from "@/components/ui/typography";
+
 const SPLASH_KEY = "robotronics:hasSeenSplash";
 const AUTO_ADVANCE_MS = 2500;
 
 const Screen = () => {
   const navigate = useNavigate();
 
-  // If the visitor has already seen the splash in this browser, redirect
-  // immediately without rendering the splash content.
   const alreadySeen =
     typeof window !== "undefined" && window.localStorage?.getItem(SPLASH_KEY) === "1";
 
@@ -21,12 +21,11 @@ const Screen = () => {
     try {
       window.localStorage?.setItem(SPLASH_KEY, "1");
     } catch {
-      /* storage may be unavailable (private mode); splash still works */
+      /* storage may be unavailable (private mode) */
     }
 
     const goHome = () => navigate({ to: "/", replace: true });
     const timer = window.setTimeout(goHome, AUTO_ADVANCE_MS);
-
     const onKey = () => goHome();
 
     window.addEventListener("keydown", onKey);
@@ -37,9 +36,7 @@ const Screen = () => {
     };
   }, [alreadySeen, navigate]);
 
-  if (alreadySeen) {
-    return null;
-  }
+  if (alreadySeen) return null;
 
   const skip = () => navigate({ to: "/", replace: true });
 
@@ -50,18 +47,16 @@ const Screen = () => {
       aria-label="Continue to Robotronics home"
       className="flex h-svh w-full cursor-pointer flex-col items-center justify-center gap-6 bg-background px-6 text-center animate-in fade-in duration-500"
     >
-      <p className="poppins-extralight text-2xl tracking-[0.3em] text-muted-foreground md:text-3xl">
-        WELCOME TO
-      </p>
-      <h1 className="poppins-extrabold text-5xl text-primary md:text-7xl lg:text-8xl">
-        ROBOTRONICS
-      </h1>
-      <p className="lato-regular max-w-xl text-base text-muted-foreground md:text-lg">
+      <Eyebrow className="tracking-[0.3em]">Welcome to</Eyebrow>
+      <Display size="xl" tone="brand" className="uppercase">
+        Robotronics
+      </Display>
+      <Text tone="muted" className="max-w-xl">
         Hands-on robotics, coding, and STEM for kids.
-      </p>
-      <p className="lato-regular mt-6 text-sm text-muted-foreground">
+      </Text>
+      <Text size="sm" tone="subtle">
         Press any key to continue
-      </p>
+      </Text>
     </button>
   );
 };

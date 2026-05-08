@@ -4,13 +4,14 @@ import PinDigitFields from "@/components/forms/PinDigitFields";
 import { Button } from "@/components/ui/button";
 import DialogShell from "@/components/ui/dialog-shell";
 
-const PinModal = ({ 
-  isOpen, 
-  onClose, 
-  onPinSubmit, 
+const PinModal = ({
+  isOpen,
+  onClose,
+  onPinSubmit,
   mode = "create",
-  title = "Set Up a PIN",
-  description = "Enter your 4 digits pin"
+  title = "Set up a PIN",
+  description = "Enter a 4-digit PIN",
+  onForgotPin,
 }) => {
   const [pin, setPin] = useState(["", "", "", ""]);
 
@@ -32,23 +33,30 @@ const PinModal = ({
 
   return (
     <DialogShell isOpen={isOpen} onClose={onClose} title={title} description={description}>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <PinDigitFields
           idPrefix={`${mode}-pin-input`}
           label="PIN"
           value={pin}
           onChange={setPin}
-          type="text"
+          type="password"
           hideLabel
           autoFocus
         />
 
-        <Button type="submit" className="w-full bg-primary text-background hover:bg-accent">
-          {mode === "verify" ? "VERIFY PIN" : "CONFIRM PIN"}
+        <Button type="submit" className="w-full">
+          {mode === "verify" ? "Start session" : "Save PIN"}
         </Button>
+
+        {mode === "verify" && onForgotPin && (
+          <Button type="button" variant="link" onClick={onForgotPin}>
+            Forgot PIN?
+          </Button>
+        )}
       </form>
     </DialogShell>
   );
 };
 
-export default PinModal; 
+export default PinModal;
+

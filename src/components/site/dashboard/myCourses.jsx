@@ -1,106 +1,181 @@
-import { MoveDown, Star } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { toast } from "react-toastify";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { toast } from "sonner";
+
 import CenteredState from "@/components/layout/CenteredState";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import QueryErrorState from "@/components/layout/QueryErrorState";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import DialogShell from "@/components/ui/dialog-shell";
 import { Spinner } from "@/components/ui/spinner";
+import { Heading, Text } from "@/components/ui/typography";
 import { getActiveChildSession } from "@/utils/childSessionRequest";
 import {
   useSaveChildCoursesMutation,
   useSelectableChildCourses,
 } from "@/hooks/useChildCourses";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { cn } from "@/lib/utils";
+
+const COURSES_PER_PAGE = 9;
+
+const Pagination = ({ page, totalPages, onChange }) => (
+  <nav aria-label="Pagination" className="mt-10 flex items-center justify-center gap-1">
+    <Button
+      type="button"
+      variant="outline"
+      size="icon"
+      aria-label="Previous page"
+      onClick={() => onChange(page - 1)}
+      disabled={page === 1}
+      className="rounded-full"
+    >
+      <ChevronLeft className="size-4" />
+    </Button>
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+      <Button
+        key={n}
+        type="button"
+        variant={n === page ? "default" : "ghost"}
+        size="icon"
+        aria-label={`Page ${n}`}
+        aria-current={n === page ? "page" : undefined}
+        onClick={() => onChange(n)}
+        className={cn("rounded-full", n === page && "font-semibold")}
+      >
+        {n}
+      </Button>
+    ))}
+    <Button
+      type="button"
+      variant="outline"
+      size="icon"
+      aria-label="Next page"
+      onClick={() => onChange(page + 1)}
+      disabled={page === totalPages}
+      className="rounded-full"
+    >
+      <ChevronRight className="size-4" />
+    </Button>
+  </nav>
+);
+
+const SelectableCard = ({ course, isSelected, onToggle, onView }) => (
+  <Card
+    className={cn(
+      "overflow-hidden p-0 transition-colors",
+      isSelected && "border-2 border-primary",
+    )}
+  >
+    <img
+      className="h-44 w-full object-cover"
+      src={resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")}
+      alt={course.title}
+      loading="lazy"
+    />
+    <CardContent className="flex flex-1 flex-col gap-3 p-5">
+      <div className="flex items-center justify-between gap-3">
+        {course.category && (
+          <Badge variant="secondary" className="rounded-full">
+            {course.category}
+          </Badge>
+        )}
+        <div className="flex items-center gap-1.5 text-caption text-muted-foreground">
+          <Star className="size-3.5 fill-primary text-primary" />
+          {course.reviews || 0} ratings
+        </div>
+      </div>
+      <Heading level={3} className="text-h5 leading-snug">
+        {course.title}
+      </Heading>
+    </CardContent>
+    <CardFooter className="flex flex-col gap-2 bg-transparent">
+      <Button
+        type="button"
+        onClick={onToggle}
+        variant={isSelected ? "outline" : "default"}
+        className="w-full rounded-full"
+      >
+        {isSelected ? "Deselect" : "Select"}
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={onView}
+        className="text-body-sm"
+      >
+        View details
+      </Button>
+    </CardFooter>
+  </Card>
+);
 
 const MyCourses = () => {
-  const [selectedCourses, setSelectedCourses] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const coursesPerPage = 9;
   const navigate = useNavigate();
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [page, setPage] = useState(1);
+  const [showLimitModal, setShowLimitModal] = useState(false);
+
   const activeChildSession = getActiveChildSession();
   const childId = activeChildSession?.childId || null;
   const {
     data: selectableCourses = {},
-    isLoading: loading,
+    isLoading,
     error,
     refetch,
   } = useSelectableChildCourses(childId);
   const saveChildCoursesMutation = useSaveChildCoursesMutation();
+
   const courses = selectableCourses.courses || [];
   const maxCourses = selectableCourses.maxCourses ?? Infinity;
+  const hasFixedCourseLimit = Number.isFinite(maxCourses);
 
   const toggleCourseSelection = (courseId) => {
     if (selectedCourses.includes(courseId)) {
       setSelectedCourses(selectedCourses.filter((id) => id !== courseId));
-    } else {
-      if (selectedCourses.length < maxCourses) {
-        setSelectedCourses([...selectedCourses, courseId]);
-      } else {
-        setShowModal(true);
-      }
+      return;
     }
+    if (selectedCourses.length >= maxCourses) {
+      setShowLimitModal(true);
+      return;
+    }
+    setSelectedCourses([...selectedCourses, courseId]);
   };
 
   const saveSelectedCourses = async () => {
     try {
-      if (!childId) {
-        throw new Error("Child ID not found");
-      }
-
+      if (!childId) throw new Error("Child ID not found");
       await saveChildCoursesMutation.mutateAsync({ childId, courseIds: selectedCourses });
-
-      setTimeout(() => {
-        navigate({ to: "/Dashboard/myAllCourses" });
-      }, 1500);
+      setTimeout(() => navigate({ to: "/Dashboard/myAllCourses" }), 1500);
     } catch (err) {
-      console.error("Error saving courses:", err);
       toast.error(`Error saving courses: ${err.message}`);
     }
   };
 
-  const totalPages = Math.ceil(courses.length / coursesPerPage);
+  const totalPages = Math.max(1, Math.ceil(courses.length / COURSES_PER_PAGE));
+  const visible = courses.slice((page - 1) * COURSES_PER_PAGE, page * COURSES_PER_PAGE);
 
-  const nextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const currentCourses = courses.slice(
-    (currentPage - 1) * coursesPerPage,
-    currentPage * coursesPerPage
-  );
-  const hasFixedCourseLimit = Number.isFinite(maxCourses);
-  const canSaveCourses = selectedCourses.length > 0
-    && (!hasFixedCourseLimit || selectedCourses.length === maxCourses);
   const remaining = hasFixedCourseLimit
     ? Math.max(maxCourses - selectedCourses.length, 0)
     : 0;
-  const buttonEnabled = selectedCourses.length > 0 && !saveChildCoursesMutation.isPending;
-  const saveButtonLabel = hasFixedCourseLimit
-    ? (selectedCourses.length === maxCourses
-      ? `Save ${maxCourses} Courses`
-      : `Save ${selectedCourses.length} of ${maxCourses} selected`)
-    : (selectedCourses.length > 0
-      ? `Save ${selectedCourses.length} Courses`
-      : "Save Courses");
+  /* Relaxed gate — partial saves are allowed. Plans simply cap selections at
+     `maxCourses` total. Kids can pick fewer courses now and add the rest later. */
+  const canSave = selectedCourses.length > 0;
+  const saveLabel = hasFixedCourseLimit
+    ? selectedCourses.length === 0
+      ? `Pick at least 1 course`
+      : selectedCourses.length === maxCourses
+        ? `Save ${maxCourses} courses`
+        : `Save ${selectedCourses.length} (add up to ${maxCourses})`
+    : selectedCourses.length > 0
+      ? `Save ${selectedCourses.length} courses`
+      : "Pick at least 1 course";
 
-  if (loading) {
+  if (isLoading) {
     return (
       <CenteredState className="h-screen">
         <Spinner className="size-12 text-primary" />
@@ -110,7 +185,7 @@ const MyCourses = () => {
 
   if (error) {
     return (
-      <CenteredState className="min-h-screen bg-muted px-6">
+      <CenteredState className="min-h-screen bg-background px-6">
         <QueryErrorState
           className="max-w-md"
           title="Couldn't load available courses"
@@ -122,183 +197,83 @@ const MyCourses = () => {
   }
 
   return (
-    <DashboardLayout
-      className="bg-background block lg:flex flex-row relative"
-      contentClassName="w-full text-center py-5 p-0"
-      navClassName="lg:w-[30%] w-2/3"
-      navProps={{ "data-aos": "fade-up" }}
-    >
-      {/* Course Listing */}
-      <div data-aos="fade-up">
-        <h1 className="text-foreground lg:text-2xl text-base poppins-bold mb-6">
-          {hasFixedCourseLimit ? `Select ${maxCourses} Courses` : "Select Courses"}
-        </h1>
+    <DashboardLayout contentClassName="px-6">
+      <div className="mb-8 flex flex-col gap-1">
+        <Heading level={1} className="text-h1">
+          {hasFixedCourseLimit ? `Select ${maxCourses} courses` : "Select your courses"}
+        </Heading>
+        <Text tone="muted">
+          {hasFixedCourseLimit
+            ? `Your subscription includes ${maxCourses} course selections.`
+            : "Your subscription includes the full course catalog."}
+        </Text>
+      </div>
 
-        {/* Save Button and Status */}
-        {/* Save Button and Status */}
-        <div className="mb-6 flex flex-col items-center gap-2">
-          <div className="text-lg font-semibold mb-2">
-            {hasFixedCourseLimit ? (
-              <span className="text-info">Your subscription includes {maxCourses} course selections</span>
-            ) : (
-              <span className="text-success">Your subscription includes the full available course catalog</span>
-            )}
-          </div>
+      <div className="mb-8 flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
+        <Text size="sm" tone="muted">
+          {hasFixedCourseLimit
+            ? remaining > 0
+              ? `${selectedCourses.length} selected · room for ${remaining} more${selectedCourses.length === 0 ? " (pick at least 1 to start)" : ""}.`
+              : `${selectedCourses.length} of ${maxCourses} selected — your plan is full.`
+            : `${selectedCourses.length} selected.`}
+        </Text>
+        <Button
+          type="button"
+          size="marketing"
+          onClick={saveSelectedCourses}
+          disabled={!canSave || saveChildCoursesMutation.isPending}
+        >
+          {saveChildCoursesMutation.isPending ? (
+            <>
+              <Spinner className="size-4" />
+              Saving…
+            </>
+          ) : (
+            saveLabel
+          )}
+        </Button>
+      </div>
 
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {visible.map((course) => (
+          <SelectableCard
+            key={course._id}
+            course={course}
+            isSelected={selectedCourses.includes(course._id)}
+            onToggle={() => toggleCourseSelection(course._id)}
+            onView={() =>
+              navigate({ to: "/Dashboard/courseDetail/$id", params: { id: course._id } })
+            }
+          />
+        ))}
+      </div>
+
+      {totalPages > 1 && (
+        <Pagination page={page} totalPages={totalPages} onChange={setPage} />
+      )}
+
+      <DialogShell
+        isOpen={showLimitModal}
+        onClose={() => setShowLimitModal(false)}
+        title="Plan limit reached"
+        titleClassName="text-destructive"
+      >
+        <div className="flex flex-col gap-4">
+          <Text>
+            Your subscription includes {maxCourses} course selections.
+          </Text>
+          <Text size="sm" tone="muted">
+            Currently selected: {selectedCourses.length} courses.
+          </Text>
           <Button
             type="button"
-            onClick={saveSelectedCourses}
-            className={`h-auto rounded-full px-6 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-              buttonEnabled
-                ? "bg-primary hover:bg-accent"
-                : "bg-muted cursor-not-allowed"
-            }`}
-            disabled={!buttonEnabled || !canSaveCourses}
-            aria-disabled={!canSaveCourses}
+            className="mx-auto min-w-32 rounded-full"
+            onClick={() => setShowLimitModal(false)}
           >
-            {saveChildCoursesMutation.isPending ? (
-              <span className="flex items-center justify-center gap-x-2">
-                <Spinner className="size-4 text-foreground" />
-                Saving...
-              </span>
-            ) : (
-              saveButtonLabel
-            )}
+            Close
           </Button>
-
-          {hasFixedCourseLimit && selectedCourses.length !== maxCourses && (
-            <p className="text-sm text-muted-foreground">
-              {remaining > 0
-                ? `Select exactly ${maxCourses} courses to save — ${remaining} more to go.`
-                : `You've selected ${selectedCourses.length}. Deselect until you have exactly ${maxCourses}.`}
-            </p>
-          )}
         </div>
-
-        {/* Courses */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {currentCourses.map((course) => {
-            const isSelected = selectedCourses.includes(course._id);
-            return (
-              <Card
-                key={course._id}
-                className={`h-full transition-colors ${isSelected ? "border-2 border-primary" : ""}`}
-              >
-                <img
-                  className="h-48 w-full object-cover"
-                  src={resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")}
-                  alt={course.title}
-                  onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/300x200";
-                  }}
-                />
-                <CardContent className="flex flex-1 flex-col gap-3">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <p className="rounded-full bg-muted px-4 py-1 text-base text-muted-foreground">
-                      {course.category}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <Star className="text-primary" />
-                      <p className="text-muted-foreground poppins-light text-base">
-                        ({course.reviews || 0} Rating)
-                      </p>
-                    </div>
-                  </div>
-                  <div className="poppins-bold text-left text-xl font-bold text-wrap">
-                    {course.title}
-                  </div>
-                </CardContent>
-                <CardFooter className="flex flex-col gap-3">
-                  <Button
-                    type="button"
-                    onClick={() => toggleCourseSelection(course._id)}
-                    className={`h-auto w-full rounded-full px-6 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${isSelected
-                      ? "bg-destructive hover:bg-destructive text-background"
-                      : "bg-success hover:bg-success text-background"
-                      }`}
-                  >
-                    {isSelected ? "Deselect" : "Select"}
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => navigate({ to: `/Dashboard/courseDetail/${course._id}` })}
-                    className="h-auto w-full rounded-full bg-primary px-4 py-2 text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  >
-                    <span>View Detail</span>
-                    <MoveDown className="text-xs" />
-                  </Button>
-                </CardFooter>
-              </Card>
-            );
-          })}
-        </div>
-
-        <div className="flex flex-col items-center justify-center mt-10 gap-4">
-          <div className="flex items-center gap-x-4">
-            <Button
-              type="button"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-              className={`h-auto rounded-full px-4 py-2 ${currentPage === 1
-                ? "bg-muted text-muted-foreground cursor-not-allowed"
-                : "bg-muted hover:bg-muted text-foreground"
-                }`}
-            >
-              Previous
-            </Button>
-
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => (
-              <Button
-                type="button"
-                key={number}
-                onClick={() => paginate(number)}
-                className={`h-auto rounded-full px-4 py-2 ${currentPage === number
-                  ? "bg-primary text-foreground font-bold"
-                  : "bg-muted hover:bg-muted text-foreground"
-                  }`}
-              >
-                {number}
-              </Button>
-            ))}
-
-            <Button
-              type="button"
-              onClick={nextPage}
-              disabled={currentPage === totalPages}
-              className={`h-auto rounded-full px-4 py-2 ${currentPage === totalPages
-                ? "bg-muted text-muted-foreground cursor-not-allowed"
-                : "bg-muted hover:bg-muted text-foreground"
-                }`}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-        <div className="mb-20"></div>
-
-        <DialogShell
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
-          title="Plan Limit"
-          titleClassName="text-destructive"
-        >
-          <div className="flex flex-col gap-4 text-center">
-            <p className="text-foreground">
-              Your subscription includes {maxCourses} course selections.
-            </p>
-            <p className="text-muted-foreground">
-              Currently selected: {selectedCourses.length} courses
-            </p>
-            <Button
-              type="button"
-              className="mx-auto min-w-32 rounded-full bg-primary text-foreground hover:bg-accent hover:text-background"
-              onClick={() => setShowModal(false)}
-            >
-              Close
-            </Button>
-          </div>
-        </DialogShell>
-      </div>
+      </DialogShell>
     </DashboardLayout>
   );
 };

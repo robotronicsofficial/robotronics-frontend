@@ -1,10 +1,14 @@
+import PropTypes from "prop-types";
 import { useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { FormInput, FormTextarea } from "@/components/forms/FormControls";
+import { Spinner } from "@/components/ui/spinner";
+import { Text } from "@/components/ui/typography";
 import { useJobApplicationMutation } from "@/hooks/useIntake";
+import { cn } from "@/lib/utils";
 
-const initialApplicationForm = {
+const INITIAL_FORM = {
   firstName: "",
   lastName: "",
   email: "",
@@ -20,66 +24,52 @@ const initialApplicationForm = {
   coverLetter: "",
 };
 
-const ApplicationInput = (props) => (
-  <FormInput {...props} />
-);
-
-const ApplicationTextarea = (props) => (
-  <FormTextarea {...props} />
-);
-
 const JobApplicationForm = ({ job = null }) => {
   const fileInputRef = useRef(null);
   const jobId = job?._id || "";
   const jobTitle = job?.title || job?.position || "";
-  const [form, setForm] = useState(initialApplicationForm);
+  const [form, setForm] = useState(INITIAL_FORM);
   const [status, setStatus] = useState({ type: "", message: "" });
   const jobApplicationMutation = useJobApplicationMutation();
   const isSubmitting = jobApplicationMutation.isPending;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prevForm) => ({ ...prevForm, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    setForm((prev) => ({ ...prev, cvFile: file }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ type: "", message: "" });
 
-    try {
-      if (!jobId || !jobTitle) {
-        throw new Error("Please apply from a specific job listing.");
-      }
+    if (!jobId || !jobTitle) {
+      setStatus({ type: "error", message: "Please apply from a specific job listing." });
+      return;
+    }
 
+    try {
       const formData = new FormData();
       formData.append("jobId", jobId);
       formData.append("jobTitle", jobTitle);
-      formData.append("firstName", form.firstName);
-      formData.append("lastName", form.lastName);
-      formData.append("email", form.email);
-      formData.append("phone", form.phone);
-      formData.append("streetAddress", form.streetAddress);
-      formData.append("city", form.city);
-      formData.append("state", form.state);
-      formData.append("postalCode", form.postalCode);
-      formData.append("education", form.education);
-      formData.append("workExperience", form.workExperience);
-      formData.append("skills", form.skills);
-      formData.append("coverLetter", form.coverLetter);
-
+      Object.entries(form).forEach(([key, value]) => {
+        if (key === "cvFile") return;
+        formData.append(key, value);
+      });
       if (form.cvFile) {
         formData.append("cvFile", form.cvFile);
       }
 
       const data = await jobApplicationMutation.mutateAsync(formData);
-
-      setForm(initialApplicationForm);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
+      setForm(INITIAL_FORM);
+      if (fileInputRef.current) fileInputRef.current.value = "";
       setStatus({
         type: "success",
-        message: data.message || "Application submitted successfully.",
+        message: data.message || "Application submitted. We'll be in touch.",
       });
     } catch (error) {
       setStatus({
@@ -89,117 +79,87 @@ const JobApplicationForm = ({ job = null }) => {
     }
   };
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    setForm((prevForm) => ({
-      ...prevForm,
-      cvFile: file,
-    }));
-  };
+  if (!jobId || !jobTitle) {
+    return (
+      <Text className="rounded-md border border-destructive/30 bg-destructive/10 p-4 text-destructive">
+        Open a specific job listing before submitting an application so the role is attached to your CV.
+      </Text>
+    );
+  }
 
   return (
-    <>
-    <div className="mx-10 my-8 flex flex-col gap-5 lg:px-24">
-          <h1 className="text-4xl poppins-bold text-foreground"data-aos="fade-up"  >Job Application</h1>
-          <h2 className="text-xl poppins-light text-foreground"data-aos="fade-up"  >
-            Submit your details and CV for {jobTitle || "the selected role"}
-          </h2>
-        </div>
-    {!jobId || !jobTitle ? (
-      <div className="mx-auto max-w-4xl rounded-md border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-        Open a specific job listing before submitting an application so the role is attached to your CV.
-      </div>
-    ) : null}
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-y-6 bg-background p-6 max-w-4xl mx-auto"
-    >
-      {/* First Name and Last Name */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ApplicationInput label="First Name" name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name" required />
-        <ApplicationInput label="Last Name" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name" required />
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <div className="grid grid-cols-1 gap-x-4 gap-y-1 md:grid-cols-2">
+        <FormInput label="First name" name="firstName" value={form.firstName} onChange={handleChange} required />
+        <FormInput label="Last name" name="lastName" value={form.lastName} onChange={handleChange} required />
       </div>
 
-      {/* Email */}
-      <div className="grid grid-cols-1">
-        <ApplicationInput label="Email" type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email Address" required />
+      <FormInput label="Email" type="email" name="email" value={form.email} onChange={handleChange} required />
+      <FormInput label="Phone" name="phone" value={form.phone} onChange={handleChange} required />
+
+      <div className="grid grid-cols-1 gap-x-4 gap-y-1 md:grid-cols-2">
+        <FormInput label="Street address" name="streetAddress" value={form.streetAddress} onChange={handleChange} required />
+        <FormInput label="City" name="city" value={form.city} onChange={handleChange} required />
+        <FormInput label="State" name="state" value={form.state} onChange={handleChange} required />
+        <FormInput label="Postal code" name="postalCode" value={form.postalCode} onChange={handleChange} required />
       </div>
 
-      {/* Phone */}
-      <div className="grid grid-cols-1">
-        <ApplicationInput label="Phone" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number" required />
-      </div>
+      <FormTextarea label="Work experience" name="workExperience" value={form.workExperience} onChange={handleChange} required />
+      <FormTextarea label="Education" name="education" value={form.education} onChange={handleChange} required />
+      <FormTextarea label="Skills" name="skills" value={form.skills} onChange={handleChange} required />
 
-      {/* Address */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ApplicationInput label="Street Address" name="streetAddress" value={form.streetAddress} onChange={handleChange} placeholder="Street Address" required />
-        <ApplicationInput label="City" name="city" value={form.city} onChange={handleChange} placeholder="City" required />
-        <ApplicationInput label="State" name="state" value={form.state} onChange={handleChange} placeholder="State" required />
-        <ApplicationInput label="Postal Code" name="postalCode" value={form.postalCode} onChange={handleChange} placeholder="Postal Code" required />
-      </div>
+      <FormInput
+        label="CV (PDF or Word)"
+        type="file"
+        name="cvFile"
+        ref={fileInputRef}
+        onChange={handleFileUpload}
+        accept=".pdf,.doc,.docx"
+        required
+      />
 
-      {/* Experience */}
-      <div className="grid grid-cols-1">
-        <ApplicationTextarea label="Work Experience" name="workExperience" value={form.workExperience} onChange={handleChange} placeholder="Describe your work experience" required />
-      </div>
+      <FormTextarea
+        label="Cover letter"
+        name="coverLetter"
+        value={form.coverLetter}
+        onChange={handleChange}
+        placeholder="Optional — what should we know that's not on your CV?"
+      />
 
-      {/* Education */}
-      <div className="grid grid-cols-1">
-        <ApplicationTextarea label="Education" name="education" value={form.education} onChange={handleChange} placeholder="Describe your educational background" required />
-      </div>
-
-      {/* Skills */}
-      <div className="grid grid-cols-1">
-        <ApplicationTextarea label="Skills" name="skills" value={form.skills} onChange={handleChange} placeholder="List your skills" required />
-      </div>
-
-      {/* CV Upload */}
-      <div className="grid grid-cols-1">
-        <div>
-          <label htmlFor="cvFile" className="block text-sm text-muted-foreground">
-            Upload CV
-          </label>
-          <FormInput
-            type="file"
-            name="cvFile"
-            label="Upload CV"
-            ref={fileInputRef}
-            onChange={handleFileUpload}
-            accept=".pdf,.doc,.docx"
-            required
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1">
-        <ApplicationTextarea label="Cover Letter" name="coverLetter" value={form.coverLetter} onChange={handleChange} placeholder="Optional cover letter" />
-      </div>
-
-      {status.message ? (
+      {status.message && (
         <p
-          className={`rounded-md px-4 py-3 text-sm ${
+          role={status.type === "error" ? "alert" : "status"}
+          className={cn(
+            "rounded-lg border px-4 py-3 text-body-sm",
             status.type === "success"
-              ? "bg-success/10 text-success"
-              : "bg-destructive/10 text-destructive"
-          }`}
+              ? "border-success/40 bg-success/10 text-success"
+              : "border-destructive/40 bg-destructive/10 text-destructive",
+          )}
         >
           {status.message}
         </p>
-      ) : null}
+      )}
 
-      {/* Submit */}
-      <div className="flex flex-col mt-6 gap-y-4">
-        <Button
-          type="submit"
-          className="h-auto bg-foreground px-4 py-2 text-background"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Submitting..." : "Submit Application"}
-        </Button>
-      </div>
+      <Button type="submit" size="marketing" className="w-full" disabled={isSubmitting}>
+        {isSubmitting ? (
+          <>
+            <Spinner />
+            Submitting…
+          </>
+        ) : (
+          "Submit application"
+        )}
+      </Button>
     </form>
-    </>
   );
+};
+
+JobApplicationForm.propTypes = {
+  job: PropTypes.shape({
+    _id: PropTypes.string,
+    title: PropTypes.string,
+    position: PropTypes.string,
+  }),
 };
 
 export default JobApplicationForm;

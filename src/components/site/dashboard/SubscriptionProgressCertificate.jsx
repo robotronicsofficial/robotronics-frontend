@@ -1,6 +1,10 @@
 import { useNavigate } from "@tanstack/react-router";
+import { Cake, Mail, MapPin, Phone, School, UserCircle } from "lucide-react";
+
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { UserCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Heading, Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import { formatDisplayDate } from "@/lib/subscription";
 import {
@@ -8,12 +12,21 @@ import {
   matchesChildSessionIdentifier,
 } from "@/utils/childSessionRequest";
 import { useCurrentParent } from "@/hooks/useAccount";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+
+const DetailRow = ({ icon: Icon, label, value }) => (
+  <div className="flex items-start gap-2.5 text-body-sm">
+    <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+    <div className="flex min-w-0 flex-col">
+      <span className="text-caption uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
+      <span className="break-words text-foreground">{value}</span>
+    </div>
+  </div>
+);
 
 const SubscriptionProgressCertificate = () => {
   const navigate = useNavigate();
-
   const { currentUser } = useAuth();
   const userId = currentUser?._id;
   const activeChildId = getActiveChildId();
@@ -21,57 +34,81 @@ const SubscriptionProgressCertificate = () => {
   const children = parent?.children || [];
 
   return (
-    <DashboardLayout>
-        <h1 className="mb-4 text-2xl font-bold md:text-3xl">Child Accounts</h1>
-
-        {children.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 p-3 sm:grid-cols-2 lg:p-5">
-            {children.map((child, index) => {
-              const isUnlockedChild = matchesChildSessionIdentifier(child, activeChildId);
-
-              return (
-                <Card key={index} className="h-full">
-                  <CardContent className="flex flex-col gap-4">
-                    <div className="flex items-center gap-4">
-                      <UserCircle className="size-10 text-muted-foreground" />
-                      <p className="text-xl font-semibold text-muted-foreground">
-                        {child.firstName} {child.lastName}
-                      </p>
-                    </div>
-
-                    <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-                      <p><strong>Email:</strong> {child.email}</p>
-                      <p><strong>Phone:</strong> {child.phone}</p>
-                      <p><strong>DOB:</strong> {formatDisplayDate(child.dateOfBirth)}</p>
-                      <p><strong>Country:</strong> {child.country}</p>
-                      <p><strong>School:</strong> {child.schoolName}</p>
-                      <p><strong>Street Address:</strong> {child.streetAddress}</p>
-                      <p><strong>City:</strong> {child.city}</p>
-                      <p><strong>Postal Code:</strong> {child.postalCode}</p>
-                    </div>
-
-                    <Button
-                      type="button"
-                      className="h-auto w-full rounded-lg border border-border bg-primary px-3 py-2 text-sm text-background hover:bg-primary"
-                      onClick={() => {
-                        if (!isUnlockedChild) {
-                          navigate({ to: "/Dashboard/ChildProfile" });
-                          return;
-                        }
-
-                        navigate({ to: "/Dashboard/ProgressCertificate/ProgressPage" });
-                      }}
+    <DashboardLayout contentClassName="px-6">
+      {children.length > 0 ? (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {children.map((child) => {
+            const isUnlockedChild = matchesChildSessionIdentifier(child, activeChildId);
+            const fullName = [child.firstName, child.lastName].filter(Boolean).join(" ") || "Child";
+            const address = [child.streetAddress, child.city, child.postalCode]
+              .filter(Boolean)
+              .join(", ");
+            return (
+              <Card key={child._id} className="h-full">
+                <CardContent className="flex flex-col gap-5">
+                  <div className="flex items-center gap-3 border-b border-border pb-4">
+                    <span
+                      aria-hidden="true"
+                      className="grid size-11 shrink-0 place-items-center rounded-full bg-primary-soft text-primary"
                     >
-                      {isUnlockedChild ? "View Progress" : "Unlock in Child Accounts"}
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        ) : (
-          <p>No children found.</p>
-        )}
+                      <UserCircle className="size-6" />
+                    </span>
+                    <div className="flex flex-col">
+                      <Heading level={3} className="text-h5">
+                        {fullName}
+                      </Heading>
+                      {child.country && (
+                        <Text size="xs" tone="subtle">
+                          {child.country}
+                        </Text>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {child.email && <DetailRow icon={Mail} label="Email" value={child.email} />}
+                    {child.dateOfBirth && (
+                      <DetailRow
+                        icon={Cake}
+                        label="Date of birth"
+                        value={formatDisplayDate(child.dateOfBirth)}
+                      />
+                    )}
+                    {child.phone && <DetailRow icon={Phone} label="Phone" value={child.phone} />}
+                    {child.schoolName && (
+                      <DetailRow icon={School} label="School" value={child.schoolName} />
+                    )}
+                    {address && <DetailRow icon={MapPin} label="Address" value={address} />}
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant={isUnlockedChild ? "default" : "outline"}
+                    className="mt-auto w-full"
+                    onClick={() => {
+                      navigate({
+                        to: isUnlockedChild
+                          ? "/Dashboard/ProgressCertificate/ProgressPage"
+                          : "/Dashboard/ChildProfile",
+                      });
+                    }}
+                  >
+                    {isUnlockedChild ? "View progress" : "Unlock in child accounts"}
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      ) : (
+        <Card>
+          <CardContent>
+            <Text tone="muted">
+              No children found. Add a child profile to start tracking progress.
+            </Text>
+          </CardContent>
+        </Card>
+      )}
     </DashboardLayout>
   );
 };

@@ -7,7 +7,6 @@ const DashboardLayout = ({
   children,
   className,
   contentClassName,
-  headerOffsetVariant = "dashboard",
   navClassName,
   navProps,
   withHeaderOffset = true,
@@ -15,7 +14,7 @@ const DashboardLayout = ({
   <div
     className={cn(
       "bg-background min-h-screen flex flex-col md:flex-row px-4 md:px-20",
-      withHeaderOffset && getHeaderOffsetClass(headerOffsetVariant),
+      withHeaderOffset && getHeaderOffsetClass(),
       className,
     )}
   >
@@ -33,7 +32,6 @@ DashboardLayout.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   contentClassName: PropTypes.string,
-  headerOffsetVariant: PropTypes.string,
   navClassName: PropTypes.string,
   navProps: PropTypes.object,
   withHeaderOffset: PropTypes.bool,

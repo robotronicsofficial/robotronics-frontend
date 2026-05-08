@@ -1,28 +1,16 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { Mail, Phone, School, MapPin, Cake, UserCircle } from "lucide-react";
+import { toast } from "sonner";
+
 import CenteredState from "@/components/layout/CenteredState";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { UserCircle } from "lucide-react";
 import SuccessModal from "./popUps/SuccessModal";
 import PinModal from "./popUps/PinModal";
 import ChangePinModal from "./popUps/ChangePinModal";
 import ErrorModal from "./popUps/ErrorModal";
-import { useAuth } from "@/contexts/useAuth";
-import {
-  clearActiveChildSession,
-  getChildSessionIdentifiers,
-  setActiveChildSession,
-} from "@/utils/childSessionRequest";
-import { ensureArray, formatDisplayDate } from "@/lib/subscription";
-import { fetchChildEnrollment } from "@/lib/account";
-import {
-  useChangeChildPinMutation,
-  useChildAccounts,
-  useCreateChildPinMutation,
-  useVerifyChildPinMutation,
-} from "@/hooks/useAccount";
-import { queryKeys } from "@/lib/queryKeys";
+import ForgotPinModal from "./popUps/ForgotPinModal";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -34,6 +22,128 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Heading, Text } from "@/components/ui/typography";
+import { useAuth } from "@/contexts/useAuth";
+import { ensureArray, formatDisplayDate } from "@/lib/subscription";
+import { fetchChildEnrollment } from "@/lib/account";
+import { queryKeys } from "@/lib/queryKeys";
+import {
+  useChangeChildPinMutation,
+  useChildAccounts,
+  useResetChildPinMutation,
+  useVerifyChildPinMutation,
+} from "@/hooks/useAccount";
+import {
+  clearActiveChildSession,
+  getChildSessionIdentifiers,
+  setActiveChildSession,
+} from "@/utils/childSessionRequest";
+
+const isConcurrentSessionMessage = (message = "") =>
+  /already active|another session|already a session|currently using/i.test(message || "");
+
+const DetailRow = ({ icon: Icon, label, value }) => (
+  <div className="flex items-start gap-2.5 text-body-sm">
+    <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+    <div className="flex min-w-0 flex-col">
+      <span className="text-caption uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
+      <span className="break-words text-foreground">{value}</span>
+    </div>
+  </div>
+);
+
+const EmptyStateCard = ({ title, description, ctaLabel, onCta }) => (
+  <Card className="max-w-2xl">
+    <CardContent className="flex flex-col items-start gap-5">
+      <div className="flex flex-col gap-2">
+        <Heading level={3} className="text-h4">
+          {title}
+        </Heading>
+        <Text size="sm" tone="muted">
+          {description}
+        </Text>
+      </div>
+      <Button type="button" size="marketing" onClick={onCta}>
+        {ctaLabel}
+      </Button>
+    </CardContent>
+  </Card>
+);
+
+const ChildCard = ({ child, onViewCourses, onPinAction }) => {
+  const fullName = [child.firstName, child.lastName].filter(Boolean).join(" ") || "Child";
+  const canManagePin = Boolean(child.hasChildAccount);
+  return (
+    <Card className="h-full">
+      <CardContent className="flex flex-col gap-5">
+        <div className="flex items-center gap-3 border-b border-border pb-4">
+          <span
+            aria-hidden="true"
+            className="grid size-11 shrink-0 place-items-center rounded-full bg-primary-soft text-primary"
+          >
+            <UserCircle className="size-6" />
+          </span>
+          <div className="flex flex-col">
+            <Heading level={3} className="text-h5">
+              {fullName}
+            </Heading>
+            {child.schoolName && (
+              <Text size="xs" tone="subtle">
+                {child.schoolName}
+              </Text>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <DetailRow icon={Mail} label="Email" value={child.email || "—"} />
+          {child.dateOfBirth && (
+            <DetailRow icon={Cake} label="Date of birth" value={formatDisplayDate(child.dateOfBirth)} />
+          )}
+          {child.phone && <DetailRow icon={Phone} label="Phone" value={child.phone} />}
+          {child.schoolName && (
+            <DetailRow icon={School} label="School" value={child.schoolName} />
+          )}
+          {(child.streetAddress || child.city) && (
+            <DetailRow
+              icon={MapPin}
+              label="Address"
+              value={[child.streetAddress, child.city, child.postalCode]
+                .filter(Boolean)
+                .join(", ")}
+            />
+          )}
+        </div>
+
+        <div className="mt-auto flex flex-col gap-2 sm:flex-row">
+          <Button
+            type="button"
+            onClick={() => onViewCourses(child._id)}
+            disabled={!child.hasPin || !child.hasChildAccount}
+            className="flex-1"
+          >
+            View courses
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onPinAction(child._id, child.hasPin)}
+            disabled={!canManagePin}
+            className="flex-1"
+          >
+            {!child.hasChildAccount
+              ? "Awaiting activation"
+              : child.hasPin
+                ? "Change PIN"
+                : "Create login PIN"}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 const SubscriptionChildProfile = () => {
   const navigate = useNavigate();
@@ -44,6 +154,8 @@ const SubscriptionChildProfile = () => {
   const [isChangePinModalOpen, setIsChangePinModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isReplacePinConfirmOpen, setIsReplacePinConfirmOpen] = useState(false);
+  const [isForgotPinOpen, setIsForgotPinOpen] = useState(false);
+  const [takeoverPin, setTakeoverPin] = useState(null);
   const [pinError, setPinError] = useState(null);
   const [selectedChildId, setSelectedChildId] = useState(null);
   const { currentUser } = useAuth();
@@ -54,7 +166,7 @@ const SubscriptionChildProfile = () => {
     error: childAccountsError,
   } = useChildAccounts(userId);
   const changeChildPinMutation = useChangeChildPinMutation(userId);
-  const createChildPinMutation = useCreateChildPinMutation(userId);
+  const resetChildPinMutation = useResetChildPinMutation(userId);
   const verifyChildPinMutation = useVerifyChildPinMutation();
   const parentData = childAccountsData?.parent || null;
   const children = childAccountsData?.children || [];
@@ -64,31 +176,22 @@ const SubscriptionChildProfile = () => {
   const handlePinSubmit = async (pinData) => {
     try {
       setPinError(null);
-      
       if (pinData.error) {
         setPinError(pinData.error);
         setIsErrorModalOpen(true);
         return;
       }
-
-      // For changing PIN
       const selectedChild = children.find((child) => child._id === selectedChildId);
-      if (!selectedChild) {
-        throw new Error("Child account not found");
-      }
-
+      if (!selectedChild) throw new Error("Child account not found");
       const childAccessId = selectedChild?.accessChildId || selectedChildId;
-
       await changeChildPinMutation.mutateAsync({
         childId: childAccessId,
         oldPin: pinData.oldPin,
         newPin: pinData.newPin,
       });
-
       setIsChangePinModalOpen(false);
       setIsSuccessModalOpen(true);
     } catch (err) {
-      console.error('Error changing PIN:', err);
       setPinError(err.message);
       setIsErrorModalOpen(true);
     }
@@ -97,128 +200,127 @@ const SubscriptionChildProfile = () => {
   const handleCreatePinSubmit = async (pinData) => {
     try {
       setPinError(null);
-      
       if (pinData.error) {
         setPinError(pinData.error);
         setIsErrorModalOpen(true);
         return;
       }
-
       const childData = children.find((child) => child._id === selectedChildId);
-      if (!childData) {
-        throw new Error("Child account not found");
+      if (!childData) throw new Error("Child account not found");
+      if (!childData.hasChildAccount) {
+        throw new Error("Subscription is not active for this child yet.");
       }
-
-      const childPlanId = childData.plan?.planId || childData.plan?.id;
-      if (!childPlanId || !childData.plan?.billingCycle) {
-        throw new Error("Child subscription plan is missing. Refresh the page and try again.");
-      }
-
-      await createChildPinMutation.mutateAsync({
-        _id: childData._id,
-        firstName: childData.firstName,
-        lastName: childData.lastName,
-        email: childData.email,
-        phone: childData.phone,
-        dateOfBirth: childData.dateOfBirth,
-        country: childData.country,
-        schoolName: childData.schoolName,
-        streetAddress: childData.streetAddress,
-        city: childData.city,
-        postalCode: childData.postalCode,
-        gender: childData.gender,
-        plan: {
-          planId: childPlanId,
-          billingCycle: childData.plan.billingCycle,
-        },
-        pin: pinData,
-        userId: currentUser._id,
+      const childAccessId = childData?.accessChildId || selectedChildId;
+      await resetChildPinMutation.mutateAsync({
+        childId: childAccessId,
+        newPin: pinData,
       });
-
       setIsPinModalOpen(false);
       setIsSuccessModalOpen(true);
     } catch (err) {
-      console.error('Error creating PIN:', err);
       setPinError(err.message);
       setIsErrorModalOpen(true);
     }
+  };
+
+  const finishVerifySession = async (selectedChild, childAccessId, sessionId) => {
+    setIsVerifyPinModalOpen(false);
+    setTakeoverPin(null);
+    if (sessionId) {
+      clearActiveChildSession();
+      setActiveChildSession({
+        childId: childAccessId,
+        childIds: getChildSessionIdentifiers(selectedChild),
+        sessionId,
+      });
+    }
+    const coursesData = await queryClient.fetchQuery({
+      queryKey: queryKeys.childCourses.enrollment(childAccessId),
+      queryFn: () => fetchChildEnrollment(childAccessId),
+    });
+    const selectedCourses = ensureArray(coursesData?.courses);
+    navigate({
+      to: selectedCourses.length > 0 ? "/Dashboard/myAllCourses" : "/Dashboard/MyCoursesPage",
+    });
   };
 
   const handleVerifyPinSubmit = async (pinData) => {
     try {
       setPinError(null);
       const selectedChild = children.find((child) => child._id === selectedChildId);
-      if (!selectedChild) {
-        throw new Error("Child account not found");
-      }
-
+      if (!selectedChild) throw new Error("Child account not found.");
       const childAccessId = selectedChild?.accessChildId || selectedChildId;
-      
       const data = await verifyChildPinMutation.mutateAsync({
         childId: childAccessId,
         pin: pinData,
       });
 
-      if (
-        data.message === 'Another session is active. Please try again later.' ||
-        data.message === 'Account is already active on another device'
-      ) {
-        setPinError("Another child is currently using this account. Please try again later.");
-        setIsErrorModalOpen(true);
+      /* Concurrent-session conflict — surface a takeover affordance instead
+         of dead-ending. The parent can decide to bump the other device. */
+      if (isConcurrentSessionMessage(data?.message)) {
+        setTakeoverPin(pinData);
         return;
       }
 
-      setIsVerifyPinModalOpen(false);
-      
-      // Store the session before routing so the child-session guard can validate it.
-      if (data.sessionId) {
-        clearActiveChildSession();
-        setActiveChildSession({
-          childId: childAccessId,
-          childIds: getChildSessionIdentifiers(selectedChild),
-          sessionId: data.sessionId,
-        });
-      }
-
-      // Fetch child's courses data
-      const coursesData = await queryClient.fetchQuery({
-        queryKey: queryKeys.childCourses.enrollment(childAccessId),
-        queryFn: () => fetchChildEnrollment(childAccessId),
-      });
-      const selectedCourses = ensureArray(coursesData?.courses);
-      
-      // Navigate based on whether courses exist
-      if (selectedCourses.length > 0) {
-        navigate({ to: "/Dashboard/myAllCourses" });
-      } else {
-        navigate({ to: "/Dashboard/MyCoursesPage" });
-      }
+      await finishVerifySession(selectedChild, childAccessId, data.sessionId);
     } catch (err) {
-      console.error('Error verifying PIN:', err);
+      if (isConcurrentSessionMessage(err?.message)) {
+        setTakeoverPin(pinData);
+        return;
+      }
       setPinError(err.message);
       setIsErrorModalOpen(true);
     }
   };
 
-  const handleViewCourses = async (childId) => {
+  const handleConfirmTakeover = async () => {
+    try {
+      setPinError(null);
+      const selectedChild = children.find((child) => child._id === selectedChildId);
+      if (!selectedChild) throw new Error("Child account not found.");
+      const childAccessId = selectedChild?.accessChildId || selectedChildId;
+      const data = await verifyChildPinMutation.mutateAsync({
+        childId: childAccessId,
+        pin: takeoverPin,
+        force: true,
+      });
+      await finishVerifySession(selectedChild, childAccessId, data.sessionId);
+      toast.success("Switched to this device.");
+    } catch (err) {
+      setPinError(err.message);
+      setIsErrorModalOpen(true);
+    }
+  };
+
+  const handleForgotPinSubmit = async (newPin) => {
+    try {
+      const selectedChild = children.find((child) => child._id === selectedChildId);
+      if (!selectedChild) throw new Error("Child account not found.");
+      const childAccessId = selectedChild?.accessChildId || selectedChildId;
+      await resetChildPinMutation.mutateAsync({
+        childId: childAccessId,
+        newPin,
+      });
+      setIsForgotPinOpen(false);
+      setIsVerifyPinModalOpen(false);
+      toast.success("PIN reset. Use the new PIN to log in.");
+    } catch (err) {
+      setPinError(err.message);
+      setIsErrorModalOpen(true);
+    }
+  };
+
+  const handleViewCourses = (childId) => {
     setSelectedChildId(childId);
-    const child = children.find((currentChild) => currentChild._id === childId);
-    
+    const child = children.find((c) => c._id === childId);
     if (!child?.hasPin) return;
-    
     setIsVerifyPinModalOpen(true);
   };
 
-
   const openPinModal = (childId, hasPin) => {
     setSelectedChildId(childId);
-
-    if (hasPin) {
-      // Child already has a PIN — confirm before replacing via the create flow.
-      setIsReplacePinConfirmOpen(true);
-    } else {
-      setIsPinModalOpen(true);
-    }
+    if (hasPin) setIsReplacePinConfirmOpen(true);
+    else setIsPinModalOpen(true);
   };
 
   const handleConfirmReplacePin = () => {
@@ -227,12 +329,12 @@ const SubscriptionChildProfile = () => {
   };
 
   if (loading) {
-    return <CenteredState className="bg-muted min-h-screen">Loading...</CenteredState>;
+    return <CenteredState className="bg-background min-h-screen">Loading…</CenteredState>;
   }
 
   if (error) {
     return (
-      <CenteredState className="min-h-screen bg-muted px-6">
+      <CenteredState className="min-h-screen bg-background px-6">
         <Alert variant="destructive" className="max-w-md">
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
@@ -243,103 +345,32 @@ const SubscriptionChildProfile = () => {
 
   return (
     <DashboardLayout contentClassName="px-6">
-        <h1 className="pl-4 mb-4 text-2xl font-bold md:text-3xl">Child Accounts</h1>
-
-        {!parentData ? (
-          <Card className="mx-4 max-w-2xl">
-            <CardContent className="flex flex-col items-start gap-4">
-              <div>
-                <p className="text-xl font-semibold text-foreground">Set up child accounts</p>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  This login does not have a parent subscription profile yet. Choose a
-                  subscription and add child details to create child accounts.
-                </p>
-              </div>
-              <Button
-                type="button"
-                className="h-auto rounded-lg bg-primary px-5 py-3 text-background"
-                onClick={() => navigate({ to: "/subscriptions" })}
-              >
-                Choose Subscription
-              </Button>
-            </CardContent>
-          </Card>
-        ) : children.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 p-4 md:grid-cols-2 lg:p-5">
-            {children.map((child) => {
-              const hasPin = child.hasPin;
-              return (
-                <Card key={child._id} className="h-full">
-                  <CardContent className="flex flex-col gap-6">
-                    <div className="flex items-center gap-4">
-                      <UserCircle className="size-10" />
-                      <p className="text-foreground poppins-bold text-xl md:text-2xl">
-                        {child.firstName} {child.lastName}
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <p className="text-foreground poppins-bold text-sm md:text-base">
-                        <span className="font-semibold">Email:</span> {child.email}
-                      </p>
-                      {child.dateOfBirth && (
-                        <p className="text-foreground poppins-bold text-sm md:text-base">
-                          <span className="font-semibold">Date of Birth:</span> {formatDisplayDate(child.dateOfBirth)}
-                        </p>
-                      )}
-                      <p className="text-foreground poppins-bold text-sm md:text-base">
-                        <span className="font-semibold">Phone:</span> {child.phone}
-                      </p>
-                      <p className="text-foreground poppins-bold text-sm md:text-base">
-                        <span className="font-semibold">School:</span> {child.schoolName}
-                      </p>
-                      <p className="text-foreground poppins-bold text-sm md:text-base text-wrap">
-                        <span className="font-semibold">Address:</span> {child.streetAddress}, {child.city}, {child.postalCode}
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-3 sm:flex-row">
-                      <Button
-                        type="button"
-                        onClick={() => handleViewCourses(child._id)}
-                        className={`h-auto rounded-lg border border-border px-3 py-2 text-sm md:text-base ${
-                          hasPin ? 'bg-primary text-background cursor-pointer' : 'bg-muted text-muted-foreground cursor-not-allowed'
-                        }`}
-                        disabled={!hasPin}
-                      >
-                        View My Courses
-                      </Button>
-                      <Button
-                        type="button"
-                        onClick={() => openPinModal(child._id, hasPin)}
-                        className="h-auto rounded-lg border border-border bg-primary px-3 py-2 text-sm text-background md:text-base"
-                      >
-                        {hasPin ? 'Change PIN' : 'Create Login Pin'}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        ) : (
-          <Card className="mx-4 max-w-2xl">
-            <CardContent className="flex flex-col items-start gap-4">
-              <div>
-                <p className="text-xl font-semibold text-foreground">No child accounts yet</p>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Your parent profile is ready, but no children are registered on it yet.
-                  Add a child through the subscription flow to start learning access.
-                </p>
-              </div>
-              <Button
-                type="button"
-                className="h-auto rounded-lg bg-primary px-5 py-3 text-background"
-                onClick={() => navigate({ to: "/subscriptions" })}
-              >
-                Add Child Account
-              </Button>
-            </CardContent>
-          </Card>
-        )}
+      {!parentData ? (
+        <EmptyStateCard
+          title="Set up child accounts"
+          description="This login doesn't have a parent subscription profile yet. Choose a subscription and add child details to create child accounts."
+          ctaLabel="Choose subscription"
+          onCta={() => navigate({ to: "/subscriptions" })}
+        />
+      ) : children.length > 0 ? (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {children.map((child) => (
+            <ChildCard
+              key={child._id}
+              child={child}
+              onViewCourses={handleViewCourses}
+              onPinAction={openPinModal}
+            />
+          ))}
+        </div>
+      ) : (
+        <EmptyStateCard
+          title="No child accounts yet"
+          description="Your parent profile is ready, but no children are registered on it yet. Add a child through the subscription flow to start learning access."
+          ctaLabel="Add child account"
+          onCta={() => navigate({ to: "/subscriptions" })}
+        />
+      )}
 
       <SuccessModal
         isOpen={isSuccessModalOpen}
@@ -358,9 +389,44 @@ const SubscriptionChildProfile = () => {
         onClose={() => setIsVerifyPinModalOpen(false)}
         onPinSubmit={handleVerifyPinSubmit}
         mode="verify"
-        title="Enter Your PIN"
-        description="Please enter your 4-digit PIN to view courses"
+        title="Enter PIN"
+        description="Enter the 4-digit PIN to start a learning session."
+        onForgotPin={() => {
+          setIsVerifyPinModalOpen(false);
+          setIsForgotPinOpen(true);
+        }}
       />
+
+      <ForgotPinModal
+        isOpen={isForgotPinOpen}
+        onClose={() => setIsForgotPinOpen(false)}
+        onSubmit={handleForgotPinSubmit}
+        isPending={resetChildPinMutation.isPending}
+      />
+
+      <Dialog open={Boolean(takeoverPin)} onOpenChange={() => setTakeoverPin(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Another device is signed in</DialogTitle>
+            <DialogDescription>
+              This child is already learning on another device. Continue here
+              to bump the other session and pick up where they left off.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setTakeoverPin(null)}>
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={handleConfirmTakeover}
+              disabled={verifyChildPinMutation.isPending}
+            >
+              {verifyChildPinMutation.isPending ? "Switching…" : "Continue here"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <ChangePinModal
         isOpen={isChangePinModalOpen}
@@ -376,24 +442,16 @@ const SubscriptionChildProfile = () => {
         errorMessage={pinError}
       />
 
-      <Dialog
-        open={isReplacePinConfirmOpen}
-        onOpenChange={setIsReplacePinConfirmOpen}
-      >
+      <Dialog open={isReplacePinConfirmOpen} onOpenChange={setIsReplacePinConfirmOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Replace existing PIN?</DialogTitle>
             <DialogDescription>
-              This child already has a PIN. Setting a new one will replace the
-              existing PIN. Continue?
+              This child already has a PIN. Setting a new one will replace the existing PIN. Continue?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsReplacePinConfirmOpen(false)}
-            >
+            <Button type="button" variant="outline" onClick={() => setIsReplacePinConfirmOpen(false)}>
               Cancel
             </Button>
             <Button type="button" onClick={handleConfirmReplacePin}>

@@ -1,50 +1,126 @@
-import DashboardLayout from "@/components/layout/DashboardLayout";
-import { FileText } from "lucide-react";
-import { useState } from 'react';
+import { useState } from "react";
+import { Download, FileText } from "lucide-react";
+
 import CenteredState from "@/components/layout/CenteredState";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { getActiveChildSession } from "@/utils/childSessionRequest";
+import { Heading, Text } from "@/components/ui/typography";
 import {
   useChildProgress,
   useDownloadChildCertificateMutation,
 } from "@/hooks/useChildCourses";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { getActiveChildSession } from "@/utils/childSessionRequest";
+import { cn } from "@/lib/utils";
+
+const FILTERS = [
+  { label: "All", value: "all" },
+  { label: "Active", value: "active" },
+  { label: "Completed", value: "completed" },
+];
+
+const FilterChip = ({ active, onClick, children }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-pressed={active}
+    className={cn(
+      "inline-flex h-9 items-center rounded-full border px-4 text-body-sm font-medium transition-colors",
+      active
+        ? "border-primary bg-primary text-primary-foreground"
+        : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground",
+    )}
+  >
+    {children}
+  </button>
+);
+
+const StatusBadge = ({ status }) => {
+  const isCompleted = (status || "active").toLowerCase() === "completed";
+  return (
+    <Badge variant={isCompleted ? "secondary" : "default"} className="rounded-full">
+      {status || "Active"}
+    </Badge>
+  );
+};
+
+const CertificateCell = ({
+  course,
+  isDownloading,
+  errorMessage,
+  onDownload,
+  onDismissError,
+}) => {
+  if (!course.certificateAvailable) {
+    return (
+      <div className="flex items-center gap-2 text-body-sm text-muted-foreground">
+        <FileText className="size-4" />
+        <span title="Complete the course to download certificate">
+          Locked
+        </span>
+      </div>
+    );
+  }
+  return (
+    <div className="flex flex-col gap-1">
+      <Button
+        type="button"
+        variant="link"
+        size="sm"
+        onClick={() => !isDownloading && onDownload()}
+        disabled={isDownloading}
+        className="h-auto p-0 text-body-sm"
+      >
+        <Download className="size-3.5" />
+        {isDownloading ? "Generating…" : "Download"}
+      </Button>
+      {errorMessage && (
+        <div className="flex items-start gap-2 text-caption text-destructive">
+          <span className="max-w-xs break-words">{errorMessage}</span>
+          <button type="button" onClick={onDismissError} className="underline">
+            Dismiss
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const SubscriptionProgressDetailPage = () => {
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState("all");
   const [downloadingCourseId, setDownloadingCourseId] = useState(null);
-  const [downloadErrors, setDownloadErrors] = useState({}); // Track errors per course
+  const [downloadErrors, setDownloadErrors] = useState({});
+
   const activeChildSession = getActiveChildSession();
   const selectedChildId = activeChildSession?.childId || null;
   const {
     data: progressData,
-    isLoading: loading,
+    isLoading,
     error,
     refetch,
   } = useChildProgress(selectedChildId);
   const downloadCertificateMutation = useDownloadChildCertificateMutation();
+
   const progressErrorMessage = !selectedChildId
-    ? 'Child session not found. Please re-enter the PIN from Child Accounts.'
+    ? "Child session not found. Please re-enter the PIN from Child Accounts."
     : error
-      ? 'Failed to load progress data. Please check your connection and try again.'
+      ? "Failed to load progress data. Check your connection and try again."
       : "";
 
   const handleDownloadCertificate = async (courseId, courseName) => {
     if (!selectedChildId || !courseId || downloadingCourseId) return;
-
     setDownloadingCourseId(courseId);
-    // Clear any previous error for this course
-    setDownloadErrors(prev => ({ ...prev, [courseId]: null }));
-
+    setDownloadErrors((prev) => ({ ...prev, [courseId]: null }));
     try {
       const { blob } = await downloadCertificateMutation.mutateAsync({
         childId: selectedChildId,
         courseId,
       });
-
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `${progressData.childName}_${courseName}_Certificate.pdf`;
       document.body.appendChild(a);
@@ -52,164 +128,133 @@ const SubscriptionProgressDetailPage = () => {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      console.error("Download error:", err);
-      setDownloadErrors(prev => ({
+      setDownloadErrors((prev) => ({
         ...prev,
-        [courseId]: err.message || 'Failed to download certificate. Please try again.'
+        [courseId]: err.message || "Failed to download certificate. Please try again.",
       }));
     } finally {
       setDownloadingCourseId(null);
     }
   };
 
-  if (loading) return (
-    <CenteredState className="bg-muted min-h-screen" contentClassName="text-center">
-      <Spinner className="mx-auto size-12 text-primary" />
-      <p className="mt-4 text-muted-foreground">Loading progress data...</p>
-    </CenteredState>
-  );
+  if (isLoading) {
+    return (
+      <CenteredState className="bg-background min-h-screen" contentClassName="text-center">
+        <Spinner className="mx-auto size-12 text-primary" />
+        <Text tone="muted" className="mt-4">
+          Loading progress data…
+        </Text>
+      </CenteredState>
+    );
+  }
 
-  if (progressErrorMessage) return (
-    <CenteredState className="bg-muted min-h-screen px-6">
-      <div className="flex w-full max-w-md flex-col gap-4">
-        <Alert variant="destructive">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{progressErrorMessage}</AlertDescription>
+  if (progressErrorMessage) {
+    return (
+      <CenteredState className="bg-background min-h-screen px-6">
+        <div className="flex w-full max-w-md flex-col gap-4">
+          <Alert variant="destructive">
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{progressErrorMessage}</AlertDescription>
+          </Alert>
+          <Button type="button" onClick={() => refetch()}>
+            Try again
+          </Button>
+        </div>
+      </CenteredState>
+    );
+  }
+
+  if (!progressData) {
+    return (
+      <CenteredState className="bg-background min-h-screen px-6">
+        <Alert className="max-w-md">
+          <AlertDescription>No progress data found for this student.</AlertDescription>
         </Alert>
-        <Button
-          type="button"
-          onClick={() => refetch()}
-          className="h-auto rounded bg-primary px-4 py-2 text-background hover:bg-primary"
-        >
-          Try Again
-        </Button>
-      </div>
-    </CenteredState>
-  );
+      </CenteredState>
+    );
+  }
 
-  if (!progressData) return (
-    <CenteredState className="bg-muted min-h-screen px-6">
-      <Alert className="max-w-md">
-        <AlertDescription>No progress data found for this student.</AlertDescription>
-      </Alert>
-    </CenteredState>
-  );
-
-  const filteredCourses = progressData.courses.filter(course => {
-    if (filter === 'all') return true;
-    return (course.status || 'active').toLowerCase() === filter;
+  const filteredCourses = progressData.courses.filter((course) => {
+    if (filter === "all") return true;
+    return (course.status || "active").toLowerCase() === filter;
   });
 
   return (
-    <DashboardLayout withHeaderOffset={false}>
-        <h1 className="text-3xl font-bold mb-4">{progressData.childName}</h1>
+    <DashboardLayout withHeaderOffset={false} contentClassName="px-6">
+      <div className="mb-6 flex flex-col gap-1">
+        <Heading level={1} className="text-h1">
+          {progressData.childName}
+        </Heading>
+        <Text tone="muted">Course progress and earned certificates.</Text>
+      </div>
 
-        {/* Filter Buttons */}
-        <div className="flex gap-4 mb-6">
-          <Button
-            type="button"
-            onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-full ${filter === 'all' ? 'bg-primary text-background' : 'bg-muted'}`}
+      <div className="mb-6 flex flex-wrap gap-2">
+        {FILTERS.map((option) => (
+          <FilterChip
+            key={option.value}
+            active={filter === option.value}
+            onClick={() => setFilter(option.value)}
           >
-            All
-          </Button>
-          <Button
-            type="button"
-            onClick={() => setFilter('active')}
-            className={`px-4 py-2 rounded-full ${filter === 'active' ? 'bg-primary text-background' : 'bg-muted'}`}
-          >
-            Active
-          </Button>
-          <Button
-            type="button"
-            onClick={() => setFilter('completed')}
-            className={`px-4 py-2 rounded-full ${filter === 'completed' ? 'bg-primary text-background' : 'bg-muted'}`}
-          >
-            Completed
-          </Button>
-        </div>
+            {option.label}
+          </FilterChip>
+        ))}
+      </div>
 
-        {/* Course Progress Table */}
-        <div className="overflow-x-auto rounded-lg border border-border bg-card p-4">
-          <h2 className="text-xl font-semibold mb-3">Course Progress</h2>
-          <table className="w-full min-w-[600px] border-collapse">
-            <thead>
-              <tr className="text-left text-muted-foreground font-semibold">
-                <th className="p-3">Course</th>
-                <th className="p-3">Modules Completed</th>
-                <th className="p-3">Certificate</th>
-                <th className="p-3">Course Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCourses.map((course, index) => {
-                const courseId = course.courseId || course.id || course._id;
-                const isDownloading = downloadingCourseId === courseId;
-                const courseError = downloadErrors[courseId];
-
-                return (
-                  <tr key={index} className="text-muted-foreground border-t">
-                    <td className="p-3">{course.name || course.courseName || "Course"}</td>
-                    <td className="p-3">{course.completed}</td>
-                    <td className="p-3">
-                      <div className="flex flex-col">
-                        <div className="flex items-center gap-2">
-                          {course.certificateAvailable ? (
-                            <>
-                              <Button
-                                type="button"
-                                variant="link"
-                                className={`hover:text-primary ${isDownloading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer text-info'}`}
-                                onClick={() => !isDownloading && handleDownloadCertificate(courseId, course.name || course.courseName || "Course")}
-                                disabled={isDownloading}
-                              >
-                                {isDownloading ? 'Generating...' : 'Download'}
-                              </Button>
-                              <FileText className="text-destructive" />
-                            </>
-                          ) : (
-                            <div
-                              className="group relative cursor-not-allowed"
-                              title="Complete the course to download certificate"
-                            >
-                              <span className="text-muted-foreground">Download</span>
-                              <FileText className="text-muted-foreground inline ml-2" />
-                              <span className="absolute hidden group-hover:block bg-muted text-background text-xs rounded py-1 px-2 bottom-full mb-2 whitespace-nowrap left-1/2 transform -translate-x-1/2">
-                                Complete the course to download
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                        {courseError && (
-                          <div className="text-destructive text-xs mt-1 max-w-xs">
-                            {courseError}
-                            <Button
-                              type="button"
-                              variant="link"
-                              onClick={() => setDownloadErrors(prev => ({ ...prev, [courseId]: null }))}
-                              className="ml-2 h-auto p-0 text-muted-foreground hover:text-muted-foreground"
-                            >
-                              Dismiss
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="p-3">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        (course.status || 'active').toLowerCase() === 'completed'
-                          ? 'bg-success/10 text-success'
-                          : 'bg-primary/10 text-primary'
-                      }`}>
-                        {course.status}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+      <Card>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[600px] border-collapse">
+              <thead>
+                <tr className="border-b border-border text-left">
+                  <th className="px-5 py-4 text-caption font-semibold uppercase tracking-wide text-muted-foreground">
+                    Course
+                  </th>
+                  <th className="px-5 py-4 text-caption font-semibold uppercase tracking-wide text-muted-foreground">
+                    Modules
+                  </th>
+                  <th className="px-5 py-4 text-caption font-semibold uppercase tracking-wide text-muted-foreground">
+                    Certificate
+                  </th>
+                  <th className="px-5 py-4 text-caption font-semibold uppercase tracking-wide text-muted-foreground">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredCourses.map((course, index) => {
+                  const courseId = course.courseId || course.id || course._id;
+                  const courseName = course.name || course.courseName || "Course";
+                  const isDownloading = downloadingCourseId === courseId;
+                  return (
+                    <tr key={courseId || index} className="border-b border-border last:border-b-0">
+                      <td className="px-5 py-4 text-body-sm text-foreground">
+                        {courseName}
+                      </td>
+                      <td className="px-5 py-4 text-body-sm text-foreground">
+                        {course.completed}
+                      </td>
+                      <td className="px-5 py-4">
+                        <CertificateCell
+                          course={course}
+                          isDownloading={isDownloading}
+                          errorMessage={downloadErrors[courseId]}
+                          onDownload={() => handleDownloadCertificate(courseId, courseName)}
+                          onDismissError={() =>
+                            setDownloadErrors((prev) => ({ ...prev, [courseId]: null }))
+                          }
+                        />
+                      </td>
+                      <td className="px-5 py-4">
+                        <StatusBadge status={course.status} />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
     </DashboardLayout>
   );
 };
