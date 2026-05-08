@@ -5,9 +5,10 @@ import OrderSummaryLine from "./OrderSummaryLine";
 import { Button } from "@/components/ui/button";
 import { Heading, Text } from "@/components/ui/typography";
 import { Separator } from "@/components/ui/separator";
-import { calculateCartSummary, formatShopCurrency } from "@/lib/shopCheckout";
+import { calculateCartSummary } from "@/lib/shopCheckout";
 import { getCommerceItemKey } from "@/lib/commerceItems";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 
 const CustomerOrder = ({
@@ -19,6 +20,7 @@ const CustomerOrder = ({
   showContinueButton = true,
 }) => {
   const cart = useCartStore(selectCart);
+  const formatMoney = useFormatMoney();
   const items = Array.isArray(itemsOverride) ? itemsOverride : cart;
   const summary = summaryOverride || calculateCartSummary(items);
 
@@ -38,7 +40,8 @@ const CustomerOrder = ({
               key={getCommerceItemKey(product)}
               title={product.name}
               image={resolveBackendAssetUrl(product?.image || product?.images?.[0], "")}
-              price={Number(product.price ?? product.unitPrice ?? 0).toLocaleString()}
+              price={formatMoney(product.price ?? product.unitPrice)}
+              priceLabel=""
               item={product.quantity}
             />
           ))
@@ -52,26 +55,26 @@ const CustomerOrder = ({
       <div className="flex flex-col gap-3">
         <OrderSummaryLine
           label="Shipping"
-          value={formatShopCurrency(summary.shipping)}
+          value={formatMoney(summary.shipping)}
           labelClassName="text-body-sm text-muted-foreground"
           valueClassName="text-body-sm"
         />
         <OrderSummaryLine
           label="Discount 10%"
-          value={`- ${formatShopCurrency(summary.discount)}`}
+          value={`- ${formatMoney(summary.discount)}`}
           labelClassName="text-body-sm text-muted-foreground"
           valueClassName="text-body-sm"
         />
         <OrderSummaryLine
           label="Subtotal"
-          value={formatShopCurrency(summary.subtotal)}
+          value={formatMoney(summary.subtotal)}
           labelClassName="text-body-sm text-muted-foreground"
           valueClassName="text-body font-medium"
         />
         <Separator />
         <OrderSummaryLine
           label="Total"
-          value={formatShopCurrency(summary.total)}
+          value={formatMoney(summary.total)}
           labelClassName="text-body-sm text-muted-foreground"
           valueClassName="text-h5 font-semibold text-primary"
         />

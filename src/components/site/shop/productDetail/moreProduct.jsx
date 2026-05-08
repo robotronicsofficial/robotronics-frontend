@@ -15,8 +15,8 @@ import {
 } from "@/lib/commerceItems";
 import { COURSE_PATH } from "@/router/paths";
 import { cn } from "@/lib/utils";
-import { formatShopCurrency } from "@/lib/shopCheckout";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { useFormatMoney } from "@/utils/formatPrice";
 import { useCourses } from "@/hooks/useCourses";
 import { useProducts } from "@/hooks/useProducts";
 
@@ -59,6 +59,7 @@ RelatedItemsMessage.propTypes = {
 
 const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
   const navigate = useNavigate();
+  const formatMoney = useFormatMoney();
   const { id } = useParams({ strict: false });
   const config = RELATED_ITEM_CONFIG[itemType] || RELATED_ITEM_CONFIG.product;
   const productQuery = useProducts();
@@ -145,7 +146,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                       {item?.name || "Item"}
                     </Text>
                     <Text size="sm" tone="brand" weight="semibold">
-                      {formatShopCurrency(item?.price)}
+                      {formatMoney(item?.price)}
                     </Text>
                   </div>
                 </button>

@@ -8,7 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/typography";
+import { useFormatMoney } from "@/utils/formatPrice";
+
 const ShopItems = () => {
+  const formatMoney = useFormatMoney();
+
   return (
     <div>
         <div className="flex-1 xl:w-1/4 md:w-1/2 p-4"  >
@@ -28,7 +32,7 @@ const ShopItems = () => {
                   </Heading>
                   <div className="flex flex-col p-5 px-16">
                   <img  className="flex p-2" src={img7}/>
-                  <p className="flex text-primary font-bold">PKR 50,000</p>
+                  <p className="flex text-primary font-bold">{formatMoney(50000)}</p>
                   </div>
                 </div>
                 {/*doted line */}

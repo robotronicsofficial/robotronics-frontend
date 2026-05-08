@@ -14,7 +14,7 @@ const CustomerProduct = ({
   imageClassName = "object-cover lg:h-20 lg:w-24",
   onDelete,
   onEdit,
-  priceLabel = "Pkr",
+  priceLabel = "",
 }) => (
   <div className="flex gap-3">
     <AppImage

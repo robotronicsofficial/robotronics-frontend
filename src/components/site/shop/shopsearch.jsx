@@ -14,8 +14,8 @@ import {
   createProductCommerceItem,
   getCommerceItemKey,
 } from "@/lib/commerceItems";
-import { formatShopCurrency } from "@/lib/shopCheckout";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { useFormatMoney } from "@/utils/formatPrice";
 import { useCartStore } from "@/stores/cartStore";
 import { useProducts } from "@/hooks/useProducts";
 import { useSavedItems, useToggleSavedItemMutation } from "@/hooks/useSavedItems";
@@ -41,6 +41,7 @@ const ActiveFilterChip = ({ label, onClear, ariaLabel }) => (
 
 const Shopsearch = () => {
   const addToCart = useCartStore((state) => state.addToCart);
+  const formatMoney = useFormatMoney();
   const { data: products = [] } = useProducts();
   const { data: savedItems = [] } = useSavedItems();
   const toggleSavedItemMutation = useToggleSavedItemMutation();
@@ -190,7 +191,7 @@ const Shopsearch = () => {
                 )}
                 {isPriceRangeActive && (
                   <ActiveFilterChip
-                    label={`${formatShopCurrency(priceRange[0])} – ${formatShopCurrency(priceRange[1])}`}
+                    label={`${formatMoney(priceRange[0])} - ${formatMoney(priceRange[1])}`}
                     onClear={() => setPriceRange(DEFAULT_PRICE_RANGE)}
                     ariaLabel="Clear price range filter"
                   />

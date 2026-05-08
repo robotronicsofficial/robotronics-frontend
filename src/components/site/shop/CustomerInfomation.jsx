@@ -13,7 +13,6 @@ import { FormInput, FormSelect, FormTextarea } from "@/components/forms/FormCont
 import { useAuth } from "@/contexts/useAuth";
 import {
   calculateCartSummary,
-  formatShopCurrency,
   hasCheckoutCustomer,
   loadShopCheckout,
   saveShopCheckout,
@@ -23,6 +22,7 @@ import {
   hasShippableCommerceItems,
 } from "@/lib/commerceItems";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { useSaveCheckoutAddressMutation } from "@/hooks/useShopOrders";
 
@@ -109,6 +109,7 @@ SelectField.propTypes = {
 
 const CustomerInfomation = ({ onNext }) => {
   const cart = useCartStore(selectCart);
+  const formatMoney = useFormatMoney();
   const { currentUser, isAuthLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -393,8 +394,8 @@ const CustomerInfomation = ({ onNext }) => {
                   key={getCommerceItemKey(product)}
                   title={product.name}
                   item={product.quantity}
-                  price={Number(product.price || 0).toLocaleString()}
-                  priceLabel="PKR"
+                  price={formatMoney(product.price)}
+                  priceLabel=""
                   image={resolveBackendAssetUrl(
                     product.image || product.images?.[0],
                     "https://via.placeholder.com/300x200",
@@ -409,26 +410,26 @@ const CustomerInfomation = ({ onNext }) => {
           <div className="flex flex-col gap-3 border-t border-border pt-4">
             <OrderSummaryLine
               label="Subtotal"
-              value={formatShopCurrency(summary.subtotal)}
+              value={formatMoney(summary.subtotal)}
               labelClassName="text-body-sm text-muted-foreground"
               valueClassName="text-body font-medium"
             />
             <OrderSummaryLine
               label="Discount (10%)"
-              value={`- ${formatShopCurrency(summary.discount)}`}
+              value={`- ${formatMoney(summary.discount)}`}
               labelClassName="text-body-sm text-muted-foreground"
               valueClassName="text-body-sm"
             />
             <OrderSummaryLine
               label="Shipping"
-              value={formatShopCurrency(summary.shipping)}
+              value={formatMoney(summary.shipping)}
               labelClassName="text-body-sm text-muted-foreground"
               valueClassName="text-body-sm"
             />
             <div className="border-t border-border pt-3">
               <OrderSummaryLine
                 label="Total"
-                value={formatShopCurrency(summary.total)}
+                value={formatMoney(summary.total)}
                 labelClassName="text-body-sm text-muted-foreground"
                 valueClassName="text-h5 font-semibold text-primary"
               />

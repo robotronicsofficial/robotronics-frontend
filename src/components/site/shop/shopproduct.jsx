@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/typography";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
-import { formatShopCurrency } from "@/lib/shopCheckout";
+import { useFormatMoney } from "@/utils/formatPrice";
 
 const Shopproduct = ({
   title,
@@ -16,6 +16,7 @@ const Shopproduct = ({
   isSaved = false,
 }) => {
   const navigate = useNavigate();
+  const formatMoney = useFormatMoney();
   const handleProductClick = () => {
     navigate({ to: `/ProductDetailPage/${productId}` });
   };
@@ -39,7 +40,7 @@ const Shopproduct = ({
         </div>
         <div className="flex flex-col gap-1 pt-2">
           <Text size="lg" weight="semibold">{title}</Text>
-          <Text size="lg" tone="brand">{formatShopCurrency(price)}</Text>
+          <Text size="lg" tone="brand">{formatMoney(price)}</Text>
         </div>
       </Button>
 

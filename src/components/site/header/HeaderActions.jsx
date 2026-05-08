@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { selectCartQuantity, useCartStore } from "@/stores/cartStore";
 
 import ChildSessionSwitcher from "./ChildSessionSwitcher";
+import CurrencySelector from "./CurrencySelector";
 import HeaderPopover from "./HeaderPopover";
 import { ACCOUNT_NAV, CART_PATH } from "./headerNav.config";
 
@@ -145,6 +146,9 @@ const HeaderActions = () => {
       >
         <Search aria-hidden="true" />
       </IconButtonLink>
+      <div className="hidden lg:flex">
+        <CurrencySelector />
+      </div>
       <IconButtonLink to={CART_PATH} label="Cart" count={cartQuantity}>
         <ShoppingCart aria-hidden="true" />
       </IconButtonLink>

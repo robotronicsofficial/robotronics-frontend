@@ -14,7 +14,6 @@ import {
   buildShopCheckoutIntentRequest,
   calculateCartSummary,
   clearShopCheckout,
-  formatShopCurrency,
   hasCheckoutCustomer,
   hasCheckoutAddress,
   hasCheckoutPayment,
@@ -25,6 +24,7 @@ import {
   hasShippableCommerceItems,
 } from "@/lib/commerceItems";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { useSubmitShopCheckoutIntentMutation } from "@/hooks/useShopOrders";
 
@@ -40,6 +40,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const location = useLocation();
   const { currentUser, isAuthLoading } = useAuth();
   const cart = useCartStore(selectCart);
+  const formatMoney = useFormatMoney();
   const clearCart = useCartStore((state) => state.clearCart);
   const checkout = useMemo(() => loadShopCheckout(), []);
   const [submitStatus, setSubmitStatus] = useState({ type: "", message: "" });
@@ -287,7 +288,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                     <CustomerProduct
                       title={product.name}
                       item={product.quantity}
-                      price={formatShopCurrency(product.price ?? product.unitPrice)}
+                      price={formatMoney(product.price ?? product.unitPrice)}
                       priceLabel=""
                       imageClassName="object-cover h-20 w-24"
                       image={resolveBackendAssetUrl(
@@ -313,26 +314,26 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
             <Heading level={3} className="text-h5">Totals</Heading>
             <OrderSummaryLine
               label="Subtotal"
-              value={formatShopCurrency(displaySummary.subtotal)}
+              value={formatMoney(displaySummary.subtotal)}
               labelClassName="text-body-sm text-muted-foreground"
               valueClassName="text-body font-medium"
             />
             <OrderSummaryLine
               label="Discount (10%)"
-              value={`- ${formatShopCurrency(displaySummary.discount)}`}
+              value={`- ${formatMoney(displaySummary.discount)}`}
               labelClassName="text-body-sm text-muted-foreground"
               valueClassName="text-body-sm"
             />
             <OrderSummaryLine
               label="Shipping"
-              value={formatShopCurrency(displaySummary.shipping)}
+              value={formatMoney(displaySummary.shipping)}
               labelClassName="text-body-sm text-muted-foreground"
               valueClassName="text-body-sm"
             />
             <div className="border-t border-border pt-3">
               <OrderSummaryLine
                 label="Total"
-                value={formatShopCurrency(displaySummary.total)}
+                value={formatMoney(displaySummary.total)}
                 labelClassName="text-body-sm text-muted-foreground"
                 valueClassName="text-h5 font-semibold text-primary"
               />

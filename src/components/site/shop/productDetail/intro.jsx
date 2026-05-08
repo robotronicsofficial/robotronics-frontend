@@ -13,8 +13,8 @@ import { Display, Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { createProductCommerceItem } from "@/lib/commerceItems";
-import { formatShopCurrency } from "@/lib/shopCheckout";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { useFormatMoney } from "@/utils/formatPrice";
 import { useCartStore } from "@/stores/cartStore";
 import { useProduct, useProducts } from "@/hooks/useProducts";
 import { useSavedItems, useToggleSavedItemMutation } from "@/hooks/useSavedItems";
@@ -26,6 +26,7 @@ const Intro = () => {
   const { id } = useParams({ strict: false });
   const navigate = useNavigate();
   const addToCart = useCartStore((state) => state.addToCart);
+  const formatMoney = useFormatMoney();
   const { data: products = [] } = useProducts();
   const cachedProduct = products.find((item) => item._id === id);
   const {
@@ -211,7 +212,7 @@ const Intro = () => {
 
             <div className="flex flex-wrap items-center justify-between gap-4">
               <Display size="md" tone="brand">
-                {formatShopCurrency(product.price)}
+                {formatMoney(product.price)}
               </Display>
               <div className="flex items-center gap-2">
                 <Button

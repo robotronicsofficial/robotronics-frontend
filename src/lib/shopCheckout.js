@@ -1,5 +1,4 @@
 import { hasShippableCommerceItems } from "./commerceItems";
-import { formatMoney } from "@/utils/formatPrice";
 
 const STORAGE_KEY = "shop_checkout";
 export const SHIPPING_COST = 500;
@@ -150,9 +149,6 @@ export const buildShopCheckoutIntentRequest = ({ checkout = {}, cart = [] } = {}
     note: normalizeCheckoutNote(checkout?.note),
   };
 };
-
-export const formatShopCurrency = (amount) =>
-  formatMoney(amount);
 
 export const calculateCartSummary = (cart = []) => {
   const subtotal = cart.reduce(

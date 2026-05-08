@@ -6,8 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FormInput, FormSelect } from "@/components/forms/FormControls";
 import { useProducts } from "@/hooks/useProducts";
+import { useFormatMoney } from "@/utils/formatPrice";
+
 const Search = () => {
   const navigate = useNavigate();
+  const formatMoney = useFormatMoney();
   const {
     data: products = [],
     isLoading: loading,
@@ -114,7 +117,7 @@ const Search = () => {
                     <p className="rounded-full bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                       {product?.category || "General"}
                     </p>
-                    <p className="text-sm font-semibold">PKR {Number(product?.price || 0).toLocaleString()}</p>
+                    <p className="text-sm font-semibold">{formatMoney(product?.price)}</p>
                   </div>
                   <h3 className="text-lg font-bold leading-snug">{product?.name || "Product"}</h3>
                   <p className="line-clamp-2 text-sm text-muted-foreground">

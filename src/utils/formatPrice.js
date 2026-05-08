@@ -1,11 +1,23 @@
-export const formatMoney = (pkrAmount) => {
+import {
+  getCurrencyConfig,
+  selectCurrencyCode,
+  useCurrencyStore,
+} from "@/stores/currencyStore";
+
+export const formatMoney = (pkrAmount, code = "PKR") => {
   const n = Number(pkrAmount) || 0;
+  const config = getCurrencyConfig(code);
+
   return new Intl.NumberFormat("en", {
     style: "currency",
-    currency: "PKR",
-    maximumFractionDigits: 0,
+    currency: config.code,
+    maximumFractionDigits: config.fractionDigits,
     minimumFractionDigits: 0,
-  }).format(n);
+  }).format(n * config.rate);
 };
 
-export const useFormatMoney = () => formatMoney;
+export const useFormatMoney = () => {
+  const code = useCurrencyStore(selectCurrencyCode);
+
+  return (amount) => formatMoney(amount, code);
+};

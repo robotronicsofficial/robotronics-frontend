@@ -14,11 +14,11 @@ import { useAuth } from "@/contexts/useAuth";
 import { getCommerceItemKey } from "@/lib/commerceItems";
 import {
   calculateCartSummary,
-  formatShopCurrency,
   loadShopCheckout,
   saveShopCheckout,
 } from "@/lib/shopCheckout";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 
 
@@ -26,6 +26,7 @@ const PENDING_CART_STORAGE_KEY = "robotronics:pendingCart";
 
 const ShopCartproductList = ({ onNext }) => {
   const cart = useCartStore(selectCart);
+  const formatMoney = useFormatMoney();
   const addToCart = useCartStore((state) => state.addToCart);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const removeItemEntirely = useCartStore((state) => state.removeItemEntirely);
@@ -173,7 +174,7 @@ const ShopCartproductList = ({ onNext }) => {
 
                     <div className="flex items-center gap-3">
                       <Text size="lg" weight="semibold">
-                        {formatShopCurrency(product.price)}
+                        {formatMoney(product.price)}
                       </Text>
                       <Button
                         type="button"
@@ -210,26 +211,26 @@ const ShopCartproductList = ({ onNext }) => {
           <div className="flex flex-col gap-3">
             <OrderSummaryLine
               label="Subtotal"
-              value={formatShopCurrency(summary.subtotal)}
+              value={formatMoney(summary.subtotal)}
               labelClassName="text-body-sm text-muted-foreground"
               valueClassName="text-body font-medium"
             />
             <OrderSummaryLine
               label="Discount (10%)"
-              value={`- ${formatShopCurrency(summary.discount)}`}
+              value={`- ${formatMoney(summary.discount)}`}
               labelClassName="text-body-sm text-muted-foreground"
               valueClassName="text-body-sm"
             />
             <OrderSummaryLine
               label="Shipping"
-              value={formatShopCurrency(summary.shipping)}
+              value={formatMoney(summary.shipping)}
               labelClassName="text-body-sm text-muted-foreground"
               valueClassName="text-body-sm"
             />
             <div className="border-t border-border pt-3">
               <OrderSummaryLine
                 label="Total"
-                value={formatShopCurrency(summary.total)}
+                value={formatMoney(summary.total)}
                 labelClassName="text-body-sm text-muted-foreground"
                 valueClassName="text-h5 font-semibold text-primary"
               />

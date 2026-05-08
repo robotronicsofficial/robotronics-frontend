@@ -6,6 +6,7 @@ import RangeSlider from "@/components/forms/RangeSlider";
 import { Button } from "@/components/ui/button";
 import { Eyebrow, Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { useFormatMoney } from "@/utils/formatPrice";
 
 const categories = [
   "Lego Robots",
@@ -54,6 +55,7 @@ const Shopfilter = ({
   onShippingChange,
   onCategoryChange,
 }) => {
+  const formatMoney = useFormatMoney();
   const [isOpenProducts, setIsOpenProducts] = useState(true);
   const [isOpenShipping, setIsOpenShipping] = useState(true);
   const [isOpenPrice, setIsOpenPrice] = useState(true);
@@ -135,7 +137,7 @@ const Shopfilter = ({
         />
         <div className="rounded-lg bg-muted p-3 text-center">
           <Text size="sm" weight="semibold">
-            PKR {priceRange[0].toLocaleString()} – PKR {priceRange[1].toLocaleString()}
+            {formatMoney(priceRange[0])} - {formatMoney(priceRange[1])}
           </Text>
         </div>
       </FilterSection>
