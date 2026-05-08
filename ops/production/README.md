@@ -1,33 +1,32 @@
 # Production rollout
 
-This repo should ship a built `build/` artifact to the VPS instead of rebuilding by hand on the box.
+Dokploy is the production source of truth for this app. GitHub Actions verifies the app, then calls the Dokploy API to deploy the configured production application.
 
-## Expected server layout
+## Live application
 
-- `/srv/robotronics/frontend/releases/<git-sha>/build`
-- `/srv/robotronics/frontend/current`
-
-`nginx` should point `robotronics.ai` at `/srv/robotronics/frontend/current` and proxy `/api/` to `127.0.0.1:8080`.
+- Service: `robotronics-frontend-wuilgh`
+- Public host: `robotronics.ai`
+- API path: same-origin `/api`
+- Router: Dokploy Traefik
 
 ## Required GitHub environment secrets
 
 Use the `production` environment instead of repo-wide secrets.
 
-- `PRODUCTION_SSH_HOST`
-- `PRODUCTION_SSH_PORT`
-- `PRODUCTION_SSH_USER`
-- `PRODUCTION_SSH_KEY`
+- `DOKPLOY_URL`
+- `DOKPLOY_API_KEY`
+- `DOKPLOY_APPLICATION_ID`
 
-## One-time server cutover
+## Deployment flow
 
-1. Create `/srv/robotronics/frontend/releases`.
-2. Update the nginx server block so its root is `/srv/robotronics/frontend/current`.
-3. Keep production same-origin with `VITE_BACKEND_URL=/api`, or leave it unset to use the built-in `/api` default.
-4. Use a frontend-only deploy user that can reload nginx without interactive sudo.
+1. Merge to `main`.
+2. GitHub Actions runs hygiene, install, lint, tests, and build.
+3. GitHub Actions calls `POST /api/application.deploy` on Dokploy.
+4. Dokploy builds and promotes the app.
 
-## Post-cutover checks
+## Production checks
 
-- `nginx -t`
 - open `https://robotronics.ai`
 - confirm API requests hit same-origin `/api/...`, not a stale Vercel backend
-- `readlink -f /srv/robotronics/frontend/current` should point at the newest deployed release
+- confirm `docker ps` shows `robotronics-frontend-wuilgh` healthy
+- confirm `dokploy-traefik` owns ports `80` and `443`

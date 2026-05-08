@@ -18,7 +18,7 @@ if ! grep -Eq '^build/?$' .gitignore; then
 fi
 
 if [ -e vercel.json ]; then
-  echo "vercel.json is stale for this VPS deployment path and must stay out of the repo."
+  echo "vercel.json is stale for this Dokploy deployment path and must stay out of the repo."
   exit 1
 fi
 
