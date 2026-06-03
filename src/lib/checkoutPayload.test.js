@@ -67,11 +67,15 @@ describe("checkout payload contract", () => {
     });
   });
 
-  it("reads persisted children from the canonical parent response", () => {
-    const children = [{ childCode: "P-5001-01" }];
+  it("reads persisted children from the checkout-scoped parent response", () => {
+    const checkoutChildren = [{ childCode: "P-5001-01" }];
+    const otherChildren = [{ childCode: "P-5001-99" }];
 
-    expect(getPersistedCheckoutChildren({ parent: { children } })).toBe(children);
-    expect(getPersistedCheckoutChildren({ children })).toEqual([]);
+    expect(getPersistedCheckoutChildren({
+      parent: { children: otherChildren },
+      checkoutChildren,
+    })).toBe(checkoutChildren);
+    expect(getPersistedCheckoutChildren({ parent: { children: otherChildren } })).toEqual([]);
   });
 
   it("extracts subscription child ids from persisted parent children", () => {
