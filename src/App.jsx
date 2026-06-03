@@ -21,6 +21,7 @@ import {
   COURSE_PATH,
   COURSE_PRODUCT_DETAIL_PATH,
   DASHBOARD_CHILD_PROFILE_PATH,
+  DASHBOARD_MY_PRODUCTS_PATH,
   LOGIN_PATH,
   PRODUCT_DETAIL_PATH,
   SCREEN_PATH,
@@ -68,7 +69,7 @@ const IServices = lazy(() => import("./pages/International/services"));
 const IHome = lazy(() => import("./pages/International/home"));
 const Screen = lazy(() => import("./pages/SplashScreen/screen"));
 const Search = lazy(() => import("@/components/site/search"));
-const MyRobort = lazy(() => import("./pages/Dashboard/myRobot"));
+const MyRobot = lazy(() => import("./pages/Dashboard/myRobot"));
 const JobApplicationForm = lazy(() => import("@/components/site/careers/CareerDetailPage/jobApplicationForm"));
 const ChildHome = lazy(() => import("./pages/ChildProtection/ChildHome"));
 const TermsHome = lazy(() => import("./pages/policies/TermsHome"));
@@ -234,7 +235,6 @@ const routeTree = rootRoute.addChildren([
   publicRoute("/BlogDetail/$id", BlogDetail),
   publicRoute(CONTACT_PATH, ContactUs),
   publicRoute("/404", Error),
-  publicRoute("/International/myRobot", MyRobort),
   publicRoute("/subscriptions", SubscriptionHome),
   publicRoute(CHECKOUT_PATH, CheckoutWizard),
   publicRoute("/for-schools", ForSchools),
@@ -256,6 +256,7 @@ const routeTree = rootRoute.addChildren([
     authRoute(SHOP_PAYMENT_PATH, ShippingService),
     authRoute(SHOP_REVIEW_PATH, Shipping),
     authRoute("/Dashboard/userInfo", UserInfo),
+    authRoute(DASHBOARD_MY_PRODUCTS_PATH, MyRobot),
     authRoute("/Dashboard/WishList", WishList),
     authRoute("/Dashboard/PaymentHistory", Payment),
     makeRedirectRoute("/Dashboard/PaymentDetails", "/Dashboard/PaymentHistory", authenticatedRoute),

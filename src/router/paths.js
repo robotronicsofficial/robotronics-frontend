@@ -11,3 +11,4 @@ export const COURSE_PATH = "/Course";
 export const PRODUCT_DETAIL_PATH = "/ProductDetailPage/$id";
 export const COURSE_PRODUCT_DETAIL_PATH = "/CoursesProduct/$id";
 export const DASHBOARD_CHILD_PROFILE_PATH = "/Dashboard/ChildProfile";
+export const DASHBOARD_MY_PRODUCTS_PATH = "/Dashboard/MyProducts";
