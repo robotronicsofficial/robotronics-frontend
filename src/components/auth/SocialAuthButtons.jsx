@@ -11,11 +11,49 @@ const SOCIAL_AUTH_PROVIDER_ICONS = {
   google,
 };
 
+const SOCIAL_AUTH_UNAVAILABLE_MESSAGE = "Social login is unavailable right now.";
+
+const buildVisibleProviders = (providers = []) => (
+  providers
+    .filter((provider) => provider.enabled)
+    .map((provider) => {
+      const icon = SOCIAL_AUTH_PROVIDER_ICONS[provider.provider];
+      if (!icon) {
+        throw new Error(`Unsupported social auth provider: ${provider.provider}`);
+      }
+
+      return {
+        ...provider,
+        icon,
+      };
+    })
+);
+
 const SocialAuthButtons = ({ redirectPath, className = "w-full" }) => {
-  const { data: socialAuthProviders = [] } = useSocialAuthProviders();
-  const visibleProviders = socialAuthProviders.filter(
-    (provider) => provider.enabled && SOCIAL_AUTH_PROVIDER_ICONS[provider.provider],
-  );
+  const {
+    data: socialAuthProviders,
+    isError,
+  } = useSocialAuthProviders();
+
+  if (isError) {
+    return (
+      <p className="text-center text-sm text-destructive" role="alert">
+        {SOCIAL_AUTH_UNAVAILABLE_MESSAGE}
+      </p>
+    );
+  }
+
+  let visibleProviders;
+
+  try {
+    visibleProviders = buildVisibleProviders(socialAuthProviders);
+  } catch {
+    return (
+      <p className="text-center text-sm text-destructive" role="alert">
+        {SOCIAL_AUTH_UNAVAILABLE_MESSAGE}
+      </p>
+    );
+  }
 
   if (!visibleProviders.length) {
     return null;
@@ -27,7 +65,7 @@ const SocialAuthButtons = ({ redirectPath, className = "w-full" }) => {
         <AuthSocialButton
           key={item.provider}
           className={className}
-          icon={SOCIAL_AUTH_PROVIDER_ICONS[item.provider]}
+          icon={item.icon}
           label={`Continue with ${item.label}`}
           onClick={() => startSocialLogin(item.authPath, redirectPath)}
         />
