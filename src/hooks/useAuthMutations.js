@@ -10,6 +10,7 @@ import {
 } from "../lib/auth";
 import { queryKeys } from "../lib/queryKeys";
 import { clearActiveChildSession } from "../utils/childSessionRequest";
+import { clearCustomerSessionState } from "../utils/customerSessionState";
 
 export const useVerifyEmailMutation = () =>
   useMutation({
@@ -34,6 +35,7 @@ export const useLogoutMutation = () => {
     mutationFn: logoutUser,
     onSettled: () => {
       clearActiveChildSession();
+      clearCustomerSessionState();
       queryClient.setQueryData(queryKeys.auth.user, null);
       queryClient.removeQueries({ queryKey: queryKeys.savedItems.all });
       queryClient.removeQueries({ queryKey: queryKeys.subscription.currentParentRoot });

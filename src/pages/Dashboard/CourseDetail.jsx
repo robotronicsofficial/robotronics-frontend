@@ -16,7 +16,6 @@ import { useParams } from "@tanstack/react-router";
 
 import video from "../../assets/videos/video-preview.mp4";
 import ReviewsComponent from "../../pages/subscriptions/SubscriptionTestimonials";
-import ChatSupport from "@/components/site/ChatSupport";
 import VideoPlayer from "@/components/site/VideoPlayer";
 import CenteredState from "@/components/layout/CenteredState";
 import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
@@ -301,14 +300,15 @@ const CourseDetail = () => {
         sectionIndex,
         answers,
       });
+      const { quiz } = responsePayload;
 
       setQuizResults((prev) => ({
         ...prev,
         [sectionIndex]: {
-          score: responsePayload?.quiz?.score ?? 0,
-          total: responsePayload?.quiz?.total ?? questions.length,
-          details: responsePayload?.quiz?.details || {},
-          passed: Boolean(responsePayload?.quiz?.passed),
+          score: quiz.score,
+          total: quiz.total,
+          details: quiz.details,
+          passed: Boolean(quiz.passed),
         },
       }));
       setQuizRetakes((prev) => ({ ...prev, [sectionIndex]: false }));
@@ -907,7 +907,6 @@ const CourseDetail = () => {
       </DialogShell>
 
       <ReviewsComponent />
-      <ChatSupport />
     </div>
   );
 };

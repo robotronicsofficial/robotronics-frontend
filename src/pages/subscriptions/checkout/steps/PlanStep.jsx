@@ -5,7 +5,7 @@ import { ChevronsRight } from "lucide-react";
 import {
   CHECKOUT_PATH,
   buildCheckoutSearch,
-} from "@/components/checkout/checkoutNav";
+} from "@/lib/checkoutFlow";
 import CheckoutShell from "@/components/checkout/CheckoutShell";
 import { BillingToggle } from "@/components/ui/billing-toggle";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { Highlight } from "@/components/ui/typography";
+import {
+  buildCheckoutPlanSelection,
+  getSubscriptionPlanPrice,
+} from "@/lib/subscriptionPlans";
 import { cn } from "@/lib/utils";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { usePlans } from "@/hooks/usePlans";
@@ -31,7 +35,7 @@ const PlanCardSkeleton = () => (
 
 const PlanOption = ({ plan, cycle, isSelected, onSelect }) => {
   const formatMoney = useFormatMoney();
-  const price = cycle === "annual" ? plan.yearlyPrice : plan.monthlyPrice;
+  const price = getSubscriptionPlanPrice(plan, cycle);
   const cycleSuffix = cycle === "annual" ? "/year" : "/month";
 
   return (
@@ -106,15 +110,7 @@ const PlanStep = () => {
   const isEmpty = !isLoading && plans.length === 0;
 
   const handleSelect = (plan) => {
-    const price = cycle === "annual" ? plan.yearlyPrice : plan.monthlyPrice;
-    setPlan({
-      planId: plan._id,
-      name: plan.planName,
-      price: Number(price || 0),
-      billingCycle: cycle,
-      courseAccess: plan.courseAccess,
-      maxQuizAttemptsPerDay: plan.maxQuizAttemptsPerDay,
-    });
+    setPlan(buildCheckoutPlanSelection(plan, cycle));
     navigate({ to: CHECKOUT_PATH, search: buildCheckoutSearch("kids") });
   };
 

@@ -1,4 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { fetchContactOptions } from "../lib/contactOptions";
+import { queryKeys } from "../lib/queryKeys";
 import {
   submitContactRequest,
   submitGiftCourseRequest,
@@ -10,6 +12,12 @@ import {
 export const useContactRequestMutation = () =>
   useMutation({
     mutationFn: submitContactRequest,
+  });
+
+export const useContactOptionsQuery = () =>
+  useQuery({
+    queryKey: queryKeys.contact.options,
+    queryFn: fetchContactOptions,
   });
 
 export const useSchoolLeadMutation = () =>

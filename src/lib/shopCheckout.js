@@ -1,14 +1,42 @@
-import { hasShippableCommerceItems } from "./commerceItems";
-
 const STORAGE_KEY = "shop_checkout";
-export const SHIPPING_COST = 500;
-export const DISCOUNT_RATE = 0.1;
+const PENDING_CART_STORAGE_KEY = "robotronics:pendingCart";
+export const EMPTY_SHOP_CART_QUOTE = Object.freeze({
+  items: [],
+  requiresShipping: false,
+  pricing: Object.freeze({
+    subtotal: 0,
+    discount: 0,
+    shipping: 0,
+    total: 0,
+  }),
+});
 
 const getStorage = () => (
   typeof window === "undefined" ? null : window.sessionStorage
 );
 
+const getPendingCartStorage = () => (
+  typeof window === "undefined" ? null : window.localStorage
+);
+
 const isBrowser = () => Boolean(getStorage());
+
+const EMPTY_CHECKOUT = Object.freeze({
+  ownerId: null,
+  customer: null,
+  address: null,
+  payment: null,
+  note: "",
+});
+
+const normalizeCheckoutOwnerId = (ownerId) => {
+  const normalizedOwnerId = String(ownerId || "").trim();
+  return normalizedOwnerId || null;
+};
+
+const writeShopCheckout = (checkout) => {
+  getStorage()?.setItem(STORAGE_KEY, JSON.stringify(checkout));
+};
 
 export const normalizeCheckoutNote = (note = "") => (
   typeof note === "string" ? note : ""
@@ -77,34 +105,38 @@ export const hasCheckoutPayment = (payment, { requiresShipping = true } = {}) =>
 
 export const loadShopCheckout = () => {
   if (!isBrowser()) {
-    return { customer: null, address: null, payment: null, note: "" };
+    return { ...EMPTY_CHECKOUT };
   }
 
   try {
     const rawValue = getStorage()?.getItem(STORAGE_KEY);
     if (!rawValue) {
-      return { customer: null, address: null, payment: null, note: "" };
+      return { ...EMPTY_CHECKOUT };
     }
 
     const parsedValue = JSON.parse(rawValue);
     return {
+      ownerId: normalizeCheckoutOwnerId(parsedValue?.ownerId),
       customer: parsedValue?.customer ? normalizeCheckoutCustomer(parsedValue.customer) : null,
       address: parsedValue?.address ? normalizeCheckoutAddress(parsedValue.address) : null,
       payment: parsedValue?.payment ? normalizeCheckoutPayment(parsedValue.payment) : null,
       note: normalizeCheckoutNote(parsedValue?.note),
     };
   } catch {
-    return { customer: null, address: null, payment: null, note: "" };
+    return { ...EMPTY_CHECKOUT };
   }
 };
 
 export const saveShopCheckout = (partialState = {}) => {
   if (!isBrowser()) {
-    return { customer: null, address: null, payment: null, note: "" };
+    return { ...EMPTY_CHECKOUT };
   }
 
   const currentState = loadShopCheckout();
   const nextState = {
+    ownerId: Object.prototype.hasOwnProperty.call(partialState, "ownerId")
+      ? normalizeCheckoutOwnerId(partialState.ownerId)
+      : currentState.ownerId,
     customer: Object.prototype.hasOwnProperty.call(partialState, "customer")
       ? (partialState.customer ? normalizeCheckoutCustomer(partialState.customer) : null)
       : currentState.customer,
@@ -119,7 +151,7 @@ export const saveShopCheckout = (partialState = {}) => {
       : currentState.note,
   };
 
-  getStorage()?.setItem(STORAGE_KEY, JSON.stringify(nextState));
+  writeShopCheckout(nextState);
   return nextState;
 };
 
@@ -131,40 +163,97 @@ export const clearShopCheckout = () => {
   getStorage()?.removeItem(STORAGE_KEY);
 };
 
-export const buildShopCheckoutIntentRequest = ({ checkout = {}, cart = [] } = {}) => {
-  const requiresShipping = hasShippableCommerceItems(cart);
+export const claimShopCheckoutOwner = (ownerId) => {
+  if (!isBrowser()) {
+    return { ...EMPTY_CHECKOUT };
+  }
 
+  const nextOwnerId = normalizeCheckoutOwnerId(ownerId);
+  if (!nextOwnerId) {
+    return loadShopCheckout();
+  }
+
+  const currentState = loadShopCheckout();
+  const nextState = currentState.ownerId && currentState.ownerId !== nextOwnerId
+    ? { ...EMPTY_CHECKOUT, ownerId: nextOwnerId }
+    : { ...currentState, ownerId: nextOwnerId };
+
+  writeShopCheckout(nextState);
+  return nextState;
+};
+
+export const loadPendingCartItems = () => {
+  const storage = getPendingCartStorage();
+  if (!storage) {
+    return [];
+  }
+
+  try {
+    const rawValue = storage.getItem(PENDING_CART_STORAGE_KEY);
+    if (!rawValue) {
+      return [];
+    }
+
+    const parsedValue = JSON.parse(rawValue);
+    return Array.isArray(parsedValue) ? parsedValue.filter(Boolean) : [];
+  } catch {
+    return [];
+  }
+};
+
+export const savePendingCartItems = (cart = []) => {
+  const storage = getPendingCartStorage();
+  if (!storage) {
+    return;
+  }
+
+  try {
+    storage.setItem(
+      PENDING_CART_STORAGE_KEY,
+      JSON.stringify(Array.isArray(cart) ? cart.filter(Boolean) : [])
+    );
+  } catch {
+    // The checkout can still continue; the cart just cannot be restored after sign-in.
+  }
+};
+
+export const clearPendingCartItems = () => {
+  const storage = getPendingCartStorage();
+  if (!storage) {
+    return;
+  }
+
+  storage.removeItem(PENDING_CART_STORAGE_KEY);
+};
+
+export const buildCommerceCartRequestItems = (cart = []) => (
+  (Array.isArray(cart) ? cart : [])
+    .map((item) => ({
+      itemType: item?.itemType || "",
+      itemId: item?.itemId || "",
+      quantity: Number(item?.quantity) || 0,
+    }))
+);
+
+export const buildShopCartQuoteRequest = ({ cart = [] } = {}) => ({
+  items: buildCommerceCartRequestItems(cart),
+});
+
+export const hasShopCartQuoteItems = (quote) => (
+  Array.isArray(quote?.items) && quote.items.length > 0
+);
+
+export const buildShopCheckoutIntentRequest = ({
+  checkout = {},
+  cart = [],
+  requiresShipping = false,
+} = {}) => {
   return {
     customer: normalizeCheckoutCustomer(checkout?.customer || {}),
     addressId: requiresShipping ? checkout?.address?.addressId || null : null,
     address: requiresShipping ? normalizeCheckoutAddress(checkout?.address || {}) : null,
     payment: normalizeCheckoutPayment(checkout?.payment || {}),
-    items: (Array.isArray(cart) ? cart : [])
-      .map((item) => ({
-        itemType: item?.itemType || "",
-        itemId: item?.itemId || "",
-        quantity: Number(item?.quantity) || 0,
-      }))
-      .filter((item) => item.itemType && item.itemId && item.quantity > 0),
+    items: buildCommerceCartRequestItems(cart),
     note: normalizeCheckoutNote(checkout?.note),
-  };
-};
-
-export const calculateCartSummary = (cart = []) => {
-  const subtotal = cart.reduce(
-    (runningTotal, item) => runningTotal + (Number(item?.price) || 0) * (Number(item?.quantity) || 0),
-    0
-  );
-  const discount = subtotal * DISCOUNT_RATE;
-  const requiresShipping = hasShippableCommerceItems(cart);
-  const shipping = requiresShipping ? SHIPPING_COST : 0;
-  const total = subtotal - discount + shipping;
-
-  return {
-    subtotal,
-    discount,
-    shipping,
-    total,
-    requiresShipping,
   };
 };

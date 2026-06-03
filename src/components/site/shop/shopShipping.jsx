@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "@tanstack/react-router";
 
 import CustomerOrder from "./customerOrder";
 import CustomerProduct from "./customerProduct";
-import OrderSummaryLine from "./OrderSummaryLine";
+import ShopOrderSummary from "./ShopOrderSummary";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,8 +12,8 @@ import { Heading, Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import {
   buildShopCheckoutIntentRequest,
-  calculateCartSummary,
   clearShopCheckout,
+  hasShopCartQuoteItems,
   hasCheckoutCustomer,
   hasCheckoutAddress,
   hasCheckoutPayment,
@@ -23,10 +23,14 @@ import {
   getCommerceItemKey,
   hasShippableCommerceItems,
 } from "@/lib/commerceItems";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
-import { useSubmitShopCheckoutIntentMutation } from "@/hooks/useShopOrders";
+import {
+  useShopCartQuoteQuery,
+  useSubmitShopCheckoutIntentMutation,
+} from "@/hooks/useShopOrders";
+import { LOGIN_PATH, SHOP_CUSTOMER_INFO_PATH, SHOP_PAYMENT_PATH } from "@/router/paths";
 
 const DetailRow = ({ label, value }) => (
   <div className="flex items-start gap-1.5 text-body-sm">
@@ -46,22 +50,25 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const [submitStatus, setSubmitStatus] = useState({ type: "", message: "" });
   const [submittedIntent, setSubmittedIntent] = useState(null);
   const submitShopCheckoutIntentMutation = useSubmitShopCheckoutIntentMutation();
-  const summary = calculateCartSummary(cart);
+  const quoteQuery = useShopCartQuoteQuery(cart);
+  const cartQuote = quoteQuery.data;
+  const quoteReady = Boolean(submittedIntent) || hasShopCartQuoteItems(cartQuote);
   const requiresShipping = submittedIntent
     ? hasShippableCommerceItems(submittedIntent.items)
-    : summary.requiresShipping;
+    : Boolean(cartQuote?.requiresShipping);
   const customerReady = hasCheckoutCustomer(checkout.customer);
   const addressReady = hasCheckoutAddress(checkout.address, { requiresShipping });
   const paymentReady = hasCheckoutPayment(checkout.payment, { requiresShipping });
-  const displayItems = submittedIntent?.items || cart;
-  const displaySummary = submittedIntent?.pricing || summary;
+  const hasBackendItems = Boolean(submittedIntent || cartQuote?.items);
+  const displayItems = hasBackendItems ? (submittedIntent?.items || cartQuote?.items || []) : cart;
+  const displaySummary = submittedIntent?.pricing || cartQuote?.pricing || null;
 
   const handleEditCustomer = () => {
     if (onEditCustomer) {
       onEditCustomer();
       return;
     }
-    navigate({ to: "/CustomerInfo" });
+    navigate({ to: SHOP_CUSTOMER_INFO_PATH });
   };
 
   const handleEditPayment = () => {
@@ -69,7 +76,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       onEditPayment();
       return;
     }
-    navigate({ to: "/ShippingService" });
+    navigate({ to: SHOP_PAYMENT_PATH });
   };
 
   const handleSubmitCheckoutIntent = async () => {
@@ -83,8 +90,16 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
     if (!currentUser) {
       navigate({
-        to: "/Login",
+        to: LOGIN_PATH,
         search: { redirect: location.href },
+      });
+      return;
+    }
+
+    if (!quoteReady || quoteQuery.isError) {
+      setSubmitStatus({
+        type: "error",
+        message: "We couldn't confirm current cart pricing. Please try again.",
       });
       return;
     }
@@ -103,13 +118,13 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
     try {
       const data = await submitShopCheckoutIntentMutation.mutateAsync({
-        ...buildShopCheckoutIntentRequest({ checkout, cart }),
+        ...buildShopCheckoutIntentRequest({ checkout, cart, requiresShipping }),
       });
 
-      setSubmittedIntent(data.checkoutIntent || null);
+      setSubmittedIntent(data.checkoutIntent);
       setSubmitStatus({
         type: "success",
-        message: data.message || "Checkout intent submitted successfully.",
+        message: data.message,
       });
       clearShopCheckout();
       clearCart();
@@ -288,13 +303,16 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                     <CustomerProduct
                       title={product.name}
                       item={product.quantity}
-                      price={formatMoney(product.price ?? product.unitPrice)}
+                      price={
+                        hasBackendItems
+                          ? formatMoney(product.price ?? product.unitPrice)
+                          : quoteQuery.isError
+                            ? "Unavailable"
+                            : "Updating..."
+                      }
                       priceLabel=""
                       imageClassName="object-cover h-20 w-24"
-                      image={resolveBackendAssetUrl(
-                        product?.image || product?.images?.[0],
-                        "https://via.placeholder.com/300x200",
-                      )}
+                      image={resolveCatalogImageUrl(product?.image || product?.images?.[0])}
                     />
                   </CardContent>
                 </Card>
@@ -312,32 +330,11 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         <Card>
           <CardContent className="flex flex-col gap-3">
             <Heading level={3} className="text-h5">Totals</Heading>
-            <OrderSummaryLine
-              label="Subtotal"
-              value={formatMoney(displaySummary.subtotal)}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body font-medium"
+            <ShopOrderSummary
+              pricing={displaySummary}
+              isLoading={!submittedIntent && cart.length > 0 && quoteQuery.isLoading}
+              isError={!submittedIntent && cart.length > 0 && quoteQuery.isError}
             />
-            <OrderSummaryLine
-              label="Discount (10%)"
-              value={`- ${formatMoney(displaySummary.discount)}`}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body-sm"
-            />
-            <OrderSummaryLine
-              label="Shipping"
-              value={formatMoney(displaySummary.shipping)}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body-sm"
-            />
-            <div className="border-t border-border pt-3">
-              <OrderSummaryLine
-                label="Total"
-                value={formatMoney(displaySummary.total)}
-                labelClassName="text-body-sm text-muted-foreground"
-                valueClassName="text-h5 font-semibold text-primary"
-              />
-            </div>
           </CardContent>
         </Card>
       </div>
@@ -347,7 +344,10 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           <CustomerOrder
             onNext={handleSubmitCheckoutIntent}
             buttonDisabled={
-              submitShopCheckoutIntentMutation.isPending || Boolean(submittedIntent)
+              submitShopCheckoutIntentMutation.isPending ||
+              Boolean(submittedIntent) ||
+              !quoteReady ||
+              quoteQuery.isError
             }
             buttonLabel={
               submittedIntent

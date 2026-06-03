@@ -1,17 +1,20 @@
 import { fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
-export const normalizeCoursesPayload = (payload) => {
-  if (Array.isArray(payload?.courses)) {
-    return payload.courses;
-  }
+export const readCourses = (payload) => (
+  readDataEnvelope(payload, Array.isArray, "Invalid courses response")
+);
 
-  return Array.isArray(payload) ? payload : [];
-};
+export const readCourse = (payload) => (
+  readDataEnvelope(payload, isRecord, "Invalid course response")
+);
 
 export const fetchCourses = async () => {
-  const payload = await fetchBackendJson("/get-courses");
-  return normalizeCoursesPayload(payload);
+  const payload = await fetchBackendJson("/courses");
+  return readCourses(payload);
 };
 
-export const fetchCourseById = (courseId) =>
-  fetchBackendJson(`/coursesById/${courseId}`);
+export const fetchCourseById = async (courseId) => {
+  const payload = await fetchBackendJson(`/courses/${courseId}`);
+  return readCourse(payload);
+};

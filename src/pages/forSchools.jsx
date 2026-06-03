@@ -18,6 +18,7 @@ import { Display, Eyebrow, Heading, Highlight, Text } from "@/components/ui/typo
 import { FormInput, FormSelect, FormTextarea } from "@/components/forms/FormControls";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { useSchoolLeadMutation } from "@/hooks/useIntake";
+import { SCHOOLS_EMAIL } from "@/lib/brandContact";
 import { cn } from "@/lib/utils";
 
 const ROLES = [
@@ -117,9 +118,9 @@ const ForSchools = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await submitLead.mutateAsync(form);
+      const result = await submitLead.mutateAsync(form);
       setSubmitted(true);
-      toast.success("We'll be in touch within a business day.");
+      toast.success(result.message);
     } catch (error) {
       toast.error(error.message || "Something went wrong. Please try again.");
     }
@@ -237,10 +238,10 @@ const ForSchools = () => {
                     <Text size="xs" tone="muted">
                       Email{" "}
                       <a
-                        href="mailto:schools@robotronics.com"
+                        href={`mailto:${SCHOOLS_EMAIL}`}
                         className="font-semibold text-foreground underline underline-offset-4"
                       >
-                        schools@robotronics.com
+                        {SCHOOLS_EMAIL}
                       </a>{" "}
                       with two windows that suit you.
                     </Text>

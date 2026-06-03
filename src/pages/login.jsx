@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 
-import facebook from "../assets/images/Facebooklogo.svg";
-import google from "../assets/images/Googlelogo.svg";
 import AuthShell from "@/components/auth/AuthShell";
-import AuthSocialButton from "@/components/auth/AuthSocialButton";
 import PasswordVisibilityButton from "@/components/auth/PasswordVisibilityButton";
+import SocialAuthButtons from "@/components/auth/SocialAuthButtons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -14,15 +12,13 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Display, Text } from "@/components/ui/typography";
 import { useAuth } from "../contexts/useAuth";
-import { resolveBackendUrl } from "../lib/api";
 import { useRequestPasswordResetMutation } from "../hooks/useAuthMutations";
 import {
-  buildAuthRedirectSearch,
-  buildAuthRedirectQuery,
   consumePostAuthRedirect,
+  buildAuthRedirectSearch,
   getSafeRedirectPath,
-  savePostAuthRedirect,
 } from "../utils/authRedirect";
+import { LOGIN_PATH, SIGNUP_PATH } from "@/router/paths";
 
 const FieldLabel = ({ htmlFor, children, action }) => (
   <div className="flex items-center justify-between">
@@ -51,7 +47,7 @@ const Login = () => {
       const nextRedirectPath = redirectPath || consumePostAuthRedirect();
       toast.success("Your email has been verified. Sign in to continue.");
       navigate({
-        to: "/Login",
+        to: LOGIN_PATH,
         search: buildAuthRedirectSearch(nextRedirectPath),
         replace: true,
       });
@@ -90,11 +86,6 @@ const Login = () => {
     } catch (err) {
       setError(err.message);
     }
-  };
-
-  const handleSocialLogin = (provider) => {
-    if (redirectPath) savePostAuthRedirect(redirectPath);
-    window.location.assign(resolveBackendUrl(`/auth/${provider}${buildAuthRedirectQuery(redirectPath)}`));
   };
 
   if (isAuthLoading) {
@@ -157,20 +148,7 @@ const Login = () => {
         <Text tone="muted">Sign in to your Robotronics.ai account.</Text>
       </header>
 
-      <div className="flex flex-col gap-3">
-        <AuthSocialButton
-          className="w-full"
-          icon={facebook}
-          label="Continue with Facebook"
-          onClick={() => handleSocialLogin("facebook")}
-        />
-        <AuthSocialButton
-          className="w-full"
-          icon={google}
-          label="Continue with Google"
-          onClick={() => handleSocialLogin("google")}
-        />
-      </div>
+      <SocialAuthButtons redirectPath={redirectPath} />
 
       <div className="flex items-center gap-3">
         <Separator className="flex-1" />
@@ -253,7 +231,7 @@ const Login = () => {
           variant="outline"
           className="w-full"
           onClick={() =>
-            navigate({ to: "/Signup", search: buildAuthRedirectSearch(redirectPath) })
+            navigate({ to: SIGNUP_PATH, search: buildAuthRedirectSearch(redirectPath) })
           }
         >
           Create an account

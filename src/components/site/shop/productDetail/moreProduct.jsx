@@ -7,38 +7,23 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import {
-  COMMERCE_ITEM_TYPES,
-  createCourseCommerceItem,
   createProductCommerceItem,
   getCommerceItemKey,
   getCommerceItemRoute,
 } from "@/lib/commerceItems";
-import { COURSE_PATH } from "@/router/paths";
+import { SHOP_PATH } from "@/router/paths";
 import { cn } from "@/lib/utils";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { useFormatMoney } from "@/utils/formatPrice";
-import { useCourses } from "@/hooks/useCourses";
 import { useProducts } from "@/hooks/useProducts";
 
-const RELATED_ITEM_CONFIG = {
-  [COMMERCE_ITEM_TYPES.product]: {
-    browsePath: "/shop",
-    browseLabel: "Browse the store",
-    emptyLabel: "No other products are available right now.",
-    subtitle: "Top selling products",
-    loadingLabel: "Loading related products…",
-    errorLabel: "Failed to load related products",
-    createItem: createProductCommerceItem,
-  },
-  [COMMERCE_ITEM_TYPES.course]: {
-    browsePath: COURSE_PATH,
-    browseLabel: "Browse courses",
-    emptyLabel: "No other courses are available right now.",
-    subtitle: "Top selling courses",
-    loadingLabel: "Loading related courses…",
-    errorLabel: "Failed to load related courses",
-    createItem: createCourseCommerceItem,
-  },
+const RELATED_PRODUCTS_CONFIG = {
+  browsePath: SHOP_PATH,
+  browseLabel: "Browse the store",
+  emptyLabel: "No other products are available right now.",
+  subtitle: "Top selling products",
+  loadingLabel: "Loading related products…",
+  errorLabel: "Failed to load related products",
 };
 
 const RelatedItemsMessage = ({ children, tone = "default" }) => (
@@ -57,25 +42,27 @@ RelatedItemsMessage.propTypes = {
   tone: PropTypes.oneOf(["default", "error"]),
 };
 
-const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
+const MoreProduct = () => {
   const navigate = useNavigate();
   const formatMoney = useFormatMoney();
   const { id } = useParams({ strict: false });
-  const config = RELATED_ITEM_CONFIG[itemType] || RELATED_ITEM_CONFIG.product;
-  const productQuery = useProducts();
-  const courseQuery = useCourses();
-  const query = itemType === COMMERCE_ITEM_TYPES.course ? courseQuery : productQuery;
+  const config = RELATED_PRODUCTS_CONFIG;
+  const query = useProducts();
   const loading = query.isLoading;
   const error = query.error;
   const items = useMemo(
     () =>
       (query.data || [])
-        .map((entry) => config.createItem(entry))
+        .map((entry) => createProductCommerceItem(entry))
         .filter(Boolean)
         .filter((entry) => entry.itemId !== id),
-    [config, id, query.data],
+    [id, query.data],
   );
   const topThree = useMemo(() => items.slice(0, 3), [items]);
+  const openItem = (item) => {
+    const route = getCommerceItemRoute(item);
+    if (route) navigate(route);
+  };
 
   return (
     <section className="bg-background py-20 md:py-24">
@@ -126,15 +113,12 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                 <button
                   key={getCommerceItemKey(item) || index}
                   type="button"
-                  onClick={() => navigate({ to: getCommerceItemRoute(item) })}
+                  onClick={() => openItem(item)}
                   className="flex cursor-pointer flex-col gap-4 overflow-hidden rounded-xl border border-border bg-card p-0 text-left transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-lg"
                 >
                   <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
                     <img
-                      src={resolveBackendAssetUrl(
-                        item?.images?.[0],
-                        "https://via.placeholder.com/300x200",
-                      )}
+                      src={resolveCatalogImageUrl(item?.images?.[0])}
                       alt={item?.name || "Item"}
                       className="h-full w-full object-cover"
                       loading="lazy"
@@ -157,10 +141,6 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
       </Container>
     </section>
   );
-};
-
-MoreProduct.propTypes = {
-  itemType: PropTypes.oneOf(Object.values(COMMERCE_ITEM_TYPES)),
 };
 
 export default MoreProduct;

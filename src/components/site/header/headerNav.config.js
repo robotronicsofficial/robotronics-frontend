@@ -1,4 +1,4 @@
-import { CART_PATH, CONTACT_PATH, COURSE_PATH } from "@/router/paths";
+import { CART_PATH, CONTACT_PATH, COURSE_PATH, SHOP_PATH } from "@/router/paths";
 
 /**
  * Single source of truth for the marketing site navigation.
@@ -9,7 +9,7 @@ export const PRIMARY_NAV = [
   { to: COURSE_PATH, label: "Courses" },
   { to: "/subscriptions", label: "Plans" },
   { to: "/for-schools", label: "For schools" },
-  { to: "/shop", label: "Shop" },
+  { to: SHOP_PATH, label: "Shop" },
 ];
 
 export const RESOURCES_NAV = {

@@ -1,4 +1,5 @@
 import { fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
 const JOBS_PATH = "/jobs";
 
@@ -7,9 +8,23 @@ const isMissingSpecificJob = (error) => {
   return /job/i.test(message) && /not found/i.test(message);
 };
 
-export const fetchJobs = () => fetchBackendJson(JOBS_PATH);
+export const readJobs = (payload) => (
+  readDataEnvelope(payload, Array.isArray, "Invalid jobs response")
+);
 
-export const fetchJobById = (jobId) => fetchBackendJson(`${JOBS_PATH}/${jobId}`);
+export const readJob = (payload) => (
+  readDataEnvelope(payload, isRecord, "Invalid job response")
+);
+
+export const fetchJobs = async () => {
+  const payload = await fetchBackendJson(JOBS_PATH);
+  return readJobs(payload);
+};
+
+export const fetchJobById = async (jobId) => {
+  const payload = await fetchBackendJson(`${JOBS_PATH}/${jobId}`);
+  return readJob(payload);
+};
 
 export const getJobsErrorMessage = (error, { detail = false } = {}) => {
   if (error?.status === 404 && isMissingSpecificJob(error)) {

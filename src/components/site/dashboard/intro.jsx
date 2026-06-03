@@ -10,10 +10,10 @@ const PATH_LABELS = {
   WishList: "Wishlist",
   PaymentHistory: "Payment history",
   ChildProfile: "Child profiles",
+  MyProducts: "My products",
   courseDetail: "Course",
   ProgressCertificate: "Progress & certificates",
   International: "International",
-  myRobot: "My products",
 };
 
 const prettify = (segment) => {

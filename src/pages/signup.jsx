@@ -6,12 +6,10 @@ import "react-phone-number-input/style.css";
 import PropTypes from "prop-types";
 import { Check, GraduationCap, Users, X } from "lucide-react";
 
-import facebook from "../assets/images/Facebooklogo.svg";
-import google from "../assets/images/Googlelogo.svg";
 import AuthShell from "@/components/auth/AuthShell";
-import AuthSocialButton from "@/components/auth/AuthSocialButton";
 import PasswordVisibilityButton from "@/components/auth/PasswordVisibilityButton";
 import { getPasswordInputClassName } from "@/components/auth/passwordInputClass";
+import SocialAuthButtons from "@/components/auth/SocialAuthButtons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -19,7 +17,6 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import { Display, Text } from "@/components/ui/typography";
-import { resolveBackendUrl } from "../lib/api";
 import { useRegisterMutation } from "../hooks/useAuthMutations";
 import {
   getPasswordValidationState,
@@ -27,12 +24,12 @@ import {
   PASSWORD_POLICY_MESSAGE,
 } from "../utils/passwordPolicy";
 import {
-  buildAuthRedirectQuery,
   buildAuthRedirectSearch,
   getSafeRedirectPath,
   savePostAuthRedirect,
 } from "../utils/authRedirect";
 import { cn } from "@/lib/utils";
+import { LOGIN_PATH } from "@/router/paths";
 
 const RequirementCheck = ({ isValid, text }) => (
   <div className="flex items-center gap-2">
@@ -202,11 +199,6 @@ const Signup = () => {
     }
   };
 
-  const handleSocialLogin = (provider) => {
-    if (redirectPath) savePostAuthRedirect(redirectPath);
-    window.location.assign(resolveBackendUrl(`/auth/${provider}${buildAuthRedirectQuery(redirectPath)}`));
-  };
-
   if (role === "school") {
     return (
       <AuthShell>
@@ -255,20 +247,7 @@ const Signup = () => {
 
       <RolePicker value={role} onChange={setRole} />
 
-      <div className="flex flex-col gap-3">
-        <AuthSocialButton
-          className="w-full"
-          icon={facebook}
-          label="Continue with Facebook"
-          onClick={() => handleSocialLogin("facebook")}
-        />
-        <AuthSocialButton
-          className="w-full"
-          icon={google}
-          label="Continue with Google"
-          onClick={() => handleSocialLogin("google")}
-        />
-      </div>
+      <SocialAuthButtons redirectPath={redirectPath} />
 
       <div className="flex items-center gap-3">
         <Separator className="flex-1" />
@@ -446,7 +425,7 @@ const Signup = () => {
       <Text tone="muted" size="sm" className="text-center">
         Already have an account?{" "}
         <Link
-          to="/Login"
+          to={LOGIN_PATH}
           search={buildAuthRedirectSearch(redirectPath)}
           className="text-foreground underline underline-offset-4"
         >

@@ -5,14 +5,21 @@ import { BrandIcon } from "@/components/ui/brand-icons";
 import { Container } from "@/components/ui/container";
 import { Eyebrow, Text } from "@/components/ui/typography";
 import { SectionInverse } from "@/components/layout/SectionInverse";
+import {
+  CONTACT_ADDRESS,
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  CONTACT_PHONE_HREF,
+  SOCIAL_LINKS,
+} from "@/lib/brandContact";
 import { cn } from "@/lib/utils";
-import { CONTACT_PATH } from "@/router/paths";
+import { CONTACT_PATH, COURSE_PATH, SHOP_PATH } from "@/router/paths";
 
 const QUICK_LINKS = [
   { label: "About", to: "/aboutUs" },
   { label: "Subscriptions", to: "/subscriptions" },
-  { label: "Courses", to: "/Course" },
-  { label: "Shop", to: "/shop" },
+  { label: "Courses", to: COURSE_PATH },
+  { label: "Shop", to: SHOP_PATH },
   { label: "Blog", to: "/Blog" },
   { label: "Careers", to: "/CareerJob" },
 ];
@@ -24,34 +31,6 @@ const RESOURCE_LINKS = [
   { label: "Terms & conditions", to: "/TermsConditions" },
   { label: "Privacy policy", to: "/PrivacyPolicy" },
   { label: "Refund policy", to: "/RefundPolicy" },
-];
-
-const SOCIALS = [
-  {
-    href: "https://www.facebook.com/robotronicspakistan/",
-    brand: "facebook",
-    label: "Robotronics on Facebook",
-  },
-  {
-    href: "https://www.instagram.com/robotronicspk/?hl=en",
-    brand: "instagram",
-    label: "Robotronics on Instagram",
-  },
-  {
-    href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
-    brand: "linkedin",
-    label: "Robotronics on LinkedIn",
-  },
-  {
-    href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
-    brand: "youtube",
-    label: "Robotronics on YouTube",
-  },
-  {
-    href: "https://wa.me/message/TKZZPIE2A34UM1",
-    brand: "whatsapp",
-    label: "Robotronics on WhatsApp",
-  },
 ];
 
 const linkClass = "text-background/70 transition-colors hover:text-primary";
@@ -80,23 +59,23 @@ const ContactColumn = () => (
         <span className="block text-caption uppercase tracking-wide text-background/45">
           Email
         </span>
-        <a className={linkClass} href="mailto:support@robotronicsofficial.com">
-          support@robotronicsofficial.com
+        <a className={linkClass} href={`mailto:${CONTACT_EMAIL}`}>
+          {CONTACT_EMAIL}
         </a>
       </li>
       <li>
         <span className="block text-caption uppercase tracking-wide text-background/45">
           Phone
         </span>
-        <a className={linkClass} href="tel:+923207626842">
-          +92 320 7626 842
+        <a className={linkClass} href={CONTACT_PHONE_HREF}>
+          {CONTACT_PHONE}
         </a>
       </li>
       <li>
         <span className="block text-caption uppercase tracking-wide text-background/45">
           Office
         </span>
-        Phase-4, DHA, Lahore, Pakistan
+        {CONTACT_ADDRESS}
       </li>
     </ul>
   </div>
@@ -109,7 +88,7 @@ const Brand = () => (
     className="inline-flex items-center gap-2.5 text-background transition-opacity hover:opacity-80"
   >
     <img src={logoMark} alt="" aria-hidden="true" className="size-8 shrink-0" />
-    <span className="text-h4 font-semibold tracking-tight">Robotronics</span>
+    <span className="text-h4 font-semibold tracking-tight">Robotronics.ai</span>
   </Link>
 );
 
@@ -126,13 +105,13 @@ const Footer = () => (
           <div className="mt-2 flex flex-col gap-2">
             <Eyebrow className="text-background/55">Follow along</Eyebrow>
             <ul className="flex flex-wrap gap-2">
-              {SOCIALS.map(({ href, brand, label }) => (
+              {SOCIAL_LINKS.filter(({ brand }) => brand !== "twitter").map(({ href, brand, label }) => (
                 <li key={brand}>
                   <a
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={label}
+                    aria-label={`Robotronics on ${label}`}
                     className="grid size-9 place-items-center rounded-full border border-background/15 text-background/70 transition-colors hover:border-primary hover:text-primary"
                   >
                     <BrandIcon brand={brand} />

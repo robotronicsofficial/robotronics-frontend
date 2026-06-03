@@ -1,5 +1,14 @@
 export const CART_PATH = "/cart";
+export const SHOP_PATH = "/shop";
+export const SHOP_CUSTOMER_INFO_PATH = "/CustomerInfo";
+export const SHOP_PAYMENT_PATH = "/ShippingService";
+export const SHOP_REVIEW_PATH = "/Shipping";
 export const CONTACT_PATH = "/contact-us";
+export const LOGIN_PATH = "/Login";
+export const SIGNUP_PATH = "/Signup";
 export const SCREEN_PATH = "/Screen";
 export const COURSE_PATH = "/Course";
+export const PRODUCT_DETAIL_PATH = "/ProductDetailPage/$id";
+export const COURSE_PRODUCT_DETAIL_PATH = "/CoursesProduct/$id";
 export const DASHBOARD_CHILD_PROFILE_PATH = "/Dashboard/ChildProfile";
+export const DASHBOARD_MY_PRODUCTS_PATH = "/Dashboard/MyProducts";

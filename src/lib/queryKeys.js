@@ -1,5 +1,6 @@
 export const queryKeys = {
   auth: {
+    socialProviders: ["auth", "social-providers"],
     user: ["auth", "user"],
   },
   blogs: {
@@ -17,9 +18,13 @@ export const queryKeys = {
   childSession: {
     verify: (childId, sessionId) => ["child-session", childId, sessionId, "verify"],
   },
+  contact: {
+    options: ["contact", "options"],
+  },
   courses: {
     all: ["courses"],
     detail: (courseId) => ["courses", courseId],
+    categories: ["courses", "categories"],
   },
   jobs: {
     all: ["jobs"],
@@ -30,12 +35,16 @@ export const queryKeys = {
   },
   products: {
     all: ["products"],
+    categories: ["products", "categories"],
     detail: (productId) => ["products", productId],
     related: (scope) => ["products", "related", scope],
   },
   savedItems: {
     all: ["saved-items"],
     user: (userId) => ["saved-items", userId],
+  },
+  shop: {
+    cartQuote: (items) => ["shop", "cart-quote", items],
   },
   services: {
     all: ["services"],

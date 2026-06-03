@@ -6,7 +6,12 @@ import { Container } from "@/components/ui/container";
 import { Heading, Text } from "@/components/ui/typography";
 import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdown";
 import { PlanCard } from "@/components/marketing/PlanCard";
+import {
+  getAnnualSavingsPercent,
+  getSubscriptionPlanPricing,
+} from "@/lib/subscriptionPlans";
 import { cn } from "@/lib/utils";
+import { usePlans } from "@/hooks/usePlans";
 const SCHOOLS_PATH = "/for-schools";
 
 const AUDIENCES = {
@@ -15,27 +20,7 @@ const AUDIENCES = {
     heading: "One plan. Every skill.",
     description:
       "Give your child the skills of tomorrow — today. From AI to entrepreneurship, everything in one platform.",
-    savingsLabel: "Save 60%",
     layout: "single",
-    plans: [
-      {
-        name: "All-in-One Learning Plan",
-        description: "One subscription. Every future skill your child needs.",
-        pricing: { monthly: 2499, annual: 11988 },
-        features: [
-          "Access to 30+ future skills (AI, Coding, Robotics, Freelancing)",
-          "Learn 2 courses at a time",
-          "AI trainer chat support",
-          "AI quizzes & personalized feedback",
-          "Project code for every lecture",
-          "International e-certificates",
-          "Webinars & community access",
-          "Works on mobile, tablet, and desktop",
-        ],
-        cta: { label: "Start Subscription", to: "/subscriptions" },
-        tone: "tinted",
-      },
-    ],
   },
   school: {
     label: "For schools",
@@ -133,7 +118,32 @@ AudienceToggle.propTypes = {
 export const PricingSection = () => {
   const [audience, setAudience] = useState("parent");
   const [cycle, setCycle] = useState("annual");
+  const {
+    data: subscriptionPlans = [],
+    error: subscriptionPlansError,
+    isLoading: isLoadingSubscriptionPlans,
+  } = usePlans();
   const config = AUDIENCES[audience];
+  const parentPlan = subscriptionPlans[0] || null;
+  const annualSavingsPercent = getAnnualSavingsPercent(parentPlan);
+  const plans = audience === "parent" && parentPlan
+    ? [
+        {
+          name: parentPlan.planName,
+          description: parentPlan.description,
+          pricing: getSubscriptionPlanPricing(parentPlan),
+          features: parentPlan.features || [],
+          cta: { label: "Start Subscription", to: "/subscriptions" },
+          tone: "tinted",
+        },
+      ]
+    : config.plans || [];
+  const savingsLabel = audience === "parent"
+    ? (annualSavingsPercent ? `Save ${annualSavingsPercent}%` : "Annual billing")
+    : config.savingsLabel;
+  const showParentPlanState = audience === "parent" && (
+    isLoadingSubscriptionPlans || subscriptionPlansError || !parentPlan
+  );
 
   return (
     <section className="bg-muted/40 py-20 md:py-28">
@@ -157,7 +167,7 @@ export const PricingSection = () => {
           <BillingToggle
             value={cycle}
             onChange={setCycle}
-            savingsLabel={config.savingsLabel}
+            savingsLabel={savingsLabel}
             className="mt-2"
           />
           {cycle === "annual" && <AnnualOfferCountdown />}
@@ -171,7 +181,17 @@ export const PricingSection = () => {
               : "max-w-xl grid-cols-1",
           )}
         >
-          {config.plans.map((plan) => (
+          {showParentPlanState ? (
+            <div className="rounded-xl border border-border bg-card p-8 text-center">
+              <Text tone="muted">
+                {subscriptionPlansError
+                  ? "We couldn't load current subscription pricing."
+                  : isLoadingSubscriptionPlans
+                    ? "Loading current subscription pricing..."
+                    : "Subscription pricing is not configured yet."}
+              </Text>
+            </div>
+          ) : plans.map((plan) => (
             <PlanCard
               key={plan.name}
               cycle={cycle}

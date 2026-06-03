@@ -1,3 +1,8 @@
+import {
+  COURSE_PRODUCT_DETAIL_PATH,
+  PRODUCT_DETAIL_PATH,
+} from "@/router/paths";
+
 export const COMMERCE_ITEM_TYPES = Object.freeze({
   product: "product",
   course: "course",
@@ -12,23 +17,62 @@ const trimString = (value) => (
   typeof value === "string" ? value.trim() : ""
 );
 
-const normalizeImages = (payload = {}) => {
-  if (Array.isArray(payload.images)) {
-    return payload.images.filter(Boolean);
+const normalizeImageList = (images) => {
+  if (!Array.isArray(images)) {
+    return [];
   }
 
-  const image = trimString(payload.image) || trimString(payload.thumbnail);
-  return image ? [image] : [];
+  return images.map(trimString).filter(Boolean);
+};
+
+const createCommerceCartItem = ({
+  itemType,
+  itemId,
+  name,
+  description = "",
+  price,
+  category = null,
+  images = [],
+  fulfillmentType,
+  quantity = 1,
+}) => {
+  const normalizedItemId = trimString(itemId);
+
+  if (!normalizedItemId) {
+    return null;
+  }
+
+  return {
+    itemType,
+    itemId: normalizedItemId,
+    name: trimString(name) || "Item",
+    description: trimString(description),
+    price: Number(price) || 0,
+    category,
+    images: normalizeImageList(images),
+    fulfillmentType,
+    quantity: Number(quantity) || 1,
+  };
 };
 
 export const getCommerceItemKey = (item = {}) => (
   `${item.itemType}:${item.itemId}`
 );
 
+export const getProductDetailRoute = (productId) => {
+  const id = trimString(productId);
+  return id ? { to: PRODUCT_DETAIL_PATH, params: { id } } : null;
+};
+
+export const getCourseDetailRoute = (courseId) => {
+  const id = trimString(courseId);
+  return id ? { to: COURSE_PRODUCT_DETAIL_PATH, params: { id } } : null;
+};
+
 export const getCommerceItemRoute = (item = {}) => (
   item.itemType === COMMERCE_ITEM_TYPES.course
-    ? `/CoursesProduct/${item.itemId}`
-    : `/ProductDetailPage/${item.itemId}`
+    ? getCourseDetailRoute(item.itemId)
+    : getProductDetailRoute(item.itemId)
 );
 
 export const isShippableCommerceItem = (item = {}) => (
@@ -40,53 +84,50 @@ export const hasShippableCommerceItems = (items = []) => (
 );
 
 export const createProductCommerceItem = (product = {}) => {
-  const itemId = trimString(product.itemId ?? product._id ?? product.id);
-
-  if (!itemId) {
-    return null;
-  }
-
-  return {
+  return createCommerceCartItem({
     itemType: COMMERCE_ITEM_TYPES.product,
-    itemId,
-    name: product.name ?? "Product",
-    description: product.description ?? "",
-    price: Number(product.price) || 0,
+    itemId: product._id,
+    name: product.name,
+    description: product.description,
+    price: product.price,
     category: product.category ?? null,
-    images: normalizeImages(product),
+    images: product.images,
     fulfillmentType: COMMERCE_FULFILLMENT_TYPES.shipping,
-    quantity: Number(product.quantity) || 1,
-  };
+    quantity: product.quantity,
+  });
 };
 
 export const createCourseCommerceItem = (course = {}) => {
-  const itemId = trimString(course.itemId ?? course._id ?? course.id);
-
-  if (!itemId) {
-    return null;
-  }
-
-  return {
+  return createCommerceCartItem({
     itemType: COMMERCE_ITEM_TYPES.course,
-    itemId,
-    name: course.name ?? course.title ?? "Course",
-    description: course.description ?? "",
-    price: Number(course.price) || 0,
+    itemId: course._id,
+    name: course.title,
+    description: course.description,
+    price: course.price,
     category: course.category ?? null,
-    images: normalizeImages(course),
+    images: trimString(course.thumbnail) ? [course.thumbnail] : [],
     fulfillmentType: COMMERCE_FULFILLMENT_TYPES.digital,
-    quantity: Number(course.quantity) || 1,
-  };
+    quantity: course.quantity,
+  });
 };
 
 export const normalizeCommerceCartItem = (item = {}) => {
-  if (item.itemType === COMMERCE_ITEM_TYPES.product) {
-    return createProductCommerceItem(item);
+  if (
+    item.itemType !== COMMERCE_ITEM_TYPES.product &&
+    item.itemType !== COMMERCE_ITEM_TYPES.course
+  ) {
+    return null;
   }
 
-  if (item.itemType === COMMERCE_ITEM_TYPES.course) {
-    return createCourseCommerceItem(item);
-  }
-
-  return null;
+  return createCommerceCartItem({
+    itemType: item.itemType,
+    itemId: item.itemId,
+    name: item.name,
+    description: item.description,
+    price: item.price,
+    category: item.category ?? null,
+    images: item.images,
+    fulfillmentType: item.fulfillmentType,
+    quantity: item.quantity,
+  });
 };

@@ -4,15 +4,8 @@ import CourseProduct from "@/components/site/course/courseProduct";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { Container } from "@/components/ui/container";
 import { Display, Highlight, Text } from "@/components/ui/typography";
-import { useCourses } from "@/hooks/useCourses";
+import { useCourseCategories, useCourses } from "@/hooks/useCourses";
 import { cn } from "@/lib/utils";
-
-const FILTERS = [
-  { label: "All", value: "" },
-  { label: "Lego WeDo 2.0", value: "Lego WeDo 2.0" },
-  { label: "Lego Mindstorms EV3", value: "Lego Mindstorms EV3" },
-  { label: "Arduino-based robots", value: "Arduino based Robots" },
-];
 
 const FilterChip = ({ active, onClick, children }) => (
   <button
@@ -32,7 +25,16 @@ const FilterChip = ({ active, onClick, children }) => (
 
 const Courses = () => {
   const { data: courses = [], isLoading } = useCourses();
+  const { data: courseCategories = [] } = useCourseCategories();
   const [filter, setFilter] = useState("");
+
+  const filters = useMemo(
+    () => [
+      { label: "All", value: "" },
+      ...courseCategories.map((category) => ({ label: category, value: category })),
+    ],
+    [courseCategories],
+  );
 
   const visibleCourses = useMemo(
     () => (filter ? courses.filter((c) => c.category === filter) : courses),
@@ -55,7 +57,7 @@ const Courses = () => {
       <section className="bg-background pb-24">
         <Container size="wide">
           <div className="flex flex-wrap items-center gap-2">
-            {FILTERS.map((option) => (
+            {filters.map((option) => (
               <FilterChip
                 key={option.value}
                 active={filter === option.value}

@@ -11,14 +11,26 @@ import { Toaster } from "sonner";
 import Layout from "@/components/site/Layout";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { fetchCurrentUser } from "./lib/auth";
+import { CHECKOUT_PATH } from "./lib/checkoutFlow";
+import { requireShopCartQuote } from "./lib/shopCheckoutGuard";
 import { verifyChildSession } from "./lib/childSession";
 import { queryClient } from "./lib/queryClient.js";
 import { queryKeys } from "./lib/queryKeys";
 import {
   CART_PATH,
   CONTACT_PATH,
+  COURSE_PATH,
+  COURSE_PRODUCT_DETAIL_PATH,
   DASHBOARD_CHILD_PROFILE_PATH,
+  DASHBOARD_MY_PRODUCTS_PATH,
+  LOGIN_PATH,
+  PRODUCT_DETAIL_PATH,
   SCREEN_PATH,
+  SHOP_CUSTOMER_INFO_PATH,
+  SHOP_PATH,
+  SHOP_PAYMENT_PATH,
+  SHOP_REVIEW_PATH,
+  SIGNUP_PATH,
 } from "./router/paths";
 import { clearActiveChildSession, getActiveChildSession } from "./utils/childSessionRequest";
 import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
@@ -58,7 +70,7 @@ const IServices = lazy(() => import("./pages/International/services"));
 const IHome = lazy(() => import("./pages/International/home"));
 const Screen = lazy(() => import("./pages/SplashScreen/screen"));
 const Search = lazy(() => import("@/components/site/search"));
-const MyRobort = lazy(() => import("./pages/Dashboard/myRobot"));
+const MyRobot = lazy(() => import("./pages/Dashboard/myRobot"));
 const JobApplicationForm = lazy(() => import("@/components/site/careers/CareerDetailPage/jobApplicationForm"));
 const ChildHome = lazy(() => import("./pages/ChildProtection/ChildHome"));
 const TermsHome = lazy(() => import("./pages/policies/TermsHome"));
@@ -98,7 +110,7 @@ const requireCurrentUser = async ({ context, location }) => {
 
   if (!user) {
     throw redirect({
-      to: "/Login",
+      to: LOGIN_PATH,
       search: buildRedirectSearchFromLocation(location),
       replace: true,
     });
@@ -194,7 +206,9 @@ const makeRedirectRoute = (path, to, parent = rootRoute) => createRoute({
 });
 
 const publicRoute = (path, component) => makeRoute({ path, component });
-const authRoute = (path, component) => makeRoute({ parent: authenticatedRoute, path, component });
+const authRoute = (path, component, beforeLoad) => (
+  makeRoute({ parent: authenticatedRoute, path, component, beforeLoad })
+);
 const childRoute = (path, component) => makeRoute({ parent: childSessionRoute, path, component });
 
 const routeTree = rootRoute.addChildren([
@@ -204,19 +218,16 @@ const routeTree = rootRoute.addChildren([
   publicRoute(SCREEN_PATH, Screen),
   publicRoute("/aboutUs", AboutUs),
   publicRoute(CART_PATH, Cart),
-  publicRoute("/shop", Shop),
-  publicRoute("/ProductDetailPage/$id", ProductDetailPage),
-  publicRoute("/Shipping", Shipping),
-  publicRoute("/ShippingService", ShippingService),
-  publicRoute("/Course", Course),
-  publicRoute("/CustomerInfo", CustomerInfo),
-  publicRoute("/Login", Login),
-  makeRedirectRoute("/login", "/Login"),
+  publicRoute(SHOP_PATH, Shop),
+  publicRoute(PRODUCT_DETAIL_PATH, ProductDetailPage),
+  publicRoute(COURSE_PATH, Course),
+  publicRoute(LOGIN_PATH, Login),
+  makeRedirectRoute("/login", LOGIN_PATH),
   publicRoute("/verifyEmail", VerifyEmail),
   publicRoute("/reset-password", ResetPassword),
-  publicRoute("/Signup", Signup),
-  makeRedirectRoute("/CoursesProduct", "/Course"),
-  publicRoute("/CoursesProduct/$id", CoursesProductDetail),
+  publicRoute(SIGNUP_PATH, Signup),
+  makeRedirectRoute("/CoursesProduct", COURSE_PATH),
+  publicRoute(COURSE_PRODUCT_DETAIL_PATH, CoursesProductDetail),
   publicRoute("/gift-courses", GiftCourse),
   publicRoute("/CareerJob", CareerJob),
   makeRedirectRoute("/CareerDetailPage", "/CareerJob"),
@@ -227,13 +238,12 @@ const routeTree = rootRoute.addChildren([
   publicRoute("/BlogDetail/$id", BlogDetail),
   publicRoute(CONTACT_PATH, ContactUs),
   publicRoute("/404", Error),
-  publicRoute("/International/myRobot", MyRobort),
   publicRoute("/subscriptions", SubscriptionHome),
-  publicRoute("/subscriptions/checkout", CheckoutWizard),
+  publicRoute(CHECKOUT_PATH, CheckoutWizard),
   publicRoute("/for-schools", ForSchools),
-  makeRedirectRoute("/subscriptions/register", "/subscriptions/checkout"),
-  makeRedirectRoute("/subscriptions/payment", "/subscriptions/checkout"),
-  makeRedirectRoute("/subscriptions/review", "/subscriptions/checkout"),
+  makeRedirectRoute("/subscriptions/register", CHECKOUT_PATH),
+  makeRedirectRoute("/subscriptions/payment", CHECKOUT_PATH),
+  makeRedirectRoute("/subscriptions/review", CHECKOUT_PATH),
   publicRoute("/International/videoGallery", VideoGallery),
   publicRoute("/International/Iservices", IServices),
   publicRoute("/International/home", IHome),
@@ -245,7 +255,11 @@ const routeTree = rootRoute.addChildren([
   makeRedirectRoute("/ServiceDetail", "/International/Iservices"),
   publicRoute("/ServiceDetail/$id", ServiceDetail),
   authenticatedRoute.addChildren([
+    authRoute(SHOP_CUSTOMER_INFO_PATH, CustomerInfo, requireShopCartQuote),
+    authRoute(SHOP_PAYMENT_PATH, ShippingService, requireShopCartQuote),
+    authRoute(SHOP_REVIEW_PATH, Shipping, requireShopCartQuote),
     authRoute("/Dashboard/userInfo", UserInfo),
+    authRoute(DASHBOARD_MY_PRODUCTS_PATH, MyRobot),
     authRoute("/Dashboard/WishList", WishList),
     authRoute("/Dashboard/PaymentHistory", Payment),
     makeRedirectRoute("/Dashboard/PaymentDetails", "/Dashboard/PaymentHistory", authenticatedRoute),

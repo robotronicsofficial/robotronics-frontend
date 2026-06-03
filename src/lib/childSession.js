@@ -1,5 +1,20 @@
 import { fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 import { buildChildSessionRequest } from "../utils/childSessionRequest";
+
+export const readChildSessionVerification = (payload) => {
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid child session response",
+  );
+
+  return {
+    message: payload.message,
+    isValid: data.isValid === true,
+    sessionId: data.sessionId || null,
+  };
+};
 
 export const verifyChildSession = async ({ childId, sessionId }) => {
   const childSessionRequest = buildChildSessionRequest({
@@ -18,6 +33,9 @@ export const verifyChildSession = async ({ childId, sessionId }) => {
     throw new Error("Child session not found. Please re-enter the PIN.");
   }
 
-  const payload = await fetchBackendJson("/verifyChildSession", childSessionRequest);
-  return Boolean(payload?.isValid);
+  const payload = await fetchBackendJson(
+    `/children/${childId}/session/verify`,
+    childSessionRequest,
+  );
+  return readChildSessionVerification(payload).isValid;
 };

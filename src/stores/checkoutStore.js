@@ -1,19 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-/* ──────────────────────────────────────────────────────────────────
-   checkoutStore — single source of truth for the subscription flow.
-
-   Replaces (and consolidates) what used to live in:
-     • selectedPlanStore (the chosen plan)
-     • sessionStorage:subscription_checkout (parent + payment + order code)
-     • localStorage:robotronics:subscriptionDraft (in-flight form state)
-
-   Persisted to localStorage so a refresh on /subscriptions/checkout?step=payment
-   keeps the user where they were instead of bouncing them back to step 1.
-   ────────────────────────────────────────────────────────────────── */
-
-export const CHECKOUT_STEPS = ["plan", "kids", "parent", "payment", "confirm", "welcome"];
+import { CHECKOUT_STATUS } from "@/lib/checkoutFlow";
 
 const EMPTY_CHILD = {
   checkoutChildKey: "",
@@ -53,17 +41,22 @@ const createEmptyChild = () => ({
   checkoutChildKey: createChildKey(),
 });
 
-const initialState = {
+const normalizeOwnerId = (ownerId) => String(ownerId || "").trim();
+
+const createInitialState = (ownerId = null) => ({
+  ownerId,
   step: "plan",
   plan: null,                     // { planId, name, price, billingCycle, courseAccess, maxQuizAttemptsPerDay }
   children: [createEmptyChild()], // always at least one row
   parent: { ...EMPTY_PARENT },    // billing address — name/email/phone come from currentUser
   payment: { ...EMPTY_PAYMENT },
   orderCode: null,
-  status: "draft",                // 'draft' | 'submitted' | 'active'
+  status: CHECKOUT_STATUS.draft,
   // Persisted children records returned by saveParent (have _id, childCode)
   persistedChildren: [],
-};
+});
+
+const initialState = createInitialState();
 
 const buildOrderCode = () => {
   const segment = (typeof crypto !== "undefined" && crypto.getRandomValues)
@@ -76,6 +69,21 @@ export const useCheckoutStore = create(
   persist(
     (set, get) => ({
       ...initialState,
+
+      claimOwner: (ownerId) => {
+        const nextOwnerId = normalizeOwnerId(ownerId);
+        if (!nextOwnerId) {
+          return;
+        }
+
+        set((state) => (
+          state.ownerId && state.ownerId !== nextOwnerId
+            ? createInitialState(nextOwnerId)
+            : { ownerId: nextOwnerId }
+        ));
+      },
+
+      clearOwner: () => set(createInitialState()),
 
       setStep: (step) => set({ step }),
 
@@ -139,15 +147,16 @@ export const useCheckoutStore = create(
 
       setStatus: (status) => set({ status }),
 
-      reset: () => set({ ...initialState, children: [createEmptyChild()] }),
+      reset: () => set(createInitialState(get().ownerId)),
     }),
     {
       name: "robotronics.checkout",
       storage: createJSONStorage(() => sessionStorage),
-      version: 2,
+      version: 3,
       migrate: (persistedState) => ({
-        ...initialState,
+        ...createInitialState(normalizeOwnerId(persistedState?.ownerId) || null),
         ...persistedState,
+        ownerId: normalizeOwnerId(persistedState?.ownerId) || null,
         children: Array.isArray(persistedState?.children) && persistedState.children.length
           ? persistedState.children.map((child) => ({
               ...EMPTY_CHILD,
@@ -164,6 +173,7 @@ export const useCheckoutStore = create(
         },
       }),
       partialize: (state) => ({
+        ownerId: state.ownerId,
         step: state.step,
         plan: state.plan,
         children: state.children,

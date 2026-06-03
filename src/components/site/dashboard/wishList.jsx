@@ -6,14 +6,15 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/typography";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { getCommerceItemRoute } from "@/lib/commerceItems";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useCartStore } from "@/stores/cartStore";
 import {
   useRemoveSavedItemMutation,
   useSavedItems,
 } from "@/hooks/useSavedItems";
 import { useFormatMoney } from "@/utils/formatPrice";
+import { SHOP_PATH } from "@/router/paths";
 
 const WishListItem = ({ item, onRemove, onView, onMoveToCart }) => {
   const formatMoney = useFormatMoney();
@@ -37,7 +38,7 @@ const WishListItem = ({ item, onRemove, onView, onMoveToCart }) => {
         className="size-20 shrink-0 overflow-hidden rounded-xl bg-muted"
       >
         <img
-          src={resolveBackendAssetUrl(item.image || item.images?.[0], "https://via.placeholder.com/160")}
+          src={resolveCatalogImageUrl(item.image || item.images?.[0])}
           className="size-full object-cover"
           alt={item.name || "Saved item"}
         />
@@ -87,6 +88,10 @@ const WishListD = () => {
       console.error("Failed to remove saved item:", err);
     }
   };
+  const handleView = (item) => {
+    const route = getCommerceItemRoute(item);
+    if (route) navigate(route);
+  };
 
   if (isLoading) {
     return <CenteredState className="bg-background min-h-screen">Loading wishlist…</CenteredState>;
@@ -109,7 +114,7 @@ const WishListD = () => {
             <Text tone="muted" className="max-w-md">
               Your wishlist is empty. Add items you&apos;re thinking about, and compare them later before checkout.
             </Text>
-            <Button type="button" size="marketing" onClick={() => navigate({ to: "/shop" })}>
+            <Button type="button" size="marketing" onClick={() => navigate({ to: SHOP_PATH })}>
               Browse products
             </Button>
           </CardContent>
@@ -121,7 +126,7 @@ const WishListD = () => {
               key={`${item.itemType}:${item.itemId}`}
               item={item}
               onRemove={handleRemove}
-              onView={(it) => navigate({ to: getCommerceItemRoute(it) })}
+              onView={handleView}
               onMoveToCart={addToCart}
             />
           ))}

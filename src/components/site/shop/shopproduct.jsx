@@ -3,7 +3,8 @@ import { useNavigate } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/typography";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
+import { getProductDetailRoute } from "@/lib/commerceItems";
 import { useFormatMoney } from "@/utils/formatPrice";
 
 const Shopproduct = ({
@@ -18,7 +19,8 @@ const Shopproduct = ({
   const navigate = useNavigate();
   const formatMoney = useFormatMoney();
   const handleProductClick = () => {
-    navigate({ to: `/ProductDetailPage/${productId}` });
+    const route = getProductDetailRoute(productId);
+    if (route) navigate(route);
   };
 
   return (
@@ -32,7 +34,7 @@ const Shopproduct = ({
         <div className="aspect-square w-full overflow-hidden rounded-2xl bg-muted">
           <img
             className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-50"
-            src={resolveBackendAssetUrl(image, "https://via.placeholder.com/300x200")}
+            src={resolveCatalogImageUrl(image)}
             alt={title || "Product"}
             loading="lazy"
             decoding="async"

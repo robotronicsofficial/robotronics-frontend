@@ -18,6 +18,7 @@ import {
   consumePostAuthRedirect,
   getSafeRedirectPath,
 } from "../utils/authRedirect";
+import { CONTACT_PATH, LOGIN_PATH } from "@/router/paths";
 
 const VerifyEmail = () => {
   const search = useSearch({ strict: false });
@@ -60,7 +61,7 @@ const VerifyEmail = () => {
             return;
           }
           navigate({
-            to: "/Login",
+            to: LOGIN_PATH,
             search: {
               emailVerified: true,
               ...buildAuthRedirectSearch(nextRedirectPath),
@@ -179,14 +180,14 @@ const VerifyEmail = () => {
             <Text tone="muted" size="sm">
               Need help?{" "}
               <Link
-                to="/Login"
+                to={LOGIN_PATH}
                 className="text-foreground underline underline-offset-4"
               >
                 Sign in
               </Link>{" "}
               or{" "}
               <Link
-                to="/contact-us"
+                to={CONTACT_PATH}
                 className="text-foreground underline underline-offset-4"
               >
                 contact support

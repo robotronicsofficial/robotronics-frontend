@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import { useChildAccounts } from "@/hooks/useAccount";
-import { CONTACT_PATH } from "@/router/paths";
+import { CONTACT_PATH, DASHBOARD_MY_PRODUCTS_PATH } from "@/router/paths";
 import {
   getActiveChildSession,
   matchesChildSessionIdentifier,
@@ -30,7 +30,7 @@ const NAV_ITEMS = [
   {
     name: "My orders",
     icon: Box,
-    subMenu: [{ name: "My products", href: "/International/myRobot" }],
+    subMenu: [{ name: "My products", href: DASHBOARD_MY_PRODUCTS_PATH }],
   },
   {
     name: "Subscriptions",

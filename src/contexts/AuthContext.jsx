@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchCurrentUser } from '../lib/auth';
@@ -8,6 +9,7 @@ import {
   useRegisterMutation,
 } from '../hooks/useAuthMutations';
 import { queryKeys } from '../lib/queryKeys';
+import { claimCustomerSessionState } from '../utils/customerSessionState';
 import { AuthContext } from './authContext';
 
 export function AuthProvider({ children }) {
@@ -26,6 +28,12 @@ export function AuthProvider({ children }) {
     queryFn: fetchCurrentUser,
     retry: false,
   });
+
+  useEffect(() => {
+    if (!isLoading && !isError && user?._id) {
+      claimCustomerSessionState(user._id);
+    }
+  }, [isError, isLoading, user?._id]);
 
   const fetchUser = async () => {
     const result = await refetch();

@@ -1,37 +1,20 @@
 import { fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
-const normalizeServicesPayload = (payload) => {
-  if (Array.isArray(payload?.data)) {
-    return payload.data;
-  }
+export const readServices = (payload) => (
+  readDataEnvelope(payload, Array.isArray, "Invalid services response")
+);
 
-  return Array.isArray(payload) ? payload : [];
-};
-
-const normalizeSingleServicePayload = (payload) => {
-  if (payload?.data && typeof payload.data === "object" && !Array.isArray(payload.data)) {
-    return payload.data;
-  }
-
-  if (payload && typeof payload === "object" && !Array.isArray(payload)) {
-    return payload;
-  }
-
-  return null;
-};
+export const readService = (payload) => (
+  readDataEnvelope(payload, isRecord, "Invalid service response")
+);
 
 export const fetchServices = async () => {
-  const payload = await fetchBackendJson("/getAllService");
-  return normalizeServicesPayload(payload);
+  const payload = await fetchBackendJson("/services");
+  return readServices(payload);
 };
 
 export const fetchServiceById = async (serviceId) => {
   const payload = await fetchBackendJson(`/services/${serviceId}`);
-  const service = normalizeSingleServicePayload(payload);
-
-  if (!service) {
-    throw new Error("Service not found");
-  }
-
-  return service;
+  return readService(payload);
 };

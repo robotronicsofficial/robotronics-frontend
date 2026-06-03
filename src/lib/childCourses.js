@@ -1,4 +1,5 @@
 import { fetchBackendBlob, fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 import { fetchCourses } from "./courses";
 import {
   ensureArray,
@@ -25,20 +26,67 @@ const buildRequiredChildRequest = ({ childId, ...request }) => {
   return childSessionRequest;
 };
 
-export const extractActiveCourses = (payload) => {
-  if (Array.isArray(payload)) return payload;
-  if (Array.isArray(payload?.data)) return payload.data;
-  if (Array.isArray(payload?.data?.activeCourses)) return payload.data.activeCourses;
-  if (Array.isArray(payload?.activeCourses)) return payload.activeCourses;
-  if (Array.isArray(payload?.courses)) return payload.courses;
-  return [];
+export const readChildCourses = (payload) => {
+  return readDataEnvelope(
+    payload,
+    Array.isArray,
+    "Invalid child courses response",
+  ).map(normalizeChildCourse);
 };
 
-export const fetchChildPlan = (childId) =>
-  fetchBackendJson(
-    `/getChildPlan/${childId}`,
+export const readChildProgress = (payload) => {
+  return normalizeProgressPayload(
+    readDataEnvelope(payload, isRecord, "Invalid child progress response"),
+  );
+};
+
+export const readChildPlan = (payload) => {
+  return readDataEnvelope(payload, isRecord, "Invalid child plan response");
+};
+
+export const readChildCourseDetail = (payload) => {
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid child course detail response",
+  );
+
+  return {
+    courseDetails: normalizeCourseDetail(data.courseDetails),
+    childCourse: normalizeChildCourse(data.course),
+    plan: data.plan || null,
+  };
+};
+
+export const readChildCourseProgressUpdate = (payload) => {
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid child course progress update response",
+  );
+  const quiz = payload?.quiz;
+
+  if (!quiz || typeof quiz !== "object" || Array.isArray(quiz)) {
+    throw new Error("Invalid child course quiz update response");
+  }
+
+  return {
+    childCourse: normalizeChildCourse(data),
+    quiz,
+  };
+};
+
+export const readGeneratedChildCertificate = (payload) => {
+  return readDataEnvelope(payload, isRecord, "Invalid child certificate response");
+};
+
+export const fetchChildPlan = async (childId) => {
+  const payload = await fetchBackendJson(
+    `/children/${childId}/plan`,
     buildRequiredChildRequest({ method: "GET", childId }),
   );
+  return readChildPlan(payload);
+};
 
 export const fetchSelectableChildCourses = async (childId) => {
   const childData = await fetchChildPlan(childId);
@@ -55,7 +103,7 @@ export const fetchSelectableChildCourses = async (childId) => {
 
 export const saveChildCourses = ({ childId, courseIds }) =>
   fetchBackendJson(
-    `/${childId}/courses`,
+    `/children/${childId}/courses`,
     buildRequiredChildRequest({
       method: "PUT",
       childId,
@@ -70,29 +118,25 @@ export const saveChildCourses = ({ childId, courseIds }) =>
 
 export const fetchChildCourses = async (childId) => {
   const payload = await fetchBackendJson(
-    `/child/${childId}/courses`,
+    `/children/${childId}/courses`,
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
-  return extractActiveCourses(payload);
+  return readChildCourses(payload);
 };
 
 export const fetchChildCourseDetail = async ({ childId, courseId }) => {
   const payload = await fetchBackendJson(
-    `/getChildById/${childId}/ByCourseId/${courseId}`,
+    `/children/${childId}/courses/${courseId}`,
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
-  return {
-    courseDetails: normalizeCourseDetail(payload?.courseDetails),
-    childCourse: normalizeChildCourse(payload?.course),
-    plan: payload?.plan || null,
-  };
+  return readChildCourseDetail(payload);
 };
 
 export const updateChildCourseProgress = async ({ childId, courseId, sectionIndex, answers }) => {
   const payload = await fetchBackendJson(
-    `/updateChildCourse/${childId}`,
+    `/children/${childId}/courses/${courseId}/progress`,
     buildRequiredChildRequest({
       method: "PUT",
       childId,
@@ -100,22 +144,18 @@ export const updateChildCourseProgress = async ({ childId, courseId, sectionInde
         "Content-Type": "application/json",
       },
       body: {
-        courseId,
         sectionIndex,
         answers,
       },
     }),
   );
 
-  return {
-    ...payload,
-    data: normalizeChildCourse(payload?.data),
-  };
+  return readChildCourseProgressUpdate(payload);
 };
 
 export const downloadChildCourseContent = ({ childId, courseId, contentId }) =>
   fetchBackendBlob(
-    `/child/${childId}/courses/${courseId}/content/${contentId}/download`,
+    `/children/${childId}/courses/${courseId}/content/${contentId}/download`,
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
@@ -125,11 +165,11 @@ export const fetchChildProgress = async (childId) => {
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
-  return normalizeProgressPayload(payload);
+  return readChildProgress(payload);
 };
 
-export const generateChildCertificate = ({ childId, courseId }) =>
-  fetchBackendJson(
+export const generateChildCertificate = async ({ childId, courseId }) => {
+  const payload = await fetchBackendJson(
     "/generate",
     buildRequiredChildRequest({
       method: "POST",
@@ -143,6 +183,9 @@ export const generateChildCertificate = ({ childId, courseId }) =>
       },
     }),
   );
+
+  return readGeneratedChildCertificate(payload);
+};
 
 export const downloadChildCertificate = ({ childId, downloadUrl, certificateId }) =>
   fetchBackendBlob(

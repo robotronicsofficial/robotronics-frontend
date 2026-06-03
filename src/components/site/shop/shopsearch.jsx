@@ -14,10 +14,9 @@ import {
   createProductCommerceItem,
   getCommerceItemKey,
 } from "@/lib/commerceItems";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { useCartStore } from "@/stores/cartStore";
-import { useProducts } from "@/hooks/useProducts";
+import { useProductCategories, useProducts } from "@/hooks/useProducts";
 import { useSavedItems, useToggleSavedItemMutation } from "@/hooks/useSavedItems";
 
 const DEFAULT_PRICE_RANGE = [0, 600000];
@@ -43,6 +42,7 @@ const Shopsearch = () => {
   const addToCart = useCartStore((state) => state.addToCart);
   const formatMoney = useFormatMoney();
   const { data: products = [] } = useProducts();
+  const { data: productCategories = [] } = useProductCategories();
   const { data: savedItems = [] } = useSavedItems();
   const toggleSavedItemMutation = useToggleSavedItemMutation();
 
@@ -167,6 +167,7 @@ const Shopsearch = () => {
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
           <Shopfilter
+            categories={productCategories}
             onPriceRangeChange={setPriceRange}
             onShippingChange={setShippingDays}
             onCategoryChange={setSelectedCategory}
@@ -234,10 +235,7 @@ const Shopsearch = () => {
                       key={product._id}
                       title={product.name}
                       price={product.price}
-                      image={resolveBackendAssetUrl(
-                        product?.images?.[0],
-                        "https://via.placeholder.com/300x200",
-                      )}
+                      image={product?.images?.[0]}
                       isSaved={itemKey ? savedItemKeys.has(itemKey) : false}
                       onAddToWishlist={() => handleToggleSavedItem(product)}
                       onAddToCart={() => {

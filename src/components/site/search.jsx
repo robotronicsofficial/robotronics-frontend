@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FormInput, FormSelect } from "@/components/forms/FormControls";
-import { useProducts } from "@/hooks/useProducts";
+import { useProductCategories, useProducts } from "@/hooks/useProducts";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
+import { getProductDetailRoute } from "@/lib/commerceItems";
 import { useFormatMoney } from "@/utils/formatPrice";
+import { SHOP_PATH } from "@/router/paths";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -16,17 +18,11 @@ const Search = () => {
     isLoading: loading,
     error,
   } = useProducts();
+  const { data: productCategories = [] } = useProductCategories();
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("");
 
-  const categories = useMemo(() => {
-    const values = products
-      .map((product) => product?.category)
-      .filter(Boolean);
-
-    return ["All categories", ...new Set(values)];
-  }, [products]);
-  const categoryOptions = categories.map((cat) => ({
+  const categoryOptions = ["All categories", ...productCategories].map((cat) => ({
     label: cat,
     value: cat === "All categories" ? "all" : cat,
   }));
@@ -45,6 +41,11 @@ const Search = () => {
       return matchesQuery && matchesCategory;
     });
   }, [products, searchTerm, category]);
+
+  const openProduct = (productId) => {
+    const route = getProductDetailRoute(productId);
+    if (route) navigate(route);
+  };
 
   return (
     <div className="min-h-screen bg-muted text-background p-4">
@@ -102,11 +103,11 @@ const Search = () => {
                 key={product._id}
                 type="button"
                 variant="ghost"
-                onClick={() => navigate({ to: `/ProductDetailPage/${product._id}` })}
+                onClick={() => openProduct(product._id)}
                 className="h-auto flex-col items-stretch overflow-hidden rounded-2xl bg-card border border-border p-0 text-left transition hover:-translate-y-1"
               >
                 <img
-                  src={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
+                  src={resolveCatalogImageUrl(product?.images?.[0])}
                   alt={product?.name || "Product"}
                   className="h-48 w-full object-cover"
                   loading="lazy"
@@ -139,7 +140,7 @@ const Search = () => {
           type="button"
           variant="link"
           className="text-foreground"
-          onClick={() => navigate({ to: "/shop" })}
+          onClick={() => navigate({ to: SHOP_PATH })}
         >
           Browse all products &rarr;
         </Button>

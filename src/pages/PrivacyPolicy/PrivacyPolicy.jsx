@@ -1,4 +1,5 @@
 import { PolicyPage } from "@/components/marketing/PolicyPage";
+import { CONTACT_EMAIL, SAFETY_EMAIL } from "@/lib/brandContact";
 
 const SECTIONS = [
   {
@@ -24,13 +25,13 @@ const SECTIONS = [
   {
     title: "How long we keep your information",
     body: [
-      "Parent account data is kept for as long as the account is active. Child account data is deleted within 90 days of account closure, and within 30 days if a parent requests deletion via safety@robotronics.com. Learning progress and certificates are retained for the lifetime of the account so children can revisit their work.",
+      `Parent account data is kept for as long as the account is active. Child account data is deleted within 90 days of account closure, and within 30 days if a parent requests deletion via ${SAFETY_EMAIL}. Learning progress and certificates are retained for the lifetime of the account so children can revisit their work.`,
       "Payment records are retained for 7 years as required by local tax law. We never use child data for marketing or advertising.",
     ],
   },
   {
     title: "User rights",
-    body: "Users may request access, correction, or deletion of their personal data by contacting support@robotronicsofficial.com.",
+    body: `Users may request access, correction, or deletion of their personal data by contacting ${CONTACT_EMAIL}.`,
   },
   {
     title: "Cookies",

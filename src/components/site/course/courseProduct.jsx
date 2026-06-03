@@ -7,6 +7,7 @@ import python from "@/assets/images/python.webp";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heading, Text } from "@/components/ui/typography";
+import { COURSE_PRODUCT_DETAIL_PATH } from "@/router/paths";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { cn } from "@/lib/utils";
@@ -81,7 +82,7 @@ const CourseProduct = ({ title, id, image, price, duration, category }) => {
         </div>
 
         <Button asChild className="mt-auto w-full rounded-full">
-          <Link to="/CoursesProduct/$id" params={{ id }}>
+          <Link to={COURSE_PRODUCT_DETAIL_PATH} params={{ id }}>
             View course
           </Link>
         </Button>

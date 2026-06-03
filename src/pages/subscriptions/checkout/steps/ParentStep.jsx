@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import {
   CHECKOUT_PATH,
   buildCheckoutSearch,
-} from "@/components/checkout/checkoutNav";
+} from "@/lib/checkoutFlow";
 import CheckoutShell from "@/components/checkout/CheckoutShell";
 import CheckoutSummary from "@/components/checkout/CheckoutSummary";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,10 @@ import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { FormInput, FormSelect } from "@/components/forms/FormControls";
 import { useAuth } from "@/contexts/useAuth";
 import { useCurrentParent, useSaveParentMutation } from "@/hooks/useAccount";
+import {
+  buildParentRegistrationPayload,
+  getPersistedCheckoutChildren,
+} from "@/lib/checkoutPayload";
 import {
   useCheckoutStore,
   selectIsParentComplete,
@@ -87,34 +91,15 @@ const ParentStep = () => {
     }
 
     try {
-      const result = await saveParentMutation.mutateAsync({
-        parent: {
-          ...parent,
-          firstName: currentUser.firstName,
-          lastName: currentUser.lastName,
-          email: currentUser.email,
-          phone: currentUser.phone,
-          userId: currentUser._id,
-        },
-        children: children.map((child) => ({
-          checkoutChildKey: child.checkoutChildKey,
-          firstName: child.firstName,
-          lastName: child.lastName,
-          dateOfBirth: child.dateOfBirth,
-          gender: child.gender,
-          email: child.email,
-          phone: child.phone,
-          schoolName: child.schoolName,
-          country: child.country,
-          streetAddress: child.streetAddress,
-          city: child.city,
-          postalCode: child.postalCode,
-        })),
-        plan: { planId: plan.planId, billingCycle: plan.billingCycle },
-      });
-
-      const persistedChildren = result?.parent?.children || result?.children || [];
-      setPersistedChildren(persistedChildren);
+      const result = await saveParentMutation.mutateAsync(
+        buildParentRegistrationPayload({
+          currentUser,
+          parent,
+          children,
+          plan,
+        }),
+      );
+      setPersistedChildren(getPersistedCheckoutChildren(result));
 
       navigate({ to: CHECKOUT_PATH, search: buildCheckoutSearch("payment") });
     } catch (error) {
