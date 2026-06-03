@@ -1,17 +1,11 @@
 import { fetchBackendJson } from "./api";
 
-export const normalizeCoursesPayload = (payload) => {
-  if (Array.isArray(payload?.courses)) {
-    return payload.courses;
-  }
-
-  return Array.isArray(payload) ? payload : [];
-};
-
 export const fetchCourses = async () => {
   const payload = await fetchBackendJson("/get-courses");
-  return normalizeCoursesPayload(payload);
+  return payload?.data;
 };
 
-export const fetchCourseById = (courseId) =>
-  fetchBackendJson(`/coursesById/${courseId}`);
+export const fetchCourseById = async (courseId) => {
+  const payload = await fetchBackendJson(`/coursesById/${courseId}`);
+  return payload?.data;
+};
