@@ -1,5 +1,6 @@
 export const queryKeys = {
   auth: {
+    socialProviders: ["auth", "social-providers"],
     user: ["auth", "user"],
   },
   blogs: {

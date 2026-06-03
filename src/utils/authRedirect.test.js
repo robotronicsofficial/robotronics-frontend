@@ -31,10 +31,10 @@ describe("auth redirect contracts", () => {
   });
 
   it("builds social auth urls from the safe redirect contract", () => {
-    expect(buildSocialAuthUrl("google", "/subscriptions/checkout?step=kids")).toBe(
+    expect(buildSocialAuthUrl("/auth/google", "/subscriptions/checkout?step=kids")).toBe(
       "/api/auth/google?redirect=%2Fsubscriptions%2Fcheckout%3Fstep%3Dkids",
     );
-    expect(buildSocialAuthUrl("facebook", "https://evil.example")).toBe(
+    expect(buildSocialAuthUrl("/auth/facebook", "https://evil.example")).toBe(
       "/api/auth/facebook",
     );
   });

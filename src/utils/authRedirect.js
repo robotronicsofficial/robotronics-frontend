@@ -19,8 +19,8 @@ export const buildAuthRedirectQuery = (redirectPath) => {
   return safeRedirectPath ? `?redirect=${encodeURIComponent(safeRedirectPath)}` : "";
 };
 
-export const buildSocialAuthUrl = (provider, redirectPath) => (
-  resolveBackendUrl(`/auth/${provider}${buildAuthRedirectQuery(redirectPath)}`)
+export const buildSocialAuthUrl = (authPath, redirectPath) => (
+  resolveBackendUrl(`${authPath}${buildAuthRedirectQuery(redirectPath)}`)
 );
 
 export const buildRedirectSearchFromLocation = (location, currentAuthPath = LOGIN_PATH) => {
@@ -34,10 +34,10 @@ export const savePostAuthRedirect = (redirectPath) => {
   window.localStorage.setItem(POST_AUTH_REDIRECT_KEY, safeRedirectPath);
 };
 
-export const startSocialLogin = (provider, redirectPath) => {
+export const startSocialLogin = (authPath, redirectPath) => {
   const safeRedirectPath = getSafeRedirectPath(redirectPath);
   if (safeRedirectPath) savePostAuthRedirect(safeRedirectPath);
-  window.location.assign(buildSocialAuthUrl(provider, safeRedirectPath));
+  window.location.assign(buildSocialAuthUrl(authPath, safeRedirectPath));
 };
 
 export const consumePostAuthRedirect = () => {
