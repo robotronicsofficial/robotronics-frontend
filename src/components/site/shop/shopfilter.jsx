@@ -8,14 +8,6 @@ import { Eyebrow, Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { useFormatMoney } from "@/utils/formatPrice";
 
-const categories = [
-  "Lego Robots",
-  "Curriculum Books",
-  "Arduino Robots",
-  "Educational Toys",
-  "Others",
-];
-
 const shippingMarks = [7, 15, 30, 45, 60].map((value) => ({
   value,
   label: String(value),
@@ -51,6 +43,7 @@ FilterSection.propTypes = {
 };
 
 const Shopfilter = ({
+  categories,
   onPriceRangeChange,
   onShippingChange,
   onCategoryChange,
@@ -86,21 +79,25 @@ const Shopfilter = ({
         onToggle={() => setIsOpenProducts(!isOpenProducts)}
       >
         <div className="flex flex-col gap-1">
-          {categories.map((category) => (
-            <button
-              type="button"
-              key={category}
-              onClick={() => handleCategoryClick(category)}
-              className={cn(
-                "rounded-lg px-3 py-2 text-left text-body-sm transition-colors",
-                selectedCategory === category
-                  ? "bg-primary-soft font-semibold text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
-              )}
-            >
-              {category}
-            </button>
-          ))}
+          {categories.length ? (
+            categories.map((category) => (
+              <button
+                type="button"
+                key={category}
+                onClick={() => handleCategoryClick(category)}
+                className={cn(
+                  "rounded-lg px-3 py-2 text-left text-body-sm transition-colors",
+                  selectedCategory === category
+                    ? "bg-primary-soft font-semibold text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                )}
+              >
+                {category}
+              </button>
+            ))
+          ) : (
+            <Text size="sm" tone="muted">No product categories yet.</Text>
+          )}
         </div>
       </FilterSection>
 
@@ -146,6 +143,7 @@ const Shopfilter = ({
 };
 
 Shopfilter.propTypes = {
+  categories: PropTypes.arrayOf(PropTypes.string).isRequired,
   onPriceRangeChange: PropTypes.func.isRequired,
   onShippingChange: PropTypes.func.isRequired,
   onCategoryChange: PropTypes.func.isRequired,

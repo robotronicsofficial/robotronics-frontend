@@ -62,6 +62,17 @@ const Shopsearch = () => {
     isPriceRangeActive ||
     isShippingActive;
 
+  const productCategories = useMemo(
+    () => [
+      ...new Set(
+        products
+          .map((product) => String(product?.category || "").trim())
+          .filter(Boolean),
+      ),
+    ].sort((a, b) => a.localeCompare(b)),
+    [products],
+  );
+
   const resetFilters = () => {
     setSearchQuery("");
     setPriceRange(DEFAULT_PRICE_RANGE);
@@ -166,6 +177,7 @@ const Shopsearch = () => {
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
           <Shopfilter
+            categories={productCategories}
             onPriceRangeChange={setPriceRange}
             onShippingChange={setShippingDays}
             onCategoryChange={setSelectedCategory}
