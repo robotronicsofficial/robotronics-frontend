@@ -35,7 +35,7 @@ export const buildParentRegistrationPayload = ({
 });
 
 export const getPersistedCheckoutChildren = (response) => (
-  Array.isArray(response?.checkoutChildren) ? response.checkoutChildren : []
+  Array.isArray(response?.data?.checkoutChildren) ? response.data.checkoutChildren : []
 );
 
 export const getPersistedCheckoutChildIds = (persistedChildren = []) => (

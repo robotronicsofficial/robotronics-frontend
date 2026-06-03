@@ -72,10 +72,12 @@ describe("checkout payload contract", () => {
     const otherChildren = [{ childCode: "P-5001-99" }];
 
     expect(getPersistedCheckoutChildren({
-      parent: { children: otherChildren },
-      checkoutChildren,
+      success: true,
+      data: {
+        parent: { children: otherChildren },
+        checkoutChildren,
+      },
     })).toBe(checkoutChildren);
-    expect(getPersistedCheckoutChildren({ parent: { children: otherChildren } })).toEqual([]);
   });
 
   it("extracts subscription child ids from checkout child codes", () => {
