@@ -1,7 +1,7 @@
 import { fetchBackendJson } from "./api";
 
 export const readServices = (payload) => {
-  if (!Array.isArray(payload?.data)) {
+  if (payload?.success !== true || !Array.isArray(payload?.data)) {
     throw new Error("Invalid services response");
   }
 
@@ -9,7 +9,12 @@ export const readServices = (payload) => {
 };
 
 export const readService = (payload) => {
-  if (!payload?.data || typeof payload.data !== "object" || Array.isArray(payload.data)) {
+  if (
+    payload?.success !== true ||
+    !payload?.data ||
+    typeof payload.data !== "object" ||
+    Array.isArray(payload.data)
+  ) {
     throw new Error("Invalid service response");
   }
 
