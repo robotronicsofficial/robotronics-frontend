@@ -17,21 +17,13 @@ import {
   loadShopCheckout,
   saveShopCheckout,
 } from "@/lib/shopCheckout";
+import { SHOP_ADDRESS_STATE_OPTIONS } from "@/lib/shopAddress";
 import { getCommerceItemKey } from "@/lib/commerceItems";
 import { useShopCartQuoteQuery } from "@/hooks/useShopOrders";
 import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { LOGIN_PATH, SHOP_PAYMENT_PATH } from "@/router/paths";
-
-
-const STATES = [
-  { value: "BAL", label: "Balochistan" },
-  { value: "KP", label: "Khyber Pakhtunkhwa" },
-  { value: "PUN", label: "Punjab" },
-  { value: "ICT", label: "Islamabad Capital Territory" },
-  { value: "SIN", label: "Sindh" },
-];
 
 const InputField = ({
   label,
@@ -338,11 +330,11 @@ const CustomerInfomation = ({ onNext }) => {
                     error={fieldErrors.city}
                   />
                   <SelectField
-                    label="State"
+                    label="State / province"
                     name="state"
                     value={form.state}
                     onChange={handleChange}
-                    options={STATES}
+                    options={SHOP_ADDRESS_STATE_OPTIONS}
                     required
                     error={fieldErrors.state}
                   />
