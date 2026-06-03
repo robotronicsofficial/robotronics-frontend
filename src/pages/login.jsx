@@ -14,14 +14,12 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Display, Text } from "@/components/ui/typography";
 import { useAuth } from "../contexts/useAuth";
-import { resolveBackendUrl } from "../lib/api";
 import { useRequestPasswordResetMutation } from "../hooks/useAuthMutations";
 import {
-  buildAuthRedirectSearch,
-  buildAuthRedirectQuery,
   consumePostAuthRedirect,
+  buildAuthRedirectSearch,
   getSafeRedirectPath,
-  savePostAuthRedirect,
+  startSocialLogin,
 } from "../utils/authRedirect";
 import { LOGIN_PATH, SIGNUP_PATH } from "@/router/paths";
 
@@ -94,8 +92,7 @@ const Login = () => {
   };
 
   const handleSocialLogin = (provider) => {
-    if (redirectPath) savePostAuthRedirect(redirectPath);
-    window.location.assign(resolveBackendUrl(`/auth/${provider}${buildAuthRedirectQuery(redirectPath)}`));
+    startSocialLogin(provider, redirectPath);
   };
 
   if (isAuthLoading) {

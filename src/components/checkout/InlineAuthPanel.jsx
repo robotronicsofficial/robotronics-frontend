@@ -17,7 +17,6 @@ import AuthSocialButton from "@/components/auth/AuthSocialButton";
 import { getPasswordInputClassName } from "@/components/auth/passwordInputClass";
 import facebook from "@/assets/images/Facebooklogo.svg";
 import google from "@/assets/images/Googlelogo.svg";
-import { resolveBackendUrl } from "@/lib/api";
 import { useAuth } from "@/contexts/useAuth";
 import {
   useRegisterMutation,
@@ -28,7 +27,7 @@ import {
   hasValidPasswordRequirements,
   PASSWORD_POLICY_MESSAGE,
 } from "@/utils/passwordPolicy";
-import { buildAuthRedirectQuery, savePostAuthRedirect } from "@/utils/authRedirect";
+import { savePostAuthRedirect, startSocialLogin } from "@/utils/authRedirect";
 import { cn } from "@/lib/utils";
 
 /* ──────────────────────────────────────────────────────────────────
@@ -94,8 +93,7 @@ export const InlineAuthPanel = ({
     passwordErrors.length && passwordErrors.number && passwordErrors.symbol;
 
   const handleSocialLogin = (provider) => {
-    if (redirectPath) savePostAuthRedirect(redirectPath);
-    window.location.assign(resolveBackendUrl(`/auth/${provider}${buildAuthRedirectQuery(redirectPath)}`));
+    startSocialLogin(provider, redirectPath);
   };
 
   const handleSignup = async (event) => {

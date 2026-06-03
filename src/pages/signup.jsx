@@ -19,7 +19,6 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import { Display, Text } from "@/components/ui/typography";
-import { resolveBackendUrl } from "../lib/api";
 import { useRegisterMutation } from "../hooks/useAuthMutations";
 import {
   getPasswordValidationState,
@@ -27,10 +26,10 @@ import {
   PASSWORD_POLICY_MESSAGE,
 } from "../utils/passwordPolicy";
 import {
-  buildAuthRedirectQuery,
   buildAuthRedirectSearch,
   getSafeRedirectPath,
   savePostAuthRedirect,
+  startSocialLogin,
 } from "../utils/authRedirect";
 import { cn } from "@/lib/utils";
 import { LOGIN_PATH } from "@/router/paths";
@@ -204,8 +203,7 @@ const Signup = () => {
   };
 
   const handleSocialLogin = (provider) => {
-    if (redirectPath) savePostAuthRedirect(redirectPath);
-    window.location.assign(resolveBackendUrl(`/auth/${provider}${buildAuthRedirectQuery(redirectPath)}`));
+    startSocialLogin(provider, redirectPath);
   };
 
   if (role === "school") {
