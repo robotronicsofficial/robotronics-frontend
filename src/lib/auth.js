@@ -33,7 +33,7 @@ const readAuthPath = (value) => {
 };
 
 export const readSocialAuthProviders = (payload) => {
-  if (!Array.isArray(payload?.data)) {
+  if (payload?.success !== true || !Array.isArray(payload?.data)) {
     throw new Error(INVALID_SOCIAL_PROVIDERS_RESPONSE);
   }
 
@@ -46,7 +46,12 @@ export const readSocialAuthProviders = (payload) => {
 };
 
 export const readCurrentAuthUser = (payload) => {
-  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+  if (
+    payload?.success !== true ||
+    !payload ||
+    typeof payload !== "object" ||
+    Array.isArray(payload)
+  ) {
     throw new Error(INVALID_AUTH_USER_RESPONSE);
   }
 

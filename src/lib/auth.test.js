@@ -31,6 +31,7 @@ describe("auth API contracts", () => {
   it("reads social auth provider readiness from the backend envelope", () => {
     expect(
       readSocialAuthProviders({
+        success: true,
         data: [
           {
             provider: "google",
@@ -97,6 +98,7 @@ describe("auth API contracts", () => {
 
   it("fetches the backend-owned social provider contract", async () => {
     fetchBackendJson.mockResolvedValueOnce({
+      success: true,
       data: [
         {
           provider: "google",
