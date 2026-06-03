@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   readChildCourses,
+  readChildCourseDetail,
   readChildPlan,
   readChildProgress,
 } from "./childCourses";
@@ -72,6 +73,40 @@ describe("child course API contract", () => {
     })).toEqual({
       childId: "P-5001-01",
       plan,
+    });
+  });
+
+  it("reads child course details from the backend data envelope", () => {
+    const detail = readChildCourseDetail({
+      success: true,
+      data: {
+        course: {
+          courseId: "course-1",
+          Sections: [{ modules: [] }],
+          progress: "75",
+        },
+        courseDetails: {
+          _id: "course-1",
+          title: "Python Foundations",
+          sections: [{ modules: [{ learningObjectives: [], contents: [] }] }],
+        },
+        plan: { planId: "plan-1" },
+      },
+    });
+
+    expect(detail).toEqual({
+      childCourse: {
+        courseId: "course-1",
+        Sections: [{ modules: [], quiz: null }],
+        progress: 75,
+      },
+      courseDetails: {
+        _id: "course-1",
+        title: "Python Foundations",
+        sections: [{ modules: [{ learningObjectives: [], contents: [] }] }],
+        reviews: 0,
+      },
+      plan: { planId: "plan-1" },
     });
   });
 });

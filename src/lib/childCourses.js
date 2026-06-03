@@ -49,6 +49,20 @@ export const readChildPlan = (payload) => {
   return payload.data;
 };
 
+export const readChildCourseDetail = (payload) => {
+  const data = payload?.data;
+
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Invalid child course detail response");
+  }
+
+  return {
+    courseDetails: normalizeCourseDetail(data.courseDetails),
+    childCourse: normalizeChildCourse(data.course),
+    plan: data.plan || null,
+  };
+};
+
 export const fetchChildPlan = async (childId) => {
   const payload = await fetchBackendJson(
     `/children/${childId}/plan`,
@@ -100,11 +114,7 @@ export const fetchChildCourseDetail = async ({ childId, courseId }) => {
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
-  return {
-    courseDetails: normalizeCourseDetail(payload?.courseDetails),
-    childCourse: normalizeChildCourse(payload?.course),
-    plan: payload?.plan || null,
-  };
+  return readChildCourseDetail(payload);
 };
 
 export const updateChildCourseProgress = async ({ childId, courseId, sectionIndex, answers }) => {
