@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import { useAuth } from "@/contexts/useAuth";
 import { cn } from "@/lib/utils";
+import { LOGIN_PATH, SIGNUP_PATH } from "@/router/paths";
 
 import {
   ACCOUNT_NAV,
@@ -109,10 +110,10 @@ const HeaderMobileMenu = () => {
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 <Button asChild variant="outline">
-                  <Link to="/Login">Sign in</Link>
+                  <Link to={LOGIN_PATH}>Sign in</Link>
                 </Button>
                 <Button asChild>
-                  <Link to="/Signup">Get started</Link>
+                  <Link to={SIGNUP_PATH}>Get started</Link>
                 </Button>
               </div>
             )}

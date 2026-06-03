@@ -16,6 +16,7 @@ import {
   useSavedItems,
 } from "../../hooks/useSavedItems";
 import { useFormatMoney } from "@/utils/formatPrice";
+import { SHOP_PATH } from "@/router/paths";
 
 const SavedItemRow = ({ item, onView, onRemove }) => {
   const formatMoney = useFormatMoney();
@@ -153,7 +154,7 @@ const MyRobot = () => {
               <Button
                 type="button"
                 size="marketing"
-                onClick={() => navigate({ to: "/shop" })}
+                onClick={() => navigate({ to: SHOP_PATH })}
               >
                 Browse products
               </Button>

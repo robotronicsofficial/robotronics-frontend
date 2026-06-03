@@ -8,6 +8,7 @@ import { FormInput, FormSelect } from "@/components/forms/FormControls";
 import { useProducts } from "@/hooks/useProducts";
 import { getProductDetailRoute } from "@/lib/commerceItems";
 import { useFormatMoney } from "@/utils/formatPrice";
+import { SHOP_PATH } from "@/router/paths";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -145,7 +146,7 @@ const Search = () => {
           type="button"
           variant="link"
           className="text-foreground"
-          onClick={() => navigate({ to: "/shop" })}
+          onClick={() => navigate({ to: SHOP_PATH })}
         >
           Browse all products &rarr;
         </Button>

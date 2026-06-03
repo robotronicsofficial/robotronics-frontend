@@ -14,6 +14,7 @@ import {
   useSavedItems,
 } from "@/hooks/useSavedItems";
 import { useFormatMoney } from "@/utils/formatPrice";
+import { SHOP_PATH } from "@/router/paths";
 
 const WishListItem = ({ item, onRemove, onView, onMoveToCart }) => {
   const formatMoney = useFormatMoney();
@@ -113,7 +114,7 @@ const WishListD = () => {
             <Text tone="muted" className="max-w-md">
               Your wishlist is empty. Add items you&apos;re thinking about, and compare them later before checkout.
             </Text>
-            <Button type="button" size="marketing" onClick={() => navigate({ to: "/shop" })}>
+            <Button type="button" size="marketing" onClick={() => navigate({ to: SHOP_PATH })}>
               Browse products
             </Button>
           </CardContent>

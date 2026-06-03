@@ -1,3 +1,5 @@
+import { LOGIN_PATH } from "@/router/paths";
+
 const POST_AUTH_REDIRECT_KEY = "robotronics:postAuthRedirect";
 
 export const isSafeRedirectPath = (value) =>
@@ -16,7 +18,7 @@ export const buildAuthRedirectQuery = (redirectPath) => {
   return safeRedirectPath ? `?redirect=${encodeURIComponent(safeRedirectPath)}` : "";
 };
 
-export const buildRedirectSearchFromLocation = (location, currentAuthPath = "/Login") => {
+export const buildRedirectSearchFromLocation = (location, currentAuthPath = LOGIN_PATH) => {
   const href = location?.href || `${location?.pathname || ""}${location?.searchStr || ""}${location?.hash || ""}`;
   return href && href !== currentAuthPath ? buildAuthRedirectSearch(href) : {};
 };

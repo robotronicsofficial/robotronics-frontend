@@ -20,6 +20,7 @@ import {
 } from "@/lib/shopCheckout";
 import { hasShippableCommerceItems } from "@/lib/commerceItems";
 import { selectCart, useCartStore } from "@/stores/cartStore";
+import { SHOP_CUSTOMER_INFO_PATH, SHOP_REVIEW_PATH } from "@/router/paths";
 
 
 const SHIPPING_SERVICES = [
@@ -139,7 +140,7 @@ const ShopPaymentMethod = ({ onNext }) => {
     if (isSubmitting) return;
 
     if (!customerReady || (requiresShipping && !addressReady)) {
-      navigate({ to: "/CustomerInfo" });
+      navigate({ to: SHOP_CUSTOMER_INFO_PATH });
       return;
     }
 
@@ -198,7 +199,7 @@ const ShopPaymentMethod = ({ onNext }) => {
         return;
       }
 
-      navigate({ to: "/Shipping" });
+      navigate({ to: SHOP_REVIEW_PATH });
     } catch (err) {
       toast.error(err.message || "Unable to save billing details. Please try again.");
     } finally {
@@ -226,7 +227,7 @@ const ShopPaymentMethod = ({ onNext }) => {
             type="button"
             variant="outline"
             size="sm"
-            onClick={() => navigate({ to: "/CustomerInfo" })}
+            onClick={() => navigate({ to: SHOP_CUSTOMER_INFO_PATH })}
           >
             Edit address
           </Button>

@@ -18,10 +18,17 @@ import { queryKeys } from "./lib/queryKeys";
 import {
   CART_PATH,
   CONTACT_PATH,
+  COURSE_PATH,
   COURSE_PRODUCT_DETAIL_PATH,
   DASHBOARD_CHILD_PROFILE_PATH,
+  LOGIN_PATH,
   PRODUCT_DETAIL_PATH,
   SCREEN_PATH,
+  SHOP_CUSTOMER_INFO_PATH,
+  SHOP_PATH,
+  SHOP_PAYMENT_PATH,
+  SHOP_REVIEW_PATH,
+  SIGNUP_PATH,
 } from "./router/paths";
 import { clearActiveChildSession, getActiveChildSession } from "./utils/childSessionRequest";
 import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
@@ -101,7 +108,7 @@ const requireCurrentUser = async ({ context, location }) => {
 
   if (!user) {
     throw redirect({
-      to: "/Login",
+      to: LOGIN_PATH,
       search: buildRedirectSearchFromLocation(location),
       replace: true,
     });
@@ -207,18 +214,18 @@ const routeTree = rootRoute.addChildren([
   publicRoute(SCREEN_PATH, Screen),
   publicRoute("/aboutUs", AboutUs),
   publicRoute(CART_PATH, Cart),
-  publicRoute("/shop", Shop),
+  publicRoute(SHOP_PATH, Shop),
   publicRoute(PRODUCT_DETAIL_PATH, ProductDetailPage),
-  publicRoute("/Shipping", Shipping),
-  publicRoute("/ShippingService", ShippingService),
-  publicRoute("/Course", Course),
-  publicRoute("/CustomerInfo", CustomerInfo),
-  publicRoute("/Login", Login),
-  makeRedirectRoute("/login", "/Login"),
+  publicRoute(SHOP_REVIEW_PATH, Shipping),
+  publicRoute(SHOP_PAYMENT_PATH, ShippingService),
+  publicRoute(COURSE_PATH, Course),
+  publicRoute(SHOP_CUSTOMER_INFO_PATH, CustomerInfo),
+  publicRoute(LOGIN_PATH, Login),
+  makeRedirectRoute("/login", LOGIN_PATH),
   publicRoute("/verifyEmail", VerifyEmail),
   publicRoute("/reset-password", ResetPassword),
-  publicRoute("/Signup", Signup),
-  makeRedirectRoute("/CoursesProduct", "/Course"),
+  publicRoute(SIGNUP_PATH, Signup),
+  makeRedirectRoute("/CoursesProduct", COURSE_PATH),
   publicRoute(COURSE_PRODUCT_DETAIL_PATH, CoursesProductDetail),
   publicRoute("/gift-courses", GiftCourse),
   publicRoute("/CareerJob", CareerJob),

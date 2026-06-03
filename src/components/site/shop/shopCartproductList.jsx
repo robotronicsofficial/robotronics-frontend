@@ -23,6 +23,7 @@ import {
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
+import { LOGIN_PATH, SHOP_PATH } from "@/router/paths";
 
 const ShopCartproductList = ({ onNext }) => {
   const cart = useCartStore(selectCart);
@@ -95,7 +96,7 @@ const ShopCartproductList = ({ onNext }) => {
       });
 
       navigate({
-        to: "/Login",
+        to: LOGIN_PATH,
         search: { redirect: location.href },
       });
       return;
@@ -178,7 +179,7 @@ const ShopCartproductList = ({ onNext }) => {
             <CardContent className="flex flex-col items-start gap-4 py-10">
               <Text tone="muted">Your cart is empty.</Text>
               <Button asChild>
-                <Link to="/shop">Continue shopping</Link>
+                <Link to={SHOP_PATH}>Continue shopping</Link>
               </Button>
             </CardContent>
           </Card>

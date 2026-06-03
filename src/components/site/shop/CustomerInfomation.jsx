@@ -25,6 +25,7 @@ import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { useSaveCheckoutAddressMutation } from "@/hooks/useShopOrders";
+import { LOGIN_PATH, SHOP_PAYMENT_PATH } from "@/router/paths";
 
 
 const STATES = [
@@ -172,7 +173,7 @@ const CustomerInfomation = ({ onNext }) => {
     if (!currentUser) {
       toast.error("Please log in to continue.");
       navigate({
-        to: "/Login",
+        to: LOGIN_PATH,
         search: { redirect: location.href },
       });
       return;
@@ -206,7 +207,7 @@ const CustomerInfomation = ({ onNext }) => {
           onNext();
           return;
         }
-        navigate({ to: "/ShippingService" });
+        navigate({ to: SHOP_PAYMENT_PATH });
         return;
       }
 
@@ -223,7 +224,7 @@ const CustomerInfomation = ({ onNext }) => {
         onNext();
         return;
       }
-      navigate({ to: "/ShippingService" });
+      navigate({ to: SHOP_PAYMENT_PATH });
     } catch (err) {
       toast.error(err.message || "Unable to save your information. Please try again.");
     }

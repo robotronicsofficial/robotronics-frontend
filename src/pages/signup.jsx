@@ -33,6 +33,7 @@ import {
   savePostAuthRedirect,
 } from "../utils/authRedirect";
 import { cn } from "@/lib/utils";
+import { LOGIN_PATH } from "@/router/paths";
 
 const RequirementCheck = ({ isValid, text }) => (
   <div className="flex items-center gap-2">
@@ -446,7 +447,7 @@ const Signup = () => {
       <Text tone="muted" size="sm" className="text-center">
         Already have an account?{" "}
         <Link
-          to="/Login"
+          to={LOGIN_PATH}
           search={buildAuthRedirectSearch(redirectPath)}
           className="text-foreground underline underline-offset-4"
         >

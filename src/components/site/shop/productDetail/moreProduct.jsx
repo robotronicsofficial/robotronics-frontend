@@ -13,7 +13,7 @@ import {
   getCommerceItemKey,
   getCommerceItemRoute,
 } from "@/lib/commerceItems";
-import { COURSE_PATH } from "@/router/paths";
+import { COURSE_PATH, SHOP_PATH } from "@/router/paths";
 import { cn } from "@/lib/utils";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
@@ -22,7 +22,7 @@ import { useProducts } from "@/hooks/useProducts";
 
 const RELATED_ITEM_CONFIG = {
   [COMMERCE_ITEM_TYPES.product]: {
-    browsePath: "/shop",
+    browsePath: SHOP_PATH,
     browseLabel: "Browse the store",
     emptyLabel: "No other products are available right now.",
     subtitle: "Top selling products",

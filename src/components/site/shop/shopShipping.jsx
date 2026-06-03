@@ -27,6 +27,7 @@ import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { useSubmitShopCheckoutIntentMutation } from "@/hooks/useShopOrders";
+import { LOGIN_PATH, SHOP_CUSTOMER_INFO_PATH, SHOP_PAYMENT_PATH } from "@/router/paths";
 
 const DetailRow = ({ label, value }) => (
   <div className="flex items-start gap-1.5 text-body-sm">
@@ -61,7 +62,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       onEditCustomer();
       return;
     }
-    navigate({ to: "/CustomerInfo" });
+    navigate({ to: SHOP_CUSTOMER_INFO_PATH });
   };
 
   const handleEditPayment = () => {
@@ -69,7 +70,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       onEditPayment();
       return;
     }
-    navigate({ to: "/ShippingService" });
+    navigate({ to: SHOP_PAYMENT_PATH });
   };
 
   const handleSubmitCheckoutIntent = async () => {
@@ -83,7 +84,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
     if (!currentUser) {
       navigate({
-        to: "/Login",
+        to: LOGIN_PATH,
         search: { redirect: location.href },
       });
       return;

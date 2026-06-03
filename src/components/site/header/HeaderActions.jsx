@@ -6,6 +6,7 @@ import { Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import { cn } from "@/lib/utils";
 import { selectCartQuantity, useCartStore } from "@/stores/cartStore";
+import { LOGIN_PATH, SIGNUP_PATH } from "@/router/paths";
 
 import ChildSessionSwitcher from "./ChildSessionSwitcher";
 import CurrencySelector from "./CurrencySelector";
@@ -54,10 +55,10 @@ const IconButtonLink = ({ to, label, count, className, children }) => (
 const SignedOutActions = () => (
   <div className="flex items-center gap-2">
     <Button asChild variant="ghost" className="h-9 rounded-full px-4 text-body-sm">
-      <Link to="/Login">Sign in</Link>
+      <Link to={LOGIN_PATH}>Sign in</Link>
     </Button>
     <Button asChild className="h-9 rounded-full px-5 text-body-sm font-semibold">
-      <Link to="/Signup">Get started</Link>
+      <Link to={SIGNUP_PATH}>Get started</Link>
     </Button>
   </div>
 );

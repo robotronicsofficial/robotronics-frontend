@@ -23,6 +23,7 @@ import {
   getSafeRedirectPath,
   savePostAuthRedirect,
 } from "../utils/authRedirect";
+import { LOGIN_PATH, SIGNUP_PATH } from "@/router/paths";
 
 const FieldLabel = ({ htmlFor, children, action }) => (
   <div className="flex items-center justify-between">
@@ -51,7 +52,7 @@ const Login = () => {
       const nextRedirectPath = redirectPath || consumePostAuthRedirect();
       toast.success("Your email has been verified. Sign in to continue.");
       navigate({
-        to: "/Login",
+        to: LOGIN_PATH,
         search: buildAuthRedirectSearch(nextRedirectPath),
         replace: true,
       });
@@ -253,7 +254,7 @@ const Login = () => {
           variant="outline"
           className="w-full"
           onClick={() =>
-            navigate({ to: "/Signup", search: buildAuthRedirectSearch(redirectPath) })
+            navigate({ to: SIGNUP_PATH, search: buildAuthRedirectSearch(redirectPath) })
           }
         >
           Create an account

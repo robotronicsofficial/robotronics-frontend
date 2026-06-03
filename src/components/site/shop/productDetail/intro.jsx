@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { createProductCommerceItem } from "@/lib/commerceItems";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
+import { SHOP_PATH } from "@/router/paths";
 import { useCartStore } from "@/stores/cartStore";
 import { useProduct, useProducts } from "@/hooks/useProducts";
 import { useSavedItems, useToggleSavedItemMutation } from "@/hooks/useSavedItems";
@@ -294,7 +295,7 @@ const Intro = () => {
             </Text>
           </div>
           <div className="flex flex-wrap items-center gap-3" data-aos="fade-left">
-            <Button type="button" onClick={() => navigate({ to: "/shop" })}>
+            <Button type="button" onClick={() => navigate({ to: SHOP_PATH })}>
               Browse all products
               <ArrowRight className="size-4" aria-hidden="true" />
             </Button>

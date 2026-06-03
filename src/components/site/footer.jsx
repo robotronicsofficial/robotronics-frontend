@@ -13,13 +13,13 @@ import {
   SOCIAL_LINKS,
 } from "@/lib/brandContact";
 import { cn } from "@/lib/utils";
-import { CONTACT_PATH } from "@/router/paths";
+import { CONTACT_PATH, COURSE_PATH, SHOP_PATH } from "@/router/paths";
 
 const QUICK_LINKS = [
   { label: "About", to: "/aboutUs" },
   { label: "Subscriptions", to: "/subscriptions" },
-  { label: "Courses", to: "/Course" },
-  { label: "Shop", to: "/shop" },
+  { label: "Courses", to: COURSE_PATH },
+  { label: "Shop", to: SHOP_PATH },
   { label: "Blog", to: "/Blog" },
   { label: "Careers", to: "/CareerJob" },
 ];

@@ -5,13 +5,14 @@ import HeroAtmospherics from "@/components/marketing/HeroAtmospherics";
 import { Container } from "@/components/ui/container";
 import { Display, Eyebrow, Text } from "@/components/ui/typography";
 import robotIllustration from "../../assets/images/robot.svg";
+import { CONTACT_PATH, COURSE_PATH, SHOP_PATH } from "@/router/paths";
 
 const HELPFUL_LINKS = [
   { label: "Home", to: "/", icon: Home },
-  { label: "Shop", to: "/shop", icon: ShoppingBag },
-  { label: "Courses", to: "/Course", icon: BookOpen },
+  { label: "Shop", to: SHOP_PATH, icon: ShoppingBag },
+  { label: "Courses", to: COURSE_PATH, icon: BookOpen },
   { label: "Subscriptions", to: "/subscriptions", icon: Star },
-  { label: "Contact support", to: "/contact-us", icon: LifeBuoy },
+  { label: "Contact support", to: CONTACT_PATH, icon: LifeBuoy },
 ];
 
 const Error = () => (

@@ -18,6 +18,7 @@ import {
   hasValidPasswordRequirements,
   PASSWORD_POLICY_MESSAGE,
 } from "../utils/passwordPolicy";
+import { LOGIN_PATH } from "@/router/paths";
 
 const RequirementCheck = ({ isValid, text }) => (
   <div className="flex items-center gap-2">
@@ -89,7 +90,7 @@ const ResetPassword = () => {
       await resetPasswordMutation.mutateAsync({ token, password });
 
       toast.success("Password reset successfully!");
-      setTimeout(() => navigate({ to: "/Login" }), 2000);
+      setTimeout(() => navigate({ to: LOGIN_PATH }), 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to reset password");
       console.error("Reset password error:", err);
@@ -176,7 +177,7 @@ const ResetPassword = () => {
 
         <Button
           type="button"
-          onClick={() => navigate({ to: "/Login" })}
+          onClick={() => navigate({ to: LOGIN_PATH })}
           variant="link"
         >
           Back to login
