@@ -17,11 +17,11 @@ export const readCourse = (payload) => {
 };
 
 export const fetchCourses = async () => {
-  const payload = await fetchBackendJson("/get-courses");
+  const payload = await fetchBackendJson("/courses");
   return readCourses(payload);
 };
 
 export const fetchCourseById = async (courseId) => {
-  const payload = await fetchBackendJson(`/coursesById/${courseId}`);
+  const payload = await fetchBackendJson(`/courses/${courseId}`);
   return readCourse(payload);
 };

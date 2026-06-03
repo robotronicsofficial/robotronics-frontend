@@ -13,7 +13,7 @@ describe("course API contract", () => {
     fetchBackendJson.mockResolvedValueOnce({ data: courses });
 
     await expect(fetchCourses()).resolves.toBe(courses);
-    expect(fetchBackendJson).toHaveBeenCalledWith("/get-courses");
+    expect(fetchBackendJson).toHaveBeenCalledWith("/courses");
   });
 
   it("reads course details from the backend data envelope", async () => {
@@ -21,7 +21,7 @@ describe("course API contract", () => {
     fetchBackendJson.mockResolvedValueOnce({ data: course });
 
     await expect(fetchCourseById("course-1")).resolves.toBe(course);
-    expect(fetchBackendJson).toHaveBeenCalledWith("/coursesById/course-1");
+    expect(fetchBackendJson).toHaveBeenCalledWith("/courses/course-1");
   });
 
   it("rejects legacy course envelopes", () => {
