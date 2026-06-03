@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { readChildCourses } from "./childCourses";
+import {
+  readChildCourses,
+  readChildProgress,
+} from "./childCourses";
 
 describe("child course API contract", () => {
   it("reads active child courses from the backend data envelope", () => {
@@ -23,5 +26,32 @@ describe("child course API contract", () => {
         progress: 40,
       },
     ]);
+  });
+
+  it("reads child progress from the backend data envelope", () => {
+    expect(readChildProgress({
+      data: {
+        childName: "Ava",
+        courses: [
+          {
+            id: "course-1",
+            name: "Python Foundations",
+            completed: 2,
+            certificateAvailable: true,
+          },
+        ],
+      },
+    })).toEqual({
+      childName: "Ava",
+      courses: [
+        {
+          id: "course-1",
+          name: "Python Foundations",
+          completed: 2,
+          status: "active",
+          certificateAvailable: true,
+        },
+      ],
+    });
   });
 });

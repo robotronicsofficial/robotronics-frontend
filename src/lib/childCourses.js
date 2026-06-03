@@ -33,6 +33,14 @@ export const readChildCourses = (payload) => {
   return payload.data.map(normalizeChildCourse);
 };
 
+export const readChildProgress = (payload) => {
+  if (!payload?.data || typeof payload.data !== "object" || Array.isArray(payload.data)) {
+    throw new Error("Invalid child progress response");
+  }
+
+  return normalizeProgressPayload(payload.data);
+};
+
 export const fetchChildPlan = (childId) =>
   fetchBackendJson(
     `/children/${childId}/plan`,
@@ -123,7 +131,7 @@ export const fetchChildProgress = async (childId) => {
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
-  return normalizeProgressPayload(payload);
+  return readChildProgress(payload);
 };
 
 export const generateChildCertificate = ({ childId, courseId }) =>
