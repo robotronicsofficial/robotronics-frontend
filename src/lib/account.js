@@ -1,5 +1,7 @@
 import { fetchSessionJson, sendSessionJson } from "./api";
 import {
+  ensureArray,
+  normalizeChildCourse,
   normalizeParentRecord,
 } from "./subscription";
 
@@ -49,8 +51,23 @@ export const fetchPayments = async () => {
   return readPayments(payload);
 };
 
-export const fetchChildEnrollment = (childId) =>
-  fetchSessionJson(`/children/${childId}`);
+export const readChildEnrollment = (payload) => {
+  const data = payload?.data;
+
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Invalid child enrollment response");
+  }
+
+  return {
+    childId: data.childId,
+    courses: ensureArray(data.courses).map(normalizeChildCourse),
+  };
+};
+
+export const fetchChildEnrollment = async (childId) => {
+  const payload = await fetchSessionJson(`/children/${childId}`);
+  return readChildEnrollment(payload);
+};
 
 export const saveParent = (body) =>
   sendSessionJson("/parents", {

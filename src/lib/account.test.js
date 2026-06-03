@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   readChildAccounts,
+  readChildEnrollment,
   readCurrentParent,
   readPayments,
 } from "./account";
@@ -40,5 +41,30 @@ describe("account api readers", () => {
     ];
 
     expect(readPayments({ success: true, data: payments })).toEqual(payments);
+  });
+
+  it("reads child enrollment from the backend data envelope", () => {
+    expect(readChildEnrollment({
+      success: true,
+      data: {
+        childId: "P-5001-01",
+        courses: [
+          {
+            courseId: "course-1",
+            Sections: [{ modules: [] }],
+            progress: "50",
+          },
+        ],
+      },
+    })).toEqual({
+      childId: "P-5001-01",
+      courses: [
+        {
+          courseId: "course-1",
+          Sections: [{ modules: [], quiz: null }],
+          progress: 50,
+        },
+      ],
+    });
   });
 });
