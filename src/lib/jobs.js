@@ -7,9 +7,31 @@ const isMissingSpecificJob = (error) => {
   return /job/i.test(message) && /not found/i.test(message);
 };
 
-export const fetchJobs = () => fetchBackendJson(JOBS_PATH);
+export const readJobs = (payload) => {
+  if (!Array.isArray(payload?.data)) {
+    throw new Error("Invalid jobs response");
+  }
 
-export const fetchJobById = (jobId) => fetchBackendJson(`${JOBS_PATH}/${jobId}`);
+  return payload.data;
+};
+
+export const readJob = (payload) => {
+  if (!payload?.data || typeof payload.data !== "object" || Array.isArray(payload.data)) {
+    throw new Error("Invalid job response");
+  }
+
+  return payload.data;
+};
+
+export const fetchJobs = async () => {
+  const payload = await fetchBackendJson(JOBS_PATH);
+  return readJobs(payload);
+};
+
+export const fetchJobById = async (jobId) => {
+  const payload = await fetchBackendJson(`${JOBS_PATH}/${jobId}`);
+  return readJob(payload);
+};
 
 export const getJobsErrorMessage = (error, { detail = false } = {}) => {
   if (error?.status === 404 && isMissingSpecificJob(error)) {
