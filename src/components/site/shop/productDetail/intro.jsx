@@ -11,17 +11,14 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Display, Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { cn } from "@/lib/utils";
 import { createProductCommerceItem } from "@/lib/commerceItems";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { SHOP_PATH } from "@/router/paths";
 import { useCartStore } from "@/stores/cartStore";
 import { useProduct, useProducts } from "@/hooks/useProducts";
 import { useSavedItems, useToggleSavedItemMutation } from "@/hooks/useSavedItems";
-import robo from "@/assets/images/shopRobot.webp";
-
-const resolveImageUrl = (image) => resolveBackendAssetUrl(image, robo);
 
 const Intro = () => {
   const { id } = useParams({ strict: false });
@@ -40,18 +37,14 @@ const Intro = () => {
 
   const product = cachedProduct || fetchedProduct || null;
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(robo);
+  const [selectedImage, setSelectedImage] = useState(resolveCatalogImageUrl(null));
   const isSaved = useMemo(
     () => savedItems.some((item) => item.itemType === "product" && item.itemId === id),
     [id, savedItems],
   );
 
   useEffect(() => {
-    if (product?.images?.[0]) {
-      setSelectedImage(resolveImageUrl(product.images[0]));
-    } else {
-      setSelectedImage(robo);
-    }
+    setSelectedImage(resolveCatalogImageUrl(product?.images?.[0]));
   }, [product]);
 
   const handleIncrease = () => setQuantity((prev) => prev + 1);
@@ -129,7 +122,7 @@ const Intro = () => {
             {productImages.length > 0 && (
               <div className="flex gap-2 overflow-x-auto lg:flex-col lg:gap-3">
                 {productImages.map((img, idx) => {
-                  const url = resolveImageUrl(img);
+                  const url = resolveCatalogImageUrl(img);
                   const isActive = url === selectedImage;
                   return (
                     <button

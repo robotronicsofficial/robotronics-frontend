@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { EMPTY_SHOP_CART_QUOTE } from "@/lib/shopCheckout";
 import { getCommerceItemKey } from "@/lib/commerceItems";
 import { useShopCartQuoteQuery } from "@/hooks/useShopOrders";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 
@@ -46,7 +46,7 @@ const CustomerOrder = ({
             <CustomerProduct
               key={getCommerceItemKey(product)}
               title={product.name}
-              image={resolveBackendAssetUrl(product?.image || product?.images?.[0], "")}
+              image={resolveCatalogImageUrl(product?.image || product?.images?.[0])}
               price={hasBackendItems ? formatMoney(product.price ?? product.unitPrice) : "Updating..."}
               priceLabel=""
               item={product.quantity}
