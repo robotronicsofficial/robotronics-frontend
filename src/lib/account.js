@@ -1,4 +1,5 @@
 import { fetchSessionJson, sendSessionJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 import { readChildSessionVerification } from "./childSession";
 import {
   ensureArray,
@@ -7,11 +8,11 @@ import {
 } from "./subscription";
 
 export const readCurrentParent = (payload) => {
-  const parent = payload?.data ?? null;
-
-  if (parent !== null && (typeof parent !== "object" || Array.isArray(parent))) {
-    throw new Error("Invalid parent response");
-  }
+  const parent = readDataEnvelope(
+    payload,
+    (value) => value === null || isRecord(value),
+    "Invalid parent response",
+  );
 
   return parent ? normalizeParentRecord(parent) : null;
 };
@@ -22,11 +23,11 @@ export const fetchCurrentParent = async () => {
 };
 
 export const readChildAccounts = (payload) => {
-  const data = payload?.data;
-
-  if (!data || typeof data !== "object" || Array.isArray(data) || !Array.isArray(data.children)) {
-    throw new Error("Invalid child accounts response");
-  }
+  const data = readDataEnvelope(
+    payload,
+    (value) => isRecord(value) && Array.isArray(value.children),
+    "Invalid child accounts response",
+  );
 
   return {
     parent: data.parent ? normalizeParentRecord(data.parent) : null,
@@ -40,11 +41,7 @@ export const fetchChildAccounts = async (userId) => {
 };
 
 export const readPayments = (payload) => {
-  if (!Array.isArray(payload?.data)) {
-    throw new Error("Invalid payments response");
-  }
-
-  return payload.data;
+  return readDataEnvelope(payload, Array.isArray, "Invalid payments response");
 };
 
 export const fetchPayments = async () => {
@@ -53,11 +50,11 @@ export const fetchPayments = async () => {
 };
 
 export const readChildEnrollment = (payload) => {
-  const data = payload?.data;
-
-  if (!data || typeof data !== "object" || Array.isArray(data)) {
-    throw new Error("Invalid child enrollment response");
-  }
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid child enrollment response",
+  );
 
   return {
     childId: data.childId,
@@ -77,10 +74,14 @@ export const saveParent = (body) =>
   });
 
 export const readSubscriptionCheckoutIntent = (payload) => {
-  const data = payload?.data;
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid subscription checkout response",
+  );
   const message = typeof payload?.message === "string" ? payload.message.trim() : "";
 
-  if (!message || !data || typeof data !== "object" || Array.isArray(data)) {
+  if (!message) {
     throw new Error("Invalid subscription checkout response");
   }
 
@@ -91,10 +92,14 @@ export const readSubscriptionCheckoutIntent = (payload) => {
 };
 
 export const readSubscriptionActivation = (payload) => {
-  const data = payload?.data;
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid subscription activation response",
+  );
   const message = typeof payload?.message === "string" ? payload.message.trim() : "";
 
-  if (!message || !data || typeof data !== "object" || Array.isArray(data)) {
+  if (!message) {
     throw new Error("Invalid subscription activation response");
   }
 
