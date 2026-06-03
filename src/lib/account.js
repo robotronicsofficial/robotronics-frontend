@@ -18,9 +18,17 @@ export const fetchChildAccounts = async (userId) => {
   };
 };
 
+export const readPayments = (payload) => {
+  if (!Array.isArray(payload?.data)) {
+    throw new Error("Invalid payments response");
+  }
+
+  return payload.data;
+};
+
 export const fetchPayments = async () => {
-  const payload = await fetchSessionJson("/getPayments");
-  return Array.isArray(payload) ? payload : [];
+  const payload = await fetchSessionJson("/payments/me");
+  return readPayments(payload);
 };
 
 export const fetchChildEnrollment = (childId) =>
