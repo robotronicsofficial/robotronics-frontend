@@ -9,6 +9,10 @@ import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdow
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { PlanCard } from "@/components/marketing/PlanCard";
 import { CHECKOUT_PATH, buildCheckoutSearch } from "@/lib/checkoutFlow";
+import {
+  buildCheckoutPlanSelection,
+  getSubscriptionPlanPricing,
+} from "@/lib/subscriptionPlans";
 import { usePlans } from "../../hooks/usePlans";
 import { useCheckoutStore } from "../../stores/checkoutStore";
 
@@ -52,15 +56,7 @@ const SubscriptionPlans = () => {
   const { data: plans = [], isLoading, error } = usePlans();
 
   const handleSelect = (plan) => {
-    const price = cycle === "annual" ? plan.yearlyPrice : plan.monthlyPrice;
-    setPlan({
-      planId: plan._id,
-      name: plan.planName,
-      price: Number(price || 0),
-      billingCycle: cycle,
-      courseAccess: plan.courseAccess,
-      maxQuizAttemptsPerDay: plan.maxQuizAttemptsPerDay,
-    });
+    setPlan(buildCheckoutPlanSelection(plan, cycle));
     navigate({ to: CHECKOUT_PATH, search: buildCheckoutSearch("kids") });
   };
 
@@ -105,10 +101,7 @@ const SubscriptionPlans = () => {
                         key={plan._id}
                         name={plan.planName || "Learning Subscription"}
                         description={plan.description}
-                        pricing={{
-                          monthly: Number(plan.monthlyPrice || 0),
-                          annual: Number(plan.yearlyPrice || 0),
-                        }}
+                        pricing={getSubscriptionPlanPricing(plan)}
                         features={plan.features || []}
                         cta={{
                           label: "Choose plan",
