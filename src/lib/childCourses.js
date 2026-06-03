@@ -35,7 +35,7 @@ export const readChildCourses = (payload) => {
 
 export const fetchChildPlan = (childId) =>
   fetchBackendJson(
-    `/getChildPlan/${childId}`,
+    `/children/${childId}/plan`,
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
@@ -54,7 +54,7 @@ export const fetchSelectableChildCourses = async (childId) => {
 
 export const saveChildCourses = ({ childId, courseIds }) =>
   fetchBackendJson(
-    `/${childId}/courses`,
+    `/children/${childId}/courses`,
     buildRequiredChildRequest({
       method: "PUT",
       childId,
@@ -69,7 +69,7 @@ export const saveChildCourses = ({ childId, courseIds }) =>
 
 export const fetchChildCourses = async (childId) => {
   const payload = await fetchBackendJson(
-    `/child/${childId}/courses`,
+    `/children/${childId}/courses`,
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
@@ -78,7 +78,7 @@ export const fetchChildCourses = async (childId) => {
 
 export const fetchChildCourseDetail = async ({ childId, courseId }) => {
   const payload = await fetchBackendJson(
-    `/getChildById/${childId}/ByCourseId/${courseId}`,
+    `/children/${childId}/courses/${courseId}`,
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
@@ -91,7 +91,7 @@ export const fetchChildCourseDetail = async ({ childId, courseId }) => {
 
 export const updateChildCourseProgress = async ({ childId, courseId, sectionIndex, answers }) => {
   const payload = await fetchBackendJson(
-    `/updateChildCourse/${childId}`,
+    `/children/${childId}/courses/${courseId}/progress`,
     buildRequiredChildRequest({
       method: "PUT",
       childId,
@@ -99,7 +99,6 @@ export const updateChildCourseProgress = async ({ childId, courseId, sectionInde
         "Content-Type": "application/json",
       },
       body: {
-        courseId,
         sectionIndex,
         answers,
       },
@@ -114,7 +113,7 @@ export const updateChildCourseProgress = async ({ childId, courseId, sectionInde
 
 export const downloadChildCourseContent = ({ childId, courseId, contentId }) =>
   fetchBackendBlob(
-    `/child/${childId}/courses/${courseId}/content/${contentId}/download`,
+    `/children/${childId}/courses/${courseId}/content/${contentId}/download`,
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
