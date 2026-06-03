@@ -25,7 +25,7 @@ export const submitGiftCourseRequest = (body) =>
   });
 
 export const submitJobApplication = (body) =>
-  sendFormData("/cvForm", {
+  sendFormData("/job-applications", {
     method: "POST",
     body,
   });
