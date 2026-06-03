@@ -1,18 +1,13 @@
 import { sendFormData, sendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
 const readSubmissionData = (payload, key, errorMessage) => {
-  const data = payload?.data;
+  const data = readDataEnvelope(payload, isRecord, errorMessage);
   const message = typeof payload?.message === "string" ? payload.message.trim() : "";
 
   if (
-    payload?.success !== true ||
     !message ||
-    !data ||
-    typeof data !== "object" ||
-    Array.isArray(data) ||
-    !data[key] ||
-    typeof data[key] !== "object" ||
-    Array.isArray(data[key])
+    !isRecord(data[key])
   ) {
     throw new Error(errorMessage);
   }
@@ -49,10 +44,14 @@ export const submitQuickContactRequest = async (body) =>
   }));
 
 export const readGiftCourseSubmission = (payload) => {
-  const data = payload?.data;
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid gift course response",
+  );
   const message = typeof payload?.message === "string" ? payload.message.trim() : "";
 
-  if (!message || !data || typeof data !== "object" || Array.isArray(data)) {
+  if (!message) {
     throw new Error("Invalid gift course response");
   }
 

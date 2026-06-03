@@ -1,13 +1,14 @@
 import { fetchSessionJson, sendSessionJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
 const SAVED_ITEMS_ENDPOINT = "/wishlists/wishlist";
 
 export const readSavedItems = (payload) => {
-  if (!Array.isArray(payload?.data?.items)) {
-    throw new Error("Invalid saved items response");
-  }
-
-  return payload.data.items;
+  return readDataEnvelope(
+    payload,
+    (value) => isRecord(value) && Array.isArray(value.items),
+    "Invalid saved items response",
+  ).items;
 };
 
 export const fetchSavedItems = async () => {

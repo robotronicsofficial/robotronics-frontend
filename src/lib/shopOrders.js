@@ -1,20 +1,23 @@
 import { sendJson, sendSessionJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
 export const readShopCartQuote = (payload) => {
-  const quote = payload?.data?.quote;
-
-  if (!quote || typeof quote !== "object" || Array.isArray(quote)) {
-    throw new Error("Invalid shop cart quote response");
-  }
-
-  return quote;
+  return readDataEnvelope(
+    payload,
+    (value) => isRecord(value) && isRecord(value.quote),
+    "Invalid shop cart quote response",
+  ).quote;
 };
 
 export const readShopCheckoutSubmission = (payload) => {
-  const data = payload?.data;
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid shop checkout response",
+  );
   const message = typeof payload?.message === "string" ? payload.message.trim() : "";
 
-  if (!message || !data || typeof data !== "object" || Array.isArray(data)) {
+  if (!message) {
     throw new Error("Invalid shop checkout response");
   }
 

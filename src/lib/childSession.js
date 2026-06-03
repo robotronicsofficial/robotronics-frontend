@@ -1,12 +1,13 @@
 import { fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 import { buildChildSessionRequest } from "../utils/childSessionRequest";
 
 export const readChildSessionVerification = (payload) => {
-  const data = payload?.data;
-
-  if (!data || typeof data !== "object" || Array.isArray(data)) {
-    throw new Error("Invalid child session response");
-  }
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid child session response",
+  );
 
   return {
     message: payload.message,
