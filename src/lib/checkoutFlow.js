@@ -1,14 +1,23 @@
-import { CHECKOUT_STEPS } from "@/stores/checkoutStore";
-
 export const CHECKOUT_PATH = "/subscriptions/checkout";
 
+export const CHECKOUT_STEPS = Object.freeze([
+  "plan",
+  "kids",
+  "parent",
+  "payment",
+  "confirm",
+  "welcome",
+]);
+
+export const isCheckoutStep = (step) => CHECKOUT_STEPS.includes(step);
+
 export const buildCheckoutSearch = (step) => ({
-  step: CHECKOUT_STEPS.includes(step) ? step : "plan",
+  step: isCheckoutStep(step) ? step : "plan",
 });
 
 export const getStepFromSearch = (search) => {
   const candidate = search?.step;
-  return CHECKOUT_STEPS.includes(candidate) ? candidate : "plan";
+  return isCheckoutStep(candidate) ? candidate : "plan";
 };
 
 export const getNextStep = (current) => {

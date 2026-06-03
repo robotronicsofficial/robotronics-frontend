@@ -5,7 +5,7 @@ import { CheckCircle2, ShieldCheck } from "lucide-react";
 import {
   CHECKOUT_PATH,
   buildCheckoutSearch,
-} from "@/components/checkout/checkoutNav";
+} from "@/lib/checkoutFlow";
 import CheckoutShell from "@/components/checkout/CheckoutShell";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";

@@ -5,7 +5,7 @@ import { ChevronsRight } from "lucide-react";
 import {
   CHECKOUT_PATH,
   buildCheckoutSearch,
-} from "@/components/checkout/checkoutNav";
+} from "@/lib/checkoutFlow";
 import CheckoutShell from "@/components/checkout/CheckoutShell";
 import { BillingToggle } from "@/components/ui/billing-toggle";
 import { Button } from "@/components/ui/button";

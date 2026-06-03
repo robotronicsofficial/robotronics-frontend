@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import {
   CHECKOUT_PATH,
   buildCheckoutSearch,
-} from "@/components/checkout/checkoutNav";
+} from "@/lib/checkoutFlow";
 import CheckoutShell from "@/components/checkout/CheckoutShell";
 import CheckoutSummary from "@/components/checkout/CheckoutSummary";
 import { Button } from "@/components/ui/button";

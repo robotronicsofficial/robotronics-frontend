@@ -5,7 +5,7 @@ import {
   CHECKOUT_PATH,
   buildCheckoutSearch,
   getStepFromSearch,
-} from "@/components/checkout/checkoutNav";
+} from "@/lib/checkoutFlow";
 import {
   selectHasPlan,
   selectIsChildrenComplete,

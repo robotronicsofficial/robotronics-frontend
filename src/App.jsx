@@ -11,6 +11,7 @@ import { Toaster } from "sonner";
 import Layout from "@/components/site/Layout";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { fetchCurrentUser } from "./lib/auth";
+import { CHECKOUT_PATH } from "./lib/checkoutFlow";
 import { verifyChildSession } from "./lib/childSession";
 import { queryClient } from "./lib/queryClient.js";
 import { queryKeys } from "./lib/queryKeys";
@@ -231,11 +232,11 @@ const routeTree = rootRoute.addChildren([
   publicRoute("/404", Error),
   publicRoute("/International/myRobot", MyRobort),
   publicRoute("/subscriptions", SubscriptionHome),
-  publicRoute("/subscriptions/checkout", CheckoutWizard),
+  publicRoute(CHECKOUT_PATH, CheckoutWizard),
   publicRoute("/for-schools", ForSchools),
-  makeRedirectRoute("/subscriptions/register", "/subscriptions/checkout"),
-  makeRedirectRoute("/subscriptions/payment", "/subscriptions/checkout"),
-  makeRedirectRoute("/subscriptions/review", "/subscriptions/checkout"),
+  makeRedirectRoute("/subscriptions/register", CHECKOUT_PATH),
+  makeRedirectRoute("/subscriptions/payment", CHECKOUT_PATH),
+  makeRedirectRoute("/subscriptions/review", CHECKOUT_PATH),
   publicRoute("/International/videoGallery", VideoGallery),
   publicRoute("/International/Iservices", IServices),
   publicRoute("/International/home", IHome),

@@ -5,9 +5,9 @@ import {
   getNextStep,
   getPrevStep,
   getStepFromSearch,
-} from "./checkoutNav";
+} from "./checkoutFlow";
 
-describe("checkout navigation contract", () => {
+describe("checkout flow contract", () => {
   it("normalizes invalid deep-link steps back to plan", () => {
     expect(getStepFromSearch({ step: "payment" })).toBe("payment");
     expect(getStepFromSearch({ step: "unknown" })).toBe("plan");

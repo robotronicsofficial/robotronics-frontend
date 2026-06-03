@@ -1,19 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-/* ──────────────────────────────────────────────────────────────────
-   checkoutStore — single source of truth for the subscription flow.
-
-   Replaces (and consolidates) what used to live in:
-     • selectedPlanStore (the chosen plan)
-     • sessionStorage:subscription_checkout (parent + payment + order code)
-     • localStorage:robotronics:subscriptionDraft (in-flight form state)
-
-   Persisted to localStorage so a refresh on /subscriptions/checkout?step=payment
-   keeps the user where they were instead of bouncing them back to step 1.
-   ────────────────────────────────────────────────────────────────── */
-
-export const CHECKOUT_STEPS = ["plan", "kids", "parent", "payment", "confirm", "welcome"];
+import { CHECKOUT_STEPS } from "@/lib/checkoutFlow";
 
 const EMPTY_CHILD = {
   checkoutChildKey: "",

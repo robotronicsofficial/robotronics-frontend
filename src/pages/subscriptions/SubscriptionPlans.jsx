@@ -8,7 +8,7 @@ import { Display, Highlight, Text } from "@/components/ui/typography";
 import { AnnualOfferCountdown } from "@/components/marketing/AnnualOfferCountdown";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { PlanCard } from "@/components/marketing/PlanCard";
-import { CHECKOUT_PATH, buildCheckoutSearch } from "@/components/checkout/checkoutNav";
+import { CHECKOUT_PATH, buildCheckoutSearch } from "@/lib/checkoutFlow";
 import { usePlans } from "../../hooks/usePlans";
 import { useCheckoutStore } from "../../stores/checkoutStore";
 
