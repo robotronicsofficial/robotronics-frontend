@@ -18,10 +18,26 @@ const calculateCartTotals = (cart) => ({
   ),
 });
 
+const normalizeOwnerId = (ownerId) => String(ownerId || "").trim();
+
 export const useCartStore = create(
   persist(
     (set, get) => ({
+      ownerId: null,
       cart: [],
+      claimOwner: (ownerId) => {
+        const nextOwnerId = normalizeOwnerId(ownerId);
+        if (!nextOwnerId) {
+          return;
+        }
+
+        set((state) => (
+          state.ownerId && state.ownerId !== nextOwnerId
+            ? { ownerId: nextOwnerId, cart: [] }
+            : { ownerId: nextOwnerId }
+        ));
+      },
+      clearOwner: () => set({ ownerId: null, cart: [] }),
       addToCart: (payload) => {
         const normalizedItem = normalizeCommerceCartItem(payload);
         if (!normalizedItem?.itemId) {
@@ -81,7 +97,7 @@ export const useCartStore = create(
     }),
     {
       name: "robotronics.cart",
-      partialize: (state) => ({ cart: state.cart }),
+      partialize: (state) => ({ ownerId: state.ownerId, cart: state.cart }),
     },
   ),
 );

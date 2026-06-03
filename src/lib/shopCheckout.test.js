@@ -1,9 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  claimShopCheckoutOwner,
   clearPendingCartItems,
+  loadShopCheckout,
   loadPendingCartItems,
   savePendingCartItems,
+  saveShopCheckout,
 } from "./shopCheckout";
 
 const createStorage = () => {
@@ -46,5 +49,30 @@ describe("shop checkout storage contract", () => {
     clearPendingCartItems();
 
     expect(loadPendingCartItems()).toEqual([]);
+  });
+
+  it("clears shop checkout details when a different owner claims the draft", () => {
+    vi.stubGlobal("window", {
+      localStorage: createStorage(),
+      sessionStorage: createStorage(),
+    });
+
+    saveShopCheckout({ note: "Ring first" });
+    claimShopCheckoutOwner("user-1");
+
+    expect(loadShopCheckout()).toMatchObject({
+      ownerId: "user-1",
+      note: "Ring first",
+    });
+
+    claimShopCheckoutOwner("user-2");
+
+    expect(loadShopCheckout()).toEqual({
+      ownerId: "user-2",
+      customer: null,
+      address: null,
+      payment: null,
+      note: "",
+    });
   });
 });

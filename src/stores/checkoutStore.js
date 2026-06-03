@@ -41,7 +41,10 @@ const createEmptyChild = () => ({
   checkoutChildKey: createChildKey(),
 });
 
-const initialState = {
+const normalizeOwnerId = (ownerId) => String(ownerId || "").trim();
+
+const createInitialState = (ownerId = null) => ({
+  ownerId,
   step: "plan",
   plan: null,                     // { planId, name, price, billingCycle, courseAccess, maxQuizAttemptsPerDay }
   children: [createEmptyChild()], // always at least one row
@@ -51,7 +54,9 @@ const initialState = {
   status: CHECKOUT_STATUS.draft,
   // Persisted children records returned by saveParent (have _id, childCode)
   persistedChildren: [],
-};
+});
+
+const initialState = createInitialState();
 
 const buildOrderCode = () => {
   const segment = (typeof crypto !== "undefined" && crypto.getRandomValues)
@@ -64,6 +69,21 @@ export const useCheckoutStore = create(
   persist(
     (set, get) => ({
       ...initialState,
+
+      claimOwner: (ownerId) => {
+        const nextOwnerId = normalizeOwnerId(ownerId);
+        if (!nextOwnerId) {
+          return;
+        }
+
+        set((state) => (
+          state.ownerId && state.ownerId !== nextOwnerId
+            ? createInitialState(nextOwnerId)
+            : { ownerId: nextOwnerId }
+        ));
+      },
+
+      clearOwner: () => set(createInitialState()),
 
       setStep: (step) => set({ step }),
 
@@ -127,15 +147,16 @@ export const useCheckoutStore = create(
 
       setStatus: (status) => set({ status }),
 
-      reset: () => set({ ...initialState, children: [createEmptyChild()] }),
+      reset: () => set(createInitialState(get().ownerId)),
     }),
     {
       name: "robotronics.checkout",
       storage: createJSONStorage(() => sessionStorage),
-      version: 2,
+      version: 3,
       migrate: (persistedState) => ({
-        ...initialState,
+        ...createInitialState(normalizeOwnerId(persistedState?.ownerId) || null),
         ...persistedState,
+        ownerId: normalizeOwnerId(persistedState?.ownerId) || null,
         children: Array.isArray(persistedState?.children) && persistedState.children.length
           ? persistedState.children.map((child) => ({
               ...EMPTY_CHILD,
@@ -152,6 +173,7 @@ export const useCheckoutStore = create(
         },
       }),
       partialize: (state) => ({
+        ownerId: state.ownerId,
         step: state.step,
         plan: state.plan,
         children: state.children,

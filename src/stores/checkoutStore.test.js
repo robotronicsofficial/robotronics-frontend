@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import {
   selectHasPlan,
@@ -6,7 +6,12 @@ import {
   selectIsParentComplete,
   selectIsPaymentComplete,
   selectTotalPrice,
+  useCheckoutStore,
 } from "./checkoutStore";
+
+afterEach(() => {
+  useCheckoutStore.getState().clearOwner();
+});
 
 describe("checkout store selectors", () => {
   const completeState = {
@@ -55,5 +60,37 @@ describe("checkout store selectors", () => {
       ...completeState,
       children: [{ firstName: "Ava", lastName: "", dateOfBirth: "", gender: "" }],
     })).toBe(false);
+  });
+});
+
+describe("checkout store ownership", () => {
+  it("keeps a guest draft when the first owner claims it", () => {
+    useCheckoutStore.getState().setPlan({
+      planId: "plan-1",
+      billingCycle: "monthly",
+      price: 1200,
+    });
+
+    useCheckoutStore.getState().claimOwner("user-1");
+
+    expect(useCheckoutStore.getState().ownerId).toBe("user-1");
+    expect(useCheckoutStore.getState().plan?.planId).toBe("plan-1");
+  });
+
+  it("resets a persisted draft when a different owner claims it", () => {
+    useCheckoutStore.setState({
+      ownerId: "user-1",
+      plan: {
+        planId: "plan-1",
+        billingCycle: "monthly",
+        price: 1200,
+      },
+    });
+
+    useCheckoutStore.getState().claimOwner("user-2");
+
+    expect(useCheckoutStore.getState().ownerId).toBe("user-2");
+    expect(useCheckoutStore.getState().plan).toBeNull();
+    expect(useCheckoutStore.getState().children).toHaveLength(1);
   });
 });

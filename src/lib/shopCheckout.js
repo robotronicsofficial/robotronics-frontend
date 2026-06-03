@@ -15,6 +15,23 @@ const getPendingCartStorage = () => (
 
 const isBrowser = () => Boolean(getStorage());
 
+const EMPTY_CHECKOUT = Object.freeze({
+  ownerId: null,
+  customer: null,
+  address: null,
+  payment: null,
+  note: "",
+});
+
+const normalizeCheckoutOwnerId = (ownerId) => {
+  const normalizedOwnerId = String(ownerId || "").trim();
+  return normalizedOwnerId || null;
+};
+
+const writeShopCheckout = (checkout) => {
+  getStorage()?.setItem(STORAGE_KEY, JSON.stringify(checkout));
+};
+
 export const normalizeCheckoutNote = (note = "") => (
   typeof note === "string" ? note : ""
 );
@@ -82,34 +99,38 @@ export const hasCheckoutPayment = (payment, { requiresShipping = true } = {}) =>
 
 export const loadShopCheckout = () => {
   if (!isBrowser()) {
-    return { customer: null, address: null, payment: null, note: "" };
+    return { ...EMPTY_CHECKOUT };
   }
 
   try {
     const rawValue = getStorage()?.getItem(STORAGE_KEY);
     if (!rawValue) {
-      return { customer: null, address: null, payment: null, note: "" };
+      return { ...EMPTY_CHECKOUT };
     }
 
     const parsedValue = JSON.parse(rawValue);
     return {
+      ownerId: normalizeCheckoutOwnerId(parsedValue?.ownerId),
       customer: parsedValue?.customer ? normalizeCheckoutCustomer(parsedValue.customer) : null,
       address: parsedValue?.address ? normalizeCheckoutAddress(parsedValue.address) : null,
       payment: parsedValue?.payment ? normalizeCheckoutPayment(parsedValue.payment) : null,
       note: normalizeCheckoutNote(parsedValue?.note),
     };
   } catch {
-    return { customer: null, address: null, payment: null, note: "" };
+    return { ...EMPTY_CHECKOUT };
   }
 };
 
 export const saveShopCheckout = (partialState = {}) => {
   if (!isBrowser()) {
-    return { customer: null, address: null, payment: null, note: "" };
+    return { ...EMPTY_CHECKOUT };
   }
 
   const currentState = loadShopCheckout();
   const nextState = {
+    ownerId: Object.prototype.hasOwnProperty.call(partialState, "ownerId")
+      ? normalizeCheckoutOwnerId(partialState.ownerId)
+      : currentState.ownerId,
     customer: Object.prototype.hasOwnProperty.call(partialState, "customer")
       ? (partialState.customer ? normalizeCheckoutCustomer(partialState.customer) : null)
       : currentState.customer,
@@ -124,7 +145,7 @@ export const saveShopCheckout = (partialState = {}) => {
       : currentState.note,
   };
 
-  getStorage()?.setItem(STORAGE_KEY, JSON.stringify(nextState));
+  writeShopCheckout(nextState);
   return nextState;
 };
 
@@ -134,6 +155,25 @@ export const clearShopCheckout = () => {
   }
 
   getStorage()?.removeItem(STORAGE_KEY);
+};
+
+export const claimShopCheckoutOwner = (ownerId) => {
+  if (!isBrowser()) {
+    return { ...EMPTY_CHECKOUT };
+  }
+
+  const nextOwnerId = normalizeCheckoutOwnerId(ownerId);
+  if (!nextOwnerId) {
+    return loadShopCheckout();
+  }
+
+  const currentState = loadShopCheckout();
+  const nextState = currentState.ownerId && currentState.ownerId !== nextOwnerId
+    ? { ...EMPTY_CHECKOUT, ownerId: nextOwnerId }
+    : { ...currentState, ownerId: nextOwnerId };
+
+  writeShopCheckout(nextState);
+  return nextState;
 };
 
 export const loadPendingCartItems = () => {
