@@ -109,14 +109,8 @@ const ShopPaymentMethod = ({ onNext }) => {
   const [cardholderName, setCardholderName] = useState(
     storedCheckout.payment?.cardholderName || "",
   );
-  const [accountNumber, setAccountNumber] = useState(
+  const [accountLast4, setAccountLast4] = useState(
     storedCheckout.payment?.accountLast4 || "",
-  );
-  const [expiryMonth, setExpiryMonth] = useState(
-    storedCheckout.payment?.expiryMonth || "",
-  );
-  const [expiryYear, setExpiryYear] = useState(
-    storedCheckout.payment?.expiryYear || "",
   );
   const [fieldErrors, setFieldErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -146,9 +140,7 @@ const ShopPaymentMethod = ({ onNext }) => {
 
     const trimmedEmail = billingEmail.trim();
     const trimmedName = cardholderName.trim();
-    const numberDigits = accountNumber.replace(/\D/g, "");
-    const trimmedMonth = expiryMonth.trim();
-    const trimmedYear = expiryYear.trim();
+    const lastFourDigits = accountLast4.replace(/\D/g, "");
 
     const errors = {};
     if (!trimmedEmail) errors.billing_email = "Billing email is required.";
@@ -157,19 +149,8 @@ const ShopPaymentMethod = ({ onNext }) => {
         ? "Cardholder name is required."
         : "Account holder name is required.";
     }
-    if (numberDigits.length < 4) {
-      errors.account_number = isCardPayment
-        ? "Enter a valid card number."
-        : "Enter a valid account number.";
-    }
-
-    if (isCardPayment) {
-      if (!trimmedMonth || Number(trimmedMonth) < 1 || Number(trimmedMonth) > 12) {
-        errors.expiry_month = "Enter MM (01–12).";
-      }
-      if (!trimmedYear || !/^\d{4}$/.test(trimmedYear)) {
-        errors.expiry_year = "Enter a 4-digit year (e.g. 2028).";
-      }
+    if (!/^\d{4}$/.test(lastFourDigits)) {
+      errors.account_last4 = "Enter the last four digits only.";
     }
 
     if (Object.keys(errors).length > 0) {
@@ -188,9 +169,9 @@ const ShopPaymentMethod = ({ onNext }) => {
           paymentMethod: selectedMethod,
           billingEmail: trimmedEmail,
           cardholderName: trimmedName,
-          accountLast4: numberDigits.slice(-4),
-          expiryMonth: isCardPayment ? trimmedMonth : "",
-          expiryYear: isCardPayment ? trimmedYear : "",
+          accountLast4: lastFourDigits,
+          expiryMonth: "",
+          expiryYear: "",
         },
       });
 
@@ -390,7 +371,8 @@ const ShopPaymentMethod = ({ onNext }) => {
             </Heading>
             <Text size="sm" tone="muted">
               These details are used for the order summary and kept locally in
-              this browser until you submit the checkout request.
+              this browser until you submit the checkout request. Do not enter
+              a full card or account number.
             </Text>
           </div>
 
@@ -421,57 +403,24 @@ const ShopPaymentMethod = ({ onNext }) => {
               error={fieldErrors.cardholder_name}
             />
             <Field
-              id="account_number"
-              label={isCardPayment ? "Card number" : "Account number"}
-              value={accountNumber}
+              id="account_last4"
+              label={isCardPayment ? "Card last 4 digits" : "Account last 4 digits"}
+              value={accountLast4}
               onChange={(next) => {
-                setAccountNumber(next);
-                clearFieldError("account_number");
+                setAccountLast4(next.replace(/\D/g, "").slice(0, 4));
+                clearFieldError("account_last4");
               }}
-              placeholder={
-                isCardPayment ? "4111 1111 1111 1111" : "03XX XXX XXXX"
-              }
-              autoComplete={isCardPayment ? "cc-number" : "off"}
-              inputMode={isCardPayment ? "numeric" : undefined}
-              error={fieldErrors.account_number}
+              placeholder="1234"
+              autoComplete="off"
+              inputMode="numeric"
+              error={fieldErrors.account_last4}
             />
-            {isCardPayment ? (
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field
-                  id="expiry_month"
-                  label="Expiry month"
-                  value={expiryMonth}
-                  onChange={(next) => {
-                    setExpiryMonth(next);
-                    clearFieldError("expiry_month");
-                  }}
-                  placeholder="MM (01–12)"
-                  autoComplete="cc-exp-month"
-                  inputMode="numeric"
-                  error={fieldErrors.expiry_month}
-                />
-                <Field
-                  id="expiry_year"
-                  label="Expiry year"
-                  value={expiryYear}
-                  onChange={(next) => {
-                    setExpiryYear(next);
-                    clearFieldError("expiry_year");
-                  }}
-                  placeholder="YYYY (e.g. 2028)"
-                  autoComplete="cc-exp-year"
-                  inputMode="numeric"
-                  error={fieldErrors.expiry_year}
-                />
-              </div>
-            ) : (
-              <Alert>
-                <AlertDescription>
-                  The last four digits of your account number will be stored
-                  with the order summary.
-                </AlertDescription>
-              </Alert>
-            )}
+            <Alert>
+              <AlertDescription>
+                Only the last four digits are stored with this checkout request.
+                Robotronics will confirm payment details outside this form.
+              </AlertDescription>
+            </Alert>
           </div>
         </section>
       </div>
