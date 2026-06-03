@@ -1,6 +1,7 @@
 import { PolicyPage } from "@/components/marketing/PolicyPage";
+import { CONTACT_EMAIL } from "@/lib/brandContact";
 
-const SUPPORT_EMAIL = "support@robotronicsofficial.com";
+const SUPPORT_EMAIL = CONTACT_EMAIL;
 
 const SECTIONS = [
   {

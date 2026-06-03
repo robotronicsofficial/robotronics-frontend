@@ -18,6 +18,7 @@ import { Display, Eyebrow, Heading, Highlight, Text } from "@/components/ui/typo
 import { FormInput, FormSelect, FormTextarea } from "@/components/forms/FormControls";
 import MarketingHero from "@/components/marketing/MarketingHero";
 import { useSchoolLeadMutation } from "@/hooks/useIntake";
+import { SCHOOLS_EMAIL } from "@/lib/brandContact";
 import { cn } from "@/lib/utils";
 
 const ROLES = [
@@ -237,10 +238,10 @@ const ForSchools = () => {
                     <Text size="xs" tone="muted">
                       Email{" "}
                       <a
-                        href="mailto:schools@robotronics.com"
+                        href={`mailto:${SCHOOLS_EMAIL}`}
                         className="font-semibold text-foreground underline underline-offset-4"
                       >
-                        schools@robotronics.com
+                        {SCHOOLS_EMAIL}
                       </a>{" "}
                       with two windows that suit you.
                     </Text>

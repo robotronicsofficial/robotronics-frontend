@@ -12,6 +12,13 @@ import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { FormSelect } from "@/components/forms/FormControls";
 import FloatingField from "@/components/forms/FloatingField";
 import { useContactRequestMutation } from "@/hooks/useIntake";
+import {
+  CONTACT_ADDRESS,
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  CONTACT_PHONE_HREF,
+  SOCIAL_LINKS,
+} from "@/lib/brandContact";
 import { cn } from "@/lib/utils";
 
 const buildGiftIntro = (plan, cycle) => {
@@ -46,21 +53,13 @@ const CONTACT_USER_TYPES = [
 ];
 
 const CONTACT_METHODS = [
-  { Icon: Phone, label: "Phone", value: "+92 309 422 4016", href: "tel:+923094224016" },
-  { Icon: Mail, label: "Email", value: "info@robotronics.com", href: "mailto:info@robotronics.com" },
+  { Icon: Phone, label: "Phone", value: CONTACT_PHONE, href: CONTACT_PHONE_HREF },
+  { Icon: Mail, label: "Email", value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
   {
     Icon: MapPin,
     label: "Office",
-    value: "Phase-4, DHA, Lahore, Pakistan",
+    value: CONTACT_ADDRESS,
   },
-];
-
-const SOCIAL_LINKS = [
-  { href: "https://www.facebook.com/robotronicspakistan/", brand: "facebook", label: "Facebook" },
-  { href: "https://www.instagram.com/robotronicspk/?hl=en", brand: "instagram", label: "Instagram" },
-  { href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all", brand: "linkedin", label: "LinkedIn" },
-  { href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw", brand: "youtube", label: "YouTube" },
-  { href: "https://wa.me/message/TKZZPIE2A34UM1", brand: "whatsapp", label: "WhatsApp" },
 ];
 
 const ContactMethod = ({ Icon, label, value, href }) => {

@@ -4,9 +4,10 @@ import { LifeBuoy, Mail, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Heading, Text } from "@/components/ui/typography";
 import { PolicyPage } from "@/components/marketing/PolicyPage";
+import { SAFETY_EMAIL } from "@/lib/brandContact";
 import { CONTACT_PATH } from "@/router/paths";
 
-const REPORT_EMAIL = "safety@robotronics.com";
+const REPORT_EMAIL = SAFETY_EMAIL;
 
 const SECTIONS = [
   {

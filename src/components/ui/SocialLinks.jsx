@@ -1,41 +1,7 @@
 import PropTypes from "prop-types";
 import { BrandIcon } from "@/components/ui/brand-icons";
+import { SOCIAL_LINKS } from "@/lib/brandContact";
 import { cn } from "@/lib/utils";
-
-// URLs are shared across footer, careers intros, about intro, etc.
-// If any of these need to change, update them here in one place.
-const SOCIAL = [
-  {
-    brand: "facebook",
-    label: "Facebook",
-    href: "https://www.facebook.com/robotronicspakistan/",
-  },
-  {
-    brand: "twitter",
-    label: "Twitter / X",
-    href: "https://twitter.com/robotronicspk",
-  },
-  {
-    brand: "youtube",
-    label: "YouTube",
-    href: "https://www.youtube.com/channel/UCx_R7IwRAVvphBpI0DCvCXw",
-  },
-  {
-    brand: "instagram",
-    label: "Instagram",
-    href: "https://www.instagram.com/robotronicspk/?hl=en",
-  },
-  {
-    brand: "linkedin",
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/robotronicspakistan/posts/?feedView=all",
-  },
-  {
-    brand: "whatsapp",
-    label: "WhatsApp",
-    href: "https://wa.me/message/TKZZPIE2A34UM1",
-  },
-];
 
 /**
  * Shared social-links row used across the marketing surface.
@@ -51,7 +17,7 @@ export default function SocialLinks({
       className={cn("flex flex-wrap items-center gap-3", className)}
       aria-label={ariaLabel}
     >
-      {SOCIAL.map(({ brand, label, href }) => (
+      {SOCIAL_LINKS.map(({ brand, label, href }) => (
         <li key={label}>
           <a
             href={href}
