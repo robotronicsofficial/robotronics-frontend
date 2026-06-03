@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 import CustomerProduct from "./customerProduct";
-import OrderSummaryLine from "./OrderSummaryLine";
+import ShopOrderSummary from "./ShopOrderSummary";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,15 +12,13 @@ import { Heading, Text } from "@/components/ui/typography";
 import { FormInput, FormSelect, FormTextarea } from "@/components/forms/FormControls";
 import { useAuth } from "@/contexts/useAuth";
 import {
-  calculateCartSummary,
+  EMPTY_SHOP_CART_QUOTE,
   hasCheckoutCustomer,
   loadShopCheckout,
   saveShopCheckout,
 } from "@/lib/shopCheckout";
-import {
-  getCommerceItemKey,
-  hasShippableCommerceItems,
-} from "@/lib/commerceItems";
+import { getCommerceItemKey } from "@/lib/commerceItems";
+import { useShopCartQuoteQuery } from "@/hooks/useShopOrders";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
@@ -114,7 +112,14 @@ const CustomerInfomation = ({ onNext }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const storedCheckout = loadShopCheckout();
-  const requiresShipping = hasShippableCommerceItems(cart);
+  const quoteQuery = useShopCartQuoteQuery(cart);
+  const quote = cart.length ? quoteQuery.data : EMPTY_SHOP_CART_QUOTE;
+  const requiresShipping = Boolean(quote?.requiresShipping);
+  const quoteReady = cart.length === 0 || Boolean(quote);
+  const quoteItemsByKey = useMemo(
+    () => new Map((quote?.items || []).map((item) => [getCommerceItemKey(item), item])),
+    [quote],
+  );
 
   const [form, setForm] = useState({
     firstName: storedCheckout.customer?.firstName || "",
@@ -176,6 +181,11 @@ const CustomerInfomation = ({ onNext }) => {
       return;
     }
 
+    if (!quoteReady || quoteQuery.isError) {
+      toast.error("We couldn't confirm current cart pricing. Please try again.");
+      return;
+    }
+
     const customer = {
       firstName: form.firstName.trim(),
       lastName: form.lastName.trim(),
@@ -221,7 +231,6 @@ const CustomerInfomation = ({ onNext }) => {
     }
   };
 
-  const summary = calculateCartSummary(cart);
   const continueLabel = requiresShipping
     ? "Continue to shipping"
     : "Continue to payment";
@@ -361,8 +370,9 @@ const CustomerInfomation = ({ onNext }) => {
             ) : (
               <Alert>
                 <AlertDescription>
-                  This order only contains digital items, so we only need your
-                  contact details here.
+                  {quoteReady
+                    ? "This order only contains digital items, so we only need your contact details here."
+                    : "Confirming the cart requirements before collecting address details."}
                 </AlertDescription>
               </Alert>
             )}
@@ -386,7 +396,13 @@ const CustomerInfomation = ({ onNext }) => {
                   key={getCommerceItemKey(product)}
                   title={product.name}
                   item={product.quantity}
-                  price={formatMoney(product.price)}
+                  price={
+                    quoteItemsByKey.has(getCommerceItemKey(product))
+                      ? formatMoney(quoteItemsByKey.get(getCommerceItemKey(product)).unitPrice)
+                      : quoteQuery.isError
+                        ? "Unavailable"
+                        : "Updating..."
+                  }
                   priceLabel=""
                   image={resolveBackendAssetUrl(
                     product.image || product.images?.[0],
@@ -399,43 +415,26 @@ const CustomerInfomation = ({ onNext }) => {
             )}
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-border pt-4">
-            <OrderSummaryLine
-              label="Subtotal"
-              value={formatMoney(summary.subtotal)}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body font-medium"
+          <div className="border-t border-border pt-4">
+            <ShopOrderSummary
+              pricing={quote?.pricing || null}
+              isLoading={cart.length > 0 && quoteQuery.isLoading}
+              isError={cart.length > 0 && quoteQuery.isError}
             />
-            <OrderSummaryLine
-              label="Discount (10%)"
-              value={`- ${formatMoney(summary.discount)}`}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body-sm"
-            />
-            <OrderSummaryLine
-              label="Shipping"
-              value={formatMoney(summary.shipping)}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body-sm"
-            />
-            <div className="border-t border-border pt-3">
-              <OrderSummaryLine
-                label="Total"
-                value={formatMoney(summary.total)}
-                labelClassName="text-body-sm text-muted-foreground"
-                valueClassName="text-h5 font-semibold text-primary"
-              />
-            </div>
           </div>
 
           <Button
             type="submit"
             form="shop-customer-information"
             size="marketing"
-            disabled={isAuthLoading}
+            disabled={isAuthLoading || !quoteReady || quoteQuery.isError}
             className="w-full"
           >
-            {isAuthLoading ? "Checking account…" : continueLabel}
+            {isAuthLoading
+              ? "Checking account…"
+              : !quoteReady
+                ? "Confirming cart…"
+                : continueLabel}
           </Button>
         </CardContent>
       </Card>

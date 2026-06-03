@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { CreditCard } from "lucide-react";
 import { toast } from "sonner";
@@ -13,12 +13,13 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import {
+  EMPTY_SHOP_CART_QUOTE,
   hasCheckoutCustomer,
   hasCheckoutAddress,
   loadShopCheckout,
   saveShopCheckout,
 } from "@/lib/shopCheckout";
-import { hasShippableCommerceItems } from "@/lib/commerceItems";
+import { useShopCartQuoteQuery } from "@/hooks/useShopOrders";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { SHOP_CUSTOMER_INFO_PATH, SHOP_REVIEW_PATH } from "@/router/paths";
 
@@ -95,7 +96,10 @@ const ShopPaymentMethod = ({ onNext }) => {
   const navigate = useNavigate();
   const cart = useCartStore(selectCart);
   const storedCheckout = useMemo(() => loadShopCheckout(), []);
-  const requiresShipping = hasShippableCommerceItems(cart);
+  const quoteQuery = useShopCartQuoteQuery(cart);
+  const quote = cart.length ? quoteQuery.data : EMPTY_SHOP_CART_QUOTE;
+  const quoteReady = cart.length === 0 || Boolean(quote);
+  const requiresShipping = Boolean(quote?.requiresShipping);
   const [selectedService, setSelectedService] = useState(
     storedCheckout.payment?.shippingService ||
       (requiresShipping ? SHIPPING_SERVICES[0].value : ""),
@@ -121,6 +125,17 @@ const ShopPaymentMethod = ({ onNext }) => {
   const addressReady = hasCheckoutAddress(savedAddress, { requiresShipping });
   const isCardPayment = selectedMethod === "Credit Card";
 
+  useEffect(() => {
+    if (requiresShipping && !selectedService) {
+      setSelectedService(SHIPPING_SERVICES[0].value);
+      return;
+    }
+
+    if (!requiresShipping && selectedService) {
+      setSelectedService("");
+    }
+  }, [requiresShipping, selectedService]);
+
   const clearFieldError = (name) => {
     setFieldErrors((prev) => {
       if (!prev[name]) return prev;
@@ -132,6 +147,11 @@ const ShopPaymentMethod = ({ onNext }) => {
 
   const handleContinue = () => {
     if (isSubmitting) return;
+
+    if (!quoteReady || quoteQuery.isError) {
+      toast.error("We couldn't confirm current cart pricing. Please try again.");
+      return;
+    }
 
     if (!customerReady || (requiresShipping && !addressReady)) {
       navigate({ to: SHOP_CUSTOMER_INFO_PATH });
@@ -432,7 +452,9 @@ const ShopPaymentMethod = ({ onNext }) => {
         <CustomerOrder
           onNext={handleContinue}
           buttonLabel={isSubmitting ? "Saving…" : "Review order"}
-          buttonDisabled={isSubmitting}
+          buttonDisabled={isSubmitting || !quoteReady || quoteQuery.isError}
+          itemsOverride={quote?.items || cart}
+          summaryOverride={quote?.pricing || null}
         />
       </div>
     </div>

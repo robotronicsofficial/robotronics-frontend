@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import OrderSummaryLine from "./OrderSummaryLine";
+import ShopOrderSummary from "./ShopOrderSummary";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heading, Text } from "@/components/ui/typography";
@@ -13,13 +13,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/useAuth";
 import { getCommerceItemKey } from "@/lib/commerceItems";
 import {
-  calculateCartSummary,
   clearPendingCartItems,
+  EMPTY_SHOP_CART_QUOTE,
   loadPendingCartItems,
   loadShopCheckout,
   savePendingCartItems,
   saveShopCheckout,
 } from "@/lib/shopCheckout";
+import { useShopCartQuoteQuery } from "@/hooks/useShopOrders";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
@@ -35,7 +36,13 @@ const ShopCartproductList = ({ onNext }) => {
   const { currentUser, isAuthLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const summary = useMemo(() => calculateCartSummary(cart), [cart]);
+  const quoteQuery = useShopCartQuoteQuery(cart);
+  const quote = cart.length ? quoteQuery.data : EMPTY_SHOP_CART_QUOTE;
+  const pricing = quote?.pricing || null;
+  const quoteItemsByKey = useMemo(
+    () => new Map((quote?.items || []).map((item) => [getCommerceItemKey(item), item])),
+    [quote],
+  );
 
   const [itemQuantity, setItemQuantity] = useState(
     cart.reduce((acc, product) => {
@@ -156,7 +163,11 @@ const ShopCartproductList = ({ onNext }) => {
 
                     <div className="flex items-center gap-3">
                       <Text size="lg" weight="semibold">
-                        {formatMoney(product.price)}
+                        {quoteItemsByKey.has(getCommerceItemKey(product))
+                          ? formatMoney(quoteItemsByKey.get(getCommerceItemKey(product)).unitPrice)
+                          : quoteQuery.isError
+                            ? "Unavailable"
+                            : "Updating..."}
                       </Text>
                       <Button
                         type="button"
@@ -190,34 +201,11 @@ const ShopCartproductList = ({ onNext }) => {
         <CardContent className="flex flex-col gap-6">
           <Heading level={3} className="text-h4">Order summary</Heading>
 
-          <div className="flex flex-col gap-3">
-            <OrderSummaryLine
-              label="Subtotal"
-              value={formatMoney(summary.subtotal)}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body font-medium"
-            />
-            <OrderSummaryLine
-              label="Discount (10%)"
-              value={`- ${formatMoney(summary.discount)}`}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body-sm"
-            />
-            <OrderSummaryLine
-              label="Shipping"
-              value={formatMoney(summary.shipping)}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body-sm"
-            />
-            <div className="border-t border-border pt-3">
-              <OrderSummaryLine
-                label="Total"
-                value={formatMoney(summary.total)}
-                labelClassName="text-body-sm text-muted-foreground"
-                valueClassName="text-h5 font-semibold text-primary"
-              />
-            </div>
-          </div>
+          <ShopOrderSummary
+            pricing={pricing}
+            isLoading={cart.length > 0 && quoteQuery.isLoading}
+            isError={cart.length > 0 && quoteQuery.isError}
+          />
 
           <div className="flex flex-col gap-2">
             <Text size="sm" weight="semibold">Special notes</Text>
@@ -236,7 +224,7 @@ const ShopCartproductList = ({ onNext }) => {
             type="button"
             size="marketing"
             onClick={handleNext}
-            disabled={cart.length === 0}
+            disabled={cart.length === 0 || quoteQuery.isLoading || quoteQuery.isError}
             className="w-full"
           >
             Proceed to checkout

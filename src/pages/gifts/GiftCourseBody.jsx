@@ -10,7 +10,6 @@ import { Heading, Text } from "@/components/ui/typography";
 import { FormInput, FormTextarea } from "@/components/forms/FormControls";
 import { useAuth } from "../../contexts/useAuth";
 import { useGiftCourseRequestMutation } from "../../hooks/useIntake";
-import { calculateCartSummary } from "../../lib/shopCheckout";
 import { COURSE_PATH } from "../../router/paths";
 import { selectCart, useCartStore } from "../../stores/cartStore";
 
@@ -69,10 +68,6 @@ const GiftCourseBody = () => {
   const courseItems = useMemo(
     () => cart.filter((item) => item.itemType === "course"),
     [cart],
-  );
-  const courseSummary = useMemo(
-    () => calculateCartSummary(courseItems),
-    [courseItems],
   );
   const isSubmitting = giftCourseRequestMutation.isPending;
 
@@ -242,7 +237,6 @@ const GiftCourseBody = () => {
 
         <CustomerOrder
           itemsOverride={courseItems}
-          summaryOverride={courseSummary}
           showContinueButton={false}
         />
       </div>

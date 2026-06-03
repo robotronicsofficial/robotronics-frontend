@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  buildShopCartQuoteRequest,
+  buildShopCheckoutIntentRequest,
   claimShopCheckoutOwner,
   clearPendingCartItems,
   loadShopCheckout,
@@ -73,6 +75,67 @@ describe("shop checkout storage contract", () => {
       address: null,
       payment: null,
       note: "",
+    });
+  });
+
+  it("uses one cart item request contract for quotes and checkout intents", () => {
+    const cart = [
+      {
+        itemType: "product",
+        itemId: "product-1",
+        quantity: "2",
+        price: 9000,
+      },
+      {
+        itemType: "course",
+        itemId: "course-1",
+        quantity: 1,
+      },
+      {
+        itemType: "product",
+        itemId: "",
+        quantity: 1,
+      },
+    ];
+    const expectedItems = [
+      { itemType: "product", itemId: "product-1", quantity: 2 },
+      { itemType: "course", itemId: "course-1", quantity: 1 },
+    ];
+
+    expect(buildShopCartQuoteRequest({ cart }).items).toEqual(expectedItems);
+    expect(buildShopCheckoutIntentRequest({ cart }).items).toEqual(expectedItems);
+  });
+
+  it("uses the backend quote fulfillment decision for checkout address fields", () => {
+    const checkout = {
+      address: {
+        addressId: "address-1",
+        firstName: "Sara",
+        lastName: "Khan",
+      },
+    };
+
+    expect(
+      buildShopCheckoutIntentRequest({
+        checkout,
+        requiresShipping: false,
+      }),
+    ).toMatchObject({
+      addressId: null,
+      address: null,
+    });
+
+    expect(
+      buildShopCheckoutIntentRequest({
+        checkout,
+        requiresShipping: true,
+      }),
+    ).toMatchObject({
+      addressId: "address-1",
+      address: expect.objectContaining({
+        firstName: "Sara",
+        lastName: "Khan",
+      }),
     });
   });
 });

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "@tanstack/react-router";
 
 import CustomerOrder from "./customerOrder";
 import CustomerProduct from "./customerProduct";
-import OrderSummaryLine from "./OrderSummaryLine";
+import ShopOrderSummary from "./ShopOrderSummary";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,8 +12,8 @@ import { Heading, Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import {
   buildShopCheckoutIntentRequest,
-  calculateCartSummary,
   clearShopCheckout,
+  EMPTY_SHOP_CART_QUOTE,
   hasCheckoutCustomer,
   hasCheckoutAddress,
   hasCheckoutPayment,
@@ -26,7 +26,10 @@ import {
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
-import { useSubmitShopCheckoutIntentMutation } from "@/hooks/useShopOrders";
+import {
+  useShopCartQuoteQuery,
+  useSubmitShopCheckoutIntentMutation,
+} from "@/hooks/useShopOrders";
 import { LOGIN_PATH, SHOP_CUSTOMER_INFO_PATH, SHOP_PAYMENT_PATH } from "@/router/paths";
 
 const DetailRow = ({ label, value }) => (
@@ -47,15 +50,18 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const [submitStatus, setSubmitStatus] = useState({ type: "", message: "" });
   const [submittedIntent, setSubmittedIntent] = useState(null);
   const submitShopCheckoutIntentMutation = useSubmitShopCheckoutIntentMutation();
-  const summary = calculateCartSummary(cart);
+  const quoteQuery = useShopCartQuoteQuery(cart);
+  const cartQuote = cart.length ? quoteQuery.data : EMPTY_SHOP_CART_QUOTE;
+  const quoteReady = Boolean(submittedIntent) || cart.length === 0 || Boolean(cartQuote);
   const requiresShipping = submittedIntent
     ? hasShippableCommerceItems(submittedIntent.items)
-    : summary.requiresShipping;
+    : Boolean(cartQuote?.requiresShipping);
   const customerReady = hasCheckoutCustomer(checkout.customer);
   const addressReady = hasCheckoutAddress(checkout.address, { requiresShipping });
   const paymentReady = hasCheckoutPayment(checkout.payment, { requiresShipping });
-  const displayItems = submittedIntent?.items || cart;
-  const displaySummary = submittedIntent?.pricing || summary;
+  const hasBackendItems = Boolean(submittedIntent || cartQuote?.items);
+  const displayItems = hasBackendItems ? (submittedIntent?.items || cartQuote?.items || []) : cart;
+  const displaySummary = submittedIntent?.pricing || cartQuote?.pricing || null;
 
   const handleEditCustomer = () => {
     if (onEditCustomer) {
@@ -90,6 +96,14 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
       return;
     }
 
+    if (!quoteReady || quoteQuery.isError) {
+      setSubmitStatus({
+        type: "error",
+        message: "We couldn't confirm current cart pricing. Please try again.",
+      });
+      return;
+    }
+
     if (!customerReady || (requiresShipping && !addressReady)) {
       handleEditCustomer();
       return;
@@ -104,7 +118,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
 
     try {
       const data = await submitShopCheckoutIntentMutation.mutateAsync({
-        ...buildShopCheckoutIntentRequest({ checkout, cart }),
+        ...buildShopCheckoutIntentRequest({ checkout, cart, requiresShipping }),
       });
 
       setSubmittedIntent(data.checkoutIntent || null);
@@ -289,7 +303,13 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                     <CustomerProduct
                       title={product.name}
                       item={product.quantity}
-                      price={formatMoney(product.price ?? product.unitPrice)}
+                      price={
+                        hasBackendItems
+                          ? formatMoney(product.price ?? product.unitPrice)
+                          : quoteQuery.isError
+                            ? "Unavailable"
+                            : "Updating..."
+                      }
                       priceLabel=""
                       imageClassName="object-cover h-20 w-24"
                       image={resolveBackendAssetUrl(
@@ -313,32 +333,11 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         <Card>
           <CardContent className="flex flex-col gap-3">
             <Heading level={3} className="text-h5">Totals</Heading>
-            <OrderSummaryLine
-              label="Subtotal"
-              value={formatMoney(displaySummary.subtotal)}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body font-medium"
+            <ShopOrderSummary
+              pricing={displaySummary}
+              isLoading={!submittedIntent && cart.length > 0 && quoteQuery.isLoading}
+              isError={!submittedIntent && cart.length > 0 && quoteQuery.isError}
             />
-            <OrderSummaryLine
-              label="Discount (10%)"
-              value={`- ${formatMoney(displaySummary.discount)}`}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body-sm"
-            />
-            <OrderSummaryLine
-              label="Shipping"
-              value={formatMoney(displaySummary.shipping)}
-              labelClassName="text-body-sm text-muted-foreground"
-              valueClassName="text-body-sm"
-            />
-            <div className="border-t border-border pt-3">
-              <OrderSummaryLine
-                label="Total"
-                value={formatMoney(displaySummary.total)}
-                labelClassName="text-body-sm text-muted-foreground"
-                valueClassName="text-h5 font-semibold text-primary"
-              />
-            </div>
           </CardContent>
         </Card>
       </div>
@@ -348,7 +347,10 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
           <CustomerOrder
             onNext={handleSubmitCheckoutIntent}
             buttonDisabled={
-              submitShopCheckoutIntentMutation.isPending || Boolean(submittedIntent)
+              submitShopCheckoutIntentMutation.isPending ||
+              Boolean(submittedIntent) ||
+              !quoteReady ||
+              quoteQuery.isError
             }
             buttonLabel={
               submittedIntent

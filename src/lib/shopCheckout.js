@@ -1,9 +1,15 @@
-import { hasShippableCommerceItems } from "./commerceItems";
-
 const STORAGE_KEY = "shop_checkout";
 const PENDING_CART_STORAGE_KEY = "robotronics:pendingCart";
-export const SHIPPING_COST = 500;
-export const DISCOUNT_RATE = 0.1;
+export const EMPTY_SHOP_CART_QUOTE = Object.freeze({
+  items: [],
+  requiresShipping: false,
+  pricing: Object.freeze({
+    subtotal: 0,
+    discount: 0,
+    shipping: 0,
+    total: 0,
+  }),
+});
 
 const getStorage = () => (
   typeof window === "undefined" ? null : window.sessionStorage
@@ -220,40 +226,31 @@ export const clearPendingCartItems = () => {
   storage.removeItem(PENDING_CART_STORAGE_KEY);
 };
 
-export const buildShopCheckoutIntentRequest = ({ checkout = {}, cart = [] } = {}) => {
-  const requiresShipping = hasShippableCommerceItems(cart);
+export const buildCommerceCartRequestItems = (cart = []) => (
+  (Array.isArray(cart) ? cart : [])
+    .map((item) => ({
+      itemType: item?.itemType || "",
+      itemId: item?.itemId || "",
+      quantity: Number(item?.quantity) || 0,
+    }))
+    .filter((item) => item.itemType && item.itemId && item.quantity > 0)
+);
 
+export const buildShopCartQuoteRequest = ({ cart = [] } = {}) => ({
+  items: buildCommerceCartRequestItems(cart),
+});
+
+export const buildShopCheckoutIntentRequest = ({
+  checkout = {},
+  cart = [],
+  requiresShipping = false,
+} = {}) => {
   return {
     customer: normalizeCheckoutCustomer(checkout?.customer || {}),
     addressId: requiresShipping ? checkout?.address?.addressId || null : null,
     address: requiresShipping ? normalizeCheckoutAddress(checkout?.address || {}) : null,
     payment: normalizeCheckoutPayment(checkout?.payment || {}),
-    items: (Array.isArray(cart) ? cart : [])
-      .map((item) => ({
-        itemType: item?.itemType || "",
-        itemId: item?.itemId || "",
-        quantity: Number(item?.quantity) || 0,
-      }))
-      .filter((item) => item.itemType && item.itemId && item.quantity > 0),
+    items: buildCommerceCartRequestItems(cart),
     note: normalizeCheckoutNote(checkout?.note),
-  };
-};
-
-export const calculateCartSummary = (cart = []) => {
-  const subtotal = cart.reduce(
-    (runningTotal, item) => runningTotal + (Number(item?.price) || 0) * (Number(item?.quantity) || 0),
-    0
-  );
-  const discount = subtotal * DISCOUNT_RATE;
-  const requiresShipping = hasShippableCommerceItems(cart);
-  const shipping = requiresShipping ? SHIPPING_COST : 0;
-  const total = subtotal - discount + shipping;
-
-  return {
-    subtotal,
-    discount,
-    shipping,
-    total,
-    requiresShipping,
   };
 };
