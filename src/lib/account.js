@@ -24,7 +24,7 @@ export const fetchPayments = async () => {
 };
 
 export const fetchChildEnrollment = (childId) =>
-  fetchSessionJson(`/getChild/${childId}`);
+  fetchSessionJson(`/children/${childId}`);
 
 export const saveParent = (body) =>
   sendSessionJson("/parents", {
@@ -45,7 +45,7 @@ export const createSubscriptionCheckoutIntent = (body) =>
   });
 
 export const createChildPin = (body) =>
-  sendSessionJson("/AddChildData", {
+  sendSessionJson("/children", {
     method: "POST",
     body,
   });
@@ -60,10 +60,9 @@ export const changeChildPin = ({ childId, oldPin, newPin }) =>
   });
 
 export const verifyChildPin = ({ childId, pin, force = false }) =>
-  sendSessionJson("/verifyChildPin", {
+  sendSessionJson(`/children/${childId}/pin/verify`, {
     method: "POST",
     body: {
-      childId,
       pin,
       force,
     },

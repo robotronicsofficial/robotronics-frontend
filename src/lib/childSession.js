@@ -18,6 +18,9 @@ export const verifyChildSession = async ({ childId, sessionId }) => {
     throw new Error("Child session not found. Please re-enter the PIN.");
   }
 
-  const payload = await fetchBackendJson("/verifyChildSession", childSessionRequest);
+  const payload = await fetchBackendJson(
+    `/children/${childId}/session/verify`,
+    childSessionRequest,
+  );
   return Boolean(payload?.isValid);
 };
