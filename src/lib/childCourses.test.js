@@ -4,6 +4,7 @@ import {
   readChildCourses,
   readChildCourseDetail,
   readChildCourseProgressUpdate,
+  readGeneratedChildCertificate,
   readChildPlan,
   readChildProgress,
 } from "./childCourses";
@@ -142,6 +143,21 @@ describe("child course API contract", () => {
           question1: true,
         },
       },
+    });
+  });
+
+  it("reads generated child certificates from the backend data envelope", () => {
+    expect(readGeneratedChildCertificate({
+      success: true,
+      data: {
+        certificateId: "cert-1",
+        downloadUrl: "/api/certificates/download/cert-1",
+        alreadyExists: false,
+      },
+    })).toEqual({
+      certificateId: "cert-1",
+      downloadUrl: "/api/certificates/download/cert-1",
+      alreadyExists: false,
     });
   });
 });

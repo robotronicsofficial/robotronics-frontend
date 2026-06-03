@@ -81,6 +81,16 @@ export const readChildCourseProgressUpdate = (payload) => {
   };
 };
 
+export const readGeneratedChildCertificate = (payload) => {
+  const data = payload?.data;
+
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Invalid child certificate response");
+  }
+
+  return data;
+};
+
 export const fetchChildPlan = async (childId) => {
   const payload = await fetchBackendJson(
     `/children/${childId}/plan`,
@@ -169,8 +179,8 @@ export const fetchChildProgress = async (childId) => {
   return readChildProgress(payload);
 };
 
-export const generateChildCertificate = ({ childId, courseId }) =>
-  fetchBackendJson(
+export const generateChildCertificate = async ({ childId, courseId }) => {
+  const payload = await fetchBackendJson(
     "/generate",
     buildRequiredChildRequest({
       method: "POST",
@@ -184,6 +194,9 @@ export const generateChildCertificate = ({ childId, courseId }) =>
       },
     }),
   );
+
+  return readGeneratedChildCertificate(payload);
+};
 
 export const downloadChildCertificate = ({ childId, downloadUrl, certificateId }) =>
   fetchBackendBlob(
