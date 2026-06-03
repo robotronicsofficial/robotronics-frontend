@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   downloadChildCourseContent,
   downloadChildCertificate,
-  extractActiveCourses,
   fetchChildCourseDetail,
   fetchChildCourses,
   fetchChildProgress,
@@ -25,7 +24,6 @@ export const useChildCourses = (childId) =>
     queryKey: queryKeys.childCourses.active(childId),
     queryFn: () => fetchChildCourses(childId),
     enabled: Boolean(childId),
-    select: extractActiveCourses,
   });
 
 export const useChildCourseDetail = ({ childId, courseId }) =>

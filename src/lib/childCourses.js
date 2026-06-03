@@ -25,13 +25,12 @@ const buildRequiredChildRequest = ({ childId, ...request }) => {
   return childSessionRequest;
 };
 
-export const extractActiveCourses = (payload) => {
-  if (Array.isArray(payload)) return payload;
-  if (Array.isArray(payload?.data)) return payload.data;
-  if (Array.isArray(payload?.data?.activeCourses)) return payload.data.activeCourses;
-  if (Array.isArray(payload?.activeCourses)) return payload.activeCourses;
-  if (Array.isArray(payload?.courses)) return payload.courses;
-  return [];
+export const readChildCourses = (payload) => {
+  if (!Array.isArray(payload?.data)) {
+    throw new Error("Invalid child courses response");
+  }
+
+  return payload.data.map(normalizeChildCourse);
 };
 
 export const fetchChildPlan = (childId) =>
@@ -74,7 +73,7 @@ export const fetchChildCourses = async (childId) => {
     buildRequiredChildRequest({ method: "GET", childId }),
   );
 
-  return extractActiveCourses(payload);
+  return readChildCourses(payload);
 };
 
 export const fetchChildCourseDetail = async ({ childId, courseId }) => {
