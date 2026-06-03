@@ -11,6 +11,7 @@ const AUTH_REGISTER_PATH = "/auth/register";
 const AUTH_LOGOUT_PATH = "/auth/logout";
 const AUTH_SOCIAL_PROVIDERS_PATH = "/auth/social-providers";
 const INVALID_SOCIAL_PROVIDERS_RESPONSE = "Invalid social auth providers response";
+const INVALID_AUTH_USER_RESPONSE = "Invalid auth user response";
 
 const readRequiredText = (value) => {
   if (typeof value !== "string" || !value.trim()) {
@@ -43,19 +44,38 @@ export const readSocialAuthProviders = (payload) => {
   }));
 };
 
+export const readCurrentAuthUser = (payload) => {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    throw new Error(INVALID_AUTH_USER_RESPONSE);
+  }
+
+  if (payload.data === null) {
+    return null;
+  }
+
+  if (!payload.data || typeof payload.data !== "object" || Array.isArray(payload.data)) {
+    throw new Error(INVALID_AUTH_USER_RESPONSE);
+  }
+
+  return payload.data;
+};
+
 export const verifyEmailToken = (token) =>
   fetchBackendJson(`/auth/verify-email?token=${encodeURIComponent(token)}`);
 
-export const fetchCurrentUser = () => fetchSessionJson(AUTH_USER_PATH);
+export const fetchCurrentUser = async () => (
+  readCurrentAuthUser(await fetchSessionJson(AUTH_USER_PATH))
+);
 
 export const fetchSocialAuthProviders = async () =>
   readSocialAuthProviders(await fetchBackendJson(AUTH_SOCIAL_PROVIDERS_PATH));
 
-export const loginUser = ({ email, password, rememberMe }) =>
-  sendSessionJson(AUTH_LOGIN_PATH, {
+export const loginUser = async ({ email, password, rememberMe }) => (
+  readCurrentAuthUser(await sendSessionJson(AUTH_LOGIN_PATH, {
     method: "POST",
     body: { email, password, rememberMe },
-  });
+  }))
+);
 
 export const logoutUser = () =>
   sendSessionJson(AUTH_LOGOUT_PATH, {

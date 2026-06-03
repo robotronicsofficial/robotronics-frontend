@@ -1,7 +1,14 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { fetchBackendJson } from "./api";
 import {
+  fetchBackendJson,
+  fetchSessionJson,
+  sendSessionJson,
+} from "./api";
+import {
+  fetchCurrentUser,
+  loginUser,
+  readCurrentAuthUser,
   fetchSocialAuthProviders,
   readSocialAuthProviders,
 } from "./auth";
@@ -52,6 +59,17 @@ describe("auth API contracts", () => {
     ]);
   });
 
+  it("reads current auth users from the backend data envelope", () => {
+    const user = {
+      _id: "user-1",
+      email: "parent@example.com",
+      firstName: "Parent",
+    };
+
+    expect(readCurrentAuthUser({ success: true, data: user })).toEqual(user);
+    expect(readCurrentAuthUser({ success: true, data: null })).toBeNull();
+  });
+
   it("rejects malformed social auth provider payloads", () => {
     expect(() => readSocialAuthProviders({ providers: [] })).toThrow(
       "Invalid social auth providers response",
@@ -84,5 +102,32 @@ describe("auth API contracts", () => {
       },
     ]);
     expect(fetchBackendJson).toHaveBeenCalledWith("/auth/social-providers");
+  });
+
+  it("fetches the current user from the backend auth envelope", async () => {
+    const user = { _id: "user-1", email: "parent@example.com" };
+    fetchSessionJson.mockResolvedValueOnce({ success: true, data: user });
+
+    await expect(fetchCurrentUser()).resolves.toEqual(user);
+    expect(fetchSessionJson).toHaveBeenCalledWith("/auth/user");
+  });
+
+  it("reads local login sessions from the backend auth envelope", async () => {
+    const user = { _id: "user-1", email: "parent@example.com" };
+    sendSessionJson.mockResolvedValueOnce({ success: true, data: user });
+
+    await expect(loginUser({
+      email: "parent@example.com",
+      password: "correct horse battery staple",
+      rememberMe: true,
+    })).resolves.toEqual(user);
+    expect(sendSessionJson).toHaveBeenCalledWith("/auth/login", {
+      method: "POST",
+      body: {
+        email: "parent@example.com",
+        password: "correct horse battery staple",
+        rememberMe: true,
+      },
+    });
   });
 });
