@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 import { readProductCategoryNames } from "./productCategories";
 
 describe("product category contracts", () => {
-  it("reads category names from the backend category payload", () => {
+  it("reads category names from the backend data envelope", () => {
     expect(readProductCategoryNames({
-      categories: [
+      data: [
         { name: " Lego Robots " },
         { name: "" },
         { name: "Curriculum Books" },
@@ -14,8 +14,12 @@ describe("product category contracts", () => {
     })).toEqual(["Lego Robots", "Curriculum Books"]);
   });
 
-  it("rejects non-category payload shapes", () => {
-    expect(readProductCategoryNames({ products: [{ category: "Derived" }] })).toEqual([]);
-    expect(readProductCategoryNames(null)).toEqual([]);
+  it("rejects legacy category envelopes", () => {
+    expect(() => readProductCategoryNames({ categories: [{ name: "Lego Robots" }] })).toThrow(
+      "Invalid product categories response",
+    );
+    expect(() => readProductCategoryNames(null)).toThrow(
+      "Invalid product categories response",
+    );
   });
 });

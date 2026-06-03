@@ -1,11 +1,8 @@
 import { fetchBackendJson } from "./api";
+import { readCategoryNames } from "./categoryNames";
 
 export const readProductCategoryNames = (payload) => (
-  Array.isArray(payload?.categories)
-    ? payload.categories
-        .map((category) => String(category?.name || "").trim())
-        .filter(Boolean)
-    : []
+  readCategoryNames(payload, "product categories")
 );
 
 export const fetchProductCategoryNames = async () => (
