@@ -1,3 +1,10 @@
+const trimString = (value) => (typeof value === "string" ? value.trim() : "");
+
+const PAYMENT_LABELS = Object.freeze({
+  easypaisa: "EasyPaisa",
+  invoice: "Invoice / bank transfer",
+});
+
 const buildCheckoutChildPayload = (child) => ({
   checkoutChildKey: child.checkoutChildKey,
   firstName: child.firstName,
@@ -30,3 +37,29 @@ export const buildParentRegistrationPayload = ({
 export const getPersistedCheckoutChildren = (response) => (
   Array.isArray(response?.parent?.children) ? response.parent.children : []
 );
+
+export const getPersistedCheckoutChildIds = (persistedChildren = []) => (
+  persistedChildren
+    .map((child) => trimString(child.childCode) || trimString(child._id?.toString?.()) || trimString(child._id))
+    .filter(Boolean)
+);
+
+export const buildSubscriptionCheckoutIntentPayload = ({
+  plan,
+  childIds,
+  payment,
+  checkoutReference,
+}) => ({
+  planId: plan.planId,
+  billingCycle: plan.billingCycle,
+  childIds,
+  payment: {
+    method: payment.method,
+    label: PAYMENT_LABELS[payment.method] || payment.method,
+    email: payment.email,
+    contactName: payment.accountName,
+    contactPhone: payment.accountPhone,
+    reference: payment.reference,
+  },
+  checkoutReference,
+});

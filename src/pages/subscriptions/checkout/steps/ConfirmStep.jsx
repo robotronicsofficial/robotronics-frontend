@@ -14,6 +14,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/useAuth";
 import { useCreateSubscriptionCheckoutIntentMutation } from "@/hooks/useAccount";
+import {
+  buildSubscriptionCheckoutIntentPayload,
+  getPersistedCheckoutChildIds,
+} from "@/lib/checkoutPayload";
 import { useCheckoutStore } from "@/stores/checkoutStore";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { formatDisplayDate } from "@/lib/subscription";
@@ -55,9 +59,7 @@ const ConfirmStep = () => {
     ensureOrderCode();
   }, [ensureOrderCode]);
 
-  const childIds = persistedChildren
-    .map((child) => child.childCode || child._id)
-    .filter(Boolean);
+  const childIds = getPersistedCheckoutChildIds(persistedChildren);
 
   const billingAddress =
     [parent.streetAddress, parent.city, parent.state, parent.postalCode, parent.country]
@@ -77,20 +79,14 @@ const ConfirmStep = () => {
 
     try {
       const checkoutReference = ensureOrderCode();
-      await createCheckoutIntent.mutateAsync({
-        planId: plan.planId,
-        billingCycle: plan.billingCycle,
-        childIds,
-        payment: {
-          method: payment.method,
-          label: payment.method === "invoice" ? "Invoice / bank transfer" : "EasyPaisa",
-          email: payment.email,
-          contactName: payment.accountName,
-          contactPhone: payment.accountPhone,
-          reference: payment.reference,
-        },
-        checkoutReference,
-      });
+      await createCheckoutIntent.mutateAsync(
+        buildSubscriptionCheckoutIntentPayload({
+          plan,
+          childIds,
+          payment,
+          checkoutReference,
+        }),
+      );
       setStatus(CHECKOUT_STATUS.submitted);
       navigate({ to: CHECKOUT_PATH, search: buildCheckoutSearch("welcome") });
     } catch (mutationError) {
