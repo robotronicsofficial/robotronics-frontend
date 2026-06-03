@@ -20,6 +20,7 @@ export const queryKeys = {
   courses: {
     all: ["courses"],
     detail: (courseId) => ["courses", courseId],
+    categories: ["courses", "categories"],
   },
   jobs: {
     all: ["jobs"],

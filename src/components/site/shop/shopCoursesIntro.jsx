@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 
 import CourseProduct from "../course/courseProduct";
@@ -7,19 +7,21 @@ import { Container } from "@/components/ui/container";
 import { Eyebrow, Text } from "@/components/ui/typography";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useCourses } from "@/hooks/useCourses";
-
-const COURSE_FILTERS = [
-  { label: "All", value: "" },
-  { label: "Lego WeDo 2.0", value: "Lego WeDo 2.0" },
-  { label: "Lego Mindstorms EV3", value: "Lego Mindstorms EV3" },
-  { label: "Arduino based Robots", value: "Arduino based Robots" },
-];
+import { useCourseCategories, useCourses } from "@/hooks/useCourses";
 
 const ShopCoursesIntro = () => {
   const { data: courses = [] } = useCourses();
+  const { data: courseCategories = [] } = useCourseCategories();
   const [selectedFilter, setSelectedFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const courseFilters = useMemo(
+    () => [
+      { label: "All", value: "" },
+      ...courseCategories.map((category) => ({ label: category, value: category })),
+    ],
+    [courseCategories],
+  );
 
   const filteredCourses = courses.filter((course) => {
     if (selectedFilter && course.category !== selectedFilter) return false;
@@ -57,7 +59,7 @@ const ShopCoursesIntro = () => {
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[200px_minmax(0,1fr)]" data-aos="fade-up">
           <aside className="flex flex-col gap-1">
-            {COURSE_FILTERS.map((filter) => {
+            {courseFilters.map((filter) => {
               const isActive = selectedFilter === filter.value;
               return (
                 <Button
