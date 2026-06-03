@@ -17,6 +17,7 @@ export const readContactOptions = (payload) => {
   const serviceOptions = data?.serviceOptions;
 
   if (
+    payload?.success !== true ||
     !Array.isArray(data?.userTypes) ||
     !data.userTypes.every(isOption) ||
     !serviceOptions ||

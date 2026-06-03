@@ -1,22 +1,52 @@
 import { sendFormData, sendJson } from "./api";
 
-export const submitContactRequest = (body) =>
-  sendJson("/contact", {
+const readSubmissionData = (payload, key, errorMessage) => {
+  const data = payload?.data;
+  const message = typeof payload?.message === "string" ? payload.message.trim() : "";
+
+  if (
+    payload?.success !== true ||
+    !message ||
+    !data ||
+    typeof data !== "object" ||
+    Array.isArray(data) ||
+    !data[key] ||
+    typeof data[key] !== "object" ||
+    Array.isArray(data[key])
+  ) {
+    throw new Error(errorMessage);
+  }
+
+  return {
+    message,
+    [key]: data[key],
+    crmSyncQueued: Boolean(data.crmSyncQueued),
+  };
+};
+
+export const readContactSubmission = (payload) =>
+  readSubmissionData(payload, "contact", "Invalid contact response");
+
+export const readQuickContactSubmission = (payload) =>
+  readSubmissionData(payload, "quickContact", "Invalid quick contact response");
+
+export const submitContactRequest = async (body) =>
+  readContactSubmission(await sendJson("/contact", {
     method: "POST",
     body,
-  });
+  }));
 
-export const submitSchoolLead = (body) =>
-  sendJson("/school-leads", {
+export const submitSchoolLead = async (body) =>
+  readContactSubmission(await sendJson("/school-leads", {
     method: "POST",
     body: { ...body, source: "for-schools" },
-  });
+  }));
 
-export const submitQuickContactRequest = (body) =>
-  sendJson("/quickContact", {
+export const submitQuickContactRequest = async (body) =>
+  readQuickContactSubmission(await sendJson("/quickContact", {
     method: "POST",
     body,
-  });
+  }));
 
 export const readGiftCourseSubmission = (payload) => {
   const data = payload?.data;

@@ -57,8 +57,8 @@ const QuickContact = () => {
     }
 
     try {
-      await quickContactRequestMutation.mutateAsync(formData);
-      setStatus({ type: "success", message: "Message sent successfully." });
+      const result = await quickContactRequestMutation.mutateAsync(formData);
+      setStatus({ type: "success", message: result.message });
       setFormData(initialQuickContactForm);
     } catch (error) {
       setStatus({

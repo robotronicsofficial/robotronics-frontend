@@ -118,9 +118,9 @@ const ForSchools = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await submitLead.mutateAsync(form);
+      const result = await submitLead.mutateAsync(form);
       setSubmitted(true);
-      toast.success("We'll be in touch within a business day.");
+      toast.success(result.message);
     } catch (error) {
       toast.error(error.message || "Something went wrong. Please try again.");
     }

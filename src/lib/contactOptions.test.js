@@ -15,7 +15,7 @@ describe("contact options API contract", () => {
         parent: [{ code: "learning-subscription", label: "Learning Subscription" }],
       },
     };
-    fetchBackendJson.mockResolvedValueOnce({ data: options });
+    fetchBackendJson.mockResolvedValueOnce({ success: true, data: options });
 
     await expect(fetchContactOptions()).resolves.toBe(options);
     expect(fetchBackendJson).toHaveBeenCalledWith("/contact/options");
