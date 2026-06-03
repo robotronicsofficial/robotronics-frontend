@@ -39,6 +39,9 @@ export const queryKeys = {
     all: ["saved-items"],
     user: (userId) => ["saved-items", userId],
   },
+  shop: {
+    cartQuote: (items) => ["shop", "cart-quote", items],
+  },
   services: {
     all: ["services"],
     detail: (serviceId) => ["services", serviceId],

@@ -13,7 +13,7 @@ import { useAuth } from "@/contexts/useAuth";
 import {
   buildShopCheckoutIntentRequest,
   clearShopCheckout,
-  EMPTY_SHOP_CART_QUOTE,
+  hasShopCartQuoteItems,
   hasCheckoutCustomer,
   hasCheckoutAddress,
   hasCheckoutPayment,
@@ -51,8 +51,8 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
   const [submittedIntent, setSubmittedIntent] = useState(null);
   const submitShopCheckoutIntentMutation = useSubmitShopCheckoutIntentMutation();
   const quoteQuery = useShopCartQuoteQuery(cart);
-  const cartQuote = cart.length ? quoteQuery.data : EMPTY_SHOP_CART_QUOTE;
-  const quoteReady = Boolean(submittedIntent) || cart.length === 0 || Boolean(cartQuote);
+  const cartQuote = quoteQuery.data;
+  const quoteReady = Boolean(submittedIntent) || hasShopCartQuoteItems(cartQuote);
   const requiresShipping = submittedIntent
     ? hasShippableCommerceItems(submittedIntent.items)
     : Boolean(cartQuote?.requiresShipping);

@@ -12,6 +12,7 @@ import Layout from "@/components/site/Layout";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { fetchCurrentUser } from "./lib/auth";
 import { CHECKOUT_PATH } from "./lib/checkoutFlow";
+import { requireShopCartQuote } from "./lib/shopCheckoutGuard";
 import { verifyChildSession } from "./lib/childSession";
 import { queryClient } from "./lib/queryClient.js";
 import { queryKeys } from "./lib/queryKeys";
@@ -205,7 +206,9 @@ const makeRedirectRoute = (path, to, parent = rootRoute) => createRoute({
 });
 
 const publicRoute = (path, component) => makeRoute({ path, component });
-const authRoute = (path, component) => makeRoute({ parent: authenticatedRoute, path, component });
+const authRoute = (path, component, beforeLoad) => (
+  makeRoute({ parent: authenticatedRoute, path, component, beforeLoad })
+);
 const childRoute = (path, component) => makeRoute({ parent: childSessionRoute, path, component });
 
 const routeTree = rootRoute.addChildren([
@@ -252,9 +255,9 @@ const routeTree = rootRoute.addChildren([
   makeRedirectRoute("/ServiceDetail", "/International/Iservices"),
   publicRoute("/ServiceDetail/$id", ServiceDetail),
   authenticatedRoute.addChildren([
-    authRoute(SHOP_CUSTOMER_INFO_PATH, CustomerInfo),
-    authRoute(SHOP_PAYMENT_PATH, ShippingService),
-    authRoute(SHOP_REVIEW_PATH, Shipping),
+    authRoute(SHOP_CUSTOMER_INFO_PATH, CustomerInfo, requireShopCartQuote),
+    authRoute(SHOP_PAYMENT_PATH, ShippingService, requireShopCartQuote),
+    authRoute(SHOP_REVIEW_PATH, Shipping, requireShopCartQuote),
     authRoute("/Dashboard/userInfo", UserInfo),
     authRoute(DASHBOARD_MY_PRODUCTS_PATH, MyRobot),
     authRoute("/Dashboard/WishList", WishList),

@@ -12,7 +12,7 @@ import { Heading, Text } from "@/components/ui/typography";
 import { FormInput, FormSelect, FormTextarea } from "@/components/forms/FormControls";
 import { useAuth } from "@/contexts/useAuth";
 import {
-  EMPTY_SHOP_CART_QUOTE,
+  hasShopCartQuoteItems,
   hasCheckoutCustomer,
   loadShopCheckout,
   saveShopCheckout,
@@ -113,9 +113,9 @@ const CustomerInfomation = ({ onNext }) => {
   const location = useLocation();
   const storedCheckout = loadShopCheckout();
   const quoteQuery = useShopCartQuoteQuery(cart);
-  const quote = cart.length ? quoteQuery.data : EMPTY_SHOP_CART_QUOTE;
+  const quote = quoteQuery.data;
   const requiresShipping = Boolean(quote?.requiresShipping);
-  const quoteReady = cart.length === 0 || Boolean(quote);
+  const quoteReady = hasShopCartQuoteItems(quote);
   const quoteItemsByKey = useMemo(
     () => new Map((quote?.items || []).map((item) => [getCommerceItemKey(item), item])),
     [quote],

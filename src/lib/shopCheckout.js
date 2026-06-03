@@ -233,12 +233,15 @@ export const buildCommerceCartRequestItems = (cart = []) => (
       itemId: item?.itemId || "",
       quantity: Number(item?.quantity) || 0,
     }))
-    .filter((item) => item.itemType && item.itemId && item.quantity > 0)
 );
 
 export const buildShopCartQuoteRequest = ({ cart = [] } = {}) => ({
   items: buildCommerceCartRequestItems(cart),
 });
+
+export const hasShopCartQuoteItems = (quote) => (
+  Array.isArray(quote?.items) && quote.items.length > 0
+);
 
 export const buildShopCheckoutIntentRequest = ({
   checkout = {},

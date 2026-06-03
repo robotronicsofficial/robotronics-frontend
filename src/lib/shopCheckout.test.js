@@ -7,6 +7,7 @@ import {
   clearPendingCartItems,
   loadShopCheckout,
   loadPendingCartItems,
+  hasShopCartQuoteItems,
   savePendingCartItems,
   saveShopCheckout,
 } from "./shopCheckout";
@@ -100,10 +101,17 @@ describe("shop checkout storage contract", () => {
     const expectedItems = [
       { itemType: "product", itemId: "product-1", quantity: 2 },
       { itemType: "course", itemId: "course-1", quantity: 1 },
+      { itemType: "product", itemId: "", quantity: 1 },
     ];
 
     expect(buildShopCartQuoteRequest({ cart }).items).toEqual(expectedItems);
     expect(buildShopCheckoutIntentRequest({ cart }).items).toEqual(expectedItems);
+  });
+
+  it("only treats backend quotes with items as checkout-ready", () => {
+    expect(hasShopCartQuoteItems(null)).toBe(false);
+    expect(hasShopCartQuoteItems({ items: [] })).toBe(false);
+    expect(hasShopCartQuoteItems({ items: [{ itemId: "product-1" }] })).toBe(true);
   });
 
   it("uses the backend quote fulfillment decision for checkout address fields", () => {

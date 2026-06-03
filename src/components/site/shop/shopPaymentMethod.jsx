@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import {
-  EMPTY_SHOP_CART_QUOTE,
+  hasShopCartQuoteItems,
   hasCheckoutCustomer,
   hasCheckoutAddress,
   loadShopCheckout,
@@ -97,8 +97,8 @@ const ShopPaymentMethod = ({ onNext }) => {
   const cart = useCartStore(selectCart);
   const storedCheckout = useMemo(() => loadShopCheckout(), []);
   const quoteQuery = useShopCartQuoteQuery(cart);
-  const quote = cart.length ? quoteQuery.data : EMPTY_SHOP_CART_QUOTE;
-  const quoteReady = cart.length === 0 || Boolean(quote);
+  const quote = quoteQuery.data;
+  const quoteReady = hasShopCartQuoteItems(quote);
   const requiresShipping = Boolean(quote?.requiresShipping);
   const [selectedService, setSelectedService] = useState(
     storedCheckout.payment?.shippingService ||
