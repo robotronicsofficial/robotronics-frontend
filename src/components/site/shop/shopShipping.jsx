@@ -23,7 +23,7 @@ import {
   getCommerceItemKey,
   hasShippableCommerceItems,
 } from "@/lib/commerceItems";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import {
@@ -312,10 +312,7 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
                       }
                       priceLabel=""
                       imageClassName="object-cover h-20 w-24"
-                      image={resolveBackendAssetUrl(
-                        product?.image || product?.images?.[0],
-                        "https://via.placeholder.com/300x200",
-                      )}
+                      image={resolveCatalogImageUrl(product?.image || product?.images?.[0])}
                     />
                   </CardContent>
                 </Card>

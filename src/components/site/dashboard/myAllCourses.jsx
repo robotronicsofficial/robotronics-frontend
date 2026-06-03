@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { useChildCourses } from "@/hooks/useChildCourses";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { getActiveChildSession } from "@/utils/childSessionRequest";
 import { cn } from "@/lib/utils";
 
@@ -24,7 +24,7 @@ const CourseCard = ({ course, onClick }) => (
   <Card className="overflow-hidden p-0">
     <img
       className="h-44 w-full object-cover"
-      src={resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")}
+      src={resolveCatalogImageUrl(course.thumbnail)}
       alt={course.title}
       loading="lazy"
     />

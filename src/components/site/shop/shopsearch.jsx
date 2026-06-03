@@ -14,7 +14,6 @@ import {
   createProductCommerceItem,
   getCommerceItemKey,
 } from "@/lib/commerceItems";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { useCartStore } from "@/stores/cartStore";
 import { useProducts } from "@/hooks/useProducts";
@@ -234,10 +233,7 @@ const Shopsearch = () => {
                       key={product._id}
                       title={product.name}
                       price={product.price}
-                      image={resolveBackendAssetUrl(
-                        product?.images?.[0],
-                        "https://via.placeholder.com/300x200",
-                      )}
+                      image={product?.images?.[0]}
                       isSaved={itemKey ? savedItemKeys.has(itemKey) : false}
                       onAddToWishlist={() => handleToggleSavedItem(product)}
                       onAddToCart={() => {

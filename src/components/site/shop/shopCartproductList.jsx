@@ -21,7 +21,7 @@ import {
   saveShopCheckout,
 } from "@/lib/shopCheckout";
 import { useShopCartQuoteQuery } from "@/hooks/useShopOrders";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { LOGIN_PATH, SHOP_PATH } from "@/router/paths";
@@ -121,10 +121,7 @@ const ShopCartproductList = ({ onNext }) => {
               <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
                 <div className="size-32 shrink-0 overflow-hidden rounded-2xl bg-muted">
                   <img
-                    src={resolveBackendAssetUrl(
-                      product.image || product.images?.[0],
-                      "https://via.placeholder.com/300x200",
-                    )}
+                    src={resolveCatalogImageUrl(product.image || product.images?.[0])}
                     alt={product.name}
                     className="h-full w-full object-cover"
                   />

@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FormInput, FormSelect } from "@/components/forms/FormControls";
 import { useProducts } from "@/hooks/useProducts";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { getProductDetailRoute } from "@/lib/commerceItems";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { SHOP_PATH } from "@/router/paths";
@@ -113,7 +113,7 @@ const Search = () => {
                 className="h-auto flex-col items-stretch overflow-hidden rounded-2xl bg-card border border-border p-0 text-left transition hover:-translate-y-1"
               >
                 <img
-                  src={resolveBackendAssetUrl(product?.images?.[0], "https://via.placeholder.com/300x200")}
+                  src={resolveCatalogImageUrl(product?.images?.[0])}
                   alt={product?.name || "Product"}
                   className="h-48 w-full object-cover"
                   loading="lazy"

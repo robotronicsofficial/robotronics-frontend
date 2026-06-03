@@ -15,7 +15,7 @@ import {
 } from "@/lib/commerceItems";
 import { COURSE_PATH, SHOP_PATH } from "@/router/paths";
 import { cn } from "@/lib/utils";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { useCourses } from "@/hooks/useCourses";
 import { useProducts } from "@/hooks/useProducts";
@@ -135,10 +135,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                 >
                   <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
                     <img
-                      src={resolveBackendAssetUrl(
-                        item?.images?.[0],
-                        "https://via.placeholder.com/300x200",
-                      )}
+                      src={resolveCatalogImageUrl(item?.images?.[0])}
                       alt={item?.name || "Item"}
                       className="h-full w-full object-cover"
                       loading="lazy"

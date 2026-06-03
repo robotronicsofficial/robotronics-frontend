@@ -17,7 +17,7 @@ import {
   useSaveChildCoursesMutation,
   useSelectableChildCourses,
 } from "@/hooks/useChildCourses";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { cn } from "@/lib/utils";
 
 const COURSES_PER_PAGE = 9;
@@ -72,7 +72,7 @@ const SelectableCard = ({ course, isSelected, onToggle, onView }) => (
   >
     <img
       className="h-44 w-full object-cover"
-      src={resolveBackendAssetUrl(course.thumbnail, "https://via.placeholder.com/300x200")}
+      src={resolveCatalogImageUrl(course.thumbnail)}
       alt={course.title}
       loading="lazy"
     />

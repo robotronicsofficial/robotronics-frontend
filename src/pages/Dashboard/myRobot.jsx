@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { getCommerceItemRoute } from "../../lib/commerceItems";
-import { resolveBackendAssetUrl } from "../../utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import {
   useRemoveSavedItemMutation,
   useSavedItems,
@@ -29,10 +29,7 @@ const SavedItemRow = ({ item, onView, onRemove }) => {
         className="size-20 shrink-0 overflow-hidden rounded-xl bg-muted"
       >
         <img
-          src={resolveBackendAssetUrl(
-            item?.image || item?.images?.[0],
-            "https://via.placeholder.com/160",
-          )}
+          src={resolveCatalogImageUrl(item?.image || item?.images?.[0])}
           className="size-full object-cover"
           alt={item?.name || "Saved item"}
         />

@@ -19,7 +19,7 @@ import {
 } from "@/lib/shopCheckout";
 import { getCommerceItemKey } from "@/lib/commerceItems";
 import { useShopCartQuoteQuery } from "@/hooks/useShopOrders";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
 import { LOGIN_PATH, SHOP_PAYMENT_PATH } from "@/router/paths";
@@ -404,10 +404,7 @@ const CustomerInfomation = ({ onNext }) => {
                         : "Updating..."
                   }
                   priceLabel=""
-                  image={resolveBackendAssetUrl(
-                    product.image || product.images?.[0],
-                    "https://via.placeholder.com/300x200",
-                  )}
+                  image={resolveCatalogImageUrl(product.image || product.images?.[0])}
                 />
               ))
             ) : (

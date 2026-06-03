@@ -6,8 +6,8 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/typography";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { getCommerceItemRoute } from "@/lib/commerceItems";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useCartStore } from "@/stores/cartStore";
 import {
   useRemoveSavedItemMutation,
@@ -38,7 +38,7 @@ const WishListItem = ({ item, onRemove, onView, onMoveToCart }) => {
         className="size-20 shrink-0 overflow-hidden rounded-xl bg-muted"
       >
         <img
-          src={resolveBackendAssetUrl(item.image || item.images?.[0], "https://via.placeholder.com/160")}
+          src={resolveCatalogImageUrl(item.image || item.images?.[0])}
           className="size-full object-cover"
           alt={item.name || "Saved item"}
         />

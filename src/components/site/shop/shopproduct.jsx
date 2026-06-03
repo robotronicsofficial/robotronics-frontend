@@ -3,8 +3,8 @@ import { useNavigate } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/typography";
+import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { getProductDetailRoute } from "@/lib/commerceItems";
-import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 
 const Shopproduct = ({
@@ -34,7 +34,7 @@ const Shopproduct = ({
         <div className="aspect-square w-full overflow-hidden rounded-2xl bg-muted">
           <img
             className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-50"
-            src={resolveBackendAssetUrl(image, "https://via.placeholder.com/300x200")}
+            src={resolveCatalogImageUrl(image)}
             alt={title || "Product"}
             loading="lazy"
             decoding="async"
