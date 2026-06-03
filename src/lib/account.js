@@ -1,21 +1,39 @@
 import { fetchSessionJson, sendSessionJson } from "./api";
 import {
-  ensureArray,
   normalizeParentRecord,
 } from "./subscription";
 
+export const readCurrentParent = (payload) => {
+  const parent = payload?.data ?? null;
+
+  if (parent !== null && (typeof parent !== "object" || Array.isArray(parent))) {
+    throw new Error("Invalid parent response");
+  }
+
+  return parent ? normalizeParentRecord(parent) : null;
+};
+
 export const fetchCurrentParent = async () => {
   const payload = await fetchSessionJson("/parents/me");
-  return payload?.parent ? normalizeParentRecord(payload.parent) : null;
+  return readCurrentParent(payload);
+};
+
+export const readChildAccounts = (payload) => {
+  const data = payload?.data;
+
+  if (!data || typeof data !== "object" || Array.isArray(data) || !Array.isArray(data.children)) {
+    throw new Error("Invalid child accounts response");
+  }
+
+  return {
+    parent: data.parent ? normalizeParentRecord(data.parent) : null,
+    children: data.children,
+  };
 };
 
 export const fetchChildAccounts = async (userId) => {
   const payload = await fetchSessionJson(`/parents/${encodeURIComponent(userId)}/child-accounts`);
-
-  return {
-    parent: payload?.parent ? normalizeParentRecord(payload.parent) : null,
-    children: ensureArray(payload?.children),
-  };
+  return readChildAccounts(payload);
 };
 
 export const readPayments = (payload) => {
