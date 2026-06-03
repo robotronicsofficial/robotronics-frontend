@@ -8,7 +8,7 @@ const isMissingSpecificJob = (error) => {
 };
 
 export const readJobs = (payload) => {
-  if (!Array.isArray(payload?.data)) {
+  if (payload?.success !== true || !Array.isArray(payload?.data)) {
     throw new Error("Invalid jobs response");
   }
 
@@ -16,7 +16,12 @@ export const readJobs = (payload) => {
 };
 
 export const readJob = (payload) => {
-  if (!payload?.data || typeof payload.data !== "object" || Array.isArray(payload.data)) {
+  if (
+    payload?.success !== true ||
+    !payload?.data ||
+    typeof payload.data !== "object" ||
+    Array.isArray(payload.data)
+  ) {
     throw new Error("Invalid job response");
   }
 
