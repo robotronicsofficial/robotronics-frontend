@@ -14,15 +14,15 @@ import { useAuth } from "@/contexts/useAuth";
 import { getCommerceItemKey } from "@/lib/commerceItems";
 import {
   calculateCartSummary,
+  clearPendingCartItems,
+  loadPendingCartItems,
   loadShopCheckout,
+  savePendingCartItems,
   saveShopCheckout,
 } from "@/lib/shopCheckout";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
-
-
-const PENDING_CART_STORAGE_KEY = "robotronics:pendingCart";
 
 const ShopCartproductList = ({ onNext }) => {
   const cart = useCartStore(selectCart);
@@ -47,21 +47,9 @@ const ShopCartproductList = ({ onNext }) => {
     if (!currentUser) return;
     if (cart.length > 0) return;
 
-    try {
-      const raw = window.localStorage.getItem(PENDING_CART_STORAGE_KEY);
-      if (!raw) return;
-
-      const pending = JSON.parse(raw);
-      if (Array.isArray(pending) && pending.length > 0) {
-        pending.forEach((item) => {
-          if (item) addToCart(item);
-        });
-      }
-    } catch (restoreError) {
-      console.error("Failed to restore pending cart:", restoreError);
-    } finally {
-      window.localStorage.removeItem(PENDING_CART_STORAGE_KEY);
-    }
+    const pending = loadPendingCartItems();
+    pending.forEach(addToCart);
+    clearPendingCartItems();
   }, [currentUser, cart.length, addToCart]);
 
   const handleAddToCart = useCallback(
@@ -100,14 +88,7 @@ const ShopCartproductList = ({ onNext }) => {
     }
 
     if (!currentUser) {
-      try {
-        window.localStorage.setItem(
-          PENDING_CART_STORAGE_KEY,
-          JSON.stringify(cart),
-        );
-      } catch (stashError) {
-        console.error("Failed to stash pending cart:", stashError);
-      }
+      savePendingCartItems(cart);
 
       toast.error("Please sign in to proceed to checkout", {
         duration: 5000,

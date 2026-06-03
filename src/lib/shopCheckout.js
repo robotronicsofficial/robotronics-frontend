@@ -1,11 +1,16 @@
 import { hasShippableCommerceItems } from "./commerceItems";
 
 const STORAGE_KEY = "shop_checkout";
+const PENDING_CART_STORAGE_KEY = "robotronics:pendingCart";
 export const SHIPPING_COST = 500;
 export const DISCOUNT_RATE = 0.1;
 
 const getStorage = () => (
   typeof window === "undefined" ? null : window.sessionStorage
+);
+
+const getPendingCartStorage = () => (
+  typeof window === "undefined" ? null : window.localStorage
 );
 
 const isBrowser = () => Boolean(getStorage());
@@ -129,6 +134,50 @@ export const clearShopCheckout = () => {
   }
 
   getStorage()?.removeItem(STORAGE_KEY);
+};
+
+export const loadPendingCartItems = () => {
+  const storage = getPendingCartStorage();
+  if (!storage) {
+    return [];
+  }
+
+  try {
+    const rawValue = storage.getItem(PENDING_CART_STORAGE_KEY);
+    if (!rawValue) {
+      return [];
+    }
+
+    const parsedValue = JSON.parse(rawValue);
+    return Array.isArray(parsedValue) ? parsedValue.filter(Boolean) : [];
+  } catch {
+    return [];
+  }
+};
+
+export const savePendingCartItems = (cart = []) => {
+  const storage = getPendingCartStorage();
+  if (!storage) {
+    return;
+  }
+
+  try {
+    storage.setItem(
+      PENDING_CART_STORAGE_KEY,
+      JSON.stringify(Array.isArray(cart) ? cart.filter(Boolean) : [])
+    );
+  } catch {
+    // The checkout can still continue; the cart just cannot be restored after sign-in.
+  }
+};
+
+export const clearPendingCartItems = () => {
+  const storage = getPendingCartStorage();
+  if (!storage) {
+    return;
+  }
+
+  storage.removeItem(PENDING_CART_STORAGE_KEY);
 };
 
 export const buildShopCheckoutIntentRequest = ({ checkout = {}, cart = [] } = {}) => {
