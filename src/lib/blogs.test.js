@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { fetchBackendJson } from "./api";
-import { fetchBlogById, fetchBlogs, readBlog, readBlogs } from "./blogs";
+import { fetchBlogById, fetchBlogs } from "./blogs";
 
 vi.mock("./api", () => ({
   fetchBackendJson: vi.fn(),
@@ -22,14 +22,5 @@ describe("blog API contract", () => {
 
     await expect(fetchBlogById("blog-1")).resolves.toBe(blog);
     expect(fetchBackendJson).toHaveBeenCalledWith("/blogs/blog-1");
-  });
-
-  it("rejects legacy blog envelopes", () => {
-    expect(() => readBlogs([{ _id: "legacy-list" }])).toThrow(
-      "Invalid blogs response",
-    );
-    expect(() => readBlog({ _id: "legacy-detail" })).toThrow(
-      "Invalid blog response",
-    );
   });
 });

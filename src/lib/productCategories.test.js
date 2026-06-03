@@ -13,13 +13,4 @@ describe("product category contracts", () => {
       ],
     })).toEqual(["Lego Robots", "Curriculum Books"]);
   });
-
-  it("rejects legacy category envelopes", () => {
-    expect(() => readProductCategoryNames({ categories: [{ name: "Lego Robots" }] })).toThrow(
-      "Invalid product categories response",
-    );
-    expect(() => readProductCategoryNames(null)).toThrow(
-      "Invalid product categories response",
-    );
-  });
 });

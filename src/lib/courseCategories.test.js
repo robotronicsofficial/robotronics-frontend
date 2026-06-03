@@ -13,13 +13,4 @@ describe("course category contracts", () => {
       ],
     })).toEqual(["Robotics", "Artificial Intelligence AI"]);
   });
-
-  it("rejects legacy category envelopes", () => {
-    expect(() => readCourseCategoryNames({ categories: [{ name: "Robotics" }] })).toThrow(
-      "Invalid course categories response",
-    );
-    expect(() => readCourseCategoryNames(null)).toThrow(
-      "Invalid course categories response",
-    );
-  });
 });

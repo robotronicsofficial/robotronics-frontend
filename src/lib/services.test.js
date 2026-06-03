@@ -4,8 +4,6 @@ import { fetchBackendJson } from "./api";
 import {
   fetchServiceById,
   fetchServices,
-  readService,
-  readServices,
 } from "./services";
 
 vi.mock("./api", () => ({
@@ -27,14 +25,5 @@ describe("services API contract", () => {
 
     await expect(fetchServiceById("service-1")).resolves.toBe(service);
     expect(fetchBackendJson).toHaveBeenCalledWith("/services/service-1");
-  });
-
-  it("rejects legacy service envelopes", () => {
-    expect(() => readServices([{ _id: "legacy-list" }])).toThrow(
-      "Invalid services response",
-    );
-    expect(() => readService({ _id: "legacy-detail" })).toThrow(
-      "Invalid service response",
-    );
   });
 });

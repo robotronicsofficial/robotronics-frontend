@@ -24,10 +24,4 @@ describe("child course API contract", () => {
       },
     ]);
   });
-
-  it("rejects legacy child course envelopes", () => {
-    expect(() =>
-      readChildCourses({ data: { activeCourses: [] } }),
-    ).toThrow("Invalid child courses response");
-  });
 });

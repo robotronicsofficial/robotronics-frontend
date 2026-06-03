@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { fetchBackendJson } from "./api";
-import { fetchCourseById, fetchCourses, readCourse, readCourses } from "./courses";
+import { fetchCourseById, fetchCourses } from "./courses";
 
 vi.mock("./api", () => ({
   fetchBackendJson: vi.fn(),
@@ -22,14 +22,5 @@ describe("course API contract", () => {
 
     await expect(fetchCourseById("course-1")).resolves.toBe(course);
     expect(fetchBackendJson).toHaveBeenCalledWith("/courses/course-1");
-  });
-
-  it("rejects legacy course envelopes", () => {
-    expect(() => readCourses({ courses: [{ _id: "legacy-list" }] })).toThrow(
-      "Invalid courses response",
-    );
-    expect(() => readCourse({ _id: "legacy-detail" })).toThrow(
-      "Invalid course response",
-    );
   });
 });

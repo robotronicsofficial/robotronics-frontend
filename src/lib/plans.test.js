@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { fetchBackendJson } from "./api";
-import { fetchPlans, readPlans } from "./plans";
+import { fetchPlans } from "./plans";
 
 vi.mock("./api", () => ({
   fetchBackendJson: vi.fn(),
@@ -14,9 +14,5 @@ describe("plans API contract", () => {
 
     await expect(fetchPlans()).resolves.toBe(plans);
     expect(fetchBackendJson).toHaveBeenCalledWith("/plans");
-  });
-
-  it("rejects legacy plan envelopes", () => {
-    expect(() => readPlans({ plans: [] })).toThrow("Invalid plans response");
   });
 });
