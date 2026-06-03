@@ -7,38 +7,23 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import {
-  COMMERCE_ITEM_TYPES,
-  createCourseCommerceItem,
   createProductCommerceItem,
   getCommerceItemKey,
   getCommerceItemRoute,
 } from "@/lib/commerceItems";
-import { COURSE_PATH, SHOP_PATH } from "@/router/paths";
+import { SHOP_PATH } from "@/router/paths";
 import { cn } from "@/lib/utils";
 import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { useFormatMoney } from "@/utils/formatPrice";
-import { useCourses } from "@/hooks/useCourses";
 import { useProducts } from "@/hooks/useProducts";
 
-const RELATED_ITEM_CONFIG = {
-  [COMMERCE_ITEM_TYPES.product]: {
-    browsePath: SHOP_PATH,
-    browseLabel: "Browse the store",
-    emptyLabel: "No other products are available right now.",
-    subtitle: "Top selling products",
-    loadingLabel: "Loading related products…",
-    errorLabel: "Failed to load related products",
-    createItem: createProductCommerceItem,
-  },
-  [COMMERCE_ITEM_TYPES.course]: {
-    browsePath: COURSE_PATH,
-    browseLabel: "Browse courses",
-    emptyLabel: "No other courses are available right now.",
-    subtitle: "Top selling courses",
-    loadingLabel: "Loading related courses…",
-    errorLabel: "Failed to load related courses",
-    createItem: createCourseCommerceItem,
-  },
+const RELATED_PRODUCTS_CONFIG = {
+  browsePath: SHOP_PATH,
+  browseLabel: "Browse the store",
+  emptyLabel: "No other products are available right now.",
+  subtitle: "Top selling products",
+  loadingLabel: "Loading related products…",
+  errorLabel: "Failed to load related products",
 };
 
 const RelatedItemsMessage = ({ children, tone = "default" }) => (
@@ -57,23 +42,21 @@ RelatedItemsMessage.propTypes = {
   tone: PropTypes.oneOf(["default", "error"]),
 };
 
-const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
+const MoreProduct = () => {
   const navigate = useNavigate();
   const formatMoney = useFormatMoney();
   const { id } = useParams({ strict: false });
-  const config = RELATED_ITEM_CONFIG[itemType] || RELATED_ITEM_CONFIG.product;
-  const productQuery = useProducts();
-  const courseQuery = useCourses();
-  const query = itemType === COMMERCE_ITEM_TYPES.course ? courseQuery : productQuery;
+  const config = RELATED_PRODUCTS_CONFIG;
+  const query = useProducts();
   const loading = query.isLoading;
   const error = query.error;
   const items = useMemo(
     () =>
       (query.data || [])
-        .map((entry) => config.createItem(entry))
+        .map((entry) => createProductCommerceItem(entry))
         .filter(Boolean)
         .filter((entry) => entry.itemId !== id),
-    [config, id, query.data],
+    [id, query.data],
   );
   const topThree = useMemo(() => items.slice(0, 3), [items]);
   const openItem = (item) => {
@@ -158,10 +141,6 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
       </Container>
     </section>
   );
-};
-
-MoreProduct.propTypes = {
-  itemType: PropTypes.oneOf(Object.values(COMMERCE_ITEM_TYPES)),
 };
 
 export default MoreProduct;
