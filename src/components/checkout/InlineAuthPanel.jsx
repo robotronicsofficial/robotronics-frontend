@@ -13,10 +13,8 @@ import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import PasswordVisibilityButton from "@/components/auth/PasswordVisibilityButton";
-import AuthSocialButton from "@/components/auth/AuthSocialButton";
 import { getPasswordInputClassName } from "@/components/auth/passwordInputClass";
-import facebook from "@/assets/images/Facebooklogo.svg";
-import google from "@/assets/images/Googlelogo.svg";
+import SocialAuthButtons from "@/components/auth/SocialAuthButtons";
 import { useAuth } from "@/contexts/useAuth";
 import {
   useRegisterMutation,
@@ -27,7 +25,7 @@ import {
   hasValidPasswordRequirements,
   PASSWORD_POLICY_MESSAGE,
 } from "@/utils/passwordPolicy";
-import { savePostAuthRedirect, startSocialLogin } from "@/utils/authRedirect";
+import { savePostAuthRedirect } from "@/utils/authRedirect";
 import { cn } from "@/lib/utils";
 
 /* ──────────────────────────────────────────────────────────────────
@@ -91,10 +89,6 @@ export const InlineAuthPanel = ({
   const passwordErrors = getPasswordValidationState(signupForm.password, signupForm.password);
   const passwordMeetsPolicy =
     passwordErrors.length && passwordErrors.number && passwordErrors.symbol;
-
-  const handleSocialLogin = (provider) => {
-    startSocialLogin(provider, redirectPath);
-  };
 
   const handleSignup = async (event) => {
     event.preventDefault();
@@ -205,20 +199,7 @@ export const InlineAuthPanel = ({
           </Text>
         </div>
 
-        <div className="flex flex-col gap-3">
-          <AuthSocialButton
-            className="w-full"
-            icon={facebook}
-            label="Continue with Facebook"
-            onClick={() => handleSocialLogin("facebook")}
-          />
-          <AuthSocialButton
-            className="w-full"
-            icon={google}
-            label="Continue with Google"
-            onClick={() => handleSocialLogin("google")}
-          />
-        </div>
+        <SocialAuthButtons redirectPath={redirectPath} />
 
         <div className="flex items-center gap-3">
           <Separator className="flex-1" />

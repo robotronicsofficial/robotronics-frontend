@@ -6,12 +6,10 @@ import "react-phone-number-input/style.css";
 import PropTypes from "prop-types";
 import { Check, GraduationCap, Users, X } from "lucide-react";
 
-import facebook from "../assets/images/Facebooklogo.svg";
-import google from "../assets/images/Googlelogo.svg";
 import AuthShell from "@/components/auth/AuthShell";
-import AuthSocialButton from "@/components/auth/AuthSocialButton";
 import PasswordVisibilityButton from "@/components/auth/PasswordVisibilityButton";
 import { getPasswordInputClassName } from "@/components/auth/passwordInputClass";
+import SocialAuthButtons from "@/components/auth/SocialAuthButtons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -29,7 +27,6 @@ import {
   buildAuthRedirectSearch,
   getSafeRedirectPath,
   savePostAuthRedirect,
-  startSocialLogin,
 } from "../utils/authRedirect";
 import { cn } from "@/lib/utils";
 import { LOGIN_PATH } from "@/router/paths";
@@ -202,10 +199,6 @@ const Signup = () => {
     }
   };
 
-  const handleSocialLogin = (provider) => {
-    startSocialLogin(provider, redirectPath);
-  };
-
   if (role === "school") {
     return (
       <AuthShell>
@@ -254,20 +247,7 @@ const Signup = () => {
 
       <RolePicker value={role} onChange={setRole} />
 
-      <div className="flex flex-col gap-3">
-        <AuthSocialButton
-          className="w-full"
-          icon={facebook}
-          label="Continue with Facebook"
-          onClick={() => handleSocialLogin("facebook")}
-        />
-        <AuthSocialButton
-          className="w-full"
-          icon={google}
-          label="Continue with Google"
-          onClick={() => handleSocialLogin("google")}
-        />
-      </div>
+      <SocialAuthButtons redirectPath={redirectPath} />
 
       <div className="flex items-center gap-3">
         <Separator className="flex-1" />
