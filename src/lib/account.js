@@ -75,17 +75,53 @@ export const saveParent = (body) =>
     body,
   });
 
-export const activateSubscription = (body) =>
-  sendSessionJson("/subscriptions/activate", {
+export const readSubscriptionCheckoutIntent = (payload) => {
+  const data = payload?.data;
+  const message = typeof payload?.message === "string" ? payload.message.trim() : "";
+
+  if (!message || !data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Invalid subscription checkout response");
+  }
+
+  return {
+    message,
+    subscription: data.subscription,
+  };
+};
+
+export const readSubscriptionActivation = (payload) => {
+  const data = payload?.data;
+  const message = typeof payload?.message === "string" ? payload.message.trim() : "";
+
+  if (!message || !data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Invalid subscription activation response");
+  }
+
+  return {
+    message,
+    subscription: data.subscription,
+    enrolledChildren: ensureArray(data.enrolledChildren),
+    courses: ensureArray(data.courses),
+  };
+};
+
+export const activateSubscription = async (body) => {
+  const payload = await sendSessionJson("/subscriptions/activate", {
     method: "POST",
     body,
   });
 
-export const createSubscriptionCheckoutIntent = (body) =>
-  sendSessionJson("/subscriptions/checkout-intents", {
+  return readSubscriptionActivation(payload);
+};
+
+export const createSubscriptionCheckoutIntent = async (body) => {
+  const payload = await sendSessionJson("/subscriptions/checkout-intents", {
     method: "POST",
     body,
   });
+
+  return readSubscriptionCheckoutIntent(payload);
+};
 
 export const createChildPin = (body) =>
   sendSessionJson("/children", {

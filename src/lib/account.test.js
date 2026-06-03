@@ -5,6 +5,8 @@ import {
   readChildEnrollment,
   readCurrentParent,
   readPayments,
+  readSubscriptionActivation,
+  readSubscriptionCheckoutIntent,
 } from "./account";
 
 describe("account api readers", () => {
@@ -65,6 +67,36 @@ describe("account api readers", () => {
           progress: 50,
         },
       ],
+    });
+  });
+
+  it("reads subscription checkout intents from the backend data envelope", () => {
+    expect(readSubscriptionCheckoutIntent({
+      success: true,
+      message: "Subscription checkout request created",
+      data: {
+        subscription: { _id: "sub-1", status: "pending" },
+      },
+    })).toEqual({
+      message: "Subscription checkout request created",
+      subscription: { _id: "sub-1", status: "pending" },
+    });
+  });
+
+  it("reads subscription activations from the backend data envelope", () => {
+    expect(readSubscriptionActivation({
+      success: true,
+      message: "Subscription activated successfully",
+      data: {
+        subscription: { _id: "sub-1", status: "active" },
+        enrolledChildren: [{ childId: "P-5001-01", courses: 4, hasPin: true }],
+        courses: [{ _id: "course-1", title: "Python Foundations" }],
+      },
+    })).toEqual({
+      message: "Subscription activated successfully",
+      subscription: { _id: "sub-1", status: "active" },
+      enrolledChildren: [{ childId: "P-5001-01", courses: 4, hasPin: true }],
+      courses: [{ _id: "course-1", title: "Python Foundations" }],
     });
   });
 });
