@@ -10,7 +10,7 @@ vi.mock("./api", () => ({
 describe("course API contract", () => {
   it("reads course lists from the backend data envelope", async () => {
     const courses = [{ _id: "course-1", title: "Python Foundations" }];
-    fetchBackendJson.mockResolvedValueOnce({ data: courses });
+    fetchBackendJson.mockResolvedValueOnce({ success: true, data: courses });
 
     await expect(fetchCourses()).resolves.toBe(courses);
     expect(fetchBackendJson).toHaveBeenCalledWith("/courses");
@@ -18,7 +18,7 @@ describe("course API contract", () => {
 
   it("reads course details from the backend data envelope", async () => {
     const course = { _id: "course-1", title: "Python Foundations" };
-    fetchBackendJson.mockResolvedValueOnce({ data: course });
+    fetchBackendJson.mockResolvedValueOnce({ success: true, data: course });
 
     await expect(fetchCourseById("course-1")).resolves.toBe(course);
     expect(fetchBackendJson).toHaveBeenCalledWith("/courses/course-1");
