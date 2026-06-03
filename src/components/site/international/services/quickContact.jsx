@@ -5,21 +5,37 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Display, Eyebrow, Text } from "@/components/ui/typography";
-import { FormInput, FormTextarea } from "@/components/forms/FormControls";
+import { FormInput, FormSelect, FormTextarea } from "@/components/forms/FormControls";
+import { useCourses } from "@/hooks/useCourses";
 import { useQuickContactRequestMutation } from "@/hooks/useIntake";
 
 const initialQuickContactForm = {
   name: "",
   email: "",
-  course: "",
+  courseId: "",
   phone: "",
   message: "",
 };
 
 const QuickContact = () => {
+  const {
+    data: courses = [],
+    isError: coursesError,
+    isLoading: coursesLoading,
+  } = useCourses();
   const quickContactRequestMutation = useQuickContactRequestMutation();
   const [formData, setFormData] = useState(initialQuickContactForm);
   const [status, setStatus] = useState(null);
+
+  const courseOptions = courses
+    .filter((course) => course?._id && course?.title)
+    .map((course) => ({
+      value: course._id,
+      label: course.title,
+    }));
+  const courseSelectDisabled =
+    coursesLoading || coursesError || courseOptions.length === 0;
+  const isSubmitting = quickContactRequestMutation.isPending;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +45,13 @@ const QuickContact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.courseId ||
+      !formData.phone ||
+      !formData.message
+    ) {
       setStatus({ type: "error", message: "Please fill in all required fields." });
       return;
     }
@@ -81,11 +103,14 @@ const QuickContact = () => {
                   required
                 />
               </div>
-              <FormInput
-                name="course"
-                value={formData.course}
+              <FormSelect
+                name="courseId"
+                value={formData.courseId}
                 onChange={handleChange}
-                placeholder="Course"
+                options={courseOptions}
+                placeholder={coursesLoading ? "Loading courses..." : "Select course"}
+                disabled={courseSelectDisabled}
+                required
               />
               <FormInput
                 name="phone"
@@ -105,10 +130,20 @@ const QuickContact = () => {
               <Button
                 type="submit"
                 size="marketing"
-                disabled={quickContactRequestMutation.isPending}
+                disabled={isSubmitting || courseSelectDisabled}
               >
-                {quickContactRequestMutation.isPending ? "Sending…" : "Send message"}
+                {isSubmitting ? "Sending…" : "Send message"}
               </Button>
+              {coursesError && (
+                <Alert variant="destructive">
+                  <AlertDescription>Courses are unavailable. Please try again later.</AlertDescription>
+                </Alert>
+              )}
+              {!coursesLoading && !coursesError && courseOptions.length === 0 && (
+                <Alert variant="destructive">
+                  <AlertDescription>No courses are available right now.</AlertDescription>
+                </Alert>
+              )}
               {status && (
                 <Alert variant={status.type === "success" ? "default" : "destructive"}>
                   <AlertDescription>{status.message}</AlertDescription>
