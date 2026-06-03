@@ -5,18 +5,10 @@ import {
   normalizeCommerceCartItem,
 } from "../lib/commerceItems";
 
-const calculateCartTotals = (cart) => ({
-  totalQuantity: cart.reduce(
-    (runningTotal, item) => runningTotal + (Number(item.quantity) || 0),
-    0,
-  ),
-  totalPrice: cart.reduce(
-    (runningTotal, item) => (
-      runningTotal + (Number(item.price) || 0) * (Number(item.quantity) || 0)
-    ),
-    0,
-  ),
-});
+const calculateCartQuantity = (cart) => cart.reduce(
+  (runningTotal, item) => runningTotal + (Number(item.quantity) || 0),
+  0,
+);
 
 const normalizeOwnerId = (ownerId) => String(ownerId || "").trim();
 
@@ -103,6 +95,4 @@ export const useCartStore = create(
 );
 
 export const selectCart = (state) => state.cart;
-export const selectCartTotals = (state) => calculateCartTotals(state.cart);
-export const selectCartQuantity = (state) => calculateCartTotals(state.cart).totalQuantity;
-export const selectCartTotalPrice = (state) => calculateCartTotals(state.cart).totalPrice;
+export const selectCartQuantity = (state) => calculateCartQuantity(state.cart);
