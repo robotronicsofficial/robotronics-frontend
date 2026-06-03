@@ -23,6 +23,5 @@ export const useShopCartQuoteQuery = (cart = []) => {
     queryFn: () => requestShopCartQuote(request),
     enabled: request.items.length > 0,
     staleTime: 30_000,
-    select: (payload) => payload.quote,
   });
 };

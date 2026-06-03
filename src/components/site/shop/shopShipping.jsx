@@ -121,10 +121,10 @@ const ShopShipping = ({ onEditCustomer, onEditPayment }) => {
         ...buildShopCheckoutIntentRequest({ checkout, cart, requiresShipping }),
       });
 
-      setSubmittedIntent(data.checkoutIntent || null);
+      setSubmittedIntent(data.checkoutIntent);
       setSubmitStatus({
         type: "success",
-        message: data.message || "Checkout intent submitted successfully.",
+        message: data.message,
       });
       clearShopCheckout();
       clearCart();

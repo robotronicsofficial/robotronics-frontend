@@ -17,16 +17,16 @@ export const requireShopCartQuote = async ({ context }) => {
     throw redirect({ to: CART_PATH, replace: true });
   }
 
-  const payload = await context.queryClient.fetchQuery({
+  const quote = await context.queryClient.fetchQuery({
     queryKey: queryKeys.shop.cartQuote(request.items),
     queryFn: () => requestShopCartQuote(request),
     retry: false,
     staleTime: 30_000,
   }).catch(() => null);
 
-  if (!hasShopCartQuoteItems(payload?.quote)) {
+  if (!hasShopCartQuoteItems(quote)) {
     throw redirect({ to: CART_PATH, replace: true });
   }
 
-  return { shopCartQuote: payload.quote };
+  return { shopCartQuote: quote };
 };

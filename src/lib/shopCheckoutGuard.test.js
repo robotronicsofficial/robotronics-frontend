@@ -26,7 +26,7 @@ describe("shop checkout route guard", () => {
       requiresShipping: true,
       pricing: { subtotal: 1000, discount: 100, shipping: 500, total: 1400 },
     };
-    requestShopCartQuote.mockResolvedValue({ quote });
+    requestShopCartQuote.mockResolvedValue(quote);
     useCartStore.setState({
       cart: [{ itemType: "product", itemId: "product-1", quantity: 1 }],
     });
@@ -51,7 +51,7 @@ describe("shop checkout route guard", () => {
   });
 
   it("redirects when the backend quote does not contain items", async () => {
-    requestShopCartQuote.mockResolvedValue({ quote: { items: [] } });
+    requestShopCartQuote.mockResolvedValue({ items: [] });
     useCartStore.setState({
       cart: [{ itemType: "product", itemId: "product-1", quantity: 1 }],
     });
