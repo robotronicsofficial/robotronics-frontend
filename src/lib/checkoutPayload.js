@@ -40,7 +40,7 @@ export const getPersistedCheckoutChildren = (response) => (
 
 export const getPersistedCheckoutChildIds = (persistedChildren = []) => (
   persistedChildren
-    .map((child) => trimString(child.childCode) || trimString(child._id?.toString?.()) || trimString(child._id))
+    .map((child) => trimString(child.childCode))
     .filter(Boolean)
 );
 

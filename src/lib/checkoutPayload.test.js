@@ -78,12 +78,11 @@ describe("checkout payload contract", () => {
     expect(getPersistedCheckoutChildren({ parent: { children: otherChildren } })).toEqual([]);
   });
 
-  it("extracts subscription child ids from persisted parent children", () => {
+  it("extracts subscription child ids from checkout child codes", () => {
     expect(getPersistedCheckoutChildIds([
       { childCode: " P-5001-01 " },
-      { _id: "mongo-child-2" },
-      { childCode: "", _id: "" },
-    ])).toEqual(["P-5001-01", "mongo-child-2"]);
+      { childCode: "P-5001-02" },
+    ])).toEqual(["P-5001-01", "P-5001-02"]);
   });
 
   it("builds the subscription checkout intent payload expected by the backend", () => {
