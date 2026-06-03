@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildCheckoutSearch,
+  CHECKOUT_STATUS,
   getNextStep,
   getPrevStep,
   getStepFromSearch,
+  resolveCheckoutStep,
 } from "./checkoutFlow";
 
 describe("checkout flow contract", () => {
@@ -19,5 +21,42 @@ describe("checkout flow contract", () => {
     expect(getNextStep("plan")).toBe("kids");
     expect(getPrevStep("payment")).toBe("parent");
     expect(getNextStep("welcome")).toBe("welcome");
+  });
+
+  it("keeps deep links behind completed prerequisites", () => {
+    expect(resolveCheckoutStep({ requestedStep: "payment" })).toEqual({
+      step: "plan",
+      shouldReset: false,
+    });
+
+    expect(resolveCheckoutStep({
+      requestedStep: "confirm",
+      hasPlan: true,
+      childrenComplete: true,
+      parentComplete: true,
+      hasPersistedChildren: true,
+      paymentComplete: false,
+    })).toEqual({
+      step: "payment",
+      shouldReset: false,
+    });
+  });
+
+  it("starts a new draft when a finished checkout leaves welcome", () => {
+    expect(resolveCheckoutStep({
+      requestedStep: "payment",
+      status: CHECKOUT_STATUS.submitted,
+    })).toEqual({
+      step: "plan",
+      shouldReset: true,
+    });
+
+    expect(resolveCheckoutStep({
+      requestedStep: "welcome",
+      status: CHECKOUT_STATUS.submitted,
+    })).toEqual({
+      step: "welcome",
+      shouldReset: false,
+    });
   });
 });

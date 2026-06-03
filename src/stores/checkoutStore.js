@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { CHECKOUT_STEPS } from "@/lib/checkoutFlow";
+import { CHECKOUT_STATUS } from "@/lib/checkoutFlow";
 
 const EMPTY_CHILD = {
   checkoutChildKey: "",
@@ -48,7 +48,7 @@ const initialState = {
   parent: { ...EMPTY_PARENT },    // billing address — name/email/phone come from currentUser
   payment: { ...EMPTY_PAYMENT },
   orderCode: null,
-  status: "draft",                // 'draft' | 'submitted' | 'active'
+  status: CHECKOUT_STATUS.draft,
   // Persisted children records returned by saveParent (have _id, childCode)
   persistedChildren: [],
 };

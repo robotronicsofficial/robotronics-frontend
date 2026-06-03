@@ -4,6 +4,7 @@ import { CheckCircle2, ShieldCheck } from "lucide-react";
 
 import {
   CHECKOUT_PATH,
+  CHECKOUT_STATUS,
   buildCheckoutSearch,
 } from "@/lib/checkoutFlow";
 import CheckoutShell from "@/components/checkout/CheckoutShell";
@@ -90,7 +91,7 @@ const ConfirmStep = () => {
         },
         checkoutReference,
       });
-      setStatus("submitted");
+      setStatus(CHECKOUT_STATUS.submitted);
       navigate({ to: CHECKOUT_PATH, search: buildCheckoutSearch("welcome") });
     } catch (mutationError) {
       setError(mutationError.message || "We couldn't create your checkout request.");
