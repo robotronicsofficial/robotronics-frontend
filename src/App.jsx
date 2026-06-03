@@ -17,7 +17,9 @@ import { queryKeys } from "./lib/queryKeys";
 import {
   CART_PATH,
   CONTACT_PATH,
+  COURSE_PRODUCT_DETAIL_PATH,
   DASHBOARD_CHILD_PROFILE_PATH,
+  PRODUCT_DETAIL_PATH,
   SCREEN_PATH,
 } from "./router/paths";
 import { clearActiveChildSession, getActiveChildSession } from "./utils/childSessionRequest";
@@ -205,7 +207,7 @@ const routeTree = rootRoute.addChildren([
   publicRoute("/aboutUs", AboutUs),
   publicRoute(CART_PATH, Cart),
   publicRoute("/shop", Shop),
-  publicRoute("/ProductDetailPage/$id", ProductDetailPage),
+  publicRoute(PRODUCT_DETAIL_PATH, ProductDetailPage),
   publicRoute("/Shipping", Shipping),
   publicRoute("/ShippingService", ShippingService),
   publicRoute("/Course", Course),
@@ -216,7 +218,7 @@ const routeTree = rootRoute.addChildren([
   publicRoute("/reset-password", ResetPassword),
   publicRoute("/Signup", Signup),
   makeRedirectRoute("/CoursesProduct", "/Course"),
-  publicRoute("/CoursesProduct/$id", CoursesProductDetail),
+  publicRoute(COURSE_PRODUCT_DETAIL_PATH, CoursesProductDetail),
   publicRoute("/gift-courses", GiftCourse),
   publicRoute("/CareerJob", CareerJob),
   makeRedirectRoute("/CareerDetailPage", "/CareerJob"),

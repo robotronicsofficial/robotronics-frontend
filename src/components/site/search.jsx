@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FormInput, FormSelect } from "@/components/forms/FormControls";
 import { useProducts } from "@/hooks/useProducts";
+import { getProductDetailRoute } from "@/lib/commerceItems";
 import { useFormatMoney } from "@/utils/formatPrice";
 
 const Search = () => {
@@ -45,6 +46,11 @@ const Search = () => {
       return matchesQuery && matchesCategory;
     });
   }, [products, searchTerm, category]);
+
+  const openProduct = (productId) => {
+    const route = getProductDetailRoute(productId);
+    if (route) navigate(route);
+  };
 
   return (
     <div className="min-h-screen bg-muted text-background p-4">
@@ -102,7 +108,7 @@ const Search = () => {
                 key={product._id}
                 type="button"
                 variant="ghost"
-                onClick={() => navigate({ to: `/ProductDetailPage/${product._id}` })}
+                onClick={() => openProduct(product._id)}
                 className="h-auto flex-col items-stretch overflow-hidden rounded-2xl bg-card border border-border p-0 text-left transition hover:-translate-y-1"
               >
                 <img

@@ -103,6 +103,10 @@ const MyRobot = () => {
       console.error("Failed to remove saved item:", err);
     }
   };
+  const handleView = (item) => {
+    const route = getCommerceItemRoute(item);
+    if (route) navigate(route);
+  };
 
   return (
     <div className="bg-background min-h-screen">
@@ -161,7 +165,7 @@ const MyRobot = () => {
               <SavedItemRow
                 key={`${item.itemType}:${item.itemId}`}
                 item={item}
-                onView={(it) => navigate({ to: getCommerceItemRoute(it) })}
+                onView={handleView}
                 onRemove={handleRemove}
               />
             ))}

@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/typography";
+import { getProductDetailRoute } from "@/lib/commerceItems";
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 
@@ -18,7 +19,8 @@ const Shopproduct = ({
   const navigate = useNavigate();
   const formatMoney = useFormatMoney();
   const handleProductClick = () => {
-    navigate({ to: `/ProductDetailPage/${productId}` });
+    const route = getProductDetailRoute(productId);
+    if (route) navigate(route);
   };
 
   return (

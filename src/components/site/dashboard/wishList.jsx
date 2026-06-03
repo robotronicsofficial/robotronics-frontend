@@ -87,6 +87,10 @@ const WishListD = () => {
       console.error("Failed to remove saved item:", err);
     }
   };
+  const handleView = (item) => {
+    const route = getCommerceItemRoute(item);
+    if (route) navigate(route);
+  };
 
   if (isLoading) {
     return <CenteredState className="bg-background min-h-screen">Loading wishlist…</CenteredState>;
@@ -121,7 +125,7 @@ const WishListD = () => {
               key={`${item.itemType}:${item.itemId}`}
               item={item}
               onRemove={handleRemove}
-              onView={(it) => navigate({ to: getCommerceItemRoute(it) })}
+              onView={handleView}
               onMoveToCart={addToCart}
             />
           ))}

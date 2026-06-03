@@ -76,6 +76,10 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
     [config, id, query.data],
   );
   const topThree = useMemo(() => items.slice(0, 3), [items]);
+  const openItem = (item) => {
+    const route = getCommerceItemRoute(item);
+    if (route) navigate(route);
+  };
 
   return (
     <section className="bg-background py-20 md:py-24">
@@ -126,7 +130,7 @@ const MoreProduct = ({ itemType = COMMERCE_ITEM_TYPES.product }) => {
                 <button
                   key={getCommerceItemKey(item) || index}
                   type="button"
-                  onClick={() => navigate({ to: getCommerceItemRoute(item) })}
+                  onClick={() => openItem(item)}
                   className="flex cursor-pointer flex-col gap-4 overflow-hidden rounded-xl border border-border bg-card p-0 text-left transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-lg"
                 >
                   <div className="aspect-[4/3] w-full overflow-hidden bg-muted">

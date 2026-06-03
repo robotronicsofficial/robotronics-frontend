@@ -1,3 +1,8 @@
+import {
+  COURSE_PRODUCT_DETAIL_PATH,
+  PRODUCT_DETAIL_PATH,
+} from "@/router/paths";
+
 export const COMMERCE_ITEM_TYPES = Object.freeze({
   product: "product",
   course: "course",
@@ -25,10 +30,20 @@ export const getCommerceItemKey = (item = {}) => (
   `${item.itemType}:${item.itemId}`
 );
 
+export const getProductDetailRoute = (productId) => {
+  const id = trimString(productId);
+  return id ? { to: PRODUCT_DETAIL_PATH, params: { id } } : null;
+};
+
+export const getCourseDetailRoute = (courseId) => {
+  const id = trimString(courseId);
+  return id ? { to: COURSE_PRODUCT_DETAIL_PATH, params: { id } } : null;
+};
+
 export const getCommerceItemRoute = (item = {}) => (
   item.itemType === COMMERCE_ITEM_TYPES.course
-    ? `/CoursesProduct/${item.itemId}`
-    : `/ProductDetailPage/${item.itemId}`
+    ? getCourseDetailRoute(item.itemId)
+    : getProductDetailRoute(item.itemId)
 );
 
 export const isShippableCommerceItem = (item = {}) => (
