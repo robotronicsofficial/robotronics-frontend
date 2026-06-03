@@ -1,13 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import {
-  saveCheckoutAddress,
-  submitShopCheckoutIntent,
-} from "../lib/shopOrders";
-
-export const useSaveCheckoutAddressMutation = () =>
-  useMutation({
-    mutationFn: saveCheckoutAddress,
-  });
+import { submitShopCheckoutIntent } from "../lib/shopOrders";
 
 export const useSubmitShopCheckoutIntentMutation = () =>
   useMutation({

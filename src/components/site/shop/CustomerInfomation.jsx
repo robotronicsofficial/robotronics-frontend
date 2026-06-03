@@ -24,7 +24,6 @@ import {
 import { resolveBackendAssetUrl } from "@/utils/mediaUrl";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { selectCart, useCartStore } from "@/stores/cartStore";
-import { useSaveCheckoutAddressMutation } from "@/hooks/useShopOrders";
 import { LOGIN_PATH, SHOP_PAYMENT_PATH } from "@/router/paths";
 
 
@@ -116,7 +115,6 @@ const CustomerInfomation = ({ onNext }) => {
   const location = useLocation();
   const storedCheckout = loadShopCheckout();
   const requiresShipping = hasShippableCommerceItems(cart);
-  const saveCheckoutAddressMutation = useSaveCheckoutAddressMutation();
 
   const [form, setForm] = useState({
     firstName: storedCheckout.customer?.firstName || "",
@@ -161,9 +159,8 @@ const CustomerInfomation = ({ onNext }) => {
     return errors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (saveCheckoutAddressMutation.isPending) return;
 
     if (isAuthLoading) {
       toast.info("Checking your account. Please try again in a moment.");
@@ -199,8 +196,6 @@ const CustomerInfomation = ({ onNext }) => {
         throw new Error("First name, last name, and phone are required.");
       }
 
-      const note = storedCheckout.note || "";
-
       if (!requiresShipping) {
         saveShopCheckout({ customer, address: null });
         if (onNext) {
@@ -211,13 +206,9 @@ const CustomerInfomation = ({ onNext }) => {
         return;
       }
 
-      const data = await saveCheckoutAddressMutation.mutateAsync({
-        ...form,
-        notes: note,
-      });
       saveShopCheckout({
         customer,
-        address: data?.address || form,
+        address: form,
       });
 
       if (onNext) {
@@ -441,10 +432,10 @@ const CustomerInfomation = ({ onNext }) => {
             type="submit"
             form="shop-customer-information"
             size="marketing"
-            disabled={saveCheckoutAddressMutation.isPending}
+            disabled={isAuthLoading}
             className="w-full"
           >
-            {saveCheckoutAddressMutation.isPending ? "Processing…" : continueLabel}
+            {isAuthLoading ? "Checking account…" : continueLabel}
           </Button>
         </CardContent>
       </Card>
