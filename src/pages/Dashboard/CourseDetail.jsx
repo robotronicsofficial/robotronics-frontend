@@ -16,7 +16,6 @@ import { useParams } from "@tanstack/react-router";
 
 import video from "../../assets/videos/video-preview.mp4";
 import ReviewsComponent from "../../pages/subscriptions/SubscriptionTestimonials";
-import ChatSupport from "@/components/site/ChatSupport";
 import VideoPlayer from "@/components/site/VideoPlayer";
 import CenteredState from "@/components/layout/CenteredState";
 import { getHeaderOffsetClass } from "@/components/layout/headerOffset";
@@ -907,7 +906,6 @@ const CourseDetail = () => {
       </DialogShell>
 
       <ReviewsComponent />
-      <ChatSupport />
     </div>
   );
 };
