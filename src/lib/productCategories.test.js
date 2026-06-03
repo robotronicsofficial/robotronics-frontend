@@ -5,6 +5,7 @@ import { readProductCategoryNames } from "./productCategories";
 describe("product category contracts", () => {
   it("reads category names from the backend data envelope", () => {
     expect(readProductCategoryNames({
+      success: true,
       data: [
         { name: " Lego Robots " },
         { name: "" },

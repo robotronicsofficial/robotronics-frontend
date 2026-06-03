@@ -5,6 +5,7 @@ import { readCourseCategoryNames } from "./courseCategories";
 describe("course category contracts", () => {
   it("reads category names from the backend data envelope", () => {
     expect(readCourseCategoryNames({
+      success: true,
       data: [
         { name: " Robotics " },
         { name: "" },
