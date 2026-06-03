@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { fetchBackendJson } from "./api";
-import { fetchProductById, fetchProducts } from "./products";
+import { fetchProductById, fetchProducts, readProduct, readProducts } from "./products";
 
 vi.mock("./api", () => ({
   fetchBackendJson: vi.fn(),
@@ -24,15 +24,12 @@ describe("product API contract", () => {
     expect(fetchBackendJson).toHaveBeenCalledWith("/products/product-1");
   });
 
-  it("does not read legacy product envelopes", async () => {
-    fetchBackendJson.mockResolvedValueOnce({
-      products: [{ _id: "legacy-list" }],
-    });
-    fetchBackendJson.mockResolvedValueOnce({
-      product: { _id: "legacy-detail" },
-    });
-
-    await expect(fetchProducts()).resolves.toBeUndefined();
-    await expect(fetchProductById("legacy-detail")).resolves.toBeUndefined();
+  it("rejects legacy product envelopes", () => {
+    expect(() => readProducts({ products: [{ _id: "legacy-list" }] })).toThrow(
+      "Invalid products response",
+    );
+    expect(() => readProduct({ product: { _id: "legacy-detail" } })).toThrow(
+      "Invalid product response",
+    );
   });
 });
