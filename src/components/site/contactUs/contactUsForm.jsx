@@ -11,7 +11,10 @@ import { Label } from "@/components/ui/label";
 import { Eyebrow, Heading, Text } from "@/components/ui/typography";
 import { FormSelect } from "@/components/forms/FormControls";
 import FloatingField from "@/components/forms/FloatingField";
-import { useContactRequestMutation } from "@/hooks/useIntake";
+import {
+  useContactOptionsQuery,
+  useContactRequestMutation,
+} from "@/hooks/useIntake";
 import {
   CONTACT_ADDRESS,
   CONTACT_EMAIL,
@@ -27,30 +30,6 @@ const buildGiftIntro = (plan, cycle) => {
   const cycleSuffix = cycleLabel ? ` (${cycleLabel} billing)` : "";
   return `Hi — I'd like to gift ${planText}${cycleSuffix}. Please tell me how to set this up and what details you'll need from me.`;
 };
-
-const CONTACT_SERVICES = {
-  school: [
-    "Learning Subscription",
-    "Robotics Curriculum Integration",
-    "Teacher Training Program",
-    "After-School Robotics Club",
-    "STEM Lab Setup Consultation",
-    "Competition Preparation",
-  ],
-  parent: [
-    "Learning Subscription",
-    "Weekend Robotics Classes",
-    "Holiday Robotics Camps",
-    "One-on-One Tutoring",
-    "Robotics Kit Purchase Guidance",
-    "Competition Registration Assistance",
-  ],
-};
-
-const CONTACT_USER_TYPES = [
-  { value: "school", label: "School" },
-  { value: "parent", label: "Parent" },
-];
 
 const CONTACT_METHODS = [
   { Icon: Phone, label: "Phone", value: CONTACT_PHONE, href: CONTACT_PHONE_HREF },
@@ -118,10 +97,11 @@ const INITIAL_FORM = {
   address: "",
   city: "",
   message: "",
-  selectedServices: [],
+  selectedServiceCodes: [],
 };
 
 const ContactUsForm = () => {
+  const contactOptionsQuery = useContactOptionsQuery();
   const contactRequestMutation = useContactRequestMutation();
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [status, setStatus] = useState(null);
@@ -145,16 +125,16 @@ const ContactUsForm = () => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-      ...(name === "userType" && { selectedServices: [] }),
+      ...(name === "userType" && { selectedServiceCodes: [] }),
     }));
   };
 
-  const handleServiceToggle = (service) => {
+  const handleServiceToggle = (serviceCode) => {
     setFormData((prev) => ({
       ...prev,
-      selectedServices: prev.selectedServices.includes(service)
-        ? prev.selectedServices.filter((s) => s !== service)
-        : [...prev.selectedServices, service],
+      selectedServiceCodes: prev.selectedServiceCodes.includes(serviceCode)
+        ? prev.selectedServiceCodes.filter((code) => code !== serviceCode)
+        : [...prev.selectedServiceCodes, serviceCode],
     }));
   };
 
@@ -171,6 +151,12 @@ const ContactUsForm = () => {
       });
     }
   };
+
+  const contactOptions = contactOptionsQuery.data;
+  const userTypeOptions = contactOptions?.userTypes ?? [];
+  const serviceOptions = formData.userType
+    ? contactOptions?.serviceOptions?.[formData.userType] ?? []
+    : [];
 
   return (
     <section className="bg-background py-20 md:py-24">
@@ -223,7 +209,8 @@ const ContactUsForm = () => {
               label="I am a..."
               value={formData.userType}
               onChange={handleChange}
-              options={CONTACT_USER_TYPES}
+              options={userTypeOptions}
+              disabled={contactOptionsQuery.isLoading || contactOptionsQuery.isError}
               required
             />
 
@@ -247,22 +234,28 @@ const ContactUsForm = () => {
                 <Label className="text-caption uppercase tracking-wide text-muted-foreground">
                   Services I&apos;m interested in
                 </Label>
-                <div className="flex flex-col gap-2">
-                  {CONTACT_SERVICES[formData.userType].map((service) => (
-                    <Label
-                      key={service}
-                      htmlFor={`service-${service}`}
-                      className="flex items-center gap-2 text-body-sm font-normal"
-                    >
-                      <Checkbox
-                        id={`service-${service}`}
-                        checked={formData.selectedServices.includes(service)}
-                        onCheckedChange={() => handleServiceToggle(service)}
-                      />
-                      {service}
-                    </Label>
-                  ))}
-                </div>
+                {contactOptionsQuery.isLoading ? (
+                  <Text tone="muted">Loading service options…</Text>
+                ) : contactOptionsQuery.isError ? (
+                  <Text tone="muted">Service options are unavailable.</Text>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {serviceOptions.map((service) => (
+                      <Label
+                        key={service.code}
+                        htmlFor={`service-${formData.userType}-${service.code}`}
+                        className="flex items-center gap-2 text-body-sm font-normal"
+                      >
+                        <Checkbox
+                          id={`service-${formData.userType}-${service.code}`}
+                          checked={formData.selectedServiceCodes.includes(service.code)}
+                          onCheckedChange={() => handleServiceToggle(service.code)}
+                        />
+                        {service.label}
+                      </Label>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
@@ -286,7 +279,11 @@ const ContactUsForm = () => {
               type="submit"
               size="marketing"
               className="w-full"
-              disabled={contactRequestMutation.isPending}
+              disabled={
+                contactRequestMutation.isPending ||
+                contactOptionsQuery.isLoading ||
+                contactOptionsQuery.isError
+              }
             >
               {contactRequestMutation.isPending ? "Sending…" : "Send message"}
             </Button>

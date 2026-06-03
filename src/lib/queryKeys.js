@@ -18,6 +18,9 @@ export const queryKeys = {
   childSession: {
     verify: (childId, sessionId) => ["child-session", childId, sessionId, "verify"],
   },
+  contact: {
+    options: ["contact", "options"],
+  },
   courses: {
     all: ["courses"],
     detail: (courseId) => ["courses", courseId],
