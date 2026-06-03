@@ -41,11 +41,21 @@ export const readChildProgress = (payload) => {
   return normalizeProgressPayload(payload.data);
 };
 
-export const fetchChildPlan = (childId) =>
-  fetchBackendJson(
+export const readChildPlan = (payload) => {
+  if (!payload?.data || typeof payload.data !== "object" || Array.isArray(payload.data)) {
+    throw new Error("Invalid child plan response");
+  }
+
+  return payload.data;
+};
+
+export const fetchChildPlan = async (childId) => {
+  const payload = await fetchBackendJson(
     `/children/${childId}/plan`,
     buildRequiredChildRequest({ method: "GET", childId }),
   );
+  return readChildPlan(payload);
+};
 
 export const fetchSelectableChildCourses = async (childId) => {
   const childData = await fetchChildPlan(childId);

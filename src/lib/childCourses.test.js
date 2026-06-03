@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   readChildCourses,
+  readChildPlan,
   readChildProgress,
 } from "./childCourses";
 
@@ -52,6 +53,25 @@ describe("child course API contract", () => {
           certificateAvailable: true,
         },
       ],
+    });
+  });
+
+  it("reads child plan from the backend data envelope", () => {
+    const plan = {
+      planId: "plan-1",
+      courseAccess: "specific",
+      includedCourseIds: ["course-1"],
+    };
+
+    expect(readChildPlan({
+      success: true,
+      data: {
+        childId: "P-5001-01",
+        plan,
+      },
+    })).toEqual({
+      childId: "P-5001-01",
+      plan,
     });
   });
 });
