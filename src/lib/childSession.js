@@ -1,6 +1,20 @@
 import { fetchBackendJson } from "./api";
 import { buildChildSessionRequest } from "../utils/childSessionRequest";
 
+export const readChildSessionVerification = (payload) => {
+  const data = payload?.data;
+
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Invalid child session response");
+  }
+
+  return {
+    message: payload.message,
+    isValid: data.isValid === true,
+    sessionId: data.sessionId || null,
+  };
+};
+
 export const verifyChildSession = async ({ childId, sessionId }) => {
   const childSessionRequest = buildChildSessionRequest({
     method: "POST",
@@ -22,5 +36,5 @@ export const verifyChildSession = async ({ childId, sessionId }) => {
     `/children/${childId}/session/verify`,
     childSessionRequest,
   );
-  return Boolean(payload?.isValid);
+  return readChildSessionVerification(payload).isValid;
 };

@@ -1,4 +1,5 @@
 import { fetchSessionJson, sendSessionJson } from "./api";
+import { readChildSessionVerification } from "./childSession";
 import {
   ensureArray,
   normalizeChildCourse,
@@ -138,14 +139,17 @@ export const changeChildPin = ({ childId, oldPin, newPin }) =>
     },
   });
 
-export const verifyChildPin = ({ childId, pin, force = false }) =>
-  sendSessionJson(`/children/${childId}/pin/verify`, {
+export const verifyChildPin = async ({ childId, pin, force = false }) => {
+  const payload = await sendSessionJson(`/children/${childId}/pin/verify`, {
     method: "POST",
     body: {
       pin,
       force,
     },
   });
+
+  return readChildSessionVerification(payload);
+};
 
 export const resetChildPin = ({ childId, newPin }) =>
   sendSessionJson(`/children/${childId}/pin/reset`, {
