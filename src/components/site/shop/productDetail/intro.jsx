@@ -103,7 +103,7 @@ const Intro = () => {
 
   return (
     <section className="relative isolate overflow-hidden bg-background pt-header pb-16 md:pb-20">
-      <HeroAtmospherics variant="full" />
+      <HeroAtmospherics variant="grid" />
 
       <Container size="wide">
         <div
