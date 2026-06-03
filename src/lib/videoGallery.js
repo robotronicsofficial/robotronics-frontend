@@ -1,7 +1,7 @@
 import { fetchBackendJson } from "./api";
 
 export const readVideoGallery = (payload) => {
-  if (!Array.isArray(payload?.data)) {
+  if (payload?.success !== true || !Array.isArray(payload?.data)) {
     throw new Error("Invalid video gallery response");
   }
 
