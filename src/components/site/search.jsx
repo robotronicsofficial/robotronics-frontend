@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FormInput, FormSelect } from "@/components/forms/FormControls";
-import { useProducts } from "@/hooks/useProducts";
+import { useProductCategories, useProducts } from "@/hooks/useProducts";
 import { resolveCatalogImageUrl } from "@/lib/catalogImage";
 import { getProductDetailRoute } from "@/lib/commerceItems";
 import { useFormatMoney } from "@/utils/formatPrice";
@@ -18,17 +18,11 @@ const Search = () => {
     isLoading: loading,
     error,
   } = useProducts();
+  const { data: productCategories = [] } = useProductCategories();
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("");
 
-  const categories = useMemo(() => {
-    const values = products
-      .map((product) => product?.category)
-      .filter(Boolean);
-
-    return ["All categories", ...new Set(values)];
-  }, [products]);
-  const categoryOptions = categories.map((cat) => ({
+  const categoryOptions = ["All categories", ...productCategories].map((cat) => ({
     label: cat,
     value: cat === "All categories" ? "all" : cat,
   }));

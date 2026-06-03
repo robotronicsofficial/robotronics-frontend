@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { fetchProductCategoryNames } from "../lib/productCategories";
 import { fetchProductById, fetchProducts } from "../lib/products";
 import { queryKeys } from "../lib/queryKeys";
 
@@ -13,4 +14,10 @@ export const useProduct = (productId) =>
     queryKey: queryKeys.products.detail(productId),
     queryFn: () => fetchProductById(productId),
     enabled: Boolean(productId),
+  });
+
+export const useProductCategories = () =>
+  useQuery({
+    queryKey: queryKeys.products.categories,
+    queryFn: fetchProductCategoryNames,
   });

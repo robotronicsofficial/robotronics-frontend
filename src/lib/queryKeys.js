@@ -31,6 +31,7 @@ export const queryKeys = {
   },
   products: {
     all: ["products"],
+    categories: ["products", "categories"],
     detail: (productId) => ["products", productId],
     related: (scope) => ["products", "related", scope],
   },

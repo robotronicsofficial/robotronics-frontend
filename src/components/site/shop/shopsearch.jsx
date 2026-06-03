@@ -16,7 +16,7 @@ import {
 } from "@/lib/commerceItems";
 import { useFormatMoney } from "@/utils/formatPrice";
 import { useCartStore } from "@/stores/cartStore";
-import { useProducts } from "@/hooks/useProducts";
+import { useProductCategories, useProducts } from "@/hooks/useProducts";
 import { useSavedItems, useToggleSavedItemMutation } from "@/hooks/useSavedItems";
 
 const DEFAULT_PRICE_RANGE = [0, 600000];
@@ -42,6 +42,7 @@ const Shopsearch = () => {
   const addToCart = useCartStore((state) => state.addToCart);
   const formatMoney = useFormatMoney();
   const { data: products = [] } = useProducts();
+  const { data: productCategories = [] } = useProductCategories();
   const { data: savedItems = [] } = useSavedItems();
   const toggleSavedItemMutation = useToggleSavedItemMutation();
 
@@ -61,17 +62,6 @@ const Shopsearch = () => {
     Boolean(selectedCategory) ||
     isPriceRangeActive ||
     isShippingActive;
-
-  const productCategories = useMemo(
-    () => [
-      ...new Set(
-        products
-          .map((product) => String(product?.category || "").trim())
-          .filter(Boolean),
-      ),
-    ].sort((a, b) => a.localeCompare(b)),
-    [products],
-  );
 
   const resetFilters = () => {
     setSearchQuery("");
