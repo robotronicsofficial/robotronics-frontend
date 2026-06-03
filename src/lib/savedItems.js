@@ -2,9 +2,17 @@ import { fetchSessionJson, sendSessionJson } from "./api";
 
 const SAVED_ITEMS_ENDPOINT = "/wishlists/wishlist";
 
+export const readSavedItems = (payload) => {
+  if (!Array.isArray(payload?.items)) {
+    throw new Error("Invalid saved items response");
+  }
+
+  return payload.items;
+};
+
 export const fetchSavedItems = async () => {
-  const data = await fetchSessionJson(SAVED_ITEMS_ENDPOINT);
-  return Array.isArray(data?.items) ? data.items : [];
+  const payload = await fetchSessionJson(SAVED_ITEMS_ENDPOINT);
+  return readSavedItems(payload);
 };
 
 export const getSavedItems = fetchSavedItems;
