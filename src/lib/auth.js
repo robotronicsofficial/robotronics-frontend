@@ -4,6 +4,7 @@ import {
   sendJson,
   sendSessionJson,
 } from "./api";
+import { isRecord, readDataEnvelope, readSuccessEnvelope } from "./apiEnvelope";
 
 const AUTH_USER_PATH = "/auth/user";
 const AUTH_LOGIN_PATH = "/auth/login";
@@ -33,11 +34,13 @@ const readAuthPath = (value) => {
 };
 
 export const readSocialAuthProviders = (payload) => {
-  if (payload?.success !== true || !Array.isArray(payload?.data)) {
-    throw new Error(INVALID_SOCIAL_PROVIDERS_RESPONSE);
-  }
+  const providers = readDataEnvelope(
+    payload,
+    Array.isArray,
+    INVALID_SOCIAL_PROVIDERS_RESPONSE,
+  );
 
-  return payload.data.map((provider) => ({
+  return providers.map((provider) => ({
     provider: readRequiredText(provider?.provider),
     label: readRequiredText(provider?.label),
     authPath: readAuthPath(provider?.authPath),
@@ -46,36 +49,30 @@ export const readSocialAuthProviders = (payload) => {
 };
 
 export const readCurrentAuthUser = (payload) => {
-  if (
-    payload?.success !== true ||
-    !payload ||
-    typeof payload !== "object" ||
-    Array.isArray(payload)
-  ) {
-    throw new Error(INVALID_AUTH_USER_RESPONSE);
-  }
+  const user = readDataEnvelope(
+    payload,
+    (value) => value === null || isRecord(value),
+    INVALID_AUTH_USER_RESPONSE,
+  );
 
-  if (payload.data === null) {
+  if (user === null) {
     return null;
   }
 
-  if (!payload.data || typeof payload.data !== "object" || Array.isArray(payload.data)) {
-    throw new Error(INVALID_AUTH_USER_RESPONSE);
-  }
-
-  return payload.data;
+  return user;
 };
 
 export const readAuthMessage = (payload) => {
+  const envelope = readSuccessEnvelope(payload, INVALID_AUTH_MESSAGE_RESPONSE);
+
   if (
-    payload?.success !== true
-    || typeof payload?.message !== "string"
-    || !payload.message.trim()
+    typeof envelope.message !== "string"
+    || !envelope.message.trim()
   ) {
     throw new Error(INVALID_AUTH_MESSAGE_RESPONSE);
   }
 
-  return { message: payload.message.trim() };
+  return { message: envelope.message.trim() };
 };
 
 export const verifyEmailToken = async (token) =>
