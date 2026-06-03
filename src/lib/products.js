@@ -2,8 +2,10 @@ import { fetchBackendJson } from "./api";
 
 export const fetchProducts = async () => {
   const payload = await fetchBackendJson("/products");
-  return Array.isArray(payload?.products) ? payload.products : [];
+  return payload?.data;
 };
 
-export const fetchProductById = (productId) =>
-  fetchBackendJson(`/products/${productId}`);
+export const fetchProductById = async (productId) => {
+  const payload = await fetchBackendJson(`/products/${productId}`);
+  return payload?.data;
+};
