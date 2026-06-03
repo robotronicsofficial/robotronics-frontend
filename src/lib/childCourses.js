@@ -1,4 +1,5 @@
 import { fetchBackendBlob, fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 import { fetchCourses } from "./courses";
 import {
   ensureArray,
@@ -26,35 +27,29 @@ const buildRequiredChildRequest = ({ childId, ...request }) => {
 };
 
 export const readChildCourses = (payload) => {
-  if (!Array.isArray(payload?.data)) {
-    throw new Error("Invalid child courses response");
-  }
-
-  return payload.data.map(normalizeChildCourse);
+  return readDataEnvelope(
+    payload,
+    Array.isArray,
+    "Invalid child courses response",
+  ).map(normalizeChildCourse);
 };
 
 export const readChildProgress = (payload) => {
-  if (!payload?.data || typeof payload.data !== "object" || Array.isArray(payload.data)) {
-    throw new Error("Invalid child progress response");
-  }
-
-  return normalizeProgressPayload(payload.data);
+  return normalizeProgressPayload(
+    readDataEnvelope(payload, isRecord, "Invalid child progress response"),
+  );
 };
 
 export const readChildPlan = (payload) => {
-  if (!payload?.data || typeof payload.data !== "object" || Array.isArray(payload.data)) {
-    throw new Error("Invalid child plan response");
-  }
-
-  return payload.data;
+  return readDataEnvelope(payload, isRecord, "Invalid child plan response");
 };
 
 export const readChildCourseDetail = (payload) => {
-  const data = payload?.data;
-
-  if (!data || typeof data !== "object" || Array.isArray(data)) {
-    throw new Error("Invalid child course detail response");
-  }
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid child course detail response",
+  );
 
   return {
     courseDetails: normalizeCourseDetail(data.courseDetails),
@@ -64,12 +59,12 @@ export const readChildCourseDetail = (payload) => {
 };
 
 export const readChildCourseProgressUpdate = (payload) => {
-  const data = payload?.data;
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid child course progress update response",
+  );
   const quiz = payload?.quiz;
-
-  if (!data || typeof data !== "object" || Array.isArray(data)) {
-    throw new Error("Invalid child course progress update response");
-  }
 
   if (!quiz || typeof quiz !== "object" || Array.isArray(quiz)) {
     throw new Error("Invalid child course quiz update response");
@@ -82,13 +77,7 @@ export const readChildCourseProgressUpdate = (payload) => {
 };
 
 export const readGeneratedChildCertificate = (payload) => {
-  const data = payload?.data;
-
-  if (!data || typeof data !== "object" || Array.isArray(data)) {
-    throw new Error("Invalid child certificate response");
-  }
-
-  return data;
+  return readDataEnvelope(payload, isRecord, "Invalid child certificate response");
 };
 
 export const fetchChildPlan = async (childId) => {

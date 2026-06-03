@@ -12,6 +12,7 @@ import {
 describe("child course API contract", () => {
   it("reads active child courses from the backend data envelope", () => {
     const courses = readChildCourses({
+      success: true,
       data: [
         {
           courseId: "course-1",
@@ -34,6 +35,7 @@ describe("child course API contract", () => {
 
   it("reads child progress from the backend data envelope", () => {
     expect(readChildProgress({
+      success: true,
       data: {
         childName: "Ava",
         courses: [
