@@ -18,11 +18,30 @@ export const submitQuickContactRequest = (body) =>
     body,
   });
 
-export const submitGiftCourseRequest = (body) =>
-  sendJson("/gift-courses", {
+export const readGiftCourseSubmission = (payload) => {
+  const data = payload?.data;
+  const message = typeof payload?.message === "string" ? payload.message.trim() : "";
+
+  if (!message || !data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Invalid gift course response");
+  }
+
+  return {
+    message,
+    giftCourse: data.giftCourse,
+    crmSyncQueued: Boolean(data.crmSyncQueued),
+    crmSyncSkippedReason: data.crmSyncSkippedReason || null,
+  };
+};
+
+export const submitGiftCourseRequest = async (body) => {
+  const payload = await sendJson("/gift-courses", {
     method: "POST",
     body,
   });
+
+  return readGiftCourseSubmission(payload);
+};
 
 export const submitJobApplication = (body) =>
   sendFormData("/job-applications", {

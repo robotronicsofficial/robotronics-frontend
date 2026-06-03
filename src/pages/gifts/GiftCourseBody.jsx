@@ -106,7 +106,7 @@ const GiftCourseBody = () => {
       setForm(buildInitialForm(currentUser));
       setStatus({
         type: "success",
-        message: data.message || "Gift request submitted successfully.",
+        message: data.message,
       });
     } catch (error) {
       setStatus({
