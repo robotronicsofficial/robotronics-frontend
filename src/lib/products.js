@@ -1,7 +1,7 @@
 import { fetchBackendJson } from "./api";
 
 export const readProducts = (payload) => {
-  if (!Array.isArray(payload?.data)) {
+  if (payload?.success !== true || !Array.isArray(payload?.data)) {
     throw new Error("Invalid products response");
   }
 
@@ -9,7 +9,12 @@ export const readProducts = (payload) => {
 };
 
 export const readProduct = (payload) => {
-  if (!payload?.data || typeof payload.data !== "object" || Array.isArray(payload.data)) {
+  if (
+    payload?.success !== true ||
+    !payload?.data ||
+    typeof payload.data !== "object" ||
+    Array.isArray(payload.data)
+  ) {
     throw new Error("Invalid product response");
   }
 
