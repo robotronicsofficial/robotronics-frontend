@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildCheckoutPlanSelection,
+  getAnnualSavingsPercent,
   getSubscriptionPlanPrice,
   getSubscriptionPlanPricing,
 } from "./subscriptionPlans";
@@ -34,5 +35,10 @@ describe("subscription plan contracts", () => {
       courseAccess: "all",
       maxQuizAttemptsPerDay: 2,
     });
+  });
+
+  it("derives annual savings from backend monthly and yearly prices", () => {
+    expect(getAnnualSavingsPercent(plan)).toBe(60);
+    expect(getAnnualSavingsPercent({ monthlyPrice: 100, yearlyPrice: 1200 })).toBe(0);
   });
 });

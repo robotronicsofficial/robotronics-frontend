@@ -16,6 +16,17 @@ export const getSubscriptionPlanPricing = (plan) => ({
   annual: Number(plan?.yearlyPrice || 0),
 });
 
+export const getAnnualSavingsPercent = (plan) => {
+  const monthlyYearTotal = getSubscriptionPlanPrice(plan, SUBSCRIPTION_BILLING_CYCLES.monthly) * 12;
+  const annualPrice = getSubscriptionPlanPrice(plan, SUBSCRIPTION_BILLING_CYCLES.annual);
+
+  if (monthlyYearTotal <= 0 || annualPrice <= 0 || annualPrice >= monthlyYearTotal) {
+    return 0;
+  }
+
+  return Math.round((1 - annualPrice / monthlyYearTotal) * 100);
+};
+
 export const buildCheckoutPlanSelection = (plan, cycle) => ({
   planId: plan?._id || "",
   name: plan?.planName || "",
