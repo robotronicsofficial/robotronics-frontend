@@ -12,6 +12,7 @@ const AUTH_LOGOUT_PATH = "/auth/logout";
 const AUTH_SOCIAL_PROVIDERS_PATH = "/auth/social-providers";
 const INVALID_SOCIAL_PROVIDERS_RESPONSE = "Invalid social auth providers response";
 const INVALID_AUTH_USER_RESPONSE = "Invalid auth user response";
+const INVALID_AUTH_MESSAGE_RESPONSE = "Invalid auth message response";
 
 const readRequiredText = (value) => {
   if (typeof value !== "string" || !value.trim()) {
@@ -60,8 +61,22 @@ export const readCurrentAuthUser = (payload) => {
   return payload.data;
 };
 
-export const verifyEmailToken = (token) =>
-  fetchBackendJson(`/auth/verify-email?token=${encodeURIComponent(token)}`);
+export const readAuthMessage = (payload) => {
+  if (
+    payload?.success !== true
+    || typeof payload?.message !== "string"
+    || !payload.message.trim()
+  ) {
+    throw new Error(INVALID_AUTH_MESSAGE_RESPONSE);
+  }
+
+  return { message: payload.message.trim() };
+};
+
+export const verifyEmailToken = async (token) =>
+  readAuthMessage(
+    await fetchBackendJson(`/auth/verify-email?token=${encodeURIComponent(token)}`),
+  );
 
 export const fetchCurrentUser = async () => (
   readCurrentAuthUser(await fetchSessionJson(AUTH_USER_PATH))
@@ -82,26 +97,26 @@ export const logoutUser = () =>
     method: "POST",
   });
 
-export const registerUser = (body) =>
-  sendJson(AUTH_REGISTER_PATH, {
+export const registerUser = async (body) =>
+  readAuthMessage(await sendJson(AUTH_REGISTER_PATH, {
     method: "POST",
     body,
-  });
+  }));
 
-export const requestPasswordReset = (email) =>
-  sendJson("/auth/forgot-password", {
+export const requestPasswordReset = async (email) =>
+  readAuthMessage(await sendJson("/auth/forgot-password", {
     method: "POST",
     body: { email },
-  });
+  }));
 
-export const resetPassword = ({ token, password }) =>
-  sendJson("/auth/reset-password", {
+export const resetPassword = async ({ token, password }) =>
+  readAuthMessage(await sendJson("/auth/reset-password", {
     method: "POST",
     body: { token, password },
-  });
+  }));
 
-export const resendVerificationEmail = (email) =>
-  sendJson("/auth/resend-verification", {
+export const resendVerificationEmail = async (email) =>
+  readAuthMessage(await sendJson("/auth/resend-verification", {
     method: "POST",
     body: { email },
-  });
+  }));
