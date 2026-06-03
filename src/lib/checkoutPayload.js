@@ -1,3 +1,5 @@
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
+
 const trimString = (value) => (typeof value === "string" ? value.trim() : "");
 
 const PAYMENT_LABELS = Object.freeze({
@@ -35,7 +37,11 @@ export const buildParentRegistrationPayload = ({
 });
 
 export const getPersistedCheckoutChildren = (response) => (
-  Array.isArray(response?.data?.checkoutChildren) ? response.data.checkoutChildren : []
+  readDataEnvelope(
+    response,
+    (value) => isRecord(value) && Array.isArray(value.checkoutChildren),
+    "Invalid parent registration response",
+  ).checkoutChildren
 );
 
 export const getPersistedCheckoutChildIds = (persistedChildren = []) => (
