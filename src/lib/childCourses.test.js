@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   readChildCourses,
   readChildCourseDetail,
+  readChildCourseProgressUpdate,
   readChildPlan,
   readChildProgress,
 } from "./childCourses";
@@ -107,6 +108,40 @@ describe("child course API contract", () => {
         reviews: 0,
       },
       plan: { planId: "plan-1" },
+    });
+  });
+
+  it("reads child course progress updates from the backend envelope", () => {
+    expect(readChildCourseProgressUpdate({
+      success: true,
+      message: "Child course progress updated successfully",
+      data: {
+        courseId: "course-1",
+        Sections: [{ modules: [] }],
+        progress: "100",
+      },
+      quiz: {
+        score: 3,
+        total: 3,
+        passed: true,
+        details: {
+          question1: true,
+        },
+      },
+    })).toEqual({
+      childCourse: {
+        courseId: "course-1",
+        Sections: [{ modules: [], quiz: null }],
+        progress: 100,
+      },
+      quiz: {
+        score: 3,
+        total: 3,
+        passed: true,
+        details: {
+          question1: true,
+        },
+      },
     });
   });
 });

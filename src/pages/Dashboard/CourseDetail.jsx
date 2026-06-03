@@ -300,14 +300,15 @@ const CourseDetail = () => {
         sectionIndex,
         answers,
       });
+      const { quiz } = responsePayload;
 
       setQuizResults((prev) => ({
         ...prev,
         [sectionIndex]: {
-          score: responsePayload?.quiz?.score ?? 0,
-          total: responsePayload?.quiz?.total ?? questions.length,
-          details: responsePayload?.quiz?.details || {},
-          passed: Boolean(responsePayload?.quiz?.passed),
+          score: quiz.score,
+          total: quiz.total,
+          details: quiz.details,
+          passed: Boolean(quiz.passed),
         },
       }));
       setQuizRetakes((prev) => ({ ...prev, [sectionIndex]: false }));

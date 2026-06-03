@@ -68,7 +68,7 @@ export const useUpdateChildCourseProgressMutation = () => {
       queryClient.setQueryData(
         queryKeys.childCourses.detail(variables.childId, variables.courseId),
         (current) => current
-          ? { ...current, childCourse: payload?.data || current.childCourse }
+          ? { ...current, childCourse: payload.childCourse }
           : current,
       );
       queryClient.invalidateQueries({

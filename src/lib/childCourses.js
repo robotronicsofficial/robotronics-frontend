@@ -63,6 +63,24 @@ export const readChildCourseDetail = (payload) => {
   };
 };
 
+export const readChildCourseProgressUpdate = (payload) => {
+  const data = payload?.data;
+  const quiz = payload?.quiz;
+
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Invalid child course progress update response");
+  }
+
+  if (!quiz || typeof quiz !== "object" || Array.isArray(quiz)) {
+    throw new Error("Invalid child course quiz update response");
+  }
+
+  return {
+    childCourse: normalizeChildCourse(data),
+    quiz,
+  };
+};
+
 export const fetchChildPlan = async (childId) => {
   const payload = await fetchBackendJson(
     `/children/${childId}/plan`,
@@ -133,10 +151,7 @@ export const updateChildCourseProgress = async ({ childId, courseId, sectionInde
     }),
   );
 
-  return {
-    ...payload,
-    data: normalizeChildCourse(payload?.data),
-  };
+  return readChildCourseProgressUpdate(payload);
 };
 
 export const downloadChildCourseContent = ({ childId, courseId, contentId }) =>
