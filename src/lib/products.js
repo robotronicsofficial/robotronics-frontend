@@ -1,25 +1,13 @@
 import { fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
-export const readProducts = (payload) => {
-  if (payload?.success !== true || !Array.isArray(payload?.data)) {
-    throw new Error("Invalid products response");
-  }
+export const readProducts = (payload) => (
+  readDataEnvelope(payload, Array.isArray, "Invalid products response")
+);
 
-  return payload.data;
-};
-
-export const readProduct = (payload) => {
-  if (
-    payload?.success !== true ||
-    !payload?.data ||
-    typeof payload.data !== "object" ||
-    Array.isArray(payload.data)
-  ) {
-    throw new Error("Invalid product response");
-  }
-
-  return payload.data;
-};
+export const readProduct = (payload) => (
+  readDataEnvelope(payload, isRecord, "Invalid product response")
+);
 
 export const fetchProducts = async () => {
   const payload = await fetchBackendJson("/products");

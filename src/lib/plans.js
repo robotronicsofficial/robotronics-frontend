@@ -1,12 +1,9 @@
 import { fetchBackendJson } from "./api";
+import { readDataEnvelope } from "./apiEnvelope";
 
-export const readPlans = (payload) => {
-  if (payload?.success !== true || !Array.isArray(payload?.data)) {
-    throw new Error("Invalid plans response");
-  }
-
-  return payload.data;
-};
+export const readPlans = (payload) => (
+  readDataEnvelope(payload, Array.isArray, "Invalid plans response")
+);
 
 export const fetchPlans = async () => {
   const payload = await fetchBackendJson("/plans");

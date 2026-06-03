@@ -1,4 +1,5 @@
 import { fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
 const isOption = (value) =>
   value &&
@@ -13,12 +14,15 @@ const isServiceOption = (value) =>
   typeof value.label === "string";
 
 export const readContactOptions = (payload) => {
-  const data = payload?.data;
+  const data = readDataEnvelope(
+    payload,
+    isRecord,
+    "Invalid contact options response",
+  );
   const serviceOptions = data?.serviceOptions;
 
   if (
-    payload?.success !== true ||
-    !Array.isArray(data?.userTypes) ||
+    !Array.isArray(data.userTypes) ||
     !data.userTypes.every(isOption) ||
     !serviceOptions ||
     typeof serviceOptions !== "object" ||

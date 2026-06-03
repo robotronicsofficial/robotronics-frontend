@@ -1,9 +1,13 @@
-export const readCategoryNames = (payload, responseName) => {
-  if (payload?.success !== true || !Array.isArray(payload?.data)) {
-    throw new Error(`Invalid ${responseName} response`);
-  }
+import { readDataEnvelope } from "./apiEnvelope";
 
-  return payload.data
+export const readCategoryNames = (payload, responseName) => {
+  const categories = readDataEnvelope(
+    payload,
+    Array.isArray,
+    `Invalid ${responseName} response`,
+  );
+
+  return categories
     .map((category) => String(category?.name || "").trim())
     .filter(Boolean);
 };

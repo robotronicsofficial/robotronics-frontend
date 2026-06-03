@@ -1,12 +1,9 @@
 import { fetchBackendJson } from "./api";
+import { readDataEnvelope } from "./apiEnvelope";
 
-export const readVideoGallery = (payload) => {
-  if (payload?.success !== true || !Array.isArray(payload?.data)) {
-    throw new Error("Invalid video gallery response");
-  }
-
-  return payload.data;
-};
+export const readVideoGallery = (payload) => (
+  readDataEnvelope(payload, Array.isArray, "Invalid video gallery response")
+);
 
 export const fetchVideoGallery = async () => {
   const payload = await fetchBackendJson("/video-gallery");

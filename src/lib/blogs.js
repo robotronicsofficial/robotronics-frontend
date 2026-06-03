@@ -1,25 +1,13 @@
 import { fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
-export const readBlogs = (payload) => {
-  if (payload?.success !== true || !Array.isArray(payload?.data)) {
-    throw new Error("Invalid blogs response");
-  }
+export const readBlogs = (payload) => (
+  readDataEnvelope(payload, Array.isArray, "Invalid blogs response")
+);
 
-  return payload.data;
-};
-
-export const readBlog = (payload) => {
-  if (
-    payload?.success !== true ||
-    !payload?.data ||
-    typeof payload.data !== "object" ||
-    Array.isArray(payload.data)
-  ) {
-    throw new Error("Invalid blog response");
-  }
-
-  return payload.data;
-};
+export const readBlog = (payload) => (
+  readDataEnvelope(payload, isRecord, "Invalid blog response")
+);
 
 export const fetchBlogs = async () => {
   const payload = await fetchBackendJson("/blogs");

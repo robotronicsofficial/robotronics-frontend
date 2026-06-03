@@ -1,25 +1,13 @@
 import { fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
-export const readCourses = (payload) => {
-  if (payload?.success !== true || !Array.isArray(payload?.data)) {
-    throw new Error("Invalid courses response");
-  }
+export const readCourses = (payload) => (
+  readDataEnvelope(payload, Array.isArray, "Invalid courses response")
+);
 
-  return payload.data;
-};
-
-export const readCourse = (payload) => {
-  if (
-    payload?.success !== true ||
-    !payload?.data ||
-    typeof payload.data !== "object" ||
-    Array.isArray(payload.data)
-  ) {
-    throw new Error("Invalid course response");
-  }
-
-  return payload.data;
-};
+export const readCourse = (payload) => (
+  readDataEnvelope(payload, isRecord, "Invalid course response")
+);
 
 export const fetchCourses = async () => {
   const payload = await fetchBackendJson("/courses");

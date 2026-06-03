@@ -1,25 +1,13 @@
 import { fetchBackendJson } from "./api";
+import { isRecord, readDataEnvelope } from "./apiEnvelope";
 
-export const readServices = (payload) => {
-  if (payload?.success !== true || !Array.isArray(payload?.data)) {
-    throw new Error("Invalid services response");
-  }
+export const readServices = (payload) => (
+  readDataEnvelope(payload, Array.isArray, "Invalid services response")
+);
 
-  return payload.data;
-};
-
-export const readService = (payload) => {
-  if (
-    payload?.success !== true ||
-    !payload?.data ||
-    typeof payload.data !== "object" ||
-    Array.isArray(payload.data)
-  ) {
-    throw new Error("Invalid service response");
-  }
-
-  return payload.data;
-};
+export const readService = (payload) => (
+  readDataEnvelope(payload, isRecord, "Invalid service response")
+);
 
 export const fetchServices = async () => {
   const payload = await fetchBackendJson("/services");
