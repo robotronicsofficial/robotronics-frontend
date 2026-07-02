@@ -1,8 +1,8 @@
 export const CONTACT_EMAIL = "support@robotronics.ai";
 export const SAFETY_EMAIL = "safety@robotronics.ai";
 export const SCHOOLS_EMAIL = "schools@robotronics.ai";
-export const CONTACT_PHONE = "+92 309 422 4016";
-export const CONTACT_PHONE_HREF = "tel:+923094224016";
+export const CONTACT_PHONE = "+92 320 762 6842";
+export const CONTACT_PHONE_HREF = "tel:+923207626842";
 export const CONTACT_ADDRESS = "Ground Floor, NIC Lahore, Vogue Tower, Main MM Alam Road, Gulberg, Lahore";
 
 export const SOCIAL_LINKS = [
@@ -34,6 +34,6 @@ export const SOCIAL_LINKS = [
   {
     brand: "whatsapp",
     label: "WhatsApp",
-    href: "https://wa.me/message/TKZZPIE2A34UM1",
+    href: "https://wa.me/923207626842",
   },
 ];
